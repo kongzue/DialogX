@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:exitFadeDuration="200">
+    <item android:drawable="@drawable/rect_dialogx_miui_editbox_focus_night" android:state_focused="true" />
+    <item android:drawable="@drawable/rect_dialogx_miui_editbox_normal_night" android:state_focused="false" />
+</selector>

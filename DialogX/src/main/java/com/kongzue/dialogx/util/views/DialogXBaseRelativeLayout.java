@@ -11,7 +11,11 @@ import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
+import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author: Kongzue
@@ -98,12 +102,19 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         public void onShow() {
         }
         
-        ;
-        
         public abstract void onDismiss();
     }
     
     private void paddingView(int left, int top, int right, int bottom) {
+        MaxRelativeLayout bkgView = findViewById(R.id.bkg);
+        if (bkgView != null) {
+            LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
+            if(bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE){
+                bkgView.setPadding(0, 0, 0, bottom);
+                setPadding(left, top, right, 0);
+                return;
+            }
+        }
         setPadding(left, top, right, bottom);
     }
     

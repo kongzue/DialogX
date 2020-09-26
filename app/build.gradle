@@ -34,4 +34,5 @@ dependencies {
     implementation project(':DialogX')
     implementation project(path: ':DialogXIOSStyle')
     implementation project(path: ':DialogXKongzueStyle')
+    implementation project(path: ':DialogXMIUIStyle')
 }

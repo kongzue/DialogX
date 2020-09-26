@@ -2,5 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     android:exitFadeDuration="200">
     <item android:drawable="@drawable/rect_dialogx_kongzue_editbox_focus" android:state_focused="true" />
-    <item android:drawable="@drawable/rect_dialogx_kongzue_editbox_normal_dark" android:state_focused="false" />
+    <item android:drawable="@drawable/rect_dialogx_kongzue_editbox_normal_night" android:state_focused="false" />
 </selector>

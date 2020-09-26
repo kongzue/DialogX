@@ -31,7 +31,9 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-    
+        if (onActivityResumeCallBack != null) {
+            onActivityResumeCallBack.getActivity(activity);
+        }
     }
     
     @Override
@@ -45,7 +47,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
             return;
         }
         if (onActivityResumeCallBack != null) {
-            onActivityResumeCallBack.onResume(activity);
+            onActivityResumeCallBack.getActivity(activity);
         }
     }
     
@@ -70,6 +72,6 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     }
     
     public interface onActivityResumeCallBack {
-        void onResume(Activity activity);
+        void getActivity(Activity activity);
     }
 }

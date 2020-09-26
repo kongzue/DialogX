@@ -5,8 +5,6 @@ import android.util.Log;
 
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
-import com.kongzue.dialogx.style.IOSStyle;
-import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 
 /**

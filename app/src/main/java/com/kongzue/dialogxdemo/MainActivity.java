@@ -20,6 +20,7 @@ import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
+import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.TextInfo;
 
@@ -130,6 +131,9 @@ public class MainActivity extends BaseActivity {
                     case R.id.rdo_ios:
                         DialogX.globalStyle = IOSStyle.style();
                         break;
+                    case R.id.rdo_miui:
+                        DialogX.globalStyle = MIUIStyle.style();
+                        break;
                 }
             }
         });
@@ -146,7 +150,8 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 new MessageDialog("将“爱奇艺”移至App资源库还是删除该App？", "移动App会将它从主屏幕移除并保留其所有数据。", "删除App", "取消", "移至App资源库")
                         .setButtonOrientation(LinearLayout.VERTICAL)
-                        .setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545"))).show();
+                        //.setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545")))
+                        .show();
             }
         });
         

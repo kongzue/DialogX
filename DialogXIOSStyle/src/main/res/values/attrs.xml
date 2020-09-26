@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MaxRelativeLayout">
+        <attr name="maxLayoutWidth" format="dimension"/>
+        <attr name="maxLayoutHeight" format="dimension"/>
+    </declare-styleable>
+
+</resources>

@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kongzue.dialogx.DialogX;
-import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.util.TextInfo;
 
@@ -38,7 +37,7 @@ public class BaseDialog {
         applicationContextWeakReference = new WeakReference<>(context.getApplicationContext());
         ActivityLifecycleImpl.init(context, new ActivityLifecycleImpl.onActivityResumeCallBack() {
             @Override
-            public void onResume(Activity activity) {
+            public void getActivity(Activity activity) {
                 try {
                     rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content));
                 } catch (Exception e) {

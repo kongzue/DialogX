@@ -220,8 +220,6 @@ public class BlurView extends View {
                 }
                 
                 r = true;
-            } catch (OutOfMemoryError e) {
-                if (isDebug()) e.printStackTrace();
             } catch (Exception e) {
                 if (isDebug()) e.printStackTrace();
             } finally {
@@ -417,15 +415,17 @@ public class BlurView extends View {
         }.start();
     }
     
+    private static boolean DEBUGMODE = false;
+    
     static boolean isDebug() {
-        return DialogX.DEBUGMODE;
+        return DEBUGMODE && DialogX.DEBUGMODE;
     }
     
     public static void log(Object o) {
-        if (DEBUGMODE) Log.i(">>>", o.toString());
+        if (isDebug()) Log.i(">>>", o.toString());
     }
     
     public static void error(Object o) {
-        if (DEBUGMODE) Log.e(">>>", o.toString());
+        if (isDebug()) Log.e(">>>", o.toString());
     }
 }
