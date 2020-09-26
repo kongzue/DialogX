@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/box_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black50"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.kongzue.dialogx.util.views.MaxRelativeLayout
+            android:id="@+id/bkg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginHorizontal="35dp"
+            app:maxLayoutWidth="270dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_dialog_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:paddingHorizontal="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="2dp"
+                    android:text="Title"
+                    android:textColor="@color/white"
+                    android:textSize="17dp" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txt_dialog_tip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="15dp"
+                            android:gravity="center"
+                            android:text="This is content text."
+                            android:textColor="@color/white"
+                            android:textSize="13dp" />
+
+                        <RelativeLayout
+                            android:id="@+id/box_custom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone"></RelativeLayout>
+
+                        <EditText
+                            android:id="@+id/txt_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/editbox_dialogx_ios_dark"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:padding="5dp"
+                            android:scrollbars="vertical"
+                            android:text=""
+                            android:textColor="@color/white"
+                            android:textSize="14dp"
+                            android:theme="@style/AppThemeDark" />
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+                <ImageView
+                    android:id="@+id/split_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/dialogxIOSSplitDark" />
+
+                <LinearLayout
+                    android:id="@+id/box_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btn_selectNegative"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_dialogx_ios_left_night"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:minWidth="65dp"
+                        android:text="Cancel"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16dp" />
+
+                    <ImageView
+                        android:id="@+id/space_other_button"
+                        android:layout_width="1px"
+                        android:layout_height="match_parent"
+                        android:background="@color/dialogxIOSSplitDark"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/btn_selectOther"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_dialogx_ios_center_night"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:minWidth="65dp"
+                        android:text="Other"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16dp"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="1px"
+                        android:layout_height="match_parent"
+                        android:background="@color/dialogxIOSSplitDark" />
+
+                    <TextView
+                        android:id="@+id/btn_selectPositive"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_dialogx_ios_right_night"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:minWidth="65dp"
+                        android:text="OK"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+
+    </RelativeLayout>
+
+</com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>

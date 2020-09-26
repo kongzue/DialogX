@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#2196F3</color>
+
+    <color name="dark">#353535</color>
+    <color name="black">#000</color>
+    <color name="black90">#E6000000</color>
+    <color name="black80">#CC000000</color>
+    <color name="black75">#BF000000</color>
+    <color name="black70">#B3000000</color>
+    <color name="black60">#99000000</color>
+    <color name="black50">#80000000</color>
+    <color name="black40">#66000000</color>
+    <color name="black30">#4D000000</color>
+    <color name="black25">#40000000</color>
+    <color name="black20">#33000000</color>
+    <color name="black10">#1A000000</color>
+    <color name="empty">#00000000</color>
+
+    <color name="white">#fff</color>
+    <color name="white90">#E6ffffff</color>
+    <color name="white80">#CCffffff</color>
+    <color name="white75">#BFffffff</color>
+    <color name="white70">#B3ffffff</color>
+    <color name="white60">#99ffffff</color>
+    <color name="white50">#80ffffff</color>
+    <color name="white40">#66ffffff</color>
+    <color name="white30">#4Dffffff</color>
+    <color name="white25">#40ffffff</color>
+    <color name="white20">#33ffffff</color>
+    <color name="white10">#1Affffff</color>
+
+    <color name="dialogxColorBlue">#2196F3</color>
+
+    <color name="dialogxIOSSplitLight">#2c000000</color>
+    <color name="dialogxIOSSplitDark">#4e4e50</color>
+    <color name="dialogxIOSBlue">#007aff</color>
+    <color name="dialogxButtonIOSLightPress">#0f000000</color>
+    <color name="dialogxIOSBkgLight">#D1F4F5F6</color>
+    <color name="dialogxIOSBkgDark">#DB161616</color>
+</resources>
