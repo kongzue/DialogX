@@ -72,10 +72,20 @@ public class MessageDialog extends BaseDialog {
     
     protected int buttonOrientation;
     
+    public static MessageDialog build() {
+        return new MessageDialog();
+    }
+    
     public MessageDialog(CharSequence title, CharSequence message, CharSequence okText) {
         this.title = title;
         this.message = message;
         this.okText = okText;
+    }
+    
+    public static MessageDialog show(CharSequence title, CharSequence message, CharSequence okText) {
+        MessageDialog messageDialog = new MessageDialog(title, message, okText);
+        messageDialog.show();
+        return messageDialog;
     }
     
     public MessageDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText) {
@@ -85,12 +95,24 @@ public class MessageDialog extends BaseDialog {
         this.cancelText = cancelText;
     }
     
+    public static MessageDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText) {
+        MessageDialog messageDialog = new MessageDialog(title, message, okText, cancelText);
+        messageDialog.show();
+        return messageDialog;
+    }
+    
     public MessageDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText) {
         this.title = title;
         this.message = message;
         this.okText = okText;
         this.cancelText = cancelText;
         this.otherText = otherText;
+    }
+    
+    public static MessageDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText) {
+        MessageDialog messageDialog = new MessageDialog(title, message, okText, cancelText, otherText);
+        messageDialog.show();
+        return messageDialog;
     }
     
     protected DialogImpl dialogImpl;
@@ -391,7 +413,7 @@ public class MessageDialog extends BaseDialog {
                     return false;
                 }
             });
-            btnSelectNegative.setOnClickListener(new View.OnClickListener() {
+            btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (okButtonClickListener != null) {
@@ -410,7 +432,7 @@ public class MessageDialog extends BaseDialog {
                     }
                 }
             });
-            btnSelectPositive.setOnClickListener(new View.OnClickListener() {
+            btnSelectNegative.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (cancelButtonClickListener != null) {
@@ -503,6 +525,19 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
+    public MessageDialog setOkButton(OnDialogButtonClickListener okButtonClickListener) {
+        this.okButtonClickListener = okButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setOkButton(CharSequence okText, OnDialogButtonClickListener okButtonClickListener) {
+        this.okText = okText;
+        this.okButtonClickListener = okButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getCancelButton() {
         return cancelText;
     }
@@ -513,12 +548,38 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
+    public MessageDialog setCancelButton(OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelText = cancelText;
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getOtherButton() {
         return otherText;
     }
     
     public MessageDialog setOtherButton(CharSequence otherText) {
         this.otherText = otherText;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setOtherButton(OnDialogButtonClickListener otherButtonClickListener) {
+        this.otherButtonClickListener = otherButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setOtherButton(CharSequence otherText, OnDialogButtonClickListener otherButtonClickListener) {
+        this.otherText = otherText;
+        this.otherButtonClickListener = otherButtonClickListener;
         refreshUI();
         return this;
     }
@@ -639,6 +700,7 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setCancelable(boolean cancelable) {
         this.cancelable = cancelable;
+        refreshUI();
         return this;
     }
     
@@ -648,6 +710,7 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
+        refreshUI();
         return this;
     }
 }

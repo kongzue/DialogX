@@ -36,6 +36,6 @@
     <color name="dialogxIOSSplitDark">#4e4e50</color>
     <color name="dialogxIOSBlue">#007aff</color>
     <color name="dialogxButtonIOSLightPress">#0f000000</color>
-    <color name="dialogxIOSBkgLight">#D1F4F5F6</color>
-    <color name="dialogxIOSBkgDark">#DB161616</color>
+    <color name="dialogxIOSBkgLight">#CCF4F5F6</color>
+    <color name="dialogxIOSBkgDark">#D1161616</color>
 </resources>

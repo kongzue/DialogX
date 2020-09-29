@@ -3,7 +3,6 @@ package com.kongzue.dialogx.style;
 import android.content.res.Resources;
 
 import com.kongzue.dialogx.interfaces.DialogXStyle;
-import com.kongzue.dialogx.iostheme.BuildConfig;
 import com.kongzue.dialogx.iostheme.R;
 
 import java.util.HashMap;
@@ -124,6 +123,26 @@ public class IOSStyle implements DialogXStyle {
             @Override
             public int overrideVerticalOtherButtonBackgroundRes(int visibleButtonCount, boolean light) {
                 return light ? R.drawable.button_dialogx_ios_center_light : R.drawable.button_dialogx_ios_center_night;
+            }
+        };
+    }
+    
+    @Override
+    public WaitTipRes overrideWaitTipRes() {
+        return new WaitTipRes() {
+            @Override
+            public boolean blurBackground() {
+                return true;
+            }
+            
+            @Override
+            public int overrideBackgroundColorRes(boolean light) {
+                return 0;
+            }
+            
+            @Override
+            public int overrideTextColorRes(boolean light) {
+                return light?R.color.white:R.color.black;
             }
         };
     }

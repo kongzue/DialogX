@@ -13,4 +13,9 @@
         <attr name="xRadius" format="dimension"/>
         <attr name="yRadius" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="ProgressView">
+        <attr name="progressStrokeWidth" format="dimension"/>
+        <attr name="progressStrokeColor" format="color"/>
+    </declare-styleable>
 </resources>

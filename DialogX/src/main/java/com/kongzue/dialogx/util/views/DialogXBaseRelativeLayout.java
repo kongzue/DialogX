@@ -1,6 +1,8 @@
 package com.kongzue.dialogx.util.views;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -52,6 +54,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private void init() {
         setFocusableInTouchMode(true);
         requestFocus();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getRootWindowInsets()!=null) {
+            onApplyWindowInsets(getRootWindowInsets());
+        }
     }
     
     @Override
@@ -116,6 +121,12 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
         }
         setPadding(left, top, right, bottom);
+    }
+    
+    @Override
+    protected boolean fitSystemWindows(Rect insets) {
+        paddingView(insets.left,insets.top,insets.right,insets.bottom);
+        return true;
     }
     
     @Override

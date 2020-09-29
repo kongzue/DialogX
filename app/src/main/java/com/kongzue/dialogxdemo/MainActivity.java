@@ -14,10 +14,13 @@ import com.kongzue.baseframework.interfaces.DarkNavigationBarTheme;
 import com.kongzue.baseframework.interfaces.DarkStatusBarTheme;
 import com.kongzue.baseframework.interfaces.Layout;
 import com.kongzue.baseframework.interfaces.NavigationBarBackgroundColorRes;
+import com.kongzue.baseframework.util.CycleRunner;
 import com.kongzue.baseframework.util.JumpParameter;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
+import com.kongzue.dialogx.dialogs.TipDialog;
+import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -47,7 +50,11 @@ public class MainActivity extends BaseActivity {
     private TextView btnSelectDialog;
     private TextView btnInputDialog;
     private TextView btnWaitDialog;
-    private TextView btnTipDialog;
+    private TextView btnWaitAndTipDialog;
+    private TextView btnTipSuccess;
+    private TextView btnTipWarning;
+    private TextView btnTipError;
+    private TextView btnTipProgress;
     private TextView btnModalDialog;
     private TextView btnShowBreak;
     private TextView btnNotify;
@@ -81,7 +88,11 @@ public class MainActivity extends BaseActivity {
         btnSelectDialog = findViewById(R.id.btn_selectDialog);
         btnInputDialog = findViewById(R.id.btn_inputDialog);
         btnWaitDialog = findViewById(R.id.btn_waitDialog);
-        btnTipDialog = findViewById(R.id.btn_tipDialog);
+        btnWaitAndTipDialog = findViewById(R.id.btn_waitAndTipDialog);
+        btnTipSuccess = findViewById(R.id.btn_tipSuccess);
+        btnTipWarning = findViewById(R.id.btn_tipWarning);
+        btnTipError = findViewById(R.id.btn_tipError);
+        btnTipProgress = findViewById(R.id.btn_tipProgress);
         btnModalDialog = findViewById(R.id.btn_modalDialog);
         btnShowBreak = findViewById(R.id.btn_showBreak);
         btnNotify = findViewById(R.id.btn_notify);
@@ -101,6 +112,10 @@ public class MainActivity extends BaseActivity {
     public void initDatas(JumpParameter parameter) {
         DialogX.globalStyle = IOSStyle.style();
     }
+    
+    //用于模拟进度提示
+    private CycleRunner cycleRunner;
+    private float progress = 0;
     
     @Override
     public void setEvents() {
@@ -148,9 +163,9 @@ public class MainActivity extends BaseActivity {
         btnSelectDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MessageDialog("将“爱奇艺”移至App资源库还是删除该App？", "移动App会将它从主屏幕移除并保留其所有数据。", "删除App", "取消", "移至App资源库")
+                new MessageDialog("多选对话框", "移动App会将它从主屏幕移除并保留其所有数据。", "删除App", "取消", "移至App资源库")
                         .setButtonOrientation(LinearLayout.VERTICAL)
-                        //.setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545")))
+                        .setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545")))
                         .show();
             }
         });
@@ -159,6 +174,78 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 new InputDialog("标题", "正文内容", "确定", "取消", "正在输入的文字").setCancelable(false).show();
+            }
+        });
+        
+        btnWaitDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WaitDialog.show("Please Wait!");
+                runDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        WaitDialog.dismiss();
+                    }
+                }, 2000);
+            }
+        });
+        
+        btnWaitAndTipDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WaitDialog.show("Please Wait!");
+                runDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        TipDialog.show("Success!", WaitDialog.TYPE.SUCCESS);
+                    }
+                }, 2000);
+            }
+        });
+        
+        btnTipSuccess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TipDialog.show("Success!", WaitDialog.TYPE.SUCCESS);
+            }
+        });
+        
+        btnTipWarning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TipDialog.show("Warning!", WaitDialog.TYPE.WARNING);
+            }
+        });
+        
+        btnTipError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TipDialog.show("Error!", WaitDialog.TYPE.ERROR);
+            }
+        });
+        
+        btnTipProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progress = 0;
+                WaitDialog.show("连接服务器...");
+                runOnMainDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cycleRunner = runOnMainCycle(new Runnable() {
+                            @Override
+                            public void run() {
+                                progress = progress + 0.1f;
+                                if (progress < 1f) {
+                                    WaitDialog.show("正在加载" + ((int) (progress * 100)) + "%", progress);
+                                } else {
+                                    TipDialog.show("加载完成", WaitDialog.TYPE.SUCCESS);
+                                    cycleRunner.cancel();
+                                }
+                            }
+                        }, 1000, 1000);
+                    }
+                }, 3000);
             }
         });
     }

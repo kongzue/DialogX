@@ -69,8 +69,8 @@
                         android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:paddingHorizontal="10dp"
-                        android:visibility="gone"
-                        android:src="@mipmap/img_share" />
+                        android:src="@mipmap/img_share"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -285,7 +285,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/btn_tipDialog"
+                        android:id="@+id/btn_waitAndTipDialog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
@@ -293,6 +293,65 @@
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="10dp"
                         android:text="等待＋提示对话框"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btn_tipSuccess"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rect_button"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="完成"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btn_tipWarning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rect_button"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="警告"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btn_tipError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rect_button"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="错误"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btn_tipProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rect_button"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="模拟进度"
                         android:textColor="@color/white"
                         android:textSize="13dp"
                         android:textStyle="bold" />
@@ -562,5 +621,4 @@
         </ScrollView>
 
     </LinearLayout>
-
 </RelativeLayout>

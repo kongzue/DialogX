@@ -98,4 +98,24 @@ public class MaterialStyle implements DialogXStyle {
             }
         };
     }
+    
+    @Override
+    public WaitTipRes overrideWaitTipRes() {
+        return new WaitTipRes() {
+            @Override
+            public boolean blurBackground() {
+                return false;
+            }
+            
+            @Override
+            public int overrideBackgroundColorRes(boolean light) {
+                return 0;
+            }
+            
+            @Override
+            public int overrideTextColorRes(boolean light) {
+                return light ? R.color.white : R.color.black;
+            }
+        };
+    }
 }

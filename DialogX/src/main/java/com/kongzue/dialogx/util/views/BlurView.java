@@ -28,8 +28,6 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
-import static com.kongzue.dialogx.DialogX.DEBUGMODE;
-
 public class BlurView extends View {
     private float mDownsampleFactor; // default 4
     private int mOverlayColor; // default #aaffffff
@@ -169,7 +167,7 @@ public class BlurView extends View {
         float downsampleFactor = mDownsampleFactor;
         
         if (mDirty || mRenderScript == null) {
-            if (supportRenderScript) {
+            if (supportRenderScript && useBlur) {
                 if (mRenderScript == null) {
                     try {
                         mRenderScript = RenderScript.create(getContext());
@@ -242,6 +240,7 @@ public class BlurView extends View {
     private final ViewTreeObserver.OnPreDrawListener preDrawListener = new ViewTreeObserver.OnPreDrawListener() {
         @Override
         public boolean onPreDraw() {
+            clean();
             final int[] locations = new int[2];
             Bitmap oldBmp = mBlurredBitmap;
             View decor = mDecorView;
@@ -279,6 +278,7 @@ public class BlurView extends View {
                 
                 blur(mBitmapToBlur, mBlurredBitmap);
                 
+                cleanFlag = false;
                 if (redrawBitmap || mDifferentRoot) {
                     invalidate();
                 }
@@ -303,7 +303,7 @@ public class BlurView extends View {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mDecorView = BaseDialog.getRootFrameLayout();
+        mDecorView = ((Activity) BaseDialog.getContext()).getWindow().getDecorView();
         if (mDecorView != null) {
             mDecorView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
             mDifferentRoot = mDecorView.getRootView() != getRootView();
@@ -326,20 +326,41 @@ public class BlurView extends View {
     
     @Override
     public void draw(Canvas canvas) {
-        if (mIsRendering) {
-            // Quit here, don't draw views above me
-            //throw STOP_EXCEPTION;
-        } else if (RENDERING_COUNT > 0) {
-            // Doesn't support blurview overlap on another blurview
+        if (!useBlur) {
+            Paint cutPaint = new Paint();
+            cutPaint.setAntiAlias(true);
+            cutPaint.setColor(removeAlphaColor(mOverlayColor));
+            mRectF.right = getWidth();
+            mRectF.bottom = getHeight();
+            canvas.drawRoundRect(mRectF, mXRadius, mYRadius, cutPaint);
         } else {
-            super.draw(canvas);
+            if (mIsRendering) {
+                // Quit here, don't draw views above me
+                //throw STOP_EXCEPTION;
+            } else if (RENDERING_COUNT > 0) {
+                // Doesn't support blurview overlap on another blurview
+            } else {
+                super.draw(canvas);
+            }
         }
+        
+    }
+    
+    private boolean cleanFlag = false;
+    
+    private void clean() {
+        cleanFlag = true;
+        invalidate();
     }
     
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawBlurredBitmap(canvas, mBlurredBitmap, mOverlayColor);
+        if (cleanFlag) {
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        } else {
+            drawBlurredBitmap(canvas, mBlurredBitmap, mOverlayColor);
+        }
     }
     
     /**
@@ -360,7 +381,7 @@ public class BlurView extends View {
                 mRectDst.bottom = getHeight();
                 cacheCanvas.drawBitmap(blurredBitmap, mRectSrc, mRectDst, null);
             }
-            cacheCanvas.drawColor(supportRenderScript ? overlayColor : removeAlphaColor(overlayColor));
+            cacheCanvas.drawColor((supportRenderScript && useBlur) ? overlayColor : removeAlphaColor(overlayColor));
             
             //Rounded corner
             mRectF.right = getWidth();
@@ -385,6 +406,17 @@ public class BlurView extends View {
     }
     
     private static boolean supportRenderScript = false;
+    private boolean useBlur = true;
+    
+    public boolean isUseBlur() {
+        return useBlur;
+    }
+    
+    public BlurView setUseBlur(boolean useBlur) {
+        this.useBlur = useBlur;
+        invalidate();
+        return this;
+    }
     
     private static int removeAlphaColor(@ColorInt int color) {
         int alpha = 255;
@@ -407,8 +439,6 @@ public class BlurView extends View {
                     BlurView.class.getClassLoader().loadClass(RenderScript.class.getCanonicalName());
                     supportRenderScript = true;
                 } catch (Throwable e) {
-                    error("\n错误！\nRenderScript支持库未启用，要启用模糊效果，请在您的app的Gradle配置文件中添加以下语句：" +
-                            "\nandroid { \n...\n  defaultConfig { \n    ...\n    renderscriptTargetApi 17 \n    renderscriptSupportModeEnabled true \n  }\n}");
                     supportRenderScript = false;
                 }
             }

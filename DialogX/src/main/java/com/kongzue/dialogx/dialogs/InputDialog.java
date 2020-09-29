@@ -1,7 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
-import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
@@ -19,10 +19,20 @@ public class InputDialog extends MessageDialog {
         me = this;
     }
     
+    public static InputDialog build() {
+        return new InputDialog();
+    }
+    
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText) {
         this.title = title;
         this.message = message;
         this.okText = okText;
+    }
+    
+    public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText) {
+        InputDialog inputDialog = new InputDialog(title, message, okText);
+        inputDialog.show();
+        return inputDialog;
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText) {
@@ -30,6 +40,12 @@ public class InputDialog extends MessageDialog {
         this.message = message;
         this.okText = okText;
         this.cancelText = cancelText;
+    }
+    
+    public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText) {
+        InputDialog inputDialog = new InputDialog(title, message, okText, cancelText);
+        inputDialog.show();
+        return inputDialog;
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, String inputText) {
@@ -40,12 +56,24 @@ public class InputDialog extends MessageDialog {
         this.inputText = inputText;
     }
     
+    public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, String inputText) {
+        InputDialog inputDialog = new InputDialog(title, message, okText, cancelText, inputText);
+        inputDialog.show();
+        return inputDialog;
+    }
+    
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText) {
         this.title = title;
         this.message = message;
         this.okText = okText;
         this.cancelText = cancelText;
         this.otherText = otherText;
+    }
+    
+    public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText) {
+        InputDialog inputDialog = new InputDialog(title, message, okText, cancelText, otherText);
+        inputDialog.show();
+        return inputDialog;
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText, String inputText) {
@@ -57,12 +85,31 @@ public class InputDialog extends MessageDialog {
         this.inputText = inputText;
     }
     
+    public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText, String inputText) {
+        InputDialog inputDialog = new InputDialog(title, message, okText, cancelText, otherText, inputText);
+        inputDialog.show();
+        return inputDialog;
+    }
+    
     public CharSequence getOkButton() {
         return okText;
     }
     
     public InputDialog setOkButton(CharSequence okText) {
         this.okText = okText;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setOkButton(OnInputDialogButtonClickListener okButtonClickListener) {
+        this.okButtonClickListener = okButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setOkButton(CharSequence okText, OnInputDialogButtonClickListener okButtonClickListener) {
+        this.okText = okText;
+        this.okButtonClickListener = okButtonClickListener;
         refreshUI();
         return this;
     }
@@ -77,6 +124,19 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
+    public InputDialog setCancelButton(OnInputDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setCancelButton(CharSequence cancelText, OnInputDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelText = cancelText;
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getOtherButton() {
         return otherText;
     }
@@ -87,31 +147,44 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
-    public OnDialogButtonClickListener getOkButtonClickListener() {
-        return okButtonClickListener;
+    public InputDialog setOtherButton(OnInputDialogButtonClickListener otherButtonClickListener) {
+        this.otherButtonClickListener = otherButtonClickListener;
+        refreshUI();
+        return this;
     }
     
-    public InputDialog setOkButtonClickListener(OnDialogButtonClickListener okButtonClickListener) {
+    public InputDialog setOtherButton(CharSequence otherText, OnInputDialogButtonClickListener otherButtonClickListener) {
+        this.otherText = otherText;
+        this.otherButtonClickListener = otherButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public OnInputDialogButtonClickListener getOkButtonClickListener() {
+        return (OnInputDialogButtonClickListener) okButtonClickListener;
+    }
+    
+    public InputDialog setOkButtonClickListener(OnInputDialogButtonClickListener okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
         refreshUI();
         return this;
     }
     
-    public OnDialogButtonClickListener getCancelButtonClickListener() {
-        return cancelButtonClickListener;
+    public OnInputDialogButtonClickListener getCancelButtonClickListener() {
+        return (OnInputDialogButtonClickListener) cancelButtonClickListener;
     }
     
-    public InputDialog setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
+    public InputDialog setCancelButtonClickListener(OnInputDialogButtonClickListener cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
         return this;
     }
     
-    public OnDialogButtonClickListener getOtherButtonClickListener() {
-        return otherButtonClickListener;
+    public OnInputDialogButtonClickListener getOtherButtonClickListener() {
+        return (OnInputDialogButtonClickListener) otherButtonClickListener;
     }
     
-    public InputDialog setOtherButtonClickListener(OnDialogButtonClickListener otherButtonClickListener) {
+    public InputDialog setOtherButtonClickListener(OnInputDialogButtonClickListener otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
         refreshUI();
         return this;

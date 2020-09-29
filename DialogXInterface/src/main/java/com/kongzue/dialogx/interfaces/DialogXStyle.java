@@ -1,12 +1,5 @@
 package com.kongzue.dialogx.interfaces;
 
-/**
- * @author: Kongzue
- * @github: https://github.com/kongzue/
- * @homepage: http://kongzue.com/
- * @mail: myzcxhh@live.cn
- * @createTime: 2020/9/26 13:14
- */
 public interface DialogXStyle {
     
     int styleVer = 1;
@@ -37,6 +30,8 @@ public interface DialogXStyle {
     
     VerticalButtonRes overrideVerticalButtonRes();
     
+    WaitTipRes overrideWaitTipRes();
+    
     interface BlurBackgroundSetting {
         
         boolean blurBackground();
@@ -62,5 +57,14 @@ public interface DialogXStyle {
         int overrideVerticalCancelButtonBackgroundRes(int visibleButtonCount, boolean light);
         
         int overrideVerticalOtherButtonBackgroundRes(int visibleButtonCount, boolean light);
+    }
+    
+    interface WaitTipRes {
+        
+        boolean blurBackground();
+        
+        int overrideBackgroundColorRes(boolean light);
+        
+        int overrideTextColorRes(boolean light);
     }
 }

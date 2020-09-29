@@ -31,14 +31,14 @@ import static com.kongzue.dialogx.DialogX.DEBUGMODE;
 public class BaseDialog {
     
     private static WeakReference<FrameLayout> rootFrameLayout;
-    private static WeakReference<Context> applicationContextWeakReference;
+    private static WeakReference<Activity> contextWeakReference;
     
     public static void init(Context context) {
-        applicationContextWeakReference = new WeakReference<>(context.getApplicationContext());
         ActivityLifecycleImpl.init(context, new ActivityLifecycleImpl.onActivityResumeCallBack() {
             @Override
             public void getActivity(Activity activity) {
                 try {
+                    contextWeakReference = new WeakReference<>(activity);
                     rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content));
                 } catch (Exception e) {
                     error("DialogX.init: 初始化异常，找不到Activity的根布局");
@@ -68,8 +68,8 @@ public class BaseDialog {
     }
     
     public static Context getContext() {
-        if (applicationContextWeakReference == null) return null;
-        return applicationContextWeakReference.get();
+        if (contextWeakReference == null) return null;
+        return contextWeakReference.get();
     }
     
     protected boolean cancelable = true;
@@ -82,7 +82,7 @@ public class BaseDialog {
     public BaseDialog() {
         style = DialogX.globalStyle;
         theme = DialogX.globalTheme;
-        autoShowInputKeyboard=  DialogX.autoShowInputKeyboard;
+        autoShowInputKeyboard = DialogX.autoShowInputKeyboard;
     }
     
     public View createView(int layoutId) {
@@ -135,7 +135,7 @@ public class BaseDialog {
         return splitView;
     }
     
-    protected View createVerticalSplitView(int color,int height) {
+    protected View createVerticalSplitView(int color, int height) {
         View splitView = new View(getContext());
         splitView.setBackgroundColor(color);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1, dip2px(height));
@@ -168,11 +168,12 @@ public class BaseDialog {
         return (int) (dpValue * scale + 0.5f);
     }
     
-    public boolean isLightTheme(){
+    public boolean isLightTheme() {
         return theme == DialogX.THEME.LIGHT;
     }
     
     public static FrameLayout getRootFrameLayout() {
+        if (rootFrameLayout == null) return null;
         return rootFrameLayout.get();
     }
 }
