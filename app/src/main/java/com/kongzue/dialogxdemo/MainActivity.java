@@ -30,7 +30,7 @@ import com.kongzue.dialogx.util.TextInfo;
 @Layout(R.layout.activity_main)
 @DarkStatusBarTheme(true)
 @DarkNavigationBarTheme(true)
-@NavigationBarBackgroundColorRes(R.color.empty)
+@NavigationBarBackgroundColorRes(R.color.colorNavbarBkg)
 public class MainActivity extends BaseActivity {
     
     private RelativeLayout boxTable;

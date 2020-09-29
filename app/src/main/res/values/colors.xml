@@ -3,4 +3,6 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">@color/white</color>
     <color name="colorAccent">#2196F3</color>
+
+    <color name="colorNavbarBkg">#01000000</color>
 </resources>

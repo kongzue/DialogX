@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
+
+import androidx.core.view.ViewCompat;
 
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -54,9 +57,14 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private void init() {
         setFocusableInTouchMode(true);
         requestFocus();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getRootWindowInsets()!=null) {
-            onApplyWindowInsets(getRootWindowInsets());
+    }
+    
+    @Override
+    public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
         }
+        return super.dispatchApplyWindowInsets(insets);
     }
     
     @Override
@@ -80,6 +88,11 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        final ViewParent parent = getParent();
+    
+        ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
+        ViewCompat.requestApplyInsets(this);
+        
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onShow();
         }
@@ -121,20 +134,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
         }
         setPadding(left, top, right, bottom);
-    }
-    
-    @Override
-    protected boolean fitSystemWindows(Rect insets) {
-        paddingView(insets.left,insets.top,insets.right,insets.bottom);
-        return true;
-    }
-    
-    @Override
-    public WindowInsets onApplyWindowInsets(WindowInsets windowInsets) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            paddingView(windowInsets.getSystemWindowInsetLeft(), windowInsets.getSystemWindowInsetTop(), windowInsets.getSystemWindowInsetRight(), windowInsets.getSystemWindowInsetBottom());
-        }
-        return super.onApplyWindowInsets(windowInsets);
     }
     
     public DialogXBaseRelativeLayout setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
