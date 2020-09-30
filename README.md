@@ -11,7 +11,8 @@ DialogX 采用分离设计，默认自带 Material 主题，可选引入 IOS、K
 
 ## 开发计划
 
-DialogX开发计划{
+DialogX开发计划
+
     MessageDialog                           √
     InputDialog(extends MessageDialog)      √
     WaitDialog                              √
@@ -20,12 +21,12 @@ DialogX开发计划{
     FullScreenDialog                        ×
     CustomDialog                            ×
     PopTip                                  ×
-}
 
-即将被抛弃{
+即将被抛弃
+
     ShareDialog
     Notification                            -
-}
+
 
 开发计划变化依据：DialogX不再提供具体功能实现的组件，因此ShareDialog将被抛弃，今后如果需要制作分享对话框则需要自行使用自定义布局实现。另外因为Toast的反射被限制，因此Notification可能也会被抛弃，PopTip则是新增的一个组件，用于非阻断式提示，类似于Toast但不可以跨界面显示，但提供了丰富的提示方式
 
