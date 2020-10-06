@@ -17,6 +17,7 @@ import com.kongzue.baseframework.interfaces.NavigationBarBackgroundColorRes;
 import com.kongzue.baseframework.util.CycleRunner;
 import com.kongzue.baseframework.util.JumpParameter;
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.TipDialog;
@@ -55,12 +56,9 @@ public class MainActivity extends BaseActivity {
     private TextView btnTipWarning;
     private TextView btnTipError;
     private TextView btnTipProgress;
-    private TextView btnModalDialog;
     private TextView btnShowBreak;
-    private TextView btnNotify;
+    private TextView btnBottomDialog;
     private TextView btnBottomMenu;
-    private TextView btnBottomMenuWithTitle;
-    private TextView btnShareDialog;
     private TextView btnCustomMessageDialog;
     private TextView btnCustomInputDialog;
     private TextView btnCustomBottomMenu;
@@ -93,12 +91,9 @@ public class MainActivity extends BaseActivity {
         btnTipWarning = findViewById(R.id.btn_tipWarning);
         btnTipError = findViewById(R.id.btn_tipError);
         btnTipProgress = findViewById(R.id.btn_tipProgress);
-        btnModalDialog = findViewById(R.id.btn_modalDialog);
         btnShowBreak = findViewById(R.id.btn_showBreak);
-        btnNotify = findViewById(R.id.btn_notify);
+        btnBottomDialog = findViewById(R.id.btn_bottom_dialog);
         btnBottomMenu = findViewById(R.id.btn_bottom_menu);
-        btnBottomMenuWithTitle = findViewById(R.id.btn_bottom_menu_withTitle);
-        btnShareDialog = findViewById(R.id.btn_shareDialog);
         btnCustomMessageDialog = findViewById(R.id.btn_customMessageDialog);
         btnCustomInputDialog = findViewById(R.id.btn_customInputDialog);
         btnCustomBottomMenu = findViewById(R.id.btn_customBottomMenu);
@@ -246,6 +241,13 @@ public class MainActivity extends BaseActivity {
                         }, 1000, 1000);
                     }
                 }, 3000);
+            }
+        });
+    
+        btnBottomDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new BottomDialog().show();
             }
         });
     }

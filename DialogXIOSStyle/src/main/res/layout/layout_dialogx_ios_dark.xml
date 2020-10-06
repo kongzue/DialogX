@@ -41,10 +41,11 @@
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:overScrollMode="never"
                     android:scrollbarSize="7dp"
                     android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
-                    android:scrollbars="vertical"
-                    android:layout_weight="1">
+                    android:scrollbars="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"

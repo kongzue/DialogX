@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
@@ -112,7 +113,7 @@ public class WaitDialog extends BaseDialog {
     
     protected DialogImpl dialogImpl;
     
-    class DialogImpl {
+    class DialogImpl implements DialogConvertViewInterface {
         DialogXBaseRelativeLayout boxRoot;
         MaxRelativeLayout bkg;
         BlurView blurView;
@@ -132,8 +133,8 @@ public class WaitDialog extends BaseDialog {
             init();
             refreshView();
         }
-        
-        private void init() {
+    
+        public void init() {
             blurView.setRadiusPx(dip2px(15));
             boxRoot.setClickable(true);
             //txtInfo.getPaint().setFakeBoldText(true);
@@ -179,8 +180,8 @@ public class WaitDialog extends BaseDialog {
         }
         
         private float oldProgress;
-        
-        private void refreshView() {
+    
+        public void refreshView() {
             if (style.overrideWaitTipRes() != null) {
                 int overrideBackgroundColorRes = style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme());
                 if (overrideBackgroundColorRes == 0) {
@@ -306,5 +307,9 @@ public class WaitDialog extends BaseDialog {
     public WaitDialog setDialogLifecycleCallback(DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback) {
         this.dialogLifecycleCallback = dialogLifecycleCallback;
         return this;
+    }
+    
+    public DialogImpl getDialogImpl() {
+        return dialogImpl;
     }
 }

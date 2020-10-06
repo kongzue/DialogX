@@ -7,7 +7,7 @@ DialogX 采用分离设计，默认自带 Material 主题，可选引入 IOS、K
 
 更低的耦合度，无论对话框是否正在显示，请肆意执行的 Activity 关闭逻辑，而无需担心引发 WindowLeaked 错误。
 
-目前开发进度：53% [========== · · · · · · · · · · ]
+目前开发进度：55% [=========== · · · · · · · · · ]
 
 ## 开发计划
 
@@ -17,7 +17,8 @@ DialogX开发计划
     InputDialog(extends MessageDialog)      √
     WaitDialog                              √
     TipDialog(extends WaitDialog)           √
-    BottomDialog                            ×
+    BottomDialog                            -
+    BottomMenu                              ×
     FullScreenDialog                        ×
     CustomDialog                            ×
     PopTip                                  ×

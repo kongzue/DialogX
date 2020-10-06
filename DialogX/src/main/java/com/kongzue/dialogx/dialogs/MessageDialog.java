@@ -21,6 +21,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -137,7 +138,7 @@ public class MessageDialog extends BaseDialog {
         dialogImpl.refreshView();
     }
     
-    class DialogImpl {
+    class DialogImpl implements DialogConvertViewInterface {
         BlurView blurView;
         
         DialogXBaseRelativeLayout boxRoot;
@@ -167,8 +168,8 @@ public class MessageDialog extends BaseDialog {
             init();
             refreshView();
         }
-        
-        private void init() {
+    
+        public void init() {
             txtDialogTitle.getPaint().setFakeBoldText(true);
             btnSelectNegative.getPaint().setFakeBoldText(true);
             btnSelectPositive.getPaint().setFakeBoldText(true);
@@ -225,8 +226,8 @@ public class MessageDialog extends BaseDialog {
                 }
             });
         }
-        
-        private void refreshView() {
+    
+        public void refreshView() {
             bkg.setMaxWidth(DialogX.dialogMaxWidth);
             if (me instanceof InputDialog) {
                 txtInput.setVisibility(View.VISIBLE);
@@ -472,7 +473,7 @@ public class MessageDialog extends BaseDialog {
             });
             
         }
-        
+    
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
             
@@ -712,5 +713,9 @@ public class MessageDialog extends BaseDialog {
         this.onBackPressedListener = onBackPressedListener;
         refreshUI();
         return this;
+    }
+    
+    public DialogImpl getDialogImpl() {
+        return dialogImpl;
     }
 }

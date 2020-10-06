@@ -42,6 +42,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbarSize="7dp"
+                    android:overScrollMode="never"
                     android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical"
                     android:scrollbars="vertical"
                     android:layout_weight="1">
