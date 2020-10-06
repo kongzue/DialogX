@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
@@ -51,36 +54,42 @@ public class BottomDialog extends BaseDialog {
     
     protected DialogImpl dialogImpl;
     
-    class DialogImpl implements DialogConvertViewInterface {
+    public class DialogImpl implements DialogConvertViewInterface {
         
-        DialogXBaseRelativeLayout boxRoot;
-        RelativeLayout boxBkg;
-        MaxRelativeLayout bkg;
-        ImageView imgTab;
-        TextView txtDialogTitle;
-        ScrollView scrollView;
-        TextView txtDialogTip;
-        RelativeLayout boxCustom;
+        public DialogXBaseRelativeLayout boxRoot;
+        public RelativeLayout boxBkg;
+        public MaxRelativeLayout bkg;
+        public ImageView imgTab;
+        public TextView txtDialogTitle;
+        public ScrollView scrollView;
+        public LinearLayout boxContent;
+        public TextView txtDialogTip;
+        public RelativeLayout boxCustom;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);
-            bkg = convertView.findViewById(R.id.bkg);
             boxBkg = convertView.findViewById(R.id.box_bkg);
+            bkg = convertView.findViewById(R.id.bkg);
             imgTab = convertView.findViewById(R.id.img_tab);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
             scrollView = convertView.findViewById(R.id.scrollView);
+            boxContent = convertView.findViewById(R.id.box_content);
             txtDialogTip = convertView.findViewById(R.id.txt_dialog_tip);
             boxCustom = convertView.findViewById(R.id.box_custom);
             init();
             refreshView();
         }
         
-        private boolean isBkgTouched = false;
-        private float bkgTouchDownY;
-        private boolean isSvTouched = false;
-        private boolean isInterceptTouched = false;
-        private float svTouchDownY;
-        private float bkgEnterAimY;
+        /**
+         * 此值记录了BottomDialog启动后的位置
+         * ·当内容高度大于屏幕安全区高度时，BottomDialog会以全屏方式启动，但一开始只会展开到 0.8×屏幕高度，
+         * 此时可以再次上划查看全部内容。
+         * ·当内容高度小于屏幕安全区高度时，BottomDialog会以内容高度启动。
+         * <p>
+         * 记录这个值的目的是，当用户向下滑动时，判断情况该回到这个位置还是关闭对话框，
+         * 并阻止当内容高度已经完全显示时的继续向上滑动操作。
+         */
+        public float bkgEnterAimY;
         
         @Override
         public void init() {
@@ -90,106 +99,13 @@ public class BottomDialog extends BaseDialog {
                     isShow = true;
                     boxRoot.setAlpha(0f);
                     
-                    scrollView.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            switch (event.getAction()) {
-                                case MotionEvent.ACTION_DOWN:
-                                    svTouchDownY = event.getY();
-                                    isSvTouched = true;
-                                    break;
-                                case MotionEvent.ACTION_MOVE:
-                                    if (isSvTouched) {
-                                        if (scrollView.getScrollY() == 0) {
-                                            bkgTouchDownY = svTouchDownY;
-                                            bkg.setInterceptTouchEvent(true);
-                                            bkg.onTouchEvent(event);
-                                            isBkgTouched = true;
-                                            isInterceptTouched = true;
-                                            return true;
-                                        } else {
-                                            svTouchDownY = event.getY();
-                                            isInterceptTouched = false;
-                                        }
-                                    }
-                                    if (isInterceptTouched || bkg.getY() > 0) {
-                                        return true;
-                                    }
-                                    break;
-                                case MotionEvent.ACTION_UP:
-                                case MotionEvent.ACTION_CANCEL:
-                                    isInterceptTouched = false;
-                                    isSvTouched = false;
-                                    break;
-                            }
-                            return false;
-                        }
-                    });
+                    new BottomDialogTouchEventInterceptor(dialogImpl);
                     
-                    bkg.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            switch (event.getAction()) {
-                                case MotionEvent.ACTION_DOWN:
-                                    bkgTouchDownY = event.getY();
-                                    isBkgTouched = true;
-                                    break;
-                                case MotionEvent.ACTION_MOVE:
-                                    if (isBkgTouched) {
-                                        float aimY = bkg.getY() + event.getY() - bkgTouchDownY;
-                                        if (aimY < 0) {
-                                            bkg.setInterceptTouchEvent(false);
-                                            scrollView.onTouchEvent(event);
-                                            bkg.setY(0);
-                                        } else {
-                                            if (bkg.isChildScrollViewCanScroll()) {
-                                                bkg.setInterceptTouchEvent(true);
-                                                bkg.setY(aimY);
-                                            } else {
-                                                if (aimY > bkgEnterAimY) {
-                                                    bkg.setInterceptTouchEvent(true);
-                                                    bkg.setY(aimY);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case MotionEvent.ACTION_UP:
-                                case MotionEvent.ACTION_CANCEL:
-                                    isBkgTouched = false;
-                                    if (bkg.getY() > 0) {
-                                        if (bkg.getY() < bkgEnterAimY  + dip2px(15)) {
-                                            ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
-                                            enterAnim.setDuration(300);
-                                            enterAnim.start();
-                                        } else {
-                                            doDismiss(boxRoot);
-                                        }
-                                    }
-                                    break;
-                            }
-                            return true;
-                        }
-                    });
-                    scrollView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            bkg.setY(boxBkg.getHeight());
-                            if (bkg.isChildScrollViewCanScroll()) {
-                                bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * 0.8f;
-                            } else {
-                                bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
-                            }
-                            ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxBkg.getHeight(), bkgEnterAimY);
-                            enterAnim.setDuration(300);
-                            enterAnim.start();
-                            boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(300).setListener(null);
-                            
-                            bkg.setInterceptTouchEvent(true);
-                        }
-                    });
+                    boxContent.getViewTreeObserver().addOnGlobalLayoutListener(onContentViewLayoutChangeListener);
                     
                     getDialogLifecycleCallback().onShow(me);
+                    
+                    onDialogInit(dialogImpl);
                 }
                 
                 @Override
@@ -199,6 +115,23 @@ public class BottomDialog extends BaseDialog {
                 }
             });
         }
+        
+        private ViewTreeObserver.OnGlobalLayoutListener onContentViewLayoutChangeListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (boxContent != null) {
+                    float oldY = bkgEnterAimY;
+                    if (bkg.isChildScrollViewCanScroll()) {
+                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * 0.6f;
+                    } else {
+                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
+                    }
+                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", oldY, bkgEnterAimY);
+                    enterAnim.setDuration(300);
+                    enterAnim.start();
+                }
+            }
+        };
         
         @Override
         public void refreshView() {
@@ -228,6 +161,9 @@ public class BottomDialog extends BaseDialog {
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
             
+            if (boxContent != null)
+                boxContent.getViewTreeObserver().removeOnGlobalLayoutListener(onContentViewLayoutChangeListener);
+            
             ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
             exitAnim.setDuration(300);
             exitAnim.start();
@@ -239,6 +175,9 @@ public class BottomDialog extends BaseDialog {
                 }
             });
         }
+    }
+    
+    protected void onDialogInit(DialogImpl dialog) {
     }
     
     public void refreshUI() {

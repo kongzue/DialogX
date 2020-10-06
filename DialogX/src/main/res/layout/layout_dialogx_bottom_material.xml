@@ -31,7 +31,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:clickable="true"
                 android:orientation="vertical">
 
                 <TextView
@@ -56,6 +55,7 @@
                     android:scrollbars="vertical">
 
                     <LinearLayout
+                        android:id="@+id/box_content"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">

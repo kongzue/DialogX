@@ -114,14 +114,6 @@ public class MaxRelativeLayout extends RelativeLayout {
     }
     
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (onTouchListener!=null){
-            return onTouchListener.onTouch(this,event);
-        }
-        return super.onTouchEvent(event);
-    }
-    
-    @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if (onTouchListener != null && interceptTouchEvent) {
             onTouchListener.onTouch(this, event);
@@ -142,10 +134,10 @@ public class MaxRelativeLayout extends RelativeLayout {
                         touchX = (int) event.getRawX();
                     }
                     isMove = true;
-                    
+                
                     float moveY = event.getRawY();
                     float moveX = event.getRawX();
-                    
+                
                     if (Math.abs(moveY - touchY) > dip2px(20) || Math.abs(moveX - touchX) > dip2px(20)) {
                         final ViewParent parent = getParent();
                         if (parent != null) {
@@ -157,7 +149,7 @@ public class MaxRelativeLayout extends RelativeLayout {
             }
             return isMove;
         }
-        return super.onInterceptTouchEvent(event);
+        return false;
     }
     
     public boolean isChildScrollViewCanScroll() {
@@ -172,8 +164,7 @@ public class MaxRelativeLayout extends RelativeLayout {
     
     private OnTouchListener onTouchListener;
     
-    @Override
-    public void setOnTouchListener(OnTouchListener l) {
+    public void setTouchCallBack(OnTouchListener l) {
         onTouchListener = l;
         super.setOnTouchListener(l);
     }

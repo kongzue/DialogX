@@ -1,0 +1,136 @@
+package com.kongzue.dialogx.util;
+
+import android.animation.ObjectAnimator;
+import android.content.res.Resources;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+
+import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
+import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
+
+/**
+ * @author: Kongzue
+ * @github: https://github.com/kongzue/
+ * @homepage: http://kongzue.com/
+ * @mail: myzcxhh@live.cn
+ * @createTime: 2020/10/7 4:01
+ */
+public class BottomDialogTouchEventInterceptor {
+    
+    /**
+     * 下边三个值用于判断触控过程，
+     * isBkgTouched：标记是否已按下
+     * bkgTouchDownY：记录起始触控位置
+     * scrolledY：记录 ScrollView 已滚动过的距离，下次触控事件将接着上次的位置继续滑动。
+     */
+    private boolean isBkgTouched = false;
+    private float bkgTouchDownY;
+    private float scrolledY;
+    /**
+     * 0：bkg接收触控事件，-1：scrollView进行滚动
+     * 此标记的意义在于，当从 [scrollView滚动] 与 [bkg接收触控事件] 状态切换时，
+     * 需要对bkgTouchDownY、scrolledY的值进行刷新，否则触控连续过程会出现闪跳。
+     */
+    private int oldMode;
+    
+    public BottomDialogTouchEventInterceptor(final BottomDialog.DialogImpl impl) {
+        
+        /**
+         * BottomDialog 触控事件说明：
+         * bkg 将拦截并接管所有触控操作。
+         * BottomDialog 的启动方式依据是内容布局高度是否大于可显示安全区域的高度。
+         * bkg 会在合适的时机，直接接管控制 ScrollView 的滚动。
+         * 因此，请确保内容布局的高度计算方式一定是按照内容高度计算，
+         * 即，请重写 onMeasure 方法：
+         * @Override
+         * protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+         *     int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
+         *     super.onMeasure(widthMeasureSpec, expandSpec);
+         * }
+         */
+        impl.bkg.setTouchCallBack(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        bkgTouchDownY = event.getY();
+                        isBkgTouched = true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (isBkgTouched) {
+                            float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
+                            if (aimY < 0 || impl.scrollView.getScrollY() != 0) {
+                                if (impl.bkg.isChildScrollViewCanScroll()) {
+                                    if (oldMode == 0) {
+                                        bkgTouchDownY = event.getY();
+                                        scrolledY = 0;
+                                    }
+                                    
+                                    impl.scrollView.scrollTo(0, (int) (scrolledY - (event.getY() - bkgTouchDownY)));
+                                    impl.bkg.setY(0);
+                                    
+                                    oldMode = -1;
+                                }
+                            } else {
+                                if (oldMode == -1) {
+                                    bkgTouchDownY = event.getY();
+                                    aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
+                                }
+                                
+                                if (impl.bkg.isChildScrollViewCanScroll()) {
+                                    impl.bkg.setY(aimY);
+                                } else {
+                                    if (aimY > impl.bkgEnterAimY) {
+                                        impl.bkg.setY(aimY);
+                                    }
+                                }
+                                
+                                oldMode = 0;
+                            }
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        scrolledY = impl.scrollView.getScrollY();
+                        isBkgTouched = false;
+                        if (impl.bkg.getY() > 0) {
+                            if (impl.bkg.getY() < impl.bkgEnterAimY + dip2px(35)) {
+                                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
+                                enterAnim.setDuration(300);
+                                enterAnim.start();
+                            } else {
+                                impl.doDismiss(impl.boxRoot);
+                            }
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
+        
+        impl.scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                impl.bkg.setY(impl.boxBkg.getHeight());
+                if (impl.bkg.isChildScrollViewCanScroll()) {
+                    impl.bkgEnterAimY = impl.boxBkg.getHeight() - impl.bkg.getHeight() * 0.6f;
+                } else {
+                    impl.bkgEnterAimY = impl.boxBkg.getHeight() - impl.bkg.getHeight();
+                }
+                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.boxBkg.getHeight(), impl.bkgEnterAimY);
+                enterAnim.setDuration(300);
+                enterAnim.start();
+                impl.boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(300).setListener(null);
+                
+                impl.bkg.setInterceptTouchEvent(true);
+            }
+        });
+    }
+    
+    private int dip2px(float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+}

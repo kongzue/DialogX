@@ -18,6 +18,7 @@ import com.kongzue.baseframework.util.CycleRunner;
 import com.kongzue.baseframework.util.JumpParameter;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.dialogs.BottomMenu;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.TipDialog;
@@ -248,6 +249,33 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 new BottomDialog().show();
+            }
+        });
+        
+        btnBottomMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new BottomMenu().setOnIconChangeCallBack(new BottomMenu.OnIconChangeCallBack() {
+                    @Override
+                    public int getIcon(int index, String menuText) {
+                        switch (menuText){
+                            case "添加":      return R.mipmap.img_dialogx_demo_add;
+                            case "查看":      return R.mipmap.img_dialogx_demo_view;
+                            case "编辑":      return R.mipmap.img_dialogx_demo_edit;
+                            case "删除":      return R.mipmap.img_dialogx_demo_delete;
+                            case "分享":      return R.mipmap.img_dialogx_demo_share;
+                            case "评论":      return R.mipmap.img_dialogx_demo_comment;
+                            case "下载":      return R.mipmap.img_dialogx_demo_download;
+                            case "收藏":      return R.mipmap.img_dialogx_demo_favorite;
+                            case "赞！":      return R.mipmap.img_dialogx_demo_link;
+                            case "不喜欢":     return R.mipmap.img_dialogx_demo_dislike;
+                            case "所属专辑":    return R.mipmap.img_dialogx_demo_album;
+                            case "复制链接":    return R.mipmap.img_dialogx_demo_link;
+                            case "类似推荐":    return R.mipmap.img_dialogx_demo_recommend;
+                        }
+                        return 0;
+                    }
+                }).show();
             }
         });
     }

@@ -362,35 +362,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:text="其他功能演示"
-                    android:textColor="#dc000000"
-                    android:textSize="14dp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/btn_showBreak"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/rect_button"
-                        android:paddingHorizontal="15dp"
-                        android:paddingVertical="10dp"
-                        android:text="显示Dialog时关闭Activity"
-                        android:textColor="@color/white"
-                        android:textSize="13dp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
                     android:text="底部菜单"
                     android:textColor="#dc000000"
                     android:textSize="14dp"
@@ -409,7 +380,7 @@
                         android:background="@drawable/rect_button"
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="10dp"
-                        android:text="标题对话框"
+                        android:text="底部对话框"
                         android:textColor="@color/white"
                         android:textSize="13dp"
                         android:textStyle="bold" />
@@ -422,7 +393,20 @@
                         android:background="@drawable/rect_button"
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="10dp"
-                        android:text="显示底部菜单"
+                        android:text="底部菜单"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btn_bottom_reply"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rect_button"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="底部输入框"
                         android:textColor="@color/white"
                         android:textSize="13dp"
                         android:textStyle="bold" />
@@ -556,6 +540,35 @@
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="10dp"
                         android:text="登录"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="其他功能演示"
+                    android:textColor="#dc000000"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btn_showBreak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rect_button"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="显示Dialog时关闭Activity"
                         android:textColor="@color/white"
                         android:textSize="13dp"
                         android:textStyle="bold" />
