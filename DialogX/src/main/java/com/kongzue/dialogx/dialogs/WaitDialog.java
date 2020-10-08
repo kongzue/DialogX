@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.Animator;
 import android.graphics.Color;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,6 +16,8 @@ import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -30,6 +33,8 @@ import java.lang.ref.WeakReference;
  * @createTime: 2020/9/27 14:50
  */
 public class WaitDialog extends BaseDialog {
+    
+    protected OnBindView<WaitDialog> onBindView;
     
     public enum TYPE {
         NONE,
@@ -47,6 +52,7 @@ public class WaitDialog extends BaseDialog {
     
     protected WaitDialog() {
         me = new WeakReference<>(this);
+        cancelable = false;
     }
     
     public static WaitDialog show(CharSequence message) {
@@ -63,7 +69,7 @@ public class WaitDialog extends BaseDialog {
         }
     }
     
-    public static WaitDialog show(CharSequence message,float progress) {
+    public static WaitDialog show(CharSequence message, float progress) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().message = message;
         if (dialogImpl != null) {
@@ -133,7 +139,7 @@ public class WaitDialog extends BaseDialog {
             init();
             refreshView();
         }
-    
+        
         public void init() {
             blurView.setRadiusPx(dip2px(15));
             boxRoot.setClickable(true);
@@ -157,6 +163,8 @@ public class WaitDialog extends BaseDialog {
                             getDialogLifecycleCallback().onShow(me());
                         }
                     });
+                    
+                    if (onBindView != null) onBindView.onBind(me.get(), onBindView.getCustomView());
                 }
                 
                 @Override
@@ -177,10 +185,24 @@ public class WaitDialog extends BaseDialog {
                     }
                 }, 100);
             }
+            
+            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+                @Override
+                public boolean onBackPressed() {
+                    if (onBackPressedListener != null && onBackPressedListener.onBackPressed()) {
+                        dismiss();
+                        return false;
+                    }
+                    if (cancelable) {
+                        dismiss();
+                    }
+                    return false;
+                }
+            });
         }
         
         private float oldProgress;
-    
+        
         public void refreshView() {
             if (style.overrideWaitTipRes() != null) {
                 int overrideBackgroundColorRes = style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme());
@@ -213,6 +235,22 @@ public class WaitDialog extends BaseDialog {
             }
             
             showText(txtInfo, message);
+            
+            if (onBindView != null && onBindView.getCustomView() != null) {
+                if (onBindView.getCustomView().isAttachedToWindow()) {
+                    boxCustomView.removeView(onBindView.getCustomView());
+                }
+                ViewGroup.LayoutParams lp = boxCustomView.getLayoutParams();
+                if (lp == null) {
+                    lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                boxCustomView.setVisibility(View.VISIBLE);
+                boxProgress.setVisibility(View.GONE);
+                boxCustomView.addView(onBindView.getCustomView(), lp);
+            } else {
+                boxCustomView.setVisibility(View.GONE);
+                boxProgress.setVisibility(View.VISIBLE);
+            }
         }
         
         public void doDismiss(View v) {
@@ -311,5 +349,32 @@ public class WaitDialog extends BaseDialog {
     
     public DialogImpl getDialogImpl() {
         return dialogImpl;
+    }
+    
+    public WaitDialog setCustomView(OnBindView<WaitDialog> onBindView) {
+        this.onBindView = onBindView;
+        refreshUI();
+        return this;
+    }
+    
+    public View getCustomView() {
+        if (onBindView == null) return null;
+        return onBindView.getCustomView();
+    }
+    
+    public WaitDialog removeCustomView() {
+        this.onBindView.clean();
+        refreshUI();
+        return this;
+    }
+    
+    public OnBackPressedListener getOnBackPressedListener() {
+        return onBackPressedListener;
+    }
+    
+    public WaitDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+        refreshUI();
+        return this;
     }
 }

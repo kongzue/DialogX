@@ -25,6 +25,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.util.views.BlurView;
@@ -42,11 +43,12 @@ import com.kongzue.dialogx.util.TextInfo;
  */
 public class MessageDialog extends BaseDialog {
     
+    protected OnBindView<MessageDialog> onBindView;
     protected MessageDialog me;
     
     private DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
     
-    public MessageDialog() {
+    protected MessageDialog() {
         me = this;
     }
     
@@ -168,7 +170,7 @@ public class MessageDialog extends BaseDialog {
             init();
             refreshView();
         }
-    
+        
         public void init() {
             txtDialogTitle.getPaint().setFakeBoldText(true);
             btnSelectNegative.getPaint().setFakeBoldText(true);
@@ -217,6 +219,8 @@ public class MessageDialog extends BaseDialog {
                             }
                         }, 300);
                     }
+    
+                    if (onBindView!=null)onBindView.onBind(me, onBindView.getCustomView());
                 }
                 
                 @Override
@@ -225,8 +229,79 @@ public class MessageDialog extends BaseDialog {
                     getDialogLifecycleCallback().onDismiss(me);
                 }
             });
+            
+            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+                @Override
+                public boolean onBackPressed() {
+                    if (onBackPressedListener != null && onBackPressedListener.onBackPressed()) {
+                        dismiss();
+                        return false;
+                    }
+                    if (cancelable) {
+                        dismiss();
+                    }
+                    return false;
+                }
+            });
+            btnSelectPositive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (okButtonClickListener != null) {
+                        if (okButtonClickListener instanceof OnInputDialogButtonClickListener) {
+                            String s = txtInput == null ? "" : txtInput.getText().toString();
+                            if (!((OnInputDialogButtonClickListener) okButtonClickListener).onClick(me, v, s)) {
+                                doDismiss(v);
+                            }
+                        } else {
+                            if (!okButtonClickListener.onClick(me, v)) {
+                                doDismiss(v);
+                            }
+                        }
+                    } else {
+                        doDismiss(v);
+                    }
+                }
+            });
+            btnSelectNegative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (cancelButtonClickListener != null) {
+                        if (cancelButtonClickListener instanceof OnInputDialogButtonClickListener) {
+                            String s = txtInput == null ? "" : txtInput.getText().toString();
+                            if (!((OnInputDialogButtonClickListener) cancelButtonClickListener).onClick(me, v, s)) {
+                                doDismiss(v);
+                            }
+                        } else {
+                            if (!cancelButtonClickListener.onClick(me, v)) {
+                                doDismiss(v);
+                            }
+                        }
+                    } else {
+                        doDismiss(v);
+                    }
+                }
+            });
+            btnSelectOther.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (otherButtonClickListener != null) {
+                        if (otherButtonClickListener instanceof OnInputDialogButtonClickListener) {
+                            String s = txtInput == null ? "" : txtInput.getText().toString();
+                            if (!((OnInputDialogButtonClickListener) otherButtonClickListener).onClick(me, v, s)) {
+                                doDismiss(v);
+                            }
+                        } else {
+                            if (!otherButtonClickListener.onClick(me, v)) {
+                                doDismiss(v);
+                            }
+                        }
+                    } else {
+                        doDismiss(v);
+                    }
+                }
+            });
         }
-    
+        
         public void refreshView() {
             bkg.setMaxWidth(DialogX.dialogMaxWidth);
             if (me instanceof InputDialog) {
@@ -405,75 +480,22 @@ public class MessageDialog extends BaseDialog {
             } else {
                 boxRoot.setOnClickListener(null);
             }
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
-                @Override
-                public boolean onBackPressed() {
-                    if (cancelable) {
-                        dismiss();
-                    }
-                    return false;
-                }
-            });
-            btnSelectPositive.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (okButtonClickListener != null) {
-                        if (okButtonClickListener instanceof OnInputDialogButtonClickListener) {
-                            String s = txtInput == null ? "" : txtInput.getText().toString();
-                            if (!((OnInputDialogButtonClickListener) okButtonClickListener).onClick(me, v, s)) {
-                                doDismiss(v);
-                            }
-                        } else {
-                            if (!okButtonClickListener.onClick(me, v)) {
-                                doDismiss(v);
-                            }
-                        }
-                    } else {
-                        doDismiss(v);
-                    }
-                }
-            });
-            btnSelectNegative.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (cancelButtonClickListener != null) {
-                        if (cancelButtonClickListener instanceof OnInputDialogButtonClickListener) {
-                            String s = txtInput == null ? "" : txtInput.getText().toString();
-                            if (!((OnInputDialogButtonClickListener) cancelButtonClickListener).onClick(me, v, s)) {
-                                doDismiss(v);
-                            }
-                        } else {
-                            if (!cancelButtonClickListener.onClick(me, v)) {
-                                doDismiss(v);
-                            }
-                        }
-                    } else {
-                        doDismiss(v);
-                    }
-                }
-            });
-            btnSelectOther.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (otherButtonClickListener != null) {
-                        if (otherButtonClickListener instanceof OnInputDialogButtonClickListener) {
-                            String s = txtInput == null ? "" : txtInput.getText().toString();
-                            if (!((OnInputDialogButtonClickListener) otherButtonClickListener).onClick(me, v, s)) {
-                                doDismiss(v);
-                            }
-                        } else {
-                            if (!otherButtonClickListener.onClick(me, v)) {
-                                doDismiss(v);
-                            }
-                        }
-                    } else {
-                        doDismiss(v);
-                    }
-                }
-            });
             
+            if (onBindView != null && onBindView.getCustomView() != null) {
+                if (onBindView.getCustomView().isAttachedToWindow()) {
+                    boxCustom.removeView(onBindView.getCustomView());
+                }
+                ViewGroup.LayoutParams lp = boxCustom.getLayoutParams();
+                if (lp == null) {
+                    lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                boxCustom.setVisibility(View.VISIBLE);
+                boxCustom.addView(onBindView.getCustomView(), lp);
+            } else {
+                boxCustom.setVisibility(View.GONE);
+            }
         }
-    
+        
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
             
@@ -717,5 +739,22 @@ public class MessageDialog extends BaseDialog {
     
     public DialogImpl getDialogImpl() {
         return dialogImpl;
+    }
+    
+    public MessageDialog setCustomView(OnBindView<MessageDialog> onBindView) {
+        this.onBindView = onBindView;
+        refreshUI();
+        return this;
+    }
+    
+    public View getCustomView() {
+        if (onBindView == null) return null;
+        return onBindView.getCustomView();
+    }
+    
+    public MessageDialog removeCustomView() {
+        this.onBindView.clean();
+        refreshUI();
+        return this;
     }
 }

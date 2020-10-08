@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -21,6 +22,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -34,15 +36,44 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
  */
 public class BottomDialog extends BaseDialog {
     
+    protected OnBindView<BottomDialog> onBindView;
+    protected CharSequence title;
+    protected CharSequence message;
+    protected CharSequence cancelText;
+    
     private DialogLifecycleCallback<BottomDialog> dialogLifecycleCallback;
     
     protected BottomDialog me;
     
-    public BottomDialog() {
+    protected BottomDialog() {
         me = this;
     }
     
     private View dialogView;
+    
+    public static BottomDialog build() {
+        return new BottomDialog();
+    }
+    
+    public BottomDialog(CharSequence title, CharSequence message) {
+        this.title = title;
+        this.message = message;
+    }
+    
+    public BottomDialog(CharSequence title, CharSequence message, OnBindView<BottomDialog> onBindView) {
+        this.title = title;
+        this.message = message;
+        this.onBindView = onBindView;
+    }
+    
+    public BottomDialog(CharSequence title, OnBindView<BottomDialog> onBindView) {
+        this.title = title;
+        this.onBindView = onBindView;
+    }
+    
+    public BottomDialog(OnBindView<BottomDialog> onBindView) {
+        this.onBindView = onBindView;
+    }
     
     public void show() {
         int layoutId = R.layout.layout_dialogx_bottom_material;
@@ -106,12 +137,28 @@ public class BottomDialog extends BaseDialog {
                     getDialogLifecycleCallback().onShow(me);
                     
                     onDialogInit(dialogImpl);
+    
+                    if (onBindView!=null)onBindView.onBind(me, onBindView.getCustomView());
                 }
                 
                 @Override
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                }
+            });
+            
+            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+                @Override
+                public boolean onBackPressed() {
+                    if (onBackPressedListener != null && onBackPressedListener.onBackPressed()) {
+                        dismiss();
+                        return false;
+                    }
+                    if (cancelable) {
+                        dismiss();
+                    }
+                    return false;
                 }
             });
         }
@@ -136,6 +183,10 @@ public class BottomDialog extends BaseDialog {
         @Override
         public void refreshView() {
             txtDialogTitle.getPaint().setFakeBoldText(true);
+            
+            showText(txtDialogTitle, title);
+            showText(txtDialogTip, message);
+            
             if (cancelable) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -146,15 +197,19 @@ public class BottomDialog extends BaseDialog {
             } else {
                 boxRoot.setOnClickListener(null);
             }
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
-                @Override
-                public boolean onBackPressed() {
-                    if (cancelable) {
-                        dismiss();
+            
+            if (onBindView != null) {
+                if (onBindView.getCustomView() != null) {
+                    if (onBindView.getCustomView().isAttachedToWindow()) {
+                        boxCustom.removeView(onBindView.getCustomView());
                     }
-                    return false;
+                    ViewGroup.LayoutParams lp = boxCustom.getLayoutParams();
+                    if (lp == null) {
+                        lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    }
+                    boxCustom.addView(onBindView.getCustomView(), lp);
                 }
-            });
+            }
         }
         
         @Override
@@ -174,6 +229,16 @@ public class BottomDialog extends BaseDialog {
                     dismiss(dialogView);
                 }
             });
+        }
+        
+        public void preDismiss() {
+            if (cancelable) {
+                doDismiss(boxRoot);
+            } else {
+                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
+                enterAnim.setDuration(300);
+                enterAnim.start();
+            }
         }
     }
     
@@ -222,5 +287,62 @@ public class BottomDialog extends BaseDialog {
     
     public DialogImpl getDialogImpl() {
         return dialogImpl;
+    }
+    
+    public CharSequence getTitle() {
+        return title;
+    }
+    
+    public BottomDialog setTitle(CharSequence title) {
+        this.title = title;
+        refreshUI();
+        return this;
+    }
+    
+    public CharSequence getMessage() {
+        return message;
+    }
+    
+    public BottomDialog setMessage(CharSequence message) {
+        this.message = message;
+        refreshUI();
+        return this;
+    }
+    
+    public CharSequence getCancelText() {
+        return cancelText;
+    }
+    
+    public BottomDialog setCancelText(CharSequence cancelText) {
+        this.cancelText = cancelText;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setCustomView(OnBindView<BottomDialog> onBindView) {
+        this.onBindView = onBindView;
+        refreshUI();
+        return this;
+    }
+    
+    public View getCustomView() {
+        if (onBindView == null) return null;
+        return onBindView.getCustomView();
+    }
+    
+    public BottomDialog removeCustomView() {
+        this.onBindView.clean();
+        refreshUI();
+        return this;
+    }
+    
+    public OnBackPressedListener getOnBackPressedListener() {
+        return onBackPressedListener;
+    }
+    
+    public BottomDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+        refreshUI();
+        return this;
     }
 }

@@ -18,7 +18,7 @@ public class TipDialog extends WaitDialog {
         return tipDialog;
     }
     
-    private TipDialog() {
+    protected TipDialog() {
         super();
     }
     

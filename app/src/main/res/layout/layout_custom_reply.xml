@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:text="回复"
+            android:textColor="@color/black90"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/btn_reply_commit"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="15dp"
+            android:text="发布"
+            android:textColor="@color/dialogxColorBlue"
+            android:textSize="16dp" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_reply_commit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/empty"
+        android:gravity="left|top"
+        android:hint="请输入内容..."
+        android:inputType="textMultiLine"
+        android:minHeight="100dp"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="5dp"
+        android:textSize="16dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="回复并转发" />
+
+</LinearLayout>

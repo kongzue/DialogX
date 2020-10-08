@@ -2,6 +2,7 @@ package com.kongzue.dialogxdemo;
 
 import android.graphics.Color;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -23,6 +24,10 @@ import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
+import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -57,9 +62,9 @@ public class MainActivity extends BaseActivity {
     private TextView btnTipWarning;
     private TextView btnTipError;
     private TextView btnTipProgress;
-    private TextView btnShowBreak;
     private TextView btnBottomDialog;
     private TextView btnBottomMenu;
+    private TextView btnBottomReply;
     private TextView btnCustomMessageDialog;
     private TextView btnCustomInputDialog;
     private TextView btnCustomBottomMenu;
@@ -67,6 +72,7 @@ public class MainActivity extends BaseActivity {
     private TextView btnCustomDialog;
     private TextView btnFullScreenDialogWebPage;
     private TextView btnFullScreenDialogLogin;
+    private TextView btnShowBreak;
     
     @Override
     public void initViews() {
@@ -92,9 +98,9 @@ public class MainActivity extends BaseActivity {
         btnTipWarning = findViewById(R.id.btn_tipWarning);
         btnTipError = findViewById(R.id.btn_tipError);
         btnTipProgress = findViewById(R.id.btn_tipProgress);
-        btnShowBreak = findViewById(R.id.btn_showBreak);
         btnBottomDialog = findViewById(R.id.btn_bottom_dialog);
         btnBottomMenu = findViewById(R.id.btn_bottom_menu);
+        btnBottomReply = findViewById(R.id.btn_bottom_reply);
         btnCustomMessageDialog = findViewById(R.id.btn_customMessageDialog);
         btnCustomInputDialog = findViewById(R.id.btn_customInputDialog);
         btnCustomBottomMenu = findViewById(R.id.btn_customBottomMenu);
@@ -102,6 +108,7 @@ public class MainActivity extends BaseActivity {
         btnCustomDialog = findViewById(R.id.btn_customDialog);
         btnFullScreenDialogWebPage = findViewById(R.id.btn_fullScreenDialog_webPage);
         btnFullScreenDialogLogin = findViewById(R.id.btn_fullScreenDialog_login);
+        btnShowBreak = findViewById(R.id.btn_showBreak);
     }
     
     @Override
@@ -112,6 +119,10 @@ public class MainActivity extends BaseActivity {
     //用于模拟进度提示
     private CycleRunner cycleRunner;
     private float progress = 0;
+    private int waitId;
+    
+    private TextView btnReplyCommit;
+    private EditText editReplyCommit;
     
     @Override
     public void setEvents() {
@@ -223,17 +234,39 @@ public class MainActivity extends BaseActivity {
         btnTipProgress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                waitId = 0;
                 progress = 0;
-                WaitDialog.show("连接服务器...");
+                WaitDialog.show("假装连接...").setOnBackPressedListener(new OnBackPressedListener() {
+                    @Override
+                    public boolean onBackPressed() {
+                        toast("点击返回");
+                        MessageDialog.show("正在进行", "是否取消？", "是", "否").setOkButton(new OnDialogButtonClickListener() {
+                            @Override
+                            public boolean onClick(BaseDialog baseDialog, View v) {
+                                waitId = -1;
+                                WaitDialog.dismiss();
+                                return false;
+                            }
+                        });
+                        return false;
+                    }
+                });
                 runOnMainDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        if (waitId != 0) {
+                            return;
+                        }
                         cycleRunner = runOnMainCycle(new Runnable() {
                             @Override
                             public void run() {
+                                if (waitId != 0) {
+                                    cycleRunner.cancel();
+                                    return;
+                                }
                                 progress = progress + 0.1f;
                                 if (progress < 1f) {
-                                    WaitDialog.show("正在加载" + ((int) (progress * 100)) + "%", progress);
+                                    WaitDialog.show("假装加载" + ((int) (progress * 100)) + "%", progress);
                                 } else {
                                     TipDialog.show("加载完成", WaitDialog.TYPE.SUCCESS);
                                     cycleRunner.cancel();
@@ -244,36 +277,75 @@ public class MainActivity extends BaseActivity {
                 }, 3000);
             }
         });
-    
+        
         btnBottomDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new BottomDialog().show();
+                new BottomDialog("标题", "这里是对话框内容。\n你可以向下滑动来关闭这个对话框。\n底部对话框也支持自定义布局扩展使用方式。",
+                        new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
+                            @Override
+                            public void onBind(BottomDialog dialog, View v) {
+                            
+                            }
+                        }).show();
             }
         });
         
         btnBottomMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new BottomMenu().setOnIconChangeCallBack(new BottomMenu.OnIconChangeCallBack() {
+                BottomMenu.build().setOnIconChangeCallBack(new BottomMenu.OnIconChangeCallBack() {
                     @Override
                     public int getIcon(int index, String menuText) {
-                        switch (menuText){
-                            case "添加":      return R.mipmap.img_dialogx_demo_add;
-                            case "查看":      return R.mipmap.img_dialogx_demo_view;
-                            case "编辑":      return R.mipmap.img_dialogx_demo_edit;
-                            case "删除":      return R.mipmap.img_dialogx_demo_delete;
-                            case "分享":      return R.mipmap.img_dialogx_demo_share;
-                            case "评论":      return R.mipmap.img_dialogx_demo_comment;
-                            case "下载":      return R.mipmap.img_dialogx_demo_download;
-                            case "收藏":      return R.mipmap.img_dialogx_demo_favorite;
-                            case "赞！":      return R.mipmap.img_dialogx_demo_link;
-                            case "不喜欢":     return R.mipmap.img_dialogx_demo_dislike;
-                            case "所属专辑":    return R.mipmap.img_dialogx_demo_album;
-                            case "复制链接":    return R.mipmap.img_dialogx_demo_link;
-                            case "类似推荐":    return R.mipmap.img_dialogx_demo_recommend;
+                        switch (menuText) {
+                            case "添加":
+                                return R.mipmap.img_dialogx_demo_add;
+                            case "查看":
+                                return R.mipmap.img_dialogx_demo_view;
+                            case "编辑":
+                                return R.mipmap.img_dialogx_demo_edit;
+                            case "删除":
+                                return R.mipmap.img_dialogx_demo_delete;
+                            case "分享":
+                                return R.mipmap.img_dialogx_demo_share;
+                            case "评论":
+                                return R.mipmap.img_dialogx_demo_comment;
+                            case "下载":
+                                return R.mipmap.img_dialogx_demo_download;
+                            case "收藏":
+                                return R.mipmap.img_dialogx_demo_favorite;
+                            case "赞！":
+                                return R.mipmap.img_dialogx_demo_link;
+                            case "不喜欢":
+                                return R.mipmap.img_dialogx_demo_dislike;
+                            case "所属专辑":
+                                return R.mipmap.img_dialogx_demo_album;
+                            case "复制链接":
+                                return R.mipmap.img_dialogx_demo_link;
+                            case "类似推荐":
+                                return R.mipmap.img_dialogx_demo_recommend;
                         }
                         return 0;
+                    }
+                }).show();
+            }
+        });
+        
+        btnBottomReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomDialog.build().setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_reply) {
+                    @Override
+                    public void onBind(BottomDialog dialog, View v) {
+                        btnReplyCommit = v.findViewById(R.id.btn_reply_commit);
+                        editReplyCommit = v.findViewById(R.id.edit_reply_commit);
+    
+                        btnReplyCommit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                toast("提交内容：\n"+editReplyCommit.getText().toString());
+                            }
+                        });
                     }
                 }).show();
             }

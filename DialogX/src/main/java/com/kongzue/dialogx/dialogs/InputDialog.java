@@ -1,6 +1,9 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.view.View;
+
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.util.InputInfo;
@@ -15,7 +18,7 @@ import com.kongzue.dialogx.util.TextInfo;
  */
 public class InputDialog extends MessageDialog {
     
-    public InputDialog() {
+    protected InputDialog() {
         me = this;
     }
     
@@ -324,6 +327,23 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setAutoShowInputKeyboard(boolean autoShowInputKeyboard) {
         this.autoShowInputKeyboard = autoShowInputKeyboard;
+        return this;
+    }
+    
+    public InputDialog setCustomView(OnBindView<MessageDialog> onBindView){
+        this.onBindView = onBindView;
+        refreshUI();
+        return this;
+    }
+    
+    public View getCustomView() {
+        if (onBindView == null) return null;
+        return onBindView.getCustomView();
+    }
+    
+    public InputDialog removeCustomView(){
+        this.onBindView.clean();
+        refreshUI();
         return this;
     }
 }

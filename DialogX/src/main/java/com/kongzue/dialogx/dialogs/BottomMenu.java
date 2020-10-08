@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.util.NormalMenuArrayAdapter;
 import com.kongzue.dialogx.util.views.BottomDialogListView;
 
@@ -24,6 +25,14 @@ import static android.view.View.OVER_SCROLL_NEVER;
  * @createTime: 2020/10/6 23:48
  */
 public class BottomMenu extends BottomDialog {
+    
+    protected BottomMenu() {
+        me = this;
+    }
+    
+    public static BottomMenu build() {
+        return new BottomMenu();
+    }
     
     private OnIconChangeCallBack onIconChangeCallBack;
     private BottomDialogListView listView;
@@ -93,5 +102,15 @@ public class BottomMenu extends BottomDialog {
     
     public interface OnIconChangeCallBack {
         int getIcon(int index, String menuText);
+    }
+    
+    public OnBackPressedListener getOnBackPressedListener() {
+        return onBackPressedListener;
+    }
+    
+    public BottomMenu setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+        refreshUI();
+        return this;
     }
 }
