@@ -81,5 +81,7 @@ public interface DialogXStyle {
         int overrideMenuDividerHeight(boolean light);
     
         int overrideMenuTextColor(boolean light);
+        
+        float overrideBottomDialogMaxHeight();
     }
 }

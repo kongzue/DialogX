@@ -1,8 +1,8 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 
@@ -13,6 +13,7 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
+import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.NormalMenuArrayAdapter;
 import com.kongzue.dialogx.util.views.BottomDialogListView;
 
@@ -33,6 +34,7 @@ public class BottomMenu extends BottomDialog {
     
     protected BottomMenu me = this;
     
+    protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
     /**
      * 此值用于，当禁用滑动时（style.overrideBottomDialogRes.touchSlide = false时）的最大显示高度。
      * 0：不限制，最大显示到屏幕可用高度。
@@ -45,6 +47,9 @@ public class BottomMenu extends BottomDialog {
     
     protected BottomMenu() {
         super();
+        if (style.overrideBottomDialogRes()!=null && style.overrideBottomDialogRes().overrideBottomDialogMaxHeight() != 0) {
+            bottomDialogMaxHeight = style.overrideBottomDialogRes().overrideBottomDialogMaxHeight();
+        }
         if (bottomDialogMaxHeight <= 1 && bottomDialogMaxHeight > 0f) {
             bottomDialogMaxHeight = (int) (getRootFrameLayout().getMeasuredHeight() * bottomDialogMaxHeight);
         }
@@ -52,7 +57,7 @@ public class BottomMenu extends BottomDialog {
     
     private OnIconChangeCallBack onIconChangeCallBack;
     private BottomDialogListView listView;
-    private BaseAdapter menuArrayAdapter;
+    private BaseAdapter menuListAdapter;
     private List<CharSequence> menuList;
     
     public static BottomMenu show(List<CharSequence> menuList) {
@@ -106,6 +111,19 @@ public class BottomMenu extends BottomDialog {
             listView.setDivider(getResources().getDrawable(dividerDrawableResId));
             listView.setDividerHeight(dividerHeight);
             
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (onMenuItemClickListener != null) {
+                        if (!onMenuItemClickListener.onClick(me, menuList.get(position), position)) {
+                            dismiss();
+                        }
+                    } else {
+                        dismiss();
+                    }
+                }
+            });
+            
             RelativeLayout.LayoutParams listViewLp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.boxCustom.addView(listView, listViewLp);
             
@@ -117,13 +135,17 @@ public class BottomMenu extends BottomDialog {
     public void refreshUI() {
         super.refreshUI();
         if (listView != null) {
-            if (menuArrayAdapter == null) {
-                menuArrayAdapter = new NormalMenuArrayAdapter(me, getContext(), R.layout.item_dialogx_material_bottom_menu_normal_text, menuList);
+            if (menuListAdapter == null) {
+                menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), R.layout.item_dialogx_material_bottom_menu_normal_text, menuList);
             }
             if (listView.getAdapter() == null) {
-                listView.setAdapter(menuArrayAdapter);
+                listView.setAdapter(menuListAdapter);
             } else {
-                menuArrayAdapter.notifyDataSetChanged();
+                if (listView.getAdapter() != menuListAdapter) {
+                    listView.setAdapter(menuListAdapter);
+                } else {
+                    menuListAdapter.notifyDataSetChanged();
+                }
             }
         }
     }
@@ -274,6 +296,24 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setBottomDialogMaxHeight(float bottomDialogMaxHeight) {
         this.bottomDialogMaxHeight = bottomDialogMaxHeight;
+        return this;
+    }
+    
+    public OnMenuItemClickListener<BottomMenu> getOnMenuItemClickListener() {
+        return onMenuItemClickListener;
+    }
+    
+    public BottomMenu setOnMenuItemClickListener(OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        this.onMenuItemClickListener = onMenuItemClickListener;
+        return this;
+    }
+    
+    public BaseAdapter getMenuListAdapter() {
+        return menuListAdapter;
+    }
+    
+    public BottomMenu setMenuListAdapter(BaseAdapter menuListAdapter) {
+        this.menuListAdapter = menuListAdapter;
         return this;
     }
 }

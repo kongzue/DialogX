@@ -509,7 +509,7 @@ public class MessageDialog extends BaseDialog {
     
     public void dismiss() {
         if (dialogImpl == null) return;
-        dialogImpl.doDismiss(null);
+        dialogImpl.doDismiss(dialogImpl.bkg);
     }
     
     public DialogLifecycleCallback<MessageDialog> getDialogLifecycleCallback() {

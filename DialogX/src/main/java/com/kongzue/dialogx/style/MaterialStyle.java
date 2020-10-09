@@ -147,6 +147,11 @@ public class MaterialStyle implements DialogXStyle {
                 return light?R.color.black90:R.color.white90;
             }
     
+            @Override
+            public float overrideBottomDialogMaxHeight() {
+                return 0.6f;
+            }
+    
         };
     }
 }
