@@ -2,10 +2,13 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
@@ -40,13 +43,14 @@ public class BottomDialog extends BaseDialog {
     protected CharSequence title;
     protected CharSequence message;
     protected CharSequence cancelText;
+    protected boolean allowInterceptTouch = true;
     
-    private DialogLifecycleCallback<BottomDialog> dialogLifecycleCallback;
+    protected DialogLifecycleCallback<BottomDialog> dialogLifecycleCallback;
     
-    protected BottomDialog me;
+    protected BottomDialog me = this;
     
     protected BottomDialog() {
-        me = this;
+        super();
     }
     
     private View dialogView;
@@ -60,10 +64,22 @@ public class BottomDialog extends BaseDialog {
         this.message = message;
     }
     
+    public static BottomDialog show(CharSequence title, CharSequence message) {
+        BottomDialog bottomDialog = new BottomDialog(title, message);
+        bottomDialog.show();
+        return bottomDialog;
+    }
+    
     public BottomDialog(CharSequence title, CharSequence message, OnBindView<BottomDialog> onBindView) {
         this.title = title;
         this.message = message;
         this.onBindView = onBindView;
+    }
+    
+    public static BottomDialog show(CharSequence title, CharSequence message, OnBindView<BottomDialog> onBindView) {
+        BottomDialog bottomDialog = new BottomDialog(title, message, onBindView);
+        bottomDialog.show();
+        return bottomDialog;
     }
     
     public BottomDialog(CharSequence title, OnBindView<BottomDialog> onBindView) {
@@ -71,12 +87,27 @@ public class BottomDialog extends BaseDialog {
         this.onBindView = onBindView;
     }
     
+    public static BottomDialog show(CharSequence title, OnBindView<BottomDialog> onBindView) {
+        BottomDialog bottomDialog = new BottomDialog(title, onBindView);
+        bottomDialog.show();
+        return bottomDialog;
+    }
+    
     public BottomDialog(OnBindView<BottomDialog> onBindView) {
         this.onBindView = onBindView;
     }
     
+    public static BottomDialog show(OnBindView<BottomDialog> onBindView) {
+        BottomDialog bottomDialog = new BottomDialog(onBindView);
+        bottomDialog.show();
+        return bottomDialog;
+    }
+    
     public void show() {
-        int layoutId = R.layout.layout_dialogx_bottom_material;
+        int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
+        if (style.overrideBottomDialogRes() != null) {
+            layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
+        }
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
@@ -86,6 +117,8 @@ public class BottomDialog extends BaseDialog {
     protected DialogImpl dialogImpl;
     
     public class DialogImpl implements DialogConvertViewInterface {
+        
+        private BottomDialogTouchEventInterceptor bottomDialogTouchEventInterceptor;
         
         public DialogXBaseRelativeLayout boxRoot;
         public RelativeLayout boxBkg;
@@ -130,15 +163,13 @@ public class BottomDialog extends BaseDialog {
                     isShow = true;
                     boxRoot.setAlpha(0f);
                     
-                    new BottomDialogTouchEventInterceptor(dialogImpl);
-                    
                     boxContent.getViewTreeObserver().addOnGlobalLayoutListener(onContentViewLayoutChangeListener);
                     
                     getDialogLifecycleCallback().onShow(me);
                     
                     onDialogInit(dialogImpl);
-    
-                    if (onBindView!=null)onBindView.onBind(me, onBindView.getCustomView());
+                    
+                    if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
                 }
                 
                 @Override
@@ -159,6 +190,24 @@ public class BottomDialog extends BaseDialog {
                         dismiss();
                     }
                     return false;
+                }
+            });
+            
+            bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
+            
+            scrollView.post(new Runnable() {
+                @Override
+                public void run() {
+                    bkg.setY(boxBkg.getHeight());
+                    if (bkg.isChildScrollViewCanScroll()) {
+                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * 0.6f;
+                    } else {
+                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
+                    }
+                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxBkg.getHeight(), bkgEnterAimY);
+                    enterAnim.setDuration(300);
+                    enterAnim.start();
+                    boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(300).setListener(null);
                 }
             });
         }
@@ -210,6 +259,14 @@ public class BottomDialog extends BaseDialog {
                     boxCustom.addView(onBindView.getCustomView(), lp);
                 }
             }
+            
+            if (isAllowInterceptTouch()) {
+                if (imgTab != null) imgTab.setVisibility(View.VISIBLE);
+            } else {
+                if (imgTab != null) imgTab.setVisibility(View.GONE);
+            }
+            
+            bottomDialogTouchEventInterceptor.refresh(me, this);
         }
         
         @Override
@@ -262,6 +319,16 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setDialogLifecycleCallback(DialogLifecycleCallback<BottomDialog> dialogLifecycleCallback) {
         this.dialogLifecycleCallback = dialogLifecycleCallback;
+        return this;
+    }
+    
+    public OnBackPressedListener getOnBackPressedListener() {
+        return onBackPressedListener;
+    }
+    
+    public BottomDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+        refreshUI();
         return this;
     }
     
@@ -336,13 +403,22 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
+    public boolean isAllowInterceptTouch() {
+        if (style.overrideBottomDialogRes() == null) {
+            return false;
+        } else {
+            return allowInterceptTouch && style.overrideBottomDialogRes().touchSlide();
+        }
     }
     
-    public BottomDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
-        this.onBackPressedListener = onBackPressedListener;
+    public BottomDialog setAllowInterceptTouch(boolean allowInterceptTouch) {
+        this.allowInterceptTouch = allowInterceptTouch;
         refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setDialogImpl(DialogImpl dialogImpl) {
+        this.dialogImpl = dialogImpl;
         return this;
     }
 }

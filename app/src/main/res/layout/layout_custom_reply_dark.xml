@@ -17,7 +17,7 @@
             android:gravity="center_vertical"
             android:paddingHorizontal="15dp"
             android:text="回复"
-            android:textColor="@color/black90"
+            android:textColor="@color/white90"
             android:textSize="16dp" />
 
         <TextView
@@ -42,6 +42,8 @@
         android:inputType="textMultiLine"
         android:minHeight="100dp"
         android:maxHeight="200dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white50"
         android:paddingHorizontal="15dp"
         android:paddingVertical="5dp"
         android:textSize="16dp" />
@@ -51,6 +53,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:theme="@style/AppThemeDark"
         android:text="回复并转发" />
 
 </LinearLayout>

@@ -2,22 +2,12 @@ package com.kongzue.dialogx.util.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.core.view.NestedScrollingChildHelper;
-import androidx.core.view.NestedScrollingParent;
-import androidx.core.view.NestedScrollingParent2;
-import androidx.core.view.NestedScrollingParentHelper;
-import androidx.core.view.ViewCompat;
 
 import com.kongzue.dialogx.R;
 
@@ -102,20 +92,10 @@ public class MaxRelativeLayout extends RelativeLayout {
     
     private boolean isMove = false;
     private int touchY, touchX;
-    private boolean interceptTouchEvent;
-    
-    public boolean isInterceptTouchEvent() {
-        return interceptTouchEvent;
-    }
-    
-    public MaxRelativeLayout setInterceptTouchEvent(boolean interceptTouchEvent) {
-        this.interceptTouchEvent = interceptTouchEvent;
-        return this;
-    }
     
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (onTouchListener != null && interceptTouchEvent) {
+        if (onTouchListener != null) {
             onTouchListener.onTouch(this, event);
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -134,10 +114,10 @@ public class MaxRelativeLayout extends RelativeLayout {
                         touchX = (int) event.getRawX();
                     }
                     isMove = true;
-                
+                    
                     float moveY = event.getRawY();
                     float moveX = event.getRawX();
-                
+                    
                     if (Math.abs(moveY - touchY) > dip2px(20) || Math.abs(moveX - touchX) > dip2px(20)) {
                         final ViewParent parent = getParent();
                         if (parent != null) {
@@ -149,11 +129,14 @@ public class MaxRelativeLayout extends RelativeLayout {
             }
             return isMove;
         }
-        return false;
+        return super.onInterceptTouchEvent(event);
     }
     
     public boolean isChildScrollViewCanScroll() {
         if (childScrollView == null) return false;
+        if (!childScrollView.isEnabled()){
+            return false;
+        }
         View child = childScrollView.getChildAt(0);
         if (child != null) {
             int childHeight = child.getHeight();

@@ -32,6 +32,8 @@ public interface DialogXStyle {
     
     WaitTipRes overrideWaitTipRes();
     
+    BottomDialogRes overrideBottomDialogRes();
+    
     interface BlurBackgroundSetting {
         
         boolean blurBackground();
@@ -66,5 +68,18 @@ public interface DialogXStyle {
         int overrideBackgroundColorRes(boolean light);
         
         int overrideTextColorRes(boolean light);
+    }
+    
+    interface BottomDialogRes {
+        
+        boolean touchSlide();
+        
+        int overrideDialogLayout(boolean light);
+        
+        int overrideMenuDividerDrawableRes(boolean light);
+    
+        int overrideMenuDividerHeight(boolean light);
+    
+        int overrideMenuTextColor(boolean light);
     }
 }

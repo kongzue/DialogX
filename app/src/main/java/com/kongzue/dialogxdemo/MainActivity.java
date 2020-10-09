@@ -1,7 +1,9 @@
 package com.kongzue.dialogxdemo;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,14 +27,18 @@ import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.TextInfo;
+
+import java.util.ArrayList;
 
 @Layout(R.layout.activity_main)
 @DarkStatusBarTheme(true)
@@ -163,7 +169,13 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MessageDialog("标题", "正文内容", "确定").show();
+                MessageDialog.show("标题", "正文内容", "确定").setOkButton(new OnDialogButtonClickListener() {
+                    @Override
+                    public boolean onClick(BaseDialog baseDialog, View v) {
+                        toast("点击确定按钮");
+                        return false;
+                    }
+                });
             }
         });
         
@@ -294,60 +306,67 @@ public class MainActivity extends BaseActivity {
         btnBottomMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomMenu.build().setOnIconChangeCallBack(new BottomMenu.OnIconChangeCallBack() {
-                    @Override
-                    public int getIcon(int index, String menuText) {
-                        switch (menuText) {
-                            case "添加":
-                                return R.mipmap.img_dialogx_demo_add;
-                            case "查看":
-                                return R.mipmap.img_dialogx_demo_view;
-                            case "编辑":
-                                return R.mipmap.img_dialogx_demo_edit;
-                            case "删除":
-                                return R.mipmap.img_dialogx_demo_delete;
-                            case "分享":
-                                return R.mipmap.img_dialogx_demo_share;
-                            case "评论":
-                                return R.mipmap.img_dialogx_demo_comment;
-                            case "下载":
-                                return R.mipmap.img_dialogx_demo_download;
-                            case "收藏":
-                                return R.mipmap.img_dialogx_demo_favorite;
-                            case "赞！":
-                                return R.mipmap.img_dialogx_demo_link;
-                            case "不喜欢":
-                                return R.mipmap.img_dialogx_demo_dislike;
-                            case "所属专辑":
-                                return R.mipmap.img_dialogx_demo_album;
-                            case "复制链接":
-                                return R.mipmap.img_dialogx_demo_link;
-                            case "类似推荐":
-                                return R.mipmap.img_dialogx_demo_recommend;
-                        }
-                        return 0;
-                    }
-                }).show();
+                BottomMenu.show(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"})
+                        .setOnIconChangeCallBack(new OnIconChangeCallBack(true) {
+                            @Override
+                            public int getIcon(BottomMenu bottomMenu, int index, String menuText) {
+                                switch (menuText) {
+                                    case "添加":
+                                        return R.mipmap.img_dialogx_demo_add;
+                                    case "查看":
+                                        return R.mipmap.img_dialogx_demo_view;
+                                    case "编辑":
+                                        return R.mipmap.img_dialogx_demo_edit;
+                                    case "删除":
+                                        return R.mipmap.img_dialogx_demo_delete;
+                                    case "分享":
+                                        return R.mipmap.img_dialogx_demo_share;
+                                    case "评论":
+                                        return R.mipmap.img_dialogx_demo_comment;
+                                    case "下载":
+                                        return R.mipmap.img_dialogx_demo_download;
+                                    case "收藏":
+                                        return R.mipmap.img_dialogx_demo_favorite;
+                                    case "赞！":
+                                        return R.mipmap.img_dialogx_demo_good;
+                                    case "不喜欢":
+                                        return R.mipmap.img_dialogx_demo_dislike;
+                                    case "所属专辑":
+                                        return R.mipmap.img_dialogx_demo_album;
+                                    case "复制链接":
+                                        return R.mipmap.img_dialogx_demo_link;
+                                    case "类似推荐":
+                                        return R.mipmap.img_dialogx_demo_recommend;
+                                }
+                                return 0;
+                            }
+                        });
             }
         });
         
         btnBottomReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomDialog.build().setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_reply) {
+                BottomDialog.show(new OnBindView<BottomDialog>(rdoDark.isChecked() ? R.layout.layout_custom_reply_dark : R.layout.layout_custom_reply) {
                     @Override
-                    public void onBind(BottomDialog dialog, View v) {
+                    public void onBind(final BottomDialog dialog, View v) {
                         btnReplyCommit = v.findViewById(R.id.btn_reply_commit);
                         editReplyCommit = v.findViewById(R.id.edit_reply_commit);
-    
                         btnReplyCommit.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                toast("提交内容：\n"+editReplyCommit.getText().toString());
+                                dialog.dismiss();
+                                toast("提交内容：\n" + editReplyCommit.getText().toString());
                             }
                         });
+                        editReplyCommit.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showIME(editReplyCommit);
+                            }
+                        }, 300);
                     }
-                }).show();
+                }).setAllowInterceptTouch(false);
             }
         });
     }
@@ -356,5 +375,15 @@ public class MainActivity extends BaseActivity {
     public void onBackPressed() {
         log("#MainActivity.onBackPressed");
         super.onBackPressed();
+    }
+    
+    public void showIME(EditText editText) {
+        if (editText == null) {
+            return;
+        }
+        editText.requestFocus();
+        editText.setFocusableInTouchMode(true);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 }

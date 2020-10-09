@@ -19,7 +19,7 @@ import com.kongzue.dialogx.util.TextInfo;
 public class InputDialog extends MessageDialog {
     
     protected InputDialog() {
-        me = this;
+        super();
     }
     
     public static InputDialog build() {

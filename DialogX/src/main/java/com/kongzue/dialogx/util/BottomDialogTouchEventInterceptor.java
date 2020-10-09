@@ -38,8 +38,14 @@ public class BottomDialogTouchEventInterceptor {
      */
     private int oldMode;
     
-    public BottomDialogTouchEventInterceptor(final BottomDialog.DialogImpl impl) {
-        
+    public BottomDialogTouchEventInterceptor(BottomDialog me, BottomDialog.DialogImpl impl) {
+        refresh(me, impl);
+    }
+    
+    public void refresh(final BottomDialog me, final BottomDialog.DialogImpl impl) {
+        if (me == null || impl == null || impl.bkg == null || impl.scrollView == null) {
+            return;
+        }
         /**
          * BottomDialog 触控事件说明：
          * bkg 将拦截并接管所有触控操作。
@@ -53,100 +59,86 @@ public class BottomDialogTouchEventInterceptor {
          *     super.onMeasure(widthMeasureSpec, expandSpec);
          * }
          */
-        impl.bkg.setTouchCallBack(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        bkgTouchDownY = event.getY();
-                        isBkgTouched = true;
-                        bkgOldY = impl.bkg.getY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (isBkgTouched) {
-                            float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
-                            if (aimY < 0 || impl.scrollView.getScrollY() != 0) {
-                                if (impl.bkg.isChildScrollViewCanScroll()) {
-                                    if (oldMode == 0) {
-                                        bkgTouchDownY = event.getY();
-                                        scrolledY = 0;
+        if (me.isAllowInterceptTouch()) {
+            impl.bkg.setTouchCallBack(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            bkgTouchDownY = event.getY();
+                            isBkgTouched = true;
+                            bkgOldY = impl.bkg.getY();
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (isBkgTouched) {
+                                float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
+                                if (aimY < 0 || impl.scrollView.getScrollY() != 0) {
+                                    if (impl.bkg.isChildScrollViewCanScroll()) {
+                                        if (oldMode == 0) {
+                                            bkgTouchDownY = event.getY();
+                                            scrolledY = 0;
+                                        }
+                                        
+                                        impl.scrollView.scrollTo(0, (int) (scrolledY - (event.getY() - bkgTouchDownY)));
+                                        impl.bkg.setY(0);
+                                        
+                                        oldMode = -1;
                                     }
-                                    
-                                    impl.scrollView.scrollTo(0, (int) (scrolledY - (event.getY() - bkgTouchDownY)));
-                                    impl.bkg.setY(0);
-                                    
-                                    oldMode = -1;
-                                }
-                            } else {
-                                if (oldMode == -1) {
-                                    bkgTouchDownY = event.getY();
-                                    aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
-                                }
-                                
-                                if (impl.bkg.isChildScrollViewCanScroll()) {
-                                    impl.bkg.setY(aimY);
                                 } else {
-                                    if (aimY > impl.bkgEnterAimY) {
-                                        impl.bkg.setY(aimY);
+                                    if (oldMode == -1) {
+                                        bkgTouchDownY = event.getY();
+                                        aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
                                     }
+                                    
+                                    if (impl.bkg.isChildScrollViewCanScroll()) {
+                                        impl.bkg.setY(aimY);
+                                    } else {
+                                        if (aimY > impl.bkgEnterAimY) {
+                                            impl.bkg.setY(aimY);
+                                        }
+                                    }
+                                    
+                                    oldMode = 0;
                                 }
-                                
-                                oldMode = 0;
                             }
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        scrolledY = impl.scrollView.getScrollY();
-                        isBkgTouched = false;
-                        if (bkgOldY == 0) {
-                            if (impl.bkg.getY() < dip2px(35)){
-                                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), 0);
-                                enterAnim.setDuration(300);
-                                enterAnim.start();
-                            }else if (impl.bkg.getY() > impl.bkgEnterAimY + dip2px(35)) {
-                                impl.preDismiss();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                            scrolledY = impl.scrollView.getScrollY();
+                            isBkgTouched = false;
+                            if (bkgOldY == 0) {
+                                if (impl.bkg.getY() < dip2px(35)) {
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), 0);
+                                    enterAnim.setDuration(300);
+                                    enterAnim.start();
+                                } else if (impl.bkg.getY() > impl.bkgEnterAimY + dip2px(35)) {
+                                    impl.preDismiss();
+                                } else {
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
+                                    enterAnim.setDuration(300);
+                                    enterAnim.start();
+                                }
                             } else {
-                                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
-                                enterAnim.setDuration(300);
-                                enterAnim.start();
+                                if (impl.bkg.getY() < bkgOldY - dip2px(35)) {
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), 0);
+                                    enterAnim.setDuration(300);
+                                    enterAnim.start();
+                                } else if (impl.bkg.getY() > bkgOldY + dip2px(35)) {
+                                    impl.preDismiss();
+                                } else {
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
+                                    enterAnim.setDuration(300);
+                                    enterAnim.start();
+                                }
                             }
-                        } else {
-                            if (impl.bkg.getY() < bkgOldY - dip2px(35)) {
-                                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), 0);
-                                enterAnim.setDuration(300);
-                                enterAnim.start();
-                            } else if (impl.bkg.getY() > bkgOldY + dip2px(35)) {
-                                impl.preDismiss();
-                            } else {
-                                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
-                                enterAnim.setDuration(300);
-                                enterAnim.start();
-                            }
-                        }
-                        break;
+                            break;
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
-        
-        impl.scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                impl.bkg.setY(impl.boxBkg.getHeight());
-                if (impl.bkg.isChildScrollViewCanScroll()) {
-                    impl.bkgEnterAimY = impl.boxBkg.getHeight() - impl.bkg.getHeight() * 0.6f;
-                } else {
-                    impl.bkgEnterAimY = impl.boxBkg.getHeight() - impl.bkg.getHeight();
-                }
-                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.boxBkg.getHeight(), impl.bkgEnterAimY);
-                enterAnim.setDuration(300);
-                enterAnim.start();
-                impl.boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(300).setListener(null);
-                
-                impl.bkg.setInterceptTouchEvent(true);
-            }
-        });
+            });
+        } else {
+            impl.bkg.setTouchCallBack(null);
+        }
     }
     
     private int dip2px(float dpValue) {

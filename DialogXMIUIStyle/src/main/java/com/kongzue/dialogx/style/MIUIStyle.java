@@ -88,4 +88,9 @@ public class MIUIStyle implements DialogXStyle {
             }
         };
     }
+    
+    @Override
+    public BottomDialogRes overrideBottomDialogRes() {
+        return null;
+    }
 }

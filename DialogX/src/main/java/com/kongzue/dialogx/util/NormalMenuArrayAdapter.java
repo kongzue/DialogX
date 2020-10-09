@@ -1,7 +1,7 @@
 package com.kongzue.dialogx.util;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,22 +21,22 @@ import java.util.List;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/10/7 0:00
  */
-public class NormalMenuArrayAdapter extends ArrayAdapter {
+public class NormalMenuArrayAdapter extends ArrayAdapter<CharSequence> {
     
-    private BottomMenu.OnIconChangeCallBack onIconChangeCallBack;
+    private BottomMenu bottomMenu;
     public int resoureId;
     public List<CharSequence> objects;
     public Context context;
     
-    public NormalMenuArrayAdapter(Context context, int resourceId, List<CharSequence> objects, BottomMenu.OnIconChangeCallBack onIconChangeCallBack) {
+    public NormalMenuArrayAdapter(BottomMenu bottomMenu, Context context, int resourceId, List<CharSequence> objects) {
         super(context, resourceId, objects);
         this.objects = objects;
         this.resoureId = resourceId;
         this.context = context;
-        this.onIconChangeCallBack = onIconChangeCallBack;
+        this.bottomMenu = bottomMenu;
     }
     
-    public class ViewHolder {
+    class ViewHolder {
         ImageView imgDialogxMenuIcon;
         TextView txtDialogxMenuText;
     }
@@ -72,13 +72,29 @@ public class NormalMenuArrayAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         CharSequence text = objects.get(position);
+        
+        int textColor = bottomMenu.isLightTheme() ? R.color.black90 : R.color.white90;
+        if (bottomMenu.getStyle().overrideBottomDialogRes() != null) {
+            if (bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuTextColor(bottomMenu.isLightTheme()) != 0) {
+                textColor = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuTextColor(bottomMenu.isLightTheme());
+            }
+        }
+        
         if (null != text) {
             viewHolder.txtDialogxMenuText.setText(text);
-            if (onIconChangeCallBack != null) {
-                int resId = onIconChangeCallBack.getIcon(position, text.toString());
+            viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
+            
+            if (bottomMenu.getOnIconChangeCallBack() != null) {
+                int resId = bottomMenu.getOnIconChangeCallBack().getIcon(bottomMenu, position, text.toString());
+                boolean autoTintIconInLightOrDarkMode = bottomMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
+                
                 if (resId != 0) {
                     viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
                     viewHolder.imgDialogxMenuIcon.setImageResource(resId);
+                    
+                    if (autoTintIconInLightOrDarkMode) {
+                        viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                    }
                 } else {
                     viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
                 }

@@ -146,4 +146,9 @@ public class IOSStyle implements DialogXStyle {
             }
         };
     }
+    
+    @Override
+    public BottomDialogRes overrideBottomDialogRes() {
+        return null;
+    }
 }

@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.util.views;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -10,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
@@ -17,6 +20,7 @@ import android.widget.RelativeLayout;
 import androidx.core.view.ViewCompat;
 
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 
 import java.util.Arrays;
@@ -54,9 +58,19 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         init();
     }
     
+    private boolean isInited = false;
+    
     private void init() {
-        setFocusableInTouchMode(true);
-        requestFocus();
+        if (!isInited) {
+            setFocusableInTouchMode(true);
+            requestFocus();
+        }
+    }
+    
+    @Override
+    protected boolean fitSystemWindows(Rect insets) {
+        paddingView(insets.left, insets.top, insets.right, insets.bottom);
+        return super.fitSystemWindows(insets);
     }
     
     @Override
@@ -65,6 +79,13 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
         }
         return super.dispatchApplyWindowInsets(insets);
+    }
+    
+    public void paddingView(WindowInsets insets) {
+        if (insets == null) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+        }
     }
     
     @Override
@@ -89,21 +110,37 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         final ViewParent parent = getParent();
-    
+        
         ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
         ViewCompat.requestApplyInsets(this);
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isInEditMode()) {
+            ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener);
+        }
         
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onShow();
         }
     }
     
+    private ViewTreeObserver.OnGlobalLayoutListener decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                paddingView(getRootWindowInsets());
+            }
+        }
+    };
+    
     @Override
     protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
+        if (decorViewLayoutListener != null) {
+            ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(decorViewLayoutListener);
+        }
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onDismiss();
         }
+        super.onDetachedFromWindow();
     }
     
     @Override
@@ -117,8 +154,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
     
     public abstract static class OnLifecycleCallBack {
-        public void onShow() {
-        }
+        public void onShow() { }
         
         public abstract void onDismiss();
     }
@@ -127,7 +163,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
         if (bkgView != null) {
             LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
-            if(bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE){
+            if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE) {
                 bkgView.setPadding(0, 0, 0, bottom);
                 setPadding(left, top, right, 0);
                 return;

@@ -3,7 +3,7 @@
     android:id="@+id/box_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black20"
+    android:background="@color/black40"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -16,13 +16,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/rect_dialogx_material_bottom_bkg_light"
+            android:background="@drawable/rect_dialogx_material_bottom_bkg_night"
             android:focusableInTouchMode="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
                 android:orientation="vertical">
 
                 <ImageView
@@ -30,8 +29,9 @@
                     android:layout_width="30dp"
                     android:layout_height="4dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="1dp"
-                    android:src="@drawable/rect_dialogx_material_dialogtap" />
+                    android:src="@drawable/rect_dialogx_material_dialogtap_night" />
 
                 <TextView
                     android:id="@+id/txt_dialog_title"
@@ -42,7 +42,7 @@
                     android:paddingHorizontal="20dp"
                     android:paddingBottom="10dp"
                     android:text="Title"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="21dp" />
 
                 <ScrollView
@@ -67,7 +67,7 @@
                             android:layout_marginHorizontal="20dp"
                             android:paddingBottom="5dp"
                             android:text="This is content text."
-                            android:textColor="@color/black70"
+                            android:textColor="@color/white60"
                             android:textSize="16dp" />
 
                         <RelativeLayout

@@ -51,6 +51,7 @@ public class WaitDialog extends BaseDialog {
     private DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
     
     protected WaitDialog() {
+        super();
         me = new WeakReference<>(this);
         cancelable = false;
     }

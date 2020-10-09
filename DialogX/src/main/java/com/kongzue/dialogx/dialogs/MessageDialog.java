@@ -44,12 +44,12 @@ import com.kongzue.dialogx.util.TextInfo;
 public class MessageDialog extends BaseDialog {
     
     protected OnBindView<MessageDialog> onBindView;
-    protected MessageDialog me;
+    protected MessageDialog me = this;
     
     private DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
     
     protected MessageDialog() {
-        me = this;
+        super();
     }
     
     private View dialogView;
@@ -121,15 +121,9 @@ public class MessageDialog extends BaseDialog {
     protected DialogImpl dialogImpl;
     
     public void show() {
-        int layoutId = R.layout.layout_dialogx_material;
-        switch (theme) {
-            case LIGHT:
-                layoutId = style.layout(true);
-                break;
-            case DARK:
-                layoutId = style.layout(false);
-                break;
-        }
+        int layoutId = style.layout(isLightTheme());
+        layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
+        
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
         show(dialogView);
@@ -219,8 +213,8 @@ public class MessageDialog extends BaseDialog {
                             }
                         }, 300);
                     }
-    
-                    if (onBindView!=null)onBindView.onBind(me, onBindView.getCustomView());
+                    
+                    if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
                 }
                 
                 @Override

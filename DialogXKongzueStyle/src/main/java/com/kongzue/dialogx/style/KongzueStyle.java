@@ -88,4 +88,9 @@ public class KongzueStyle implements DialogXStyle {
             }
         };
     }
+    
+    @Override
+    public BottomDialogRes overrideBottomDialogRes() {
+        return null;
+    }
 }
