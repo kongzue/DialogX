@@ -1,7 +1,5 @@
 package com.kongzue.dialogx.style;
 
-import android.content.res.Resources;
-
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 
@@ -10,15 +8,11 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
  * @github: https://github.com/kongzue/
  * @homepage: http://kongzue.com/
  * @mail: myzcxhh@live.cn
- * @createTime: 2020/9/26 13:09
+ * @createTime: 2020/10/11 12:26
  */
-public class MaterialStyle implements DialogXStyle {
-    
-    private MaterialStyle() {
-    }
-    
-    public static MaterialStyle style() {
-        return new MaterialStyle();
+public class BuildStyle implements DialogXStyle {
+    public static BuildStyle style() {
+        return new BuildStyle();
     }
     
     @Override
@@ -55,7 +49,7 @@ public class MaterialStyle implements DialogXStyle {
     public int splitColorRes(boolean light) {
         return 0;
     }
-
+    
     @Override
     public BlurBackgroundSetting messageDialogBlurSettings() {
         return null;
@@ -120,51 +114,50 @@ public class MaterialStyle implements DialogXStyle {
             }
         };
     }
-
+    
     @Override
     public BottomDialogRes overrideBottomDialogRes() {
         return new BottomDialogRes() {
-
+            
             @Override
             public boolean touchSlide() {
                 return true;
             }
-
+            
             @Override
             public int overrideDialogLayout(boolean light) {
                 return light ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
             }
-
+            
             @Override
             public int overrideMenuDividerDrawableRes(boolean light) {
                 return light ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
             }
-
+            
             @Override
             public int overrideMenuDividerHeight(boolean light) {
                 return 1;
             }
-
+            
             @Override
             public int overrideMenuTextColor(boolean light) {
                 return light?R.color.black90:R.color.white90;
             }
-
+            
             @Override
             public float overrideBottomDialogMaxHeight() {
                 return 0.6f;
             }
-    
+            
             @Override
             public int overrideMenuCancelButtonBackgroundRes(boolean b) {
                 return 0;
             }
-    
+            
             @Override
             public int overrideMenuItemLayout(boolean b, int i, int i1) {
                 return R.layout.item_dialogx_material_bottom_menu_normal_text;
             }
-    
         };
     }
 }

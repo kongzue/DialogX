@@ -33,6 +33,7 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
+import com.kongzue.dialogx.style.BuildStyle;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -120,7 +121,7 @@ public class MainActivity extends BaseActivity {
     
     @Override
     public void initDatas(JumpParameter parameter) {
-        DialogX.globalStyle = IOSStyle.style();
+        DialogX.globalStyle = BuildStyle.style();
     }
     
     //用于模拟进度提示
@@ -183,10 +184,12 @@ public class MainActivity extends BaseActivity {
         btnSelectDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MessageDialog("多选对话框", "移动App会将它从主屏幕移除并保留其所有数据。", "删除App", "取消", "移至App资源库")
-                        .setButtonOrientation(LinearLayout.VERTICAL)
-                        .setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545")))
-                        .show();
+                MessageDialog messageDialog = new MessageDialog("多选对话框", "移除App会将它从主屏幕移除并保留其所有数据。", "删除App", "取消", "移至App资源库")
+                        .setButtonOrientation(LinearLayout.VERTICAL);
+                if (!rdoMiui.isChecked()){
+                    messageDialog.setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545")));
+                }
+                messageDialog.show();
             }
         });
         
@@ -200,7 +203,13 @@ public class MainActivity extends BaseActivity {
         btnWaitDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WaitDialog.show("Please Wait!");
+                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener() {
+                    @Override
+                    public boolean onBackPressed() {
+                        toast("按下返回");
+                        return false;
+                    }
+                });
                 runDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -213,7 +222,13 @@ public class MainActivity extends BaseActivity {
         btnWaitAndTipDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WaitDialog.show("Please Wait!");
+                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener() {
+                    @Override
+                    public boolean onBackPressed() {
+                        toast("按下返回");
+                        return false;
+                    }
+                });
                 runDelayed(new Runnable() {
                     @Override
                     public void run() {

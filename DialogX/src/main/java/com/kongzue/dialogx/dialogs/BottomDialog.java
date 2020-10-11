@@ -172,7 +172,7 @@ public class BottomDialog extends BaseDialog {
          * 记录这个值的目的是，当用户向下滑动时，判断情况该回到这个位置还是关闭对话框，
          * 并阻止当内容高度已经完全显示时的继续向上滑动操作。
          */
-        public float bkgEnterAimY;
+        public float bkgEnterAimY = -1;
         
         @Override
         public void init() {
@@ -266,20 +266,19 @@ public class BottomDialog extends BaseDialog {
             scrollView.post(new Runnable() {
                 @Override
                 public void run() {
-                    bkg.setY(boxBkg.getHeight());
                     if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
                         if (bottomDialogMaxHeight <= 1) {
                             bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;
                         } else {
-                            bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight - boxBkg.getPaddingBottom();
+                            bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight;
                         }
                     } else {
-                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() - boxBkg.getPaddingBottom();
+                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
                     }
-                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
+                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxBkg.getHeight(), bkgEnterAimY);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     enterAnim.setDuration(500);
-                    bkg.startAnimation(enterAnim);
+                    enterAnim.start();
                     boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
                 }
             });
@@ -289,7 +288,7 @@ public class BottomDialog extends BaseDialog {
             @Override
             public void onGlobalLayout() {
                 if (boxContent != null) {
-                    float oldY = bkgEnterAimY;
+                    float oldY = bkgEnterAimY == -1 ? boxContent.getHeight() : bkgEnterAimY;
                     if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
                         if (bottomDialogMaxHeight <= 1) {
                             bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;

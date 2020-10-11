@@ -34,4 +34,11 @@
     <color name="dialogxWaitBkgLight">#CCF4F5F6</color>
     <color name="dialogxWaitBkgDark">#D1161616</color>
 
+    <color name="dialogxKongzueLightOkButtonBkgColor">#E1E9F1</color>
+    <color name="dialogxKongzueLightOkButtonBkgColorPress">#CEDAE6</color>
+    <color name="dialogxKongzueLightOtherButtonBkgColor">#F4F5F6</color>
+    <color name="dialogxKongzueLightOtherButtonBkgColorPress">#E6E8EA</color>
+    <color name="dialogxKongzueDarkBkgColor">#181818</color>
+    <color name="dialogxKongzueDarkButtonBkgColor">#272727</color>
+    <color name="dialogxKongzueDarkButtonBkgColorPress">#33363B</color>
 </resources>
