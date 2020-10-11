@@ -262,11 +262,15 @@ public class BottomDialog extends BaseDialog {
             });
             
             bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
-            
-            scrollView.post(new Runnable() {
+    
+            boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
                     boxRoot.animate().setDuration(300).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
+                    
+                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
+                    enterAnim.setDuration(300);
+                    enterAnim.start();
                 }
             });
         }
@@ -275,7 +279,6 @@ public class BottomDialog extends BaseDialog {
             @Override
             public void onGlobalLayout() {
                 if (boxContent != null) {
-                    float oldY = bkgEnterAimY == -1 ? boxContent.getHeight() : bkgEnterAimY;
                     if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
                         if (bottomDialogMaxHeight <= 1) {
                             bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;
@@ -285,9 +288,6 @@ public class BottomDialog extends BaseDialog {
                     } else {
                         bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
                     }
-                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", oldY, bkgEnterAimY);
-                    enterAnim.setDuration(300);
-                    enterAnim.start();
                 }
             }
         };
