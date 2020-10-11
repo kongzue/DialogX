@@ -12,6 +12,7 @@ import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.NormalMenuArrayAdapter;
@@ -248,12 +249,24 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
     
-    public CharSequence getCancelText() {
+    public CharSequence getCancelButton() {
         return cancelText;
     }
     
-    public BottomMenu setCancelText(CharSequence cancelText) {
+    public BottomMenu setCancelButton(CharSequence cancelText) {
         this.cancelText = cancelText;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setCancelButton(OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        return this;
+    }
+    
+    public BottomMenu setCancelButton(CharSequence cancelText,OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelText = cancelText;
+        this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
         return this;
     }
@@ -314,6 +327,15 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setMenuListAdapter(BaseAdapter menuListAdapter) {
         this.menuListAdapter = menuListAdapter;
+        return this;
+    }
+    
+    public OnDialogButtonClickListener getCancelButtonClickListener() {
+        return cancelButtonClickListener;
+    }
+    
+    public BottomMenu setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
 }

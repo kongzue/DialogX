@@ -252,7 +252,6 @@ public class MainActivity extends BaseActivity {
                 WaitDialog.show("假装连接...").setOnBackPressedListener(new OnBackPressedListener() {
                     @Override
                     public boolean onBackPressed() {
-                        toast("点击返回");
                         MessageDialog.show("正在进行", "是否取消？", "是", "否").setOkButton(new OnDialogButtonClickListener() {
                             @Override
                             public boolean onClick(BaseDialog baseDialog, View v) {
@@ -294,7 +293,8 @@ public class MainActivity extends BaseActivity {
         btnBottomDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new BottomDialog("标题", "这里是对话框内容。\n你可以向下滑动来关闭这个对话框。\n底部对话框也支持自定义布局扩展使用方式。",
+                String s = rdoMaterial.isChecked() ? "你可以向下滑动来关闭这个对话框" : "你可以点击空白区域或返回键来关闭这个对话框";
+                new BottomDialog("标题", "这里是对话框内容。\n" + s + "。\n底部对话框也支持自定义布局扩展使用方式。",
                         new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
@@ -353,8 +353,15 @@ public class MainActivity extends BaseActivity {
                             });
                 }
                 if (rdoIos.isChecked()) {
-                    BottomMenu.show(new String[]{"新标签页中打开","稍后阅读","复制链接网址"})
-                            .setMessage("http://www.kongzue.com/DialogX");
+                    BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
+                            .setMessage("http://www.kongzue.com/DialogX")
+                            .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
+                                @Override
+                                public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
+                                    toast(text);
+                                    return false;
+                                }
+                            });
                 }
             }
         });

@@ -22,6 +22,8 @@ import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.views.BlurView;
@@ -42,6 +44,7 @@ public class BottomDialog extends BaseDialog {
     protected CharSequence message;
     protected CharSequence cancelText = "取消";
     protected boolean allowInterceptTouch = true;
+    protected OnDialogButtonClickListener cancelButtonClickListener;
     
     /**
      * 此值用于，当禁用滑动时（style.overrideBottomDialogRes.touchSlide = false时）的最大显示高度。
@@ -220,7 +223,13 @@ public class BottomDialog extends BaseDialog {
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dismiss();
+                        if (cancelButtonClickListener != null) {
+                            if (!cancelButtonClickListener.onClick(me, v)) {
+                                dismiss();
+                            }
+                        } else {
+                            dismiss();
+                        }
                     }
                 });
             }
@@ -326,7 +335,7 @@ public class BottomDialog extends BaseDialog {
                 }
             }
             
-            if (isAllowInterceptTouch()) {
+            if (isAllowInterceptTouch() && cancelable) {
                 if (imgTab != null) imgTab.setVisibility(View.VISIBLE);
             } else {
                 if (imgTab != null) imgTab.setVisibility(View.GONE);
@@ -458,12 +467,24 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
-    public CharSequence getCancelText() {
+    public CharSequence getCancelButton() {
         return cancelText;
     }
     
-    public BottomDialog setCancelText(CharSequence cancelText) {
+    public BottomDialog setCancelButton(CharSequence cancelText) {
         this.cancelText = cancelText;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setCancelButton(OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelText = cancelText;
+        this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
         return this;
     }
@@ -501,6 +522,15 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setDialogImpl(DialogImpl dialogImpl) {
         this.dialogImpl = dialogImpl;
+        return this;
+    }
+    
+    public OnDialogButtonClickListener getCancelButtonClickListener() {
+        return cancelButtonClickListener;
+    }
+    
+    public BottomDialog setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
 }

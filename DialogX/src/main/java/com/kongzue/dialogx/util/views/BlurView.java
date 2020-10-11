@@ -435,7 +435,7 @@ public class BlurView extends View {
         }.start();
     }
     
-    private static boolean DEBUGMODE = true;
+    private static boolean DEBUGMODE = false;
     
     static boolean isDebug() {
         return DEBUGMODE && DialogX.DEBUGMODE;
