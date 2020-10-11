@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -269,15 +271,15 @@ public class BottomDialog extends BaseDialog {
                         if (bottomDialogMaxHeight <= 1) {
                             bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;
                         } else {
-                            bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight;
+                            bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight - boxBkg.getPaddingBottom();
                         }
                     } else {
-                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
+                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() - boxBkg.getPaddingBottom();
                     }
-                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxBkg.getHeight(), bkgEnterAimY);
+                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     enterAnim.setDuration(500);
-                    enterAnim.start();
+                    bkg.startAnimation(enterAnim);
                     boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
                 }
             });
