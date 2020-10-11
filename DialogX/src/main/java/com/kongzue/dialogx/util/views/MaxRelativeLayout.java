@@ -22,6 +22,7 @@ public class MaxRelativeLayout extends RelativeLayout {
     
     private int maxWidth;
     private int maxHeight;
+    private boolean lockWidth;
     
     public MaxRelativeLayout(Context context) {
         super(context);
@@ -43,6 +44,7 @@ public class MaxRelativeLayout extends RelativeLayout {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MaxRelativeLayout);
             maxWidth = a.getDimensionPixelSize(R.styleable.MaxRelativeLayout_maxLayoutWidth, 0);
             maxHeight = a.getDimensionPixelSize(R.styleable.MaxRelativeLayout_maxLayoutHeight, 0);
+            lockWidth = a.getBoolean(R.styleable.MaxRelativeLayout_lockWidth, false);
             
             a.recycle();
         }
@@ -60,6 +62,8 @@ public class MaxRelativeLayout extends RelativeLayout {
         return this;
     }
     
+    private int preWidth = -1;
+    
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -68,6 +72,12 @@ public class MaxRelativeLayout extends RelativeLayout {
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         
+        if (preWidth == -1 && widthSize != 0) {
+            preWidth = widthSize;
+        }
+        if (lockWidth) {
+            maxWidth = Math.min(widthSize, preWidth);
+        }
         if (maxHeight > 0) {
             heightSize = Math.min(heightSize, maxHeight);
         }
@@ -134,7 +144,7 @@ public class MaxRelativeLayout extends RelativeLayout {
     
     public boolean isChildScrollViewCanScroll() {
         if (childScrollView == null) return false;
-        if (!childScrollView.isEnabled()){
+        if (!childScrollView.isEnabled()) {
             return false;
         }
         View child = childScrollView.getChildAt(0);
@@ -155,5 +165,14 @@ public class MaxRelativeLayout extends RelativeLayout {
     public int dip2px(float dpValue) {
         final float scale = getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+    
+    public boolean isLockWidth() {
+        return lockWidth;
+    }
+    
+    public MaxRelativeLayout setLockWidth(boolean lockWidth) {
+        this.lockWidth = lockWidth;
+        return this;
     }
 }

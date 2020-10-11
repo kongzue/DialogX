@@ -24,7 +24,7 @@ public interface DialogXStyle {
     
     int splitColorRes(boolean light);
     
-    BlurBackgroundSetting blurSettings();
+    BlurBackgroundSetting messageDialogBlurSettings();
     
     HorizontalButtonRes overrideHorizontalButtonRes();
     
@@ -77,11 +77,15 @@ public interface DialogXStyle {
         int overrideDialogLayout(boolean light);
         
         int overrideMenuDividerDrawableRes(boolean light);
-    
+        
         int overrideMenuDividerHeight(boolean light);
-    
+        
         int overrideMenuTextColor(boolean light);
         
         float overrideBottomDialogMaxHeight();
+        
+        int overrideMenuCancelButtonBackgroundRes(boolean light);
+        
+        int overrideMenuItemLayout(boolean light, int index, int count);
     }
 }

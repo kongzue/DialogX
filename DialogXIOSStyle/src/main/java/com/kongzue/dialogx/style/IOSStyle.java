@@ -59,7 +59,7 @@ public class IOSStyle implements DialogXStyle {
     }
     
     @Override
-    public BlurBackgroundSetting blurSettings() {
+    public BlurBackgroundSetting messageDialogBlurSettings() {
         return new BlurBackgroundSetting() {
             @Override
             public boolean blurBackground() {
@@ -149,6 +149,65 @@ public class IOSStyle implements DialogXStyle {
     
     @Override
     public BottomDialogRes overrideBottomDialogRes() {
-        return null;
+        return new BottomDialogRes() {
+            
+            @Override
+            public boolean touchSlide() {
+                return false;
+            }
+            
+            @Override
+            public int overrideDialogLayout(boolean light) {
+                //return light ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
+                return light ? R.layout.layout_dialogx_bottom_ios : R.layout.layout_dialogx_bottom_ios_dark;
+            }
+            
+            @Override
+            public int overrideMenuDividerDrawableRes(boolean light) {
+                return light ? R.drawable.rect_dialogx_ios_menu_split_divider : R.drawable.rect_dialogx_ios_menu_split_divider_night;
+            }
+            
+            @Override
+            public int overrideMenuDividerHeight(boolean light) {
+                return 1;
+            }
+            
+            @Override
+            public int overrideMenuTextColor(boolean light) {
+                return light ? R.color.dialogxIOSBlue : R.color.dialogxIOSBlueDark;
+            }
+            
+            @Override
+            public float overrideBottomDialogMaxHeight() {
+                return 0f;
+            }
+            
+            @Override
+            public int overrideMenuCancelButtonBackgroundRes(boolean light) {
+                return light ? R.drawable.button_dialogx_ios_light : R.drawable.button_dialogx_ios_night;
+            }
+            
+            @Override
+            public int overrideMenuItemLayout(boolean light, int index, int count) {
+                if (light) {
+                    if (index == 0) {
+                        return R.layout.item_dialogx_ios_bottom_menu_top_light;
+                    } else if (index == count - 1) {
+                        return R.layout.item_dialogx_ios_bottom_menu_bottom_light;
+                    } else {
+                        return R.layout.item_dialogx_ios_bottom_menu_center_light;
+                    }
+                } else {
+                    if (index == 0) {
+                        return R.layout.item_dialogx_ios_bottom_menu_top_dark;
+                    } else if (index == count - 1) {
+                        return R.layout.item_dialogx_ios_bottom_menu_bottom_dark;
+                    } else {
+                        return R.layout.item_dialogx_ios_bottom_menu_center_dark;
+                    }
+                }
+            }
+            
+        };
     }
 }

@@ -35,11 +35,6 @@ public class BottomMenu extends BottomDialog {
     protected BottomMenu me = this;
     
     protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
-    /**
-     * 此值用于，当禁用滑动时（style.overrideBottomDialogRes.touchSlide = false时）的最大显示高度。
-     * 0：不限制，最大显示到屏幕可用高度。
-     */
-    protected float bottomDialogMaxHeight = 0.6f;
     
     public static BottomMenu build() {
         return new BottomMenu();
@@ -47,7 +42,7 @@ public class BottomMenu extends BottomDialog {
     
     protected BottomMenu() {
         super();
-        if (style.overrideBottomDialogRes()!=null && style.overrideBottomDialogRes().overrideBottomDialogMaxHeight() != 0) {
+        if (style.overrideBottomDialogRes() != null) {
             bottomDialogMaxHeight = style.overrideBottomDialogRes().overrideBottomDialogMaxHeight();
         }
         if (bottomDialogMaxHeight <= 1 && bottomDialogMaxHeight > 0f) {
@@ -123,6 +118,11 @@ public class BottomMenu extends BottomDialog {
                     }
                 }
             });
+            if (style.overrideBottomDialogRes() != null) {
+                if (style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 1) != 0) {
+                    listView.setSelector(R.color.empty);
+                }
+            }
             
             RelativeLayout.LayoutParams listViewLp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.boxCustom.addView(listView, listViewLp);
@@ -136,7 +136,7 @@ public class BottomMenu extends BottomDialog {
         super.refreshUI();
         if (listView != null) {
             if (menuListAdapter == null) {
-                menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), R.layout.item_dialogx_material_bottom_menu_normal_text, menuList);
+                menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), menuList);
             }
             if (listView.getAdapter() == null) {
                 listView.setAdapter(menuListAdapter);

@@ -55,7 +55,7 @@ public class MIUIStyle implements DialogXStyle {
     }
     
     @Override
-    public BlurBackgroundSetting blurSettings() {
+    public BlurBackgroundSetting messageDialogBlurSettings() {
         return null;
     }
     

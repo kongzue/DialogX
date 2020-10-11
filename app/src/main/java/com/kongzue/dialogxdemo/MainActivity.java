@@ -307,48 +307,55 @@ public class MainActivity extends BaseActivity {
         btnBottomMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomMenu.show(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"})
-                        .setOnIconChangeCallBack(new OnIconChangeCallBack(true) {
-                            @Override
-                            public int getIcon(BottomMenu bottomMenu, int index, String menuText) {
-                                switch (menuText) {
-                                    case "添加":
-                                        return R.mipmap.img_dialogx_demo_add;
-                                    case "查看":
-                                        return R.mipmap.img_dialogx_demo_view;
-                                    case "编辑":
-                                        return R.mipmap.img_dialogx_demo_edit;
-                                    case "删除":
-                                        return R.mipmap.img_dialogx_demo_delete;
-                                    case "分享":
-                                        return R.mipmap.img_dialogx_demo_share;
-                                    case "评论":
-                                        return R.mipmap.img_dialogx_demo_comment;
-                                    case "下载":
-                                        return R.mipmap.img_dialogx_demo_download;
-                                    case "收藏":
-                                        return R.mipmap.img_dialogx_demo_favorite;
-                                    case "赞！":
-                                        return R.mipmap.img_dialogx_demo_good;
-                                    case "不喜欢":
-                                        return R.mipmap.img_dialogx_demo_dislike;
-                                    case "所属专辑":
-                                        return R.mipmap.img_dialogx_demo_album;
-                                    case "复制链接":
-                                        return R.mipmap.img_dialogx_demo_link;
-                                    case "类似推荐":
-                                        return R.mipmap.img_dialogx_demo_recommend;
+                if (rdoMaterial.isChecked()) {
+                    //Material 可滑动展开 BottomMenu 演示
+                    BottomMenu.show(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"})
+                            .setOnIconChangeCallBack(new OnIconChangeCallBack(true) {
+                                @Override
+                                public int getIcon(BottomMenu bottomMenu, int index, String menuText) {
+                                    switch (menuText) {
+                                        case "添加":
+                                            return R.mipmap.img_dialogx_demo_add;
+                                        case "查看":
+                                            return R.mipmap.img_dialogx_demo_view;
+                                        case "编辑":
+                                            return R.mipmap.img_dialogx_demo_edit;
+                                        case "删除":
+                                            return R.mipmap.img_dialogx_demo_delete;
+                                        case "分享":
+                                            return R.mipmap.img_dialogx_demo_share;
+                                        case "评论":
+                                            return R.mipmap.img_dialogx_demo_comment;
+                                        case "下载":
+                                            return R.mipmap.img_dialogx_demo_download;
+                                        case "收藏":
+                                            return R.mipmap.img_dialogx_demo_favorite;
+                                        case "赞！":
+                                            return R.mipmap.img_dialogx_demo_good;
+                                        case "不喜欢":
+                                            return R.mipmap.img_dialogx_demo_dislike;
+                                        case "所属专辑":
+                                            return R.mipmap.img_dialogx_demo_album;
+                                        case "复制链接":
+                                            return R.mipmap.img_dialogx_demo_link;
+                                        case "类似推荐":
+                                            return R.mipmap.img_dialogx_demo_recommend;
+                                    }
+                                    return 0;
                                 }
-                                return 0;
-                            }
-                        })
-                        .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
-                            @Override
-                            public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                toast(text);
-                                return false;
-                            }
-                        });
+                            })
+                            .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
+                                @Override
+                                public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
+                                    toast(text);
+                                    return false;
+                                }
+                            });
+                }
+                if (rdoIos.isChecked()) {
+                    BottomMenu.show(new String[]{"新标签页中打开","稍后阅读","复制链接网址"})
+                            .setMessage("http://www.kongzue.com/DialogX");
+                }
             }
         });
         

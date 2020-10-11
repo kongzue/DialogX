@@ -161,7 +161,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     private void paddingView(int left, int top, int right, int bottom) {
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
-        if (bkgView != null) {
+        if (bkgView != null &&  bkgView.getLayoutParams() instanceof LayoutParams) {
             LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
             if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE) {
                 bkgView.setPadding(0, 0, 0, bottom);

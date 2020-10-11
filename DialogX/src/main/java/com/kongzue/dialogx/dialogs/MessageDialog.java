@@ -185,17 +185,17 @@ public class MessageDialog extends BaseDialog {
                     
                     getDialogLifecycleCallback().onShow(me);
                     
-                    if (style.blurSettings() != null && style.blurSettings().blurBackground()) {
+                    if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground()) {
                         bkg.post(new Runnable() {
                             @Override
                             public void run() {
-                                int blurFrontColor = getResources().getColor(style.blurSettings().blurForwardColorRes(isLightTheme()));
+                                int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
                                 blurView = new BlurView(bkg.getContext(), null);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
                                 params.addRule(RelativeLayout.CENTER_IN_PARENT);
                                 blurView.setOverlayColor(blurFrontColor);
                                 blurView.setTag("blurView");
-                                blurView.setRadiusPx(style.blurSettings().blurBackgroundRoundRadiusPx());
+                                blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 bkg.addView(blurView, 0, params);
                             }
                         });

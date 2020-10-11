@@ -55,7 +55,7 @@ public class KongzueStyle implements DialogXStyle {
     }
     
     @Override
-    public BlurBackgroundSetting blurSettings() {
+    public BlurBackgroundSetting messageDialogBlurSettings() {
         return null;
     }
     

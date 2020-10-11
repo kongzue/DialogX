@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/box_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black50"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/box_bkg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.kongzue.dialogx.util.views.MaxRelativeLayout
+            android:id="@+id/bkg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="10dp"
+            android:focusableInTouchMode="true"
+            app:lockWidth="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.kongzue.dialogx.util.views.MaxRelativeLayout
+                    android:tag="body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txt_dialog_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center"
+                            android:paddingHorizontal="20dp"
+                            android:paddingTop="13dp"
+                            android:text="Title"
+                            android:textColor="@color/dialogxIOSTipTextDark"
+                            android:textSize="12dp"
+                            android:textStyle="bold"/>
+
+                        <ScrollView
+                            android:id="@+id/scrollView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
+                            android:overScrollMode="never"
+                            android:scrollbarSize="7dp"
+                            android:scrollbars="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/box_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/txt_dialog_tip"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="20dp"
+                                    android:gravity="center"
+                                    android:paddingVertical="13dp"
+                                    android:textColor="@color/dialogxIOSTipTextDark"
+                                    android:textSize="12dp"
+                                    android:text="This is content text." />
+
+                                <ImageView
+                                    android:tag="split"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1px"
+                                    android:visibility="gone" />
+
+                                <RelativeLayout
+                                    android:id="@+id/box_custom"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                            </LinearLayout>
+
+                        </ScrollView>
+
+                    </LinearLayout>
+
+                </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+
+                <com.kongzue.dialogx.util.views.MaxRelativeLayout
+                    android:tag="cancelBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="53dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:tag="cancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:singleLine="true"
+                        android:textColor="@color/dialogxIOSBlueDark"
+                        android:text="取消"
+                        android:textSize="19dp"
+                        android:textStyle="bold" />
+
+                </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+
+            </LinearLayout>
+
+        </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+
+    </RelativeLayout>
+
+</com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>

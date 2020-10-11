@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.kongzue.dialogx.R;
@@ -21,17 +23,14 @@ import java.util.List;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/10/7 0:00
  */
-public class NormalMenuArrayAdapter extends ArrayAdapter<CharSequence> {
+public class NormalMenuArrayAdapter extends BaseAdapter {
     
     private BottomMenu bottomMenu;
-    public int resoureId;
     public List<CharSequence> objects;
     public Context context;
     
-    public NormalMenuArrayAdapter(BottomMenu bottomMenu, Context context, int resourceId, List<CharSequence> objects) {
-        super(context, resourceId, objects);
+    public NormalMenuArrayAdapter(BottomMenu bottomMenu, Context context, List<CharSequence> objects) {
         this.objects = objects;
-        this.resoureId = resourceId;
         this.context = context;
         this.bottomMenu = bottomMenu;
     }
@@ -62,7 +61,24 @@ public class NormalMenuArrayAdapter extends ArrayAdapter<CharSequence> {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater mInflater = LayoutInflater.from(context);
-            convertView = mInflater.inflate(resoureId, null);
+            
+            int resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
+            if (bottomMenu.getStyle().overrideBottomDialogRes() != null) {
+                resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), position, getCount());
+                if (resourceId == 0) {
+                    resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
+                } else {
+                    if (bottomMenu.getDialogImpl().txtDialogTitle.getVisibility() == View.VISIBLE ||
+                            bottomMenu.getDialogImpl().txtDialogTip.getVisibility() == View.VISIBLE||
+                            bottomMenu.getCustomView()!=null) {
+                        if (position == 0) {
+                            //有显示 title、tip 或自定义布局时第一个 item 按钮显示为 center 部分的样式
+                            resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), 1, getCount() + 1);
+                        }
+                    }
+                }
+            }
+            convertView = mInflater.inflate(resourceId, null);
             
             viewHolder.imgDialogxMenuIcon = convertView.findViewById(R.id.img_dialogx_menu_icon);
             viewHolder.txtDialogxMenuText = convertView.findViewById(R.id.txt_dialogx_menu_text);

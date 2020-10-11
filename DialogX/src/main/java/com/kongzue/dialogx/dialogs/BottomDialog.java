@@ -24,6 +24,7 @@ import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
+import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
@@ -39,8 +40,14 @@ public class BottomDialog extends BaseDialog {
     protected OnBindView<BottomDialog> onBindView;
     protected CharSequence title;
     protected CharSequence message;
-    protected CharSequence cancelText;
+    protected CharSequence cancelText = "取消";
     protected boolean allowInterceptTouch = true;
+    
+    /**
+     * 此值用于，当禁用滑动时（style.overrideBottomDialogRes.touchSlide = false时）的最大显示高度。
+     * 0：不限制，最大显示到屏幕可用高度。
+     */
+    protected float bottomDialogMaxHeight = 0.6f;
     
     protected DialogLifecycleCallback<BottomDialog> dialogLifecycleCallback;
     
@@ -120,23 +127,33 @@ public class BottomDialog extends BaseDialog {
         public DialogXBaseRelativeLayout boxRoot;
         public RelativeLayout boxBkg;
         public MaxRelativeLayout bkg;
+        public ViewGroup boxBody;
         public ImageView imgTab;
         public TextView txtDialogTitle;
         public ScrollView scrollView;
         public LinearLayout boxContent;
         public TextView txtDialogTip;
+        public View imgSplit;
         public RelativeLayout boxCustom;
+        public BlurView blurView;
+        public ViewGroup boxCancel;
+        public TextView btnCancel;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
+            boxBody = convertView.findViewWithTag("body");
             imgTab = convertView.findViewById(R.id.img_tab);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
             scrollView = convertView.findViewById(R.id.scrollView);
             boxContent = convertView.findViewById(R.id.box_content);
             txtDialogTip = convertView.findViewById(R.id.txt_dialog_tip);
+            imgSplit = convertView.findViewWithTag("split");
             boxCustom = convertView.findViewById(R.id.box_custom);
+            blurView = convertView.findViewById(R.id.blurView);
+            boxCancel = convertView.findViewWithTag("cancelBox");
+            btnCancel = convertView.findViewWithTag("cancel");
             init();
             refreshView();
         }
@@ -167,6 +184,29 @@ public class BottomDialog extends BaseDialog {
                     onDialogInit(dialogImpl);
                     
                     if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
+                    
+                    if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground() && boxBody != null && boxCancel != null) {
+                        int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
+                        blurView = new BlurView(bkg.getContext(), null);
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
+                        blurView.setOverlayColor(blurFrontColor);
+                        blurView.setTag("blurView");
+                        blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
+                        boxBody.addView(blurView, 0, params);
+                        
+                        BlurView cancelBlurView = new BlurView(boxCancel.getContext(), null);
+                        RelativeLayout.LayoutParams cancelButtonLp = new RelativeLayout.LayoutParams(boxCancel.getWidth(), boxCancel.getHeight());
+                        cancelBlurView.setOverlayColor(blurFrontColor);
+                        cancelBlurView.setTag("blurView");
+                        cancelBlurView.setUseBlur(false);
+                        cancelBlurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
+                        boxCancel.addView(cancelBlurView, 0, cancelButtonLp);
+                        
+                        int cancelButtonDrawable = style.overrideBottomDialogRes().overrideMenuCancelButtonBackgroundRes(isLightTheme());
+                        if (cancelButtonDrawable != 0) {
+                            btnCancel.setBackgroundResource(cancelButtonDrawable);
+                        }
+                    }
                 }
                 
                 @Override
@@ -175,6 +215,26 @@ public class BottomDialog extends BaseDialog {
                     getDialogLifecycleCallback().onDismiss(me);
                 }
             });
+            
+            if (btnCancel != null) {
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+            }
+            
+            if (imgSplit != null) {
+                int dividerRes = style.overrideBottomDialogRes().overrideMenuDividerDrawableRes(isLightTheme());
+                int dividerHeight = style.overrideBottomDialogRes().overrideMenuDividerHeight(isLightTheme());
+                if (dividerRes != 0) imgSplit.setBackgroundResource(dividerRes);
+                if (dividerHeight != 0) {
+                    ViewGroup.LayoutParams lp = imgSplit.getLayoutParams();
+                    lp.height = dividerHeight;
+                    imgSplit.setLayoutParams(lp);
+                }
+            }
             
             boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
                 @Override
@@ -196,15 +256,20 @@ public class BottomDialog extends BaseDialog {
                 @Override
                 public void run() {
                     bkg.setY(boxBkg.getHeight());
-                    if (bkg.isChildScrollViewCanScroll()) {
-                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * 0.6f;
+                    if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
+                        if (bottomDialogMaxHeight <= 1) {
+                            bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;
+                        } else {
+                            bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight;
+                        }
                     } else {
                         bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
                     }
                     ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxBkg.getHeight(), bkgEnterAimY);
-                    enterAnim.setDuration(300);
+                    enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                    enterAnim.setDuration(500);
                     enterAnim.start();
-                    boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(300).setListener(null);
+                    boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
                 }
             });
         }
@@ -214,8 +279,12 @@ public class BottomDialog extends BaseDialog {
             public void onGlobalLayout() {
                 if (boxContent != null) {
                     float oldY = bkgEnterAimY;
-                    if (bkg.isChildScrollViewCanScroll()) {
-                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * 0.6f;
+                    if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
+                        if (bottomDialogMaxHeight <= 1) {
+                            bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;
+                        } else {
+                            bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight;
+                        }
                     } else {
                         bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
                     }
@@ -264,6 +333,22 @@ public class BottomDialog extends BaseDialog {
             }
             
             bottomDialogTouchEventInterceptor.refresh(me, this);
+            
+            if (imgSplit != null) {
+                if (txtDialogTitle.getVisibility() == View.VISIBLE || txtDialogTip.getVisibility() == View.VISIBLE) {
+                    imgSplit.setVisibility(View.VISIBLE);
+                } else {
+                    imgSplit.setVisibility(View.GONE);
+                }
+            }
+            
+            if (boxCancel != null) {
+                if (isNull(cancelText)) {
+                    boxCancel.setVisibility(View.GONE);
+                } else {
+                    boxCancel.setVisibility(View.VISIBLE);
+                }
+            }
         }
         
         @Override

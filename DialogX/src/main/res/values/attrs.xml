@@ -4,14 +4,14 @@
     <declare-styleable name="MaxRelativeLayout">
         <attr name="maxLayoutWidth" format="dimension"/>
         <attr name="maxLayoutHeight" format="dimension"/>
+        <attr name="lockWidth" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="RealtimeBlurView">
         <attr name="realtimeBlurRadius" format="dimension"/>
         <attr name="realtimeDownsampleFactor" format="float"/>
         <attr name="realtimeOverlayColor" format="color"/>
-        <attr name="xRadius" format="dimension"/>
-        <attr name="yRadius" format="dimension"/>
+        <attr name="radius" format="dimension"/>
     </declare-styleable>
 
     <declare-styleable name="ProgressView">
