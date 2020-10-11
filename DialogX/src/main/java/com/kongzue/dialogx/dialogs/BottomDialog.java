@@ -268,9 +268,11 @@ public class BottomDialog extends BaseDialog {
                 public void run() {
                     boxRoot.animate().setDuration(300).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
                     
-                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
-                    enterAnim.setDuration(300);
-                    enterAnim.start();
+                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
+                    enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                    bkg.startAnimation(enterAnim);
+    
+                    bkg.setY(bkgEnterAimY);
                 }
             });
         }
