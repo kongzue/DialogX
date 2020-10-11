@@ -266,20 +266,7 @@ public class BottomDialog extends BaseDialog {
             scrollView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
-                        if (bottomDialogMaxHeight <= 1) {
-                            bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;
-                        } else {
-                            bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight;
-                        }
-                    } else {
-                        bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
-                    }
-                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxBkg.getHeight(), bkgEnterAimY);
-                    enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                    enterAnim.setDuration(500);
-                    enterAnim.start();
-                    boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
+                    boxRoot.animate().setDuration(300).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
                 }
             });
         }
