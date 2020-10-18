@@ -106,7 +106,6 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setOkButton(OnInputDialogButtonClickListener okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -129,7 +128,6 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setCancelButton(OnInputDialogButtonClickListener cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -152,7 +150,6 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setOtherButton(OnInputDialogButtonClickListener otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -169,7 +166,6 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setOkButtonClickListener(OnInputDialogButtonClickListener okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -179,7 +175,6 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setCancelButtonClickListener(OnInputDialogButtonClickListener cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -189,7 +184,6 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setOtherButtonClickListener(OnInputDialogButtonClickListener otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
-        refreshUI();
         return this;
     }
     

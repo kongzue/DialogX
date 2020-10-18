@@ -16,6 +16,7 @@ import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.NormalMenuArrayAdapter;
+import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BottomDialogListView;
 
 import java.util.ArrayList;
@@ -301,11 +302,6 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
     
-    public BottomMenu setDialogImpl(DialogImpl dialogImpl) {
-        this.dialogImpl = dialogImpl;
-        return this;
-    }
-    
     public float getBottomDialogMaxHeight() {
         return bottomDialogMaxHeight;
     }
@@ -339,6 +335,36 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
+        return this;
+    }
+    
+    public TextInfo getTitleTextInfo() {
+        return titleTextInfo;
+    }
+    
+    public BottomMenu setTitleTextInfo(TextInfo titleTextInfo) {
+        this.titleTextInfo = titleTextInfo;
+        refreshUI();
+        return this;
+    }
+    
+    public TextInfo getMessageTextInfo() {
+        return messageTextInfo;
+    }
+    
+    public BottomMenu setMessageTextInfo(TextInfo messageTextInfo) {
+        this.messageTextInfo = messageTextInfo;
+        refreshUI();
+        return this;
+    }
+    
+    public TextInfo getCancelTextInfo() {
+        return cancelTextInfo;
+    }
+    
+    public BottomMenu setCancelTextInfo(TextInfo cancelTextInfo) {
+        this.cancelTextInfo = cancelTextInfo;
+        refreshUI();
         return this;
     }
 }

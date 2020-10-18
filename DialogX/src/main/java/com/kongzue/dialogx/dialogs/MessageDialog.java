@@ -544,7 +544,6 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setOkButton(OnDialogButtonClickListener okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -567,7 +566,6 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setCancelButton(OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -590,7 +588,6 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setOtherButton(OnDialogButtonClickListener otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -607,7 +604,6 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setOkButtonClickListener(OnDialogButtonClickListener okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -617,7 +613,6 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -627,7 +622,6 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setOtherButtonClickListener(OnDialogButtonClickListener otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -727,7 +721,6 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
-        refreshUI();
         return this;
     }
     

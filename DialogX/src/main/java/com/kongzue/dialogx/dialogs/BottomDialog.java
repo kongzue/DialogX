@@ -480,7 +480,6 @@ public class BottomDialog extends BaseDialog {
     public BottomDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
-        refreshUI();
         return this;
     }
     
@@ -515,17 +514,43 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
-    public BottomDialog setDialogImpl(DialogImpl dialogImpl) {
-        this.dialogImpl = dialogImpl;
-        return this;
-    }
-    
     public OnDialogButtonClickListener getCancelButtonClickListener() {
         return cancelButtonClickListener;
     }
     
     public BottomDialog setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public TextInfo getTitleTextInfo() {
+        return titleTextInfo;
+    }
+    
+    public BottomDialog setTitleTextInfo(TextInfo titleTextInfo) {
+        this.titleTextInfo = titleTextInfo;
+        refreshUI();
+        return this;
+    }
+    
+    public TextInfo getMessageTextInfo() {
+        return messageTextInfo;
+    }
+    
+    public BottomDialog setMessageTextInfo(TextInfo messageTextInfo) {
+        this.messageTextInfo = messageTextInfo;
+        refreshUI();
+        return this;
+    }
+    
+    public TextInfo getCancelTextInfo() {
+        return cancelTextInfo;
+    }
+    
+    public BottomDialog setCancelTextInfo(TextInfo cancelTextInfo) {
+        this.cancelTextInfo = cancelTextInfo;
+        refreshUI();
         return this;
     }
 }
