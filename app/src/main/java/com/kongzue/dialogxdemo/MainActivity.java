@@ -121,7 +121,12 @@ public class MainActivity extends BaseActivity {
     
     @Override
     public void initDatas(JumpParameter parameter) {
-        DialogX.globalStyle = BuildStyle.style();
+        if (BuildConfig.DEBUG) {
+            //开发中...
+            DialogX.globalStyle = BuildStyle.style();
+        } else {
+            DialogX.globalStyle = IOSStyle.style();
+        }
     }
     
     //用于模拟进度提示
@@ -186,7 +191,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 MessageDialog messageDialog = new MessageDialog("多选对话框", "移除App会将它从主屏幕移除并保留其所有数据。", "删除App", "取消", "移至App资源库")
                         .setButtonOrientation(LinearLayout.VERTICAL);
-                if (!rdoMiui.isChecked()){
+                if (!rdoMiui.isChecked()) {
                     messageDialog.setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545")));
                 }
                 messageDialog.show();
@@ -366,7 +371,7 @@ public class MainActivity extends BaseActivity {
                                     return false;
                                 }
                             });
-                }else{
+                } else {
                     BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
                             .setMessage("http://www.kongzue.com/DialogX")
                             .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
