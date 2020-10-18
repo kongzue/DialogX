@@ -114,6 +114,8 @@
                         android:paddingRight="15dp"
                         android:singleLine="true"
                         android:textColor="@color/dialogxIOSBlueDark"
+                        android:clickable="true"
+                        android:background="@drawable/button_dialogx_ios_night"
                         android:text="取消"
                         android:textSize="19dp"
                         android:textStyle="bold" />

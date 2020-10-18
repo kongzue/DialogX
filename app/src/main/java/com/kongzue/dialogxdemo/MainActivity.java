@@ -366,8 +366,7 @@ public class MainActivity extends BaseActivity {
                                     return false;
                                 }
                             });
-                }
-                if (rdoIos.isChecked()) {
+                }else{
                     BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
                             .setMessage("http://www.kongzue.com/DialogX")
                             .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {

@@ -206,11 +206,6 @@ public class BottomDialog extends BaseDialog {
                         cancelBlurView.setUseBlur(false);
                         cancelBlurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                         boxCancel.addView(cancelBlurView, 0, cancelButtonLp);
-                        
-                        int cancelButtonDrawable = style.overrideBottomDialogRes().overrideMenuCancelButtonBackgroundRes(isLightTheme());
-                        if (cancelButtonDrawable != 0) {
-                            btnCancel.setBackgroundResource(cancelButtonDrawable);
-                        }
                     }
                 }
                 

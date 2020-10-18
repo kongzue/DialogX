@@ -183,11 +183,6 @@ public class IOSStyle implements DialogXStyle {
             }
             
             @Override
-            public int overrideMenuCancelButtonBackgroundRes(boolean light) {
-                return light ? R.drawable.button_dialogx_ios_light : R.drawable.button_dialogx_ios_night;
-            }
-            
-            @Override
             public int overrideMenuItemLayout(boolean light, int index, int count) {
                 if (light) {
                     if (index == 0) {

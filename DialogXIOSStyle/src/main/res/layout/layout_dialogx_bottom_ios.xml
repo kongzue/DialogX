@@ -115,6 +115,8 @@
                         android:singleLine="true"
                         android:text="取消"
                         android:textColor="@color/dialogxIOSBlue"
+                        android:clickable="true"
+                        android:background="@drawable/button_dialogx_ios_light"
                         android:textSize="19dp"
                         android:textStyle="bold" />
 

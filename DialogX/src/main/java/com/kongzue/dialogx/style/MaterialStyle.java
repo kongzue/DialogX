@@ -156,12 +156,7 @@ public class MaterialStyle implements DialogXStyle {
             }
     
             @Override
-            public int overrideMenuCancelButtonBackgroundRes(boolean b) {
-                return 0;
-            }
-    
-            @Override
-            public int overrideMenuItemLayout(boolean b, int i, int i1) {
+            public int overrideMenuItemLayout(boolean light, int index, int count) {
                 return R.layout.item_dialogx_material_bottom_menu_normal_text;
             }
     

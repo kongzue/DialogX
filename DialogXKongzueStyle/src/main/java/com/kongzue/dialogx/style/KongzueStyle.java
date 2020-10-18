@@ -91,6 +91,42 @@ public class KongzueStyle implements DialogXStyle {
     
     @Override
     public BottomDialogRes overrideBottomDialogRes() {
-        return null;
+        return new BottomDialogRes() {
+            
+            @Override
+            public boolean touchSlide() {
+                return false;
+            }
+            
+            @Override
+            public int overrideDialogLayout(boolean light) {
+                return light ? R.layout.layout_dialogx_bottom_kongzue : R.layout.layout_dialogx_bottom_kongzue_dark;
+            }
+            
+            @Override
+            public int overrideMenuDividerDrawableRes(boolean light) {
+                return light ? R.color.dialogxKongzueButtonSplitLineColor : R.color.dialogxKongzueDarkButtonSplitLineColor;
+            }
+            
+            @Override
+            public int overrideMenuDividerHeight(boolean light) {
+                return 1;
+            }
+            
+            @Override
+            public int overrideMenuTextColor(boolean light) {
+                return light?R.color.black90:R.color.white90;
+            }
+            
+            @Override
+            public float overrideBottomDialogMaxHeight() {
+                return 0.6f;
+            }
+            
+            @Override
+            public int overrideMenuItemLayout(boolean light, int index, int count) {
+                return light?R.layout.item_dialogx_kongzue_bottom_menu_normal_text:R.layout.item_dialogx_kongzue_bottom_menu_normal_text_dark;
+            }
+        };
     }
 }

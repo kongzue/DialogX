@@ -39,5 +39,11 @@
     <color name="dialogxKongzueDarkBkgColor">#181818</color>
     <color name="dialogxKongzueDarkButtonBkgColor">#272727</color>
     <color name="dialogxKongzueDarkButtonBkgColorPress">#33363B</color>
+    <color name="dialogxKongzueButtonSplitSpaceColor">#0D000000</color>
+    <color name="dialogxKongzueButtonSplitLineColor">#26000000</color>
+    <color name="dialogxKongzueDarkDialogBkgColor">#343434</color>
+    <color name="dialogxKongzueDarkButtonSplitSpaceColor">#1AFFFFFF</color>
+    <color name="dialogxKongzueDarkButtonMenuBackgroundColor">#0DFFFFFF</color>
+    <color name="dialogxKongzueDarkButtonSplitLineColor">#26FFFFFF</color>
 
 </resources>

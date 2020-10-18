@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/box_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black20"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/box_bkg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.kongzue.dialogx.util.views.MaxRelativeLayout
+            android:id="@+id/bkg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:focusableInTouchMode="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_dialog_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingBottom="10dp"
+                    android:text="Title"
+                    android:textColor="@color/black"
+                    android:textSize="21dp" />
+
+                <ScrollView
+                    android:id="@+id/scrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:overScrollMode="never"
+                    android:scrollbarSize="7dp"
+                    android:scrollbars="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/box_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txt_dialog_tip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:paddingBottom="5dp"
+                            android:text="This is content text."
+                            android:textColor="@color/black70"
+                            android:textSize="16dp" />
+
+                        <ImageView
+                            android:tag="split"
+                            android:layout_width="match_parent"
+                            android:background="@color/dialogxKongzueButtonSplitLineColor"
+                            android:layout_height="1px"/>
+
+                        <RelativeLayout
+                            android:id="@+id/box_custom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:background="@color/dialogxKongzueButtonSplitLineColor"
+                    android:layout_height="1px"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:background="@color/dialogxKongzueButtonSplitSpaceColor"
+                    android:layout_height="8dp"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:background="@color/dialogxKongzueButtonSplitLineColor"
+                    android:layout_height="1px"/>
+
+                <TextView
+                    android:tag="cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:singleLine="true"
+                    android:background="@drawable/button_dialogx_kongzue_menu_light"
+                    android:text="取消"
+                    android:textColor="@color/black90"
+                    android:textSize="16dp"/>
+
+            </LinearLayout>
+
+        </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+
+    </RelativeLayout>
+
+</com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>
