@@ -95,11 +95,14 @@ public class BottomMenu extends BottomDialog {
                 }
             }
             
-            int dividerDrawableResId = isLightTheme() ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
+            int dividerDrawableResId = 0;
             int dividerHeight = 1;
             if (style.overrideBottomDialogRes() != null) {
                 dividerDrawableResId = style.overrideBottomDialogRes().overrideMenuDividerDrawableRes(isLightTheme());
                 dividerHeight = style.overrideBottomDialogRes().overrideMenuDividerHeight(isLightTheme());
+            }
+            if (dividerDrawableResId == 0) {
+                dividerDrawableResId = isLightTheme() ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
             }
             
             listView = new BottomDialogListView(getContext());
@@ -120,7 +123,7 @@ public class BottomMenu extends BottomDialog {
                 }
             });
             if (style.overrideBottomDialogRes() != null) {
-                if (style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 1) != 0) {
+                if (style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 1,false) != 0) {
                     listView.setSelector(R.color.empty);
                 }
             }
@@ -264,7 +267,7 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
     
-    public BottomMenu setCancelButton(CharSequence cancelText,OnDialogButtonClickListener cancelButtonClickListener) {
+    public BottomMenu setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();

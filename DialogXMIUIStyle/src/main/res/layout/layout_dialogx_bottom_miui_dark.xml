@@ -3,7 +3,7 @@
     android:id="@+id/box_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black20"
+    android:background="@color/black40"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/dialogxKongzueDarkDialogBkgColor"
+            android:background="@drawable/rect_dialogx_miui_bkg_night"
             android:focusableInTouchMode="true">
 
             <LinearLayout
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:orientation="vertical"
-                android:paddingTop="10dp">
+                android:paddingTop="20dp">
 
                 <TextView
                     android:id="@+id/txt_dialog_title"
@@ -33,9 +33,10 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
                     android:paddingHorizontal="20dp"
+                    android:paddingTop="7dp"
                     android:paddingBottom="10dp"
                     android:text="Title"
-                    android:textColor="@color/white"
+                    android:textColor="@color/dialogxMIUITextDark"
                     android:textSize="18dp" />
 
                 <ScrollView
@@ -58,18 +59,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginHorizontal="26dp"
                             android:gravity="left"
                             android:paddingBottom="5dp"
                             android:text="This is content text."
-                            android:textColor="@color/white60"
+                            android:textColor="@color/dialogxMIUITextDark"
                             android:textSize="16dp" />
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="1px"
-                            android:background="@color/dialogxKongzueDarkButtonSplitLineColor"
-                            android:tag="split" />
 
                         <RelativeLayout
                             android:id="@+id/box_custom"
@@ -80,22 +75,19 @@
 
                 </ScrollView>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@color/dialogxKongzueDarkButtonSplitSpaceColor" />
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/button_dialogx_kongzue_menu_night"
+                    android:layout_marginHorizontal="26dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_dialogx_miui_gray_night"
+                    android:clickable="true"
                     android:gravity="center"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:singleLine="true"
                     android:tag="cancel"
                     android:text="取消"
-                    android:textColor="@color/white90"
+                    android:textColor="@color/dialogxMIUITextDark"
                     android:textSize="16dp" />
 
             </LinearLayout>

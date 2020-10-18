@@ -84,6 +84,6 @@ public interface DialogXStyle {
         
         float overrideBottomDialogMaxHeight();
         
-        int overrideMenuItemLayout(boolean light, int index, int count);
+        int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility);
     }
 }

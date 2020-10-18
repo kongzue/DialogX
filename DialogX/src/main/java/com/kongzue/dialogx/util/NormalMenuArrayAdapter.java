@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,16 +65,15 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
             
             int resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
             if (bottomMenu.getStyle().overrideBottomDialogRes() != null) {
-                resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), position, getCount());
+                resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), position, getCount(), false);
                 if (resourceId == 0) {
                     resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
                 } else {
                     if (bottomMenu.getDialogImpl().txtDialogTitle.getVisibility() == View.VISIBLE ||
-                            bottomMenu.getDialogImpl().txtDialogTip.getVisibility() == View.VISIBLE||
-                            bottomMenu.getCustomView()!=null) {
+                            bottomMenu.getDialogImpl().txtDialogTip.getVisibility() == View.VISIBLE ||
+                            bottomMenu.getCustomView() != null) {
                         if (position == 0) {
-                            //有显示 title、tip 或自定义布局时第一个 item 按钮显示为 center 部分的样式
-                            resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), 1, getCount() + 1);
+                            resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), position, getCount(), true);
                         }
                     }
                 }

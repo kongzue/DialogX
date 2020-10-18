@@ -28,6 +28,7 @@ import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
+import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -47,6 +48,10 @@ public class BottomDialog extends BaseDialog {
     protected CharSequence cancelText = "取消";
     protected boolean allowInterceptTouch = true;
     protected OnDialogButtonClickListener cancelButtonClickListener;
+    
+    protected TextInfo titleTextInfo;
+    protected TextInfo messageTextInfo;
+    protected TextInfo cancelTextInfo = new TextInfo().setBold(true);
     
     /**
      * 此值用于，当禁用滑动时（style.overrideBottomDialogRes.touchSlide = false时）的最大显示高度。
@@ -257,7 +262,7 @@ public class BottomDialog extends BaseDialog {
             });
             
             bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
-    
+            
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
@@ -266,7 +271,7 @@ public class BottomDialog extends BaseDialog {
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     bkg.startAnimation(enterAnim);
-    
+                    
                     bkg.setY(bkgEnterAimY);
                 }
             });
@@ -295,6 +300,10 @@ public class BottomDialog extends BaseDialog {
             
             showText(txtDialogTitle, title);
             showText(txtDialogTip, message);
+            
+            useTextInfo(txtDialogTitle, titleTextInfo);
+            useTextInfo(txtDialogTip, messageTextInfo);
+            useTextInfo(btnCancel, cancelTextInfo);
             
             if (cancelable) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
@@ -340,6 +349,7 @@ public class BottomDialog extends BaseDialog {
                 if (isNull(cancelText)) {
                     boxCancel.setVisibility(View.GONE);
                 } else {
+                    showText(btnCancel, cancelText);
                     boxCancel.setVisibility(View.VISIBLE);
                 }
             }

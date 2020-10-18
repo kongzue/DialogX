@@ -156,7 +156,7 @@ public class MaterialStyle implements DialogXStyle {
             }
     
             @Override
-            public int overrideMenuItemLayout(boolean light, int index, int count) {
+            public int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility) {
                 return R.layout.item_dialogx_material_bottom_menu_normal_text;
             }
     

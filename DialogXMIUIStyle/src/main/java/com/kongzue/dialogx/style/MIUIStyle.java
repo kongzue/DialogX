@@ -91,6 +91,57 @@ public class MIUIStyle implements DialogXStyle {
     
     @Override
     public BottomDialogRes overrideBottomDialogRes() {
-        return null;
+        return new BottomDialogRes() {
+            @Override
+            public boolean touchSlide() {
+                return false;
+            }
+            
+            @Override
+            public int overrideDialogLayout(boolean light) {
+                return light ? R.layout.layout_dialogx_bottom_miui : R.layout.layout_dialogx_bottom_miui_dark;
+            }
+            
+            @Override
+            public int overrideMenuDividerDrawableRes(boolean light) {
+                return 0;
+            }
+            
+            @Override
+            public int overrideMenuDividerHeight(boolean light) {
+                return 0;
+            }
+            
+            @Override
+            public int overrideMenuTextColor(boolean light) {
+                return light ? R.color.black : R.color.dialogxMIUITextDark;
+            }
+            
+            @Override
+            public float overrideBottomDialogMaxHeight() {
+                return 0.6f;
+            }
+            
+            @Override
+            public int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility) {
+                if (light) {
+                    if (index == 0) {
+                        return R.layout.item_dialogx_miui_bottom_menu_top_light;
+                    } else if (index == count - 1) {
+                        return R.layout.item_dialogx_miui_bottom_menu_bottom_light;
+                    } else {
+                        return R.layout.item_dialogx_miui_bottom_menu_center_light;
+                    }
+                } else {
+                    if (index == 0) {
+                        return R.layout.item_dialogx_miui_bottom_menu_top_dark;
+                    } else if (index == count - 1) {
+                        return R.layout.item_dialogx_miui_bottom_menu_bottom_dark;
+                    } else {
+                        return R.layout.item_dialogx_miui_bottom_menu_center_dark;
+                    }
+                }
+            }
+        };
     }
 }

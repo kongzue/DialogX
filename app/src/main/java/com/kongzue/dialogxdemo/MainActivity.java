@@ -33,7 +33,6 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
-import com.kongzue.dialogx.style.BuildStyle;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -121,12 +120,7 @@ public class MainActivity extends BaseActivity {
     
     @Override
     public void initDatas(JumpParameter parameter) {
-        if (BuildConfig.DEBUG) {
-            //开发中...
-            DialogX.globalStyle = BuildStyle.style();
-        } else {
-            DialogX.globalStyle = IOSStyle.style();
-        }
+        DialogX.globalStyle = IOSStyle.style();
     }
     
     //用于模拟进度提示

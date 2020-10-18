@@ -114,12 +114,12 @@ public class IOSStyle implements DialogXStyle {
             public int overrideVerticalOkButtonBackgroundRes(int visibleButtonCount, boolean light) {
                 return light ? R.drawable.button_dialogx_ios_center_light : R.drawable.button_dialogx_ios_center_night;
             }
-    
+            
             @Override
             public int overrideVerticalCancelButtonBackgroundRes(int visibleButtonCount, boolean light) {
                 return light ? R.drawable.button_dialogx_ios_bottom_light : R.drawable.button_dialogx_ios_bottom_night;
             }
-    
+            
             @Override
             public int overrideVerticalOtherButtonBackgroundRes(int visibleButtonCount, boolean light) {
                 return light ? R.drawable.button_dialogx_ios_center_light : R.drawable.button_dialogx_ios_center_night;
@@ -142,7 +142,7 @@ public class IOSStyle implements DialogXStyle {
             
             @Override
             public int overrideTextColorRes(boolean light) {
-                return light?R.color.white:R.color.black;
+                return light ? R.color.white : R.color.black;
             }
         };
     }
@@ -183,10 +183,10 @@ public class IOSStyle implements DialogXStyle {
             }
             
             @Override
-            public int overrideMenuItemLayout(boolean light, int index, int count) {
+            public int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility) {
                 if (light) {
                     if (index == 0) {
-                        return R.layout.item_dialogx_ios_bottom_menu_top_light;
+                        return isContentVisibility ? R.layout.item_dialogx_ios_bottom_menu_center_light : R.layout.item_dialogx_ios_bottom_menu_top_light;
                     } else if (index == count - 1) {
                         return R.layout.item_dialogx_ios_bottom_menu_bottom_light;
                     } else {
@@ -194,7 +194,7 @@ public class IOSStyle implements DialogXStyle {
                     }
                 } else {
                     if (index == 0) {
-                        return R.layout.item_dialogx_ios_bottom_menu_top_dark;
+                        return isContentVisibility ? R.layout.item_dialogx_ios_bottom_menu_center_dark : R.layout.item_dialogx_ios_bottom_menu_top_dark;
                     } else if (index == count - 1) {
                         return R.layout.item_dialogx_ios_bottom_menu_bottom_dark;
                     } else {

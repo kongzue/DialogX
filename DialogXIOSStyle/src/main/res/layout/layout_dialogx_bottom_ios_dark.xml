@@ -28,10 +28,10 @@
                 android:orientation="vertical">
 
                 <com.kongzue.dialogx.util.views.MaxRelativeLayout
-                    android:tag="body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:tag="body">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -50,16 +50,16 @@
                             android:text="Title"
                             android:textColor="@color/dialogxIOSTipTextDark"
                             android:textSize="12dp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <ScrollView
                             android:id="@+id/scrollView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
                             android:overScrollMode="never"
                             android:scrollbarSize="7dp"
+                            android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
                             android:scrollbars="vertical">
 
                             <LinearLayout
@@ -75,14 +75,14 @@
                                     android:layout_marginHorizontal="20dp"
                                     android:gravity="center"
                                     android:paddingVertical="13dp"
+                                    android:text="This is content text."
                                     android:textColor="@color/dialogxIOSTipTextDark"
-                                    android:textSize="12dp"
-                                    android:text="This is content text." />
+                                    android:textSize="12dp" />
 
                                 <ImageView
-                                    android:tag="split"
                                     android:layout_width="match_parent"
                                     android:layout_height="1px"
+                                    android:tag="split"
                                     android:visibility="gone" />
 
                                 <RelativeLayout
@@ -99,26 +99,25 @@
                 </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 
                 <com.kongzue.dialogx.util.views.MaxRelativeLayout
-                    android:tag="cancelBox"
                     android:layout_width="match_parent"
                     android:layout_height="53dp"
                     android:layout_marginTop="7dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:tag="cancelBox">
 
                     <TextView
-                        android:tag="cancel"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/button_dialogx_ios_night"
+                        android:clickable="true"
                         android:gravity="center"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:singleLine="true"
-                        android:textColor="@color/dialogxIOSBlueDark"
-                        android:clickable="true"
-                        android:background="@drawable/button_dialogx_ios_night"
+                        android:tag="cancel"
                         android:text="取消"
-                        android:textSize="19dp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/dialogxIOSBlueDark"
+                        android:textSize="19dp" />
 
                 </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 

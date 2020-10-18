@@ -84,7 +84,7 @@ public class KongzueStyle implements DialogXStyle {
             
             @Override
             public int overrideTextColorRes(boolean light) {
-                return light?R.color.white:R.color.black;
+                return light ? R.color.white : R.color.black;
             }
         };
     }
@@ -115,7 +115,7 @@ public class KongzueStyle implements DialogXStyle {
             
             @Override
             public int overrideMenuTextColor(boolean light) {
-                return light?R.color.black90:R.color.white90;
+                return light ? R.color.black90 : R.color.white90;
             }
             
             @Override
@@ -124,8 +124,8 @@ public class KongzueStyle implements DialogXStyle {
             }
             
             @Override
-            public int overrideMenuItemLayout(boolean light, int index, int count) {
-                return light?R.layout.item_dialogx_kongzue_bottom_menu_normal_text:R.layout.item_dialogx_kongzue_bottom_menu_normal_text_dark;
+            public int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility) {
+                return light ? R.layout.item_dialogx_kongzue_bottom_menu_normal_text : R.layout.item_dialogx_kongzue_bottom_menu_normal_text_dark;
             }
         };
     }

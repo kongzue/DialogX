@@ -22,21 +22,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
                 android:clickable="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="10dp">
 
                 <TextView
                     android:id="@+id/txt_dialog_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:paddingHorizontal="20dp"
                     android:paddingBottom="10dp"
                     android:text="Title"
                     android:textColor="@color/black"
-                    android:textSize="21dp" />
+                    android:textSize="18dp" />
 
                 <ScrollView
                     android:id="@+id/scrollView"
@@ -55,24 +55,26 @@
 
                         <TextView
                             android:id="@+id/txt_dialog_tip"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
                             android:layout_marginHorizontal="20dp"
+                            android:gravity="left"
                             android:paddingBottom="5dp"
                             android:text="This is content text."
                             android:textColor="@color/black70"
                             android:textSize="16dp" />
 
                         <ImageView
-                            android:tag="split"
                             android:layout_width="match_parent"
+                            android:layout_height="1px"
                             android:background="@color/dialogxKongzueButtonSplitLineColor"
-                            android:layout_height="1px"/>
+                            android:tag="split" />
 
                         <RelativeLayout
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
@@ -80,31 +82,31 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:background="@color/dialogxKongzueButtonSplitLineColor"
-                    android:layout_height="1px"/>
+                    android:layout_height="1px"
+                    android:background="@color/dialogxKongzueButtonSplitLineColor" />
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:background="@color/dialogxKongzueButtonSplitSpaceColor"
-                    android:layout_height="8dp"/>
+                    android:layout_height="8dp"
+                    android:background="@color/dialogxKongzueButtonSplitSpaceColor" />
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:background="@color/dialogxKongzueButtonSplitLineColor"
-                    android:layout_height="1px"/>
+                    android:layout_height="1px"
+                    android:background="@color/dialogxKongzueButtonSplitLineColor" />
 
                 <TextView
-                    android:tag="cancel"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:background="@drawable/button_dialogx_kongzue_menu_light"
                     android:gravity="center"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:singleLine="true"
-                    android:background="@drawable/button_dialogx_kongzue_menu_light"
+                    android:tag="cancel"
                     android:text="取消"
                     android:textColor="@color/black90"
-                    android:textSize="16dp"/>
+                    android:textSize="16dp" />
 
             </LinearLayout>
 
