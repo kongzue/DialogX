@@ -383,7 +383,9 @@ public class ProgressView extends View {
     
     public void progress(float progress) {
         if (rotateAnimator != null) rotateAnimator.cancel();
-        
+        if (status != STATUS_PROGRESSING) {
+            currentRotateDegrees = 0;
+        }
         rotateAnimator = ValueAnimator.ofFloat(currentRotateDegrees, 365 * progress);
         rotateAnimator.setDuration(1000);
         rotateAnimator.setInterpolator(new DecelerateInterpolator(2));

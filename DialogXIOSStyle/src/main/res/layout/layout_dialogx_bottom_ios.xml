@@ -79,6 +79,11 @@
                                     android:textColor="@color/dialogxIOSTipTextLight"
                                     android:textSize="12dp" />
 
+                                <RelativeLayout
+                                    android:id="@+id/box_custom"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"/>
+
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="1px"
@@ -86,9 +91,9 @@
                                     android:visibility="gone" />
 
                                 <RelativeLayout
-                                    android:id="@+id/box_custom"
+                                    android:id="@+id/box_list"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
+                                    android:layout_height="wrap_content"/>
 
                             </LinearLayout>
 

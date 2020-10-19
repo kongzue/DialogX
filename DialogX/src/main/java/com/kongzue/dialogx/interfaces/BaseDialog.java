@@ -72,6 +72,12 @@ public class BaseDialog {
         return contextWeakReference.get();
     }
     
+    public static void cleanContext() {
+        contextWeakReference.clear();
+        contextWeakReference = null;
+        System.gc();
+    }
+    
     protected boolean cancelable = true;
     protected OnBackPressedListener onBackPressedListener;
     protected boolean isShow;

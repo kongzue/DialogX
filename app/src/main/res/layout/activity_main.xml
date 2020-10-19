@@ -466,19 +466,6 @@
                         android:textSize="13dp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/btn_customNotification"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/rect_button"
-                        android:paddingHorizontal="15dp"
-                        android:paddingVertical="10dp"
-                        android:text="通知"
-                        android:textColor="@color/white"
-                        android:textSize="13dp"
-                        android:textStyle="bold" />
-
                 </LinearLayout>
 
                 <TextView

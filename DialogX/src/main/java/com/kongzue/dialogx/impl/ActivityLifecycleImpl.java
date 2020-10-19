@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.kongzue.dialogx.interfaces.BaseDialog;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -68,7 +70,9 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
-    
+        if (BaseDialog.getContext()==activity){
+            BaseDialog.cleanContext();
+        }
     }
     
     public interface onActivityResumeCallBack {

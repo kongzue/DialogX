@@ -75,7 +75,6 @@ public class MainActivity extends BaseActivity {
     private TextView btnCustomMessageDialog;
     private TextView btnCustomInputDialog;
     private TextView btnCustomBottomMenu;
-    private TextView btnCustomNotification;
     private TextView btnCustomDialog;
     private TextView btnFullScreenDialogWebPage;
     private TextView btnFullScreenDialogLogin;
@@ -111,7 +110,6 @@ public class MainActivity extends BaseActivity {
         btnCustomMessageDialog = findViewById(R.id.btn_customMessageDialog);
         btnCustomInputDialog = findViewById(R.id.btn_customInputDialog);
         btnCustomBottomMenu = findViewById(R.id.btn_customBottomMenu);
-        btnCustomNotification = findViewById(R.id.btn_customNotification);
         btnCustomDialog = findViewById(R.id.btn_customDialog);
         btnFullScreenDialogWebPage = findViewById(R.id.btn_fullScreenDialog_webPage);
         btnFullScreenDialogLogin = findViewById(R.id.btn_fullScreenDialog_login);
@@ -121,6 +119,33 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initDatas(JumpParameter parameter) {
         DialogX.globalStyle = IOSStyle.style();
+        
+        boolean showBreak = parameter.getBoolean("showBreak");
+        if (showBreak){
+            MessageDialog.show("提示","接下来会直接运行一个 WaitDialog，2 秒后直接关闭 Activity，并回到原 Activity，保证程序不会出现 WindowLeaked 错误。\n\n" +
+                    "Android 原生 AlertDialog 常出现因 Dialog 先于 Activity 关闭而导致此错误引发程序崩溃。\n\n" +
+                    "而使用 DialogX 构建的对话框不仅仅不会出现此问题，还可避免因句柄持续持有导致的内存泄漏。","开始测试","取消")
+                    .setOkButton(new OnDialogButtonClickListener() {
+                        @Override
+                        public boolean onClick(BaseDialog baseDialog, View v) {
+                            WaitDialog.show("请稍后...");
+                            runDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    finish();
+                                }
+                            },2000);
+                            return false;
+                        }
+                    })
+                    .setCancelButton(new OnDialogButtonClickListener() {
+                        @Override
+                        public boolean onClick(BaseDialog baseDialog, View v) {
+                            finish();
+                            return false;
+                        }
+                    });
+        }
     }
     
     //用于模拟进度提示
@@ -402,6 +427,60 @@ public class MainActivity extends BaseActivity {
                         }, 300);
                     }
                 }).setAllowInterceptTouch(false);
+            }
+        });
+        
+        btnCustomMessageDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MessageDialog.show("这里是标题","此对话框演示的是自定义对话框内部布局的效果","确定","取消")
+                        .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
+                            @Override
+                            public void onBind(MessageDialog dialog, View v) {
+        
+                            }
+                        });
+            }
+        });
+        
+        btnCustomInputDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputDialog.show("这里是标题","此对话框演示的是自定义对话框内部布局的效果","确定","取消")
+                        .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
+                            @Override
+                            public void onBind(MessageDialog dialog, View v) {
+                
+                            }
+                        });
+            }
+        });
+        
+        btnCustomBottomMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
+                        .setMessage("http://www.kongzue.com/DialogX")
+                        .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
+                            @Override
+                            public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
+                                toast(text);
+                                return false;
+                            }
+                        })
+                .setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
+                    @Override
+                    public void onBind(BottomDialog dialog, View v) {
+        
+                    }
+                });
+            }
+        });
+        
+        btnShowBreak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jump(MainActivity.class,new JumpParameter().put("showBreak",true));
             }
         });
     }

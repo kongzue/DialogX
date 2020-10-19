@@ -310,7 +310,7 @@ public class MessageDialog extends BaseDialog {
             showText(btnSelectPositive, okText);
             showText(btnSelectNegative, cancelText);
             showText(btnSelectOther, otherText);
-            showText(txtInput, inputText);
+            txtInput.setText(inputText);
             if (spaceOtherButton != null) {
                 if (otherText == null) {
                     spaceOtherButton.setVisibility(View.GONE);

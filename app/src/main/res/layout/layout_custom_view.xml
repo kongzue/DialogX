@@ -15,13 +15,14 @@
             android:id="@+id/img_ico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ico_wechat" />
+            android:src="@mipmap/ic_launcher" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="这里是自定义Layout测试"
+            android:textColor="#878787"
             android:textSize="12dp" />
 
     </LinearLayout>

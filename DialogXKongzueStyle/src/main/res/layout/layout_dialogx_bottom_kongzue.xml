@@ -58,12 +58,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginHorizontal="20dp"
                             android:gravity="left"
+                            android:layout_marginHorizontal="20dp"
                             android:paddingBottom="5dp"
                             android:text="This is content text."
                             android:textColor="@color/black70"
                             android:textSize="16dp" />
+
+                        <RelativeLayout
+                            android:id="@+id/box_custom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -72,9 +77,9 @@
                             android:tag="split" />
 
                         <RelativeLayout
-                            android:id="@+id/box_custom"
+                            android:id="@+id/box_list"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"/>
 
                     </LinearLayout>
 

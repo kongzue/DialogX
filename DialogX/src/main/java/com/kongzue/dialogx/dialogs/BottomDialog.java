@@ -144,6 +144,7 @@ public class BottomDialog extends BaseDialog {
         public LinearLayout boxContent;
         public TextView txtDialogTip;
         public View imgSplit;
+        public RelativeLayout boxList;
         public RelativeLayout boxCustom;
         public BlurView blurView;
         public ViewGroup boxCancel;
@@ -160,6 +161,7 @@ public class BottomDialog extends BaseDialog {
             boxContent = convertView.findViewById(R.id.box_content);
             txtDialogTip = convertView.findViewById(R.id.txt_dialog_tip);
             imgSplit = convertView.findViewWithTag("split");
+            boxList = convertView.findViewById(R.id.box_list);
             boxCustom = convertView.findViewById(R.id.box_custom);
             blurView = convertView.findViewById(R.id.blurView);
             boxCancel = convertView.findViewWithTag("cancelBox");

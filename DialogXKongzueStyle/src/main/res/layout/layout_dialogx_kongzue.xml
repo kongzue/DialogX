@@ -50,9 +50,10 @@
 
                         <TextView
                             android:id="@+id/txt_dialog_tip"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="left"
                             android:paddingTop="5dp"
                             android:paddingBottom="10dp"
                             android:layout_marginHorizontal="20dp"
@@ -64,8 +65,7 @@
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:visibility="gone"></RelativeLayout>
+                            android:visibility="gone"/>
 
                         <EditText
                             android:id="@+id/txt_input"

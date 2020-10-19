@@ -65,6 +65,11 @@
                             android:textColor="@color/white60"
                             android:textSize="16dp" />
 
+                        <RelativeLayout
+                            android:id="@+id/box_custom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="1px"
@@ -72,9 +77,9 @@
                             android:tag="split" />
 
                         <RelativeLayout
-                            android:id="@+id/box_custom"
+                            android:id="@+id/box_list"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"/>
 
                     </LinearLayout>
 

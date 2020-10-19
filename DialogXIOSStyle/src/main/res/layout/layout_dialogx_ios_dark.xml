@@ -54,10 +54,11 @@
 
                         <TextView
                             android:id="@+id/txt_dialog_tip"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="left"
                             android:layout_marginHorizontal="15dp"
-                            android:gravity="center"
                             android:text="This is content text."
                             android:textColor="@color/white"
                             android:textSize="13dp" />
@@ -66,8 +67,7 @@
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:visibility="gone"></RelativeLayout>
+                            android:visibility="gone"/>
 
                         <EditText
                             android:id="@+id/txt_input"

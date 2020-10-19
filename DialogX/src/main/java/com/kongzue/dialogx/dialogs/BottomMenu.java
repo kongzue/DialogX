@@ -124,13 +124,14 @@ public class BottomMenu extends BottomDialog {
                 }
             });
             if (style.overrideBottomDialogRes() != null) {
-                if (style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 1,false) != 0) {
+                if (style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 0,false) != 0) {
+                    log("@@@"+style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 0,false) );
                     listView.setSelector(R.color.empty);
                 }
             }
             
             RelativeLayout.LayoutParams listViewLp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            dialog.boxCustom.addView(listView, listViewLp);
+            dialog.boxList.addView(listView, listViewLp);
             
             refreshUI();
         }
