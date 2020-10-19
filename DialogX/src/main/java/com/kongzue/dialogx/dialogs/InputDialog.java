@@ -2,6 +2,8 @@ package com.kongzue.dialogx.dialogs;
 
 import android.view.View;
 
+import androidx.annotation.ColorInt;
+
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -337,6 +339,16 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog removeCustomView(){
         this.onBindView.clean();
+        refreshUI();
+        return this;
+    }
+    
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+    
+    public InputDialog setBackgroundColor(@ColorInt int backgroundColor) {
+        this.backgroundColor = backgroundColor;
         refreshUI();
         return this;
     }

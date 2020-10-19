@@ -11,6 +11,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
@@ -210,7 +212,7 @@ public class WaitDialog extends BaseDialog {
                 if (overrideBackgroundColorRes == 0) {
                     overrideBackgroundColorRes = isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight;
                 }
-                blurView.setOverlayColor(getResources().getColor(overrideBackgroundColorRes));
+                blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(overrideBackgroundColorRes) : backgroundColor);
                 int overrideTextColorRes = style.overrideWaitTipRes().overrideTextColorRes(isLightTheme());
                 if (overrideTextColorRes == 0) {
                     overrideTextColorRes = isLightTheme() ? R.color.white : R.color.black;
@@ -220,11 +222,11 @@ public class WaitDialog extends BaseDialog {
                 blurView.setUseBlur(style.overrideWaitTipRes().blurBackground());
             } else {
                 if (isLightTheme()) {
-                    blurView.setOverlayColor(getResources().getColor(R.color.dialogxWaitBkgDark));
+                    blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgDark) : backgroundColor);
                     progressView.setColor(Color.WHITE);
                     txtInfo.setTextColor(Color.WHITE);
                 } else {
-                    blurView.setOverlayColor(getResources().getColor(R.color.dialogxWaitBkgLight));
+                    blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgLight) : backgroundColor);
                     progressView.setColor(Color.BLACK);
                     txtInfo.setTextColor(Color.BLACK);
                 }
@@ -375,6 +377,16 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
+        refreshUI();
+        return this;
+    }
+    
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+    
+    public WaitDialog setBackgroundColor(@ColorInt int backgroundColor) {
+        this.backgroundColor = backgroundColor;
         refreshUI();
         return this;
     }

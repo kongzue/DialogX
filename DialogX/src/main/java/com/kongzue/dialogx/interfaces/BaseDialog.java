@@ -2,6 +2,7 @@ package com.kongzue.dialogx.interfaces;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
@@ -84,6 +87,7 @@ public class BaseDialog {
     protected DialogXStyle style;
     protected DialogX.THEME theme;
     protected boolean autoShowInputKeyboard;
+    protected int backgroundColor = -1;
     
     public BaseDialog() {
         style = DialogX.globalStyle;
@@ -181,5 +185,9 @@ public class BaseDialog {
     public static FrameLayout getRootFrameLayout() {
         if (rootFrameLayout == null) return null;
         return rootFrameLayout.get();
+    }
+    
+    public void tintColor(View view, int color) {
+        view.setBackgroundTintList(ColorStateList.valueOf(color));
     }
 }

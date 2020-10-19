@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
@@ -28,6 +30,7 @@ import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
+import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.InputInfo;
@@ -193,7 +196,7 @@ public class MessageDialog extends BaseDialog {
                                 blurView = new BlurView(bkg.getContext(), null);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
                                 params.addRule(RelativeLayout.CENTER_IN_PARENT);
-                                blurView.setOverlayColor(blurFrontColor);
+                                blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                                 blurView.setTag("blurView");
                                 blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 bkg.addView(blurView, 0, params);
@@ -297,6 +300,15 @@ public class MessageDialog extends BaseDialog {
         }
         
         public void refreshView() {
+            if (backgroundColor != -1) {
+                tintColor(bkg, backgroundColor);
+                if (style instanceof MaterialStyle) {
+                    tintColor(btnSelectOther, backgroundColor);
+                    tintColor(btnSelectNegative, backgroundColor);
+                    tintColor(btnSelectPositive, backgroundColor);
+                }
+            }
+            
             bkg.setMaxWidth(DialogX.dialogMaxWidth);
             if (me instanceof InputDialog) {
                 txtInput.setVisibility(View.VISIBLE);
@@ -741,6 +753,16 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog removeCustomView() {
         this.onBindView.clean();
+        refreshUI();
+        return this;
+    }
+    
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+    
+    public MessageDialog setBackgroundColor(@ColorInt int backgroundColor) {
+        this.backgroundColor = backgroundColor;
         refreshUI();
         return this;
     }

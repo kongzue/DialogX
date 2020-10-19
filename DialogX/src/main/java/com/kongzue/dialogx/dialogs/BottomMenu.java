@@ -6,6 +6,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.ColorInt;
+
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
@@ -365,6 +367,16 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setCancelTextInfo(TextInfo cancelTextInfo) {
         this.cancelTextInfo = cancelTextInfo;
+        refreshUI();
+        return this;
+    }
+    
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+    
+    public BottomMenu setBackgroundColor(@ColorInt int backgroundColor) {
+        this.backgroundColor = backgroundColor;
         refreshUI();
         return this;
     }

@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
@@ -27,6 +29,7 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
+import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
@@ -149,6 +152,7 @@ public class BottomDialog extends BaseDialog {
         public BlurView blurView;
         public ViewGroup boxCancel;
         public TextView btnCancel;
+        public BlurView cancelBlurView;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);
@@ -201,14 +205,14 @@ public class BottomDialog extends BaseDialog {
                         int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
                         blurView = new BlurView(bkg.getContext(), null);
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
-                        blurView.setOverlayColor(blurFrontColor);
+                        blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                         blurView.setTag("blurView");
                         blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                         boxBody.addView(blurView, 0, params);
                         
-                        BlurView cancelBlurView = new BlurView(boxCancel.getContext(), null);
+                        cancelBlurView = new BlurView(boxCancel.getContext(), null);
                         RelativeLayout.LayoutParams cancelButtonLp = new RelativeLayout.LayoutParams(boxCancel.getWidth(), boxCancel.getHeight());
-                        cancelBlurView.setOverlayColor(blurFrontColor);
+                        cancelBlurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                         cancelBlurView.setTag("blurView");
                         cancelBlurView.setUseBlur(false);
                         cancelBlurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
@@ -298,6 +302,14 @@ public class BottomDialog extends BaseDialog {
         
         @Override
         public void refreshView() {
+            if (backgroundColor != -1) {
+                tintColor(bkg, backgroundColor);
+                if (blurView != null && cancelBlurView != null) {
+                    blurView.setOverlayColor(backgroundColor);
+                    cancelBlurView.setOverlayColor(backgroundColor);
+                }
+            }
+            
             txtDialogTitle.getPaint().setFakeBoldText(true);
             
             showText(txtDialogTitle, title);
@@ -552,6 +564,16 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setCancelTextInfo(TextInfo cancelTextInfo) {
         this.cancelTextInfo = cancelTextInfo;
+        refreshUI();
+        return this;
+    }
+    
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+    
+    public BottomDialog setBackgroundColor(@ColorInt int backgroundColor) {
+        this.backgroundColor = backgroundColor;
         refreshUI();
         return this;
     }

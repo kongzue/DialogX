@@ -121,10 +121,10 @@ public class MainActivity extends BaseActivity {
         DialogX.globalStyle = IOSStyle.style();
         
         boolean showBreak = parameter.getBoolean("showBreak");
-        if (showBreak){
-            MessageDialog.show("提示","接下来会直接运行一个 WaitDialog，2 秒后直接关闭 Activity，并回到原 Activity，保证程序不会出现 WindowLeaked 错误。\n\n" +
+        if (showBreak) {
+            MessageDialog.show("提示", "接下来会直接运行一个 WaitDialog，2 秒后直接关闭 Activity，并回到原 Activity，保证程序不会出现 WindowLeaked 错误。\n\n" +
                     "Android 原生 AlertDialog 常出现因 Dialog 先于 Activity 关闭而导致此错误引发程序崩溃。\n\n" +
-                    "而使用 DialogX 构建的对话框不仅仅不会出现此问题，还可避免因句柄持续持有导致的内存泄漏。","开始测试","取消")
+                    "而使用 DialogX 构建的对话框不仅仅不会出现此问题，还可避免因句柄持续持有导致的内存泄漏。", "开始测试", "取消")
                     .setOkButton(new OnDialogButtonClickListener() {
                         @Override
                         public boolean onClick(BaseDialog baseDialog, View v) {
@@ -134,7 +134,7 @@ public class MainActivity extends BaseActivity {
                                 public void run() {
                                     finish();
                                 }
-                            },2000);
+                            }, 2000);
                             return false;
                         }
                     })
@@ -433,11 +433,11 @@ public class MainActivity extends BaseActivity {
         btnCustomMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MessageDialog.show("这里是标题","此对话框演示的是自定义对话框内部布局的效果","确定","取消")
+                MessageDialog.show("这里是标题", "此对话框演示的是自定义对话框内部布局的效果", "确定", "取消")
                         .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(MessageDialog dialog, View v) {
-        
+                            
                             }
                         });
             }
@@ -446,11 +446,11 @@ public class MainActivity extends BaseActivity {
         btnCustomInputDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputDialog.show("这里是标题","此对话框演示的是自定义对话框内部布局的效果","确定","取消")
+                InputDialog.show("这里是标题", "此对话框演示的是自定义对话框内部布局的效果", "确定", "取消")
                         .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(MessageDialog dialog, View v) {
-                
+                            
                             }
                         });
             }
@@ -468,19 +468,19 @@ public class MainActivity extends BaseActivity {
                                 return false;
                             }
                         })
-                .setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
-                    @Override
-                    public void onBind(BottomDialog dialog, View v) {
-        
-                    }
-                });
+                        .setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
+                            @Override
+                            public void onBind(BottomDialog dialog, View v) {
+                            
+                            }
+                        });
             }
         });
         
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jump(MainActivity.class,new JumpParameter().put("showBreak",true));
+                jump(MainActivity.class, new JumpParameter().put("showBreak", true));
             }
         });
     }
