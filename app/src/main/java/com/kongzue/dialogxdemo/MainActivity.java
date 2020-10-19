@@ -1,9 +1,15 @@
 package com.kongzue.dialogxdemo;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +28,7 @@ import com.kongzue.baseframework.util.JumpParameter;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.dialogs.BottomMenu;
+import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.TipDialog;
@@ -51,6 +58,7 @@ public class MainActivity extends BaseActivity {
     private LinearLayout boxTableChild;
     private LinearLayout btnBack;
     private ImageView btnShare;
+    private TextView txtTitle;
     private LinearLayout boxBody;
     private RadioGroup grpStyle;
     private RadioButton rdoIos;
@@ -86,6 +94,7 @@ public class MainActivity extends BaseActivity {
         boxTableChild = findViewById(R.id.box_table_child);
         btnBack = findViewById(R.id.btn_back);
         btnShare = findViewById(R.id.btn_share);
+        txtTitle = findViewById(R.id.txt_title);
         boxBody = findViewById(R.id.box_body);
         grpStyle = findViewById(R.id.grp_style);
         rdoIos = findViewById(R.id.rdo_ios);
@@ -122,6 +131,7 @@ public class MainActivity extends BaseActivity {
         
         boolean showBreak = parameter.getBoolean("showBreak");
         if (showBreak) {
+            txtTitle.setText("显示Dialog时关闭Activity演示");
             MessageDialog.show("提示", "接下来会直接运行一个 WaitDialog，2 秒后直接关闭 Activity，并回到原 Activity，保证程序不会出现 WindowLeaked 错误。\n\n" +
                     "Android 原生 AlertDialog 常出现因 Dialog 先于 Activity 关闭而导致此错误引发程序崩溃。\n\n" +
                     "而使用 DialogX 构建的对话框不仅仅不会出现此问题，还可避免因句柄持续持有导致的内存泄漏。", "开始测试", "取消")
@@ -155,6 +165,16 @@ public class MainActivity extends BaseActivity {
     
     private TextView btnReplyCommit;
     private EditText editReplyCommit;
+    
+    private TextView btnCancel;
+    private TextView btnSubmit;
+    private RelativeLayout boxUserName;
+    private EditText editUserName;
+    private RelativeLayout boxPassword;
+    private EditText editPassword;
+    
+    private TextView btnClose;
+    private WebView webView;
     
     @Override
     public void setEvents() {
@@ -481,6 +501,143 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 jump(MainActivity.class, new JumpParameter().put("showBreak", true));
+            }
+        });
+        
+        btnFullScreenDialogLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FullScreenDialog.show(new OnBindView<FullScreenDialog>(R.layout.layout_full_login) {
+                    @Override
+                    public void onBind(FullScreenDialog dialog, View v) {
+                        btnCancel = v.findViewById(R.id.btn_cancel);
+                        btnSubmit = v.findViewById(R.id.btn_submit);
+                        boxUserName = v.findViewById(R.id.box_userName);
+                        editUserName = v.findViewById(R.id.edit_userName);
+                        boxPassword = v.findViewById(R.id.box_password);
+                        editPassword = v.findViewById(R.id.edit_password);
+                        
+                        initFullScreenLoginDemo(dialog);
+                    }
+                });
+            }
+        });
+        
+        btnFullScreenDialogWebPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FullScreenDialog.show(new OnBindView<FullScreenDialog>(R.layout.layout_full_webview) {
+                    @Override
+                    public void onBind(final FullScreenDialog dialog, View v) {
+                        btnClose = v.findViewById(R.id.btn_close);
+                        webView = v.findViewById(R.id.webView);
+    
+                        btnClose.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+    
+                        WebSettings webSettings = webView.getSettings();
+                        webSettings.setJavaScriptEnabled(true);
+                        webSettings.setLoadWithOverviewMode(true);
+                        webSettings.setUseWideViewPort(true);
+                        webSettings.setSupportZoom(false);
+                        webSettings.setAllowFileAccess(true);
+                        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+                        webSettings.setLoadsImagesAutomatically(true);
+                        webSettings.setDefaultTextEncodingName("utf-8");
+    
+                        webView.setWebViewClient(new WebViewClient() {
+                            @Override
+                            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                    startActivity(intent);
+                                } catch (ActivityNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                return true;
+                            }
+        
+                            @Override
+                            public void onPageFinished(WebView view, String url) {
+                                super.onPageFinished(view, url);
+                            }
+                        });
+    
+                        webView.loadUrl("https://github.com/kongzue/DialogV3/");
+                    }
+                });
+            }
+        });
+    }
+    
+    private void initFullScreenLoginDemo(final FullScreenDialog fullScreenDialog) {
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fullScreenDialog.dismiss();
+            }
+        });
+        
+        btnCancel.setText("取消");
+        btnSubmit.setText("下一步");
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isNull(editUserName.getText().toString().trim())) {
+                    hideIME(null);
+                    TipDialog.show("请输入账号", TipDialog.TYPE.WARNING);
+                    return;
+                }
+                
+                boxUserName.animate().x(-getDisplayWidth()).setDuration(300);
+                boxPassword.setX(getDisplayWidth());
+                boxPassword.setVisibility(View.VISIBLE);
+                boxPassword.animate().x(0).setDuration(300);
+                
+                editPassword.setFocusable(true);
+                editPassword.requestFocus();
+                
+                btnCancel.setText("上一步");
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boxUserName.animate().x(0).setDuration(300);
+                        boxPassword.animate().x(getDisplayWidth()).setDuration(300);
+                        
+                        editUserName.setFocusable(true);
+                        editUserName.requestFocus();
+                        
+                        initFullScreenLoginDemo(fullScreenDialog);
+                    }
+                });
+                
+                btnSubmit.setText("登录");
+                btnSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        hideIME(null);
+                        if (isNull(editPassword.getText().toString().trim())) {
+                            TipDialog.show("请输入密码", TipDialog.TYPE.WARNING);
+                            return;
+                        }
+                        WaitDialog.show("登录中...");
+                        runOnMainDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                TipDialog.show("登录成功", TipDialog.TYPE.SUCCESS).setDialogLifecycleCallback(new DialogLifecycleCallback<WaitDialog>() {
+                                    @Override
+                                    public void onDismiss(WaitDialog dialog) {
+                                        fullScreenDialog.dismiss();
+                                    }
+                                });
+                            }
+                        }, 2000);
+                    }
+                });
             }
         });
     }

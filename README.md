@@ -17,9 +17,9 @@ DialogX开发计划
     InputDialog(extends MessageDialog)      √
     WaitDialog                              √
     TipDialog(extends WaitDialog)           √
-    BottomDialog                            -
-    BottomMenu                              -
-    FullScreenDialog                        ×
+    BottomDialog                            √
+    BottomMenu                              √
+    FullScreenDialog                        √
     CustomDialog                            ×
     PopTip                                  ×
 

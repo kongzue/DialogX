@@ -1,8 +1,11 @@
 package com.kongzue.dialogx.util.views;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
@@ -23,6 +26,7 @@ public class MaxRelativeLayout extends RelativeLayout {
     private int maxWidth;
     private int maxHeight;
     private boolean lockWidth;
+    private boolean interceptTouch = true;
     
     public MaxRelativeLayout(Context context) {
         super(context);
@@ -39,14 +43,30 @@ public class MaxRelativeLayout extends RelativeLayout {
         init(context, attrs);
     }
     
+    private float startAnimValue = 0, endAnimValue = 0;
+    
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MaxRelativeLayout);
             maxWidth = a.getDimensionPixelSize(R.styleable.MaxRelativeLayout_maxLayoutWidth, 0);
             maxHeight = a.getDimensionPixelSize(R.styleable.MaxRelativeLayout_maxLayoutHeight, 0);
             lockWidth = a.getBoolean(R.styleable.MaxRelativeLayout_lockWidth, false);
+            interceptTouch = a.getBoolean(R.styleable.MaxRelativeLayout_interceptTouch, true);
             
             a.recycle();
+        }
+        
+        if (!isInEditMode()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                animate().setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        float progress = (float) animation.getAnimatedValue();
+                        long value = (long) (startAnimValue + (endAnimValue - startAnimValue) * progress);
+                        if (onYChangedListener != null) onYChangedListener.y(value);
+                    }
+                });
+            }
         }
     }
     
@@ -105,6 +125,9 @@ public class MaxRelativeLayout extends RelativeLayout {
     
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (!interceptTouch) {
+            return super.onInterceptTouchEvent(event);
+        }
         if (onTouchListener != null) {
             onTouchListener.onTouch(this, event);
             switch (event.getAction()) {
@@ -174,5 +197,31 @@ public class MaxRelativeLayout extends RelativeLayout {
     public MaxRelativeLayout setLockWidth(boolean lockWidth) {
         this.lockWidth = lockWidth;
         return this;
+    }
+    
+    private OnYChanged onYChangedListener;
+    
+    public interface OnYChanged {
+        void y(float y);
+    }
+    
+    @Override
+    public void setY(float y) {
+        super.setY(y);
+    }
+    
+    public OnYChanged getOnYChanged() {
+        return onYChangedListener;
+    }
+    
+    public MaxRelativeLayout setOnYChanged(OnYChanged onYChanged) {
+        this.onYChangedListener = onYChanged;
+        return this;
+    }
+    
+    @Override
+    public void setTranslationY(float translationY) {
+        super.setTranslationY(translationY);
+        if (onYChangedListener != null) onYChangedListener.y(translationY);
     }
 }

@@ -5,6 +5,7 @@
         <attr name="maxLayoutWidth" format="dimension"/>
         <attr name="maxLayoutHeight" format="dimension"/>
         <attr name="lockWidth" format="boolean"/>
+        <attr name="interceptTouch" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="RealtimeBlurView">

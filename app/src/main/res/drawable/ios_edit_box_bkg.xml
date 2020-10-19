@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android">
+    <selector>
+        <item
+            android:drawable="@drawable/rect_ios_edit_box_bkg_focus"
+            android:state_focused="true" />
+        <item android:drawable="@drawable/rect_ios_edit_box_bkg_normal" />
+    </selector>
+</inset>

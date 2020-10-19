@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -22,6 +23,7 @@ import androidx.core.view.ViewCompat;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +36,8 @@ import java.util.List;
  * @createTime: 2020/9/22 13:53
  */
 public class DialogXBaseRelativeLayout extends RelativeLayout {
+    
+    private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
     
     private OnLifecycleCallBack onLifecycleCallBack;
     private OnBackPressedListener onBackPressedListener;
@@ -153,6 +157,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         return this;
     }
     
+    public float getSafeHeight() {
+        return getMeasuredHeight() - unsafePlace.bottom - unsafePlace.top;
+    }
+    
     public abstract static class OnLifecycleCallBack {
         public void onShow() {
         }
@@ -160,7 +168,11 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         public abstract void onDismiss();
     }
     
+    protected Rect unsafePlace;
+    
     private void paddingView(int left, int top, int right, int bottom) {
+        unsafePlace = new Rect(left, top, right, bottom);
+        if (onSafeInsetsChangeListener != null) onSafeInsetsChangeListener.onChange(unsafePlace);
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
         if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
             LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
@@ -175,6 +187,15 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     public DialogXBaseRelativeLayout setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
+        return this;
+    }
+    
+    public OnSafeInsetsChangeListener getOnSafeInsetsChangeListener() {
+        return onSafeInsetsChangeListener;
+    }
+    
+    public DialogXBaseRelativeLayout setOnSafeInsetsChangeListener(OnSafeInsetsChangeListener onSafeInsetsChangeListener) {
+        this.onSafeInsetsChangeListener = onSafeInsetsChangeListener;
         return this;
     }
 }

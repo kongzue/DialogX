@@ -2,6 +2,7 @@ package com.kongzue.dialogx.interfaces;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 /**
  * @author: Kongzue
@@ -16,7 +17,7 @@ public abstract class OnBindView<D> {
     
     public OnBindView(int layoutResId) {
         this.layoutResId = layoutResId;
-        customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, null);
+        customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()),false);
     }
     
     public OnBindView(View customView) {

@@ -81,6 +81,7 @@
                     android:background="#a6a8a9" />
 
                 <TextView
+                    android:id="@+id/txt_title"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_alignParentBottom="true"

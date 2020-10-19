@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black">
+
+    <com.kongzue.dialogx.util.views.ActivityScreenShotImageView
+        android:id="@+id/img_zoom_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
+
+    <com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout
+        android:id="@+id/box_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black20"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/box_bkg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.kongzue.dialogx.util.views.MaxRelativeLayout
+                android:id="@+id/bkg"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/rect_dialogx_material_bottom_bkg_light"
+                android:focusableInTouchMode="true">
+
+                <RelativeLayout
+                    android:id="@+id/box_custom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:orientation="vertical"/>
+
+            </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+
+        </RelativeLayout>
+
+    </com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>
+
+</RelativeLayout>
