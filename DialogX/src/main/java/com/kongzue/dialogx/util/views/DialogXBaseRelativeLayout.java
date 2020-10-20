@@ -38,6 +38,7 @@ import java.util.List;
 public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
+    private boolean autoUnsafePlacePadding = true;
     
     private OnLifecycleCallBack onLifecycleCallBack;
     private OnBackPressedListener onBackPressedListener;
@@ -176,13 +177,13 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
         if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
             LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
-            if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE) {
+            if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
                 bkgView.setPadding(0, 0, 0, bottom);
                 setPadding(left, top, right, 0);
                 return;
             }
         }
-        setPadding(left, top, right, bottom);
+        if (isAutoUnsafePlacePadding()) setPadding(left, top, right, bottom);
     }
     
     public DialogXBaseRelativeLayout setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
@@ -196,6 +197,15 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     public DialogXBaseRelativeLayout setOnSafeInsetsChangeListener(OnSafeInsetsChangeListener onSafeInsetsChangeListener) {
         this.onSafeInsetsChangeListener = onSafeInsetsChangeListener;
+        return this;
+    }
+    
+    public boolean isAutoUnsafePlacePadding() {
+        return autoUnsafePlacePadding;
+    }
+    
+    public DialogXBaseRelativeLayout setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
+        this.autoUnsafePlacePadding = autoUnsafePlacePadding;
         return this;
     }
 }

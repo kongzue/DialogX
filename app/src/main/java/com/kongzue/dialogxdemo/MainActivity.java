@@ -28,6 +28,7 @@ import com.kongzue.baseframework.util.JumpParameter;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.dialogs.BottomMenu;
+import com.kongzue.dialogx.dialogs.CustomDialog;
 import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
@@ -568,6 +569,25 @@ public class MainActivity extends BaseActivity {
                         });
     
                         webView.loadUrl("https://github.com/kongzue/DialogV3/");
+                    }
+                });
+            }
+        });
+        
+        btnCustomDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
+                    @Override
+                    public void onBind(final CustomDialog dialog, View v) {
+                        ImageView btnOk;
+                        btnOk = v.findViewById(R.id.btn_ok);
+                        btnOk.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
                     }
                 });
             }
