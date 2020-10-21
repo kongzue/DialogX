@@ -165,7 +165,7 @@ public class MaterialStyle implements DialogXStyle {
     
             @Override
             public boolean selectionImageTint(boolean light) {
-                return true;
+                return false;
             }
     
         };

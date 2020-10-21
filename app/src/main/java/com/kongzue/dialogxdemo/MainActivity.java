@@ -61,8 +61,8 @@ public class MainActivity extends BaseActivity {
     private TextView txtTitle;
     private LinearLayout boxBody;
     private RadioGroup grpStyle;
-    private RadioButton rdoIos;
     private RadioButton rdoMaterial;
+    private RadioButton rdoIos;
     private RadioButton rdoKongzue;
     private RadioButton rdoMiui;
     private RadioGroup grpTheme;
@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity {
     private TextView btnBottomDialog;
     private TextView btnBottomMenu;
     private TextView btnBottomReply;
+    private TextView btnBottomSelectMenu;
     private TextView btnCustomMessageDialog;
     private TextView btnCustomInputDialog;
     private TextView btnCustomBottomMenu;
@@ -99,8 +100,8 @@ public class MainActivity extends BaseActivity {
         txtTitle = findViewById(R.id.txt_title);
         boxBody = findViewById(R.id.box_body);
         grpStyle = findViewById(R.id.grp_style);
-        rdoIos = findViewById(R.id.rdo_ios);
         rdoMaterial = findViewById(R.id.rdo_material);
+        rdoIos = findViewById(R.id.rdo_ios);
         rdoKongzue = findViewById(R.id.rdo_kongzue);
         rdoMiui = findViewById(R.id.rdo_miui);
         grpTheme = findViewById(R.id.grp_theme);
@@ -120,6 +121,7 @@ public class MainActivity extends BaseActivity {
         btnBottomDialog = findViewById(R.id.btn_bottom_dialog);
         btnBottomMenu = findViewById(R.id.btn_bottom_menu);
         btnBottomReply = findViewById(R.id.btn_bottom_reply);
+        btnBottomSelectMenu = findViewById(R.id.btn_bottom_select_menu);
         btnCustomMessageDialog = findViewById(R.id.btn_customMessageDialog);
         btnCustomInputDialog = findViewById(R.id.btn_customInputDialog);
         btnCustomBottomMenu = findViewById(R.id.btn_customBottomMenu);
@@ -417,18 +419,15 @@ public class MainActivity extends BaseActivity {
                                 }
                             });
                 } else {
-                    BottomMenu.show(new String[]{"拒绝", "询问", "始终允许", "仅在使用中允许"})
-                            .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
-                            .setTitle("获得权限标题")
+                    BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
+                            .setMessage("http://www.kongzue.com/DialogX")
                             .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                    selectMenuIndex = index;
                                     toast(text);
                                     return false;
                                 }
-                            })
-                            .setSelection(selectMenuIndex);
+                            });
                 }
             }
         });
@@ -616,6 +615,24 @@ public class MainActivity extends BaseActivity {
                 } else {
                     PopTip.show(R.mipmap.img_mail_line_white, "邮件已发送", "撤回").showLong();
                 }
+            }
+        });
+        
+        btnBottomSelectMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomMenu.show(new String[]{"拒绝", "询问", "始终允许", "仅在使用中允许"})
+                        .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
+                        .setTitle("获得权限标题")
+                        .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
+                            @Override
+                            public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
+                                selectMenuIndex = index;
+                                toast(text);
+                                return false;
+                            }
+                        })
+                        .setSelection(selectMenuIndex);
             }
         });
     }
