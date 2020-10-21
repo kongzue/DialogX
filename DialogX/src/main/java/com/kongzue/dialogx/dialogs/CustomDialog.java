@@ -36,6 +36,7 @@ public class CustomDialog extends BaseDialog {
     protected int enterAnimResId = R.anim.anim_dialogx_default_enter;
     protected int exitAnimResId = R.anim.anim_dialogx_default_exit;
     protected ALIGN align = ALIGN.CENTER;
+    protected boolean autoUnsafePlacePadding = true;
     private View dialogView;
     
     public enum ALIGN {
@@ -90,6 +91,8 @@ public class CustomDialog extends BaseDialog {
         
         @Override
         public void init() {
+            boxRoot.setAutoUnsafePlacePadding(autoUnsafePlacePadding);
+            
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -314,6 +317,15 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setAlign(ALIGN align) {
         this.align = align;
+        return this;
+    }
+    
+    public boolean isAutoUnsafePlacePadding() {
+        return autoUnsafePlacePadding;
+    }
+    
+    public CustomDialog setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
+        this.autoUnsafePlacePadding = autoUnsafePlacePadding;
         return this;
     }
 }

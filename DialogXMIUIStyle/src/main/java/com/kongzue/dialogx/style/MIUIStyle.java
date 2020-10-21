@@ -144,4 +144,9 @@ public class MIUIStyle implements DialogXStyle {
             }
         };
     }
+    
+    @Override
+    public PopTipSettings popTipSettings() {
+        return null;
+    }
 }

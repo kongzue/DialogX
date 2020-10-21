@@ -129,4 +129,9 @@ public class KongzueStyle implements DialogXStyle {
             }
         };
     }
+    
+    @Override
+    public PopTipSettings popTipSettings() {
+        return null;
+    }
 }

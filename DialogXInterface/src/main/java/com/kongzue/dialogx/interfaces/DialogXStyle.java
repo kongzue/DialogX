@@ -34,6 +34,8 @@ public interface DialogXStyle {
     
     BottomDialogRes overrideBottomDialogRes();
     
+    PopTipSettings popTipSettings();
+    
     interface BlurBackgroundSetting {
         
         boolean blurBackground();
@@ -85,5 +87,24 @@ public interface DialogXStyle {
         float overrideBottomDialogMaxHeight();
         
         int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility);
+    }
+    
+    interface PopTipSettings {
+        
+        int layout(boolean light);
+    
+        ALIGN align();
+    
+        enum ALIGN {
+            CENTER,
+            TOP,
+            BOTTOM,
+            TOP_INSIDE,
+            BOTTOM_INSIDE
+        }
+        
+        int enterAnimResId(boolean light);
+    
+        int exitAnimResId(boolean light);
     }
 }

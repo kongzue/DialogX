@@ -126,21 +126,21 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/rdo_ios"
+                        android:id="@+id/rdo_material"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:padding="10dp"
-                        android:text="iOS"
+                        android:text="Material"
                         android:textColor="#7b000000"
                         android:textSize="12dp" />
 
                     <RadioButton
-                        android:id="@+id/rdo_material"
+                        android:id="@+id/rdo_ios"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="Material"
+                        android:text="iOS"
                         android:textColor="#7b000000"
                         android:textSize="12dp" />
 
@@ -353,6 +353,39 @@
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="10dp"
                         android:text="模拟进度"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btn_poptip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rect_button"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="轻量消息提示"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btn_poptip_bigMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/rect_button"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="10dp"
+                        android:text="复杂消息提示"
                         android:textColor="@color/white"
                         android:textSize="13dp"
                         android:textStyle="bold" />

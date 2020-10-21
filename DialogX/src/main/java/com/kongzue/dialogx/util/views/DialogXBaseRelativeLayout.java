@@ -1,14 +1,10 @@
 package com.kongzue.dialogx.util.views;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,9 +20,6 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author: Kongzue
@@ -139,7 +132,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     protected void onDetachedFromWindow() {
-        if (decorViewLayoutListener != null) {
+        if (decorViewLayoutListener != null && ((Activity) BaseDialog.getContext())!=null) {
             ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(decorViewLayoutListener);
         }
         if (onLifecycleCallBack != null) {

@@ -22,6 +22,7 @@ public class DialogX {
     public static DialogX.THEME globalTheme = DialogX.THEME.LIGHT;
     public static int dialogMaxWidth;
     public static boolean autoShowInputKeyboard = true;
+    public static boolean onlyOnePopTip = true;
     
     public enum THEME {
         LIGHT, DARK

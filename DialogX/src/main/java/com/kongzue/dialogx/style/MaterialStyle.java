@@ -1,7 +1,5 @@
 package com.kongzue.dialogx.style;
 
-import android.content.res.Resources;
-
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 
@@ -162,4 +160,30 @@ public class MaterialStyle implements DialogXStyle {
     
         };
     }
+    
+    @Override
+    public PopTipSettings popTipSettings() {
+        return new PopTipSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light?R.layout.layout_dialogx_poptip_material :R.layout.layout_dialogx_poptip_material_dark;
+            }
+
+            @Override
+            public ALIGN align() {
+                return ALIGN.BOTTOM;
+            }
+
+            @Override
+            public int enterAnimResId(boolean b) {
+                return R.anim.anim_dialogx_default_enter;
+            }
+
+            @Override
+            public int exitAnimResId(boolean b) {
+                return R.anim.anim_dialogx_default_exit;
+            }
+        };
+    }
+    
 }

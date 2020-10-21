@@ -5,8 +5,6 @@ import android.content.res.Resources;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.iostheme.R;
 
-import java.util.HashMap;
-
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -203,6 +201,31 @@ public class IOSStyle implements DialogXStyle {
                 }
             }
             
+        };
+    }
+    
+    @Override
+    public PopTipSettings popTipSettings() {
+        return new PopTipSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light?R.layout.layout_dialogx_poptip_ios :R.layout.layout_dialogx_poptip_ios_dark;
+            }
+            
+            @Override
+            public ALIGN align() {
+                return ALIGN.TOP;
+            }
+            
+            @Override
+            public int enterAnimResId(boolean b) {
+                return R.anim.anim_dialogx_ios_top_enter;
+            }
+            
+            @Override
+            public int exitAnimResId(boolean b) {
+                return R.anim.anim_dialogx_top_ios_exit;
+            }
         };
     }
 }

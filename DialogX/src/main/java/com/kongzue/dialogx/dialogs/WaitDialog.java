@@ -256,18 +256,23 @@ public class WaitDialog extends BaseDialog {
             }
         }
         
-        public void doDismiss(View v) {
-            if (v != null) v.setEnabled(false);
-            
-            int exitAnimResId = R.anim.anim_dialogx_default_exit;
-            Animation enterAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
-            enterAnim.setInterpolator(new AccelerateInterpolator());
-            bkg.startAnimation(enterAnim);
-            
-            boxRoot.animate().setDuration(300).alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(enterAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
+        public void doDismiss(final View v) {
+            boxRoot.post(new Runnable() {
                 @Override
-                public void onAnimationEnd(Animator animation) {
-                    dismiss(dialogView);
+                public void run() {
+                    if (v != null) v.setEnabled(false);
+    
+                    int exitAnimResId = R.anim.anim_dialogx_default_exit;
+                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+                    enterAnim.setInterpolator(new AccelerateInterpolator());
+                    bkg.startAnimation(enterAnim);
+    
+                    boxRoot.animate().setDuration(300).alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(enterAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            dismiss(dialogView);
+                        }
+                    });
                 }
             });
         }

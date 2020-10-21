@@ -30,8 +30,11 @@
     <color name="white20">#33ffffff</color>
     <color name="white10">#1Affffff</color>
 
+    <color name="dialogxColorBlue">#2196F3</color>
+
     <color name="dialogxMaterialDarkDialogBkgColor">#343434</color>
     <color name="dialogxWaitBkgLight">#CCF4F5F6</color>
     <color name="dialogxWaitBkgDark">#D1161616</color>
 
+    <color name="dialogxPopButtonBlueDark">#86B3D6</color>
 </resources>

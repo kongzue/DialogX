@@ -32,6 +32,7 @@ import com.kongzue.dialogx.dialogs.CustomDialog;
 import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
+import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
@@ -78,6 +79,8 @@ public class MainActivity extends BaseActivity {
     private TextView btnTipWarning;
     private TextView btnTipError;
     private TextView btnTipProgress;
+    private TextView btnPoptip;
+    private TextView btnPoptipBigMessage;
     private TextView btnBottomDialog;
     private TextView btnBottomMenu;
     private TextView btnBottomReply;
@@ -114,6 +117,8 @@ public class MainActivity extends BaseActivity {
         btnTipWarning = findViewById(R.id.btn_tipWarning);
         btnTipError = findViewById(R.id.btn_tipError);
         btnTipProgress = findViewById(R.id.btn_tipProgress);
+        btnPoptip = findViewById(R.id.btn_poptip);
+        btnPoptipBigMessage = findViewById(R.id.btn_poptip_bigMessage);
         btnBottomDialog = findViewById(R.id.btn_bottom_dialog);
         btnBottomMenu = findViewById(R.id.btn_bottom_menu);
         btnBottomReply = findViewById(R.id.btn_bottom_reply);
@@ -128,7 +133,7 @@ public class MainActivity extends BaseActivity {
     
     @Override
     public void initDatas(JumpParameter parameter) {
-        DialogX.globalStyle = IOSStyle.style();
+        DialogX.globalStyle = MaterialStyle.style();
         
         boolean showBreak = parameter.getBoolean("showBreak");
         if (showBreak) {
@@ -532,14 +537,14 @@ public class MainActivity extends BaseActivity {
                     public void onBind(final FullScreenDialog dialog, View v) {
                         btnClose = v.findViewById(R.id.btn_close);
                         webView = v.findViewById(R.id.webView);
-    
+                        
                         btnClose.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
                             }
                         });
-    
+                        
                         WebSettings webSettings = webView.getSettings();
                         webSettings.setJavaScriptEnabled(true);
                         webSettings.setLoadWithOverviewMode(true);
@@ -549,7 +554,7 @@ public class MainActivity extends BaseActivity {
                         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
                         webSettings.setLoadsImagesAutomatically(true);
                         webSettings.setDefaultTextEncodingName("utf-8");
-    
+                        
                         webView.setWebViewClient(new WebViewClient() {
                             @Override
                             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -561,13 +566,13 @@ public class MainActivity extends BaseActivity {
                                 }
                                 return true;
                             }
-        
+                            
                             @Override
                             public void onPageFinished(WebView view, String url) {
                                 super.onPageFinished(view, url);
                             }
                         });
-    
+                        
                         webView.loadUrl("https://github.com/kongzue/DialogV3/");
                     }
                 });
@@ -590,6 +595,24 @@ public class MainActivity extends BaseActivity {
                         });
                     }
                 });
+            }
+        });
+        
+        btnPoptip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopTip.show("这是一个提示");
+            }
+        });
+        
+        btnPoptipBigMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rdoIos.isChecked()) {
+                    PopTip.show(R.mipmap.img_air_pods_pro, "AirPods Pro 已连接").setAutoTintIconInLightOrDarkMode(false).showLong();
+                } else {
+                    PopTip.show(R.mipmap.img_mail_line_white, "邮件已发送", "撤回").showLong();
+                }
             }
         });
     }
