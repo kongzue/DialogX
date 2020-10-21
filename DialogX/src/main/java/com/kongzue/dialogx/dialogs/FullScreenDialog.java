@@ -79,7 +79,7 @@ public class FullScreenDialog extends BaseDialog {
     public class DialogImpl implements DialogConvertViewInterface {
         
         private FullScreenDialogTouchEventInterceptor fullScreenDialogTouchEventInterceptor;
-    
+        
         public ActivityScreenShotImageView imgZoomActivity;
         public DialogXBaseRelativeLayout boxRoot;
         public RelativeLayout boxBkg;
@@ -138,15 +138,16 @@ public class FullScreenDialog extends BaseDialog {
                 @Override
                 public void run() {
                     bkgEnterAimY = boxRoot.getSafeHeight() - boxCustom.getHeight();
+                    if (bkgEnterAimY < 0) bkgEnterAimY = 0;
                     
                     boxRoot.animate().setDuration(300).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
-    
+                    
                     ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
                     exitAnim.setDuration(300);
                     exitAnim.start();
                 }
             });
-    
+            
             bkg.setOnYChanged(new MaxRelativeLayout.OnYChanged() {
                 @Override
                 public void y(float y) {
@@ -154,15 +155,15 @@ public class FullScreenDialog extends BaseDialog {
                     if (zoomScale > 1) zoomScale = 1;
                     imgZoomActivity.setScaleX(zoomScale);
                     imgZoomActivity.setScaleY(zoomScale);
-    
+                    
                     imgZoomActivity.setRadius(dip2px(15) * ((boxRoot.getHeight() - y) / boxRoot.getHeight()));
                 }
             });
-    
+            
             boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {
                 @Override
                 public void onChange(Rect unsafeRect) {
-                    if (unsafeRect.bottom>dip2px(100)){
+                    if (unsafeRect.bottom > dip2px(100)) {
                         ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), 0);
                         enterAnim.setDuration(300);
                         enterAnim.start();
@@ -201,7 +202,7 @@ public class FullScreenDialog extends BaseDialog {
                 }
             }
             
-            fullScreenDialogTouchEventInterceptor.refresh(me,this);
+            fullScreenDialogTouchEventInterceptor.refresh(me, this);
         }
         
         @Override
