@@ -56,6 +56,7 @@ public class PopTip extends BaseDialog {
     private View dialogView;
     protected DialogXStyle.PopTipSettings.ALIGN align;
     protected OnDialogButtonClickListener onButtonClickListener;
+    protected OnDialogButtonClickListener onPopTipClickListener;
     protected boolean autoTintIconInLightOrDarkMode = true;
     
     protected int iconResId;
@@ -313,6 +314,8 @@ public class PopTip extends BaseDialog {
                 public void onChange(Rect unsafeRect) {
                     if (align == DialogXStyle.PopTipSettings.ALIGN.TOP) {
                         boxBody.setY(unsafeRect.top);
+                    } else if (align == DialogXStyle.PopTipSettings.ALIGN.TOP_INSIDE) {
+                        boxBody.setPadding(0, unsafeRect.top, 0, 0);
                     }
                 }
             });
@@ -378,6 +381,20 @@ public class PopTip extends BaseDialog {
                 }
             } else {
                 imgDialogxPopIcon.setVisibility(View.GONE);
+            }
+            
+            if (onPopTipClickListener != null) {
+                boxBody.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!onPopTipClickListener.onClick(me, v)){
+                            dismiss();
+                        }
+                    }
+                });
+            }else{
+                boxBody.setOnClickListener(null);
+                boxBody.setClickable(false);
             }
         }
         
@@ -559,6 +576,16 @@ public class PopTip extends BaseDialog {
     
     public PopTip setAutoTintIconInLightOrDarkMode(boolean autoTintIconInLightOrDarkMode) {
         this.autoTintIconInLightOrDarkMode = autoTintIconInLightOrDarkMode;
+        refreshUI();
+        return this;
+    }
+    
+    public OnDialogButtonClickListener getOnPopTipClickListener() {
+        return onPopTipClickListener;
+    }
+    
+    public PopTip setOnPopTipClickListener(OnDialogButtonClickListener onPopTipClickListener) {
+        this.onPopTipClickListener = onPopTipClickListener;
         refreshUI();
         return this;
     }

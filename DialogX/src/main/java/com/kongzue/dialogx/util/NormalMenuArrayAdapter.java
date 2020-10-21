@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.drawable.StateListDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
     class ViewHolder {
         ImageView imgDialogxMenuIcon;
         TextView txtDialogxMenuText;
+        ImageView imgDialogxMenuSelection;
     }
     
     @Override
@@ -64,6 +66,7 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
             LayoutInflater mInflater = LayoutInflater.from(context);
             
             int resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
+            int overrideSelectionBackgroundColorRes = 0;
             if (bottomMenu.getStyle().overrideBottomDialogRes() != null) {
                 resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), position, getCount(), false);
                 if (resourceId == 0) {
@@ -77,11 +80,40 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
                         }
                     }
                 }
+                
+                overrideSelectionBackgroundColorRes = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionMenuBackgroundColor(bottomMenu.isLightTheme());
             }
             convertView = mInflater.inflate(resourceId, null);
             
             viewHolder.imgDialogxMenuIcon = convertView.findViewById(R.id.img_dialogx_menu_icon);
             viewHolder.txtDialogxMenuText = convertView.findViewById(R.id.txt_dialogx_menu_text);
+            viewHolder.imgDialogxMenuSelection = convertView.findViewById(R.id.img_dialogx_menu_selection);
+            
+            if (bottomMenu.getSelection() >= 0) {
+                if (viewHolder.imgDialogxMenuSelection != null) {
+                    if (bottomMenu.getSelection() == position) {
+                        viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
+                    } else {
+                        viewHolder.imgDialogxMenuSelection.setVisibility(View.INVISIBLE);
+                    }
+                }
+            } else {
+                viewHolder.imgDialogxMenuSelection.setVisibility(View.GONE);
+            }
+            if (bottomMenu.getSelection() == position) {
+                if (overrideSelectionBackgroundColorRes != 0) {
+                    convertView.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(overrideSelectionBackgroundColorRes)));
+                    final View finalRootView = convertView;
+                    convertView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            finalRootView.setPressed(true);
+                        }
+                    });
+                }
+            } else {
+                convertView.setBackgroundTintList(null);
+            }
             
             convertView.setTag(viewHolder);
         } else {
@@ -99,6 +131,13 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
         if (null != text) {
             viewHolder.txtDialogxMenuText.setText(text);
             viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
+            if (viewHolder.imgDialogxMenuSelection != null) {
+                if (bottomMenu.getStyle().overrideBottomDialogRes()!=null && bottomMenu.getStyle().overrideBottomDialogRes().selectionImageTint(bottomMenu.isLightTheme())) {
+                    viewHolder.imgDialogxMenuSelection.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                }else{
+                    viewHolder.imgDialogxMenuSelection.setImageTintList(null);
+                }
+            }
             
             if (bottomMenu.getOnIconChangeCallBack() != null) {
                 int resId = bottomMenu.getOnIconChangeCallBack().getIcon(bottomMenu, position, text.toString());

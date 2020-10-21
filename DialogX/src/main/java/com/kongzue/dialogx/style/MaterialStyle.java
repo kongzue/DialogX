@@ -158,6 +158,16 @@ public class MaterialStyle implements DialogXStyle {
                 return 0;
             }
     
+            @Override
+            public int overrideSelectionMenuBackgroundColor(boolean light) {
+                return 0;
+            }
+    
+            @Override
+            public boolean selectionImageTint(boolean light) {
+                return true;
+            }
+    
         };
     }
     
@@ -175,12 +185,12 @@ public class MaterialStyle implements DialogXStyle {
             }
 
             @Override
-            public int enterAnimResId(boolean b) {
+            public int enterAnimResId(boolean light) {
                 return R.anim.anim_dialogx_default_enter;
             }
 
             @Override
-            public int exitAnimResId(boolean b) {
+            public int exitAnimResId(boolean light) {
                 return R.anim.anim_dialogx_default_exit;
             }
         };

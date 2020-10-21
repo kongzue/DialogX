@@ -200,7 +200,16 @@ public class IOSStyle implements DialogXStyle {
                     }
                 }
             }
-            
+    
+            @Override
+            public int overrideSelectionMenuBackgroundColor(boolean light) {
+                return 0;
+            }
+    
+            @Override
+            public boolean selectionImageTint(boolean light) {
+                return true;
+            }
         };
     }
     
@@ -224,7 +233,7 @@ public class IOSStyle implements DialogXStyle {
             
             @Override
             public int exitAnimResId(boolean b) {
-                return R.anim.anim_dialogx_top_ios_exit;
+                return R.anim.anim_dialogx_ios_top_exit;
             }
         };
     }

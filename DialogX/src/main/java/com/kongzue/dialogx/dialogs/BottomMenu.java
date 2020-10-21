@@ -37,6 +37,7 @@ import static android.view.View.OVER_SCROLL_NEVER;
 public class BottomMenu extends BottomDialog {
     
     protected BottomMenu me = this;
+    protected int selectionIndex = -1;
     
     protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
     
@@ -90,6 +91,7 @@ public class BottomMenu extends BottomDialog {
     @Override
     protected void onDialogInit(final DialogImpl dialog) {
         if (dialog != null) {
+            dialog.boxList.setVisibility(View.VISIBLE);
             
             if (!isAllowInterceptTouch()) {
                 dialog.bkg.setMaxHeight((int) bottomDialogMaxHeight);
@@ -126,8 +128,7 @@ public class BottomMenu extends BottomDialog {
                 }
             });
             if (style.overrideBottomDialogRes() != null) {
-                if (style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 0,false) != 0) {
-                    log("@@@"+style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 0,false) );
+                if (style.overrideBottomDialogRes().overrideMenuItemLayout(true, 0, 0, false) != 0) {
                     listView.setSelector(R.color.empty);
                 }
             }
@@ -377,6 +378,17 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        refreshUI();
+        return this;
+    }
+    
+    public int getSelection() {
+        return selectionIndex;
+    }
+    
+    public BottomMenu setSelection(int selectionIndex) {
+        this.selectionIndex = selectionIndex;
+        menuListAdapter = null;
         refreshUI();
         return this;
     }

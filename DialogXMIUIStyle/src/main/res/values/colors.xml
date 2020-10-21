@@ -46,5 +46,7 @@
     <color name="dialogxMIUIButtonBlueNormalDark">#096CD1</color>
     <color name="dialogxMIUIButtonGrayNormalDark">#333335</color>
     <color name="dialogxMIUIButtonGrayPressDark">#29292B</color>
+    <color name="dialogxMIUIItemSelectionBkg">#1A0C84FF</color>
+    <color name="dialogxMIUIItemSelectionBkgDark">#6282BA</color>
 
 </resources>

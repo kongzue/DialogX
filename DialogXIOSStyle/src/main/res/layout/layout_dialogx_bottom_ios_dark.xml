@@ -30,6 +30,7 @@
                 <com.kongzue.dialogx.util.views.MaxRelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="40dp"
                     android:layout_weight="1"
                     android:tag="body">
 
@@ -46,7 +47,7 @@
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
                             android:paddingHorizontal="20dp"
-                            android:paddingTop="13dp"
+                            android:paddingVertical="7dp"
                             android:text="Title"
                             android:textColor="@color/dialogxIOSTipTextDark"
                             android:textSize="12dp"

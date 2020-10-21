@@ -25,11 +25,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_weight="1"
             android:singleLine="true"
             android:text="MenuText"
             android:textColor="@color/dialogxMIUITextDark"
             android:textSize="16dp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/img_dialogx_menu_selection"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="-5dp"
+            android:padding="5dp"
+            android:src="@mipmap/img_dialogx_bottom_menu_miui_item_selection"
+            android:visibility="gone" />
 
     </LinearLayout>
 

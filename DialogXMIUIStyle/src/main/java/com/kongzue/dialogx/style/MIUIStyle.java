@@ -142,6 +142,16 @@ public class MIUIStyle implements DialogXStyle {
                     }
                 }
             }
+            
+            @Override
+            public int overrideSelectionMenuBackgroundColor(boolean light) {
+                return light ? R.color.dialogxMIUIItemSelectionBkg : R.color.dialogxMIUIItemSelectionBkgDark;
+            }
+            
+            @Override
+            public boolean selectionImageTint(boolean light) {
+                return false;
+            }
         };
     }
     

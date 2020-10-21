@@ -48,8 +48,6 @@ import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.TextInfo;
 
-import java.util.ArrayList;
-
 @Layout(R.layout.activity_main)
 @DarkStatusBarTheme(true)
 @DarkNavigationBarTheme(true)
@@ -181,6 +179,8 @@ public class MainActivity extends BaseActivity {
     
     private TextView btnClose;
     private WebView webView;
+    
+    private int selectMenuIndex;
     
     @Override
     public void setEvents() {
@@ -417,15 +417,18 @@ public class MainActivity extends BaseActivity {
                                 }
                             });
                 } else {
-                    BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
-                            .setMessage("http://www.kongzue.com/DialogX")
+                    BottomMenu.show(new String[]{"拒绝", "询问", "始终允许", "仅在使用中允许"})
+                            .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
+                            .setTitle("获得权限标题")
                             .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
+                                    selectMenuIndex = index;
                                     toast(text);
                                     return false;
                                 }
-                            });
+                            })
+                            .setSelection(selectMenuIndex);
                 }
             }
         });

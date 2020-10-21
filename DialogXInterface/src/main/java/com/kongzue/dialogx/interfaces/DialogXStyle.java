@@ -87,6 +87,10 @@ public interface DialogXStyle {
         float overrideBottomDialogMaxHeight();
         
         int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility);
+        
+        int overrideSelectionMenuBackgroundColor(boolean light);
+        
+        boolean selectionImageTint(boolean light);
     }
     
     interface PopTipSettings {

@@ -127,11 +127,41 @@ public class KongzueStyle implements DialogXStyle {
             public int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility) {
                 return light ? R.layout.item_dialogx_kongzue_bottom_menu_normal_text : R.layout.item_dialogx_kongzue_bottom_menu_normal_text_dark;
             }
+    
+            @Override
+            public int overrideSelectionMenuBackgroundColor(boolean light) {
+                return 0;
+            }
+    
+            @Override
+            public boolean selectionImageTint(boolean light) {
+                return true;
+            }
         };
     }
     
     @Override
     public PopTipSettings popTipSettings() {
-        return null;
+        return new PopTipSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light?R.layout.layout_dialogx_poptip_kongzue :R.layout.layout_dialogx_poptip_kongzue_dark;
+            }
+            
+            @Override
+            public ALIGN align() {
+                return ALIGN.TOP_INSIDE;
+            }
+            
+            @Override
+            public int enterAnimResId(boolean b) {
+                return R.anim.anim_dialogx_kongzue_top_enter;
+            }
+            
+            @Override
+            public int exitAnimResId(boolean b) {
+                return R.anim.anim_dialogx_kongzue_top_exit;
+            }
+        };
     }
 }
