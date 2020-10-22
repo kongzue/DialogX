@@ -98,7 +98,7 @@ implementation 'com.kongzue.dialogx:DialogX:0.0.2'
 </dependency>
 ```
 
-具体的使用说明，请参阅 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/%E6%AC%A2%E8%BF%8E%E4%BD%BF%E7%94%A8-DialogX)
+具体的使用说明，请参阅 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
 
 # 开源协议
 
