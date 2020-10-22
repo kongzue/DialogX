@@ -206,10 +206,10 @@ public class BlurView extends View {
                 mBlurScript.setRadius(radius);
             }
         }
-    
+        
         final int width = getWidth();
         final int height = getHeight();
-    
+        
         int scaledWidth = Math.max(1, (int) (width / downsampleFactor));
         int scaledHeight = Math.max(1, (int) (height / downsampleFactor));
         
@@ -224,7 +224,7 @@ public class BlurView extends View {
                 }
                 mBlurringCanvas = new Canvas(mBitmapToBlur);
                 
-                if (!supportRenderScript || !useBlur){
+                if (!supportRenderScript || !useBlur) {
                     return true;
                 }
                 
@@ -314,6 +314,9 @@ public class BlurView extends View {
             mDecorView = BaseDialog.getRootFrameLayout().getChildAt(0);
         }
         if (mDecorView != null) {
+            if (mDecorView.getBackground() == null) {
+                mDecorView.setBackgroundColor(Color.WHITE);
+            }
             log("mDecorView is ok.");
             mDecorView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
             mDifferentRoot = mDecorView.getRootView() != getRootView();
@@ -428,7 +431,7 @@ public class BlurView extends View {
                     BlurView.class.getClassLoader().loadClass(RenderScript.class.getCanonicalName());
                     supportRenderScript = true;
                 } catch (Throwable e) {
-                    if (isDebug()){
+                    if (isDebug()) {
                         e.printStackTrace();
                     }
                     supportRenderScript = false;
