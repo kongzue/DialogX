@@ -1,4 +1,4 @@
-经过三代的更迭，最新版本的 Kongzue DialogX 已经到来，不仅仅保留了以往的优势，更带来了更灵活的扩展性和全新的流畅体验。
+经过三代的更迭，全新的 Kongzue DialogX 已经到来，不仅仅保留了以往的优势，更带来了更灵活的扩展性和全新的流畅体验。
 
 <a href="https://github.com/kongzue/dialogX/">
 <img src="https://img.shields.io/badge/Kongzue%20Dialog-Alpha-green.svg" alt="Kongzue Dialog">
