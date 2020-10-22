@@ -21,5 +21,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation files('libs\\DialogXInterface.jar')
+    implementation project(path: ':DialogX')
+    implementation project(path: ':DialogXInterface')
 }

@@ -170,6 +170,7 @@ public class BlurView extends View {
     }
     
     protected void release() {
+        log("release");
         releaseBitmap();
         releaseScript();
     }
@@ -205,10 +206,10 @@ public class BlurView extends View {
                 mBlurScript.setRadius(radius);
             }
         }
-        
+    
         final int width = getWidth();
         final int height = getHeight();
-        
+    
         int scaledWidth = Math.max(1, (int) (width / downsampleFactor));
         int scaledHeight = Math.max(1, (int) (height / downsampleFactor));
         
@@ -222,6 +223,10 @@ public class BlurView extends View {
                     return false;
                 }
                 mBlurringCanvas = new Canvas(mBitmapToBlur);
+                
+                if (!supportRenderScript || !useBlur){
+                    return true;
+                }
                 
                 mBlurInput = Allocation.createFromBitmap(mRenderScript, mBitmapToBlur,
                         Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT
@@ -423,16 +428,19 @@ public class BlurView extends View {
                     BlurView.class.getClassLoader().loadClass(RenderScript.class.getCanonicalName());
                     supportRenderScript = true;
                 } catch (Throwable e) {
+                    if (isDebug()){
+                        e.printStackTrace();
+                    }
                     supportRenderScript = false;
                 }
             }
         }.start();
     }
     
-    private static boolean DEBUGMODE = false;
+    public static boolean DEBUGMODE = false;
     
     static boolean isDebug() {
-        return DEBUGMODE && DialogX.DEBUGMODE;
+        return DialogX.DEBUGMODE;
     }
     
     public static void log(Object o) {
