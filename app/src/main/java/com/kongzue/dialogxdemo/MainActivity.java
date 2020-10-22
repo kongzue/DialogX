@@ -41,6 +41,7 @@ import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
+import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
@@ -223,9 +224,9 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageDialog.show("标题", "正文内容", "确定").setOkButton(new OnDialogButtonClickListener() {
+                MessageDialog.show("标题", "正文内容", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                     @Override
-                    public boolean onClick(BaseDialog baseDialog, View v) {
+                    public boolean onClick(MessageDialog baseDialog, View v) {
                         toast("点击确定按钮");
                         return false;
                     }
@@ -248,7 +249,16 @@ public class MainActivity extends BaseActivity {
         btnInputDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new InputDialog("标题", "正文内容", "确定", "取消", "正在输入的文字").setCancelable(false).show();
+                new InputDialog("标题", "正文内容", "确定", "取消", "正在输入的文字")
+                        .setCancelable(false)
+                        .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
+                            @Override
+                            public boolean onClick(InputDialog baseDialog, View v, String inputStr) {
+                                toast("输入的内容：" + inputStr);
+                                return false;
+                            }
+                        })
+                        .show();
             }
         });
         

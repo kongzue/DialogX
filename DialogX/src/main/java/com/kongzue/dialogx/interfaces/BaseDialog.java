@@ -58,9 +58,14 @@ public class BaseDialog {
         if (DEBUGMODE) Log.e(">>>", o.toString());
     }
     
-    public static void show(View view) {
-        if (rootFrameLayout == null || view == null) return;
-        rootFrameLayout.get().addView(view);
+    public static void show(final View view) {
+        if (rootFrameLayout == null || view == null || rootFrameLayout.get() == null) return;
+        rootFrameLayout.get().post(new Runnable() {
+            @Override
+            public void run() {
+                rootFrameLayout.get().addView(view);
+            }
+        });
     }
     
     public static void dismiss(View dialogView) {

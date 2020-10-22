@@ -9,8 +9,8 @@ import android.view.View;
  * Mail: myzcxhh@live.cn
  * CreateTime: 2019/3/29 18:44
  */
-public interface OnDialogButtonClickListener {
+public interface OnDialogButtonClickListener<D extends BaseDialog> extends BaseOnDialogClickCallback{
     
-    boolean onClick(BaseDialog baseDialog, View v);
+    boolean onClick(D baseDialog, View v);
     
 }

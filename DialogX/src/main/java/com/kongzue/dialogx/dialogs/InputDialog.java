@@ -106,12 +106,12 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
-    public InputDialog setOkButton(OnInputDialogButtonClickListener okButtonClickListener) {
+    public InputDialog setOkButton(OnInputDialogButtonClickListener<InputDialog> okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
         return this;
     }
     
-    public InputDialog setOkButton(CharSequence okText, OnInputDialogButtonClickListener okButtonClickListener) {
+    public InputDialog setOkButton(CharSequence okText, OnInputDialogButtonClickListener<InputDialog> okButtonClickListener) {
         this.okText = okText;
         this.okButtonClickListener = okButtonClickListener;
         refreshUI();
@@ -128,12 +128,12 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
-    public InputDialog setCancelButton(OnInputDialogButtonClickListener cancelButtonClickListener) {
+    public InputDialog setCancelButton(OnInputDialogButtonClickListener<InputDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
     
-    public InputDialog setCancelButton(CharSequence cancelText, OnInputDialogButtonClickListener cancelButtonClickListener) {
+    public InputDialog setCancelButton(CharSequence cancelText, OnInputDialogButtonClickListener<InputDialog> cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
@@ -150,41 +150,41 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
-    public InputDialog setOtherButton(OnInputDialogButtonClickListener otherButtonClickListener) {
+    public InputDialog setOtherButton(OnInputDialogButtonClickListener<InputDialog> otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
     
-    public InputDialog setOtherButton(CharSequence otherText, OnInputDialogButtonClickListener otherButtonClickListener) {
+    public InputDialog setOtherButton(CharSequence otherText, OnInputDialogButtonClickListener<InputDialog> otherButtonClickListener) {
         this.otherText = otherText;
         this.otherButtonClickListener = otherButtonClickListener;
         refreshUI();
         return this;
     }
     
-    public OnInputDialogButtonClickListener getOkButtonClickListener() {
-        return (OnInputDialogButtonClickListener) okButtonClickListener;
+    public OnInputDialogButtonClickListener<InputDialog> getInputOkButtonClickListener() {
+        return (OnInputDialogButtonClickListener<InputDialog>) okButtonClickListener;
     }
     
-    public InputDialog setOkButtonClickListener(OnInputDialogButtonClickListener okButtonClickListener) {
+    public InputDialog setOkButtonClickListener(OnInputDialogButtonClickListener<InputDialog> okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
         return this;
     }
     
-    public OnInputDialogButtonClickListener getCancelButtonClickListener() {
-        return (OnInputDialogButtonClickListener) cancelButtonClickListener;
+    public OnInputDialogButtonClickListener getInputCancelButtonClickListener() {
+        return (OnInputDialogButtonClickListener<InputDialog>) cancelButtonClickListener;
     }
     
-    public InputDialog setCancelButtonClickListener(OnInputDialogButtonClickListener cancelButtonClickListener) {
+    public InputDialog setCancelButtonClickListener(OnInputDialogButtonClickListener<InputDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
     
-    public OnInputDialogButtonClickListener getOtherButtonClickListener() {
-        return (OnInputDialogButtonClickListener) otherButtonClickListener;
+    public OnInputDialogButtonClickListener getInputOtherButtonClickListener() {
+        return (OnInputDialogButtonClickListener<InputDialog>) otherButtonClickListener;
     }
     
-    public InputDialog setOtherButtonClickListener(OnInputDialogButtonClickListener otherButtonClickListener) {
+    public InputDialog setOtherButtonClickListener(OnInputDialogButtonClickListener<InputDialog> otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }

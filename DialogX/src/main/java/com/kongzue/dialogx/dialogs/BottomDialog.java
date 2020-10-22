@@ -50,7 +50,7 @@ public class BottomDialog extends BaseDialog {
     protected CharSequence message;
     protected CharSequence cancelText = "取消";
     protected boolean allowInterceptTouch = true;
-    protected OnDialogButtonClickListener cancelButtonClickListener;
+    protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -486,12 +486,12 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
-    public BottomDialog setCancelButton(OnDialogButtonClickListener cancelButtonClickListener) {
+    public BottomDialog setCancelButton(OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
     
-    public BottomDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
+    public BottomDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
@@ -528,11 +528,11 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
-    public OnDialogButtonClickListener getCancelButtonClickListener() {
+    public OnDialogButtonClickListener<BottomDialog> getCancelButtonClickListener() {
         return cancelButtonClickListener;
     }
     
-    public BottomDialog setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
+    public BottomDialog setCancelButtonClickListener(OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
         return this;

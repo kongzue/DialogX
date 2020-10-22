@@ -23,6 +23,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BaseOnDialogClickCallback;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
@@ -72,9 +73,9 @@ public class MessageDialog extends BaseDialog {
     protected TextInfo otherTextInfo;
     protected InputInfo inputInfo;
     
-    protected OnDialogButtonClickListener okButtonClickListener;
-    protected OnDialogButtonClickListener cancelButtonClickListener;
-    protected OnDialogButtonClickListener otherButtonClickListener;
+    protected BaseOnDialogClickCallback okButtonClickListener;
+    protected BaseOnDialogClickCallback cancelButtonClickListener;
+    protected BaseOnDialogClickCallback otherButtonClickListener;
     
     protected int buttonOrientation;
     
@@ -249,8 +250,8 @@ public class MessageDialog extends BaseDialog {
                             if (!((OnInputDialogButtonClickListener) okButtonClickListener).onClick(me, v, s)) {
                                 doDismiss(v);
                             }
-                        } else {
-                            if (!okButtonClickListener.onClick(me, v)) {
+                        } else if (okButtonClickListener instanceof OnDialogButtonClickListener) {
+                            if (!((OnDialogButtonClickListener) okButtonClickListener).onClick(me, v)) {
                                 doDismiss(v);
                             }
                         }
@@ -269,7 +270,7 @@ public class MessageDialog extends BaseDialog {
                                 doDismiss(v);
                             }
                         } else {
-                            if (!cancelButtonClickListener.onClick(me, v)) {
+                            if (!((OnDialogButtonClickListener) cancelButtonClickListener).onClick(me, v)) {
                                 doDismiss(v);
                             }
                         }
@@ -288,7 +289,7 @@ public class MessageDialog extends BaseDialog {
                                 doDismiss(v);
                             }
                         } else {
-                            if (!otherButtonClickListener.onClick(me, v)) {
+                            if (!((OnDialogButtonClickListener) otherButtonClickListener).onClick(me, v)) {
                                 doDismiss(v);
                             }
                         }
@@ -554,12 +555,12 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
-    public MessageDialog setOkButton(OnDialogButtonClickListener okButtonClickListener) {
+    public MessageDialog setOkButton(OnDialogButtonClickListener<MessageDialog> okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
         return this;
     }
     
-    public MessageDialog setOkButton(CharSequence okText, OnDialogButtonClickListener okButtonClickListener) {
+    public MessageDialog setOkButton(CharSequence okText, OnDialogButtonClickListener<MessageDialog> okButtonClickListener) {
         this.okText = okText;
         this.okButtonClickListener = okButtonClickListener;
         refreshUI();
@@ -576,12 +577,12 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
-    public MessageDialog setCancelButton(OnDialogButtonClickListener cancelButtonClickListener) {
+    public MessageDialog setCancelButton(OnDialogButtonClickListener<MessageDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
     
-    public MessageDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
+    public MessageDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener<MessageDialog> cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
@@ -598,41 +599,41 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
-    public MessageDialog setOtherButton(OnDialogButtonClickListener otherButtonClickListener) {
+    public MessageDialog setOtherButton(OnDialogButtonClickListener<MessageDialog> otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
     
-    public MessageDialog setOtherButton(CharSequence otherText, OnDialogButtonClickListener otherButtonClickListener) {
+    public MessageDialog setOtherButton(CharSequence otherText, OnDialogButtonClickListener<MessageDialog> otherButtonClickListener) {
         this.otherText = otherText;
         this.otherButtonClickListener = otherButtonClickListener;
         refreshUI();
         return this;
     }
     
-    public OnDialogButtonClickListener getOkButtonClickListener() {
-        return okButtonClickListener;
+    public OnDialogButtonClickListener<MessageDialog> getOkButtonClickListener() {
+        return (OnDialogButtonClickListener<MessageDialog>) okButtonClickListener;
     }
     
-    public MessageDialog setOkButtonClickListener(OnDialogButtonClickListener okButtonClickListener) {
+    public MessageDialog setOkButtonClickListener(OnDialogButtonClickListener<MessageDialog> okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
         return this;
     }
     
-    public OnDialogButtonClickListener getCancelButtonClickListener() {
-        return cancelButtonClickListener;
+    public OnDialogButtonClickListener<MessageDialog> getCancelButtonClickListener() {
+        return (OnDialogButtonClickListener<MessageDialog>) cancelButtonClickListener;
     }
     
-    public MessageDialog setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
+    public MessageDialog setCancelButtonClickListener(OnDialogButtonClickListener<MessageDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
     
-    public OnDialogButtonClickListener getOtherButtonClickListener() {
-        return otherButtonClickListener;
+    public OnDialogButtonClickListener<MessageDialog> getOtherButtonClickListener() {
+        return (OnDialogButtonClickListener<MessageDialog>) otherButtonClickListener;
     }
     
-    public MessageDialog setOtherButtonClickListener(OnDialogButtonClickListener otherButtonClickListener) {
+    public MessageDialog setOtherButtonClickListener(OnDialogButtonClickListener<MessageDialog> otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
@@ -765,5 +766,13 @@ public class MessageDialog extends BaseDialog {
         this.backgroundColor = backgroundColor;
         refreshUI();
         return this;
+    }
+    
+    public String getInputText() {
+        if (dialogImpl.txtInput != null) {
+            return dialogImpl.txtInput.getText().toString();
+        } else {
+            return "";
+        }
     }
 }
