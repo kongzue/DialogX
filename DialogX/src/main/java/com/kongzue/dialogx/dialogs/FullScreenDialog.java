@@ -69,7 +69,7 @@ public class FullScreenDialog extends BaseDialog {
     }
     
     public void show() {
-        dialogView = createView(R.layout.layout_dialogx_fullscreen);
+        dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
         show(dialogView);
     }
