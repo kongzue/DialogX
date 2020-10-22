@@ -3,7 +3,7 @@
 <a href="https://github.com/kongzue/dialogX/">
 <img src="https://img.shields.io/badge/Kongzue%20Dialog-Alpha-green.svg" alt="Kongzue Dialog">
 </a> 
-<a href="https://bintray.com/myzchh/maven/dialogx/0.0.1/link">
+<a href="https://bintray.com/myzchh/maven/dialogX/">
 <img src="https://img.shields.io/badge/Maven-Alpha-blue.svg" alt="Maven">
 </a> 
 <a href="http://www.apache.org/licenses/LICENSE-2.0">
