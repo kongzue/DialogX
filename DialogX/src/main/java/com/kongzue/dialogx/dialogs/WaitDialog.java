@@ -240,9 +240,7 @@ public class WaitDialog extends BaseDialog {
             showText(txtInfo, message);
             
             if (onBindView != null && onBindView.getCustomView() != null) {
-                if (onBindView.getCustomView().isAttachedToWindow()) {
-                    boxCustomView.removeView(onBindView.getCustomView());
-                }
+                boxCustomView.removeView(onBindView.getCustomView());
                 ViewGroup.LayoutParams lp = boxCustomView.getLayoutParams();
                 if (lp == null) {
                     lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);

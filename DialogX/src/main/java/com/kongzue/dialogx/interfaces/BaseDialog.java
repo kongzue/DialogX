@@ -70,9 +70,7 @@ public class BaseDialog {
     
     public static void dismiss(View dialogView) {
         if (rootFrameLayout == null || dialogView == null) return;
-        if (dialogView.isAttachedToWindow()) {
-            rootFrameLayout.get().removeView(dialogView);
-        }
+        rootFrameLayout.get().removeView(dialogView);
     }
     
     public static Context getContext() {

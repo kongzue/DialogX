@@ -332,9 +332,7 @@ public class BottomDialog extends BaseDialog {
             
             if (onBindView != null) {
                 if (onBindView.getCustomView() != null) {
-                    if (onBindView.getCustomView().isAttachedToWindow()) {
-                        boxCustom.removeView(onBindView.getCustomView());
-                    }
+                    boxCustom.removeView(onBindView.getCustomView());
                     ViewGroup.LayoutParams lp = boxCustom.getLayoutParams();
                     if (lp == null) {
                         lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
