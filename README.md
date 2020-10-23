@@ -77,6 +77,12 @@ DialogX 采用了主体分离结构，主框架仅包含 Material 设计风格�
 
 主题设计开发者也可以通过使用 DialogX 提供的主题定制接口来实现自定义主题，或者对现有主题进行样式调整和修改。
 
+# Demo
+
+您可以先下载 Demo 进行尝试：http://beta.kongzue.com/DialogXDemo
+
+![下载 DialogX Demo](https://github.com/kongzue/DialogX/raw/master/readme/download_demo_qrcode.png)
+
 # 开始使用DialogX
 
 🚧警告！此框架依然处于 Alpha 预览版本阶段，可能会存在问题或其它接口变动的可能，且文档还处于完善阶段，若需要正式稳定的Dialog组件暂时依然建议前往使用 [DialogV3](https://github.com/kongzue/DialogV3)，若您在使用过程中遇到任何问题，请加群271127803讨论。
