@@ -110,6 +110,10 @@ implementation 'com.kongzue.dialogx:DialogX:0.0.2'
 
 具体的使用说明，请参阅 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
 
+反馈建议可以加讨论群：590498789
+
+<div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/feedback_qrcode.png" alt="反馈 DialogX" width="250" height="250" /></div>
+
 # 开源协议
 
 DialogX 遵循 Apache License 2.0 开源协议。
