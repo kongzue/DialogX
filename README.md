@@ -27,7 +27,7 @@
 
 DialogX 包含以下对话框组件：
 
-- 基础对话框 MessageDialog和 输入对话框 InputDialog
+- [基础对话框 MessageDialog和 输入对话框 InputDialog](https://github.com/kongzue/DialogX/wiki/%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%AF%9D%E6%A1%86-MessageDialog-%E5%92%8C-%E8%BE%93%E5%85%A5%E5%AF%B9%E8%AF%9D%E6%A1%86-InputDialog)
 
   ![基础对话框 MessageDialog和 输入对话框 InputDialog](https://github.com/kongzue/DialogX/raw/master/readme/messagedialog.png)
 
@@ -35,13 +35,13 @@ DialogX 包含以下对话框组件：
 
   输入对话框 InputDialog 是基础对话框的扩展组件，除了包含基础的功能外还提供了输入框，可自定义输入提示文本、输入文字样式和点击按钮后的输入内容回调等。
 
-- 等待框 WaitDialog 和提示框 TipDialog
+- [等待框 WaitDialog 和提示框 TipDialog](https://github.com/kongzue/DialogX/wiki/%E7%AD%89%E5%BE%85%E6%A1%86-WaitDialog-%E5%92%8C%E6%8F%90%E7%A4%BA%E6%A1%86-TipDialog)
 
   ![等待框 WaitDialog 和提示框 TipDialog](https://github.com/kongzue/DialogX/raw/master/readme/waitdialog.png)
 
   阻断式等待提示框，会显示基础的环形等待动画以及进度展示动画，它是单例的，这就意味着从等待状态 WaitDialog 切换到提示状态 TipDialog 是无缝的，你可以自由的选择在等待结束后显示成功/警告/错误三种状态的消息提示，动画的切换也会无缝衔接。
 
-- 底部对话框 BottomDialog 和底部菜单 BottomMenu
+- [底部对话框 BottomDialog 和底部菜单 BottomMenu](https://github.com/kongzue/DialogX/wiki/%E5%BA%95%E9%83%A8%E5%AF%B9%E8%AF%9D%E6%A1%86-BottomDialog-%E5%92%8C%E5%BA%95%E9%83%A8%E8%8F%9C%E5%8D%95-BottomMenu)
 
   ![底部对话框 BottomDialog 和底部菜单 BottomMenu](https://github.com/kongzue/DialogX/raw/master/readme/bottomdialog.png)
 
@@ -49,19 +49,19 @@ DialogX 包含以下对话框组件：
 
   底部菜单 BottomMenu 则是底部对话框 BottomDialog 的扩展组件，在底部对话框的基础上额外提供了菜单功能，菜单可设置菜单内容/菜单图标/单选功能，在不同的主题下还可以提供“取消”关闭按钮（注：因 Material 直接可以下滑关闭因此 Material 主题不提供额外的“取消”关闭按钮）
 
-- 简单提示 PopTip
+- [简单提示 PopTip](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E6%8F%90%E7%A4%BA-PopTip)
 
   ![简单提示 PopTip](https://github.com/kongzue/DialogX/raw/master/readme/poptip.png)
 
   提供一个类似 Toast 的文本提示功能，但它拥有更强大的自定义属性。你可以设置文本提示、图标、以及一个控制按钮，并可以设置持续显示或定义自动消失的时长。PopTip 是非阻断式提示，也就是说，在 PopTip 显示时用户依然可以操作界面。
 
-- 全屏对话框 FullScreenDialog
+- [全屏对话框 FullScreenDialog](https://github.com/kongzue/DialogX/wiki/%E5%85%A8%E5%B1%8F%E5%AF%B9%E8%AF%9D%E6%A1%86-FullScreenDialog)
 
   ![全屏对话框 FullScreenDialog](https://github.com/kongzue/DialogX/raw/master/readme/fullscreendialog.png)
 
   全屏对话框 FullScreenDialog 提供从底部弹出的对话框效果，类似 BottomDialog 但相比 BottomDialog 的定制化自由度更高。全屏对话框 FullScreenDialog 将不提供任何基础实现，开发者可以自定义实现布局。默认只提供一个默认的下划关闭逻辑和 Activity 背景下沉的显示效果。
 
-- 自定义对话框 CustomDialog
+- [自定义对话框 CustomDialog](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E8%AF%9D%E6%A1%86-CustomDialog)
 
   ![自定义对话框 CustomDialog](https://github.com/kongzue/DialogX/raw/master/readme/customdialog.png)
 
@@ -76,6 +76,8 @@ DialogX 采用了主体分离结构，主框架仅包含 Material 设计风格�
 额外的，每套主题都包含亮色/暗色两种显示风格，您可以通过 DialogX 的设置自由切换对话框的显示效果。
 
 主题设计开发者也可以通过使用 DialogX 提供的主题定制接口来实现自定义主题，或者对现有主题进行样式调整和修改。
+
+你还可以更深入的 [了解 DialogX 主题](https://github.com/kongzue/DialogX/wiki/%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96-DialogX%E4%B8%BB%E9%A2%98)
 
 # Demo
 
