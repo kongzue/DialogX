@@ -87,7 +87,7 @@ DialogX 采用了主体分离结构，主框架仅包含 Material 设计风格�
 
 # 开始使用DialogX
 
-🚧警告！此框架依然处于 Alpha 预览版本阶段，可能会存在问题或其它接口变动的可能，且文档还处于完善阶段，若需要正式稳定的Dialog组件暂时依然建议前往使用 [DialogV3](https://github.com/kongzue/DialogV3)，若您在使用过程中遇到任何问题，请加群590498789讨论。
+🚧警告！此框架依然处于 Alpha 预览版本阶段，可能会存在问题或其它接口变动的可能，且文档还处于完善阶段，若需要正式稳定的Dialog组件暂时依然建议前往使用 [DialogV3](https://github.com/kongzue/DialogV3)，若您在使用过程中遇到任何问题，请加群 590498789 讨论。
 
 
 

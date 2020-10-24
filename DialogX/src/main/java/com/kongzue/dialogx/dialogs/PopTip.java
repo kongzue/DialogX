@@ -55,8 +55,8 @@ public class PopTip extends BaseDialog {
     protected int exitAnimResId = R.anim.anim_dialogx_default_exit;
     private View dialogView;
     protected DialogXStyle.PopTipSettings.ALIGN align;
-    protected OnDialogButtonClickListener onButtonClickListener;
-    protected OnDialogButtonClickListener onPopTipClickListener;
+    protected OnDialogButtonClickListener<PopTip> onButtonClickListener;
+    protected OnDialogButtonClickListener<PopTip> onPopTipClickListener;
     protected boolean autoTintIconInLightOrDarkMode = true;
     
     protected int iconResId;
@@ -360,6 +360,9 @@ public class PopTip extends BaseDialog {
                         lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     }
                     boxCustom.addView(onBindView.getCustomView(), lp);
+                    boxCustom.setVisibility(View.VISIBLE);
+                }else{
+                    boxCustom.setVisibility(View.GONE);
                 }
             }
             
@@ -437,16 +440,6 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
-    }
-    
-    public PopTip setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
-        this.onBackPressedListener = onBackPressedListener;
-        refreshUI();
-        return this;
-    }
-    
     public PopTip setStyle(DialogXStyle style) {
         this.style = style;
         return this;
@@ -454,16 +447,6 @@ public class PopTip extends BaseDialog {
     
     public PopTip setTheme(DialogX.THEME theme) {
         this.theme = theme;
-        return this;
-    }
-    
-    public boolean isCancelable() {
-        return cancelable;
-    }
-    
-    public PopTip setCancelable(boolean cancelable) {
-        this.cancelable = cancelable;
-        refreshUI();
         return this;
     }
     
@@ -527,14 +510,14 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
-    public PopTip setButton(CharSequence buttonText, OnDialogButtonClickListener onButtonClickListener) {
+    public PopTip setButton(CharSequence buttonText, OnDialogButtonClickListener<PopTip> onButtonClickListener) {
         this.buttonText = buttonText;
         this.onButtonClickListener = onButtonClickListener;
         refreshUI();
         return this;
     }
     
-    public PopTip setButton(OnDialogButtonClickListener onButtonClickListener) {
+    public PopTip setButton(OnDialogButtonClickListener<PopTip> onButtonClickListener) {
         this.onButtonClickListener = onButtonClickListener;
         return this;
     }
@@ -559,11 +542,11 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
-    public OnDialogButtonClickListener getOnButtonClickListener() {
+    public OnDialogButtonClickListener<PopTip> getOnButtonClickListener() {
         return onButtonClickListener;
     }
     
-    public PopTip setOnButtonClickListener(OnDialogButtonClickListener onButtonClickListener) {
+    public PopTip setOnButtonClickListener(OnDialogButtonClickListener<PopTip> onButtonClickListener) {
         this.onButtonClickListener = onButtonClickListener;
         return this;
     }
@@ -578,11 +561,11 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
-    public OnDialogButtonClickListener getOnPopTipClickListener() {
+    public OnDialogButtonClickListener<PopTip> getOnPopTipClickListener() {
         return onPopTipClickListener;
     }
     
-    public PopTip setOnPopTipClickListener(OnDialogButtonClickListener onPopTipClickListener) {
+    public PopTip setOnPopTipClickListener(OnDialogButtonClickListener<PopTip> onPopTipClickListener) {
         this.onPopTipClickListener = onPopTipClickListener;
         refreshUI();
         return this;

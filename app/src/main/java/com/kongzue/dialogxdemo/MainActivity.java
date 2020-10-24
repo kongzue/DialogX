@@ -623,7 +623,13 @@ public class MainActivity extends BaseActivity {
                 if (rdoIos.isChecked()) {
                     PopTip.show(R.mipmap.img_air_pods_pro, "AirPods Pro 已连接").setAutoTintIconInLightOrDarkMode(false).showLong();
                 } else {
-                    PopTip.show(R.mipmap.img_mail_line_white, "邮件已发送", "撤回").showLong();
+                    PopTip.show(R.mipmap.img_mail_line_white, "邮件已发送", "撤回").showLong().setButton(new OnDialogButtonClickListener<PopTip>() {
+                        @Override
+                        public boolean onClick(PopTip popTip, View v) {
+                            //点击“撤回”按钮回调
+                            return false;
+                        }
+                    });
                 }
             }
         });
