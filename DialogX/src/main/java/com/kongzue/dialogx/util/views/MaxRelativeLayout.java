@@ -152,13 +152,10 @@ public class MaxRelativeLayout extends RelativeLayout {
                     float moveX = event.getRawX();
                     
                     if (Math.abs(moveY - touchY) > dip2px(20) || Math.abs(moveX - touchX) > dip2px(20)) {
-                        final ViewParent parent = getParent();
-                        if (parent != null) {
-                            parent.requestDisallowInterceptTouchEvent(true);
-                        }
                         return true;
+                    } else {
+                        return false;
                     }
-                    break;
             }
             return isMove;
         }
