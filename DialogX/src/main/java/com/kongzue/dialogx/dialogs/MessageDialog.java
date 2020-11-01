@@ -244,6 +244,10 @@ public class MessageDialog extends BaseDialog {
             btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (txtInput != null) {
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(txtInput.getWindowToken(), 0);
+                    }
                     if (okButtonClickListener != null) {
                         if (okButtonClickListener instanceof OnInputDialogButtonClickListener) {
                             String s = txtInput == null ? "" : txtInput.getText().toString();
@@ -263,6 +267,10 @@ public class MessageDialog extends BaseDialog {
             btnSelectNegative.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (txtInput != null) {
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(txtInput.getWindowToken(), 0);
+                    }
                     if (cancelButtonClickListener != null) {
                         if (cancelButtonClickListener instanceof OnInputDialogButtonClickListener) {
                             String s = txtInput == null ? "" : txtInput.getText().toString();
@@ -282,6 +290,10 @@ public class MessageDialog extends BaseDialog {
             btnSelectOther.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (txtInput != null) {
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(txtInput.getWindowToken(), 0);
+                    }
                     if (otherButtonClickListener != null) {
                         if (otherButtonClickListener instanceof OnInputDialogButtonClickListener) {
                             String s = txtInput == null ? "" : txtInput.getText().toString();

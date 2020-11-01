@@ -42,6 +42,8 @@ public class BottomDialogTouchEventInterceptor {
         refresh(me, impl);
     }
     
+    private int touchY, touchX;
+    
     public void refresh(final BottomDialog me, final BottomDialog.DialogImpl impl) {
         if (me == null || impl == null || impl.bkg == null || impl.scrollView == null) {
             return;
@@ -68,7 +70,8 @@ public class BottomDialogTouchEventInterceptor {
                             bkgTouchDownY = event.getY();
                             isBkgTouched = true;
                             bkgOldY = impl.bkg.getY();
-                            break;
+                            return false;
+                        //break;
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
                                 float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
@@ -100,8 +103,16 @@ public class BottomDialogTouchEventInterceptor {
                                     
                                     oldMode = 0;
                                 }
+                                
+                                float moveY = event.getRawY();
+                                float moveX = event.getRawX();
+                                if (Math.abs(moveY - touchY) > dip2px(20) || Math.abs(moveX - touchX) > dip2px(20)) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
                             }
-                            break;
+                            //break;
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
                             scrolledY = impl.scrollView.getScrollY();
@@ -131,7 +142,9 @@ public class BottomDialogTouchEventInterceptor {
                                     enterAnim.start();
                                 }
                             }
-                            break;
+                            
+                            return false;
+                        //break;
                     }
                     return true;
                 }

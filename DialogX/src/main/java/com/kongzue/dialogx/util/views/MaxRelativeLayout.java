@@ -129,35 +129,42 @@ public class MaxRelativeLayout extends RelativeLayout {
             return super.onInterceptTouchEvent(event);
         }
         if (onTouchListener != null) {
-            onTouchListener.onTouch(this, event);
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    isMove = false;
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    if (!isMove) {
-                        return false;
-                    }
-                    isMove = false;
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    if (!isMove) {
-                        touchY = (int) event.getRawY();
-                        touchX = (int) event.getRawX();
-                    }
-                    isMove = true;
-                    
-                    float moveY = event.getRawY();
-                    float moveX = event.getRawX();
-                    
-                    if (Math.abs(moveY - touchY) > dip2px(20) || Math.abs(moveX - touchX) > dip2px(20)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-            }
-            return isMove;
+            return onTouchListener.onTouch(this, event);
+//            switch (event.getAction()) {
+//                case MotionEvent.ACTION_DOWN:
+//                    Log.d(">>>", "ACTION_DOWN ");
+//                    isMove = false;
+//                    break;
+//                case MotionEvent.ACTION_CANCEL:
+//                case MotionEvent.ACTION_UP:
+//                    Log.d(">>>", "ACTION_UP ");
+//                    if (!isMove) {
+//                        return false;
+//                    }
+//                    isMove = false;
+//                    break;
+//                case MotionEvent.ACTION_MOVE:
+//                    Log.d(">>>", "ACTION_MOVE ");
+//                    if (!isMove) {
+//                        touchY = (int) event.getRawY();
+//                        touchX = (int) event.getRawX();
+//                    }
+//                    isMove = true;
+//
+//                    float moveY = event.getRawY();
+//                    float moveX = event.getRawX();
+//
+//                    if (Math.abs(moveY - touchY) > dip2px(20) || Math.abs(moveX - touchX) > dip2px(20)) {
+//                        final ViewParent parent = getParent();
+//                        if (parent != null) {
+//                            parent.requestDisallowInterceptTouchEvent(true);
+//                        }
+//                        return true;
+//                    } else {
+//                        return false;
+//                    }
+//            }
+//            return isMove;
         }
         return super.onInterceptTouchEvent(event);
     }
