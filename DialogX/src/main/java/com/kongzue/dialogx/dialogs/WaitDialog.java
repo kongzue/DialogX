@@ -114,6 +114,7 @@ public class WaitDialog extends BaseDialog {
     private View dialogView;
     
     public WaitDialog show() {
+        super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_wait);
         dialogImpl = new DialogImpl(dialogView);
         show(dialogView);

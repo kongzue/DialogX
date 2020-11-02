@@ -186,6 +186,7 @@ public class PopTip extends BaseDialog {
     }
     
     public void show() {
+        super.beforeShow();
         if (DialogX.onlyOnePopTip) {
             if (oldInstance != null && oldInstance.get() != null) {
                 oldInstance.get().dismiss();

@@ -14,8 +14,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
-
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.util.TextInfo;
@@ -192,5 +190,11 @@ public class BaseDialog {
     
     public void tintColor(View view, int color) {
         view.setBackgroundTintList(ColorStateList.valueOf(color));
+    }
+    
+    protected void beforeShow() {
+        if (getContext() == null) {
+            error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+        }
     }
 }

@@ -71,6 +71,7 @@ public class CustomDialog extends BaseDialog {
     }
     
     public void show() {
+        super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
         show(dialogView);

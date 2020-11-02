@@ -121,6 +121,7 @@ public class BottomDialog extends BaseDialog {
     }
     
     public void show() {
+        super.beforeShow();
         int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
         if (style.overrideBottomDialogRes() != null) {
             layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());

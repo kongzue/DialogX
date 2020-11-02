@@ -125,6 +125,7 @@ public class MessageDialog extends BaseDialog {
     protected DialogImpl dialogImpl;
     
     public void show() {
+        super.beforeShow();
         int layoutId = style.layout(isLightTheme());
         layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
         
