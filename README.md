@@ -15,11 +15,20 @@
 
 # DialogX优势
 
-- DialogX 采用全新的实现方式，**不**依赖 AlertDialog、Window 或 Fragment 实现，更加轻便快捷。
-- DialogX 的启动无需 context 参数，默认提供静态方法一句代码实现对话框的启动，使用更加方便。
-- DialogX 采用分离设计，默认自带 Material 主题，可选引入 IOS、Kongzue 等其他风格主题，大大减小 App 体积，同时提供了主题接口，如有定制需求完全可以自行实现一套私有主题。
-- 更低的耦合度，更少的问题，例如 DialogX 可以在对话框正在运行的过程中随意关闭 Activity ，而无需担心引发 WindowLeaked 错误。
-- 更流畅的体验，DialogX 的动画效果更加丰富，对话框启动动画采用非线性动画实现，更自带连贯的等待提示到完成错误动画过渡效果，让你的 APP 更具动感。
+对话框是一个软件对用户操作进行响应、反馈的重要组件，而 DialogX 将可以协助开发者快速完成这些事务。
+
+我们力求减少开发者所需要担心的，所需要顾虑的，而打造一款可以在任意时间，任意情况都能轻松使用的对话框组件。
+
+在轻松使用的前提下，DialogX 提供了更多的个性接口方便开发者进行扩展，包括在对话框内插入自定义布局，亮暗色模式的切换，甚至自定义更符合 App UI 的自定义主题。
+
+### DialogX的特性：
+
+- DialogX 采用全新的实现方式，**不依赖** AlertDialog、Window 或 Fragment 实现，更加轻便快捷。
+- DialogX 的启动与线程无关，你可以**在任意线程**启动 DialogX 而它都将自动在 UI 线程运行。
+- DialogX 的启动**无需 context 参数**，默认提供静态方法一句代码实现对话框的启动，使用更加方便。
+- DialogX 采用**主题分离设计**，默认自带 Material 主题，可选引入 IOS、Kongzue 等其他风格主题，大大减小 App 体积，同时提供了主题接口，如有定制需求完全可以自行实现一套私有主题。
+- 更低的耦合度，更少的问题，DialogX 可以在对话框正在**运行的过程中随意关闭 Activity** ，而无需担心以往 AlertDialog 等组件会引发的 WindowLeaked 错误。
+- 更流畅的体验，DialogX 的动画效果更加丰富，对话框启动动画采用**非线性动画**实现，更自带连贯的等待提示到完成错误动画过渡效果，让你的 APP 更具动感。
 - 所有主题默认支持亮暗色两种模式，只需一键配置即可实现亮暗色的对话框主题切换，更有自由的布局内容满足定制化需求。
 - 轻松的实现对话框的生命周期管控以及沉浸式适配。
 
@@ -96,7 +105,7 @@ DialogX 采用了主体分离结构，主框架仅包含 Material 设计风格�
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-implementation 'com.kongzue.dialogx:DialogX:0.0.6'
+implementation 'com.kongzue.dialogx:DialogX:0.0.7'
 ```
 
 若有需要，也可以手动配置 Maven：
@@ -105,7 +114,7 @@ implementation 'com.kongzue.dialogx:DialogX:0.0.6'
 <dependency>
   <groupId>com.kongzue.dialogx</groupId>
   <artifactId>DialogX</artifactId>
-  <version>0.0.6</version>
+  <version>0.0.7</version>
   <type>pom</type>
 </dependency>
 ```

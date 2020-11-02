@@ -383,6 +383,7 @@ public class ProgressView extends View {
     
     public void progress(float progress) {
         if (rotateAnimator != null) rotateAnimator.cancel();
+        if (followAnimator != null) followAnimator.cancel();
         if (status != STATUS_PROGRESSING) {
             currentRotateDegrees = 0;
         }
@@ -416,14 +417,11 @@ public class ProgressView extends View {
         line1Y = 0;
         line2X = 0;
         line2Y = 0;
-        if (rotateAnimator != null) rotateAnimator.cancel();
-        rotateAnimator = ValueAnimator.ofFloat(0, 365);
-        rotateAnimator.setDuration(1000);
-        rotateAnimator.setInterpolator(new LinearInterpolator());
-        rotateAnimator.setRepeatCount(-1);
-        rotateAnimator.setInterpolator(new LinearInterpolator());
         status = STATUS_LOADING;
-        rotateAnimator.start();
+        if (rotateAnimator != null) rotateAnimator.cancel();
+        if (followAnimator != null) followAnimator.cancel();
+        isInited = false;
+        init(null);
     }
     
     public int getStatus() {

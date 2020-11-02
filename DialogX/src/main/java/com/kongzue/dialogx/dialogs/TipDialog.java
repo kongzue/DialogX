@@ -11,20 +11,24 @@ import java.lang.ref.WeakReference;
  */
 public class TipDialog extends WaitDialog {
     
-    public static TipDialog show(CharSequence message) {
-        TipDialog tipDialog = new TipDialog();
-        tipDialog.message = message;
-        tipDialog.show();
-        return tipDialog;
-    }
-    
     protected TipDialog() {
         super();
     }
     
+    public static WaitDialog show(int messageResId, TYPE tip) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(messageResId);
+        if (dialogImpl != null) {
+            dialogImpl.showTip(tip);
+        } else {
+            me().showTip(messageResId, tip);
+        }
+        return me();
+    }
+    
     public static WaitDialog show(CharSequence message, TYPE tip) {
         DialogImpl dialogImpl = me().dialogImpl;
-        me().message = message;
+        me().preMessage(message);
         if (dialogImpl != null) {
             dialogImpl.showTip(tip);
         } else {
@@ -33,9 +37,21 @@ public class TipDialog extends WaitDialog {
         return me();
     }
     
+    public static WaitDialog show(int messageResId, TYPE tip, long duration) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(messageResId);
+        me().tipShowDuration = duration;
+        if (dialogImpl != null) {
+            dialogImpl.showTip(tip);
+        } else {
+            me().showTip(messageResId, tip);
+        }
+        return me();
+    }
+    
     public static WaitDialog show(CharSequence message, TYPE tip, long duration) {
         DialogImpl dialogImpl = me().dialogImpl;
-        me().message = message;
+        me().preMessage(message);
         me().tipShowDuration = duration;
         if (dialogImpl != null) {
             dialogImpl.showTip(tip);

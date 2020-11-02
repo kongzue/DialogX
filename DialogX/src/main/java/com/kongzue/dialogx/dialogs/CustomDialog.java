@@ -217,7 +217,12 @@ public class CustomDialog extends BaseDialog {
     
     public void refreshUI() {
         if (dialogImpl == null) return;
-        dialogImpl.refreshView();
+        getRootFrameLayout().post(new Runnable() {
+            @Override
+            public void run() {
+                dialogImpl.refreshView();
+            }
+        });
     }
     
     public void dismiss() {

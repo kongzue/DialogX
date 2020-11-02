@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -233,7 +234,12 @@ public class FullScreenDialog extends BaseDialog {
     
     public void refreshUI() {
         if (dialogImpl == null) return;
-        dialogImpl.refreshView();
+        getRootFrameLayout().post(new Runnable() {
+            @Override
+            public void run() {
+                dialogImpl.refreshView();
+            }
+        });
     }
     
     public void dismiss() {
@@ -308,6 +314,12 @@ public class FullScreenDialog extends BaseDialog {
     
     public FullScreenDialog setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        refreshUI();
+        return this;
+    }
+    
+    public FullScreenDialog setBackgroundColorRes(@ColorRes int backgroundColorRes) {
+        this.backgroundColor = getColor(backgroundColorRes);
         refreshUI();
         return this;
     }

@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
@@ -34,8 +35,20 @@ public class InputDialog extends MessageDialog {
         this.okText = okText;
     }
     
+    public InputDialog(int titleResId, int messageResId, int okTextResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+        this.okText = getString(okTextResId);
+    }
+    
     public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText) {
         InputDialog inputDialog = new InputDialog(title, message, okText);
+        inputDialog.show();
+        return inputDialog;
+    }
+    
+    public static InputDialog show(int titleResId, int messageResId, int okTextResId) {
+        InputDialog inputDialog = new InputDialog(titleResId, messageResId, okTextResId);
         inputDialog.show();
         return inputDialog;
     }
@@ -47,8 +60,21 @@ public class InputDialog extends MessageDialog {
         this.cancelText = cancelText;
     }
     
+    public InputDialog(int titleResId, int messageResId, int okTextResId, int cancelTextResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+        this.okText = getString(okTextResId);
+        this.cancelText = getString(cancelTextResId);
+    }
+    
     public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText) {
         InputDialog inputDialog = new InputDialog(title, message, okText, cancelText);
+        inputDialog.show();
+        return inputDialog;
+    }
+    
+    public static InputDialog show(int titleResId, int messageResId, int okTextResId, int cancelTextResId) {
+        InputDialog inputDialog = new InputDialog(titleResId, messageResId, okTextResId, cancelTextResId);
         inputDialog.show();
         return inputDialog;
     }
@@ -75,8 +101,22 @@ public class InputDialog extends MessageDialog {
         this.otherText = otherText;
     }
     
+    public InputDialog(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+        this.okText = getString(okTextResId);
+        this.cancelText = getString(cancelTextResId);
+        this.otherText = getString(otherTextResId);
+    }
+    
     public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText) {
         InputDialog inputDialog = new InputDialog(title, message, okText, cancelText, otherText);
+        inputDialog.show();
+        return inputDialog;
+    }
+    
+    public static InputDialog show(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId) {
+        InputDialog inputDialog = new InputDialog(titleResId, messageResId, okTextResId, cancelTextResId, otherTextResId);
         inputDialog.show();
         return inputDialog;
     }
@@ -90,8 +130,23 @@ public class InputDialog extends MessageDialog {
         this.inputText = inputText;
     }
     
+    public InputDialog(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId, int inputTextResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+        this.okText = getString(okTextResId);
+        this.cancelText = getString(cancelTextResId);
+        this.otherText = getString(otherTextResId);
+        this.inputText = getString(inputTextResId);
+    }
+    
     public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText, String inputText) {
         InputDialog inputDialog = new InputDialog(title, message, okText, cancelText, otherText, inputText);
+        inputDialog.show();
+        return inputDialog;
+    }
+    
+    public static InputDialog show(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId, int inputTextResId)  {
+        InputDialog inputDialog = new InputDialog(titleResId, messageResId, okTextResId, cancelTextResId, otherTextResId, inputTextResId);
         inputDialog.show();
         return inputDialog;
     }
@@ -102,6 +157,12 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setOkButton(CharSequence okText) {
         this.okText = okText;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setOkButton(int okTextResId) {
+        this.okText = getString(okTextResId);
         refreshUI();
         return this;
     }
@@ -118,12 +179,25 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
+    public InputDialog setOkButton(int okTextResId, OnInputDialogButtonClickListener<InputDialog> okButtonClickListener) {
+        this.okText = getString(okTextResId);
+        this.okButtonClickListener = okButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getCancelButton() {
         return cancelText;
     }
     
     public InputDialog setCancelButton(CharSequence cancelText) {
         this.cancelText = cancelText;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setCancelButton(int cancelTextResId) {
+        this.cancelText = getString(cancelTextResId);
         refreshUI();
         return this;
     }
@@ -140,12 +214,25 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
+    public InputDialog setCancelButton(int cancelTextResId, OnInputDialogButtonClickListener<InputDialog> cancelButtonClickListener) {
+        this.cancelText = getString(cancelTextResId);
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getOtherButton() {
         return otherText;
     }
     
     public InputDialog setOtherButton(CharSequence otherText) {
         this.otherText = otherText;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setOtherButton(int otherTextResId) {
+        this.otherText = getString(otherTextResId);
         refreshUI();
         return this;
     }
@@ -157,6 +244,13 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setOtherButton(CharSequence otherText, OnInputDialogButtonClickListener<InputDialog> otherButtonClickListener) {
         this.otherText = otherText;
+        this.otherButtonClickListener = otherButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setOtherButton(int otherTextResId, OnInputDialogButtonClickListener<InputDialog> otherButtonClickListener) {
+        this.otherText = getString(otherTextResId);
         this.otherButtonClickListener = otherButtonClickListener;
         refreshUI();
         return this;
@@ -199,12 +293,24 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
+    public InputDialog setTitle(int titleResId) {
+        this.title = getString(titleResId);
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getMessage() {
         return message;
     }
     
     public InputDialog setMessage(CharSequence message) {
         this.message = message;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setMessage(int messageResId) {
+        this.message = getString(messageResId);
         refreshUI();
         return this;
     }
@@ -219,12 +325,24 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
+    public InputDialog setInputText(int inputTextResId) {
+        this.inputText = getString(inputTextResId);
+        refreshUI();
+        return this;
+    }
+    
     public String getInputHintText() {
         return inputHintText;
     }
     
     public InputDialog setInputHintText(String inputHintText) {
         this.inputHintText = inputHintText;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setInputHintText(int inputHintTextResId) {
+        this.inputHintText = getString(inputHintTextResId);
         refreshUI();
         return this;
     }
@@ -326,7 +444,7 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
-    public InputDialog setCustomView(OnBindView<MessageDialog> onBindView){
+    public InputDialog setCustomView(OnBindView<MessageDialog> onBindView) {
         this.onBindView = onBindView;
         refreshUI();
         return this;
@@ -337,7 +455,7 @@ public class InputDialog extends MessageDialog {
         return onBindView.getCustomView();
     }
     
-    public InputDialog removeCustomView(){
+    public InputDialog removeCustomView() {
         this.onBindView.clean();
         refreshUI();
         return this;
@@ -349,6 +467,12 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setBackgroundColorRes(@ColorRes int backgroundColorResId) {
+        this.backgroundColor = getColor(backgroundColorResId);
         refreshUI();
         return this;
     }

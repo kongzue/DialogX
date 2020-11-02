@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
@@ -49,6 +50,7 @@ public class WaitDialog extends BaseDialog {
     protected CharSequence message;
     protected long tipShowDuration = 1500;
     protected float waitProgress = -1;
+    protected int showType = -1;        //-1:Waitdialog 状态标示符，其余为 TipDialog 状态标示
     
     private DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
     
@@ -61,7 +63,9 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(CharSequence message) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().message = message;
+        me().showType = -1;
         if (dialogImpl != null) {
+            dialogImpl.progressView.loading();
             setMessage(message);
             return me();
         } else {
@@ -72,16 +76,50 @@ public class WaitDialog extends BaseDialog {
         }
     }
     
+    public static WaitDialog show(int messageResId) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(messageResId);
+        me().showType = -1;
+        if (dialogImpl != null) {
+            dialogImpl.progressView.loading();
+            setMessage(messageResId);
+            return me();
+        } else {
+            WaitDialog waitDialog = new WaitDialog();
+            waitDialog.preMessage(messageResId);
+            waitDialog.show();
+            return waitDialog;
+        }
+    }
+    
     public static WaitDialog show(CharSequence message, float progress) {
         DialogImpl dialogImpl = me().dialogImpl;
-        me().message = message;
+        me().showType = -1;
+        me().preMessage(message);
         if (dialogImpl != null) {
             setMessage(message);
             me().setProgress(progress);
             return me();
         } else {
             WaitDialog waitDialog = new WaitDialog();
-            waitDialog.message = message;
+            waitDialog.preMessage(message);
+            waitDialog.show();
+            waitDialog.setProgress(progress);
+            return waitDialog;
+        }
+    }
+    
+    public static WaitDialog show(int messageResId, float progress) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().showType = -1;
+        me().preMessage(messageResId);
+        if (dialogImpl != null) {
+            setMessage(messageResId);
+            me().setProgress(progress);
+            return me();
+        } else {
+            WaitDialog waitDialog = new WaitDialog();
+            waitDialog.preMessage(messageResId);
             waitDialog.show();
             waitDialog.setProgress(progress);
             return waitDialog;
@@ -90,6 +128,7 @@ public class WaitDialog extends BaseDialog {
     
     public static WaitDialog show(float progress) {
         DialogImpl dialogImpl = me().dialogImpl;
+        me().showType = -1;
         if (dialogImpl != null) {
             me().setProgress(progress);
             return me();
@@ -277,6 +316,7 @@ public class WaitDialog extends BaseDialog {
         }
         
         public void showTip(TYPE tip) {
+            showType = tip.ordinal();
             if (progressView == null) return;
             switch (tip) {
                 case NONE:
@@ -299,7 +339,9 @@ public class WaitDialog extends BaseDialog {
                     progressView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            doDismiss(null);
+                            if (showType>-1) {
+                                doDismiss(null);
+                            }
                         }
                     }, tipShowDuration);
                 }
@@ -309,7 +351,12 @@ public class WaitDialog extends BaseDialog {
     
     public void refreshUI() {
         if (dialogImpl == null) return;
-        dialogImpl.refreshView();
+        getRootFrameLayout().post(new Runnable() {
+            @Override
+            public void run() {
+                dialogImpl.refreshView();
+            }
+        });
     }
     
     public void doDismiss() {
@@ -329,7 +376,15 @@ public class WaitDialog extends BaseDialog {
     protected TYPE readyTipType;
     
     protected void showTip(CharSequence message, TYPE type) {
+        showType = type.ordinal();
         this.message = message;
+        readyTipType = type;
+        show();
+    }
+    
+    protected void showTip(int messageResId, TYPE type) {
+        showType = type.ordinal();
+        this.message = getString(messageResId);
         readyTipType = type;
         show();
     }
@@ -339,8 +394,31 @@ public class WaitDialog extends BaseDialog {
     }
     
     public static WaitDialog setMessage(CharSequence message) {
-        me().message = message;
+        me().preMessage(message);
         me().refreshUI();
+        return me();
+    }
+    
+    public static WaitDialog setMessage(int messageResId) {
+        me().preMessage(messageResId);
+        me().refreshUI();
+        return me();
+    }
+    
+    /**
+     * 用于从 WaitDialog 到 TipDialog 的消息设置
+     * 此方法不会立即执行，而是等到动画衔接完成后由事件设置
+     *
+     * @param message   消息
+     * @return          me
+     */
+    protected WaitDialog preMessage(CharSequence message) {
+        me().message = message;
+        return me();
+    }
+    
+    protected WaitDialog preMessage(int messageResId) {
+        me().message = getString(messageResId);
         return me();
     }
     
@@ -391,6 +469,12 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        refreshUI();
+        return this;
+    }
+    
+    public WaitDialog setBackgroundColorRes(@ColorRes int backgroundColorResId) {
+        this.backgroundColor = getColor(backgroundColorResId);
         refreshUI();
         return this;
     }

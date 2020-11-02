@@ -18,6 +18,7 @@ import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -89,8 +90,20 @@ public class MessageDialog extends BaseDialog {
         this.okText = okText;
     }
     
+    public MessageDialog(int titleResId, int messageResId, int okTextResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+        this.okText = getString(okTextResId);
+    }
+    
     public static MessageDialog show(CharSequence title, CharSequence message, CharSequence okText) {
         MessageDialog messageDialog = new MessageDialog(title, message, okText);
+        messageDialog.show();
+        return messageDialog;
+    }
+    
+    public static MessageDialog show(int titleResId, int messageResId, int okTextResId) {
+        MessageDialog messageDialog = new MessageDialog(titleResId, messageResId, okTextResId);
         messageDialog.show();
         return messageDialog;
     }
@@ -102,8 +115,21 @@ public class MessageDialog extends BaseDialog {
         this.cancelText = cancelText;
     }
     
+    public MessageDialog(int titleResId, int messageResId, int okTextResId, int cancelTextResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+        this.okText = getString(okTextResId);
+        this.cancelText = getString(cancelTextResId);
+    }
+    
     public static MessageDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText) {
         MessageDialog messageDialog = new MessageDialog(title, message, okText, cancelText);
+        messageDialog.show();
+        return messageDialog;
+    }
+    
+    public static MessageDialog show(int titleResId, int messageResId, int okTextResId, int cancelTextResId) {
+        MessageDialog messageDialog = new MessageDialog(titleResId, messageResId, okTextResId, cancelTextResId);
         messageDialog.show();
         return messageDialog;
     }
@@ -116,8 +142,22 @@ public class MessageDialog extends BaseDialog {
         this.otherText = otherText;
     }
     
+    public MessageDialog(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+        this.okText = getString(okTextResId);
+        this.cancelText = getString(cancelTextResId);
+        this.otherText = getString(otherTextResId);
+    }
+    
     public static MessageDialog show(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText) {
         MessageDialog messageDialog = new MessageDialog(title, message, okText, cancelText, otherText);
+        messageDialog.show();
+        return messageDialog;
+    }
+    
+    public static MessageDialog show(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId) {
+        MessageDialog messageDialog = new MessageDialog(titleResId, messageResId, okTextResId, cancelTextResId, otherTextResId);
         messageDialog.show();
         return messageDialog;
     }
@@ -136,7 +176,12 @@ public class MessageDialog extends BaseDialog {
     
     public void refreshUI() {
         if (dialogImpl == null) return;
-        dialogImpl.refreshView();
+        getRootFrameLayout().post(new Runnable() {
+            @Override
+            public void run() {
+                dialogImpl.refreshView();
+            }
+        });
     }
     
     class DialogImpl implements DialogConvertViewInterface {
@@ -337,6 +382,7 @@ public class MessageDialog extends BaseDialog {
             showText(btnSelectNegative, cancelText);
             showText(btnSelectOther, otherText);
             txtInput.setText(inputText);
+            txtInput.setHint(inputHintText);
             if (spaceOtherButton != null) {
                 if (otherText == null) {
                     spaceOtherButton.setVisibility(View.GONE);
@@ -566,6 +612,12 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
+    public MessageDialog setOkButton(int okTextRedId) {
+        this.okText = getString(okTextRedId);
+        refreshUI();
+        return this;
+    }
+    
     public MessageDialog setOkButton(OnDialogButtonClickListener<MessageDialog> okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
         return this;
@@ -578,12 +630,25 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
+    public MessageDialog setOkButton(int okTextRedId, OnDialogButtonClickListener<MessageDialog> okButtonClickListener) {
+        this.okText = getString(okTextRedId);
+        this.okButtonClickListener = okButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getCancelButton() {
         return cancelText;
     }
     
     public MessageDialog setCancelButton(CharSequence cancelText) {
         this.cancelText = cancelText;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setCancelButton(int cancelTextResId) {
+        this.cancelText = getString(cancelTextResId);
         refreshUI();
         return this;
     }
@@ -600,12 +665,25 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
+    public MessageDialog setCancelButton(int cancelTextResId, OnDialogButtonClickListener<MessageDialog> cancelButtonClickListener) {
+        this.cancelText = getString(cancelTextResId);
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getOtherButton() {
         return otherText;
     }
     
     public MessageDialog setOtherButton(CharSequence otherText) {
         this.otherText = otherText;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setOtherButton(int otherTextResId) {
+        this.otherText = getString(otherTextResId);
         refreshUI();
         return this;
     }
@@ -617,6 +695,13 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setOtherButton(CharSequence otherText, OnDialogButtonClickListener<MessageDialog> otherButtonClickListener) {
         this.otherText = otherText;
+        this.otherButtonClickListener = otherButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setOtherButton(int otherTextResId, OnDialogButtonClickListener<MessageDialog> otherButtonClickListener) {
+        this.otherText = getString(otherTextResId);
         this.otherButtonClickListener = otherButtonClickListener;
         refreshUI();
         return this;
@@ -659,12 +744,24 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
+    public MessageDialog setTitle(int titleResId) {
+        this.title = getString(titleResId);
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getMessage() {
         return message;
     }
     
     public MessageDialog setMessage(CharSequence message) {
         this.message = message;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setMessage(int messageResId) {
+        this.message = getString(messageResId);
         refreshUI();
         return this;
     }
@@ -785,5 +882,11 @@ public class MessageDialog extends BaseDialog {
         } else {
             return "";
         }
+    }
+    
+    public MessageDialog setBackgroundColorRes(@ColorRes int backgroundColorResId) {
+        this.backgroundColor = getColor(backgroundColorResId);
+        refreshUI();
+        return this;
     }
 }

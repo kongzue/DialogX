@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -88,6 +89,114 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(CharSequence title, CharSequence message, List<CharSequence> menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu showStringList(CharSequence title, CharSequence message, List<String> menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuStringList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence title, CharSequence message, String[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence title, CharSequence message, CharSequence[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(String title, String message, List<CharSequence> menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu showStringList(String title, String message, List<String> menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuStringList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(String title, String message, String[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(String title, String message, CharSequence[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, int messageResId, List<CharSequence> menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu showStringList(int titleResId, int messageResId, List<String> menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setMenuStringList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, int messageResId, String[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, int messageResId, CharSequence[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     @Override
     protected void onDialogInit(final DialogImpl dialog) {
         if (dialog != null) {
@@ -143,6 +252,7 @@ public class BottomMenu extends BottomDialog {
     @Override
     public void refreshUI() {
         super.refreshUI();
+        
         if (listView != null) {
             if (menuListAdapter == null) {
                 menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), menuList);
@@ -247,12 +357,24 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
     
+    public BottomMenu setTitle(int titleResId) {
+        this.title = getString(titleResId);
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getMessage() {
         return message;
     }
     
     public BottomMenu setMessage(CharSequence message) {
         this.message = message;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setMessage(int messageResId) {
+        this.message = getString(messageResId);
         refreshUI();
         return this;
     }
@@ -267,6 +389,12 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
     
+    public BottomMenu setCancelButton(int cancelTextResId) {
+        this.cancelText = getString(cancelTextResId);
+        refreshUI();
+        return this;
+    }
+    
     public BottomMenu setCancelButton(OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
@@ -274,6 +402,13 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelText = cancelText;
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setCancelButton(int cancelTextResId, OnDialogButtonClickListener cancelButtonClickListener) {
+        this.cancelText = getString(cancelTextResId);
         this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
         return this;
@@ -389,6 +524,12 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setSelection(int selectionIndex) {
         this.selectionIndex = selectionIndex;
         menuListAdapter = null;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setBackgroundColorRes(@ColorRes int backgroundRes) {
+        this.backgroundColor = getColor(backgroundRes);
         refreshUI();
         return this;
     }

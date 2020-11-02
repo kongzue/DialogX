@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -81,8 +82,19 @@ public class BottomDialog extends BaseDialog {
         this.message = message;
     }
     
+    public BottomDialog(int titleResId, int messageResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+    }
+    
     public static BottomDialog show(CharSequence title, CharSequence message) {
         BottomDialog bottomDialog = new BottomDialog(title, message);
+        bottomDialog.show();
+        return bottomDialog;
+    }
+    
+    public static BottomDialog show(int titleResId, int messageResId) {
+        BottomDialog bottomDialog = new BottomDialog(titleResId, messageResId);
         bottomDialog.show();
         return bottomDialog;
     }
@@ -93,8 +105,20 @@ public class BottomDialog extends BaseDialog {
         this.onBindView = onBindView;
     }
     
+    public BottomDialog(int titleResId, int messageResId, OnBindView<BottomDialog> onBindView) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+        this.onBindView = onBindView;
+    }
+    
     public static BottomDialog show(CharSequence title, CharSequence message, OnBindView<BottomDialog> onBindView) {
         BottomDialog bottomDialog = new BottomDialog(title, message, onBindView);
+        bottomDialog.show();
+        return bottomDialog;
+    }
+    
+    public static BottomDialog show(int titleResId, int messageResId, OnBindView<BottomDialog> onBindView) {
+        BottomDialog bottomDialog = new BottomDialog(titleResId, messageResId, onBindView);
         bottomDialog.show();
         return bottomDialog;
     }
@@ -104,8 +128,19 @@ public class BottomDialog extends BaseDialog {
         this.onBindView = onBindView;
     }
     
+    public BottomDialog(int titleResId, OnBindView<BottomDialog> onBindView) {
+        this.title = getString(titleResId);
+        this.onBindView = onBindView;
+    }
+    
     public static BottomDialog show(CharSequence title, OnBindView<BottomDialog> onBindView) {
         BottomDialog bottomDialog = new BottomDialog(title, onBindView);
+        bottomDialog.show();
+        return bottomDialog;
+    }
+    
+    public static BottomDialog show(int titleResId, OnBindView<BottomDialog> onBindView) {
+        BottomDialog bottomDialog = new BottomDialog(titleResId, onBindView);
         bottomDialog.show();
         return bottomDialog;
     }
@@ -403,7 +438,12 @@ public class BottomDialog extends BaseDialog {
     
     public void refreshUI() {
         if (dialogImpl == null) return;
-        dialogImpl.refreshView();
+        getRootFrameLayout().post(new Runnable() {
+            @Override
+            public void run() {
+                dialogImpl.refreshView();
+            }
+        });
     }
     
     public void dismiss() {
@@ -465,12 +505,24 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
+    public BottomDialog setTitle(int titleResId) {
+        this.title = getString(titleResId);
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getMessage() {
         return message;
     }
     
     public BottomDialog setMessage(CharSequence message) {
         this.message = message;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setMessage(int messageResId) {
+        this.message = getString(messageResId);
         refreshUI();
         return this;
     }
@@ -485,6 +537,12 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
+    public BottomDialog setCancelButton(int cancelTextResId) {
+        this.cancelText = getString(cancelTextResId);
+        refreshUI();
+        return this;
+    }
+    
     public BottomDialog setCancelButton(OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
@@ -492,6 +550,12 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelText = cancelText;
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setCancelButton(int cancelTextResId, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
+        this.cancelText = getString(cancelTextResId);
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
@@ -573,6 +637,12 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setBackgroundColorRes(@ColorRes int backgroundRes) {
+        this.backgroundColor = getColor(backgroundRes);
         refreshUI();
         return this;
     }

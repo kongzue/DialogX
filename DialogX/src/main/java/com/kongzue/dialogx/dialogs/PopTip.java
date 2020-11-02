@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 
 import com.kongzue.dialogx.DialogX;
@@ -84,6 +85,11 @@ public class PopTip extends BaseDialog {
         this.message = message;
     }
     
+    public PopTip(int messageResId) {
+        super();
+        this.message = getString(messageResId);
+    }
+    
     public PopTip(int iconResId, CharSequence message) {
         super();
         this.iconResId = iconResId;
@@ -97,15 +103,34 @@ public class PopTip extends BaseDialog {
         this.buttonText = buttonText;
     }
     
+    public PopTip(int iconResId, int messageResId, int buttonTextResId) {
+        super();
+        this.iconResId = iconResId;
+        this.message = getString(messageResId);
+        this.buttonText = getString(buttonTextResId);
+    }
+    
     public PopTip(CharSequence message, CharSequence buttonText) {
         super();
         this.message = message;
         this.buttonText = buttonText;
     }
     
+    public PopTip(int messageResId, int buttonTextResId) {
+        super();
+        this.message = getString(messageResId);
+        this.buttonText = getString(buttonTextResId);
+    }
+    
     public PopTip(CharSequence message, OnBindView<PopTip> onBindView) {
         super();
         this.message = message;
+        this.onBindView = onBindView;
+    }
+    
+    public PopTip(int messageResId, OnBindView<PopTip> onBindView) {
+        super();
+        this.message = getString(messageResId);
         this.onBindView = onBindView;
     }
     
@@ -124,10 +149,25 @@ public class PopTip extends BaseDialog {
         this.onBindView = onBindView;
     }
     
+    public PopTip(int iconResId, int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
+        super();
+        this.iconResId = iconResId;
+        this.message = getString(messageResId);
+        this.buttonText = getString(buttonTextResId);
+        this.onBindView = onBindView;
+    }
+    
     public PopTip(CharSequence message, CharSequence buttonText, OnBindView<PopTip> onBindView) {
         super();
         this.message = message;
         this.buttonText = buttonText;
+        this.onBindView = onBindView;
+    }
+    
+    public PopTip(int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
+        super();
+        this.message = getString(messageResId);
+        this.buttonText = getString(buttonTextResId);
         this.onBindView = onBindView;
     }
     
@@ -143,14 +183,32 @@ public class PopTip extends BaseDialog {
         return popTip;
     }
     
+    public static PopTip show(int messageResId) {
+        PopTip popTip = new PopTip(messageResId);
+        popTip.show();
+        return popTip;
+    }
+    
     public static PopTip show(CharSequence message, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(message, onBindView);
         popTip.show();
         return popTip;
     }
     
+    public static PopTip show(int messageResId, OnBindView<PopTip> onBindView) {
+        PopTip popTip = new PopTip(messageResId, onBindView);
+        popTip.show();
+        return popTip;
+    }
+    
     public static PopTip show(CharSequence message, CharSequence buttonText) {
         PopTip popTip = new PopTip(message, buttonText);
+        popTip.show();
+        return popTip;
+    }
+    
+    public static PopTip show(int messageResId, int buttonTextResId) {
+        PopTip popTip = new PopTip(messageResId, buttonTextResId);
         popTip.show();
         return popTip;
     }
@@ -179,8 +237,20 @@ public class PopTip extends BaseDialog {
         return popTip;
     }
     
+    public static PopTip show(int iconResId, int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
+        PopTip popTip = new PopTip(iconResId, messageResId, buttonTextResId, onBindView);
+        popTip.show();
+        return popTip;
+    }
+    
     public static PopTip show(CharSequence message, CharSequence buttonText, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(message, buttonText, onBindView);
+        popTip.show();
+        return popTip;
+    }
+    
+    public static PopTip show(int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
+        PopTip popTip = new PopTip(messageResId, buttonTextResId, onBindView);
         popTip.show();
         return popTip;
     }
@@ -362,7 +432,7 @@ public class PopTip extends BaseDialog {
                     }
                     boxCustom.addView(onBindView.getCustomView(), lp);
                     boxCustom.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     boxCustom.setVisibility(View.GONE);
                 }
             }
@@ -389,12 +459,12 @@ public class PopTip extends BaseDialog {
                 boxBody.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!onPopTipClickListener.onClick(me, v)){
+                        if (!onPopTipClickListener.onClick(me, v)) {
                             dismiss();
                         }
                     }
                 });
-            }else{
+            } else {
                 boxBody.setOnClickListener(null);
                 boxBody.setClickable(false);
             }
@@ -423,7 +493,12 @@ public class PopTip extends BaseDialog {
     
     public void refreshUI() {
         if (dialogImpl == null) return;
-        dialogImpl.refreshView();
+        getRootFrameLayout().post(new Runnable() {
+            @Override
+            public void run() {
+                dialogImpl.refreshView();
+            }
+        });
     }
     
     public void dismiss() {
@@ -501,6 +576,12 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
+    public PopTip setMessage(int messageResId) {
+        this.message = getString(messageResId);
+        refreshUI();
+        return this;
+    }
+    
     public CharSequence getButtonText() {
         return buttonText;
     }
@@ -511,8 +592,21 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
+    public PopTip setButton(int buttonTextResId) {
+        this.buttonText = getString(buttonTextResId);
+        refreshUI();
+        return this;
+    }
+    
     public PopTip setButton(CharSequence buttonText, OnDialogButtonClickListener<PopTip> onButtonClickListener) {
         this.buttonText = buttonText;
+        this.onButtonClickListener = onButtonClickListener;
+        refreshUI();
+        return this;
+    }
+    
+    public PopTip setButton(int buttonTextResId, OnDialogButtonClickListener<PopTip> onButtonClickListener) {
+        this.buttonText = getString(buttonTextResId);
         this.onButtonClickListener = onButtonClickListener;
         refreshUI();
         return this;
@@ -578,6 +672,12 @@ public class PopTip extends BaseDialog {
     
     public PopTip setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
+        refreshUI();
+        return this;
+    }
+    
+    public PopTip setBackgroundColorRes(@ColorRes int backgroundColorResId) {
+        this.backgroundColor = getColor(backgroundColorResId);
         refreshUI();
         return this;
     }
