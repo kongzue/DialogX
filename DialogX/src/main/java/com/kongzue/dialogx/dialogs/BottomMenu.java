@@ -383,6 +383,74 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(CharSequence title, CharSequence[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence title, String[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence title, CharSequence[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence title, String[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, CharSequence[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, String[] menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, CharSequence[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, String[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     @Override
     protected void onDialogInit(final DialogImpl dialog) {
         if (dialog != null) {
