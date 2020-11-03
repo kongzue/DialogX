@@ -68,9 +68,25 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(List<CharSequence> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     public static BottomMenu showStringList(List<String> menuList) {
         BottomMenu bottomMenu = new BottomMenu();
         bottomMenu.setMenuStringList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu showStringList(List<String> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.setMenuStringList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
         bottomMenu.show();
         return bottomMenu;
     }
@@ -82,9 +98,25 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(String[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     public static BottomMenu show(CharSequence[] menuList) {
         BottomMenu bottomMenu = new BottomMenu();
         bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
         bottomMenu.show();
         return bottomMenu;
     }
@@ -98,11 +130,48 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(CharSequence title, CharSequence message, List<CharSequence> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence title, List<CharSequence> menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence title, List<CharSequence> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     public static BottomMenu showStringList(CharSequence title, CharSequence message, List<String> menuList) {
         BottomMenu bottomMenu = new BottomMenu();
         bottomMenu.title = title;
         bottomMenu.message = message;
         bottomMenu.setMenuStringList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu showStringList(CharSequence title, CharSequence message, List<String> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuStringList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
         bottomMenu.show();
         return bottomMenu;
     }
@@ -116,11 +185,31 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(CharSequence title, CharSequence message, String[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     public static BottomMenu show(CharSequence title, CharSequence message, CharSequence[] menuList) {
         BottomMenu bottomMenu = new BottomMenu();
         bottomMenu.title = title;
         bottomMenu.message = message;
         bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(CharSequence title, CharSequence message, CharSequence[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
         bottomMenu.show();
         return bottomMenu;
     }
@@ -134,11 +223,31 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(String title, String message, List<CharSequence> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     public static BottomMenu showStringList(String title, String message, List<String> menuList) {
         BottomMenu bottomMenu = new BottomMenu();
         bottomMenu.title = title;
         bottomMenu.message = message;
         bottomMenu.setMenuStringList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu showStringList(String title, String message, List<String> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuStringList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
         bottomMenu.show();
         return bottomMenu;
     }
@@ -152,6 +261,16 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(String title, String message, String[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     public static BottomMenu show(String title, String message, CharSequence[] menuList) {
         BottomMenu bottomMenu = new BottomMenu();
         bottomMenu.title = title;
@@ -161,10 +280,28 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    public static BottomMenu show(String title, String message, CharSequence[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = title;
+        bottomMenu.message = message;
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
     public static BottomMenu show(int titleResId, int messageResId, List<CharSequence> menuList) {
         BottomMenu bottomMenu = new BottomMenu();
         bottomMenu.title = bottomMenu.getString(titleResId);
         bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, List<CharSequence> menuList) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
         bottomMenu.setMenuList(menuList);
         bottomMenu.show();
         return bottomMenu;
@@ -193,6 +330,55 @@ public class BottomMenu extends BottomDialog {
         bottomMenu.title = bottomMenu.getString(titleResId);
         bottomMenu.message = bottomMenu.getString(messageResId);
         bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, int messageResId, List<CharSequence> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, List<CharSequence> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu showStringList(int titleResId, int messageResId, List<String> menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setMenuStringList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, int messageResId, String[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
+        bottomMenu.show();
+        return bottomMenu;
+    }
+    
+    public static BottomMenu show(int titleResId, int messageResId, CharSequence[] menuList, OnMenuItemClickListener<BottomMenu> onMenuItemClickListener) {
+        BottomMenu bottomMenu = new BottomMenu();
+        bottomMenu.title = bottomMenu.getString(titleResId);
+        bottomMenu.message = bottomMenu.getString(messageResId);
+        bottomMenu.setMenuList(menuList);
+        bottomMenu.setOnMenuItemClickListener(onMenuItemClickListener);
         bottomMenu.show();
         return bottomMenu;
     }
