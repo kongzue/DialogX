@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -30,12 +31,14 @@ public class InputDialog extends MessageDialog {
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText) {
+        cancelable = DialogX.cancelable;
         this.title = title;
         this.message = message;
         this.okText = okText;
     }
     
     public InputDialog(int titleResId, int messageResId, int okTextResId) {
+        cancelable = DialogX.cancelable;
         this.title = getString(titleResId);
         this.message = getString(messageResId);
         this.okText = getString(okTextResId);
@@ -54,6 +57,7 @@ public class InputDialog extends MessageDialog {
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText) {
+        cancelable = DialogX.cancelable;
         this.title = title;
         this.message = message;
         this.okText = okText;
@@ -61,6 +65,7 @@ public class InputDialog extends MessageDialog {
     }
     
     public InputDialog(int titleResId, int messageResId, int okTextResId, int cancelTextResId) {
+        cancelable = DialogX.cancelable;
         this.title = getString(titleResId);
         this.message = getString(messageResId);
         this.okText = getString(okTextResId);
@@ -80,6 +85,7 @@ public class InputDialog extends MessageDialog {
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, String inputText) {
+        cancelable = DialogX.cancelable;
         this.title = title;
         this.message = message;
         this.okText = okText;
@@ -94,6 +100,7 @@ public class InputDialog extends MessageDialog {
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText) {
+        cancelable = DialogX.cancelable;
         this.title = title;
         this.message = message;
         this.okText = okText;
@@ -102,6 +109,7 @@ public class InputDialog extends MessageDialog {
     }
     
     public InputDialog(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId) {
+        cancelable = DialogX.cancelable;
         this.title = getString(titleResId);
         this.message = getString(messageResId);
         this.okText = getString(okTextResId);
@@ -122,6 +130,7 @@ public class InputDialog extends MessageDialog {
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText, CharSequence cancelText, CharSequence otherText, String inputText) {
+        cancelable = DialogX.cancelable;
         this.title = title;
         this.message = message;
         this.okText = okText;
@@ -131,6 +140,7 @@ public class InputDialog extends MessageDialog {
     }
     
     public InputDialog(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId, int inputTextResId) {
+        cancelable = DialogX.cancelable;
         this.title = getString(titleResId);
         this.message = getString(messageResId);
         this.okText = getString(okTextResId);

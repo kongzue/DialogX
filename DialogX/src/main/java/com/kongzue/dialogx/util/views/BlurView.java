@@ -443,7 +443,7 @@ public class BlurView extends View {
     public static boolean DEBUGMODE = false;
     
     static boolean isDebug() {
-        return DialogX.DEBUGMODE;
+        return DEBUGMODE && DialogX.DEBUGMODE;
     }
     
     public static void log(Object o) {

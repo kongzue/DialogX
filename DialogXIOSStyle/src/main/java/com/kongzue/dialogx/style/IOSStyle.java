@@ -1,8 +1,10 @@
 package com.kongzue.dialogx.style;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import com.kongzue.dialogx.interfaces.DialogXStyle;
+import com.kongzue.dialogx.interfaces.ProgressViewInterface;
 import com.kongzue.dialogx.iostheme.R;
 
 /**
@@ -141,6 +143,11 @@ public class IOSStyle implements DialogXStyle {
             @Override
             public int overrideTextColorRes(boolean light) {
                 return light ? R.color.white : R.color.black;
+            }
+    
+            @Override
+            public ProgressViewInterface overrideWaitView(Context context, boolean light) {
+                return null;
             }
         };
     }

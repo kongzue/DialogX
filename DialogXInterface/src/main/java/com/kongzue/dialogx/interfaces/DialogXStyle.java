@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.interfaces;
 
+import android.content.Context;
+
 public interface DialogXStyle {
     
     int styleVer = 1;
@@ -70,6 +72,8 @@ public interface DialogXStyle {
         int overrideBackgroundColorRes(boolean light);
         
         int overrideTextColorRes(boolean light);
+    
+        ProgressViewInterface overrideWaitView(Context context, boolean light);
     }
     
     interface BottomDialogRes {

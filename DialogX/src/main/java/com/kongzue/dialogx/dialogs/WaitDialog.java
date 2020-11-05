@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
@@ -21,6 +22,8 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.ProgressViewInterface;
+import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -51,13 +54,14 @@ public class WaitDialog extends BaseDialog {
     protected long tipShowDuration = 1500;
     protected float waitProgress = -1;
     protected int showType = -1;        //-1:Waitdialog 状态标示符，其余为 TipDialog 状态标示
+    protected TextInfo messageTextInfo;
     
     private DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
     
     protected WaitDialog() {
         super();
         me = new WeakReference<>(this);
-        cancelable = false;
+        cancelable = DialogX.cancelableTipDialog;
     }
     
     public static WaitDialog show(CharSequence message) {
@@ -167,7 +171,7 @@ public class WaitDialog extends BaseDialog {
         MaxRelativeLayout bkg;
         BlurView blurView;
         RelativeLayout boxProgress;
-        ProgressView progressView;
+        ProgressViewInterface progressView;
         RelativeLayout boxCustomView;
         TextView txtInfo;
         
@@ -176,7 +180,12 @@ public class WaitDialog extends BaseDialog {
             bkg = convertView.findViewById(R.id.bkg);
             blurView = convertView.findViewById(R.id.blurView);
             boxProgress = convertView.findViewById(R.id.box_progress);
-            progressView = convertView.findViewById(R.id.progressView);
+            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getContext(), isLightTheme());
+            if (progressViewCache == null) {
+                progressViewCache = new ProgressView(getContext());
+            }
+            progressView = (ProgressViewInterface) progressViewCache;
+            boxProgress.addView(progressViewCache, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             boxCustomView = convertView.findViewById(R.id.box_customView);
             txtInfo = convertView.findViewById(R.id.txt_info);
             init();
@@ -184,9 +193,10 @@ public class WaitDialog extends BaseDialog {
         }
         
         public void init() {
+            if (messageTextInfo == null) messageTextInfo = DialogX.tipTextInfo;
+            
             blurView.setRadiusPx(dip2px(15));
             boxRoot.setClickable(true);
-            //txtInfo.getPaint().setFakeBoldText(true);
             
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
@@ -221,7 +231,7 @@ public class WaitDialog extends BaseDialog {
             
             if (readyTipType != null) {
                 progressView.noLoading();
-                progressView.postDelayed(new Runnable() {
+                ((View) progressView).postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         showTip(readyTipType);
@@ -278,6 +288,7 @@ public class WaitDialog extends BaseDialog {
             }
             
             showText(txtInfo, message);
+            useTextInfo(txtInfo, messageTextInfo);
             
             if (onBindView != null && onBindView.getCustomView() != null) {
                 boxCustomView.removeView(onBindView.getCustomView());
@@ -299,12 +310,12 @@ public class WaitDialog extends BaseDialog {
                 @Override
                 public void run() {
                     if (v != null) v.setEnabled(false);
-    
+                    
                     int exitAnimResId = R.anim.anim_dialogx_default_exit;
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
                     enterAnim.setInterpolator(new AccelerateInterpolator());
                     bkg.startAnimation(enterAnim);
-    
+                    
                     boxRoot.animate().setDuration(300).alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(enterAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
@@ -332,14 +343,16 @@ public class WaitDialog extends BaseDialog {
                     progressView.error();
                     break;
             }
+            
+            //此事件是在完成衔接动画绘制后执行的逻辑
             progressView.whenShowTick(new Runnable() {
                 @Override
                 public void run() {
                     refreshView();
-                    progressView.postDelayed(new Runnable() {
+                    ((View) progressView).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (showType>-1) {
+                            if (showType > -1) {
                                 doDismiss(null);
                             }
                         }
@@ -409,8 +422,8 @@ public class WaitDialog extends BaseDialog {
      * 用于从 WaitDialog 到 TipDialog 的消息设置
      * 此方法不会立即执行，而是等到动画衔接完成后由事件设置
      *
-     * @param message   消息
-     * @return          me
+     * @param message 消息
+     * @return me
      */
     protected WaitDialog preMessage(CharSequence message) {
         me().message = message;

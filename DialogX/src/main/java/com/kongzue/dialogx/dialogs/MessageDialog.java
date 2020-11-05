@@ -216,6 +216,15 @@ public class MessageDialog extends BaseDialog {
         }
         
         public void init() {
+            if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
+            if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
+            if (okTextInfo == null) okTextInfo = DialogX.okButtonTextInfo;
+            if (okTextInfo == null) okTextInfo = DialogX.buttonTextInfo;
+            if (cancelTextInfo == null) cancelTextInfo = DialogX.buttonTextInfo;
+            if (otherTextInfo == null) otherTextInfo = DialogX.buttonTextInfo;
+            if (inputInfo == null) inputInfo = DialogX.inputInfo;
+            if (DialogX.backgroundColor != -1) setBackgroundColor(DialogX.backgroundColor);
+            
             txtDialogTitle.getPaint().setFakeBoldText(true);
             btnSelectNegative.getPaint().setFakeBoldText(true);
             btnSelectPositive.getPaint().setFakeBoldText(true);

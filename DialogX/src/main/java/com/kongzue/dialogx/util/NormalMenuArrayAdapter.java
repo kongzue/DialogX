@@ -2,8 +2,10 @@ package com.kongzue.dialogx.util;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.graphics.drawable.StateListDrawable;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.BottomMenu;
 
@@ -131,10 +134,13 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
         if (null != text) {
             viewHolder.txtDialogxMenuText.setText(text);
             viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
+            if (DialogX.menuTextInfo != null) {
+                useTextInfo(viewHolder.txtDialogxMenuText, DialogX.menuTextInfo);
+            }
             if (viewHolder.imgDialogxMenuSelection != null) {
-                if (bottomMenu.getStyle().overrideBottomDialogRes()!=null && bottomMenu.getStyle().overrideBottomDialogRes().selectionImageTint(bottomMenu.isLightTheme())) {
+                if (bottomMenu.getStyle().overrideBottomDialogRes() != null && bottomMenu.getStyle().overrideBottomDialogRes().selectionImageTint(bottomMenu.isLightTheme())) {
                     viewHolder.imgDialogxMenuSelection.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
-                }else{
+                } else {
                     viewHolder.imgDialogxMenuSelection.setImageTintList(null);
                 }
             }
@@ -159,5 +165,21 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
         }
         
         return convertView;
+    }
+    
+    protected void useTextInfo(TextView textView, TextInfo textInfo) {
+        if (textInfo == null) return;
+        if (textView == null) return;
+        if (textInfo.getFontSize() > 0) {
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textInfo.getFontSize());
+        }
+        if (textInfo.getFontColor() != 1) {
+            textView.setTextColor(textInfo.getFontColor());
+        }
+        if (textInfo.getGravity() != -1) {
+            textView.setGravity(textInfo.getGravity());
+        }
+        Typeface font = Typeface.create(Typeface.SANS_SERIF, textInfo.isBold() ? Typeface.BOLD : Typeface.NORMAL);
+        textView.setTypeface(font);
     }
 }

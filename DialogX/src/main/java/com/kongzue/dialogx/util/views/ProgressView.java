@@ -3,6 +3,7 @@ package com.kongzue.dialogx.util.views;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.view.animation.LinearInterpolator;
 import androidx.annotation.Nullable;
 
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.interfaces.ProgressViewInterface;
 
 /**
  * @author: Kongzue
@@ -28,7 +30,7 @@ import com.kongzue.dialogx.R;
  * @createTime: 2020/9/27 16:16
  * @license: Apache License 2.0
  */
-public class ProgressView extends View {
+public class ProgressView extends View implements ProgressViewInterface {
     
     public static final int STATUS_LOADING = 0;
     public static final int STATUS_SUCCESS = 1;
@@ -38,7 +40,7 @@ public class ProgressView extends View {
     
     private int status = STATUS_LOADING;
     
-    private int width = 5;
+    private int width = dip2px(2);
     private int color = Color.WHITE;
     
     public ProgressView(Context context) {
@@ -85,7 +87,7 @@ public class ProgressView extends View {
             isInited = true;
             if (attrs != null) {
                 TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ProgressView);
-                width = a.getDimensionPixelSize(R.styleable.ProgressView_progressStrokeWidth, 5);
+                width = a.getDimensionPixelSize(R.styleable.ProgressView_progressStrokeWidth, dip2px(2));
                 color = a.getDimensionPixelSize(R.styleable.ProgressView_progressStrokeColor, color);
                 
                 a.recycle();
@@ -463,5 +465,10 @@ public class ProgressView extends View {
     
     public void noLoading() {
         noShowLoading = true;
+    }
+    
+    private int dip2px(float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }

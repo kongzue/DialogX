@@ -32,16 +32,7 @@
             <RelativeLayout
                 android:id="@+id/box_progress"
                 android:layout_width="65dp"
-                android:layout_height="65dp">
-
-                <com.kongzue.dialogx.util.views.ProgressView
-                    android:id="@+id/progressView"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_centerInParent="true"
-                    app:progressStrokeWidth="2dp" />
-
-            </RelativeLayout>
+                android:layout_height="65dp"/>
 
             <RelativeLayout
                 android:id="@+id/box_customView"

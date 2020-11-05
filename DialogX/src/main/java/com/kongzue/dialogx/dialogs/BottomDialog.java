@@ -223,6 +223,12 @@ public class BottomDialog extends BaseDialog {
         
         @Override
         public void init() {
+            if (titleTextInfo == null) titleTextInfo = DialogX.menuTitleInfo;
+            if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
+            if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
+            if (cancelTextInfo == null) cancelTextInfo = DialogX.buttonTextInfo;
+            if (DialogX.backgroundColor != -1) setBackgroundColor(DialogX.backgroundColor);
+            
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {

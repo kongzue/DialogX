@@ -76,73 +76,61 @@ public class PopTip extends BaseDialog {
     }
     
     public PopTip(OnBindView<PopTip> onBindView) {
-        super();
         this.onBindView = onBindView;
     }
     
     public PopTip(CharSequence message) {
-        super();
         this.message = message;
     }
     
     public PopTip(int messageResId) {
-        super();
         this.message = getString(messageResId);
     }
     
     public PopTip(int iconResId, CharSequence message) {
-        super();
         this.iconResId = iconResId;
         this.message = message;
     }
     
     public PopTip(int iconResId, CharSequence message, CharSequence buttonText) {
-        super();
         this.iconResId = iconResId;
         this.message = message;
         this.buttonText = buttonText;
     }
     
     public PopTip(int iconResId, int messageResId, int buttonTextResId) {
-        super();
         this.iconResId = iconResId;
         this.message = getString(messageResId);
         this.buttonText = getString(buttonTextResId);
     }
     
     public PopTip(CharSequence message, CharSequence buttonText) {
-        super();
         this.message = message;
         this.buttonText = buttonText;
     }
     
     public PopTip(int messageResId, int buttonTextResId) {
-        super();
         this.message = getString(messageResId);
         this.buttonText = getString(buttonTextResId);
     }
     
     public PopTip(CharSequence message, OnBindView<PopTip> onBindView) {
-        super();
         this.message = message;
         this.onBindView = onBindView;
     }
     
     public PopTip(int messageResId, OnBindView<PopTip> onBindView) {
-        super();
         this.message = getString(messageResId);
         this.onBindView = onBindView;
     }
     
     public PopTip(int iconResId, CharSequence message, OnBindView<PopTip> onBindView) {
-        super();
         this.iconResId = iconResId;
         this.message = message;
         this.onBindView = onBindView;
     }
     
     public PopTip(int iconResId, CharSequence message, CharSequence buttonText, OnBindView<PopTip> onBindView) {
-        super();
         this.iconResId = iconResId;
         this.message = message;
         this.buttonText = buttonText;
@@ -150,7 +138,6 @@ public class PopTip extends BaseDialog {
     }
     
     public PopTip(int iconResId, int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
-        super();
         this.iconResId = iconResId;
         this.message = getString(messageResId);
         this.buttonText = getString(buttonTextResId);
@@ -158,14 +145,12 @@ public class PopTip extends BaseDialog {
     }
     
     public PopTip(CharSequence message, CharSequence buttonText, OnBindView<PopTip> onBindView) {
-        super();
         this.message = message;
         this.buttonText = buttonText;
         this.onBindView = onBindView;
     }
     
     public PopTip(int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
-        super();
         this.message = getString(messageResId);
         this.buttonText = getString(buttonTextResId);
         this.onBindView = onBindView;
@@ -333,6 +318,10 @@ public class PopTip extends BaseDialog {
         
         @Override
         public void init() {
+            if (messageTextInfo == null) messageTextInfo = DialogX.popTextInfo;
+            if (buttonTextInfo == null) buttonTextInfo = DialogX.buttonTextInfo;
+            if (DialogX.backgroundColor != -1) setBackgroundColor(DialogX.backgroundColor);
+            
             boxRoot.setFocusable(false);
             boxRoot.setFocusableInTouchMode(false);
             boxRoot.setAutoUnsafePlacePadding(false);

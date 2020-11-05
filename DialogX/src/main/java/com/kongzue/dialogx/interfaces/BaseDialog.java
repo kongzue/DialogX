@@ -94,6 +94,7 @@ public class BaseDialog {
     protected int backgroundColor = -1;
     
     public BaseDialog() {
+        cancelable = DialogX.cancelable;
         style = DialogX.globalStyle;
         theme = DialogX.globalTheme;
         autoShowInputKeyboard = DialogX.autoShowInputKeyboard;

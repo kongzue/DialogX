@@ -1,6 +1,9 @@
 package com.kongzue.dialogx.style;
 
+import android.content.Context;
+
 import com.kongzue.dialogx.interfaces.DialogXStyle;
+import com.kongzue.dialogx.interfaces.ProgressViewInterface;
 import com.kongzue.dialogx.miuistyle.R;
 
 /**
@@ -85,6 +88,11 @@ public class MIUIStyle implements DialogXStyle {
             @Override
             public int overrideTextColorRes(boolean light) {
                 return light ? R.color.white : R.color.black;
+            }
+    
+            @Override
+            public ProgressViewInterface overrideWaitView(Context context, boolean light) {
+                return null;
             }
         };
     }
