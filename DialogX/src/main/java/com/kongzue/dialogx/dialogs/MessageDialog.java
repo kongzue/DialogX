@@ -223,7 +223,7 @@ public class MessageDialog extends BaseDialog {
             if (cancelTextInfo == null) cancelTextInfo = DialogX.buttonTextInfo;
             if (otherTextInfo == null) otherTextInfo = DialogX.buttonTextInfo;
             if (inputInfo == null) inputInfo = DialogX.inputInfo;
-            if (DialogX.backgroundColor != -1) setBackgroundColor(DialogX.backgroundColor);
+            if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
             
             txtDialogTitle.getPaint().setFakeBoldText(true);
             btnSelectNegative.getPaint().setFakeBoldText(true);

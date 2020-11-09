@@ -28,6 +28,9 @@ public class DialogX {
     //全局对话框明暗风格
     public static DialogX.THEME globalTheme = DialogX.THEME.LIGHT;
     
+    //TipDialog 和 WaitDialog 明暗风格，不设置则默认根据 globalTheme 定义
+    public static DialogX.THEME tipTheme;
+    
     //对话框最大宽度（像素）
     public static int dialogMaxWidth;
     
@@ -61,8 +64,18 @@ public class DialogX {
     //默认底部菜单文本样式
     public static TextInfo menuTextInfo;
     
-    //默认对话框背景颜色（-1不生效）
+    //默认对话框背景颜色（值为 ColorInt，为-1不生效）
     public static int backgroundColor = -1;
+    
+    //默认 TipDialog 和 WaitDialog 背景颜色（值为 ColorInt，为-1不生效）
+    public static int tipBackgroundColor = -1;
+    
+    /**
+     * 重写 TipDialog 和 WaitDialog 进度动画颜色，
+     * 注意此属性为覆盖性质，即设置此值将替换提示框原本的进度动画的颜色，包括亮暗色切换的颜色变化也将被替代
+     * （值为 ColorInt，为-1不生效）
+     */
+    public static int tipProgressColor = -1;
     
     //默认对话框默认是否可以点击外围遮罩区域或返回键关闭，此开关不影响提示框（TipDialog）以及等待框（TipDialog）
     public static boolean cancelable = true;
@@ -71,7 +84,7 @@ public class DialogX {
     public static boolean cancelableTipDialog = false;
     
     //默认取消按钮文本文字，影响 BottomDialog
-    public static String cancelButtonText;
+    public static String cancelButtonText = "取消";
     
     //默认 PopTip 文本样式
     public static TextInfo popTextInfo;

@@ -49,7 +49,7 @@ public class BottomDialog extends BaseDialog {
     protected OnBindView<BottomDialog> onBindView;
     protected CharSequence title;
     protected CharSequence message;
-    protected CharSequence cancelText = "取消";
+    protected CharSequence cancelText;
     protected boolean allowInterceptTouch = true;
     protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
     
@@ -227,7 +227,8 @@ public class BottomDialog extends BaseDialog {
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
             if (cancelTextInfo == null) cancelTextInfo = DialogX.buttonTextInfo;
-            if (DialogX.backgroundColor != -1) setBackgroundColor(DialogX.backgroundColor);
+            if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
+            if (cancelText == null) cancelText = DialogX.cancelButtonText;
             
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override

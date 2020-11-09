@@ -194,6 +194,7 @@ public class WaitDialog extends BaseDialog {
         
         public void init() {
             if (messageTextInfo == null) messageTextInfo = DialogX.tipTextInfo;
+            if (backgroundColor == -1) backgroundColor = DialogX.tipBackgroundColor;
             
             blurView.setRadiusPx(dip2px(15));
             boxRoot.setClickable(true);
@@ -281,6 +282,7 @@ public class WaitDialog extends BaseDialog {
                     txtInfo.setTextColor(Color.BLACK);
                 }
             }
+            if (DialogX.tipProgressColor != -1) progressView.setColor(DialogX.tipProgressColor);
             
             if (waitProgress >= 0 && waitProgress <= 1 && oldProgress != waitProgress) {
                 progressView.progress(waitProgress);
@@ -359,6 +361,15 @@ public class WaitDialog extends BaseDialog {
                     }, tipShowDuration);
                 }
             });
+        }
+    }
+    
+    @Override
+    public boolean isLightTheme() {
+        if (DialogX.tipTheme == null) {
+            return super.isLightTheme();
+        } else {
+            return DialogX.tipTheme == DialogX.THEME.LIGHT;
         }
     }
     

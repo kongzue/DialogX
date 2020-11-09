@@ -320,7 +320,7 @@ public class PopTip extends BaseDialog {
         public void init() {
             if (messageTextInfo == null) messageTextInfo = DialogX.popTextInfo;
             if (buttonTextInfo == null) buttonTextInfo = DialogX.buttonTextInfo;
-            if (DialogX.backgroundColor != -1) setBackgroundColor(DialogX.backgroundColor);
+            if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
             
             boxRoot.setFocusable(false);
             boxRoot.setFocusableInTouchMode(false);

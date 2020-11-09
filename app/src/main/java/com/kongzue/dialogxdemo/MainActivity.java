@@ -161,7 +161,8 @@ public class MainActivity extends BaseActivity {
                             finish();
                             return false;
                         }
-                    });
+                    })
+                    .setCancelable(false);
         }
     }
     
