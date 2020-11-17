@@ -92,8 +92,6 @@ public class CustomDialog extends BaseDialog {
         
         @Override
         public void init() {
-            boxRoot.setAutoUnsafePlacePadding(autoUnsafePlacePadding);
-            
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -176,6 +174,7 @@ public class CustomDialog extends BaseDialog {
         
         @Override
         public void refreshView() {
+            boxRoot.setAutoUnsafePlacePadding(autoUnsafePlacePadding);
             if (cancelable) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -330,6 +329,13 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
         this.autoUnsafePlacePadding = autoUnsafePlacePadding;
+        refreshUI();
+        return this;
+    }
+    
+    public CustomDialog setFullScreen(boolean fullscreen) {
+        this.autoUnsafePlacePadding = !autoUnsafePlacePadding;
+        refreshUI();
         return this;
     }
 }

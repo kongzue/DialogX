@@ -607,7 +607,7 @@ public class MainActivity extends BaseActivity {
                             }
                         });
                     }
-                });
+                }).setFullScreen(true);
             }
         });
         
