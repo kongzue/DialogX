@@ -9,6 +9,7 @@ import android.view.animation.DecelerateInterpolator;
 
 import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
+import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 /**
@@ -60,7 +61,7 @@ public class BottomDialogTouchEventInterceptor {
          * }
          */
         if (me.isAllowInterceptTouch()) {
-            impl.bkg.setTouchCallBack(new View.OnTouchListener() {
+            impl.bkg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
@@ -68,42 +69,34 @@ public class BottomDialogTouchEventInterceptor {
                             bkgTouchDownY = event.getY();
                             isBkgTouched = true;
                             bkgOldY = impl.bkg.getY();
-                            
-                            return false;
+                            break;
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
                                 float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
-                                if (aimY < 0 || impl.scrollView.getScrollY() != 0) {
-                                    if (impl.bkg.isChildScrollViewCanScroll()) {
-                                        if (oldMode == 0) {
-                                            bkgTouchDownY = event.getY();
-                                            scrolledY = 0;
-                                        }
-
-                                        impl.scrollView.scrollTo(0, (int) (scrolledY - (event.getY() - bkgTouchDownY)));
-                                        impl.bkg.setY(0);
-                                        oldMode = -1;
-                                        return true;
-                                    }
-                                } else {
-                                    if (oldMode == -1) {
-                                        bkgTouchDownY = event.getY();
-                                        aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
-                                    }
-
-                                    if (impl.bkg.isChildScrollViewCanScroll()) {
-                                        impl.bkg.setY(aimY);
-                                    } else {
-                                        if (aimY > impl.bkgEnterAimY) {
+                                if (impl.bkg.isChildScrollViewCanScroll()) {
+                                    if (aimY > 0) {
+                                        if (impl.scrollView.getScrollY() == 0) {
+                                            if (impl.scrollView instanceof BottomDialogScrollView) {
+                                                ((BottomDialogScrollView) impl.scrollView).lockScroll(true);
+                                            }
                                             impl.bkg.setY(aimY);
                                         }
+                                    } else {
+                                        if (impl.scrollView instanceof BottomDialogScrollView) {
+                                            ((BottomDialogScrollView) impl.scrollView).lockScroll(false);
+                                        }
+                                        impl.bkg.setY(0);
+                                        return false;
                                     }
-
-                                    oldMode = 0;
-                                    return true;
+                                } else {
+                                    if (aimY > impl.bkgEnterAimY) {
+                                        impl.bkg.setY(aimY);
+                                    } else {
+                                        impl.bkg.setY(impl.bkgEnterAimY);
+                                    }
                                 }
                             }
-                            return false;
+                            break;
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
                             scrolledY = impl.scrollView.getScrollY();
@@ -133,13 +126,13 @@ public class BottomDialogTouchEventInterceptor {
                                     enterAnim.start();
                                 }
                             }
-                            return false;
+                            break;
                     }
-                    return false;
+                    return true;
                 }
             });
         } else {
-            impl.bkg.setTouchCallBack(null);
+            impl.bkg.setOnTouchListener(null);
         }
     }
     

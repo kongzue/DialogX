@@ -120,55 +120,6 @@ public class MaxRelativeLayout extends RelativeLayout {
         childScrollView = findViewById(R.id.scrollView);
     }
     
-    private boolean isMove = false;
-    private int touchY, touchX;
-    
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (!interceptTouch) {
-            return super.onInterceptTouchEvent(event);
-        }
-        if (onTouchListener != null) {
-            return onTouchListener.onTouch(this, event);
-//            switch (event.getAction()) {
-//                case MotionEvent.ACTION_DOWN:
-//                    Log.d(">>>", "ACTION_DOWN ");
-//                    isMove = false;
-//                    break;
-//                case MotionEvent.ACTION_CANCEL:
-//                case MotionEvent.ACTION_UP:
-//                    Log.d(">>>", "ACTION_UP ");
-//                    if (!isMove) {
-//                        return false;
-//                    }
-//                    isMove = false;
-//                    break;
-//                case MotionEvent.ACTION_MOVE:
-//                    Log.d(">>>", "ACTION_MOVE ");
-//                    if (!isMove) {
-//                        touchY = (int) event.getRawY();
-//                        touchX = (int) event.getRawX();
-//                    }
-//                    isMove = true;
-//
-//                    float moveY = event.getRawY();
-//                    float moveX = event.getRawX();
-//
-//                    if (Math.abs(moveY - touchY) > dip2px(20) || Math.abs(moveX - touchX) > dip2px(20)) {
-//                        final ViewParent parent = getParent();
-//                        if (parent != null) {
-//                            parent.requestDisallowInterceptTouchEvent(true);
-//                        }
-//                        return true;
-//                    } else {
-//                        return false;
-//                    }
-//            }
-//            return isMove;
-        }
-        return super.onInterceptTouchEvent(event);
-    }
-    
     public boolean isChildScrollViewCanScroll() {
         if (childScrollView == null) return false;
         if (!childScrollView.isEnabled()) {
@@ -180,13 +131,6 @@ public class MaxRelativeLayout extends RelativeLayout {
             return childScrollView.getHeight() < childHeight;
         }
         return false;
-    }
-    
-    private OnTouchListener onTouchListener;
-    
-    public void setTouchCallBack(OnTouchListener l) {
-        onTouchListener = l;
-        super.setOnTouchListener(l);
     }
     
     public int dip2px(float dpValue) {
@@ -227,5 +171,29 @@ public class MaxRelativeLayout extends RelativeLayout {
     public void setTranslationY(float translationY) {
         super.setTranslationY(translationY);
         if (onYChangedListener != null) onYChangedListener.y(translationY);
+    }
+    
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent ev) {
+//        if (interceptTouch && onTouchListener != null) {
+//            return onTouchListener.onTouch(this, ev);
+//        }
+//        return super.onInterceptTouchEvent(ev);
+//    }
+    
+    private OnTouchListener onTouchListener;
+    
+    @Override
+    public void setOnTouchListener(OnTouchListener l) {
+        onTouchListener = l;
+       // super.setOnTouchListener(l);
+    }
+    
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (onTouchListener!=null){
+            onTouchListener.onTouch(this,ev);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

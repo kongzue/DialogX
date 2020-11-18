@@ -34,6 +34,7 @@ import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
+import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 

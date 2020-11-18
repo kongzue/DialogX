@@ -3,6 +3,7 @@ package com.kongzue.dialogx.util.views;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 
 import androidx.annotation.RequiresApi;
+
+import com.kongzue.dialogx.dialogs.BottomDialog;
 
 /**
  * @author: Kongzue
@@ -30,6 +33,13 @@ public class BottomDialogListView extends ListView {
     
     public BottomDialogListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+    
+    private BottomDialog.DialogImpl dialogImpl;
+    
+    public BottomDialogListView(BottomDialog.DialogImpl dialog, Context context) {
+        super(context);
+        dialogImpl = dialog;
     }
     
     @Override

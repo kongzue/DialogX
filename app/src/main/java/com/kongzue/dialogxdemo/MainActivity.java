@@ -228,7 +228,7 @@ public class MainActivity extends BaseActivity {
                 MessageDialog.show("标题", "正文内容", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                     @Override
                     public boolean onClick(MessageDialog baseDialog, View v) {
-                        toast("点击确定按钮");
+                        PopTip.show("点击确定按钮");
                         return false;
                     }
                 });
@@ -255,7 +255,7 @@ public class MainActivity extends BaseActivity {
                         .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
                             @Override
                             public boolean onClick(InputDialog baseDialog, View v, String inputStr) {
-                                toast("输入的内容：" + inputStr);
+                                PopTip.show("输入的内容：" + inputStr);
                                 return false;
                             }
                         })
@@ -269,7 +269,7 @@ public class MainActivity extends BaseActivity {
                 WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener() {
                     @Override
                     public boolean onBackPressed() {
-                        toast("按下返回");
+                        PopTip.show("按下返回");
                         return false;
                     }
                 });
@@ -288,7 +288,7 @@ public class MainActivity extends BaseActivity {
                 WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener() {
                     @Override
                     public boolean onBackPressed() {
-                        toast("按下返回");
+                        PopTip.show("按下返回");
                         return false;
                     }
                 });
@@ -425,7 +425,7 @@ public class MainActivity extends BaseActivity {
                             .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                    toast(text);
+                                    PopTip.show(text);
                                     return false;
                                 }
                             });
@@ -435,7 +435,7 @@ public class MainActivity extends BaseActivity {
                             .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                    toast(text);
+                                    PopTip.show(text);
                                     return false;
                                 }
                             });
@@ -455,7 +455,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onClick(View v) {
                                 dialog.dismiss();
-                                toast("提交内容：\n" + editReplyCommit.getText().toString());
+                                PopTip.show("提交内容：\n" + editReplyCommit.getText().toString());
                             }
                         });
                         editReplyCommit.postDelayed(new Runnable() {
@@ -503,7 +503,7 @@ public class MainActivity extends BaseActivity {
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                             @Override
                             public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                toast(text);
+                                PopTip.show(text);
                                 return false;
                             }
                         })
@@ -645,7 +645,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
                                 selectMenuIndex = index;
-                                toast(text);
+                                PopTip.show(text);
                                 return false;
                             }
                         })

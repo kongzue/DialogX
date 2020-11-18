@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/box_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,18 +14,18 @@
 
         <com.kongzue.dialogx.util.views.MaxRelativeLayout
             android:id="@+id/bkg"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/rect_dialogx_material_bottom_bkg_light"
-            android:focusableInTouchMode="true">
+            android:background="@drawable/rect_dialogx_material_bottom_bkg_light">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:clickable="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="10dp">
 
                 <ImageView
                     android:id="@+id/img_tab"
@@ -46,7 +47,7 @@
                     android:textColor="@color/black"
                     android:textSize="21dp" />
 
-                <ScrollView
+                <com.kongzue.dialogx.util.views.BottomDialogScrollView
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -74,16 +75,16 @@
                         <RelativeLayout
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <RelativeLayout
                             android:id="@+id/box_list"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
-                </ScrollView>
+                </com.kongzue.dialogx.util.views.BottomDialogScrollView>
 
             </LinearLayout>
 

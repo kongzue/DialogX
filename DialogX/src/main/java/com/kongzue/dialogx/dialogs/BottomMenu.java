@@ -473,7 +473,7 @@ public class BottomMenu extends BottomDialog {
                 dividerDrawableResId = isLightTheme() ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
             }
             
-            listView = new BottomDialogListView(getContext());
+            listView = new BottomDialogListView(dialog,getContext());
             listView.setOverScrollMode(OVER_SCROLL_NEVER);
             listView.setDivider(getResources().getDrawable(dividerDrawableResId));
             listView.setDividerHeight(dividerHeight);
