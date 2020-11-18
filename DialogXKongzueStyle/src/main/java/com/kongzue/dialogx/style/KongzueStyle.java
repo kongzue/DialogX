@@ -145,6 +145,11 @@ public class KongzueStyle implements DialogXStyle {
             public boolean selectionImageTint(boolean light) {
                 return true;
             }
+            
+            @Override
+            public int overrideSelectionImage(boolean light, boolean isSelected) {
+                return 0;
+            }
         };
     }
     

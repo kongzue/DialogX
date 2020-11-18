@@ -64,6 +64,7 @@ public class BottomDialogTouchEventInterceptor {
             impl.bkg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    //这里 return 什么实际上无关紧要，重点在于 MaxRelativeLayout.java(dispatchTouchEvent:184) 的事件分发会独立触发此处的额外滑动事件
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             bkgTouchDownY = event.getY();
@@ -80,13 +81,14 @@ public class BottomDialogTouchEventInterceptor {
                                                 ((BottomDialogScrollView) impl.scrollView).lockScroll(true);
                                             }
                                             impl.bkg.setY(aimY);
+                                        } else {
+                                            bkgTouchDownY = event.getY();
                                         }
                                     } else {
                                         if (impl.scrollView instanceof BottomDialogScrollView) {
                                             ((BottomDialogScrollView) impl.scrollView).lockScroll(false);
                                         }
                                         impl.bkg.setY(0);
-                                        return false;
                                     }
                                 } else {
                                     if (aimY > impl.bkgEnterAimY) {
@@ -128,7 +130,7 @@ public class BottomDialogTouchEventInterceptor {
                             }
                             break;
                     }
-                    return true;
+                    return false;
                 }
             });
         } else {

@@ -57,7 +57,7 @@ public class MaterialStyle implements DialogXStyle {
     public int splitColorRes(boolean light) {
         return 0;
     }
-
+    
     @Override
     public BlurBackgroundSetting messageDialogBlurSettings() {
         return null;
@@ -120,63 +120,68 @@ public class MaterialStyle implements DialogXStyle {
             public int overrideTextColorRes(boolean light) {
                 return light ? R.color.white : R.color.black;
             }
-    
+            
             @Override
             public ProgressViewInterface overrideWaitView(Context context, boolean light) {
                 return new ProgressView(context);
             }
         };
     }
-
+    
     @Override
     public BottomDialogRes overrideBottomDialogRes() {
         return new BottomDialogRes() {
-
+            
             @Override
             public boolean touchSlide() {
                 return true;
             }
-
+            
             @Override
             public int overrideDialogLayout(boolean light) {
                 return light ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
             }
-
+            
             @Override
             public int overrideMenuDividerDrawableRes(boolean light) {
                 return light ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
             }
-
+            
             @Override
             public int overrideMenuDividerHeight(boolean light) {
                 return 1;
             }
-
+            
             @Override
             public int overrideMenuTextColor(boolean light) {
-                return light?R.color.black90:R.color.white90;
+                return light ? R.color.black90 : R.color.white90;
             }
-
+            
             @Override
             public float overrideBottomDialogMaxHeight() {
                 return 0.6f;
             }
-    
+            
             @Override
             public int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility) {
                 return 0;
             }
-    
+            
             @Override
             public int overrideSelectionMenuBackgroundColor(boolean light) {
                 return 0;
             }
-    
+            
             @Override
             public boolean selectionImageTint(boolean light) {
                 return false;
             }
-    
+            
+            @Override
+            public int overrideSelectionImage(boolean light, boolean isSelected) {
+                return isSelected ? R.mipmap.img_dialogx_bottom_menu_material_item_selection : R.mipmap.img_dialogx_bottom_menu_material_item_non_select;
+            }
+            
         };
     }
     
@@ -185,19 +190,19 @@ public class MaterialStyle implements DialogXStyle {
         return new PopTipSettings() {
             @Override
             public int layout(boolean light) {
-                return light?R.layout.layout_dialogx_poptip_material :R.layout.layout_dialogx_poptip_material_dark;
+                return light ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
             }
-
+            
             @Override
             public ALIGN align() {
                 return ALIGN.BOTTOM;
             }
-
+            
             @Override
             public int enterAnimResId(boolean light) {
                 return R.anim.anim_dialogx_default_enter;
             }
-
+            
             @Override
             public int exitAnimResId(boolean light) {
                 return R.anim.anim_dialogx_default_exit;

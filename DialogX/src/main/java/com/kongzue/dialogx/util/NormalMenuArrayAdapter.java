@@ -96,8 +96,18 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
                 if (viewHolder.imgDialogxMenuSelection != null) {
                     if (bottomMenu.getSelection() == position) {
                         viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
+                        int overrideSelectionImageResId = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionImage(bottomMenu.isLightTheme(), true);
+                        if (overrideSelectionImageResId != 0) {
+                            viewHolder.imgDialogxMenuSelection.setImageResource(overrideSelectionImageResId);
+                        }
                     } else {
-                        viewHolder.imgDialogxMenuSelection.setVisibility(View.INVISIBLE);
+                        int overrideSelectionImageResId = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionImage(bottomMenu.isLightTheme(), false);
+                        if (overrideSelectionImageResId != 0) {
+                            viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
+                            viewHolder.imgDialogxMenuSelection.setImageResource(overrideSelectionImageResId);
+                        }else{
+                            viewHolder.imgDialogxMenuSelection.setVisibility(View.INVISIBLE);
+                        }
                     }
                 }
             } else {

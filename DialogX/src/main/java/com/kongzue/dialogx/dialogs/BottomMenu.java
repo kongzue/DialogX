@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,6 +12,7 @@ import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.interfaces.BottomMenuListViewTouchEvent;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -451,6 +453,8 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
     
+    private float touchDownY;
+    
     @Override
     protected void onDialogInit(final DialogImpl dialog) {
         if (dialog != null) {
@@ -473,14 +477,25 @@ public class BottomMenu extends BottomDialog {
                 dividerDrawableResId = isLightTheme() ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
             }
             
-            listView = new BottomDialogListView(dialog,getContext());
+            listView = new BottomDialogListView(dialog, getContext());
             listView.setOverScrollMode(OVER_SCROLL_NEVER);
             listView.setDivider(getResources().getDrawable(dividerDrawableResId));
             listView.setDividerHeight(dividerHeight);
             
+            listView.setBottomMenuListViewTouchEvent(new BottomMenuListViewTouchEvent() {
+                @Override
+                public void down(MotionEvent event) {
+                    touchDownY = dialog.bkg.getY();
+                }
+            });
+            
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    float deltaY = Math.abs(touchDownY - dialog.bkg.getY());
+                    if (deltaY > dip2px(15)) {
+                        return;
+                    }
                     if (onMenuItemClickListener != null) {
                         if (!onMenuItemClickListener.onClick(me, menuList.get(position), position)) {
                             dismiss();

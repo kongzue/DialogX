@@ -16,6 +16,7 @@ import com.kongzue.dialogx.dialogs.BottomDialog;
  * @createTime: 2020/11/17 15:29
  */
 public class BottomDialogScrollView extends ScrollView {
+    
     public BottomDialogScrollView(Context context) {
         super(context);
     }
@@ -32,24 +33,23 @@ public class BottomDialogScrollView extends ScrollView {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
     
-    private BottomDialog.DialogImpl dialogImpl;
-    
-    public BottomDialogScrollView setDialogImpl(BottomDialog.DialogImpl dialogImpl) {
-        this.dialogImpl = dialogImpl;
-        return this;
-    }
-    
     boolean lockScroll;
     
     public void lockScroll(boolean lockScroll) {
-        this.lockScroll=lockScroll;
+        this.lockScroll = lockScroll;
     }
     
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (lockScroll){
+        if (lockScroll) {
             return false;
         }
         return super.onTouchEvent(ev);
+    }
+    
+    
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
     }
 }

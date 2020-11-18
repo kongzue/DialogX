@@ -14,6 +14,7 @@ import android.widget.ScrollView;
 import androidx.annotation.RequiresApi;
 
 import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.interfaces.BottomMenuListViewTouchEvent;
 
 /**
  * @author: Kongzue
@@ -23,6 +24,9 @@ import com.kongzue.dialogx.dialogs.BottomDialog;
  * @createTime: 2020/10/6 23:42
  */
 public class BottomDialogListView extends ListView {
+    
+    private BottomMenuListViewTouchEvent bottomMenuListViewTouchEvent;
+    
     public BottomDialogListView(Context context) {
         super(context);
     }
@@ -48,4 +52,47 @@ public class BottomDialogListView extends ListView {
         super.onMeasure(widthMeasureSpec, expandSpec);
     }
     
+    private int mPosition;
+    
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        final int actionMasked = ev.getActionMasked() & MotionEvent.ACTION_MASK;
+        
+        if (actionMasked == MotionEvent.ACTION_DOWN) {
+            if (bottomMenuListViewTouchEvent != null) {
+                bottomMenuListViewTouchEvent.down(ev);
+            }
+            mPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
+            return super.dispatchTouchEvent(ev);
+        }
+        
+        if (actionMasked == MotionEvent.ACTION_MOVE) {
+            if (bottomMenuListViewTouchEvent != null) {
+                bottomMenuListViewTouchEvent.move(ev);
+            }
+            return true;
+        }
+        if (actionMasked == MotionEvent.ACTION_UP || actionMasked == MotionEvent.ACTION_CANCEL) {
+            if (bottomMenuListViewTouchEvent != null) {
+                bottomMenuListViewTouchEvent.up(ev);
+            }
+            if (pointToPosition((int) ev.getX(), (int) ev.getY()) == mPosition) {
+                super.dispatchTouchEvent(ev);
+            } else {
+                setPressed(false);
+                invalidate();
+            }
+        }
+        
+        return super.dispatchTouchEvent(ev);
+    }
+    
+    public BottomMenuListViewTouchEvent getBottomMenuListViewTouchEvent() {
+        return bottomMenuListViewTouchEvent;
+    }
+    
+    public BottomDialogListView setBottomMenuListViewTouchEvent(BottomMenuListViewTouchEvent bottomMenuListViewTouchEvent) {
+        this.bottomMenuListViewTouchEvent = bottomMenuListViewTouchEvent;
+        return this;
+    }
 }

@@ -72,7 +72,7 @@ public interface DialogXStyle {
         int overrideBackgroundColorRes(boolean light);
         
         int overrideTextColorRes(boolean light);
-    
+        
         ProgressViewInterface overrideWaitView(Context context, boolean light);
     }
     
@@ -95,14 +95,16 @@ public interface DialogXStyle {
         int overrideSelectionMenuBackgroundColor(boolean light);
         
         boolean selectionImageTint(boolean light);
+        
+        int overrideSelectionImage(boolean light, boolean isSelected);
     }
     
     interface PopTipSettings {
         
         int layout(boolean light);
-    
+        
         ALIGN align();
-    
+        
         enum ALIGN {
             CENTER,
             TOP,
@@ -112,7 +114,7 @@ public interface DialogXStyle {
         }
         
         int enterAnimResId(boolean light);
-    
+        
         int exitAnimResId(boolean light);
     }
 }

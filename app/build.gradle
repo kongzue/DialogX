@@ -7,8 +7,8 @@ android {
         applicationId "com.kongzue.dialogxdemo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 13
-        versionName "0.0.13"
+        versionCode 14
+        versionName "0.0.14"
 
         renderscriptTargetApi 21
         renderscriptSupportModeEnabled true    // Enable RS support
