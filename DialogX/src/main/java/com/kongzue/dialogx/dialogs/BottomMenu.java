@@ -455,6 +455,9 @@ public class BottomMenu extends BottomDialog {
     
     private float touchDownY;
     
+    public static final int DELAY = 500;
+    private long lastClickTime = 0;
+    
     @Override
     protected void onDialogInit(final DialogImpl dialog) {
         if (dialog != null) {
@@ -492,16 +495,20 @@ public class BottomMenu extends BottomDialog {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    float deltaY = Math.abs(touchDownY - dialog.bkg.getY());
-                    if (deltaY > dip2px(15)) {
-                        return;
-                    }
-                    if (onMenuItemClickListener != null) {
-                        if (!onMenuItemClickListener.onClick(me, menuList.get(position), position)) {
+                    long currentTime = System.currentTimeMillis();
+                    if (currentTime - lastClickTime > DELAY) {
+                        lastClickTime = currentTime;
+                        float deltaY = Math.abs(touchDownY - dialog.bkg.getY());
+                        if (deltaY > dip2px(15)) {
+                            return;
+                        }
+                        if (onMenuItemClickListener != null) {
+                            if (!onMenuItemClickListener.onClick(me, menuList.get(position), position)) {
+                                dismiss();
+                            }
+                        } else {
                             dismiss();
                         }
-                    } else {
-                        dismiss();
                     }
                 }
             });
