@@ -61,6 +61,7 @@ public class BaseDialog {
     
     public static void show(final View view) {
         if (rootFrameLayout == null || view == null || rootFrameLayout.get() == null) return;
+        view.setTag(rootFrameLayout.get());
         rootFrameLayout.get().post(new Runnable() {
             @Override
             public void run() {
@@ -71,7 +72,11 @@ public class BaseDialog {
     
     public static void dismiss(View dialogView) {
         if (rootFrameLayout == null || dialogView == null) return;
-        rootFrameLayout.get().removeView(dialogView);
+        if (dialogView.getTag() == null || !(dialogView.getTag() instanceof ViewGroup)) {
+            rootFrameLayout.get().removeView(dialogView);
+        } else {
+            ((ViewGroup) dialogView.getTag()).removeView(dialogView);
+        }
     }
     
     public static Context getContext() {
