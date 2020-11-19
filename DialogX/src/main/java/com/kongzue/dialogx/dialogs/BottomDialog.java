@@ -405,8 +405,15 @@ public class BottomDialog extends BaseDialog {
                 if (isNull(cancelText)) {
                     boxCancel.setVisibility(View.GONE);
                 } else {
-                    showText(btnCancel, cancelText);
                     boxCancel.setVisibility(View.VISIBLE);
+                }
+            }
+            if (btnCancel != null) {
+                if (isNull(cancelText)) {
+                    btnCancel.setVisibility(View.GONE);
+                } else {
+                    showText(btnCancel, cancelText);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }
             }
         }

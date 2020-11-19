@@ -89,7 +89,6 @@
                     android:layout_marginHorizontal="26dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
-                    android:layout_weight="1"
                     android:background="@drawable/button_dialogx_miui_gray_night"
                     android:clickable="true"
                     android:gravity="center"
