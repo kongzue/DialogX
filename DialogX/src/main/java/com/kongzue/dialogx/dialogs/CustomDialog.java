@@ -79,8 +79,8 @@ public class CustomDialog extends BaseDialog {
     
     public class DialogImpl implements DialogConvertViewInterface {
         
-        DialogXBaseRelativeLayout boxRoot;
-        RelativeLayout boxCustom;
+        public DialogXBaseRelativeLayout boxRoot;
+        public RelativeLayout boxCustom;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);

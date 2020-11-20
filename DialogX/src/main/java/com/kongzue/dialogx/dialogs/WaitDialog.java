@@ -166,14 +166,14 @@ public class WaitDialog extends BaseDialog {
     
     protected DialogImpl dialogImpl;
     
-    class DialogImpl implements DialogConvertViewInterface {
-        DialogXBaseRelativeLayout boxRoot;
-        MaxRelativeLayout bkg;
-        BlurView blurView;
-        RelativeLayout boxProgress;
-        ProgressViewInterface progressView;
-        RelativeLayout boxCustomView;
-        TextView txtInfo;
+    public class DialogImpl implements DialogConvertViewInterface {
+        public DialogXBaseRelativeLayout boxRoot;
+        public MaxRelativeLayout bkg;
+        public BlurView blurView;
+        public RelativeLayout boxProgress;
+        public ProgressViewInterface progressView;
+        public RelativeLayout boxCustomView;
+        public TextView txtInfo;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);

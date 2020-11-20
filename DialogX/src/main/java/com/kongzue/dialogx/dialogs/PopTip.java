@@ -297,12 +297,12 @@ public class PopTip extends BaseDialog {
     
     public class DialogImpl implements DialogConvertViewInterface {
         
-        DialogXBaseRelativeLayout boxRoot;
-        LinearLayout boxBody;
-        ImageView imgDialogxPopIcon;
-        TextView txtDialogxPopText;
-        RelativeLayout boxCustom;
-        TextView txtDialogxButton;
+        public DialogXBaseRelativeLayout boxRoot;
+        public LinearLayout boxBody;
+        public ImageView imgDialogxPopIcon;
+        public TextView txtDialogxPopText;
+        public RelativeLayout boxCustom;
+        public TextView txtDialogxButton;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);

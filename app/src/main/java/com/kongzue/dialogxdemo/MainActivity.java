@@ -606,6 +606,8 @@ public class MainActivity extends BaseActivity {
                                 dialog.dismiss();
                             }
                         });
+    
+                        dialog.getDialogImpl().boxRoot.setBackgroundResource(R.color.black40);
                     }
                 }).setFullScreen(true);
             }

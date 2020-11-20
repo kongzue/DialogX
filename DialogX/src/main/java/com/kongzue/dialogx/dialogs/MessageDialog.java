@@ -184,20 +184,20 @@ public class MessageDialog extends BaseDialog {
         });
     }
     
-    class DialogImpl implements DialogConvertViewInterface {
+    public class DialogImpl implements DialogConvertViewInterface {
         BlurView blurView;
         
-        DialogXBaseRelativeLayout boxRoot;
-        MaxRelativeLayout bkg;
-        TextView txtDialogTitle;
-        TextView txtDialogTip;
-        RelativeLayout boxCustom;
-        EditText txtInput;
-        LinearLayout boxButton;
-        TextView btnSelectOther;
-        View spaceOtherButton;
-        TextView btnSelectNegative;
-        TextView btnSelectPositive;
+        public DialogXBaseRelativeLayout boxRoot;
+        public MaxRelativeLayout bkg;
+        public TextView txtDialogTitle;
+        public TextView txtDialogTip;
+        public RelativeLayout boxCustom;
+        public EditText txtInput;
+        public LinearLayout boxButton;
+        public TextView btnSelectOther;
+        public View spaceOtherButton;
+        public TextView btnSelectNegative;
+        public TextView btnSelectPositive;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);
