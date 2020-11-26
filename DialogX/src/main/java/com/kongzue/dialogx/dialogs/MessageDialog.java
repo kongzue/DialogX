@@ -84,6 +84,11 @@ public class MessageDialog extends BaseDialog {
         return new MessageDialog();
     }
     
+    public MessageDialog(CharSequence title, CharSequence message) {
+        this.title = title;
+        this.message = message;
+    }
+    
     public MessageDialog(CharSequence title, CharSequence message, CharSequence okText) {
         this.title = title;
         this.message = message;
@@ -96,6 +101,11 @@ public class MessageDialog extends BaseDialog {
         this.okText = getString(okTextResId);
     }
     
+    public MessageDialog(int titleResId, int messageResId) {
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
+    }
+    
     public static MessageDialog show(CharSequence title, CharSequence message, CharSequence okText) {
         MessageDialog messageDialog = new MessageDialog(title, message, okText);
         messageDialog.show();
@@ -104,6 +114,18 @@ public class MessageDialog extends BaseDialog {
     
     public static MessageDialog show(int titleResId, int messageResId, int okTextResId) {
         MessageDialog messageDialog = new MessageDialog(titleResId, messageResId, okTextResId);
+        messageDialog.show();
+        return messageDialog;
+    }
+    
+    public static MessageDialog show(CharSequence title, CharSequence message) {
+        MessageDialog messageDialog = new MessageDialog(title, message);
+        messageDialog.show();
+        return messageDialog;
+    }
+    
+    public static MessageDialog show(int titleResId, int messageResId) {
+        MessageDialog messageDialog = new MessageDialog(titleResId, messageResId);
         messageDialog.show();
         return messageDialog;
     }
@@ -390,6 +412,7 @@ public class MessageDialog extends BaseDialog {
             showText(btnSelectPositive, okText);
             showText(btnSelectNegative, cancelText);
             showText(btnSelectOther, otherText);
+            
             txtInput.setText(inputText);
             txtInput.setHint(inputHintText);
             if (spaceOtherButton != null) {

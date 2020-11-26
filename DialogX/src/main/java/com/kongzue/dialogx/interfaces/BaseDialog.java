@@ -133,11 +133,11 @@ public class BaseDialog {
         if (textInfo.getGravity() != -1) {
             textView.setGravity(textInfo.getGravity());
         }
-        Typeface font = Typeface.create(Typeface.SANS_SERIF, textInfo.isBold() ? Typeface.BOLD : Typeface.NORMAL);
-        textView.setTypeface(font);
+        textView.getPaint().setFakeBoldText(textInfo.isBold());
     }
     
     protected void showText(TextView textView, CharSequence text) {
+        if (textView == null) return;
         if (text == null) {
             textView.setVisibility(View.GONE);
             textView.setText("");

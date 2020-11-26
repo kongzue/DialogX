@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -22,6 +23,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BaseOnDialogClickCallback;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
@@ -51,12 +53,18 @@ public class BottomDialog extends BaseDialog {
     protected CharSequence title;
     protected CharSequence message;
     protected CharSequence cancelText;
+    protected CharSequence okText;
+    protected CharSequence otherText;
     protected boolean allowInterceptTouch = true;
     protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
+    protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
+    protected OnDialogButtonClickListener<BottomDialog> otherButtonClickListener;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
     protected TextInfo cancelTextInfo = new TextInfo().setBold(true);
+    protected TextInfo okTextInfo = new TextInfo().setBold(true);
+    protected TextInfo otherTextInfo = new TextInfo().setBold(true);
     
     /**
      * 此值用于，当禁用滑动时（style.overrideBottomDialogRes.touchSlide = false时）的最大显示高度。
@@ -191,6 +199,9 @@ public class BottomDialog extends BaseDialog {
         public TextView btnCancel;
         public BlurView cancelBlurView;
         
+        public TextView btnSelectOther;
+        public TextView btnSelectPositive;
+        
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
@@ -207,6 +218,10 @@ public class BottomDialog extends BaseDialog {
             blurView = convertView.findViewById(R.id.blurView);
             boxCancel = convertView.findViewWithTag("cancelBox");
             btnCancel = convertView.findViewWithTag("cancel");
+            
+            btnSelectOther = convertView.findViewById(R.id.btn_selectOther);
+            btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
+            
             init();
             refreshView();
         }
@@ -227,9 +242,17 @@ public class BottomDialog extends BaseDialog {
             if (titleTextInfo == null) titleTextInfo = DialogX.menuTitleInfo;
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
+            if (okTextInfo == null) okTextInfo = DialogX.okButtonTextInfo;
+            if (okTextInfo == null) okTextInfo = DialogX.buttonTextInfo;
             if (cancelTextInfo == null) cancelTextInfo = DialogX.buttonTextInfo;
+            if (otherTextInfo == null) otherTextInfo = DialogX.buttonTextInfo;
             if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
             if (cancelText == null) cancelText = DialogX.cancelButtonText;
+            
+            txtDialogTitle.getPaint().setFakeBoldText(true);
+            if (btnCancel != null) btnCancel.getPaint().setFakeBoldText(true);
+            if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
+            if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
             
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
@@ -277,6 +300,34 @@ public class BottomDialog extends BaseDialog {
                     public void onClick(View v) {
                         if (cancelButtonClickListener != null) {
                             if (!cancelButtonClickListener.onClick(me, v)) {
+                                dismiss();
+                            }
+                        } else {
+                            dismiss();
+                        }
+                    }
+                });
+            }
+            if (btnSelectOther != null) {
+                btnSelectOther.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (otherButtonClickListener != null) {
+                            if (!otherButtonClickListener.onClick(me, v)) {
+                                dismiss();
+                            }
+                        } else {
+                            dismiss();
+                        }
+                    }
+                });
+            }
+            if (btnSelectPositive != null) {
+                btnSelectPositive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (okButtonClickListener != null) {
+                            if (!okButtonClickListener.onClick(me, v)) {
                                 dismiss();
                             }
                         } else {
@@ -354,14 +405,14 @@ public class BottomDialog extends BaseDialog {
                 }
             }
             
-            txtDialogTitle.getPaint().setFakeBoldText(true);
-            
             showText(txtDialogTitle, title);
             showText(txtDialogTip, message);
             
             useTextInfo(txtDialogTitle, titleTextInfo);
             useTextInfo(txtDialogTip, messageTextInfo);
             useTextInfo(btnCancel, cancelTextInfo);
+            useTextInfo(btnSelectOther, otherTextInfo);
+            useTextInfo(btnSelectPositive, okTextInfo);
             
             if (cancelable) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
@@ -408,14 +459,10 @@ public class BottomDialog extends BaseDialog {
                     boxCancel.setVisibility(View.VISIBLE);
                 }
             }
-            if (btnCancel != null) {
-                if (isNull(cancelText)) {
-                    btnCancel.setVisibility(View.GONE);
-                } else {
-                    showText(btnCancel, cancelText);
-                    btnCancel.setVisibility(View.VISIBLE);
-                }
-            }
+            
+            showText(btnSelectPositive, okText);
+            showText(btnCancel, cancelText);
+            showText(btnSelectOther, otherText);
         }
         
         @Override
@@ -659,6 +706,72 @@ public class BottomDialog extends BaseDialog {
     public BottomDialog setBackgroundColorRes(@ColorRes int backgroundRes) {
         this.backgroundColor = getColor(backgroundRes);
         refreshUI();
+        return this;
+    }
+    
+    public CharSequence getOkButton() {
+        return okText;
+    }
+    
+    public BottomDialog setOkButton(CharSequence okText) {
+        this.okText = okText;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setOkButton(int OkTextResId) {
+        this.okText = getString(OkTextResId);
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setOkButton(OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+        this.okButtonClickListener = OkButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setOkButton(CharSequence OkText, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+        this.okText = OkText;
+        this.okButtonClickListener = OkButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setOkButton(int OkTextResId, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+        this.okText = getString(OkTextResId);
+        this.okButtonClickListener = OkButtonClickListener;
+        return this;
+    }
+    
+    public CharSequence getOtherButton() {
+        return otherText;
+    }
+    
+    public BottomDialog setOtherButton(CharSequence otherText) {
+        this.otherText = otherText;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setOtherButton(int OtherTextResId) {
+        this.otherText = getString(OtherTextResId);
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setOtherButton(OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+        this.otherButtonClickListener = OtherButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setOtherButton(CharSequence OtherText, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+        this.otherText = OtherText;
+        this.otherButtonClickListener = OtherButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setOtherButton(int OtherTextResId, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+        this.otherText = getString(OtherTextResId);
+        this.otherButtonClickListener = OtherButtonClickListener;
         return this;
     }
 }

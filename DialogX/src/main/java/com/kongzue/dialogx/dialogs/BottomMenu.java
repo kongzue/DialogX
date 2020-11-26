@@ -809,4 +809,70 @@ public class BottomMenu extends BottomDialog {
         refreshUI();
         return this;
     }
+    
+    public CharSequence getOkButton() {
+        return okText;
+    }
+    
+    public BottomDialog setOkButton(CharSequence okText) {
+        this.okText = okText;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setOkButton(int OkTextResId) {
+        this.okText = getString(OkTextResId);
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setOkButton(OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+        this.okButtonClickListener = OkButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setOkButton(CharSequence OkText, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+        this.okText = OkText;
+        this.okButtonClickListener = OkButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setOkButton(int OkTextResId, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+        this.okText = getString(OkTextResId);
+        this.okButtonClickListener = OkButtonClickListener;
+        return this;
+    }
+    
+    public CharSequence getOtherButton() {
+        return otherText;
+    }
+    
+    public BottomDialog setOtherButton(CharSequence otherText) {
+        this.otherText = otherText;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setOtherButton(int OtherTextResId) {
+        this.otherText = getString(OtherTextResId);
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setOtherButton(OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+        this.otherButtonClickListener = OtherButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setOtherButton(CharSequence OtherText, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+        this.otherText = OtherText;
+        this.otherButtonClickListener = OtherButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setOtherButton(int OtherTextResId, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+        this.otherText = getString(OtherTextResId);
+        this.otherButtonClickListener = OtherButtonClickListener;
+        return this;
+    }
 }

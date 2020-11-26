@@ -85,33 +85,41 @@
 
                 </ScrollView>
 
-                <ImageView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/dialogxKongzueButtonSplitLineColor" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:tag="cancelBox">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@color/dialogxKongzueButtonSplitSpaceColor" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/dialogxKongzueButtonSplitLineColor" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@color/dialogxKongzueButtonSplitLineColor" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:background="@color/dialogxKongzueButtonSplitSpaceColor" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/button_dialogx_kongzue_menu_light"
-                    android:gravity="center"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:singleLine="true"
-                    android:tag="cancel"
-                    android:text="取消"
-                    android:textColor="@color/black90"
-                    android:textSize="16dp" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/dialogxKongzueButtonSplitLineColor" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/button_dialogx_kongzue_menu_light"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:singleLine="true"
+                        android:tag="cancel"
+                        android:text="取消"
+                        android:textColor="@color/black90"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

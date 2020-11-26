@@ -68,7 +68,7 @@
                         <RelativeLayout
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -79,29 +79,37 @@
                         <RelativeLayout
                             android:id="@+id/box_list"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
                 </ScrollView>
 
-                <ImageView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:background="@color/dialogxKongzueDarkButtonSplitSpaceColor" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:tag="cancelBox">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/button_dialogx_kongzue_menu_night"
-                    android:gravity="center"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:singleLine="true"
-                    android:tag="cancel"
-                    android:text="取消"
-                    android:textColor="@color/white90"
-                    android:textSize="16dp" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:background="@color/dialogxKongzueDarkButtonSplitSpaceColor" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/button_dialogx_kongzue_menu_night"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:singleLine="true"
+                        android:tag="cancel"
+                        android:text="取消"
+                        android:textColor="@color/white90"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
