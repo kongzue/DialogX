@@ -499,11 +499,11 @@ public class BottomDialog extends BaseDialog {
     }
     
     public void refreshUI() {
-        if (dialogImpl == null) return;
+        if (getRootFrameLayout() == null) return;
         getRootFrameLayout().post(new Runnable() {
             @Override
             public void run() {
-                dialogImpl.refreshView();
+                if (dialogImpl!=null)dialogImpl.refreshView();
             }
         });
     }
