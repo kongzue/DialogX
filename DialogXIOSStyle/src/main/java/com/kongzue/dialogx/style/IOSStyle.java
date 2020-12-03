@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
 import com.kongzue.dialogx.iostheme.R;
+import com.kongzue.dialogx.style.views.ProgressView;
 
 /**
  * @author: Kongzue
@@ -147,7 +148,7 @@ public class IOSStyle implements DialogXStyle {
     
             @Override
             public ProgressViewInterface overrideWaitView(Context context, boolean light) {
-                return null;
+                return new ProgressView(context).setLightMode(light);
             }
         };
     }
