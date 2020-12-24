@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,13 @@ public class FullScreenDialog extends BaseDialog {
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
         show(dialogView);
+    }
+    
+    public void show(Activity activity) {
+        super.beforeShow();
+        dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+        dialogImpl = new DialogImpl(dialogView);
+        show(activity, dialogView);
     }
     
     protected DialogImpl dialogImpl;
@@ -237,7 +245,7 @@ public class FullScreenDialog extends BaseDialog {
         getRootFrameLayout().post(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl!=null)dialogImpl.refreshView();
+                if (dialogImpl != null) dialogImpl.refreshView();
             }
         });
     }

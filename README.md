@@ -81,7 +81,7 @@ DialogX 包含以下对话框组件：
 
 ![DialogX主题](https://github.com/kongzue/DialogX/raw/master/readme/allstyle.png)
 
-DialogX 采用了主体分离结构，主框架仅包含 Material 设计风格的对话框组件，您可以通过额外引入主题包来实现主题的扩展。
+DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格的对话框组件，您可以通过额外引入主题包来实现主题的扩展。
 
 额外的，每套主题都包含亮色/暗色两种显示风格，您可以通过 DialogX 的设置自由切换对话框的显示效果。
 
@@ -97,16 +97,14 @@ DialogX 采用了主体分离结构，主框架仅包含 Material 设计风格�
 
 # 开始使用DialogX
 
-🚧警告！此框架依然处于 Alpha 预览版本阶段，可能会存在问题或其它接口变动的可能，且文档还处于完善阶段，若需要正式稳定的Dialog组件暂时依然建议前往使用 [DialogV3](https://github.com/kongzue/DialogV3)，若您在使用过程中遇到任何问题，请加群 590498789 讨论。
-
-
+🚧 此框架依然处于 Alpha 预览版本阶段，可能会存在问题或其它接口变动的可能，且文档还处于完善阶段，若需要正式稳定的Dialog组件暂时依然建议前往使用 [DialogV3](https://github.com/kongzue/DialogV3)，若您在使用过程中遇到任何问题，请加群 590498789 讨论。
 
 因为依赖的关系，DialogX 目前仅支持 AndroidX 作为基础进行开发，若您正在使用最新版本的 Android Studio，那么默认创建的项目就是使用 AndroidX 作为底层框架的，老版本 Android Support 兼容库将在后续更新。
 
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-implementation 'com.kongzue.dialogx:DialogX:0.0.23'
+implementation 'com.kongzue.dialogx:DialogX:0.0.24'
 ```
 
 若有需要，也可以手动配置 Maven：
@@ -115,14 +113,14 @@ implementation 'com.kongzue.dialogx:DialogX:0.0.23'
 <dependency>
   <groupId>com.kongzue.dialogx</groupId>
   <artifactId>DialogX</artifactId>
-  <version>0.0.23</version>
+  <version>0.0.24</version>
   <type>pom</type>
 </dependency>
 ```
 
 具体的使用说明，请参阅 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
 
-反馈建议可以加讨论群：590498789
+技术支持和反馈建议可以加讨论群：590498789
 
 <div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/feedback_qq_qrcode.png" alt="反馈 DialogX" width="250" height="250" /></div>
 

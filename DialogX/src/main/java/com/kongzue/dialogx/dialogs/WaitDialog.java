@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
@@ -161,6 +162,14 @@ public class WaitDialog extends BaseDialog {
         dialogView = createView(R.layout.layout_dialogx_wait);
         dialogImpl = new DialogImpl(dialogView);
         show(dialogView);
+        return this;
+    }
+    
+    public WaitDialog show(Activity activity) {
+        super.beforeShow();
+        dialogView = createView(R.layout.layout_dialogx_wait);
+        dialogImpl = new DialogImpl(dialogView);
+        show(activity, dialogView);
         return this;
     }
     
@@ -378,7 +387,7 @@ public class WaitDialog extends BaseDialog {
         getRootFrameLayout().post(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl!=null)dialogImpl.refreshView();
+                if (dialogImpl != null) dialogImpl.refreshView();
             }
         });
     }

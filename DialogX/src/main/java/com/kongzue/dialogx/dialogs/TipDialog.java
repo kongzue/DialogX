@@ -15,6 +15,17 @@ public class TipDialog extends WaitDialog {
         super();
     }
     
+    public static WaitDialog show(int messageResId) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(messageResId);
+        if (dialogImpl != null) {
+            dialogImpl.showTip(TYPE.WARNING);
+        } else {
+            me().showTip(messageResId, TYPE.WARNING);
+        }
+        return me();
+    }
+    
     public static WaitDialog show(int messageResId, TYPE tip) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().preMessage(messageResId);

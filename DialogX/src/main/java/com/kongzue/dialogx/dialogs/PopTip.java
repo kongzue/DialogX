@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
@@ -263,6 +264,29 @@ public class PopTip extends BaseDialog {
         show(dialogView);
     }
     
+    public void show(Activity activity) {
+        super.beforeShow();
+        if (DialogX.onlyOnePopTip) {
+            if (oldInstance != null && oldInstance.get() != null) {
+                oldInstance.get().dismiss();
+            }
+        }
+        oldInstance = new WeakReference<>(this);
+        int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
+        if (style.popTipSettings() != null) {
+            if (style.popTipSettings().layout(isLightTheme()) != 0) {
+                layoutResId = style.popTipSettings().layout(isLightTheme());
+            }
+            align = style.popTipSettings().align();
+            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+            enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
+            exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
+        }
+        dialogView = createView(layoutResId);
+        dialogImpl = new DialogImpl(dialogView);
+        show(activity, dialogView);
+    }
+    
     protected Timer autoDismissTimer;
     
     public PopTip autoDismiss(long delay) {
@@ -485,7 +509,7 @@ public class PopTip extends BaseDialog {
         getRootFrameLayout().post(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl!=null)dialogImpl.refreshView();
+                if (dialogImpl != null) dialogImpl.refreshView();
             }
         });
     }

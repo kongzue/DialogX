@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -174,6 +175,18 @@ public class BottomDialog extends BaseDialog {
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
         show(dialogView);
+    }
+    
+    public void show(Activity activity) {
+        super.beforeShow();
+        int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
+        if (style.overrideBottomDialogRes() != null) {
+            layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
+        }
+        
+        dialogView = createView(layoutId);
+        dialogImpl = new DialogImpl(dialogView);
+        show(activity, dialogView);
     }
     
     protected DialogImpl dialogImpl;
@@ -503,7 +516,7 @@ public class BottomDialog extends BaseDialog {
         getRootFrameLayout().post(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl!=null)dialogImpl.refreshView();
+                if (dialogImpl != null) dialogImpl.refreshView();
             }
         });
     }

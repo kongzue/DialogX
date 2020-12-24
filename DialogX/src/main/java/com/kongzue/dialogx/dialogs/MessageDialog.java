@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -196,12 +197,22 @@ public class MessageDialog extends BaseDialog {
         show(dialogView);
     }
     
+    public void show(Activity activity) {
+        super.beforeShow();
+        int layoutId = style.layout(isLightTheme());
+        layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
+        
+        dialogView = createView(layoutId);
+        dialogImpl = new DialogImpl(dialogView);
+        show(activity, dialogView);
+    }
+    
     public void refreshUI() {
         if (getRootFrameLayout() == null) return;
         getRootFrameLayout().post(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl!=null)dialogImpl.refreshView();
+                if (dialogImpl != null) dialogImpl.refreshView();
             }
         });
     }

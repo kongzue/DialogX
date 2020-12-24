@@ -70,6 +70,19 @@ public class BaseDialog {
         });
     }
     
+    public static void show(Activity activity, final View view) {
+        if (activity == null || view == null) return;
+        final ViewGroup activityRootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        if (activityRootView == null) return;
+        view.setTag(activityRootView);
+        activityRootView.post(new Runnable() {
+            @Override
+            public void run() {
+                activityRootView.addView(view);
+            }
+        });
+    }
+    
     public static void dismiss(View dialogView) {
         if (rootFrameLayout == null || dialogView == null) return;
         if (dialogView.getTag() == null || !(dialogView.getTag() instanceof ViewGroup)) {
