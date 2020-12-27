@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -9,6 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.ColorInt;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -39,6 +42,7 @@ public class CustomDialog extends BaseDialog {
     protected ALIGN align = ALIGN.CENTER;
     protected boolean autoUnsafePlacePadding = true;
     private View dialogView;
+    protected int maskColor = Color.TRANSPARENT;
     
     public enum ALIGN {
         CENTER,
@@ -194,6 +198,8 @@ public class CustomDialog extends BaseDialog {
                 boxRoot.setOnClickListener(null);
             }
             
+            boxRoot.setBackgroundColor(maskColor);
+            
             if (onBindView != null) {
                 if (onBindView.getCustomView() != null) {
                     boxCustom.removeView(onBindView.getCustomView());
@@ -343,6 +349,12 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setFullScreen(boolean fullscreen) {
         this.autoUnsafePlacePadding = !autoUnsafePlacePadding;
+        refreshUI();
+        return this;
+    }
+    
+    public CustomDialog setMaskColor(@ColorInt int maskColor) {
+        this.maskColor = maskColor;
         refreshUI();
         return this;
     }

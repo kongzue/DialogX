@@ -87,7 +87,9 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 主题设计开发者也可以通过使用 DialogX 提供的主题定制接口来实现自定义主题，或者对现有主题进行样式调整和修改。
 
-你还可以更深入的 [了解 DialogX 主题](https://github.com/kongzue/DialogX/wiki/%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96-DialogX%E4%B8%BB%E9%A2%98)
+你还可以更深入的 [了解如何使用 DialogX 主题](https://github.com/kongzue/DialogX/wiki/%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96-DialogX%E4%B8%BB%E9%A2%98)
+
+你还可以更深入的 [了解如何开发 DialogX 主题](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98)
 
 # Demo
 
@@ -104,7 +106,7 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-implementation 'com.kongzue.dialogx:DialogX:0.0.24'
+implementation 'com.kongzue.dialogx:DialogX:0.0.25'
 ```
 
 若有需要，也可以手动配置 Maven：
@@ -113,7 +115,7 @@ implementation 'com.kongzue.dialogx:DialogX:0.0.24'
 <dependency>
   <groupId>com.kongzue.dialogx</groupId>
   <artifactId>DialogX</artifactId>
-  <version>0.0.24</version>
+  <version>0.0.25</version>
   <type>pom</type>
 </dependency>
 ```
@@ -123,6 +125,10 @@ implementation 'com.kongzue.dialogx:DialogX:0.0.24'
 技术支持和反馈建议可以加讨论群：590498789
 
 <div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/feedback_qq_qrcode.png" alt="反馈 DialogX" width="250" height="250" /></div>
+
+### 如何从 DialogV3 迁移至 DialogX
+
+请参考文章 [从 DialogV3 迁移至 DialogX](https://github.com/kongzue/DialogX/wiki/%E4%BB%8E-DialogV3-%E8%BF%81%E7%A7%BB%E8%87%B3-DialogX)
 
 # 开源协议
 

@@ -486,4 +486,10 @@ public class InputDialog extends MessageDialog {
         refreshUI();
         return this;
     }
+    
+    public InputDialog setMaskColor(@ColorInt int maskColor) {
+        this.maskColor = maskColor;
+        refreshUI();
+        return this;
+    }
 }

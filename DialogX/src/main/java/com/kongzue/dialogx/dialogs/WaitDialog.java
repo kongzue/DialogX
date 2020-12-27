@@ -56,6 +56,7 @@ public class WaitDialog extends BaseDialog {
     protected float waitProgress = -1;
     protected int showType = -1;        //-1:Waitdialog 状态标示符，其余为 TipDialog 状态标示
     protected TextInfo messageTextInfo;
+    protected int maskColor = -1;
     
     private DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
     
@@ -301,6 +302,8 @@ public class WaitDialog extends BaseDialog {
             showText(txtInfo, message);
             useTextInfo(txtInfo, messageTextInfo);
             
+            if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
+            
             if (onBindView != null && onBindView.getCustomView() != null) {
                 boxCustomView.removeView(onBindView.getCustomView());
                 ViewGroup.LayoutParams lp = boxCustomView.getLayoutParams();
@@ -508,6 +511,12 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setBackgroundColorRes(@ColorRes int backgroundColorResId) {
         this.backgroundColor = getColor(backgroundColorResId);
+        refreshUI();
+        return this;
+    }
+    
+    public WaitDialog setMaskColor(@ColorInt int maskColor) {
+        this.maskColor = maskColor;
         refreshUI();
         return this;
     }

@@ -67,6 +67,7 @@ public class MessageDialog extends BaseDialog {
     protected CharSequence otherText;
     protected String inputText;
     protected String inputHintText;
+    protected int maskColor = -1;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -417,6 +418,7 @@ public class MessageDialog extends BaseDialog {
                 txtInput.setVisibility(View.GONE);
             }
             boxRoot.setClickable(true);
+            if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
             
             showText(txtDialogTitle, title);
             showText(txtDialogTip, message);
@@ -929,6 +931,12 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setBackgroundColorRes(@ColorRes int backgroundColorResId) {
         this.backgroundColor = getColor(backgroundColorResId);
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setMaskColor(@ColorInt int maskColor) {
+        this.maskColor = maskColor;
         refreshUI();
         return this;
     }

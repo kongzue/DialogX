@@ -6,7 +6,7 @@ def siteUrl = 'https://github.com/kongzue/DialogX' //项目在github主页地址
 def gitUrl = 'https://github.com/kongzue/DialogX.git'   //Git仓库的地址
 
 group = "com.kongzue.dialogx.style.ios"
-version = "0.0.24"
+version = BUILD_VERSION
 
 android {
     compileSdkVersion 30
@@ -14,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 24
-        versionName "0.0.24"
+        versionCode BUILD_VERSION_INT as int
+        versionName BUILD_VERSION
     }
 
     buildTypes {

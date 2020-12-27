@@ -875,4 +875,10 @@ public class BottomMenu extends BottomDialog {
         this.otherButtonClickListener = OtherButtonClickListener;
         return this;
     }
+    
+    public BottomDialog setMaskColor(@ColorInt int maskColor) {
+        this.maskColor = maskColor;
+        refreshUI();
+        return this;
+    }
 }

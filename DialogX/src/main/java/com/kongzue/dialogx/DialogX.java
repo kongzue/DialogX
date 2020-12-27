@@ -84,7 +84,7 @@ public class DialogX {
     public static boolean cancelableTipDialog = false;
     
     //默认取消按钮文本文字，影响 BottomDialog
-    public static String cancelButtonText ;
+    public static String cancelButtonText;
     
     //默认 PopTip 文本样式
     public static TextInfo popTextInfo;

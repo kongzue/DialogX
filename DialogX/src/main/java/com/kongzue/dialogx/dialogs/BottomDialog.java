@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.core.content.ContextCompat;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -57,6 +59,7 @@ public class BottomDialog extends BaseDialog {
     protected CharSequence okText;
     protected CharSequence otherText;
     protected boolean allowInterceptTouch = true;
+    protected int maskColor = -1;
     protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> otherButtonClickListener;
@@ -437,6 +440,8 @@ public class BottomDialog extends BaseDialog {
             } else {
                 boxRoot.setOnClickListener(null);
             }
+    
+            if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
             
             if (onBindView != null) {
                 if (onBindView.getCustomView() != null) {
@@ -785,6 +790,12 @@ public class BottomDialog extends BaseDialog {
     public BottomDialog setOtherButton(int OtherTextResId, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
         this.otherText = getString(OtherTextResId);
         this.otherButtonClickListener = OtherButtonClickListener;
+        return this;
+    }
+    
+    public BottomDialog setMaskColor(@ColorInt int maskColor) {
+        this.maskColor = maskColor;
+        refreshUI();
         return this;
     }
 }

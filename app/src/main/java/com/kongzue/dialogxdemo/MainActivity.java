@@ -208,9 +208,11 @@ public class MainActivity extends BaseActivity {
         grpStyle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                DialogX.cancelButtonText = "取消";
                 switch (checkedId) {
                     case R.id.rdo_material:
                         DialogX.globalStyle = MaterialStyle.style();
+                        DialogX.cancelButtonText = "";
                         break;
                     case R.id.rdo_kongzue:
                         DialogX.globalStyle = KongzueStyle.style();
@@ -610,7 +612,8 @@ public class MainActivity extends BaseActivity {
                             }
                         });
                     }
-                }).setFullScreen(true);
+                }).setFullScreen(true)
+                        .setMaskColor(getResources().getColor(R.color.black30));
             }
         });
         
