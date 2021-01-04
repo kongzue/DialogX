@@ -79,6 +79,7 @@ public class CustomDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
         show(dialogView);
     }
     
@@ -86,6 +87,7 @@ public class CustomDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
     }
     

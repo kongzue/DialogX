@@ -43,7 +43,7 @@ public class BaseDialog {
             public void getActivity(Activity activity) {
                 try {
                     contextWeakReference = new WeakReference<>(activity);
-                    rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView().findViewById(android.R.id.content));
+                    rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
                 } catch (Exception e) {
                     error("DialogX.init: 初始化异常，找不到Activity的根布局");
                 }
@@ -61,7 +61,7 @@ public class BaseDialog {
     
     public static void show(final View view) {
         if (rootFrameLayout == null || view == null || rootFrameLayout.get() == null) return;
-        view.setTag(rootFrameLayout.get());
+        log(view.getTag() + ".show");
         rootFrameLayout.get().post(new Runnable() {
             @Override
             public void run() {
@@ -72,9 +72,9 @@ public class BaseDialog {
     
     public static void show(Activity activity, final View view) {
         if (activity == null || view == null) return;
-        final ViewGroup activityRootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        log(view.getTag() + ".show");
+        final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
         if (activityRootView == null) return;
-        view.setTag(activityRootView);
         activityRootView.post(new Runnable() {
             @Override
             public void run() {
@@ -84,11 +84,12 @@ public class BaseDialog {
     }
     
     public static void dismiss(View dialogView) {
+        log(dialogView.getTag() + ".dismiss");
         if (rootFrameLayout == null || dialogView == null) return;
-        if (dialogView.getTag() == null || !(dialogView.getTag() instanceof ViewGroup)) {
+        if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
             rootFrameLayout.get().removeView(dialogView);
         } else {
-            ((ViewGroup) dialogView.getTag()).removeView(dialogView);
+            ((ViewGroup) dialogView.getParent()).removeView(dialogView);
         }
     }
     

@@ -74,6 +74,7 @@ public class FullScreenDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
         show(dialogView);
     }
     
@@ -81,6 +82,7 @@ public class FullScreenDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
     }
     

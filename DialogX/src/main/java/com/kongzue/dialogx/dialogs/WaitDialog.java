@@ -162,6 +162,7 @@ public class WaitDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_wait);
         dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
         show(dialogView);
         return this;
     }
@@ -170,6 +171,7 @@ public class WaitDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_wait);
         dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
         return this;
     }

@@ -261,6 +261,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
         show(dialogView);
     }
     
@@ -284,6 +285,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
     }
     
@@ -312,6 +314,10 @@ public class PopTip extends BaseDialog {
     public PopTip showLong() {
         autoDismiss(3500);
         return this;
+    }
+    
+    public PopTip showAlways() {
+        return noAutoDismiss();
     }
     
     public PopTip noAutoDismiss() {
@@ -349,6 +355,10 @@ public class PopTip extends BaseDialog {
             boxRoot.setFocusable(false);
             boxRoot.setFocusableInTouchMode(false);
             boxRoot.setAutoUnsafePlacePadding(false);
+    
+            if (autoDismissTimer == null) {
+                showShort();
+            }
             
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
@@ -359,10 +369,6 @@ public class PopTip extends BaseDialog {
                     getDialogLifecycleCallback().onShow(me);
                     
                     if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
-                    
-                    if (autoDismissTimer == null) {
-                        showShort();
-                    }
                 }
                 
                 @Override

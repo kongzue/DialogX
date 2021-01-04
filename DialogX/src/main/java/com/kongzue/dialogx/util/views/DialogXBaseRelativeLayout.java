@@ -88,7 +88,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+        if (isAttachedToWindow() && event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             if (onBackPressedListener != null) {
                 onBackPressedListener.onBackPressed();
             }
