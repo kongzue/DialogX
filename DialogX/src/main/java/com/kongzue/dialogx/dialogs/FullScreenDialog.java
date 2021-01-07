@@ -46,6 +46,7 @@ public class FullScreenDialog extends BaseDialog {
     
     public static BOOLEAN overrideCancelable;
     protected OnBindView<FullScreenDialog> onBindView;
+    protected BOOLEAN privateCancelable;
     
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
     
@@ -289,14 +290,17 @@ public class FullScreenDialog extends BaseDialog {
     }
     
     public boolean isCancelable() {
-        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+        if (privateCancelable != null) {
+            return privateCancelable == BOOLEAN.TRUE;
+        }
+        if (overrideCancelable != null) {
             return overrideCancelable == BOOLEAN.TRUE;
         }
         return cancelable;
     }
     
     public FullScreenDialog setCancelable(boolean cancelable) {
-        this.cancelable = cancelable;
+        this.privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
         refreshUI();
         return this;
     }

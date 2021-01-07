@@ -64,6 +64,7 @@ public class BottomDialog extends BaseDialog {
     protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> otherButtonClickListener;
+    protected BOOLEAN privateCancelable;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -571,14 +572,17 @@ public class BottomDialog extends BaseDialog {
     }
     
     public boolean isCancelable() {
-        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+        if (privateCancelable != null) {
+            return privateCancelable == BOOLEAN.TRUE;
+        }
+        if (overrideCancelable != null) {
             return overrideCancelable == BOOLEAN.TRUE;
         }
         return cancelable;
     }
     
     public BottomDialog setCancelable(boolean cancelable) {
-        this.cancelable = cancelable;
+        this.privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
         refreshUI();
         return this;
     }

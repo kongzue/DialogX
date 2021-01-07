@@ -241,6 +241,6 @@ public class BaseDialog {
     }
     
     public enum BOOLEAN {
-        NONE, TRUE, FALSE
+        TRUE, FALSE
     }
 }

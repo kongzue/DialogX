@@ -52,6 +52,7 @@ public class MessageDialog extends BaseDialog {
     public static BOOLEAN overrideCancelable;
     protected OnBindView<MessageDialog> onBindView;
     protected MessageDialog me = this;
+    protected BOOLEAN privateCancelable;
     
     private DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
     
@@ -875,14 +876,17 @@ public class MessageDialog extends BaseDialog {
     }
     
     public boolean isCancelable() {
-        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+        if (privateCancelable != null) {
+            return privateCancelable == BOOLEAN.TRUE;
+        }
+        if (overrideCancelable != null) {
             return overrideCancelable == BOOLEAN.TRUE;
         }
         return cancelable;
     }
     
     public MessageDialog setCancelable(boolean cancelable) {
-        this.cancelable = cancelable;
+        this.privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
         refreshUI();
         return this;
     }

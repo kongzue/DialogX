@@ -58,6 +58,7 @@ public class WaitDialog extends BaseDialog {
     protected int showType = -1;        //-1:Waitdialog 状态标示符，其余为 TipDialog 状态标示
     protected TextInfo messageTextInfo;
     protected int maskColor = -1;
+    protected BOOLEAN privateCancelable;
     
     private DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
     protected DialogLifecycleCallback<WaitDialog> tipDialogLifecycleCallback;
@@ -448,7 +449,10 @@ public class WaitDialog extends BaseDialog {
     }
     
     public boolean isCancelable() {
-        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+        if (privateCancelable != null) {
+            return privateCancelable == BOOLEAN.TRUE;
+        }
+        if (overrideCancelable != null) {
             return overrideCancelable == BOOLEAN.TRUE;
         }
         return cancelable;

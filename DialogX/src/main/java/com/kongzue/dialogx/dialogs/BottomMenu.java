@@ -610,14 +610,17 @@ public class BottomMenu extends BottomDialog {
     }
     
     public boolean isCancelable() {
-        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+        if (privateCancelable != null) {
+            return privateCancelable == BOOLEAN.TRUE;
+        }
+        if (overrideCancelable != null) {
             return overrideCancelable == BOOLEAN.TRUE;
         }
         return cancelable;
     }
     
     public BottomMenu setCancelable(boolean cancelable) {
-        this.cancelable = cancelable;
+        this.privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
         refreshUI();
         return this;
     }
