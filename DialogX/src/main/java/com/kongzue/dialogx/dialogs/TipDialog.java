@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
+import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+
 import java.lang.ref.WeakReference;
 
 /**

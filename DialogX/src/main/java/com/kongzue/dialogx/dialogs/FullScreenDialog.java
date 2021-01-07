@@ -44,6 +44,7 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
  */
 public class FullScreenDialog extends BaseDialog {
     
+    public static BOOLEAN overrideCancelable;
     protected OnBindView<FullScreenDialog> onBindView;
     
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
@@ -137,7 +138,7 @@ public class FullScreenDialog extends BaseDialog {
                         dismiss();
                         return false;
                     }
-                    if (cancelable) {
+                    if (isCancelable()) {
                         dismiss();
                     }
                     return false;
@@ -190,7 +191,7 @@ public class FullScreenDialog extends BaseDialog {
                 tintColor(bkg, backgroundColor);
             }
             
-            if (cancelable) {
+            if (isCancelable()) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -232,7 +233,7 @@ public class FullScreenDialog extends BaseDialog {
         }
         
         public void preDismiss() {
-            if (cancelable) {
+            if (isCancelable()) {
                 doDismiss(boxRoot);
             } else {
                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
@@ -288,6 +289,9 @@ public class FullScreenDialog extends BaseDialog {
     }
     
     public boolean isCancelable() {
+        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+            return overrideCancelable == BOOLEAN.TRUE;
+        }
         return cancelable;
     }
     

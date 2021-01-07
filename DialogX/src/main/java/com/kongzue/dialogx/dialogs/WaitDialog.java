@@ -41,6 +41,7 @@ import java.lang.ref.WeakReference;
  */
 public class WaitDialog extends BaseDialog {
     
+    public static BOOLEAN overrideCancelable;
     protected OnBindView<WaitDialog> onBindView;
     
     public enum TYPE {
@@ -59,6 +60,7 @@ public class WaitDialog extends BaseDialog {
     protected int maskColor = -1;
     
     private DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
+    protected DialogLifecycleCallback<WaitDialog> tipDialogLifecycleCallback;
     
     protected WaitDialog() {
         super();
@@ -162,7 +164,7 @@ public class WaitDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_wait);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(dialogView);
         return this;
     }
@@ -171,7 +173,7 @@ public class WaitDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_wait);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
         return this;
     }
@@ -259,7 +261,7 @@ public class WaitDialog extends BaseDialog {
                         dismiss();
                         return false;
                     }
-                    if (cancelable) {
+                    if (isCancelable()) {
                         dismiss();
                     }
                     return false;
@@ -364,6 +366,7 @@ public class WaitDialog extends BaseDialog {
             progressView.whenShowTick(new Runnable() {
                 @Override
                 public void run() {
+                    getTipDialogLifecycleCallback().onShow(WaitDialog.this);
                     refreshView();
                     ((View) progressView).postDelayed(new Runnable() {
                         @Override
@@ -424,6 +427,7 @@ public class WaitDialog extends BaseDialog {
         showType = type.ordinal();
         this.message = getString(messageResId);
         readyTipType = type;
+        setDialogLifecycleCallback(tipDialogLifecycleCallback);
         show();
     }
     
@@ -441,6 +445,13 @@ public class WaitDialog extends BaseDialog {
         me().preMessage(messageResId);
         me().refreshUI();
         return me();
+    }
+    
+    public boolean isCancelable() {
+        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+            return overrideCancelable == BOOLEAN.TRUE;
+        }
+        return cancelable;
     }
     
     /**
@@ -520,6 +531,16 @@ public class WaitDialog extends BaseDialog {
     public WaitDialog setMaskColor(@ColorInt int maskColor) {
         this.maskColor = maskColor;
         refreshUI();
+        return this;
+    }
+    
+    public DialogLifecycleCallback<WaitDialog> getTipDialogLifecycleCallback() {
+        return tipDialogLifecycleCallback == null ? new DialogLifecycleCallback<WaitDialog>() {
+        } : tipDialogLifecycleCallback;
+    }
+    
+    public WaitDialog setTipDialogLifecycleCallback(DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback) {
+        this.tipDialogLifecycleCallback = dialogLifecycleCallback;
         return this;
     }
 }

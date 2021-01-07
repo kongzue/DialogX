@@ -610,6 +610,9 @@ public class BottomMenu extends BottomDialog {
     }
     
     public boolean isCancelable() {
+        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+            return overrideCancelable == BOOLEAN.TRUE;
+        }
         return cancelable;
     }
     

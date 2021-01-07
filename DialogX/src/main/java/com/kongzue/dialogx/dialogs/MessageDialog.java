@@ -49,6 +49,7 @@ import com.kongzue.dialogx.util.TextInfo;
  */
 public class MessageDialog extends BaseDialog {
     
+    public static BOOLEAN overrideCancelable;
     protected OnBindView<MessageDialog> onBindView;
     protected MessageDialog me = this;
     
@@ -326,7 +327,7 @@ public class MessageDialog extends BaseDialog {
                         dismiss();
                         return false;
                     }
-                    if (cancelable) {
+                    if (isCancelable()) {
                         dismiss();
                     }
                     return false;
@@ -583,7 +584,7 @@ public class MessageDialog extends BaseDialog {
             }
             
             //Events
-            if (cancelable) {
+            if (isCancelable()) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -874,6 +875,9 @@ public class MessageDialog extends BaseDialog {
     }
     
     public boolean isCancelable() {
+        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+            return overrideCancelable == BOOLEAN.TRUE;
+        }
         return cancelable;
     }
     

@@ -239,4 +239,8 @@ public class BaseDialog {
         }
         return getContext().getResources().getColor(backgroundRes);
     }
+    
+    public enum BOOLEAN {
+        NONE, TRUE, FALSE
+    }
 }

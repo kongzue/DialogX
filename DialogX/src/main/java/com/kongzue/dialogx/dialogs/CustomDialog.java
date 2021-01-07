@@ -33,6 +33,7 @@ import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
  */
 public class CustomDialog extends BaseDialog {
     
+    public static BOOLEAN overrideCancelable;
     protected OnBindView<CustomDialog> onBindView;
     protected DialogLifecycleCallback<CustomDialog> dialogLifecycleCallback;
     protected CustomDialog me = this;
@@ -79,7 +80,7 @@ public class CustomDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(dialogView);
     }
     
@@ -87,7 +88,7 @@ public class CustomDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
     }
     
@@ -131,7 +132,7 @@ public class CustomDialog extends BaseDialog {
                         dismiss();
                         return false;
                     }
-                    if (cancelable) {
+                    if (isCancelable()) {
                         dismiss();
                     }
                     return false;
@@ -189,7 +190,7 @@ public class CustomDialog extends BaseDialog {
         @Override
         public void refreshView() {
             boxRoot.setAutoUnsafePlacePadding(autoUnsafePlacePadding);
-            if (cancelable) {
+            if (isCancelable()) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -276,6 +277,9 @@ public class CustomDialog extends BaseDialog {
     }
     
     public boolean isCancelable() {
+        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+            return overrideCancelable == BOOLEAN.TRUE;
+        }
         return cancelable;
     }
     

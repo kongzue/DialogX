@@ -52,6 +52,7 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
  */
 public class BottomDialog extends BaseDialog {
     
+    public static BOOLEAN overrideCancelable;
     protected OnBindView<BottomDialog> onBindView;
     protected CharSequence title;
     protected CharSequence message;
@@ -177,7 +178,7 @@ public class BottomDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(dialogView);
     }
     
@@ -190,7 +191,7 @@ public class BottomDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
     }
     
@@ -373,7 +374,7 @@ public class BottomDialog extends BaseDialog {
                         dismiss();
                         return false;
                     }
-                    if (cancelable) {
+                    if (isCancelable()) {
                         dismiss();
                     }
                     return false;
@@ -432,7 +433,7 @@ public class BottomDialog extends BaseDialog {
             useTextInfo(btnSelectOther, otherTextInfo);
             useTextInfo(btnSelectPositive, okTextInfo);
             
-            if (cancelable) {
+            if (isCancelable()) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -442,7 +443,13 @@ public class BottomDialog extends BaseDialog {
             } else {
                 boxRoot.setOnClickListener(null);
             }
-    
+            boxBkg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boxRoot.callOnClick();
+                }
+            });
+            
             if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
             
             if (onBindView != null) {
@@ -456,7 +463,7 @@ public class BottomDialog extends BaseDialog {
                 }
             }
             
-            if (isAllowInterceptTouch() && cancelable) {
+            if (isAllowInterceptTouch() && isCancelable()) {
                 if (imgTab != null) imgTab.setVisibility(View.VISIBLE);
             } else {
                 if (imgTab != null) imgTab.setVisibility(View.GONE);
@@ -505,7 +512,7 @@ public class BottomDialog extends BaseDialog {
         }
         
         public void preDismiss() {
-            if (cancelable) {
+            if (isCancelable()) {
                 doDismiss(boxRoot);
             } else {
                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
@@ -564,6 +571,9 @@ public class BottomDialog extends BaseDialog {
     }
     
     public boolean isCancelable() {
+        if (overrideCancelable != null && overrideCancelable != BOOLEAN.NONE) {
+            return overrideCancelable == BOOLEAN.TRUE;
+        }
         return cancelable;
     }
     

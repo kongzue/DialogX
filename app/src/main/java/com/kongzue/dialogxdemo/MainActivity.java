@@ -231,7 +231,7 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageDialog.show("标题", "正文内容", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                MessageDialog.show("自动切换回源输入法", "自动切换回源输入法自动切换回源输入法自动切换回源输入法自动切换回源输入法", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                     @Override
                     public boolean onClick(MessageDialog baseDialog, View v) {
                         PopTip.show("点击确定按钮");
