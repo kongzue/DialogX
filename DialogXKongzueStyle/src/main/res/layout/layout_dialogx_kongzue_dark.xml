@@ -83,6 +83,7 @@
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
                             android:scrollbars="vertical"
+                            android:textColorHint="@color/white30"
                             android:text=""
                             android:textColor="@color/white90"
                             android:textSize="14dp"

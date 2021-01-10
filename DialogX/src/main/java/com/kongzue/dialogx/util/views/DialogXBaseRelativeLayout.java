@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +22,8 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
+
+import static com.kongzue.dialogx.DialogX.log;
 
 /**
  * @author: Kongzue
@@ -112,7 +116,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
         ViewCompat.requestApplyInsets(this);
         
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isInEditMode()) {
+        if (BaseDialog.getContext() == null) return;
+        if (!isInEditMode()) {
             ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener);
         }
         
@@ -126,13 +131,20 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         public void onGlobalLayout() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 paddingView(getRootWindowInsets());
+            } else {
+                if (BaseDialog.getContext() == null) return;
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                ((Activity) BaseDialog.getContext()).getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
+                Rect rect = new Rect();
+                ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                paddingView( rect.left,  rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
             }
         }
     };
     
     @Override
     protected void onDetachedFromWindow() {
-        if (decorViewLayoutListener != null && ((Activity) BaseDialog.getContext())!=null) {
+        if (decorViewLayoutListener != null && ((Activity) BaseDialog.getContext()) != null) {
             ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(decorViewLayoutListener);
         }
         if (onLifecycleCallBack != null) {
@@ -165,6 +177,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     protected Rect unsafePlace;
     
     private void paddingView(int left, int top, int right, int bottom) {
+        Log.e(">>>", "paddingView: left:" + left + " top:" + top + " right:" + right + " bottom:" + bottom);
         unsafePlace = new Rect(left, top, right, bottom);
         if (onSafeInsetsChangeListener != null) onSafeInsetsChangeListener.onChange(unsafePlace);
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
