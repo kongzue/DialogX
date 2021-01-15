@@ -314,9 +314,6 @@ public class BlurView extends View {
             mDecorView = BaseDialog.getRootFrameLayout().getChildAt(0);
         }
         if (mDecorView != null) {
-            if (mDecorView.getBackground() == null) {
-                mDecorView.setBackgroundColor(Color.WHITE);
-            }
             log("mDecorView is ok.");
             mDecorView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
             mDifferentRoot = mDecorView.getRootView() != getRootView();
