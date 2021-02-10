@@ -76,7 +76,7 @@ public class FullScreenDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(dialogView);
     }
     
@@ -84,7 +84,7 @@ public class FullScreenDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
     }
     
@@ -154,10 +154,14 @@ public class FullScreenDialog extends BaseDialog {
                     bkgEnterAimY = boxRoot.getSafeHeight() - boxCustom.getHeight();
                     if (bkgEnterAimY < 0) bkgEnterAimY = 0;
                     
-                    boxRoot.animate().setDuration(300).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
+                    boxRoot.animate()
+                            .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .setListener(null);
                     
                     ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
-                    exitAnim.setDuration(300);
+                    exitAnim.setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration);
                     exitAnim.start();
                 }
             });
@@ -179,7 +183,7 @@ public class FullScreenDialog extends BaseDialog {
                 public void onChange(Rect unsafeRect) {
                     if (unsafeRect.bottom > dip2px(100)) {
                         ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), 0);
-                        enterAnim.setDuration(300);
+                        enterAnim.setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration);
                         enterAnim.start();
                     }
                 }
@@ -222,15 +226,19 @@ public class FullScreenDialog extends BaseDialog {
             if (v != null) v.setEnabled(false);
             
             ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
-            exitAnim.setDuration(300);
+            exitAnim.setDuration(exitAnimDuration == -1 ? 300 : exitAnimDuration);
             exitAnim.start();
             
-            boxRoot.animate().setDuration(300).alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(exitAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    dismiss(dialogView);
-                }
-            });
+            boxRoot.animate()
+                    .alpha(0f)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .setDuration(exitAnim.getDuration())
+                    .setListener(new AnimatorListenerEndCallBack() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            dismiss(dialogView);
+                        }
+                    });
         }
         
         public void preDismiss() {
@@ -238,7 +246,7 @@ public class FullScreenDialog extends BaseDialog {
                 doDismiss(boxRoot);
             } else {
                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
-                enterAnim.setDuration(300);
+                enterAnim.setDuration(exitAnimDuration == -1 ? 300 : exitAnimDuration);
                 enterAnim.start();
             }
         }
@@ -339,6 +347,24 @@ public class FullScreenDialog extends BaseDialog {
     public FullScreenDialog setBackgroundColorRes(@ColorRes int backgroundColorRes) {
         this.backgroundColor = getColor(backgroundColorRes);
         refreshUI();
+        return this;
+    }
+    
+    public long getEnterAnimDuration() {
+        return enterAnimDuration;
+    }
+    
+    public FullScreenDialog setEnterAnimDuration(long enterAnimDuration) {
+        this.enterAnimDuration = enterAnimDuration;
+        return this;
+    }
+    
+    public long getExitAnimDuration() {
+        return exitAnimDuration;
+    }
+    
+    public FullScreenDialog setExitAnimDuration(long exitAnimDuration) {
+        this.exitAnimDuration = exitAnimDuration;
         return this;
     }
 }

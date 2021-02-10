@@ -261,7 +261,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(dialogView);
     }
     
@@ -285,7 +285,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
     }
     
@@ -355,7 +355,7 @@ public class PopTip extends BaseDialog {
             boxRoot.setFocusable(false);
             boxRoot.setFocusableInTouchMode(false);
             boxRoot.setAutoUnsafePlacePadding(false);
-    
+            
             if (autoDismissTimer == null) {
                 showShort();
             }
@@ -416,9 +416,16 @@ public class PopTip extends BaseDialog {
                     
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                    if (enterAnimDuration!=-1){
+                        enterAnim.setDuration(enterAnimDuration);
+                    }
                     boxBody.startAnimation(enterAnim);
                     
-                    boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setListener(null);
+                    boxRoot.animate()
+                            .setDuration(enterAnimDuration==-1?enterAnim.getDuration():enterAnimDuration)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .setListener(null);
                 }
             });
             
@@ -497,14 +504,21 @@ public class PopTip extends BaseDialog {
                     if (v != null) v.setEnabled(false);
                     
                     Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+                    if (exitAnimDuration!=-1){
+                        exitAnim.setDuration(exitAnimResId);
+                    }
                     boxBody.startAnimation(exitAnim);
                     
-                    boxRoot.animate().alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(exitAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            dismiss(dialogView);
-                        }
-                    });
+                    boxRoot.animate()
+                            .alpha(0f)
+                            .setInterpolator(new AccelerateInterpolator())
+                            .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration)
+                            .setListener(new AnimatorListenerEndCallBack() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    dismiss(dialogView);
+                                }
+                            });
                 }
             });
         }
@@ -698,6 +712,23 @@ public class PopTip extends BaseDialog {
     public PopTip setBackgroundColorRes(@ColorRes int backgroundColorResId) {
         this.backgroundColor = getColor(backgroundColorResId);
         refreshUI();
+        return this;
+    }
+    public long getEnterAnimDuration() {
+        return enterAnimDuration;
+    }
+    
+    public PopTip setEnterAnimDuration(long enterAnimDuration) {
+        this.enterAnimDuration = enterAnimDuration;
+        return this;
+    }
+    
+    public long getExitAnimDuration() {
+        return exitAnimDuration;
+    }
+    
+    public PopTip setExitAnimDuration(long exitAnimDuration) {
+        this.exitAnimDuration = exitAnimDuration;
         return this;
     }
 }

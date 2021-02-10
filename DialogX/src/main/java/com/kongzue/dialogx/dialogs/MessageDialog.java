@@ -197,7 +197,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(dialogView);
     }
     
@@ -208,7 +208,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" +Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
         show(activity, dialogView);
     }
     
@@ -275,10 +275,17 @@ public class MessageDialog extends BaseDialog {
                     boxRoot.setAlpha(0f);
                     int enterAnimResId = style.enterAnimResId() == 0 ? R.anim.anim_dialogx_default_enter : style.enterAnimResId();
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
+                    if (enterAnimDuration != -1) {
+                        enterAnim.setDuration(enterAnimDuration);
+                    }
                     enterAnim.setInterpolator(new DecelerateInterpolator());
                     bkg.startAnimation(enterAnim);
                     
-                    boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(300).setListener(null);
+                    boxRoot.animate()
+                            .setDuration(enterAnim.getDuration())
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .setListener(null);
                     
                     getDialogLifecycleCallback().onShow(me);
                     
@@ -302,13 +309,23 @@ public class MessageDialog extends BaseDialog {
                         txtInput.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                if (txtInput == null) return;
                                 txtInput.requestFocus();
                                 txtInput.setFocusableInTouchMode(true);
                                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.showSoftInput(txtInput, InputMethodManager.RESULT_UNCHANGED_SHOWN);
                                 txtInput.setSelection(txtInput.getText().length());
+                                if (inputInfo != null && inputInfo.isSelectAllText()) {
+                                    txtInput.selectAll();
+                                }
                             }
                         }, 300);
+                    }else{
+                        if (inputInfo != null && inputInfo.isSelectAllText()) {
+                            txtInput.clearFocus();
+                            txtInput.requestFocus();
+                            txtInput.selectAll();
+                        }
                     }
                     
                     if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
@@ -453,16 +470,8 @@ public class MessageDialog extends BaseDialog {
                     inputType = inputType | InputType.TYPE_TEXT_FLAG_MULTI_LINE;
                 }
                 txtInput.setInputType(inputType);
-                if (inputInfo.getTextInfo() != null)
+                if (inputInfo.getTextInfo() != null) {
                     useTextInfo(txtInput, inputInfo.getTextInfo());
-                
-                if (inputInfo.isSelectAllText()) {
-                    txtInput.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            txtInput.selectAll();
-                        }
-                    });
                 }
             }
             
@@ -613,16 +622,23 @@ public class MessageDialog extends BaseDialog {
             if (v != null) v.setEnabled(false);
             
             int exitAnimResId = style.exitAnimResId() == 0 ? R.anim.anim_dialogx_default_exit : style.exitAnimResId();
-            Animation enterAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
-            enterAnim.setInterpolator(new AccelerateInterpolator());
-            bkg.startAnimation(enterAnim);
+            Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+            exitAnim.setInterpolator(new AccelerateInterpolator());
+            if (exitAnimDuration != -1) {
+                exitAnim.setDuration(exitAnimDuration);
+            }
+            bkg.startAnimation(exitAnim);
             
-            boxRoot.animate().setDuration(300).alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(enterAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    dismiss(dialogView);
-                }
-            });
+            boxRoot.animate()
+                    .alpha(0f)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration)
+                    .setListener(new AnimatorListenerEndCallBack() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            dismiss(dialogView);
+                        }
+                    });
         }
     }
     
@@ -948,6 +964,24 @@ public class MessageDialog extends BaseDialog {
     public MessageDialog setMaskColor(@ColorInt int maskColor) {
         this.maskColor = maskColor;
         refreshUI();
+        return this;
+    }
+    
+    public long getEnterAnimDuration() {
+        return enterAnimDuration;
+    }
+    
+    public MessageDialog setEnterAnimDuration(long enterAnimDuration) {
+        this.enterAnimDuration = enterAnimDuration;
+        return this;
+    }
+    
+    public long getExitAnimDuration() {
+        return exitAnimDuration;
+    }
+    
+    public MessageDialog setExitAnimDuration(long exitAnimDuration) {
+        this.exitAnimDuration = exitAnimDuration;
         return this;
     }
 }

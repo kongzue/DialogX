@@ -51,11 +51,11 @@ public class BaseDialog {
         });
     }
     
-    public static void log(Object o) {
+    protected static void log(Object o) {
         if (DEBUGMODE) Log.i(">>>", o.toString());
     }
     
-    public static void error(Object o) {
+    protected static void error(Object o) {
         if (DEBUGMODE) Log.e(">>>", o.toString());
     }
     
@@ -111,11 +111,15 @@ public class BaseDialog {
     protected DialogX.THEME theme;
     protected boolean autoShowInputKeyboard;
     protected int backgroundColor = -1;
+    protected long enterAnimDuration = -1;
+    protected long exitAnimDuration = -1;
     
     public BaseDialog() {
         cancelable = DialogX.cancelable;
         style = DialogX.globalStyle;
         theme = DialogX.globalTheme;
+        enterAnimDuration = DialogX.enterAnimDuration;
+        exitAnimDuration = DialogX.exitAnimDuration;
         autoShowInputKeyboard = DialogX.autoShowInputKeyboard;
     }
     

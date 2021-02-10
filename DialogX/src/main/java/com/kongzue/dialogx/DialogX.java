@@ -89,6 +89,12 @@ public class DialogX {
     //默认 PopTip 文本样式
     public static TextInfo popTextInfo;
     
+    //默认启动对话框动画时长
+    public static long enterAnimDuration = -1;
+    
+    //默认关闭对话框动画时长
+    public static long exitAnimDuration = -1;
+    
     //全局 Dialog 生命周期监听器
     public static DialogLifecycleCallback<BaseDialog> dialogLifeCycleListener;
     

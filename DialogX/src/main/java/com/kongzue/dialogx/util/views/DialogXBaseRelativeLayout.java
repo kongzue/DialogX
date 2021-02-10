@@ -137,7 +137,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 ((Activity) BaseDialog.getContext()).getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
                 Rect rect = new Rect();
                 ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
-                paddingView( rect.left,  rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
+                paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
             }
         }
     };
@@ -174,10 +174,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         public abstract void onDismiss();
     }
     
-    protected Rect unsafePlace;
+    protected Rect unsafePlace = new Rect();
     
     private void paddingView(int left, int top, int right, int bottom) {
-        Log.e(">>>", "paddingView: left:" + left + " top:" + top + " right:" + right + " bottom:" + bottom);
+        log("paddingView: left:" + left + " top:" + top + " right:" + right + " bottom:" + bottom);
         unsafePlace = new Rect(left, top, right, bottom);
         if (onSafeInsetsChangeListener != null) onSafeInsetsChangeListener.onChange(unsafePlace);
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);

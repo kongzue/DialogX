@@ -499,4 +499,22 @@ public class InputDialog extends MessageDialog {
         refreshUI();
         return this;
     }
+    
+    public long getEnterAnimDuration() {
+        return enterAnimDuration;
+    }
+    
+    public InputDialog setEnterAnimDuration(long enterAnimDuration) {
+        this.enterAnimDuration = enterAnimDuration;
+        return this;
+    }
+    
+    public long getExitAnimDuration() {
+        return exitAnimDuration;
+    }
+    
+    public InputDialog setExitAnimDuration(long exitAnimDuration) {
+        this.exitAnimDuration = exitAnimDuration;
+        return this;
+    }
 }

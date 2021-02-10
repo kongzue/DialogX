@@ -225,9 +225,16 @@ public class WaitDialog extends BaseDialog {
                             int enterAnimResId = R.anim.anim_dialogx_default_enter;
                             Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
                             enterAnim.setInterpolator(new DecelerateInterpolator());
+                            if (enterAnimDuration != -1) {
+                                enterAnim.setDuration(enterAnimDuration);
+                            }
                             bkg.startAnimation(enterAnim);
                             
-                            boxRoot.animate().setDuration(enterAnim.getDuration()).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(300).setListener(null);
+                            boxRoot.animate()
+                                    .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
+                                    .alpha(1f)
+                                    .setInterpolator(new DecelerateInterpolator())
+                                    .setListener(null);
                             
                             getDialogLifecycleCallback().onShow(me());
                         }
@@ -331,16 +338,23 @@ public class WaitDialog extends BaseDialog {
                     if (v != null) v.setEnabled(false);
                     
                     int exitAnimResId = R.anim.anim_dialogx_default_exit;
-                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
-                    enterAnim.setInterpolator(new AccelerateInterpolator());
-                    bkg.startAnimation(enterAnim);
+                    Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+                    if (exitAnimDuration != -1) {
+                        exitAnim.setDuration(exitAnimDuration);
+                    }
+                    exitAnim.setInterpolator(new AccelerateInterpolator());
+                    bkg.startAnimation(exitAnim);
                     
-                    boxRoot.animate().setDuration(300).alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(enterAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            dismiss(dialogView);
-                        }
-                    });
+                    boxRoot.animate()
+                            .alpha(0f)
+                            .setInterpolator(new AccelerateInterpolator())
+                            .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration)
+                            .setListener(new AnimatorListenerEndCallBack() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    dismiss(dialogView);
+                                }
+                            });
                 }
             });
         }
@@ -545,6 +559,20 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setTipDialogLifecycleCallback(DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback) {
         this.tipDialogLifecycleCallback = dialogLifecycleCallback;
+        return this;
+    }
+    
+    public WaitDialog setEnterAnimDuration(long enterAnimDuration) {
+        this.enterAnimDuration = enterAnimDuration;
+        return this;
+    }
+    
+    public long getExitAnimDuration() {
+        return exitAnimDuration;
+    }
+    
+    public WaitDialog setExitAnimDuration(long exitAnimDuration) {
+        this.exitAnimDuration = exitAnimDuration;
         return this;
     }
 }

@@ -162,7 +162,11 @@ public class CustomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    boxRoot.animate().setDuration(300).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
+                    boxRoot.animate()
+                            .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .setListener(null);
                     
                     if (enterAnimResId == R.anim.anim_dialogx_default_enter && exitAnimResId == R.anim.anim_dialogx_default_exit) {
                         switch (align) {
@@ -221,14 +225,21 @@ public class CustomDialog extends BaseDialog {
             if (v != null) v.setEnabled(false);
             
             Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+            if (exitAnimDuration != -1) {
+                exitAnim.setDuration(exitAnimDuration);
+            }
             boxCustom.startAnimation(exitAnim);
             
-            boxRoot.animate().setDuration(300).alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(exitAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    dismiss(dialogView);
-                }
-            });
+            boxRoot.animate()
+                    .alpha(0f)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .setDuration(exitAnim.getDuration())
+                    .setListener(new AnimatorListenerEndCallBack() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            dismiss(dialogView);
+                        }
+                    });
         }
     }
     
@@ -366,6 +377,24 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setMaskColor(@ColorInt int maskColor) {
         this.maskColor = maskColor;
         refreshUI();
+        return this;
+    }
+    
+    public long getEnterAnimDuration() {
+        return enterAnimDuration;
+    }
+    
+    public CustomDialog setEnterAnimDuration(long enterAnimDuration) {
+        this.enterAnimDuration = enterAnimDuration;
+        return this;
+    }
+    
+    public long getExitAnimDuration() {
+        return exitAnimDuration;
+    }
+    
+    public CustomDialog setExitAnimDuration(long exitAnimDuration) {
+        this.exitAnimDuration = exitAnimDuration;
         return this;
     }
 }

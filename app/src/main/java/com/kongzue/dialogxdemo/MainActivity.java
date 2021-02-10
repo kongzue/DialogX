@@ -48,6 +48,7 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
+import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
 
 import java.util.Timer;
@@ -257,6 +258,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 new InputDialog("标题", "正文内容", "确定", "取消", "正在输入的文字")
+                        .setInputText("Hello World")
+                        .setInputInfo(new InputInfo().setSelectAllText(true))
                         .setCancelable(false)
                         .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
                             @Override
@@ -373,7 +376,7 @@ public class MainActivity extends BaseActivity {
                 }, 3000);
             }
         });
-    
+        
         btnBottomDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -820,30 +820,30 @@ public class BottomMenu extends BottomDialog {
         return okText;
     }
     
-    public BottomDialog setOkButton(CharSequence okText) {
+    public BottomMenu setOkButton(CharSequence okText) {
         this.okText = okText;
         refreshUI();
         return this;
     }
     
-    public BottomDialog setOkButton(int OkTextResId) {
+    public BottomMenu setOkButton(int OkTextResId) {
         this.okText = getString(OkTextResId);
         refreshUI();
         return this;
     }
     
-    public BottomDialog setOkButton(OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+    public BottomMenu setOkButton(OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
         this.okButtonClickListener = OkButtonClickListener;
         return this;
     }
     
-    public BottomDialog setOkButton(CharSequence OkText, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+    public BottomMenu setOkButton(CharSequence OkText, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
         this.okText = OkText;
         this.okButtonClickListener = OkButtonClickListener;
         return this;
     }
     
-    public BottomDialog setOkButton(int OkTextResId, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
+    public BottomMenu setOkButton(int OkTextResId, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
         this.okText = getString(OkTextResId);
         this.okButtonClickListener = OkButtonClickListener;
         return this;
@@ -853,38 +853,56 @@ public class BottomMenu extends BottomDialog {
         return otherText;
     }
     
-    public BottomDialog setOtherButton(CharSequence otherText) {
+    public BottomMenu setOtherButton(CharSequence otherText) {
         this.otherText = otherText;
         refreshUI();
         return this;
     }
     
-    public BottomDialog setOtherButton(int OtherTextResId) {
+    public BottomMenu setOtherButton(int OtherTextResId) {
         this.otherText = getString(OtherTextResId);
         refreshUI();
         return this;
     }
     
-    public BottomDialog setOtherButton(OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+    public BottomMenu setOtherButton(OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
         this.otherButtonClickListener = OtherButtonClickListener;
         return this;
     }
     
-    public BottomDialog setOtherButton(CharSequence OtherText, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+    public BottomMenu setOtherButton(CharSequence OtherText, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
         this.otherText = OtherText;
         this.otherButtonClickListener = OtherButtonClickListener;
         return this;
     }
     
-    public BottomDialog setOtherButton(int OtherTextResId, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
+    public BottomMenu setOtherButton(int OtherTextResId, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
         this.otherText = getString(OtherTextResId);
         this.otherButtonClickListener = OtherButtonClickListener;
         return this;
     }
     
-    public BottomDialog setMaskColor(@ColorInt int maskColor) {
+    public BottomMenu setMaskColor(@ColorInt int maskColor) {
         this.maskColor = maskColor;
         refreshUI();
+        return this;
+    }
+    
+    public long getEnterAnimDuration() {
+        return enterAnimDuration;
+    }
+    
+    public BottomMenu setEnterAnimDuration(long enterAnimDuration) {
+        this.enterAnimDuration = enterAnimDuration;
+        return this;
+    }
+    
+    public long getExitAnimDuration() {
+        return exitAnimDuration;
+    }
+    
+    public BottomMenu setExitAnimDuration(long exitAnimDuration) {
+        this.exitAnimDuration = exitAnimDuration;
         return this;
     }
 }

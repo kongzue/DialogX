@@ -387,9 +387,16 @@ public class BottomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    boxRoot.animate().setDuration(300).alpha(1f).setInterpolator(new DecelerateInterpolator()).setDuration(100).setListener(null);
+                    boxRoot.animate()
+                            .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .setListener(null);
                     
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
+                    if (enterAnimDuration != -1) {
+                        enterAnim.setDuration(enterAnimDuration);
+                    }
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     bkg.startAnimation(enterAnim);
                     
@@ -501,15 +508,19 @@ public class BottomDialog extends BaseDialog {
                 boxContent.getViewTreeObserver().removeOnGlobalLayoutListener(onContentViewLayoutChangeListener);
             
             ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
-            exitAnim.setDuration(300);
+            exitAnim.setDuration(exitAnimDuration == -1 ? 300 : exitAnimDuration);
             exitAnim.start();
             
-            boxRoot.animate().setDuration(300).alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(exitAnim.getDuration()).setListener(new AnimatorListenerEndCallBack() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    dismiss(dialogView);
-                }
-            });
+            boxRoot.animate()
+                    .alpha(0f)
+                    .setInterpolator(new AccelerateInterpolator())
+                    .setDuration(exitAnim.getDuration())
+                    .setListener(new AnimatorListenerEndCallBack() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            dismiss(dialogView);
+                        }
+                    });
         }
         
         public void preDismiss() {
@@ -517,7 +528,7 @@ public class BottomDialog extends BaseDialog {
                 doDismiss(boxRoot);
             } else {
                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
-                enterAnim.setDuration(300);
+                enterAnim.setDuration(exitAnimDuration == -1 ? 300 : exitAnimDuration);
                 enterAnim.start();
             }
         }
@@ -812,6 +823,24 @@ public class BottomDialog extends BaseDialog {
     public BottomDialog setMaskColor(@ColorInt int maskColor) {
         this.maskColor = maskColor;
         refreshUI();
+        return this;
+    }
+    
+    public long getEnterAnimDuration() {
+        return enterAnimDuration;
+    }
+    
+    public BottomDialog setEnterAnimDuration(long enterAnimDuration) {
+        this.enterAnimDuration = enterAnimDuration;
+        return this;
+    }
+    
+    public long getExitAnimDuration() {
+        return exitAnimDuration;
+    }
+    
+    public BottomDialog setExitAnimDuration(long exitAnimDuration) {
+        this.exitAnimDuration = exitAnimDuration;
         return this;
     }
 }

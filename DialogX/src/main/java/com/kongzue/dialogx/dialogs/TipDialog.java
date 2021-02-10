@@ -28,6 +28,17 @@ public class TipDialog extends WaitDialog {
         return me();
     }
     
+    public static WaitDialog show(CharSequence message) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(message);
+        if (dialogImpl != null) {
+            dialogImpl.showTip(TYPE.WARNING);
+        } else {
+            me().showTip(message, TYPE.WARNING);
+        }
+        return me();
+    }
+    
     public static WaitDialog show(int messageResId, TYPE tip) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().preMessage(messageResId);
