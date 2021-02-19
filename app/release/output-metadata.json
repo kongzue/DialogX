@@ -1,19 +1,17 @@
 {
-  "version": 1,
+  "version": 2,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
   },
   "applicationId": "com.kongzue.dialogxdemo",
-  "variantName": "release",
+  "variantName": "processReleaseResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "properties": [],
-      "versionCode": 29,
-      "versionName": "0.0.29",
-      "enabled": true,
+      "versionCode": 31,
+      "versionName": "0.0.31",
       "outputFile": "app-release.apk"
     }
   ]
