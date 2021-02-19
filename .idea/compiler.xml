@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.8">
+    <bytecodeTargetLevel target="1.7">
+      <module name="DialogXDemo.app" target="1.8" />
+      <module name="DialogXDemo.DialogX" target="1.8" />
+      <module name="DialogXDemo.DialogXIOSStyle" target="1.8" />
+      <module name="DialogXDemo.DialogXKongzueStyle" target="1.8" />
+      <module name="DialogXDemo.DialogXMIUIStyle" target="1.8" />
       <module name="DialogXInterface" target="1.7" />
     </bytecodeTargetLevel>
   </component>

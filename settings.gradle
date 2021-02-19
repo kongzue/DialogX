@@ -1,4 +1,3 @@
-include ':DialogXStyleInterface'
 include ':DialogXInterface'
 include ':DialogXMIUIStyle'
 include ':DialogXKongzueStyle'
