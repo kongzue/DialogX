@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,7 @@ public class FullScreenDialog extends BaseDialog {
     
     protected DialogImpl dialogImpl;
     
-    public class DialogImpl implements DialogConvertViewInterface {
+    public class DialogImpl implements DialogConvertViewInterface  {
         
         private FullScreenDialogTouchEventInterceptor fullScreenDialogTouchEventInterceptor;
         
@@ -114,6 +115,7 @@ public class FullScreenDialog extends BaseDialog {
         
         @Override
         public void init() {
+            boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -366,5 +368,20 @@ public class FullScreenDialog extends BaseDialog {
     public FullScreenDialog setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
+    }
+    
+    @Override
+    public void onUIModeChange(Configuration newConfig) {
+        if (dialogView != null) {
+            dismiss(dialogView);
+        }
+        if (getDialogImpl().boxCustom!=null){
+            getDialogImpl().boxCustom.removeAllViews();
+        }
+        enterAnimDuration = 0;
+        dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+        dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        show(dialogView);
     }
 }

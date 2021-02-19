@@ -128,9 +128,9 @@
                     <RadioButton
                         android:id="@+id/rdo_material"
                         android:layout_width="wrap_content"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:padding="10dp"
                         android:text="Material"
                         android:textColor="#7b000000"
                         android:textSize="12dp" />
@@ -139,7 +139,7 @@
                         android:id="@+id/rdo_ios"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:layout_weight="1"
                         android:text="iOS"
                         android:textColor="#7b000000"
                         android:textSize="12dp" />
@@ -148,7 +148,7 @@
                         android:id="@+id/rdo_kongzue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:layout_weight="1"
                         android:text="Kongzue"
                         android:textColor="#7b000000"
                         android:textSize="12dp" />
@@ -157,7 +157,7 @@
                         android:id="@+id/rdo_miui"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
+                        android:layout_weight="1"
                         android:text="MIUI"
                         android:textColor="#7b000000"
                         android:textSize="12dp" />
@@ -181,10 +181,19 @@
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/rdo_light"
+                        android:id="@+id/rdo_auto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
+                        android:padding="10dp"
+                        android:text="自动"
+                        android:textColor="#7b000000"
+                        android:textSize="12dp" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:text="亮色"
                         android:textColor="#7b000000"

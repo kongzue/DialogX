@@ -99,7 +99,7 @@ public class DialogX {
     public static DialogLifecycleCallback<BaseDialog> dialogLifeCycleListener;
     
     public enum THEME {
-        LIGHT, DARK
+        LIGHT, DARK, AUTO
     }
     
     public static void init(Context context) {

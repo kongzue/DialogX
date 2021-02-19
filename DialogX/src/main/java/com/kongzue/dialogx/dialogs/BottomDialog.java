@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
@@ -274,6 +275,7 @@ public class BottomDialog extends BaseDialog {
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
             
+            boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -842,5 +844,28 @@ public class BottomDialog extends BaseDialog {
     public BottomDialog setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
+    }
+    
+    @Override
+    public void onUIModeChange(Configuration newConfig) {
+        if (dialogView != null) {
+            dismiss(dialogView);
+        }
+        if (getDialogImpl().boxCustom != null) {
+            getDialogImpl().boxCustom.removeAllViews();
+        }
+        if (getDialogImpl().boxList != null) {
+            getDialogImpl().boxList.removeAllViews();
+        }
+        int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
+        if (style.overrideBottomDialogRes() != null) {
+            layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
+        }
+    
+        enterAnimDuration = 0;
+        dialogView = createView(layoutId);
+        dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        show(dialogView);
     }
 }

@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +94,7 @@ public class CustomDialog extends BaseDialog {
         show(activity, dialogView);
     }
     
-    public class DialogImpl implements DialogConvertViewInterface {
+    public class DialogImpl implements DialogConvertViewInterface  {
         
         public DialogXBaseRelativeLayout boxRoot;
         public RelativeLayout boxCustom;
@@ -108,6 +109,7 @@ public class CustomDialog extends BaseDialog {
         
         @Override
         public void init() {
+            boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -396,5 +398,21 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
+    }
+    
+    @Override
+    public void onUIModeChange(Configuration newConfig) {
+        if (dialogView != null) {
+            dismiss(dialogView);
+        }
+        if (getDialogImpl().boxCustom!=null){
+            getDialogImpl().boxCustom.removeAllViews();
+        }
+    
+        enterAnimDuration = 0;
+        dialogView = createView(R.layout.layout_dialogx_custom);
+        dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        show(dialogView);
     }
 }

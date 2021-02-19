@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
@@ -325,7 +326,7 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
-    public class DialogImpl implements DialogConvertViewInterface {
+    public class DialogImpl implements DialogConvertViewInterface  {
         
         public DialogXBaseRelativeLayout boxRoot;
         public LinearLayout boxBody;
@@ -359,7 +360,8 @@ public class PopTip extends BaseDialog {
             if (autoDismissTimer == null) {
                 showShort();
             }
-            
+    
+            boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -730,5 +732,36 @@ public class PopTip extends BaseDialog {
     public PopTip setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
+    }
+    
+    @Override
+    public void onUIModeChange(Configuration newConfig) {
+        if (dialogView != null) {
+            dismiss(dialogView);
+        }
+        if (getDialogImpl().boxCustom!=null){
+            getDialogImpl().boxCustom.removeAllViews();
+        }
+        if (DialogX.onlyOnePopTip) {
+            if (oldInstance != null && oldInstance.get() != null) {
+                oldInstance.get().dismiss();
+            }
+        }
+        oldInstance = new WeakReference<>(this);
+        int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
+        if (style.popTipSettings() != null) {
+            if (style.popTipSettings().layout(isLightTheme()) != 0) {
+                layoutResId = style.popTipSettings().layout(isLightTheme());
+            }
+            align = style.popTipSettings().align();
+            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+            enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
+            exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
+        }
+        enterAnimDuration = 0;
+        dialogView = createView(layoutResId);
+        dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        show(dialogView);
     }
 }

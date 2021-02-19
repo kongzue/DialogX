@@ -1,11 +1,13 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.content.res.Configuration;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -155,7 +157,7 @@ public class InputDialog extends MessageDialog {
         return inputDialog;
     }
     
-    public static InputDialog show(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId, int inputTextResId)  {
+    public static InputDialog show(int titleResId, int messageResId, int okTextResId, int cancelTextResId, int otherTextResId, int inputTextResId) {
         InputDialog inputDialog = new InputDialog(titleResId, messageResId, okTextResId, cancelTextResId, otherTextResId, inputTextResId);
         inputDialog.show();
         return inputDialog;
@@ -326,6 +328,9 @@ public class InputDialog extends MessageDialog {
     }
     
     public String getInputText() {
+        if (getDialogImpl() != null && getDialogImpl().txtInput != null) {
+            return getDialogImpl().txtInput.getText().toString();
+        }
         return inputText;
     }
     
@@ -516,5 +521,25 @@ public class InputDialog extends MessageDialog {
     public InputDialog setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
+    }
+    
+    @Override
+    public void onUIModeChange(Configuration newConfig) {
+        if (dialogView != null) {
+            dismiss(dialogView);
+        }
+        if (getDialogImpl().boxCustom!=null){
+            getDialogImpl().boxCustom.removeAllViews();
+        }
+        int layoutId = style.layout(isLightTheme());
+        layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
+        
+        String inputText = getInputText();
+        enterAnimDuration = 0;
+        dialogView = createView(layoutId);
+        dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        show(dialogView);
+        setInputText(inputText);
     }
 }

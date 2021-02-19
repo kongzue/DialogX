@@ -3,6 +3,7 @@ package com.kongzue.dialogxdemo;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
@@ -18,6 +19,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.kongzue.baseframework.BaseActivity;
 import com.kongzue.baseframework.interfaces.DarkNavigationBarTheme;
@@ -72,6 +75,7 @@ public class MainActivity extends BaseActivity {
     private RadioButton rdoKongzue;
     private RadioButton rdoMiui;
     private RadioGroup grpTheme;
+    private RadioButton rdoAuto;
     private RadioButton rdoLight;
     private RadioButton rdoDark;
     private TextView btnMessageDialog;
@@ -111,6 +115,7 @@ public class MainActivity extends BaseActivity {
         rdoKongzue = findViewById(R.id.rdo_kongzue);
         rdoMiui = findViewById(R.id.rdo_miui);
         grpTheme = findViewById(R.id.grp_theme);
+        rdoAuto = findViewById(R.id.rdo_auto);
         rdoLight = findViewById(R.id.rdo_light);
         rdoDark = findViewById(R.id.rdo_dark);
         btnMessageDialog = findViewById(R.id.btn_messageDialog);
@@ -139,7 +144,9 @@ public class MainActivity extends BaseActivity {
     
     @Override
     public void initDatas(JumpParameter parameter) {
+        refreshUIMode();
         DialogX.globalStyle = MaterialStyle.style();
+        DialogX.globalTheme = DialogX.THEME.AUTO;
         
         boolean showBreak = parameter.getBoolean("showBreak");
         if (showBreak) {
@@ -197,6 +204,9 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
+                    case R.id.rdo_auto:
+                        DialogX.globalTheme = DialogX.THEME.AUTO;
+                        break;
                     case R.id.rdo_light:
                         DialogX.globalTheme = DialogX.THEME.LIGHT;
                         break;
@@ -259,7 +269,6 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 new InputDialog("标题", "正文内容", "确定", "取消", "正在输入的文字")
                         .setInputText("Hello World")
-                        .setInputInfo(new InputInfo().setSelectAllText(true))
                         .setCancelable(false)
                         .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
                             @Override
@@ -748,4 +757,20 @@ public class MainActivity extends BaseActivity {
         imm.showSoftInput(editText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
     
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        refreshUIMode();
+    }
+    
+    /**
+     * 刷新亮暗色模式界面变化
+     */
+    private void refreshUIMode() {
+        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+            setDarkStatusBarTheme(true);
+        } else {
+            setDarkStatusBarTheme(false);
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
@@ -181,7 +182,7 @@ public class WaitDialog extends BaseDialog {
     
     protected DialogImpl dialogImpl;
     
-    public class DialogImpl implements DialogConvertViewInterface {
+    public class DialogImpl implements DialogConvertViewInterface  {
         public DialogXBaseRelativeLayout boxRoot;
         public MaxRelativeLayout bkg;
         public BlurView blurView;
@@ -213,7 +214,8 @@ public class WaitDialog extends BaseDialog {
             
             blurView.setRadiusPx(dip2px(15));
             boxRoot.setClickable(true);
-            
+    
+            boxRoot.setParentDialog(me.get());
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -574,5 +576,10 @@ public class WaitDialog extends BaseDialog {
     public WaitDialog setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
+    }
+    
+    @Override
+    public void onUIModeChange(Configuration newConfig) {
+        refreshUI();
     }
 }

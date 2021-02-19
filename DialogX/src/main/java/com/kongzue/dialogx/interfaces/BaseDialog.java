@@ -3,6 +3,7 @@ package com.kongzue.dialogx.interfaces;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
@@ -32,7 +34,7 @@ import static com.kongzue.dialogx.DialogX.DEBUGMODE;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/9/22 14:10
  */
-public class BaseDialog {
+public abstract class BaseDialog {
     
     private static WeakReference<FrameLayout> rootFrameLayout;
     private static WeakReference<Activity> contextWeakReference;
@@ -58,6 +60,8 @@ public class BaseDialog {
     protected static void error(Object o) {
         if (DEBUGMODE) Log.e(">>>", o.toString());
     }
+    
+    public abstract void onUIModeChange(Configuration newConfig);
     
     protected static void show(final View view) {
         if (rootFrameLayout == null || view == null || rootFrameLayout.get() == null) return;
@@ -207,6 +211,9 @@ public class BaseDialog {
     }
     
     public boolean isLightTheme() {
+        if (theme == DialogX.THEME.AUTO) {
+            return (getContext().getApplicationContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
+        }
         return theme == DialogX.THEME.LIGHT;
     }
     

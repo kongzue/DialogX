@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
@@ -60,7 +61,7 @@ public class MessageDialog extends BaseDialog {
         super();
     }
     
-    private View dialogView;
+    protected View dialogView;
     
     protected CharSequence title;
     protected CharSequence message;
@@ -268,6 +269,7 @@ public class MessageDialog extends BaseDialog {
             btnSelectPositive.getPaint().setFakeBoldText(true);
             btnSelectOther.getPaint().setFakeBoldText(true);
             
+            boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -320,7 +322,7 @@ public class MessageDialog extends BaseDialog {
                                 }
                             }
                         }, 300);
-                    }else{
+                    } else {
                         if (inputInfo != null && inputInfo.isSelectAllText()) {
                             txtInput.clearFocus();
                             txtInput.requestFocus();
@@ -983,5 +985,23 @@ public class MessageDialog extends BaseDialog {
     public MessageDialog setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
+    }
+    
+    @Override
+    public void onUIModeChange(Configuration newConfig) {
+        if (dialogView != null) {
+            dismiss(dialogView);
+        }
+        if (getDialogImpl().boxCustom!=null){
+            getDialogImpl().boxCustom.removeAllViews();
+        }
+        int layoutId = style.layout(isLightTheme());
+        layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
+        
+        enterAnimDuration = 0;
+        dialogView = createView(layoutId);
+        dialogImpl = new DialogImpl(dialogView);
+        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        show(dialogView);
     }
 }

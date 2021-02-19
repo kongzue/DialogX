@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@drawable/rect_dialogx_material_bottom_bkg_night"
+            android:clickable="true"
             android:focusableInTouchMode="true">
 
             <ImageView
@@ -31,9 +32,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:clickable="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="15dp">
 
                 <TextView
                     android:id="@+id/txt_dialog_title"
@@ -47,7 +47,7 @@
                     android:textColor="@color/white"
                     android:textSize="21dp" />
 
-                <ScrollView
+                <com.kongzue.dialogx.util.views.BottomDialogScrollView
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -67,8 +67,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="20dp"
-                            android:paddingBottom="5dp"
                             android:layout_marginBottom="5dp"
+                            android:paddingBottom="5dp"
                             android:text="This is content text."
                             android:textColor="@color/white60"
                             android:textSize="16dp" />
@@ -76,16 +76,16 @@
                         <RelativeLayout
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <RelativeLayout
                             android:id="@+id/box_list"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 
-                </ScrollView>
+                </com.kongzue.dialogx.util.views.BottomDialogScrollView>
 
                 <LinearLayout
                     android:id="@+id/box_button"
@@ -99,10 +99,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
+                        android:layout_marginVertical="10dp"
                         android:background="@drawable/button_dialogx_material_night"
                         android:clickable="true"
                         android:gravity="center"
-                        android:layout_marginVertical="10dp"
                         android:paddingHorizontal="15dp"
                         android:text="Other"
                         android:textColor="@color/colorAccent"
@@ -118,12 +118,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
+                        android:layout_marginVertical="10dp"
                         android:background="@drawable/button_dialogx_material_night"
                         android:clickable="true"
                         android:gravity="center"
-                        android:tag="cancel"
-                        android:layout_marginVertical="10dp"
                         android:paddingHorizontal="15dp"
+                        android:tag="cancel"
                         android:text="Cancel"
                         android:textColor="@color/colorAccent"
                         android:textSize="15dp" />
@@ -132,10 +132,10 @@
                         android:id="@+id/btn_selectPositive"
                         android:layout_width="wrap_content"
                         android:layout_height="36dp"
+                        android:layout_marginVertical="10dp"
                         android:background="@drawable/button_dialogx_material_night"
                         android:clickable="true"
                         android:gravity="center"
-                        android:layout_marginVertical="10dp"
                         android:paddingHorizontal="15dp"
                         android:text="OK"
                         android:textColor="@color/colorAccent"

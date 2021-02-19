@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -35,6 +36,7 @@ import static com.kongzue.dialogx.DialogX.log;
 public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
+    private BaseDialog parentDialog;
     private boolean autoUnsafePlacePadding = true;
     
     private OnLifecycleCallBack onLifecycleCallBack;
@@ -63,7 +65,11 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private boolean isInited = false;
     
     private void init() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            setForceDarkAllowed(false);
+        }
         if (!isInited) {
+            setFocusable(true);
             setFocusableInTouchMode(true);
             requestFocus();
         }
@@ -177,7 +183,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     protected Rect unsafePlace = new Rect();
     
     private void paddingView(int left, int top, int right, int bottom) {
-        log("paddingView: left:" + left + " top:" + top + " right:" + right + " bottom:" + bottom);
         unsafePlace = new Rect(left, top, right, bottom);
         if (onSafeInsetsChangeListener != null) onSafeInsetsChangeListener.onChange(unsafePlace);
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
@@ -213,5 +218,20 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public DialogXBaseRelativeLayout setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
         this.autoUnsafePlacePadding = autoUnsafePlacePadding;
         return this;
+    }
+    
+    public BaseDialog getParentDialog() {
+        return parentDialog;
+    }
+    
+    public DialogXBaseRelativeLayout setParentDialog(BaseDialog parentDialog) {
+        this.parentDialog = parentDialog;
+        return this;
+    }
+    
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getParentDialog().onUIModeChange(newConfig);
     }
 }
