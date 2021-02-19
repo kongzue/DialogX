@@ -353,10 +353,6 @@ public class PopTip extends BaseDialog {
             if (buttonTextInfo == null) buttonTextInfo = DialogX.buttonTextInfo;
             if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
             
-            boxRoot.setFocusable(false);
-            boxRoot.setFocusableInTouchMode(false);
-            boxRoot.setAutoUnsafePlacePadding(false);
-            
             if (autoDismissTimer == null) {
                 showShort();
             }
@@ -409,6 +405,13 @@ public class PopTip extends BaseDialog {
                     } else if (align == DialogXStyle.PopTipSettings.ALIGN.TOP_INSIDE) {
                         boxBody.setPadding(0, unsafeRect.top, 0, 0);
                     }
+                }
+            });
+    
+            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+                @Override
+                public boolean onBackPressed() {
+                    return false;
                 }
             });
             

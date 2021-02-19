@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.app.Activity;
+
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 
 import java.lang.ref.WeakReference;
@@ -28,6 +30,17 @@ public class TipDialog extends WaitDialog {
         return me();
     }
     
+    public static WaitDialog show(Activity activity, int messageResId) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(messageResId);
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            dialogImpl.showTip(TYPE.WARNING);
+        } else {
+            me().showTip(activity, messageResId, TYPE.WARNING);
+        }
+        return me();
+    }
+    
     public static WaitDialog show(CharSequence message) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().preMessage(message);
@@ -35,6 +48,17 @@ public class TipDialog extends WaitDialog {
             dialogImpl.showTip(TYPE.WARNING);
         } else {
             me().showTip(message, TYPE.WARNING);
+        }
+        return me();
+    }
+    
+    public static WaitDialog show(Activity activity, CharSequence message) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(message);
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            dialogImpl.showTip(TYPE.WARNING);
+        } else {
+            me().showTip(activity, message, TYPE.WARNING);
         }
         return me();
     }
@@ -50,6 +74,17 @@ public class TipDialog extends WaitDialog {
         return me();
     }
     
+    public static WaitDialog show(Activity activity, int messageResId, TYPE tip) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(messageResId);
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            dialogImpl.showTip(tip);
+        } else {
+            me().showTip(activity, messageResId, tip);
+        }
+        return me();
+    }
+    
     public static WaitDialog show(CharSequence message, TYPE tip) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().preMessage(message);
@@ -57,6 +92,17 @@ public class TipDialog extends WaitDialog {
             dialogImpl.showTip(tip);
         } else {
             me().showTip(message, tip);
+        }
+        return me();
+    }
+    
+    public static WaitDialog show(Activity activity, CharSequence message, TYPE tip) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(message);
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            dialogImpl.showTip(tip);
+        } else {
+            me().showTip(activity, message, tip);
         }
         return me();
     }
@@ -73,6 +119,18 @@ public class TipDialog extends WaitDialog {
         return me();
     }
     
+    public static WaitDialog show(Activity activity, int messageResId, TYPE tip, long duration) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(messageResId);
+        me().tipShowDuration = duration;
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            dialogImpl.showTip(tip);
+        } else {
+            me().showTip(activity, messageResId, tip);
+        }
+        return me();
+    }
+    
     public static WaitDialog show(CharSequence message, TYPE tip, long duration) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().preMessage(message);
@@ -81,6 +139,18 @@ public class TipDialog extends WaitDialog {
             dialogImpl.showTip(tip);
         } else {
             me().showTip(message, tip);
+        }
+        return me();
+    }
+    
+    public static WaitDialog show(Activity activity, CharSequence message, TYPE tip, long duration) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(message);
+        me().tipShowDuration = duration;
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            dialogImpl.showTip(tip);
+        } else {
+            me().showTip(activity, message, tip);
         }
         return me();
     }

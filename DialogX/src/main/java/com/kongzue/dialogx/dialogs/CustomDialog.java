@@ -50,7 +50,9 @@ public class CustomDialog extends BaseDialog {
     public enum ALIGN {
         CENTER,
         TOP,
-        BOTTOM
+        BOTTOM,
+        LEFT,
+        RIGHT
     }
     
     protected CustomDialog() {
@@ -158,6 +160,16 @@ public class CustomDialog extends BaseDialog {
                     rlp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     rlp.addRule(RelativeLayout.CENTER_IN_PARENT);
                     break;
+                case LEFT:
+                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    break;
+                case RIGHT:
+                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    break;
             }
             boxCustom.setLayoutParams(rlp);
             
@@ -179,6 +191,14 @@ public class CustomDialog extends BaseDialog {
                             case BOTTOM:
                                 enterAnimResId = R.anim.anim_dialogx_bottom_enter;
                                 exitAnimResId = R.anim.anim_dialogx_bottom_exit;
+                                break;
+                            case LEFT:
+                                enterAnimResId = R.anim.anim_dialogx_left_enter;
+                                exitAnimResId = R.anim.anim_dialogx_left_exit;
+                                break;
+                            case RIGHT:
+                                enterAnimResId = R.anim.anim_dialogx_right_enter;
+                                exitAnimResId = R.anim.anim_dialogx_right_exit;
                                 break;
                         }
                     }

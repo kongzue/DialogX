@@ -86,6 +86,22 @@ public class WaitDialog extends BaseDialog {
         }
     }
     
+    public static WaitDialog show(Activity activity, CharSequence message) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().message = message;
+        me().showType = -1;
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            dialogImpl.progressView.loading();
+            setMessage(message);
+            return me();
+        } else {
+            WaitDialog waitDialog = new WaitDialog();
+            waitDialog.message = message;
+            waitDialog.show(activity);
+            return waitDialog;
+        }
+    }
+    
     public static WaitDialog show(int messageResId) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().preMessage(messageResId);
@@ -98,6 +114,22 @@ public class WaitDialog extends BaseDialog {
             WaitDialog waitDialog = new WaitDialog();
             waitDialog.preMessage(messageResId);
             waitDialog.show();
+            return waitDialog;
+        }
+    }
+    
+    public static WaitDialog show(Activity activity, int messageResId) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().preMessage(messageResId);
+        me().showType = -1;
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            dialogImpl.progressView.loading();
+            setMessage(messageResId);
+            return me();
+        } else {
+            WaitDialog waitDialog = new WaitDialog();
+            waitDialog.preMessage(messageResId);
+            waitDialog.show(activity);
             return waitDialog;
         }
     }
@@ -119,6 +151,23 @@ public class WaitDialog extends BaseDialog {
         }
     }
     
+    public static WaitDialog show(Activity activity, CharSequence message, float progress) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().showType = -1;
+        me().preMessage(message);
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            setMessage(message);
+            me().setProgress(progress);
+            return me();
+        } else {
+            WaitDialog waitDialog = new WaitDialog();
+            waitDialog.preMessage(message);
+            waitDialog.show(activity);
+            waitDialog.setProgress(progress);
+            return waitDialog;
+        }
+    }
+    
     public static WaitDialog show(int messageResId, float progress) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().showType = -1;
@@ -131,6 +180,37 @@ public class WaitDialog extends BaseDialog {
             WaitDialog waitDialog = new WaitDialog();
             waitDialog.preMessage(messageResId);
             waitDialog.show();
+            waitDialog.setProgress(progress);
+            return waitDialog;
+        }
+    }
+    
+    public static WaitDialog show(Activity activity, int messageResId, float progress) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().showType = -1;
+        me().preMessage(messageResId);
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            setMessage(messageResId);
+            me().setProgress(progress);
+            return me();
+        } else {
+            WaitDialog waitDialog = new WaitDialog();
+            waitDialog.preMessage(messageResId);
+            waitDialog.show(activity);
+            waitDialog.setProgress(progress);
+            return waitDialog;
+        }
+    }
+    
+    public static WaitDialog show(Activity activity, float progress) {
+        DialogImpl dialogImpl = me().dialogImpl;
+        me().showType = -1;
+        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+            me().setProgress(progress);
+            return me();
+        } else {
+            WaitDialog waitDialog = new WaitDialog();
+            waitDialog.show(activity);
             waitDialog.setProgress(progress);
             return waitDialog;
         }
@@ -182,7 +262,7 @@ public class WaitDialog extends BaseDialog {
     
     protected DialogImpl dialogImpl;
     
-    public class DialogImpl implements DialogConvertViewInterface  {
+    public class DialogImpl implements DialogConvertViewInterface {
         public DialogXBaseRelativeLayout boxRoot;
         public MaxRelativeLayout bkg;
         public BlurView blurView;
@@ -214,7 +294,7 @@ public class WaitDialog extends BaseDialog {
             
             blurView.setRadiusPx(dip2px(15));
             boxRoot.setClickable(true);
-    
+            
             boxRoot.setParentDialog(me.get());
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
@@ -440,12 +520,27 @@ public class WaitDialog extends BaseDialog {
         show();
     }
     
+    protected void showTip(Activity activity, CharSequence message, TYPE type) {
+        showType = type.ordinal();
+        this.message = message;
+        readyTipType = type;
+        show(activity);
+    }
+    
     protected void showTip(int messageResId, TYPE type) {
         showType = type.ordinal();
         this.message = getString(messageResId);
         readyTipType = type;
         setDialogLifecycleCallback(tipDialogLifecycleCallback);
         show();
+    }
+    
+    protected void showTip(Activity activity, int messageResId, TYPE type) {
+        showType = type.ordinal();
+        this.message = getString(messageResId);
+        readyTipType = type;
+        setDialogLifecycleCallback(tipDialogLifecycleCallback);
+        show(activity);
     }
     
     public static CharSequence getMessage() {
