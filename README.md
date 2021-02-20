@@ -27,7 +27,7 @@
 - DialogX 的启动与线程无关，你可以**在任意线程**启动 DialogX 而它都将自动在 UI 线程运行。
 - DialogX 的启动**无需 context 参数**，默认提供静态方法一句代码实现对话框的启动，使用更加方便。
 - 更自由，开发者可以轻松定制对话框中任何组件的样式，包括文本样式、按钮文字样式、菜单文本样式、输入文本样式，大到标题，小到提示消息都可以根据需要随意修改。
-- DialogX 采用**主题分离设计**，默认自带 Material 主题，可选引入 IOS、Kongzue 等其他风格主题，大大减小 App 体积，同时提供了主题接口，如有定制需求完全可以自行实现一套私有主题。
+- DialogX 采用**主题分离设计**，默认自带 Material 主题，可选引入 IOS、Kongzue、MIUI 等其他风格主题，大大减小 App 体积，同时提供了主题接口，如有定制需求完全可以自行实现一套私有主题。
 - 更低的耦合度，更少的问题，DialogX 可以在对话框正在**运行的过程中随意关闭 Activity** ，而无需担心以往 AlertDialog 等组件会引发的 WindowLeaked 错误。
 - 更流畅的体验，DialogX 的动画效果更加丰富，对话框启动动画采用**非线性动画**实现，更自带连贯的等待提示到完成错误动画过渡效果，让你的 APP 更具动感。
 - 所有主题默认支持亮暗色两种模式，只需一键配置即可实现亮暗色的对话框主题切换，更有自由的布局内容满足定制化需求，DialogX 也支持自动适应系统亮暗色模式切换，能够根据系统设置自动判断亮暗色显示效果的切换。
@@ -57,7 +57,7 @@ DialogX 包含以下对话框组件：
 
   底部对话框 BottomDialog 提供从底部弹出显示的对话框样式，可设置标题、提示文本和自定义布局，使用 Material 主题时还会提供向下滑动关闭和向上滑动展开的功能。
 
-  底部菜单 BottomMenu 则是底部对话框 BottomDialog 的扩展组件，在底部对话框的基础上额外提供了菜单功能，菜单可设置菜单内容/菜单图标/单选功能，在不同的主题下还可以提供“取消”关闭按钮（注：因 Material 直接可以下滑关闭因此 Material 主题不提供额外的“取消”关闭按钮）
+  底部菜单 BottomMenu 则是底部对话框 BottomDialog 的扩展组件，在底部对话框的基础上额外提供了菜单功能，菜单可设置菜单内容/菜单图标/单选功能，在不同的主题下还可以提供“取消”关闭按钮
 
 - [简单提示 PopTip](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E6%8F%90%E7%A4%BA-PopTip)
 
@@ -75,7 +75,7 @@ DialogX 包含以下对话框组件：
 
   ![自定义对话框 CustomDialog](https://github.com/kongzue/DialogX/raw/master/readme/customdialog.png)
 
-  根据定制化自由度的对话框组件，完全由用户自行实现布局内容。CustomDialog 提供了 ALIGN 选项可以轻松定制对话框弹出的方式，默认支持屏幕中央、屏幕底部和屏幕顶部三种弹出模式，也会提供相应的弹出动画效果，当然用户也可以自定义动画效果。
+  根据定制化自由度的对话框组件，完全由用户自行实现布局内容。CustomDialog 提供了 ALIGN 选项可以轻松定制对话框弹出的方式，默认支持屏幕中央、屏幕底部、屏幕顶部、屏幕左侧、屏幕右侧多种弹出模式，也会提供相应的弹出动画效果，当然用户也可以自定义动画效果。
 
 # DialogX主题
 
@@ -98,8 +98,6 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 <div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/download_demo_qrcode.png" alt="下载 DialogX Demo" width="250" height="250" /></div>
 
 # 开始使用DialogX
-
-🚧 此框架依然处于 Alpha 预览版本阶段，可能会存在问题或其它接口变动的可能，且文档还处于完善阶段，若需要正式稳定的Dialog组件暂时依然建议前往使用 [DialogV3](https://github.com/kongzue/DialogV3)，若您在使用过程中遇到任何问题，请加群 590498789 讨论。
 
 因为依赖的关系，DialogX 目前仅支持 AndroidX 作为基础进行开发，若您正在使用最新版本的 Android Studio，那么默认创建的项目就是使用 AndroidX 作为底层框架的，老版本 Android Support 兼容库将在后续更新。
 
