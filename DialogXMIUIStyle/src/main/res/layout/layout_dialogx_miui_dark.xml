@@ -27,10 +27,11 @@
                     android:id="@+id/txt_dialog_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="25dp"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
-                    android:paddingHorizontal="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="25dp"
+                    android:paddingRight="20dp"
                     android:text="Title"
                     android:textColor="@color/dialogxMIUITextDark"
                     android:textSize="18dp" />
@@ -38,11 +39,11 @@
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbarSize="7dp"
+                    android:layout_weight="1"
                     android:overScrollMode="never"
+                    android:scrollbarSize="7dp"
                     android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
-                    android:scrollbars="vertical"
-                    android:layout_weight="1">
+                    android:scrollbars="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -54,10 +55,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginHorizontal="20dp"
                             android:gravity="left"
                             android:paddingTop="10dp"
                             android:paddingBottom="15dp"
-                            android:layout_marginHorizontal="20dp"
                             android:text="This is content text."
                             android:textColor="@color/dialogxMIUITextDark"
                             android:textSize="16dp" />
@@ -66,26 +67,26 @@
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <EditText
                             android:id="@+id/txt_input"
-                            android:theme="@style/AppTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginHorizontal="20dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="15dp"
-                            android:visibility="gone"
-                            android:padding="15dp"
-                            android:maxLines="1"
-                            android:inputType="text"
                             android:background="@drawable/editbox_dialogx_miui_night"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:padding="15dp"
                             android:scrollbars="vertical"
                             android:text=""
                             android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            android:theme="@style/AppTheme"
+                            android:visibility="gone" />
 
                     </LinearLayout>
 
@@ -96,47 +97,47 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:gravity="right|center_vertical"
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginBottom="20dp"
+                    android:gravity="right|center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/btn_selectNegative"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_weight="1"
+                        android:layout_marginHorizontal="6dp"
                         android:layout_marginVertical="5dp"
+                        android:layout_weight="1"
                         android:background="@drawable/button_dialogx_miui_gray_night"
                         android:clickable="true"
                         android:gravity="center"
                         android:text="Cancel"
                         android:textColor="@color/dialogxMIUITextDark"
-                        android:layout_marginHorizontal="6dp"
                         android:textSize="16dp" />
 
                     <TextView
                         android:id="@+id/btn_selectOther"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_weight="1"
+                        android:layout_marginHorizontal="6dp"
                         android:layout_marginVertical="5dp"
+                        android:layout_weight="1"
                         android:background="@drawable/button_dialogx_miui_gray_night"
                         android:clickable="true"
                         android:gravity="center"
-                        android:layout_marginHorizontal="6dp"
-                        android:visibility="gone"
                         android:text="Other"
                         android:textColor="@color/dialogxMIUITextDark"
-                        android:textSize="16dp" />
+                        android:textSize="16dp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/btn_selectPositive"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginHorizontal="6dp"
-                        android:layout_weight="1"
                         android:layout_marginVertical="5dp"
+                        android:layout_weight="1"
                         android:background="@drawable/button_dialogx_miui_blue_night"
                         android:clickable="true"
                         android:gravity="center"

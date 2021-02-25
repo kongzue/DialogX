@@ -55,12 +55,13 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/button_dialogx_material_light"
             android:gravity="left|center_vertical"
-            android:paddingHorizontal="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:singleLine="true"
-            android:visibility="gone"
             android:text="Dismiss"
             android:textColor="@color/dialogxColorBlue"
-            android:textSize="14dp" />
+            android:textSize="14dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 

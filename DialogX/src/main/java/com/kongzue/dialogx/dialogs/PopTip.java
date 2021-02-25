@@ -358,6 +358,7 @@ public class PopTip extends BaseDialog {
             }
     
             boxRoot.setParentDialog(me);
+            boxRoot.setAutoUnsafePlacePadding(false);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {

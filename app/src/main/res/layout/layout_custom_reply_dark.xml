@@ -15,7 +15,8 @@
             android:layout_height="35dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:paddingHorizontal="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:text="回复"
             android:textColor="@color/white90"
             android:textSize="16dp" />
@@ -25,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:gravity="center_vertical"
-            android:paddingHorizontal="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:text="发布"
             android:textColor="@color/dialogxColorBlue"
             android:textSize="16dp" />
@@ -40,12 +42,14 @@
         android:gravity="left|top"
         android:hint="请输入内容..."
         android:inputType="textMultiLine"
-        android:minHeight="100dp"
         android:maxHeight="200dp"
+        android:minHeight="100dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="5dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white50"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="5dp"
         android:textSize="16dp" />
 
     <CheckBox
@@ -53,8 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"
+        android:text="回复并转发"
         android:textColor="@color/white"
-        android:theme="@style/AppThemeDark"
-        android:text="回复并转发" />
+        android:theme="@style/AppThemeDark" />
 
 </LinearLayout>

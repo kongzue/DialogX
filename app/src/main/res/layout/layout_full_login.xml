@@ -15,7 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingHorizontal="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:text="取消"
             android:textColor="@color/dialogxIOSBlue"
             android:textSize="18dp" />
@@ -30,7 +31,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingHorizontal="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:text="下一步"
             android:textColor="@color/dialogxIOSBlue"
             android:textSize="18dp" />

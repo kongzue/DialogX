@@ -19,7 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:paddingHorizontal="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:text="关闭"
             android:textColor="@color/dialogxIOSBlue"
             android:textSize="18dp" />

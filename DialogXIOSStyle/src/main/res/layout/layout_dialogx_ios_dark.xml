@@ -31,8 +31,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
-                    android:paddingHorizontal="15dp"
+                    android:paddingLeft="15dp"
                     android:paddingTop="15dp"
+                    android:paddingRight="15dp"
                     android:paddingBottom="2dp"
                     android:text="Title"
                     android:textColor="@color/white"
@@ -57,8 +58,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:gravity="left"
                             android:layout_marginHorizontal="15dp"
+                            android:gravity="left"
                             android:text="This is content text."
                             android:textColor="@color/white"
                             android:textSize="13dp" />
@@ -67,7 +68,7 @@
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <EditText
                             android:id="@+id/txt_input"

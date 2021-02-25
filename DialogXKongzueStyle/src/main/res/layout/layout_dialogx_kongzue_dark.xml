@@ -31,8 +31,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
-                    android:paddingHorizontal="20dp"
+                    android:paddingLeft="20dp"
                     android:paddingTop="15dp"
+                    android:paddingRight="20dp"
                     android:text="Title"
                     android:textColor="@color/white"
                     android:textSize="20dp" />
@@ -40,8 +41,8 @@
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:overScrollMode="never">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -53,9 +54,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:gravity="left"
-                            android:layout_marginVertical="10dp"
                             android:layout_marginHorizontal="25dp"
+                            android:layout_marginVertical="10dp"
+                            android:gravity="left"
                             android:paddingTop="5dp"
                             android:paddingBottom="10dp"
                             android:text="This is content text."
@@ -66,7 +67,7 @@
                             android:id="@+id/box_custom"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"/>
+                            android:visibility="gone" />
 
                         <EditText
                             android:id="@+id/txt_input"
@@ -78,14 +79,14 @@
                             android:background="@drawable/editbox_dialogx_kongzue_night"
                             android:inputType="text"
                             android:maxLines="1"
-                            android:paddingHorizontal="10dp"
-                            android:paddingVertical="10dp"
+                            android:paddingLeft="10dp"
                             android:paddingTop="10dp"
+                            android:paddingRight="10dp"
                             android:paddingBottom="10dp"
                             android:scrollbars="vertical"
-                            android:textColorHint="@color/white30"
                             android:text=""
                             android:textColor="@color/white90"
+                            android:textColorHint="@color/white30"
                             android:textSize="14dp"
                             android:theme="@style/AppThemeDark"
                             android:visibility="gone" />

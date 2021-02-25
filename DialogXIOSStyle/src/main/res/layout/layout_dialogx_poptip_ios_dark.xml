@@ -10,13 +10,14 @@
         android:id="@+id/box_body"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="35dp"
-        android:paddingHorizontal="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/rect_dialogx_ios_poptip_bkg_night"
         android:elevation="100dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <ImageView
             android:id="@+id/img_dialogx_pop_icon"
@@ -51,7 +52,8 @@
             android:layout_marginHorizontal="5dp"
             android:layout_marginVertical="5dp"
             android:gravity="left|center_vertical"
-            android:paddingHorizontal="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:singleLine="true"
             android:text="Dismiss"
             android:textColor="@color/dialogxIOSBlueDark"

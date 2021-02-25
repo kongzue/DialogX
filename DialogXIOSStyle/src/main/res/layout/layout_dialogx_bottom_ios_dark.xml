@@ -30,8 +30,8 @@
                 <com.kongzue.dialogx.util.views.MaxRelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="40dp"
                     android:layout_weight="1"
+                    android:minHeight="40dp"
                     android:tag="body">
 
                     <LinearLayout
@@ -46,8 +46,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:gravity="center"
-                            android:paddingHorizontal="20dp"
-                            android:paddingVertical="7dp"
+                            android:paddingLeft="20dp"
+                            android:paddingTop="7dp"
+                            android:paddingRight="20dp"
+                            android:paddingBottom="7dp"
                             android:text="Title"
                             android:textColor="@color/dialogxIOSTipTextDark"
                             android:textSize="12dp"
@@ -75,7 +77,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginHorizontal="20dp"
                                     android:gravity="center"
-                                    android:paddingVertical="13dp"
+                                    android:paddingTop="13dp"
+                                    android:paddingBottom="13dp"
                                     android:text="This is content text."
                                     android:textColor="@color/dialogxIOSTipTextDark"
                                     android:textSize="12dp" />
@@ -83,7 +86,7 @@
                                 <RelativeLayout
                                     android:id="@+id/box_custom"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="wrap_content" />
 
                                 <ImageView
                                     android:layout_width="match_parent"
@@ -94,7 +97,7 @@
                                 <RelativeLayout
                                     android:id="@+id/box_list"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="wrap_content" />
 
                             </LinearLayout>
 

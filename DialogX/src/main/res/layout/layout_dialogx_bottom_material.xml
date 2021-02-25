@@ -41,7 +41,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:paddingBottom="10dp"
                     android:text="Title"
                     android:textColor="@color/black"
@@ -93,7 +94,8 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="right|center_vertical"
                     android:orientation="horizontal"
-                    android:paddingHorizontal="10dp">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <TextView
                         android:id="@+id/btn_selectOther"
@@ -103,7 +105,8 @@
                         android:background="@drawable/button_dialogx_material_light"
                         android:clickable="true"
                         android:gravity="center"
-                        android:paddingHorizontal="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
                         android:text="Other"
                         android:textColor="@color/colorAccent"
                         android:textSize="15dp"
@@ -122,7 +125,8 @@
                         android:background="@drawable/button_dialogx_material_light"
                         android:clickable="true"
                         android:gravity="center"
-                        android:paddingHorizontal="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
                         android:tag="cancel"
                         android:text="Cancel"
                         android:textColor="@color/colorAccent"
@@ -136,7 +140,8 @@
                         android:background="@drawable/button_dialogx_material_light"
                         android:clickable="true"
                         android:gravity="center"
-                        android:paddingHorizontal="15dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
                         android:text="OK"
                         android:textColor="@color/colorAccent"
                         android:textSize="15dp" />
