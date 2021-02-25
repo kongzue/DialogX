@@ -16,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginHorizontal="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
             app:maxLayoutWidth="270dp">
 
             <LinearLayout
@@ -58,7 +59,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
                             android:gravity="left"
                             android:text="This is content text."
                             android:textColor="@color/white"
@@ -75,8 +77,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginHorizontal="15dp"
+                            android:layout_marginLeft="15dp"
                             android:layout_marginTop="10dp"
+                            android:layout_marginRight="15dp"
                             android:background="@drawable/editbox_dialogx_ios_dark"
                             android:inputType="text"
                             android:maxLines="1"
