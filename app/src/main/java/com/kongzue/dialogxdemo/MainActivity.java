@@ -147,7 +147,7 @@ public class MainActivity extends BaseActivity {
         refreshUIMode();
         DialogX.globalStyle = MaterialStyle.style();
         DialogX.globalTheme = DialogX.THEME.AUTO;
-        DialogX.onlyOnePopTip = true;
+        DialogX.onlyOnePopTip = false;
         
         boolean showBreak = parameter.getBoolean("showBreak");
         if (showBreak) {
