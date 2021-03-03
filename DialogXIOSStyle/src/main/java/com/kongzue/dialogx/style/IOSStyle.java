@@ -17,9 +17,6 @@ import com.kongzue.dialogx.style.views.ProgressView;
  */
 public class IOSStyle implements DialogXStyle {
     
-    private IOSStyle() {
-    }
-    
     public static IOSStyle style() {
         return new IOSStyle();
     }

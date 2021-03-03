@@ -35,6 +35,8 @@ import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,8 +50,8 @@ import java.util.TimerTask;
 public class PopTip extends BaseDialog {
     
     public static final int TIME_NO_AUTO_DISMISS_DELAY = -1;
+    protected static List<PopTip> popTipList;
     
-    protected static WeakReference<PopTip> oldInstance;
     protected OnBindView<PopTip> onBindView;
     protected DialogLifecycleCallback<PopTip> dialogLifecycleCallback;
     protected PopTip me = this;
@@ -245,11 +247,23 @@ public class PopTip extends BaseDialog {
     public void show() {
         super.beforeShow();
         if (DialogX.onlyOnePopTip) {
-            if (oldInstance != null && oldInstance.get() != null) {
-                oldInstance.get().dismiss();
+            PopTip oldInstance = null;
+            if (popTipList != null && !popTipList.isEmpty()) {
+                oldInstance = popTipList.get(popTipList.size() - 1);
+            }
+            if (oldInstance != null) {
+                oldInstance.dismiss();
+            }
+        } else {
+            if (popTipList != null) {
+                for (int i = 0; i < popTipList.size(); i++) {
+                    PopTip popInstance = popTipList.get(i);
+                    popInstance.moveUp();
+                }
             }
         }
-        oldInstance = new WeakReference<>(this);
+        if (popTipList == null) popTipList = new ArrayList<>();
+        popTipList.add(PopTip.this);
         int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
         if (style.popTipSettings() != null) {
             if (style.popTipSettings().layout(isLightTheme()) != 0) {
@@ -269,11 +283,23 @@ public class PopTip extends BaseDialog {
     public void show(Activity activity) {
         super.beforeShow();
         if (DialogX.onlyOnePopTip) {
-            if (oldInstance != null && oldInstance.get() != null) {
-                oldInstance.get().dismiss();
+            PopTip oldInstance = null;
+            if (popTipList != null && !popTipList.isEmpty()) {
+                oldInstance = popTipList.get(popTipList.size() - 1);
+            }
+            if (oldInstance != null) {
+                oldInstance.dismiss();
+            }
+        } else {
+            if (popTipList != null) {
+                for (int i = 0; i < popTipList.size(); i++) {
+                    PopTip popInstance = popTipList.get(i);
+                    popInstance.moveUp();
+                }
             }
         }
-        oldInstance = new WeakReference<>(this);
+        if (popTipList == null) popTipList = new ArrayList<>();
+        popTipList.add(PopTip.this);
         int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
         if (style.popTipSettings() != null) {
             if (style.popTipSettings().layout(isLightTheme()) != 0) {
@@ -326,7 +352,7 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
-    public class DialogImpl implements DialogConvertViewInterface  {
+    public class DialogImpl implements DialogConvertViewInterface {
         
         public DialogXBaseRelativeLayout boxRoot;
         public LinearLayout boxBody;
@@ -356,7 +382,7 @@ public class PopTip extends BaseDialog {
             if (autoDismissTimer == null) {
                 showShort();
             }
-    
+            
             boxRoot.setParentDialog(me);
             boxRoot.setAutoUnsafePlacePadding(false);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
@@ -372,8 +398,8 @@ public class PopTip extends BaseDialog {
                 
                 @Override
                 public void onDismiss() {
+                    if (popTipList != null) popTipList.remove(PopTip.this);
                     isShow = false;
-                    if (oldInstance.get() == me) oldInstance.clear();
                     getDialogLifecycleCallback().onDismiss(me);
                 }
             });
@@ -408,7 +434,7 @@ public class PopTip extends BaseDialog {
                     }
                 }
             });
-    
+            
             boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
@@ -422,13 +448,13 @@ public class PopTip extends BaseDialog {
                     
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                    if (enterAnimDuration!=-1){
+                    if (enterAnimDuration != -1) {
                         enterAnim.setDuration(enterAnimDuration);
                     }
                     boxBody.startAnimation(enterAnim);
                     
                     boxRoot.animate()
-                            .setDuration(enterAnimDuration==-1?enterAnim.getDuration():enterAnimDuration)
+                            .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
                             .alpha(1f)
                             .setInterpolator(new DecelerateInterpolator())
                             .setListener(null);
@@ -510,7 +536,7 @@ public class PopTip extends BaseDialog {
                     if (v != null) v.setEnabled(false);
                     
                     Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
-                    if (exitAnimDuration!=-1){
+                    if (exitAnimDuration != -1) {
                         exitAnim.setDuration(exitAnimResId);
                     }
                     boxBody.startAnimation(exitAnim);
@@ -525,6 +551,43 @@ public class PopTip extends BaseDialog {
                                     dismiss(dialogView);
                                 }
                             });
+                }
+            });
+        }
+    }
+    
+    private void moveUp() {
+        if (getDialogImpl()!=null && getDialogImpl().boxBody!=null){
+            getDialogImpl().boxBody.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (style.popTipSettings() != null) align = style.popTipSettings().align();
+                    if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+                    switch (align) {
+                        case TOP:
+                            getDialogImpl().boxBody.animate()
+                                    .y(getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() * 1.3f)
+                                    .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
+                                    .setInterpolator(new DecelerateInterpolator(2f))
+                            ;
+                            break;
+                        case TOP_INSIDE:
+                            getDialogImpl().boxBody.animate()
+                                    .y(getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() -getDialogImpl().boxBody.getPaddingTop())
+                                    .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
+                                    .setInterpolator(new DecelerateInterpolator(2f))
+                            ;
+                            break;
+                        case CENTER:
+                        case BOTTOM:
+                        case BOTTOM_INSIDE:
+                            getDialogImpl().boxBody.animate()
+                                    .y(getDialogImpl().boxBody.getY() - getDialogImpl().boxBody.getHeight() * 1.3f)
+                                    .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
+                                    .setInterpolator(new DecelerateInterpolator(2f))
+                            ;
+                            break;
+                    }
                 }
             });
         }
@@ -720,6 +783,7 @@ public class PopTip extends BaseDialog {
         refreshUI();
         return this;
     }
+    
     public long getEnterAnimDuration() {
         return enterAnimDuration;
     }
@@ -743,15 +807,29 @@ public class PopTip extends BaseDialog {
         if (dialogView != null) {
             dismiss(dialogView);
         }
-        if (getDialogImpl().boxCustom!=null){
+        if (getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
+        
         if (DialogX.onlyOnePopTip) {
-            if (oldInstance != null && oldInstance.get() != null) {
-                oldInstance.get().dismiss();
+            PopTip oldInstance = null;
+            if (popTipList != null && !popTipList.isEmpty()) {
+                oldInstance = popTipList.get(popTipList.size() - 1);
+            }
+            if (oldInstance != null) {
+                oldInstance.dismiss();
+            }
+        } else {
+            if (popTipList != null) {
+                for (int i = 0; i < popTipList.size(); i++) {
+                    PopTip popInstance = popTipList.get(i);
+                    popInstance.moveUp();
+                }
             }
         }
-        oldInstance = new WeakReference<>(this);
+        if (popTipList == null) popTipList = new ArrayList<>();
+        popTipList.add(PopTip.this);
+        
         int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
         if (style.popTipSettings() != null) {
             if (style.popTipSettings().layout(isLightTheme()) != 0) {

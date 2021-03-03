@@ -16,9 +16,6 @@ import com.kongzue.dialogx.util.views.ProgressView;
  */
 public class MaterialStyle implements DialogXStyle {
     
-    private MaterialStyle() {
-    }
-    
     public static MaterialStyle style() {
         return new MaterialStyle();
     }

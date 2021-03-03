@@ -147,6 +147,7 @@ public class MainActivity extends BaseActivity {
         refreshUIMode();
         DialogX.globalStyle = MaterialStyle.style();
         DialogX.globalTheme = DialogX.THEME.AUTO;
+        DialogX.onlyOnePopTip = true;
         
         boolean showBreak = parameter.getBoolean("showBreak");
         if (showBreak) {
@@ -647,6 +648,7 @@ public class MainActivity extends BaseActivity {
                         @Override
                         public boolean onClick(PopTip popTip, View v) {
                             //点击“撤回”按钮回调
+                            toastS("邮件已撤回");
                             return false;
                         }
                     }).showLong();

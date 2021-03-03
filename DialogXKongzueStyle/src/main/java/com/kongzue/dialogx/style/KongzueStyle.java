@@ -15,9 +15,6 @@ import com.kongzue.dialogx.kongzuetheme.R;
  */
 public class KongzueStyle implements DialogXStyle {
     
-    private KongzueStyle() {
-    }
-    
     public static KongzueStyle style() {
         return new KongzueStyle();
     }

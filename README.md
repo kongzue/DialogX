@@ -104,7 +104,7 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-implementation 'com.kongzue.dialogx:DialogX:0.0.32'
+implementation 'com.kongzue.dialogx:DialogX:0.0.33'
 ```
 
 若有需要，也可以手动配置 Maven：
@@ -113,7 +113,7 @@ implementation 'com.kongzue.dialogx:DialogX:0.0.32'
 <dependency>
   <groupId>com.kongzue.dialogx</groupId>
   <artifactId>DialogX</artifactId>
-  <version>0.0.32</version>
+  <version>0.0.33</version>
   <type>pom</type>
 </dependency>
 ```

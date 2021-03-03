@@ -15,9 +15,6 @@ import com.kongzue.dialogx.miuistyle.R;
  */
 public class MIUIStyle implements DialogXStyle {
     
-    private MIUIStyle() {
-    }
-    
     public static MIUIStyle style() {
         return new MIUIStyle();
     }

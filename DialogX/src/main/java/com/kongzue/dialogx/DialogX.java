@@ -38,7 +38,7 @@ public class DialogX {
     public static boolean autoShowInputKeyboard = true;
     
     //同时只显示一个 PopTip
-    public static boolean onlyOnePopTip = true;
+    public static boolean onlyOnePopTip = false;
     
     //默认按钮文字样式
     public static TextInfo buttonTextInfo;
