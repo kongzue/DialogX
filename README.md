@@ -128,7 +128,7 @@ allprojects {
 2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-implementation 'com.github.kongzue.dialogx:DialogX:0.0.32'
+implementation 'com.github.kongzue.dialogx:DialogX:0.0.33'
 ```
 
 ### 方式三：直接引入 AAR 包文件
