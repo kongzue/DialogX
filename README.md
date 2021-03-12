@@ -101,9 +101,9 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 因为依赖的关系，DialogX 目前仅支持 AndroidX 作为基础进行开发，若您正在使用最新版本的 Android Studio，那么默认创建的项目就是使用 AndroidX 作为底层框架的，老版本 Android Support 兼容库将在后续更新。
 
-以下四种引入方式请任选其一。
+**以下四种引入方式请任选其一。**
 
-## Gradle 引入 jCenter 源
+### Gradle 引入 jCenter 源
 
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
@@ -111,9 +111,9 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 implementation 'com.kongzue.dialogx:DialogX:0.0.33'
 ```
 
-## Gradle 引入  jitPack 源
+### Gradle 引入  jitPack 源
 
-在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
+1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
 
 ```
 allprojects {
@@ -125,13 +125,13 @@ allprojects {
 }
 ```
 
-在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
+2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
 implementation 'com.github.kongzue.dialogx:DialogX:0.0.32'
 ```
 
-## 直接引入 AAR 包文件
+### 直接引入 AAR 包文件
 
 请前往 [Release](https://github.com/kongzue/DialogX/releases) 页面根据需要版本的下载 AAR 包文件。
 
@@ -149,7 +149,7 @@ repositories{
 implementation(name: 'AAR文件名', ext: 'aar')
 ```
 
-## 手动配置 Maven：
+### 手动配置 Maven：
 
 ```xml
 <dependency>
@@ -159,6 +159,8 @@ implementation(name: 'AAR文件名', ext: 'aar')
   <type>pom</type>
 </dependency>
 ```
+
+## 使用
 
 具体的使用说明，请参阅 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
 
