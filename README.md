@@ -103,7 +103,7 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 **以下四种引入方式请任选其一。**
 
-### Gradle 引入 jCenter 源
+### 方式一：Gradle 引入 jCenter 源
 
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
@@ -111,7 +111,7 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 implementation 'com.kongzue.dialogx:DialogX:0.0.33'
 ```
 
-### Gradle 引入  jitPack 源
+### 方式二：Gradle 引入  jitPack 源
 
 1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
 
@@ -131,7 +131,7 @@ allprojects {
 implementation 'com.github.kongzue.dialogx:DialogX:0.0.32'
 ```
 
-### 直接引入 AAR 包文件
+### 方式三：直接引入 AAR 包文件
 
 请前往 [Release](https://github.com/kongzue/DialogX/releases) 页面根据需要版本的下载 AAR 包文件。
 
@@ -149,7 +149,7 @@ repositories{
 implementation(name: 'AAR文件名', ext: 'aar')
 ```
 
-### 手动配置 Maven：
+### 方式四：手动配置 Maven
 
 ```xml
 <dependency>
