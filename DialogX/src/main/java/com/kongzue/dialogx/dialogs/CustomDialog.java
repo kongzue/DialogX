@@ -96,7 +96,7 @@ public class CustomDialog extends BaseDialog {
         show(activity, dialogView);
     }
     
-    public class DialogImpl implements DialogConvertViewInterface  {
+    public class DialogImpl implements DialogConvertViewInterface {
         
         public DialogXBaseRelativeLayout boxRoot;
         public RelativeLayout boxCustom;
@@ -116,10 +116,8 @@ public class CustomDialog extends BaseDialog {
                 @Override
                 public void onShow() {
                     isShow = true;
-                    boxRoot.setAlpha(0f);
-                    
                     getDialogLifecycleCallback().onShow(me);
-                    
+                    boxCustom.setVisibility(View.GONE);
                     if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
                 }
                 
@@ -176,12 +174,6 @@ public class CustomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    boxRoot.animate()
-                            .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(null);
-                    
                     if (enterAnimResId == R.anim.anim_dialogx_default_enter && exitAnimResId == R.anim.anim_dialogx_default_exit) {
                         switch (align) {
                             case TOP:
@@ -209,6 +201,10 @@ public class CustomDialog extends BaseDialog {
                     } else {
                         enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
                     }
+                    if (enterAnimDuration != -1) {
+                        enterAnim.setDuration(enterAnimDuration);
+                    }
+                    boxCustom.setVisibility(View.VISIBLE);
                     boxCustom.startAnimation(enterAnim);
                 }
             });
@@ -251,17 +247,22 @@ public class CustomDialog extends BaseDialog {
                 exitAnim.setDuration(exitAnimDuration);
             }
             boxCustom.startAnimation(exitAnim);
-            
-            boxRoot.animate()
-                    .alpha(0f)
-                    .setInterpolator(new AccelerateInterpolator())
-                    .setDuration(exitAnim.getDuration())
-                    .setListener(new AnimatorListenerEndCallBack() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            dismiss(dialogView);
-                        }
-                    });
+            exitAnim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                
+                }
+                
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    dismiss(dialogView);
+                }
+                
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                
+                }
+            });
         }
     }
     
@@ -425,10 +426,10 @@ public class CustomDialog extends BaseDialog {
         if (dialogView != null) {
             dismiss(dialogView);
         }
-        if (getDialogImpl().boxCustom!=null){
+        if (getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
-    
+        
         enterAnimDuration = 0;
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);

@@ -21,6 +21,9 @@ allprojects {
         maven{
             url 'https://dl.bintray.com/myzchh/maven'
         }
+        maven{
+            url 'https://jitpack.io'
+        }
     }
 }
 

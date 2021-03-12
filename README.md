@@ -97,9 +97,13 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 <div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/download_demo_qrcode.png" alt="下载 DialogX Demo" width="250" height="250" /></div>
 
-# 开始使用DialogX
+# 开始使用 DialogX
 
 因为依赖的关系，DialogX 目前仅支持 AndroidX 作为基础进行开发，若您正在使用最新版本的 Android Studio，那么默认创建的项目就是使用 AndroidX 作为底层框架的，老版本 Android Support 兼容库将在后续更新。
+
+以下四种引入方式请任选其一。
+
+## Gradle 引入 jCenter 源
 
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
@@ -107,7 +111,45 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 implementation 'com.kongzue.dialogx:DialogX:0.0.33'
 ```
 
-若有需要，也可以手动配置 Maven：
+## Gradle 引入  jitPack 源
+
+在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
+
+```
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://jitpack.io' }      //增加 jitPack Maven 仓库
+    }
+}
+```
+
+在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
+
+```
+implementation 'com.github.kongzue.dialogx:DialogX:0.0.32'
+```
+
+## 直接引入 AAR 包文件
+
+请前往 [Release](https://github.com/kongzue/DialogX/releases) 页面根据需要版本的下载 AAR 包文件。
+
+1) 将 AAR 放入 libs 目录。
+
+2) 在 Module 的 build.gradle 里加入以下代码：
+```
+build.gradle
+repositories{
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+implementation(name: 'AAR文件名', ext: 'aar')
+```
+
+## 手动配置 Maven：
 
 ```xml
 <dependency>

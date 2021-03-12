@@ -203,7 +203,7 @@ public class BlurView extends View {
                     downsampleFactor = downsampleFactor * radius / 25;
                     radius = 25;
                 }
-                mBlurScript.setRadius(radius);
+                if(mBlurScript!=null)mBlurScript.setRadius(radius);
             }
         }
         
