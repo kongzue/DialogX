@@ -276,7 +276,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(dialogView);
     }
     
@@ -312,8 +312,13 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(activity, dialogView);
+    }
+    
+    @Override
+    public String dialogKey() {
+        return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
     }
     
     protected Timer autoDismissTimer;
@@ -843,7 +848,7 @@ public class PopTip extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(dialogView);
     }
 }

@@ -154,4 +154,9 @@ public class TipDialog extends WaitDialog {
         }
         return me();
     }
+    
+    @Override
+    public String dialogKey() {
+        return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
+    }
 }

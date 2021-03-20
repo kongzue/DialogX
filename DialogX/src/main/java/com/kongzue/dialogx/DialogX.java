@@ -19,6 +19,8 @@ import com.kongzue.dialogx.util.TextInfo;
  */
 public class DialogX {
     
+    public static final String ERROR_INIT_TIPS = "DialogX.init: 初始化异常，context 为 null 或未初始化，详情请查看 https://github.com/kongzue/DialogX/wiki";
+    
     //开启日志
     public static boolean DEBUGMODE = true;
     
@@ -104,7 +106,7 @@ public class DialogX {
     
     public static void init(Context context) {
         if (context == null) {
-            error("DialogX.init: 初始化异常，context 为 null");
+            error(ERROR_INIT_TIPS);
             return;
         }
         BaseDialog.init(context);

@@ -198,7 +198,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(dialogView);
     }
     
@@ -209,7 +209,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(activity, dialogView);
     }
     
@@ -235,6 +235,7 @@ public class MessageDialog extends BaseDialog {
         public LinearLayout boxButton;
         public TextView btnSelectOther;
         public View spaceOtherButton;
+        public View splitHorizontal;
         public TextView btnSelectNegative;
         public TextView btnSelectPositive;
         
@@ -248,6 +249,7 @@ public class MessageDialog extends BaseDialog {
             boxButton = convertView.findViewById(R.id.box_button);
             btnSelectOther = convertView.findViewById(R.id.btn_selectOther);
             spaceOtherButton = convertView.findViewById(R.id.space_other_button);
+            splitHorizontal = convertView.findViewWithTag("split");
             btnSelectNegative = convertView.findViewById(R.id.btn_selectNegative);
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
             init();
@@ -488,6 +490,10 @@ public class MessageDialog extends BaseDialog {
                 visibleButtonCount = visibleButtonCount + 1;
             }
             
+            if (splitHorizontal != null) {
+                splitHorizontal.setBackgroundColor(style.splitColorRes(isLightTheme()));
+            }
+            
             boxButton.setOrientation(buttonOrientation);
             if (buttonOrientation == LinearLayout.VERTICAL) {
                 //纵向
@@ -642,6 +648,11 @@ public class MessageDialog extends BaseDialog {
                         }
                     });
         }
+    }
+    
+    @Override
+    public String dialogKey() {
+        return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
     }
     
     public void dismiss() {
@@ -992,7 +1003,7 @@ public class MessageDialog extends BaseDialog {
         if (dialogView != null) {
             dismiss(dialogView);
         }
-        if (getDialogImpl().boxCustom!=null){
+        if (getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
         int layoutId = style.layout(isLightTheme());
@@ -1001,7 +1012,7 @@ public class MessageDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(dialogView);
     }
 }

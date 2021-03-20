@@ -16,5 +16,4 @@ public abstract class DialogLifecycleCallback<T extends BaseDialog> {
     public void onDismiss(T dialog){
     
     }
-    
 }

@@ -546,6 +546,11 @@ public class BottomMenu extends BottomDialog {
         }
     }
     
+    @Override
+    public String dialogKey() {
+        return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
+    }
+    
     public List<CharSequence> getMenuList() {
         return menuList;
     }

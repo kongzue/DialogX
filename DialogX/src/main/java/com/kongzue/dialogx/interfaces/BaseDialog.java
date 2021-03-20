@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -66,7 +68,8 @@ public abstract class BaseDialog {
     protected static void show(final View view) {
         if (rootFrameLayout == null || view == null || rootFrameLayout.get() == null) return;
         log(view.getTag() + ".show");
-        rootFrameLayout.get().post(new Runnable() {
+    
+        getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 rootFrameLayout.get().addView(view);
@@ -79,7 +82,7 @@ public abstract class BaseDialog {
         log(view.getTag() + ".show");
         final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
         if (activityRootView == null) return;
-        activityRootView.post(new Runnable() {
+        getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 activityRootView.addView(view);
@@ -87,14 +90,19 @@ public abstract class BaseDialog {
         });
     }
     
-    protected static void dismiss(View dialogView) {
+    protected static void dismiss(final View dialogView) {
         log(dialogView.getTag() + ".dismiss");
         if (rootFrameLayout == null || dialogView == null) return;
-        if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
-            rootFrameLayout.get().removeView(dialogView);
-        } else {
-            ((ViewGroup) dialogView.getParent()).removeView(dialogView);
-        }
+        getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
+                    rootFrameLayout.get().removeView(dialogView);
+                } else {
+                    ((ViewGroup) dialogView.getParent()).removeView(dialogView);
+                }
+            }
+        });
     }
     
     public static Context getContext() {
@@ -253,5 +261,11 @@ public abstract class BaseDialog {
     
     public enum BOOLEAN {
         TRUE, FALSE
+    }
+    
+    public abstract String dialogKey();
+    
+    protected static Handler getMainHandler(){
+        return new Handler(Looper.getMainLooper());
     }
 }

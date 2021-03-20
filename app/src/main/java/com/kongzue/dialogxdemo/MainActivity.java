@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
@@ -15,12 +16,14 @@ import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
 
 import com.kongzue.baseframework.BaseActivity;
 import com.kongzue.baseframework.interfaces.DarkNavigationBarTheme;
@@ -145,9 +148,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initDatas(JumpParameter parameter) {
         refreshUIMode();
-        DialogX.globalStyle = MaterialStyle.style();
-        DialogX.globalTheme = DialogX.THEME.AUTO;
-        DialogX.onlyOnePopTip = false;
         
         boolean showBreak = parameter.getBoolean("showBreak");
         if (showBreak) {

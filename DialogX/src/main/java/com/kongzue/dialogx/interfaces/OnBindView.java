@@ -4,6 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.kongzue.dialogx.DialogX;
+
+import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
+
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -16,6 +20,10 @@ public abstract class OnBindView<D> {
     View customView;
     
     public OnBindView(int layoutResId) {
+        if (BaseDialog.getContext() == null){
+            DialogX.error(ERROR_INIT_TIPS);
+            return;
+        }
         this.layoutResId = layoutResId;
         customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()),false);
     }

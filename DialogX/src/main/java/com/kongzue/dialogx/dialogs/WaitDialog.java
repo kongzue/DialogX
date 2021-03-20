@@ -62,7 +62,6 @@ public class WaitDialog extends BaseDialog {
     protected BOOLEAN privateCancelable;
     
     private DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
-    protected DialogLifecycleCallback<WaitDialog> tipDialogLifecycleCallback;
     
     protected WaitDialog() {
         super();
@@ -246,7 +245,7 @@ public class WaitDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_wait);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(dialogView);
         return this;
     }
@@ -255,7 +254,7 @@ public class WaitDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_wait);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(activity, dialogView);
         return this;
     }
@@ -463,7 +462,7 @@ public class WaitDialog extends BaseDialog {
             progressView.whenShowTick(new Runnable() {
                 @Override
                 public void run() {
-                    getTipDialogLifecycleCallback().onShow(WaitDialog.this);
+                    getDialogLifecycleCallback().onShow(WaitDialog.this);
                     refreshView();
                     ((View) progressView).postDelayed(new Runnable() {
                         @Override
@@ -476,6 +475,11 @@ public class WaitDialog extends BaseDialog {
                 }
             });
         }
+    }
+    
+    @Override
+    public String dialogKey() {
+        return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
     }
     
     @Override
@@ -531,7 +535,6 @@ public class WaitDialog extends BaseDialog {
         showType = type.ordinal();
         this.message = getString(messageResId);
         readyTipType = type;
-        setDialogLifecycleCallback(tipDialogLifecycleCallback);
         show();
     }
     
@@ -539,7 +542,6 @@ public class WaitDialog extends BaseDialog {
         showType = type.ordinal();
         this.message = getString(messageResId);
         readyTipType = type;
-        setDialogLifecycleCallback(tipDialogLifecycleCallback);
         show(activity);
     }
     
@@ -649,16 +651,6 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
     
-    public DialogLifecycleCallback<WaitDialog> getTipDialogLifecycleCallback() {
-        return tipDialogLifecycleCallback == null ? new DialogLifecycleCallback<WaitDialog>() {
-        } : tipDialogLifecycleCallback;
-    }
-    
-    public WaitDialog setTipDialogLifecycleCallback(DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback) {
-        this.tipDialogLifecycleCallback = dialogLifecycleCallback;
-        return this;
-    }
-    
     public WaitDialog setEnterAnimDuration(long enterAnimDuration) {
         this.enterAnimDuration = enterAnimDuration;
         return this;
@@ -676,5 +668,9 @@ public class WaitDialog extends BaseDialog {
     @Override
     public void onUIModeChange(Configuration newConfig) {
         refreshUI();
+    }
+    
+    public static WaitDialog getInstance(){
+        return me();
     }
 }

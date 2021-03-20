@@ -99,7 +99,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_marginTop="15dp"
-                    android:background="@color/dialogxIOSSplitLight" />
+                    android:background="@color/dialogxIOSSplitLight"
+                    android:tag="split" />
 
                 <LinearLayout
                     android:id="@+id/box_button"

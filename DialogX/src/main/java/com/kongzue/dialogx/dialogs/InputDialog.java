@@ -163,6 +163,11 @@ public class InputDialog extends MessageDialog {
         return inputDialog;
     }
     
+    @Override
+    public String dialogKey() {
+        return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
+    }
+    
     public CharSequence getOkButton() {
         return okText;
     }
@@ -538,7 +543,7 @@ public class InputDialog extends MessageDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")");
+        dialogView.setTag(dialogKey());
         show(dialogView);
         setInputText(inputText);
     }
