@@ -129,20 +129,30 @@ public class IOSStyle implements DialogXStyle {
     public WaitTipRes overrideWaitTipRes() {
         return new WaitTipRes() {
             @Override
+            public int overrideWaitLayout(boolean light) {
+                return 0;
+            }
+            
+            @Override
+            public int overrideRadiusPx() {
+                return -1;
+            }
+            
+            @Override
             public boolean blurBackground() {
                 return true;
             }
             
             @Override
             public int overrideBackgroundColorRes(boolean light) {
-                return 0;
+                return light ? R.color.dialogxIOSWaitBkgDark : R.color.dialogxIOSWaitBkgLight;
             }
             
             @Override
             public int overrideTextColorRes(boolean light) {
-                return light ? R.color.white : R.color.black;
+                return 0;
             }
-    
+            
             @Override
             public ProgressViewInterface overrideWaitView(Context context, boolean light) {
                 return new ProgressView(context).setLightMode(light);
@@ -205,12 +215,12 @@ public class IOSStyle implements DialogXStyle {
                     }
                 }
             }
-    
+            
             @Override
             public int overrideSelectionMenuBackgroundColor(boolean light) {
                 return 0;
             }
-    
+            
             @Override
             public boolean selectionImageTint(boolean light) {
                 return true;
@@ -228,7 +238,7 @@ public class IOSStyle implements DialogXStyle {
         return new PopTipSettings() {
             @Override
             public int layout(boolean light) {
-                return light?R.layout.layout_dialogx_poptip_ios :R.layout.layout_dialogx_poptip_ios_dark;
+                return light ? R.layout.layout_dialogx_poptip_ios : R.layout.layout_dialogx_poptip_ios_dark;
             }
             
             @Override

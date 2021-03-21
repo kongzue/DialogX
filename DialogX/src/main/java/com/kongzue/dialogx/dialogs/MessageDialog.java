@@ -491,7 +491,7 @@ public class MessageDialog extends BaseDialog {
             }
             
             if (splitHorizontal != null) {
-                splitHorizontal.setBackgroundColor(style.splitColorRes(isLightTheme()));
+                splitHorizontal.setBackgroundColor(getColor(style.splitColorRes(isLightTheme())));
             }
             
             boxButton.setOrientation(buttonOrientation);

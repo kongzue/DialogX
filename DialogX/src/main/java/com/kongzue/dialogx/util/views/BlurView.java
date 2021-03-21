@@ -340,7 +340,7 @@ public class BlurView extends View {
         if (!useBlur) {
             Paint cutPaint = new Paint();
             cutPaint.setAntiAlias(true);
-            cutPaint.setColor(removeAlphaColor(mOverlayColor));
+            cutPaint.setColor(mOverlayColor);
             mRectF.right = getWidth();
             mRectF.bottom = getHeight();
             canvas.drawRoundRect(mRectF, mRadius, mRadius, cutPaint);

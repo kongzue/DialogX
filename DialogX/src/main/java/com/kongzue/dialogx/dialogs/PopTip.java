@@ -420,6 +420,7 @@ public class PopTip extends BaseDialog {
                 case BOTTOM:
                     rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
                     rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    boxRoot.setAutoUnsafePlacePadding(true);
                     break;
                 case CENTER:
                     rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);

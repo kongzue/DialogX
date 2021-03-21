@@ -49,4 +49,7 @@
     <color name="dialogxMIUIItemSelectionBkg">#1A0C84FF</color>
     <color name="dialogxMIUIItemSelectionBkgDark">#6282BA</color>
 
+    <color name="dialogxWaitBkgLight">#F5F6F7</color>
+    <color name="dialogxWaitBkgDark">#3F3F3F</color>
+
 </resources>

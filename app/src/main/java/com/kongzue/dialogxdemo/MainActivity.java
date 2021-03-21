@@ -63,7 +63,7 @@ import java.util.TimerTask;
 @Layout(R.layout.activity_main)
 @DarkStatusBarTheme(true)
 @DarkNavigationBarTheme(true)
-@NavigationBarBackgroundColorRes(R.color.colorNavbarBkg)
+@NavigationBarBackgroundColorRes(R.color.emptyNavBar)
 public class MainActivity extends BaseActivity {
     
     private RelativeLayout boxTable;

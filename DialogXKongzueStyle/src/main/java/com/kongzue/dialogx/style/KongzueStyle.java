@@ -73,6 +73,16 @@ public class KongzueStyle implements DialogXStyle {
     public WaitTipRes overrideWaitTipRes() {
         return new WaitTipRes() {
             @Override
+            public int overrideWaitLayout(boolean light) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideRadiusPx() {
+                return -1;
+            }
+            
+            @Override
             public boolean blurBackground() {
                 return false;
             }

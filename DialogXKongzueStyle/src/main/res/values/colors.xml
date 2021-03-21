@@ -46,6 +46,9 @@
     <color name="dialogxKongzueDarkButtonMenuBackgroundColor">#0DFFFFFF</color>
     <color name="dialogxKongzueDarkButtonSplitLineColor">#26FFFFFF</color>
 
+    <color name="dialogxWaitBkgLight">#F5F6F7</color>
+    <color name="dialogxWaitBkgDark">#3F3F3F</color>
+
     <color name="dialogxPopButtonBlueDark">#86B3D6</color>
     <color name="dialogxKongzuePopDarkBkgColor">#343434</color>
 

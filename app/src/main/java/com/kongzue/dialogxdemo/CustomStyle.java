@@ -14,9 +14,6 @@ import com.kongzue.dialogx.util.views.NoArticulatedProgressView;
  */
 public class CustomStyle extends MaterialStyle {
     
-    private CustomStyle() {
-    }
-    
     public static CustomStyle style() {
         return new CustomStyle();
     }
@@ -24,6 +21,16 @@ public class CustomStyle extends MaterialStyle {
     @Override
     public WaitTipRes overrideWaitTipRes() {
         return new WaitTipRes() {
+            @Override
+            public int overrideWaitLayout(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideRadiusPx() {
+                return -1;
+            }
+    
             @Override
             public boolean blurBackground() {
                 return false;

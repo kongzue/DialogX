@@ -104,6 +104,16 @@ public class MaterialStyle implements DialogXStyle {
     public WaitTipRes overrideWaitTipRes() {
         return new WaitTipRes() {
             @Override
+            public int overrideWaitLayout(boolean light) {
+                return R.layout.layout_dialogx_wait;
+            }
+            
+            @Override
+            public int overrideRadiusPx() {
+                return -1;
+            }
+            
+            @Override
             public boolean blurBackground() {
                 return false;
             }

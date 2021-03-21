@@ -43,4 +43,7 @@
     <color name="dialogxIOSTipTextDark">#9AA8B9</color>
     <color name="dialogxIOSBlueDark">#8AB4F8</color>
     <color name="dialogxIOSDarkDialogBkgColor">#262727</color>
+
+    <color name="dialogxIOSWaitBkgLight">#CCF4F5F6</color>
+    <color name="dialogxIOSWaitBkgDark">#D1161616</color>
 </resources>

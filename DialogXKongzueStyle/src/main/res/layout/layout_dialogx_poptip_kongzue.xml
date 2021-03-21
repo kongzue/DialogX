@@ -4,7 +4,8 @@
     android:id="@+id/box_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:baseFocusable="false">
 
     <LinearLayout
         android:id="@+id/box_body"

@@ -243,7 +243,11 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog show() {
         super.beforeShow();
-        dialogView = createView(R.layout.layout_dialogx_wait);
+        int layoutResId = R.layout.layout_dialogx_wait;
+        if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
+            layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
+        }
+        dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
         dialogView.setTag(dialogKey());
         show(dialogView);
@@ -252,7 +256,11 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog show(Activity activity) {
         super.beforeShow();
-        dialogView = createView(R.layout.layout_dialogx_wait);
+        int layoutResId = R.layout.layout_dialogx_wait;
+        if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
+            layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
+        }
+        dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
         dialogView.setTag(dialogKey());
         show(activity, dialogView);
@@ -291,7 +299,11 @@ public class WaitDialog extends BaseDialog {
             if (messageTextInfo == null) messageTextInfo = DialogX.tipTextInfo;
             if (backgroundColor == -1) backgroundColor = DialogX.tipBackgroundColor;
             
-            blurView.setRadiusPx(dip2px(15));
+            if (style.overrideWaitTipRes() == null) {
+                blurView.setRadiusPx(dip2px(15));
+            } else {
+                blurView.setRadiusPx(style.overrideWaitTipRes().overrideRadiusPx() < 0 ? dip2px(15) : style.overrideWaitTipRes().overrideRadiusPx());
+            }
             boxRoot.setClickable(true);
             
             boxRoot.setParentDialog(me.get());
@@ -440,38 +452,43 @@ public class WaitDialog extends BaseDialog {
             });
         }
         
-        public void showTip(TYPE tip) {
-            showType = tip.ordinal();
-            if (progressView == null) return;
-            switch (tip) {
-                case NONE:
-                    progressView.loading();
-                    return;
-                case SUCCESS:
-                    progressView.success();
-                    break;
-                case WARNING:
-                    progressView.warning();
-                    break;
-                case ERROR:
-                    progressView.error();
-                    break;
-            }
-            
-            //此事件是在完成衔接动画绘制后执行的逻辑
-            progressView.whenShowTick(new Runnable() {
+        public void showTip(final TYPE tip) {
+            getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    getDialogLifecycleCallback().onShow(WaitDialog.this);
-                    refreshView();
-                    ((View) progressView).postDelayed(new Runnable() {
+                    showType = tip.ordinal();
+                    if (progressView == null) return;
+                    switch (tip) {
+                        case NONE:
+                            progressView.loading();
+                            return;
+                        case SUCCESS:
+                            progressView.success();
+                            break;
+                        case WARNING:
+                            progressView.warning();
+                            break;
+                        case ERROR:
+                            progressView.error();
+                            break;
+                    }
+                    
+                    //此事件是在完成衔接动画绘制后执行的逻辑
+                    progressView.whenShowTick(new Runnable() {
                         @Override
                         public void run() {
-                            if (showType > -1) {
-                                doDismiss(null);
-                            }
+                            getDialogLifecycleCallback().onShow(WaitDialog.this);
+                            refreshView();
+                            ((View) progressView).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (showType > -1) {
+                                        doDismiss(null);
+                                    }
+                                }
+                            }, tipShowDuration);
                         }
-                    }, tipShowDuration);
+                    });
                 }
             });
         }
@@ -670,7 +687,7 @@ public class WaitDialog extends BaseDialog {
         refreshUI();
     }
     
-    public static WaitDialog getInstance(){
+    public static WaitDialog getInstance() {
         return me();
     }
 }

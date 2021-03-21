@@ -29,11 +29,13 @@ repositories {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.kongzue.baseframeworkx:baseframework:6.7.7'
+    implementation 'com.kongzue.baseframeworkx:baseframework:6.7.9'
 
-    implementation 'com.kongzue.dialogx.style.ios:DialogXIOSStyle:0.0.33'
-    implementation 'com.kongzue.dialogx.style.kongzue:DialogXKongzueStyle:0.0.33'
-    implementation 'com.kongzue.dialogx.style.miui:DialogXMIUIStyle:0.0.33'
+    implementation 'com.kongzue.dialogx.style.ios:DialogXIOSStyle:0.0.35'
+    implementation 'com.kongzue.dialogx.style.kongzue:DialogXKongzueStyle:0.0.35'
+    implementation 'com.kongzue.dialogx.style.miui:DialogXMIUIStyle:0.0.35'
+
+    implementation 'com.github.kongzue:DialogXStyle-Snackbar:1.0.3'
 
     implementation project(path: ':DialogX')
 }

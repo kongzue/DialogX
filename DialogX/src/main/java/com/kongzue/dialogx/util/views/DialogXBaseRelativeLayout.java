@@ -3,6 +3,7 @@ package com.kongzue.dialogx.util.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -38,40 +39,48 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
     private BaseDialog parentDialog;
     private boolean autoUnsafePlacePadding = true;
+    private boolean focusable = true;
     
     private OnLifecycleCallBack onLifecycleCallBack;
     private OnBackPressedListener onBackPressedListener;
     
     public DialogXBaseRelativeLayout(Context context) {
         super(context);
-        init();
+        init(null);
     }
     
     public DialogXBaseRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
     }
     
     public DialogXBaseRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
     
     public DialogXBaseRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(attrs);
     }
     
     private boolean isInited = false;
     
-    private void init() {
+    private void init(AttributeSet attrs) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             setForceDarkAllowed(false);
         }
-        if (!isInited) {
-            setFocusable(true);
-            setFocusableInTouchMode(true);
-            requestFocus();
+        if (!isInited ) {
+            if (attrs != null) {
+                TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DialogXBaseRelativeLayout);
+                focusable = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_baseFocusable, true);
+                a.recycle();
+            }
+            if (focusable) {
+                setFocusable(true);
+                setFocusableInTouchMode(true);
+                requestFocus();
+            }
         }
     }
     

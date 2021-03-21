@@ -4,7 +4,7 @@ import android.content.Context;
 
 public interface DialogXStyle {
     
-    int styleVer = 1;
+    int styleVer = 2;
     
     int BUTTON_OK = 1;
     int BUTTON_CANCEL = 2;
@@ -66,6 +66,10 @@ public interface DialogXStyle {
     }
     
     interface WaitTipRes {
+    
+        int overrideWaitLayout(boolean light);
+        
+        int overrideRadiusPx();
         
         boolean blurBackground();
         
