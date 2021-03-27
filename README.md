@@ -21,7 +21,7 @@
 
 在轻松使用的前提下，DialogX 提供了更多的个性接口方便开发者进行扩展，包括在对话框内插入自定义布局，亮暗色模式的切换，甚至自定义更符合 App UI 的自定义主题。
 
-### DialogX的特性：
+### ✅DialogX的特性：
 
 - DialogX 采用全新的实现方式，**不依赖** AlertDialog、Window 或 Fragment 实现，更加轻便快捷。
 - DialogX 的启动与线程无关，你可以**在任意线程**启动 DialogX 而它都将自动在 UI 线程运行。
@@ -103,7 +103,9 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 **以下四种引入方式请任选其一。**
 
-### 方式一：Gradle 引入 jCenter 源
+### 📥引入
+
+#### 方式一：Gradle 引入 jCenter 源
 
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
@@ -111,7 +113,7 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 implementation 'com.kongzue.dialogx:DialogX:0.0.36'
 ```
 
-### 方式二：Gradle 引入  jitPack 源
+#### 方式二：Gradle 引入  jitPack 源
 
 1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
 
@@ -131,13 +133,14 @@ allprojects {
 implementation 'com.github.kongzue.dialogx:DialogX:0.0.36'
 ```
 
-### 方式三：直接引入 AAR 包文件
+#### 方式三：直接引入 AAR 包文件
 
 请前往 [Release](https://github.com/kongzue/DialogX/releases) 页面根据需要版本的下载 AAR 包文件。
 
 1) 将 AAR 放入 libs 目录。
 
 2) 在 Module 的 build.gradle 里加入以下代码：
+
 ```
 build.gradle
 repositories{
@@ -149,7 +152,7 @@ repositories{
 implementation(name: 'AAR文件名', ext: 'aar')
 ```
 
-### 方式四：手动配置 Maven
+#### 方式四：手动配置 Maven
 
 ```xml
 <dependency>
@@ -160,7 +163,7 @@ implementation(name: 'AAR文件名', ext: 'aar')
 </dependency>
 ```
 
-## 使用
+### ▶️使用
 
 具体的使用说明，请参阅 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
 
@@ -168,7 +171,11 @@ implementation(name: 'AAR文件名', ext: 'aar')
 
 <div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/feedback_qq_qrcode.png" alt="反馈 DialogX" width="250" height="250" /></div>
 
-### 如何从 DialogV3 迁移至 DialogX
+### ℹ️使用过程遇到问题？
+
+查看 [常见问题](https://github.com/kongzue/DialogX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+
+### 🔁如何从 DialogV3 迁移至 DialogX
 
 请参考文章 [从 DialogV3 迁移至 DialogX](https://github.com/kongzue/DialogX/wiki/%E4%BB%8E-DialogV3-%E8%BF%81%E7%A7%BB%E8%87%B3-DialogX)
 
