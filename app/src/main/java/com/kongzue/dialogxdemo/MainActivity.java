@@ -256,17 +256,13 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Thread() {
+                MessageDialog.show("标题", "这里是正文内容。", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                     @Override
-                    public void run() {
-                        try {
-                            sleep(1000);
-                            TipDialog.show("OK", WaitDialog.TYPE.SUCCESS);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    public boolean onClick(MessageDialog baseDialog, View v) {
+                        PopTip.show("点击确定按钮");
+                        return false;
                     }
-                }.start();
+                });
             }
         });
         
