@@ -100,6 +100,9 @@ public class DialogX {
     //全局 Dialog 生命周期监听器
     public static DialogLifecycleCallback<BaseDialog> dialogLifeCycleListener;
     
+    //是否自动在主线程执行
+    public static boolean autoRunOnUIThread = true;
+    
     public enum THEME {
         LIGHT, DARK, AUTO
     }

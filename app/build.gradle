@@ -35,7 +35,7 @@ dependencies {
     implementation 'com.kongzue.dialogx.style.kongzue:DialogXKongzueStyle:0.0.35'
     implementation 'com.kongzue.dialogx.style.miui:DialogXMIUIStyle:0.0.35'
 
-    implementation 'com.github.kongzue:DialogXStyle-Snackbar:1.0.3'
+    implementation 'com.github.kongzue:DialogXStyle-Snackbar:1.0.6'
 
     implementation project(path: ':DialogX')
 }

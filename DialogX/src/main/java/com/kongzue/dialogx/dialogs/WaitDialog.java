@@ -243,27 +243,37 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog show() {
         super.beforeShow();
-        int layoutResId = R.layout.layout_dialogx_wait;
-        if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
-            layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
-        }
-        dialogView = createView(layoutResId);
-        dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
-        show(dialogView);
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                int layoutResId = R.layout.layout_dialogx_wait;
+                if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
+                    layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
+                }
+                dialogView = createView(layoutResId);
+                dialogImpl = new DialogImpl(dialogView);
+                dialogView.setTag(dialogKey());
+                show(dialogView);
+            }
+        });
         return this;
     }
     
-    public WaitDialog show(Activity activity) {
+    public WaitDialog show(final Activity activity) {
         super.beforeShow();
-        int layoutResId = R.layout.layout_dialogx_wait;
-        if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
-            layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
-        }
-        dialogView = createView(layoutResId);
-        dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
-        show(activity, dialogView);
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                int layoutResId = R.layout.layout_dialogx_wait;
+                if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
+                    layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
+                }
+                dialogView = createView(layoutResId);
+                dialogImpl = new DialogImpl(dialogView);
+                dialogView.setTag(dialogKey());
+                show(activity, dialogView);
+            }
+        });
         return this;
     }
     
@@ -332,8 +342,6 @@ public class WaitDialog extends BaseDialog {
                             getDialogLifecycleCallback().onShow(me());
                         }
                     });
-                    
-                    if (onBindView != null) onBindView.onBind(me.get(), onBindView.getCustomView());
                 }
                 
                 @Override
@@ -410,14 +418,9 @@ public class WaitDialog extends BaseDialog {
             if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
             
             if (onBindView != null && onBindView.getCustomView() != null) {
-                boxCustomView.removeView(onBindView.getCustomView());
-                ViewGroup.LayoutParams lp = boxCustomView.getLayoutParams();
-                if (lp == null) {
-                    lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                }
+                onBindView.bindParent(boxCustomView, me.get());
                 boxCustomView.setVisibility(View.VISIBLE);
                 boxProgress.setVisibility(View.GONE);
-                boxCustomView.addView(onBindView.getCustomView(), lp);
             } else {
                 boxCustomView.setVisibility(View.GONE);
                 boxProgress.setVisibility(View.VISIBLE);
@@ -453,7 +456,7 @@ public class WaitDialog extends BaseDialog {
         }
         
         public void showTip(final TYPE tip) {
-            getMainHandler().post(new Runnable() {
+            runOnMain(new Runnable() {
                 @Override
                 public void run() {
                     showType = tip.ordinal();
@@ -509,8 +512,7 @@ public class WaitDialog extends BaseDialog {
     }
     
     public void refreshUI() {
-        if (getRootFrameLayout() == null) return;
-        getRootFrameLayout().post(new Runnable() {
+        runOnMain(new Runnable() {
             @Override
             public void run() {
                 if (dialogImpl != null) dialogImpl.refreshView();
@@ -586,6 +588,11 @@ public class WaitDialog extends BaseDialog {
             return overrideCancelable == BOOLEAN.TRUE;
         }
         return cancelable;
+    }
+    
+    public WaitDialog setCancelable(boolean cancelable) {
+        privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
+        return this;
     }
     
     /**

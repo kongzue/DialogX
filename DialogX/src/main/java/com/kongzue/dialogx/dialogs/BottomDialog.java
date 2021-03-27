@@ -285,8 +285,6 @@ public class BottomDialog extends BaseDialog {
                     
                     onDialogInit(dialogImpl);
                     
-                    if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
-                    
                     if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground() && boxBody != null && boxCancel != null) {
                         int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
                         blurView = new BlurView(bkg.getContext(), null);
@@ -459,15 +457,8 @@ public class BottomDialog extends BaseDialog {
             
             if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
             
-            if (onBindView != null) {
-                if (onBindView.getCustomView() != null) {
-                    boxCustom.removeView(onBindView.getCustomView());
-                    ViewGroup.LayoutParams lp = boxCustom.getLayoutParams();
-                    if (lp == null) {
-                        lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    }
-                    boxCustom.addView(onBindView.getCustomView(), lp);
-                }
+            if (onBindView != null && onBindView.getCustomView() != null) {
+                onBindView.bindParent(boxCustom, me);
             }
             
             if (isAllowInterceptTouch() && isCancelable()) {
@@ -537,8 +528,7 @@ public class BottomDialog extends BaseDialog {
     }
     
     public void refreshUI() {
-        if (getRootFrameLayout() == null) return;
-        getRootFrameLayout().post(new Runnable() {
+        runOnMain(new Runnable() {
             @Override
             public void run() {
                 if (dialogImpl != null) dialogImpl.refreshView();
@@ -858,7 +848,7 @@ public class BottomDialog extends BaseDialog {
         if (style.overrideBottomDialogRes() != null) {
             layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
         }
-    
+        
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);

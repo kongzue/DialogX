@@ -529,21 +529,25 @@ public class BottomMenu extends BottomDialog {
     @Override
     public void refreshUI() {
         super.refreshUI();
-        
-        if (listView != null) {
-            if (menuListAdapter == null) {
-                menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), menuList);
-            }
-            if (listView.getAdapter() == null) {
-                listView.setAdapter(menuListAdapter);
-            } else {
-                if (listView.getAdapter() != menuListAdapter) {
-                    listView.setAdapter(menuListAdapter);
-                } else {
-                    menuListAdapter.notifyDataSetChanged();
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                if (listView != null) {
+                    if (menuListAdapter == null) {
+                        menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), menuList);
+                    }
+                    if (listView.getAdapter() == null) {
+                        listView.setAdapter(menuListAdapter);
+                    } else {
+                        if (listView.getAdapter() != menuListAdapter) {
+                            listView.setAdapter(menuListAdapter);
+                        } else {
+                            menuListAdapter.notifyDataSetChanged();
+                        }
+                    }
                 }
             }
-        }
+        });
     }
     
     @Override

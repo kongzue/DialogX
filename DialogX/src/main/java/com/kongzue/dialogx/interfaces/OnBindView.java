@@ -2,6 +2,7 @@ package com.kongzue.dialogx.interfaces;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.kongzue.dialogx.DialogX;
@@ -20,12 +21,12 @@ public abstract class OnBindView<D> {
     View customView;
     
     public OnBindView(int layoutResId) {
-        if (BaseDialog.getContext() == null){
+        if (BaseDialog.getContext() == null) {
             DialogX.error(ERROR_INIT_TIPS);
             return;
         }
         this.layoutResId = layoutResId;
-        customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()),false);
+        customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
     }
     
     public OnBindView(View customView) {
@@ -55,5 +56,38 @@ public abstract class OnBindView<D> {
     public void clean() {
         layoutResId = 0;
         customView = null;
+    }
+    
+    public OnBindView<D> bindParent(ViewGroup parentView) {
+        if (customView == null) return this;
+        if (customView.getParent() != null) {
+            if (customView.getParent()==parentView){
+                return this;
+            }
+            ((ViewGroup) customView.getParent()).removeView(customView);
+        }
+        ViewGroup.LayoutParams lp = parentView.getLayoutParams();
+        if (lp == null) {
+            lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+        parentView.addView(customView, lp);
+        return this;
+    }
+    
+    public OnBindView<D> bindParent(ViewGroup parentView, BaseDialog dialog) {
+        if (customView == null) return this;
+        if (customView.getParent() != null) {
+            if (customView.getParent()==parentView){
+                return this;
+            }
+            ((ViewGroup) customView.getParent()).removeView(customView);
+        }
+        ViewGroup.LayoutParams lp = parentView.getLayoutParams();
+        if (lp == null) {
+            lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+        parentView.addView(customView, lp);
+        onBind((D) dialog, customView);
+        return this;
     }
 }

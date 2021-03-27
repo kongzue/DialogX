@@ -397,8 +397,6 @@ public class PopTip extends BaseDialog {
                     boxRoot.setAlpha(0f);
                     
                     getDialogLifecycleCallback().onShow(me);
-                    
-                    if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
                 }
                 
                 @Override
@@ -487,19 +485,13 @@ public class PopTip extends BaseDialog {
                 tintColor(boxBody, backgroundColor);
             }
             
-            if (onBindView != null) {
-                if (onBindView.getCustomView() != null) {
-                    boxCustom.removeView(onBindView.getCustomView());
-                    ViewGroup.LayoutParams lp = onBindView.getCustomView().getLayoutParams();
-                    if (lp == null) {
-                        lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    }
-                    boxCustom.addView(onBindView.getCustomView(), lp);
-                    boxCustom.setVisibility(View.VISIBLE);
-                } else {
-                    boxCustom.setVisibility(View.GONE);
-                }
+            if (onBindView != null && onBindView.getCustomView() != null) {
+                onBindView.bindParent(boxCustom, me);
+                boxCustom.setVisibility(View.VISIBLE);
+            } else {
+                boxCustom.setVisibility(View.GONE);
             }
+            
             
             showText(txtDialogxPopText, message);
             showText(txtDialogxButton, buttonText);
@@ -563,7 +555,7 @@ public class PopTip extends BaseDialog {
     }
     
     private void moveUp() {
-        if (getDialogImpl()!=null && getDialogImpl().boxBody!=null){
+        if (getDialogImpl() != null && getDialogImpl().boxBody != null) {
             getDialogImpl().boxBody.post(new Runnable() {
                 @Override
                 public void run() {
@@ -579,7 +571,7 @@ public class PopTip extends BaseDialog {
                             break;
                         case TOP_INSIDE:
                             getDialogImpl().boxBody.animate()
-                                    .y(getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() -getDialogImpl().boxBody.getPaddingTop())
+                                    .y(getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() - getDialogImpl().boxBody.getPaddingTop())
                                     .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
                                     .setInterpolator(new DecelerateInterpolator(2f))
                             ;
@@ -600,8 +592,7 @@ public class PopTip extends BaseDialog {
     }
     
     public void refreshUI() {
-        if (getRootFrameLayout() == null) return;
-        getRootFrameLayout().post(new Runnable() {
+        runOnMain(new Runnable() {
             @Override
             public void run() {
                 if (dialogImpl != null) dialogImpl.refreshView();

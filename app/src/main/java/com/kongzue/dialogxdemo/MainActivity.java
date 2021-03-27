@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -162,7 +163,19 @@ public class MainActivity extends BaseActivity {
                             runDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    finish();
+                                    new Thread() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                //模拟2秒后启动 WaitDialog
+                                                sleep(2000);
+                                                WaitDialog.show(MainActivity.this, "Hello!");
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }.start();
+                                    finish();       //先结束掉本界面
                                 }
                             }, 2000);
                             return false;
@@ -243,13 +256,17 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageDialog.show("标题", "这里是正文内容。", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                new Thread() {
                     @Override
-                    public boolean onClick(MessageDialog baseDialog, View v) {
-                        PopTip.show("点击确定按钮");
-                        return false;
+                    public void run() {
+                        try {
+                            sleep(1000);
+                            TipDialog.show("OK", WaitDialog.TYPE.SUCCESS);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                });
+                }.start();
             }
         });
         
@@ -626,7 +643,8 @@ public class MainActivity extends BaseActivity {
                             }
                         });
                     }
-                }).setFullScreen(true)
+                })
+                        .setFullScreen(true)
                         .setMaskColor(getResources().getColor(R.color.black30));
             }
         });

@@ -214,8 +214,7 @@ public class MessageDialog extends BaseDialog {
     }
     
     public void refreshUI() {
-        if (getRootFrameLayout() == null) return;
-        getRootFrameLayout().post(new Runnable() {
+        runOnMain(new Runnable() {
             @Override
             public void run() {
                 if (dialogImpl != null) dialogImpl.refreshView();
@@ -331,8 +330,6 @@ public class MessageDialog extends BaseDialog {
                             txtInput.selectAll();
                         }
                     }
-                    
-                    if (onBindView != null) onBindView.onBind(me, onBindView.getCustomView());
                 }
                 
                 @Override
@@ -614,13 +611,8 @@ public class MessageDialog extends BaseDialog {
             }
             
             if (onBindView != null && onBindView.getCustomView() != null) {
-                boxCustom.removeView(onBindView.getCustomView());
-                ViewGroup.LayoutParams lp = boxCustom.getLayoutParams();
-                if (lp == null) {
-                    lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                }
+                onBindView.bindParent(boxCustom, me);
                 boxCustom.setVisibility(View.VISIBLE);
-                boxCustom.addView(onBindView.getCustomView(), lp);
             } else {
                 boxCustom.setVisibility(View.GONE);
             }
