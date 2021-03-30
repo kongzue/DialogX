@@ -45,6 +45,8 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
  */
 public class BottomDialog extends BaseDialog {
     
+    public static int overrideEnterDuration = -1;
+    public static int overrideExitDuration = -1;
     public static BOOLEAN overrideCancelable;
     protected OnBindView<BottomDialog> onBindView;
     protected CharSequence title;
@@ -298,7 +300,6 @@ public class BottomDialog extends BaseDialog {
                         RelativeLayout.LayoutParams cancelButtonLp = new RelativeLayout.LayoutParams(boxCancel.getWidth(), boxCancel.getHeight());
                         cancelBlurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                         cancelBlurView.setTag("blurView");
-                        cancelBlurView.setUseBlur(false);
                         cancelBlurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                         boxCancel.addView(cancelBlurView, 0, cancelButtonLp);
                     }
@@ -384,20 +385,25 @@ public class BottomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    boxRoot.animate()
-                            .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(null);
-                    
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
-                    if (enterAnimDuration != -1) {
-                        enterAnim.setDuration(enterAnimDuration);
+                    long enterAnimDurationTemp = enterAnim.getDuration();
+                    if (overrideEnterDuration >= 0) {
+                        enterAnimDurationTemp = overrideEnterDuration;
                     }
+                    if (enterAnimDuration >= 0) {
+                        enterAnimDurationTemp = enterAnimDuration;
+                    }
+                    enterAnim.setDuration(enterAnimDurationTemp);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     bkg.startAnimation(enterAnim);
                     
                     bkg.setY(bkgEnterAimY);
+                    
+                    boxRoot.animate()
+                            .setDuration(enterAnimDurationTemp)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .setListener(null);
                 }
             });
         }
@@ -498,13 +504,20 @@ public class BottomDialog extends BaseDialog {
                 boxContent.getViewTreeObserver().removeOnGlobalLayoutListener(onContentViewLayoutChangeListener);
             
             ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
-            exitAnim.setDuration(exitAnimDuration == -1 ? 300 : exitAnimDuration);
+            long exitAnimDurationTemp = 300;
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration >= 0) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            exitAnim.setDuration(exitAnimDurationTemp);
             exitAnim.start();
             
             boxRoot.animate()
                     .alpha(0f)
                     .setInterpolator(new AccelerateInterpolator())
-                    .setDuration(exitAnim.getDuration())
+                    .setDuration(exitAnimDurationTemp)
                     .setListener(new AnimatorListenerEndCallBack() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
@@ -517,8 +530,15 @@ public class BottomDialog extends BaseDialog {
             if (isCancelable()) {
                 doDismiss(boxRoot);
             } else {
+                long exitAnimDurationTemp = 300;
+                if (overrideExitDuration >= 0) {
+                    exitAnimDurationTemp = overrideExitDuration;
+                }
+                if (exitAnimDuration >= 0) {
+                    exitAnimDurationTemp = exitAnimDuration;
+                }
                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
-                enterAnim.setDuration(exitAnimDuration == -1 ? 300 : exitAnimDuration);
+                enterAnim.setDuration(exitAnimDurationTemp);
                 enterAnim.start();
             }
         }

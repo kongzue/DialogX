@@ -262,7 +262,7 @@ public abstract class BaseDialog {
             error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return Color.BLACK;
         }
-        return getContext().getResources().getColor(backgroundRes);
+        return getResources().getColor(backgroundRes);
     }
     
     public enum BOOLEAN {

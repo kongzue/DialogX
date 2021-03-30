@@ -82,7 +82,7 @@ public abstract class OnBindView<D> {
             }
             ((ViewGroup) customView.getParent()).removeView(customView);
         }
-        ViewGroup.LayoutParams lp = parentView.getLayoutParams();
+        ViewGroup.LayoutParams lp = customView.getLayoutParams();
         if (lp == null) {
             lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }

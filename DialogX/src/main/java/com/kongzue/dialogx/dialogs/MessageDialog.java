@@ -50,6 +50,10 @@ import com.kongzue.dialogx.util.TextInfo;
  */
 public class MessageDialog extends BaseDialog {
     
+    public static int overrideEnterDuration = -1;
+    public static int overrideExitDuration = -1;
+    public static int overrideEnterAnimRes = 0;
+    public static int overrideExitAnimRes = 0;
     public static BOOLEAN overrideCancelable;
     protected OnBindView<MessageDialog> onBindView;
     protected MessageDialog me = this;
@@ -277,15 +281,23 @@ public class MessageDialog extends BaseDialog {
                     isShow = true;
                     boxRoot.setAlpha(0f);
                     int enterAnimResId = style.enterAnimResId() == 0 ? R.anim.anim_dialogx_default_enter : style.enterAnimResId();
-                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
-                    if (enterAnimDuration != -1) {
-                        enterAnim.setDuration(enterAnimDuration);
+                    if (overrideEnterAnimRes != 0) {
+                        enterAnimResId = overrideEnterAnimRes;
                     }
+                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
+                    long enterAnimDurationTemp = enterAnim.getDuration();
+                    if (overrideEnterDuration >= 0) {
+                        enterAnimDurationTemp = overrideEnterDuration;
+                    }
+                    if (enterAnimDuration >= 0) {
+                        enterAnimDurationTemp = enterAnimDuration;
+                    }
+                    enterAnim.setDuration(enterAnimDurationTemp);
                     enterAnim.setInterpolator(new DecelerateInterpolator());
                     bkg.startAnimation(enterAnim);
                     
                     boxRoot.animate()
-                            .setDuration(enterAnim.getDuration())
+                            .setDuration(enterAnimDurationTemp)
                             .alpha(1f)
                             .setInterpolator(new DecelerateInterpolator())
                             .setListener(null);
@@ -622,11 +634,19 @@ public class MessageDialog extends BaseDialog {
             if (v != null) v.setEnabled(false);
             
             int exitAnimResId = style.exitAnimResId() == 0 ? R.anim.anim_dialogx_default_exit : style.exitAnimResId();
-            Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
-            exitAnim.setInterpolator(new AccelerateInterpolator());
-            if (exitAnimDuration != -1) {
-                exitAnim.setDuration(exitAnimDuration);
+            if (overrideExitAnimRes != 0) {
+                exitAnimResId = overrideExitAnimRes;
             }
+            Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+            long exitAnimDurationTemp = exitAnim.getDuration();
+            exitAnim.setInterpolator(new AccelerateInterpolator());
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration >= 0) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            exitAnim.setDuration(exitAnimDurationTemp);
             bkg.startAnimation(exitAnim);
             
             boxRoot.animate()

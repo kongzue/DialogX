@@ -42,6 +42,10 @@ import java.lang.ref.WeakReference;
  */
 public class WaitDialog extends BaseDialog {
     
+    public static int overrideEnterDuration = -1;
+    public static int overrideExitDuration = -1;
+    public static int overrideEnterAnimRes = 0;
+    public static int overrideExitAnimRes = 0;
     public static BOOLEAN overrideCancelable;
     protected OnBindView<WaitDialog> onBindView;
     
@@ -326,15 +330,23 @@ public class WaitDialog extends BaseDialog {
                         @Override
                         public void run() {
                             int enterAnimResId = R.anim.anim_dialogx_default_enter;
-                            Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
-                            enterAnim.setInterpolator(new DecelerateInterpolator());
-                            if (enterAnimDuration != -1) {
-                                enterAnim.setDuration(enterAnimDuration);
+                            if (overrideEnterAnimRes != 0) {
+                                enterAnimResId = overrideEnterAnimRes;
                             }
+                            Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
+                            long enterAnimDurationTemp = enterAnim.getDuration();
+                            enterAnim.setInterpolator(new DecelerateInterpolator());
+                            if (overrideEnterDuration >= 0) {
+                                enterAnimDurationTemp = overrideEnterDuration;
+                            }
+                            if (enterAnimDuration >= 0) {
+                                enterAnimDurationTemp = enterAnimDuration;
+                            }
+                            enterAnim.setDuration(enterAnimDurationTemp);
                             bkg.startAnimation(enterAnim);
                             
                             boxRoot.animate()
-                                    .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
+                                    .setDuration(enterAnimDurationTemp)
                                     .alpha(1f)
                                     .setInterpolator(new DecelerateInterpolator())
                                     .setListener(null);
@@ -434,17 +446,25 @@ public class WaitDialog extends BaseDialog {
                     if (v != null) v.setEnabled(false);
                     
                     int exitAnimResId = R.anim.anim_dialogx_default_exit;
-                    Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
-                    if (exitAnimDuration != -1) {
-                        exitAnim.setDuration(exitAnimDuration);
+                    if (overrideExitAnimRes != 0) {
+                        exitAnimResId = overrideExitAnimRes;
                     }
+                    Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+                    long exitAnimDurationTemp = exitAnim.getDuration();
+                    if (overrideExitDuration >= 0) {
+                        exitAnimDurationTemp = overrideExitDuration;
+                    }
+                    if (exitAnimDuration != -1) {
+                        exitAnimDurationTemp = exitAnimDuration;
+                    }
+                    exitAnim.setDuration(exitAnimDurationTemp);
                     exitAnim.setInterpolator(new AccelerateInterpolator());
                     bkg.startAnimation(exitAnim);
                     
                     boxRoot.animate()
                             .alpha(0f)
                             .setInterpolator(new AccelerateInterpolator())
-                            .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration)
+                            .setDuration(exitAnimDurationTemp)
                             .setListener(new AnimatorListenerEndCallBack() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {

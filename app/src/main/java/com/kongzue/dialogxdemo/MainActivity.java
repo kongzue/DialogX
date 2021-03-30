@@ -640,7 +640,7 @@ public class MainActivity extends BaseActivity {
                         });
                     }
                 })
-                        .setFullScreen(true)
+                        .setAlign(CustomDialog.ALIGN.CENTER)
                         .setMaskColor(getResources().getColor(R.color.black30));
             }
         });
