@@ -13,6 +13,8 @@
 <img src="https://img.shields.io/badge/Homepage-Kongzue.com-brightgreen.svg" alt="Homepage">
 </a>
 
+![DialogX](https://repository-images.githubusercontent.com/298764877/37386d80-8986-11eb-8ff2-1206da84cd8d)
+
 # DialogX优势
 
 对话框是一个软件对用户操作进行响应、反馈的重要组件，而 DialogX 将可以协助开发者快速完成这些事务。
