@@ -410,7 +410,8 @@ public class MainActivity extends BaseActivity {
                             public void onBind(BottomDialog dialog, View v) {
                             
                             }
-                        }).show();
+                        })
+                        .show();
             }
         });
         

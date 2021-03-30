@@ -1,4 +1,4 @@
-# 0.0.37.beta2
+# 0.0.37.beta3
 更新日志：
 
 ### 新增
@@ -29,4 +29,7 @@ BottomDialog 在 IOS 样式下“取消”按钮背景不模糊的问题；
 CustomDialog Align 方法无效的问题；
 
 OnBindView 绑定父布局时设置的 LayoutParams 存在不生效的问题；
+
+在对话框处于已经显示时设置 setDialogLifecycleCallback，会自动执行一次onShow
+
 

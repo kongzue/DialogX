@@ -639,6 +639,7 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setDialogLifecycleCallback(DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback) {
         this.dialogLifecycleCallback = dialogLifecycleCallback;
+        if (isShow) dialogLifecycleCallback.onShow(me.get());
         return this;
     }
     
