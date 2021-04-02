@@ -50,7 +50,7 @@ public class App extends BaseApp<App> {
                 };
             }
         };
-        
+    
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.onlyOnePopTip = false;
     }

@@ -272,14 +272,7 @@ public abstract class BaseDialog {
     public abstract String dialogKey();
     
     protected static void runOnMain(Runnable runnable) {
-        if (!DialogX.autoRunOnUIThread){
-            runnable.run();
-            return;
-        }
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            runnable.run();
-        } else {
-            new Handler(Looper.getMainLooper()).post(runnable);
-        }
+        if (!DialogX.autoRunOnUIThread) runnable.run();
+        new Handler(Looper.getMainLooper()).post(runnable);
     }
 }
