@@ -212,42 +212,6 @@ public class MainActivity extends BaseActivity {
     
     private int selectMenuIndex;
     
-    private void b(){
-        CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_view) {
-            @Override
-            public void onBind(final CustomDialog dialog, View v) {
-                log("#B");
-                v.findViewById(R.id.img_ico).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        log("B click!");
-                    }
-                });
-            }
-        })
-        .setAutoUnsafePlacePadding(true)
-        .setMaskColor(getResources().getColor(R.color.black30))
-        .setAlign(CustomDialog.ALIGN.TOP);
-    }
-    
-    private void a(){
-        CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
-            @Override
-            public void onBind(final CustomDialog dialog, View v) {
-                log("#A");
-                v.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        b();
-                        dialog.dismiss();
-                    }
-                });
-            }
-        })
-                .setFullScreen(true)
-                .setMaskColor(getResources().getColor(R.color.black30));
-    }
-    
     @Override
     public void setEvents() {
         grpTheme.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -292,14 +256,13 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                MessageDialog.show("标题", "这里是正文内容。", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
-//                    @Override
-//                    public boolean onClick(MessageDialog baseDialog, View v) {
-//                        PopTip.show("点击确定按钮");
-//                        return false;
-//                    }
-//                });
-               a();
+                MessageDialog.show("标题", "这里是正文内容。", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                    @Override
+                    public boolean onClick(MessageDialog baseDialog, View v) {
+                        PopTip.show("点击确定按钮");
+                        return false;
+                    }
+                });
             }
         });
         
@@ -445,7 +408,7 @@ public class MainActivity extends BaseActivity {
                         new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
-                            
+
                             }
                         })
                         .show();
