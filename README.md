@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/Kongzue%20Dialog-Beta-green.svg" alt="Kongzue Dialog">
 </a> 
 <a href="https://bintray.com/myzchh/maven/dialogX/">
-<img src="https://img.shields.io/badge/Maven-Beta-blue.svg" alt="Maven">
+<img src="https://api.bintray.com/packages/myzchh/maven/dialogX/images/download.svg" alt="jCenter">
 </a> 
 <a href="https://jitpack.io/#kongzue/DialogX">
 <img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
