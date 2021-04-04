@@ -385,22 +385,29 @@ public class BottomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
-                    long enterAnimDurationTemp = enterAnim.getDuration();
-                    if (overrideEnterDuration >= 0) {
-                        enterAnimDurationTemp = overrideEnterDuration;
-                    }
-                    if (enterAnimDuration >= 0) {
-                        enterAnimDurationTemp = enterAnimDuration;
-                    }
-                    enterAnim.setDuration(enterAnimDurationTemp);
-                    enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                    bkg.startAnimation(enterAnim);
-                    
-                    bkg.setY(bkgEnterAimY);
+                    bkg.setY(boxRoot.getHeight());
+                    bkg.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            
+                            bkg.setY(bkgEnterAimY);
+    
+                            Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
+                            long enterAnimDurationTemp = enterAnim.getDuration();
+                            if (overrideEnterDuration >= 0) {
+                                enterAnimDurationTemp = overrideEnterDuration;
+                            }
+                            if (enterAnimDuration >= 0) {
+                                enterAnimDurationTemp = enterAnimDuration;
+                            }
+                            enterAnim.setDuration(enterAnimDurationTemp);
+                            enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                            bkg.startAnimation(enterAnim);
+                        }
+                    });
                     
                     boxRoot.animate()
-                            .setDuration(enterAnimDurationTemp)
+                            .setDuration(300)
                             .alpha(1f)
                             .setInterpolator(new DecelerateInterpolator())
                             .setListener(null);
@@ -537,9 +544,9 @@ public class BottomDialog extends BaseDialog {
                 if (exitAnimDuration >= 0) {
                     exitAnimDurationTemp = exitAnimDuration;
                 }
-                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
-                enterAnim.setDuration(exitAnimDurationTemp);
-                enterAnim.start();
+                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
+                exitAnim.setDuration(exitAnimDurationTemp);
+                exitAnim.start();
             }
         }
     }
