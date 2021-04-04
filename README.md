@@ -6,6 +6,7 @@
 <a href="https://bintray.com/myzchh/maven/dialogX/">
 <img src="https://img.shields.io/badge/Maven-Beta-blue.svg" alt="Maven">
 </a> 
+<a href="https://jitpack.io/#kongzue/DialogX">[![](https://jitpack.io/v/kongzue/DialogX.svg)](https://jitpack.io/#kongzue/DialogX)</a> 
 <a href="http://www.apache.org/licenses/LICENSE-2.0">
 <img src="https://img.shields.io/badge/License-Apache%202.0-red.svg" alt="License">
 </a> 
