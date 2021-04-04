@@ -35,7 +35,7 @@
                     android:paddingLeft="15dp"
                     android:paddingTop="15dp"
                     android:paddingRight="15dp"
-                    android:paddingBottom="2dp"
+                    android:paddingBottom="8dp"
                     android:text="Title"
                     android:textColor="@color/black"
                     android:textSize="17dp" />
@@ -88,7 +88,7 @@
                             android:text=""
                             android:textColor="@color/black90"
                             android:textSize="14dp"
-                            android:theme="@style/AppTheme" />
+                            android:theme="@style/DialogXCompatThemeLight" />
 
                     </LinearLayout>
 

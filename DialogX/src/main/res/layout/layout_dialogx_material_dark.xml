@@ -84,7 +84,7 @@
                             android:text=""
                             android:textColor="@color/white"
                             android:textSize="18dp"
-                            android:theme="@style/AppThemeDark" />
+                            android:theme="@style/DialogXCompatThemeDark" />
 
                     </LinearLayout>
 

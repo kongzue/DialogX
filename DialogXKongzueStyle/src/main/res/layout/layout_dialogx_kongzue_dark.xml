@@ -92,7 +92,7 @@
                             android:textColor="@color/white90"
                             android:textColorHint="@color/white30"
                             android:textSize="14dp"
-                            android:theme="@style/AppThemeDark"
+                            android:theme="@style/DialogXCompatThemeDark"
                             android:visibility="gone" />
 
                     </LinearLayout>
