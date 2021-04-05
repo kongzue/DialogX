@@ -385,26 +385,41 @@ public class BottomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    bkg.setY(boxRoot.getHeight());
-                    bkg.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            
-                            bkg.setY(bkgEnterAimY);
-    
-                            Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
-                            long enterAnimDurationTemp = enterAnim.getDuration();
-                            if (overrideEnterDuration >= 0) {
-                                enterAnimDurationTemp = overrideEnterDuration;
+                    if (style.overrideBottomDialogRes()!=null && style.overrideBottomDialogRes().touchSlide()){
+                        bkg.setY(boxRoot.getHeight());
+                        bkg.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                bkg.setY(bkgEnterAimY);
+            
+                                Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
+                                long enterAnimDurationTemp = enterAnim.getDuration();
+                                if (overrideEnterDuration >= 0) {
+                                    enterAnimDurationTemp = overrideEnterDuration;
+                                }
+                                if (enterAnimDuration >= 0) {
+                                    enterAnimDurationTemp = enterAnimDuration;
+                                }
+                                enterAnim.setDuration(enterAnimDurationTemp);
+                                enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                                bkg.startAnimation(enterAnim);
                             }
-                            if (enterAnimDuration >= 0) {
-                                enterAnimDurationTemp = enterAnimDuration;
-                            }
-                            enterAnim.setDuration(enterAnimDurationTemp);
-                            enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                            bkg.startAnimation(enterAnim);
+                        });
+                    }else{
+                        Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
+                        long enterAnimDurationTemp = enterAnim.getDuration();
+                        if (overrideEnterDuration >= 0) {
+                            enterAnimDurationTemp = overrideEnterDuration;
                         }
-                    });
+                        if (enterAnimDuration >= 0) {
+                            enterAnimDurationTemp = enterAnimDuration;
+                        }
+                        enterAnim.setDuration(enterAnimDurationTemp);
+                        enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                        bkg.startAnimation(enterAnim);
+    
+                        bkg.setY(bkgEnterAimY);
+                    }
                     
                     boxRoot.animate()
                             .setDuration(300)
