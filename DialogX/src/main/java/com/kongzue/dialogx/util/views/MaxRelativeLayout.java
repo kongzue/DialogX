@@ -106,11 +106,23 @@ public class MaxRelativeLayout extends RelativeLayout {
         }
         
         View blurView = findViewWithTag("blurView");
-        if (blurView != null) {
-            LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
-            lp.width = getMeasuredWidth();
-            lp.height = getMeasuredHeight();
-            blurView.setLayoutParams(lp);
+        View contentView = findViewWithoutTag("blurView");
+        if (contentView != null) {
+            int widthTemp = contentView.getMeasuredWidth() == 0 ? getMeasuredWidth() : contentView.getMeasuredWidth();
+            int heightTemp = contentView.getMeasuredHeight() == 0 ? getMeasuredHeight() : contentView.getMeasuredHeight();
+            if (blurView != null) {
+                LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
+                lp.width = widthTemp;
+                lp.height = heightTemp;
+                blurView.setLayoutParams(lp);
+            }
+        } else {
+            if (blurView != null) {
+                LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
+                lp.width = getMeasuredWidth();
+                lp.height = getMeasuredHeight();
+                blurView.setLayoutParams(lp);
+            }
         }
         
         int maxHeightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, heightMode);
@@ -118,6 +130,15 @@ public class MaxRelativeLayout extends RelativeLayout {
         super.onMeasure(maxWidthMeasureSpec, maxHeightMeasureSpec);
         
         childScrollView = findViewById(R.id.scrollView);
+    }
+    
+    private View findViewWithoutTag(String tag) {
+        for (int i = 0; i < getChildCount(); i++) {
+            if (!tag.equals(getChildAt(i).getTag())) {
+                return getChildAt(i);
+            }
+        }
+        return null;
     }
     
     public boolean isChildScrollViewCanScroll() {
