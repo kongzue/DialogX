@@ -25,6 +25,8 @@ public class MaxRelativeLayout extends RelativeLayout {
     
     private int maxWidth;
     private int maxHeight;
+    private int minWidth;
+    private int minHeight;
     private boolean lockWidth;
     private boolean interceptTouch = true;
     
@@ -55,6 +57,8 @@ public class MaxRelativeLayout extends RelativeLayout {
             
             a.recycle();
         }
+        minWidth = getMinimumWidth();
+        minHeight = getMinimumHeight();
         
         if (!isInEditMode()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -110,6 +114,8 @@ public class MaxRelativeLayout extends RelativeLayout {
         if (contentView != null) {
             int widthTemp = contentView.getMeasuredWidth() == 0 ? getMeasuredWidth() : contentView.getMeasuredWidth();
             int heightTemp = contentView.getMeasuredHeight() == 0 ? getMeasuredHeight() : contentView.getMeasuredHeight();
+            if (widthTemp < minWidth) widthTemp = minWidth;
+            if (heightTemp < minHeight) heightTemp = minHeight;
             if (blurView != null) {
                 LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
                 lp.width = widthTemp;

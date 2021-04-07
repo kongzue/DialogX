@@ -174,7 +174,7 @@ public abstract class BaseDialog {
     
     protected void showText(TextView textView, CharSequence text) {
         if (textView == null) return;
-        if (text == null) {
+        if (isNull(text)) {
             textView.setVisibility(View.GONE);
             textView.setText("");
         } else {
