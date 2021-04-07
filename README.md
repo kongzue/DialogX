@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/Kongzue%20DialogX-Beta-green.svg" alt="Kongzue Dialog">
 </a> 
 <a href="https://bintray.com/myzchh/maven/dialogX/">
-<img src="https://api.bintray.com/packages/myzchh/maven/dialogX/images/download.svg" alt="jCenter">
+<img src="https://img.shields.io/badge/jCenter-Beta-blue.svg" alt="Maven">
 </a> 
 <a href="https://jitpack.io/#kongzue/DialogX">
 <img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
@@ -112,6 +112,10 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 #### 方式一：Gradle 引入 jCenter 源
 
+<a href="https://bintray.com/myzchh/maven/dialogX/">
+<img src="https://api.bintray.com/packages/myzchh/maven/dialogX/images/download.svg" alt="jCenter">
+</a> 
+
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
@@ -119,6 +123,10 @@ implementation 'com.kongzue.dialogx:DialogX:0.0.36'
 ```
 
 #### 方式二：Gradle 引入  jitPack 源
+
+<a href="https://jitpack.io/#kongzue/DialogX">
+<img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
+</a> 
 
 1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
 
