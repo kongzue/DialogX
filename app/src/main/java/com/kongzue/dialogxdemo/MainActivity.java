@@ -408,7 +408,7 @@ public class MainActivity extends BaseActivity {
                         new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
-
+                            
                             }
                         })
                         .show();
