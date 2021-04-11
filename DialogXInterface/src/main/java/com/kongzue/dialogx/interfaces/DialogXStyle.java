@@ -4,7 +4,7 @@ import android.content.Context;
 
 public interface DialogXStyle {
     
-    int styleVer = 2;
+    int styleVer = 3;
     
     int BUTTON_OK = 1;
     int BUTTON_CANCEL = 2;
@@ -101,6 +101,8 @@ public interface DialogXStyle {
         boolean selectionImageTint(boolean light);
         
         int overrideSelectionImage(boolean light, boolean isSelected);
+    
+        int overrideMultiSelectionImage(boolean light, boolean isSelected);
     }
     
     interface PopTipSettings {

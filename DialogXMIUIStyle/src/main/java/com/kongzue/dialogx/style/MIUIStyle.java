@@ -172,6 +172,11 @@ public class MIUIStyle implements DialogXStyle {
             public int overrideSelectionImage(boolean light, boolean isSelected) {
                 return 0;
             }
+    
+            @Override
+            public int overrideMultiSelectionImage(boolean b, boolean b1) {
+                return 0;
+            }
         };
     }
     

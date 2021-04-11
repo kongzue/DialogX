@@ -51,6 +51,7 @@ import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
+import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -58,6 +59,8 @@ import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -97,6 +100,7 @@ public class MainActivity extends BaseActivity {
     private TextView btnBottomMenu;
     private TextView btnBottomReply;
     private TextView btnBottomSelectMenu;
+    private TextView btnBottomMultiSelectMenu;
     private TextView btnCustomMessageDialog;
     private TextView btnCustomInputDialog;
     private TextView btnCustomBottomMenu;
@@ -137,6 +141,7 @@ public class MainActivity extends BaseActivity {
         btnBottomMenu = findViewById(R.id.btn_bottom_menu);
         btnBottomReply = findViewById(R.id.btn_bottom_reply);
         btnBottomSelectMenu = findViewById(R.id.btn_bottom_select_menu);
+        btnBottomMultiSelectMenu = findViewById(R.id.btn_bottom_multiSelect_menu);
         btnCustomMessageDialog = findViewById(R.id.btn_customMessageDialog);
         btnCustomInputDialog = findViewById(R.id.btn_customInputDialog);
         btnCustomBottomMenu = findViewById(R.id.btn_customBottomMenu);
@@ -210,7 +215,11 @@ public class MainActivity extends BaseActivity {
     private TextView btnClose;
     private WebView webView;
     
+    private String[] singleSelectMenuText = new String[]{"拒绝", "询问", "始终允许", "仅在使用中允许"};
+    private String[] multiSelectMenuText = new String[]{"上海", "北京", "广州", "深圳"};
     private int selectMenuIndex;
+    private int[] selectMenuIndexArray;
+    private String multiSelectMenuResultCache;
     
     @Override
     public void setEvents() {
@@ -674,18 +683,50 @@ public class MainActivity extends BaseActivity {
         btnBottomSelectMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomMenu.show(new String[]{"拒绝", "询问", "始终允许", "仅在使用中允许"})
+                BottomMenu.show(singleSelectMenuText)
                         .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
                         .setTitle("获得权限标题")
-                        .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
+                        .setOnMenuItemClickListener(new OnMenuItemSelectListener<BottomMenu>() {
                             @Override
-                            public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
+                            public void onOneItemSelect(BottomMenu dialog, CharSequence text, int index, boolean select) {
                                 selectMenuIndex = index;
-                                PopTip.show(text);
+                            }
+                        })
+                        .setOkButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+                            @Override
+                            public boolean onClick(BottomDialog baseDialog, View v) {
+                                PopTip.show("已选择：" + singleSelectMenuText[selectMenuIndex]);
                                 return false;
                             }
                         })
                         .setSelection(selectMenuIndex);
+            }
+        });
+        
+        btnBottomMultiSelectMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomMenu.show(multiSelectMenuText)
+                        .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
+                        .setTitle("获得权限标题")
+                        .setOnMenuItemClickListener(new OnMenuItemSelectListener<BottomMenu>() {
+                            @Override
+                            public void onMultiItemSelect(BottomMenu dialog, CharSequence[] text, int[] index) {
+                                multiSelectMenuResultCache = "";
+                                for (CharSequence c : text) {
+                                    multiSelectMenuResultCache = multiSelectMenuResultCache + " " + c;
+                                }
+                                selectMenuIndexArray = index;
+                            }
+                        })
+                        .setOkButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+                            @Override
+                            public boolean onClick(BottomDialog baseDialog, View v) {
+                                PopTip.show("已选择：" + multiSelectMenuResultCache);
+                                return false;
+                            }
+                        })
+                        .setSelection(selectMenuIndexArray);
             }
         });
     }

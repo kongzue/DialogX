@@ -21,6 +21,7 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
+import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
 import com.kongzue.dialogx.util.NormalMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BottomDialogListView;
@@ -40,8 +41,16 @@ import static android.view.View.OVER_SCROLL_NEVER;
  */
 public class BottomMenu extends BottomDialog {
     
+    public enum SELECT_MODE {
+        NONE,
+        SINGLE,
+        MULTIPLE
+    }
+    
     protected BottomMenu me = this;
     protected int selectionIndex = -1;
+    protected SELECT_MODE selectMode = SELECT_MODE.NONE;
+    protected ArrayList<Integer> selectionItems;
     
     protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
     
@@ -456,9 +465,6 @@ public class BottomMenu extends BottomDialog {
     
     private float touchDownY;
     
-    public static final int DELAY = 500;
-    private long lastClickTime = 0;
-    
     @Override
     protected void onDialogInit(final DialogImpl dialog) {
         if (dialog != null) {
@@ -496,20 +502,78 @@ public class BottomMenu extends BottomDialog {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    long currentTime = System.currentTimeMillis();
-                    if (currentTime - lastClickTime > DELAY) {
-                        lastClickTime = currentTime;
-                        float deltaY = Math.abs(touchDownY - dialog.bkg.getY());
-                        if (deltaY > dip2px(15)) {
-                            return;
-                        }
-                        if (onMenuItemClickListener != null) {
-                            if (!onMenuItemClickListener.onClick(me, menuList.get(position), position)) {
+                    float deltaY = Math.abs(touchDownY - dialog.bkg.getY());
+                    if (deltaY > dip2px(15)) {
+                        return;
+                    }
+                    switch (selectMode) {
+                        case NONE:
+                            if (onMenuItemClickListener != null) {
+                                if (!onMenuItemClickListener.onClick(me, menuList.get(position), position)) {
+                                    dismiss();
+                                }
+                            } else {
                                 dismiss();
                             }
-                        } else {
-                            dismiss();
-                        }
+                            break;
+                        case SINGLE:
+                            if (onMenuItemClickListener instanceof OnMenuItemSelectListener) {
+                                OnMenuItemSelectListener<BottomMenu> onMenuItemSelectListener = (OnMenuItemSelectListener<BottomMenu>) onMenuItemClickListener;
+                                if (!onMenuItemSelectListener.onClick(me, menuList.get(position), position)) {
+                                    dismiss();
+                                } else {
+                                    boolean select = false;
+                                    if (selectionIndex == position) {
+                                        selectionIndex = -1;
+                                    } else {
+                                        selectionIndex = position;
+                                        select = true;
+                                    }
+                                    menuListAdapter.notifyDataSetInvalidated();
+                                    menuListAdapter.notifyDataSetChanged();
+                                    onMenuItemSelectListener.onOneItemSelect(me, menuList.get(position), position, select);
+                                }
+                            } else {
+                                if (onMenuItemClickListener != null) {
+                                    if (!onMenuItemClickListener.onClick(me, menuList.get(position), position)) {
+                                        dismiss();
+                                    }
+                                } else {
+                                    dismiss();
+                                }
+                            }
+                            break;
+                        case MULTIPLE:
+                            if (onMenuItemClickListener instanceof OnMenuItemSelectListener) {
+                                OnMenuItemSelectListener<BottomMenu> onMenuItemSelectListener = (OnMenuItemSelectListener<BottomMenu>) onMenuItemClickListener;
+                                if (!onMenuItemSelectListener.onClick(me, menuList.get(position), position)) {
+                                    dismiss();
+                                } else {
+                                    if (selectionItems.contains(position)) {
+                                        selectionItems.remove(new Integer(position));
+                                    } else {
+                                        selectionItems.add(position);
+                                    }
+                                    menuListAdapter.notifyDataSetInvalidated();
+                                    menuListAdapter.notifyDataSetChanged();
+                                    int[] resultArray = new int[selectionItems.size()];
+                                    CharSequence[] selectTextArray = new CharSequence[selectionItems.size()];
+                                    for (int i = 0; i < selectionItems.size(); i++) {
+                                        resultArray[i] = selectionItems.get(i);
+                                        selectTextArray[i] = menuList.get(resultArray[i]);
+                                    }
+                                    onMenuItemSelectListener.onMultiItemSelect(me, selectTextArray, resultArray);
+                                }
+                            } else {
+                                if (onMenuItemClickListener != null) {
+                                    if (!onMenuItemClickListener.onClick(me, menuList.get(position), position)) {
+                                        dismiss();
+                                    }
+                                } else {
+                                    dismiss();
+                                }
+                            }
+                            break;
                     }
                 }
             });
@@ -814,8 +878,64 @@ public class BottomMenu extends BottomDialog {
         return selectionIndex;
     }
     
+    public ArrayList<Integer> getSelectionList() {
+        return selectionItems;
+    }
+    
     public BottomMenu setSelection(int selectionIndex) {
+        this.selectMode = SELECT_MODE.SINGLE;
         this.selectionIndex = selectionIndex;
+        this.selectionItems = null;
+        menuListAdapter = null;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setSingleSelection() {
+        this.selectMode = SELECT_MODE.SINGLE;
+        this.selectionIndex = -1;
+        this.selectionItems = null;
+        menuListAdapter = null;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setSelection(int[] selectionItems) {
+        this.selectMode = SELECT_MODE.MULTIPLE;
+        this.selectionIndex = -1;
+        this.selectionItems = new ArrayList<>();
+        if (selectionItems != null) {
+            for (int itemIndex : selectionItems) {
+                this.selectionItems.add(itemIndex);
+            }
+        }
+        menuListAdapter = null;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setMultiSelection() {
+        this.selectMode = SELECT_MODE.MULTIPLE;
+        this.selectionIndex = -1;
+        this.selectionItems = new ArrayList<>();
+        menuListAdapter = null;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setSelection(List<Integer> selectionItems) {
+        this.selectMode = SELECT_MODE.MULTIPLE;
+        this.selectionIndex = -1;
+        this.selectionItems = new ArrayList<>(selectionItems);
+        menuListAdapter = null;
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setNoSelect() {
+        this.selectMode = SELECT_MODE.NONE;
+        this.selectionIndex = -1;
+        this.selectionItems = null;
         menuListAdapter = null;
         refreshUI();
         return this;
@@ -915,5 +1035,9 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
+    }
+    
+    public SELECT_MODE getSelectMode() {
+        return selectMode;
     }
 }

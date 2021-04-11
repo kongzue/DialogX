@@ -19,7 +19,10 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.BottomMenu;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.kongzue.dialogx.DialogX.log;
 
 /**
  * @author: Kongzue
@@ -69,7 +72,6 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
             LayoutInflater mInflater = LayoutInflater.from(context);
             
             int resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
-            int overrideSelectionBackgroundColorRes = 0;
             if (bottomMenu.getStyle().overrideBottomDialogRes() != null) {
                 resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), position, getCount(), false);
                 if (resourceId == 0) {
@@ -83,8 +85,6 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
                         }
                     }
                 }
-                
-                overrideSelectionBackgroundColorRes = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionMenuBackgroundColor(bottomMenu.isLightTheme());
             }
             convertView = mInflater.inflate(resourceId, null);
             
@@ -92,45 +92,66 @@ public class NormalMenuArrayAdapter extends BaseAdapter {
             viewHolder.txtDialogxMenuText = convertView.findViewById(R.id.txt_dialogx_menu_text);
             viewHolder.imgDialogxMenuSelection = convertView.findViewById(R.id.img_dialogx_menu_selection);
             
-            if (bottomMenu.getSelection() >= 0) {
-                if (viewHolder.imgDialogxMenuSelection != null) {
-                    if (bottomMenu.getSelection() == position) {
-                        viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
-                        int overrideSelectionImageResId = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionImage(bottomMenu.isLightTheme(), true);
-                        if (overrideSelectionImageResId != 0) {
-                            viewHolder.imgDialogxMenuSelection.setImageResource(overrideSelectionImageResId);
-                        }
-                    } else {
-                        int overrideSelectionImageResId = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionImage(bottomMenu.isLightTheme(), false);
-                        if (overrideSelectionImageResId != 0) {
-                            viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
-                            viewHolder.imgDialogxMenuSelection.setImageResource(overrideSelectionImageResId);
-                        }else{
-                            viewHolder.imgDialogxMenuSelection.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                }
-            } else {
-                viewHolder.imgDialogxMenuSelection.setVisibility(View.GONE);
-            }
-            if (bottomMenu.getSelection() == position) {
-                if (overrideSelectionBackgroundColorRes != 0) {
-                    convertView.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(overrideSelectionBackgroundColorRes)));
-                    final View finalRootView = convertView;
-                    convertView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            finalRootView.setPressed(true);
-                        }
-                    });
-                }
-            } else {
-                convertView.setBackgroundTintList(null);
-            }
-            
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
+        }
+        if (bottomMenu.getSelectMode() == BottomMenu.SELECT_MODE.SINGLE) {
+            if (viewHolder.imgDialogxMenuSelection != null) {
+                if (bottomMenu.getSelection() == position) {
+                    viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
+                    int overrideSelectionImageResId = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionImage(bottomMenu.isLightTheme(), true);
+                    if (overrideSelectionImageResId != 0) {
+                        viewHolder.imgDialogxMenuSelection.setImageResource(overrideSelectionImageResId);
+                    }
+                } else {
+                    int overrideSelectionImageResId = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionImage(bottomMenu.isLightTheme(), false);
+                    if (overrideSelectionImageResId != 0) {
+                        viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
+                        viewHolder.imgDialogxMenuSelection.setImageResource(overrideSelectionImageResId);
+                    } else {
+                        viewHolder.imgDialogxMenuSelection.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        } else if (bottomMenu.getSelectMode() == BottomMenu.SELECT_MODE.MULTIPLE) {
+            if (viewHolder.imgDialogxMenuSelection != null) {
+                if (bottomMenu.getSelectionList().contains(position)) {
+                    viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
+                    int overrideSelectionImageResId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMultiSelectionImage(bottomMenu.isLightTheme(), true);
+                    if (overrideSelectionImageResId != 0) {
+                        viewHolder.imgDialogxMenuSelection.setImageResource(overrideSelectionImageResId);
+                    }
+                } else {
+                    int overrideSelectionImageResId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMultiSelectionImage(bottomMenu.isLightTheme(), false);
+                    if (overrideSelectionImageResId != 0) {
+                        viewHolder.imgDialogxMenuSelection.setVisibility(View.VISIBLE);
+                        viewHolder.imgDialogxMenuSelection.setImageResource(overrideSelectionImageResId);
+                    } else {
+                        viewHolder.imgDialogxMenuSelection.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+        } else {
+            viewHolder.imgDialogxMenuSelection.setVisibility(View.GONE);
+        }
+        int overrideSelectionBackgroundColorRes = 0;
+        if (bottomMenu.getStyle().overrideBottomDialogRes() != null) {
+            overrideSelectionBackgroundColorRes = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionMenuBackgroundColor(bottomMenu.isLightTheme());
+        }
+        if (bottomMenu.getSelection() == position) {
+            if (overrideSelectionBackgroundColorRes != 0) {
+                convertView.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(overrideSelectionBackgroundColorRes)));
+                final View finalRootView = convertView;
+                convertView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        finalRootView.setPressed(true);
+                    }
+                });
+            }
+        } else {
+            convertView.setBackgroundTintList(null);
         }
         CharSequence text = objects.get(position);
         

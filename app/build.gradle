@@ -38,4 +38,7 @@ dependencies {
     implementation 'com.github.kongzue:DialogXStyle-Snackbar:1.0.6'
     //implementation 'com.github.kongzue.dialogx:DialogX:0.0.37'
     implementation project(path: ':DialogX')
+//    implementation project(path: ':DialogXIOSStyle')
+//    implementation project(path: ':DialogXKongzueStyle')
+//    implementation project(path: ':DialogXMIUIStyle')
 }
