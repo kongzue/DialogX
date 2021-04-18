@@ -104,6 +104,7 @@ public class FullScreenDialog extends BaseDialog {
             bkg = convertView.findViewById(R.id.bkg);
             boxCustom = convertView.findViewById(R.id.box_custom);
             init();
+            dialogImpl = this;
             refreshView();
         }
         

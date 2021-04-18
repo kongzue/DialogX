@@ -243,6 +243,7 @@ public class BottomDialog extends BaseDialog {
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
             
             init();
+            dialogImpl = this;
             refreshView();
         }
         

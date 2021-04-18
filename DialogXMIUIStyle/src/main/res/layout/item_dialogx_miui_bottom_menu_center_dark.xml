@@ -26,11 +26,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_weight="1"
             android:singleLine="true"
             android:text="MenuText"
             android:textColor="@color/black"
             android:textSize="16dp"
-            android:textStyle="bold" />
+            android:textStyle="bold" /9
 
         <ImageView
             android:id="@+id/img_dialogx_menu_selection"

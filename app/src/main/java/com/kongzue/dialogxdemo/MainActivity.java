@@ -216,8 +216,9 @@ public class MainActivity extends BaseActivity {
     private WebView webView;
     
     private String[] singleSelectMenuText = new String[]{"拒绝", "询问", "始终允许", "仅在使用中允许"};
-    private String[] multiSelectMenuText = new String[]{"上海", "北京", "广州", "深圳"};
     private int selectMenuIndex;
+    
+    private String[] multiSelectMenuText = new String[]{"上海", "北京", "广州", "深圳"};
     private int[] selectMenuIndexArray;
     private String multiSelectMenuResultCache;
     
@@ -692,7 +693,7 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndex = index;
                             }
                         })
-                        .setOkButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+                        .setCancelButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
                             @Override
                             public boolean onClick(BottomDialog baseDialog, View v) {
                                 PopTip.show("已选择：" + singleSelectMenuText[selectMenuIndex]);
@@ -719,7 +720,7 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndexArray = index;
                             }
                         })
-                        .setOkButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+                        .setCancelButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
                             @Override
                             public boolean onClick(BottomDialog baseDialog, View v) {
                                 PopTip.show("已选择：" + multiSelectMenuResultCache);
