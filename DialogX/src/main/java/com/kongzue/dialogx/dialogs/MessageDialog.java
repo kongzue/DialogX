@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
@@ -653,13 +655,14 @@ public class MessageDialog extends BaseDialog {
             boxRoot.animate()
                     .alpha(0f)
                     .setInterpolator(new AccelerateInterpolator())
-                    .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration)
-                    .setListener(new AnimatorListenerEndCallBack() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            dismiss(dialogView);
-                        }
-                    });
+                    .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+            
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dismiss(dialogView);
+                }
+            },exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
         }
     }
     
