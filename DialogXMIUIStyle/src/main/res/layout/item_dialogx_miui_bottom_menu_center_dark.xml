@@ -31,7 +31,7 @@
             android:text="MenuText"
             android:textColor="@color/black"
             android:textSize="16dp"
-            android:textStyle="bold" /9
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/img_dialogx_menu_selection"
