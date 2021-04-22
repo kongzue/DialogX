@@ -119,10 +119,10 @@ public class MaxRelativeLayout extends RelativeLayout {
             if (heightTemp < minHeight) heightTemp = minHeight;
             if (blurView != null) {
                 if (heightMode == EXACTLY){
-                    heightTemp = getMeasuredHeight();
+                    heightTemp = heightSize;
                 }
                 if (widthMode == EXACTLY){
-                    widthTemp = getMeasuredWidth();
+                    widthTemp = widthSize;
                 }
                 LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
                 lp.width = widthTemp;

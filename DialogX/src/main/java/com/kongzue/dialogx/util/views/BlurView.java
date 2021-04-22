@@ -203,7 +203,7 @@ public class BlurView extends View {
                     downsampleFactor = downsampleFactor * radius / 25;
                     radius = 25;
                 }
-                if(mBlurScript!=null)mBlurScript.setRadius(radius);
+                if (mBlurScript != null) mBlurScript.setRadius(radius);
             }
         }
         
@@ -354,6 +354,8 @@ public class BlurView extends View {
                 if (mRadius != 0) {
                     Rect rect = new Rect();
                     getLocalVisibleRect(rect);
+                    rect.right = rect.left + getWidth();
+                    rect.bottom = rect.top + getHeight();
                     mBoundPath = caculateRoundRectPath(rect);
                     canvas.clipPath(mBoundPath);
                 }
