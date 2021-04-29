@@ -181,7 +181,7 @@ public class BottomDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
+        dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -194,7 +194,7 @@ public class BottomDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
+        dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -932,7 +932,7 @@ public class BottomDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
+        dialogView.setTag(me);
         show(dialogView);
     }
 }

@@ -128,7 +128,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         super.onAttachedToWindow();
         final ViewParent parent = getParent();
         
-        ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
+        if (parent instanceof View)ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
         ViewCompat.requestApplyInsets(this);
         
         if (BaseDialog.getContext() == null) return;

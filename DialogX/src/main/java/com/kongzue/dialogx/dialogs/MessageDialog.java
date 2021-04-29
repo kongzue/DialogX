@@ -204,7 +204,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
+        dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -215,7 +215,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
+        dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -1029,7 +1029,7 @@ public class MessageDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
+        dialogView.setTag(me);
         show(dialogView);
     }
 }

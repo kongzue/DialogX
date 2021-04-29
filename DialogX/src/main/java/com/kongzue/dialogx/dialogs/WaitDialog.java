@@ -258,7 +258,7 @@ public class WaitDialog extends BaseDialog {
                 }
                 dialogView = createView(layoutResId);
                 dialogImpl = new DialogImpl(dialogView);
-                dialogView.setTag(dialogKey());
+                dialogView.setTag(me.get());
                 show(dialogView);
             }
         });
@@ -276,7 +276,7 @@ public class WaitDialog extends BaseDialog {
                 }
                 dialogView = createView(layoutResId);
                 dialogImpl = new DialogImpl(dialogView);
-                dialogView.setTag(dialogKey());
+                dialogView.setTag(me.get());
                 show(activity, dialogView);
             }
         });

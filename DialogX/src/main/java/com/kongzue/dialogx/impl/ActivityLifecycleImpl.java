@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,12 +56,10 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-    
     }
     
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-    
     }
     
     @Override
@@ -73,6 +72,11 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         if (BaseDialog.getContext()==activity){
             BaseDialog.cleanContext();
         }
+    }
+    
+    @Override
+    public void onActivityPreDestroyed(@NonNull Activity activity) {
+        BaseDialog.recycleDialog(activity);
     }
     
     public interface onActivityResumeCallBack {

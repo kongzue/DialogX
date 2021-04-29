@@ -543,7 +543,7 @@ public class InputDialog extends MessageDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(dialogKey());
+        dialogView.setTag(me);
         show(dialogView);
         setInputText(inputText);
     }

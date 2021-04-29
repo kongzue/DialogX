@@ -14,6 +14,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,10 +23,15 @@ import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogx.util.WindowUtil;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.kongzue.dialogx.DialogX.DEBUGMODE;
 
@@ -40,6 +46,9 @@ public abstract class BaseDialog {
     
     private static WeakReference<FrameLayout> rootFrameLayout;
     private static WeakReference<Activity> contextWeakReference;
+    protected WeakReference<Activity> ownActivity;
+    private static List<BaseDialog> runningDialogList;
+    private WeakReference<View> dialogView;
     
     public static void init(Context context) {
         ActivityLifecycleImpl.init(context, new ActivityLifecycleImpl.onActivityResumeCallBack() {
@@ -66,49 +75,99 @@ public abstract class BaseDialog {
     public abstract void onUIModeChange(Configuration newConfig);
     
     protected static void show(final View view) {
-        if (rootFrameLayout == null || view == null || rootFrameLayout.get() == null) return;
-        log(view.getTag() + ".show");
+        if (view == null) return;
+        final BaseDialog baseDialog = (BaseDialog) view.getTag();
+        baseDialog.ownActivity = new WeakReference<>(contextWeakReference.get());
+        baseDialog.dialogView = new WeakReference<>(view);
         
-        runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                rootFrameLayout.get().addView(view);
-            }
-        });
+        log(baseDialog.dialogKey() + ".show");
+        addDialogToRunningList(baseDialog);
+        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
+            if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
+            runOnMain(new Runnable() {
+                @Override
+                public void run() {
+                    rootFrameLayout.get().addView(view);
+                }
+            });
+        } else {
+            runOnMain(new Runnable() {
+                @Override
+                public void run() {
+                    WindowUtil.show(contextWeakReference.get(), view, !(baseDialog instanceof PopTip));
+                }
+            });
+        }
     }
     
-    protected static void show(Activity activity, final View view) {
+    protected static void show(final Activity activity, final View view) {
         if (activity == null || view == null) return;
         if (activity.isDestroyed()) {
-            error(view.getTag() + ".show ERROR: activity is Destroyed.");
+            error(((BaseDialog) view.getTag()).dialogKey() + ".show ERROR: activity is Destroyed.");
             return;
         }
-        log(view.getTag() + ".show");
-        final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
-        if (activityRootView == null) {
-            return;
-        }
-        runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                activityRootView.addView(view);
+        final BaseDialog baseDialog = (BaseDialog) view.getTag();
+        baseDialog.ownActivity = new WeakReference<>(activity);
+        baseDialog.dialogView = new WeakReference<>(view);
+        
+        log(baseDialog + ".show");
+        addDialogToRunningList(baseDialog);
+        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
+            final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
+            if (activityRootView == null) {
+                return;
             }
-        });
+            runOnMain(new Runnable() {
+                @Override
+                public void run() {
+                    activityRootView.addView(view);
+                }
+            });
+        } else {
+            runOnMain(new Runnable() {
+                @Override
+                public void run() {
+                    WindowUtil.show(activity, view, !(baseDialog instanceof PopTip));
+                }
+            });
+        }
     }
     
     protected static void dismiss(final View dialogView) {
-        log(dialogView.getTag() + ".dismiss");
-        if (rootFrameLayout == null || dialogView == null) return;
-        runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
-                    rootFrameLayout.get().removeView(dialogView);
-                } else {
-                    ((ViewGroup) dialogView.getParent()).removeView(dialogView);
+        if (dialogView == null) return;
+        final BaseDialog baseDialog = (BaseDialog) dialogView.getTag();
+        log(baseDialog.dialogKey() + ".dismiss");
+        removeDialogToRunningList(baseDialog);
+        if (baseDialog.dialogView != null) baseDialog.dialogView.clear();
+        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
+            if (rootFrameLayout == null) return;
+            runOnMain(new Runnable() {
+                @Override
+                public void run() {
+                    if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
+                        rootFrameLayout.get().removeView(dialogView);
+                    } else {
+                        ((ViewGroup) dialogView.getParent()).removeView(dialogView);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            runOnMain(new Runnable() {
+                @Override
+                public void run() {
+                    WindowUtil.dismiss(dialogView);
+                }
+            });
+        }
+    }
+    
+    private static void addDialogToRunningList(BaseDialog baseDialog) {
+        if (runningDialogList == null) runningDialogList = new ArrayList<>();
+        runningDialogList.add(baseDialog);
+    }
+    
+    private static void removeDialogToRunningList(BaseDialog baseDialog) {
+        if (runningDialogList != null) runningDialogList.remove(baseDialog);
     }
     
     public static Context getContext() {
@@ -274,5 +333,26 @@ public abstract class BaseDialog {
     protected static void runOnMain(Runnable runnable) {
         if (!DialogX.autoRunOnUIThread) runnable.run();
         new Handler(Looper.getMainLooper()).post(runnable);
+    }
+    
+    public Activity getActivity() {
+        return ownActivity == null ? null : ownActivity.get();
+    }
+    
+    protected void cleanActivityContext() {
+        if (ownActivity != null) ownActivity.clear();
+    }
+    
+    public static void recycleDialog(Activity activity) {
+        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.WINDOW){
+            if (runningDialogList != null) {
+                CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
+                for (BaseDialog baseDialog : copyOnWriteList) {
+                    if (baseDialog.getActivity() == activity && baseDialog.dialogView != null) {
+                        WindowUtil.dismiss(baseDialog.dialogView.get());
+                    }
+                }
+            }
+        }
     }
 }

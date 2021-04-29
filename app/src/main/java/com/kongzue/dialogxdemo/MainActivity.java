@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -58,6 +61,7 @@ import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogx.util.WindowUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -168,18 +172,6 @@ public class MainActivity extends BaseActivity {
                             runDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    new Thread() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                //模拟2秒后启动 WaitDialog
-                                                sleep(2000);
-                                                WaitDialog.show(MainActivity.this, "Hello!");
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }.start();
                                     finish();       //先结束掉本界面
                                 }
                             }, 2000);
