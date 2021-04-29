@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
@@ -598,7 +599,6 @@ public class BottomMenu extends BottomDialog {
     
     @Override
     public void refreshUI() {
-        super.refreshUI();
         runOnMain(new Runnable() {
             @Override
             public void run() {
@@ -618,6 +618,7 @@ public class BottomMenu extends BottomDialog {
                 }
             }
         });
+        super.refreshUI();
     }
     
     @Override
@@ -631,13 +632,22 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setMenuList(List<CharSequence> menuList) {
         this.menuList = menuList;
+        this.menuListAdapter = null;
         refreshUI();
         return this;
+    }
+    
+    private boolean isSameSize(int menuListSize) {
+        if (this.menuList == null || this.menuList.size() == 0) {
+            return true;
+        }
+        return this.menuList.size() == menuListSize;
     }
     
     public BottomMenu setMenuStringList(List<String> menuList) {
         this.menuList = new ArrayList<>();
         this.menuList.addAll(menuList);
+        this.menuListAdapter = null;
         refreshUI();
         return this;
     }
@@ -645,12 +655,14 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setMenuList(String[] menuList) {
         this.menuList = new ArrayList<>();
         this.menuList.addAll(Arrays.asList(menuList));
+        this.menuListAdapter = null;
         refreshUI();
         return this;
     }
     
     public BottomMenu setMenuList(CharSequence[] menuList) {
         this.menuList = Arrays.asList(menuList);
+        this.menuListAdapter = null;
         refreshUI();
         return this;
     }

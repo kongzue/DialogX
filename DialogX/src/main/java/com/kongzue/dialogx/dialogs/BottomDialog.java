@@ -249,6 +249,12 @@ public class BottomDialog extends BaseDialog {
             refreshView();
         }
         
+        public void reBuild() {
+            init();
+            dialogImpl = this;
+            refreshView();
+        }
+        
         /**
          * 此值记录了BottomDialog启动后的位置
          * ·当内容高度大于屏幕安全区高度时，BottomDialog会以全屏方式启动，但一开始只会展开到 0.8×屏幕高度，
@@ -384,31 +390,16 @@ public class BottomDialog extends BaseDialog {
             });
             
             bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
-            
+    
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (style.overrideBottomDialogRes()!=null && style.overrideBottomDialogRes().touchSlide()){
-                        bkg.setY(boxRoot.getHeight());
-                        bkg.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                bkg.setY(bkgEnterAimY);
-            
-                                Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
-                                long enterAnimDurationTemp = enterAnim.getDuration();
-                                if (overrideEnterDuration >= 0) {
-                                    enterAnimDurationTemp = overrideEnterDuration;
-                                }
-                                if (enterAnimDuration >= 0) {
-                                    enterAnimDurationTemp = enterAnimDuration;
-                                }
-                                enterAnim.setDuration(enterAnimDurationTemp);
-                                enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                                bkg.startAnimation(enterAnim);
-                            }
-                        });
-                    }else{
+                    /**
+                     * 对于非支持滑动展开的对话框，直接使用从下往上的资源动画实现
+                     * 其他情况不适用，请参考 onContentViewLayoutChangeListener 的代码实现。
+                     */
+                    if (style.overrideBottomDialogRes() == null || !style.overrideBottomDialogRes().touchSlide()) {
+                        //bkg.setY(getRootFrameLayout().getMeasuredHeight());
                         Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
                         long enterAnimDurationTemp = enterAnim.getDuration();
                         if (overrideEnterDuration >= 0) {
@@ -420,10 +411,10 @@ public class BottomDialog extends BaseDialog {
                         enterAnim.setDuration(enterAnimDurationTemp);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                         bkg.startAnimation(enterAnim);
-    
+        
                         bkg.setY(bkgEnterAimY);
                     }
-                    
+    
                     boxRoot.animate()
                             .setDuration(300)
                             .alpha(1f)
@@ -432,18 +423,55 @@ public class BottomDialog extends BaseDialog {
                 }
             });
         }
-        
+    
         private ViewTreeObserver.OnGlobalLayoutListener onContentViewLayoutChangeListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (boxContent != null) {
-                    if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
-                        if (bottomDialogMaxHeight <= 1) {
-                            bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;
+                    if (style.overrideBottomDialogRes() != null &&style.overrideBottomDialogRes().touchSlide()) {
+                        //若内容布已经超出屏幕可用范围，且预设的对话框最大高度已知
+                        if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
+                            //先将内容布局放置到屏幕底部以外区域，然后执行上移动画
+                            bkg.setY(getRootFrameLayout().getMeasuredHeight());
+                            //执行上移动画
+                            if (bottomDialogMaxHeight <= 1) {
+                                //bottomDialogMaxHeight 值若为小于 1 的小数，视为比例
+                                bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight() * bottomDialogMaxHeight;
+                            } else {
+                                bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight;
+                            }
+                            long enterAnimDurationTemp = 300;
+                            if (overrideEnterDuration >= 0) {
+                                enterAnimDurationTemp = overrideEnterDuration;
+                            }
+                            if (enterAnimDuration >= 0) {
+                                enterAnimDurationTemp = enterAnimDuration;
+                            }
+                            ObjectAnimator keepBottomAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
+                            keepBottomAnim.setDuration(enterAnimDurationTemp);
+                            keepBottomAnim.setInterpolator(new DecelerateInterpolator(2f));
+                            keepBottomAnim.start();
                         } else {
-                            bkgEnterAimY = boxBkg.getHeight() - bottomDialogMaxHeight;
+                            bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
+                            bkg.setY(boxRoot.getHeight());
+                            bkg.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
+                                    long enterAnimDurationTemp = 300;
+                                    if (overrideEnterDuration >= 0) {
+                                        enterAnimDurationTemp = overrideEnterDuration;
+                                    }
+                                    if (enterAnimDuration >= 0) {
+                                        enterAnimDurationTemp = enterAnimDuration;
+                                    }
+                                    enterAnim.setDuration(enterAnimDurationTemp);
+                                    enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                                    enterAnim.start();
+                                }
+                            });
                         }
-                    } else {
+                    }else{
                         bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
                     }
                 }
@@ -549,7 +577,7 @@ public class BottomDialog extends BaseDialog {
                 public void run() {
                     dismiss(dialogView);
                 }
-            },exitAnimDurationTemp);
+            }, exitAnimDurationTemp);
         }
         
         public void preDismiss() {

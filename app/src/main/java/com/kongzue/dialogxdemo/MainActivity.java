@@ -469,7 +469,7 @@ public class MainActivity extends BaseActivity {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
                                     PopTip.show(text);
-                                    return false;
+                                    return true;
                                 }
                             });
                 } else {
@@ -479,6 +479,7 @@ public class MainActivity extends BaseActivity {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
                                     PopTip.show(text);
+                                    dialog.setMenuList(new String[]{"test","test2","test3"});
                                     return false;
                                 }
                             });
