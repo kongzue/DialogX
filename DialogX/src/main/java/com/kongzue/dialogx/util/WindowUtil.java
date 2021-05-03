@@ -39,22 +39,6 @@ public class WindowUtil {
         ;
         if (!touchEnable) {
             layoutParams.flags = layoutParams.flags | FLAG_NOT_FOCUSABLE;
-
-//            ViewGroup boxRoot = dialogView.findViewById(R.id.box_root);
-//            ViewGroup boxBody = dialogView.findViewById(R.id.box_body);
-//            if (boxBody != null && boxRoot != null) {
-//                boxRoot.removeView(boxBody);
-//                dialogView = boxBody;
-//
-//                layoutParams.width = 300;
-//                layoutParams.height = 85;
-//            }
-//            int paddingValue = (int) boxBody.getElevation();
-//            layoutParams.width = WRAP_CONTENT;
-//            layoutParams.height = WRAP_CONTENT;
-//            boxRoot.setPadding(100, 0, 100, 100);
-
-//            boxRoot.setFocusable(false);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             layoutParams.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
@@ -67,7 +51,7 @@ public class WindowUtil {
         BaseDialog baseDialog = (BaseDialog) dialogView.getTag();
         if (baseDialog != null && baseDialog.getActivity() != null) {
             WindowManager manager = (WindowManager) baseDialog.getActivity().getSystemService(Context.WINDOW_SERVICE);
-            manager.removeView(dialogView);
+            manager.removeViewImmediate(dialogView);
         }
     }
 }

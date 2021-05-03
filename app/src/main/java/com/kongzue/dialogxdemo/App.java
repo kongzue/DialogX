@@ -24,7 +24,7 @@ public class App extends BaseApp<App> {
     @Override
     public void init() {
         DialogX.init(this);
-        DialogX.implIMPLMode= DialogX.IMPL_MODE.VIEW;
+        DialogX.implIMPLMode= DialogX.IMPL_MODE.WINDOW;
         DialogX.globalStyle = new MaterialStyle() {
             @Override
             public PopTipSettings popTipSettings() {

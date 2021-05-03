@@ -644,7 +644,7 @@ public class MainActivity extends BaseActivity {
                         });
                     }
                 })
-                        .setAlign(CustomDialog.ALIGN.CENTER)
+                        .setAlign(CustomDialog.ALIGN.LEFT)
                         .setMaskColor(getResources().getColor(R.color.black30));
             }
         });

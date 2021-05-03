@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
@@ -75,7 +77,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     }
     
     @Override
-    public void onActivityPreDestroyed(@NonNull Activity activity) {
+    public void onActivityPreDestroyed(@NonNull final Activity activity) {
         BaseDialog.recycleDialog(activity);
     }
     

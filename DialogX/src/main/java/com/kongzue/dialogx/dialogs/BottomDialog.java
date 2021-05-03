@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.core.view.ViewCompat;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -37,6 +38,8 @@ import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
+
+import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK;
 
 /**
  * @author: Kongzue
@@ -394,6 +397,7 @@ public class BottomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
+                    long enterAnimDurationTemp = 300;
                     /**
                      * 对于非支持滑动展开的对话框，直接使用从下往上的资源动画实现
                      * 其他情况不适用，请参考 onContentViewLayoutChangeListener 的代码实现。
@@ -401,7 +405,7 @@ public class BottomDialog extends BaseDialog {
                     if (style.overrideBottomDialogRes() == null || !style.overrideBottomDialogRes().touchSlide()) {
                         //bkg.setY(getRootFrameLayout().getMeasuredHeight());
                         Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
-                        long enterAnimDurationTemp = enterAnim.getDuration();
+                        enterAnimDurationTemp = enterAnim.getDuration();
                         if (overrideEnterDuration >= 0) {
                             enterAnimDurationTemp = overrideEnterDuration;
                         }
@@ -410,19 +414,31 @@ public class BottomDialog extends BaseDialog {
                         }
                         enterAnim.setDuration(enterAnimDurationTemp);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                        bkg.startAnimation(enterAnim);
-        
+                        
                         bkg.setY(bkgEnterAimY);
+                        bkg.startAnimation(enterAnim);
                     }
     
                     boxRoot.animate()
-                            .setDuration(300)
+                            .setDuration(enterAnimDurationTemp)
                             .alpha(1f)
                             .setInterpolator(new DecelerateInterpolator())
                             .setListener(null);
+    
+                    bkg.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            isEnterAnimFinished = true;
+    
+                            bkg.setFocusable(true);
+                            bkg.requestFocus();
+                        }
+                    },enterAnimDurationTemp);
                 }
             });
         }
+        
+        private boolean isEnterAnimFinished = false;
     
         private ViewTreeObserver.OnGlobalLayoutListener onContentViewLayoutChangeListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -432,7 +448,7 @@ public class BottomDialog extends BaseDialog {
                         //若内容布已经超出屏幕可用范围，且预设的对话框最大高度已知
                         if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
                             //先将内容布局放置到屏幕底部以外区域，然后执行上移动画
-                            bkg.setY(getRootFrameLayout().getMeasuredHeight());
+                            if (!isEnterAnimFinished)bkg.setY(getRootFrameLayout().getMeasuredHeight());
                             //执行上移动画
                             if (bottomDialogMaxHeight <= 1) {
                                 //bottomDialogMaxHeight 值若为小于 1 的小数，视为比例
@@ -453,7 +469,7 @@ public class BottomDialog extends BaseDialog {
                             keepBottomAnim.start();
                         } else {
                             bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
-                            bkg.setY(boxRoot.getHeight());
+                            if (!isEnterAnimFinished)bkg.setY(boxRoot.getHeight());
                             bkg.post(new Runnable() {
                                 @Override
                                 public void run() {
