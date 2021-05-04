@@ -461,7 +461,7 @@ public class MainActivity extends BaseActivity {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
                                     PopTip.show(text);
-                                    return true;
+                                    return false;
                                 }
                             });
                 } else {
@@ -644,7 +644,6 @@ public class MainActivity extends BaseActivity {
                         });
                     }
                 })
-                        .setAlign(CustomDialog.ALIGN.LEFT)
                         .setMaskColor(getResources().getColor(R.color.black30));
             }
         });

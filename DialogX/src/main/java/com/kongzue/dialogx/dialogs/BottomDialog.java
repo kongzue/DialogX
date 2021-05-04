@@ -290,9 +290,11 @@ public class BottomDialog extends BaseDialog {
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
+                    bkg.setY(getRootFrameLayout().getMeasuredHeight());
+                    
                     isShow = true;
                     boxRoot.setAlpha(0f);
-                    
+    
                     boxContent.getViewTreeObserver().addOnGlobalLayoutListener(onContentViewLayoutChangeListener);
                     
                     getDialogLifecycleCallback().onShow(me);
@@ -424,16 +426,6 @@ public class BottomDialog extends BaseDialog {
                             .alpha(1f)
                             .setInterpolator(new DecelerateInterpolator())
                             .setListener(null);
-    
-                    bkg.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            isEnterAnimFinished = true;
-    
-                            bkg.setFocusable(true);
-                            bkg.requestFocus();
-                        }
-                    },enterAnimDurationTemp);
                 }
             });
         }
@@ -443,6 +435,7 @@ public class BottomDialog extends BaseDialog {
         private ViewTreeObserver.OnGlobalLayoutListener onContentViewLayoutChangeListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                log("A");
                 if (boxContent != null) {
                     if (style.overrideBottomDialogRes() != null &&style.overrideBottomDialogRes().touchSlide()) {
                         //若内容布已经超出屏幕可用范围，且预设的对话框最大高度已知
@@ -491,6 +484,7 @@ public class BottomDialog extends BaseDialog {
                         bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
                     }
                 }
+                isEnterAnimFinished = true;
             }
         };
         

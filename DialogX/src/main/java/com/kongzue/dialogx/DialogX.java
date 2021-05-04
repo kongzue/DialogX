@@ -33,7 +33,7 @@ public class DialogX {
     //TipDialog 和 WaitDialog 明暗风格，不设置则默认根据 globalTheme 定义
     public static DialogX.THEME tipTheme;
     
-    //DialogX 实现模式
+    //DialogX 实现模式（实验性功能）
     public static IMPL_MODE implIMPLMode = IMPL_MODE.VIEW;
     
     //对话框最大宽度（像素）

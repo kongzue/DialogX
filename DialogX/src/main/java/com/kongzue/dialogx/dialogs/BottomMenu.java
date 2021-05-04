@@ -599,26 +599,30 @@ public class BottomMenu extends BottomDialog {
     
     @Override
     public void refreshUI() {
+        if (listView != null) {
+            if (menuListAdapter == null) {
+                menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), menuList);
+            }
+            if (listView.getAdapter() == null) {
+                listView.setAdapter(menuListAdapter);
+            } else {
+                if (listView.getAdapter() != menuListAdapter) {
+                    listView.setAdapter(menuListAdapter);
+                } else {
+                    menuListAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+        super.refreshUI();
+    }
+    
+    public void preRefreshUI(){
         runOnMain(new Runnable() {
             @Override
             public void run() {
-                if (listView != null) {
-                    if (menuListAdapter == null) {
-                        menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), menuList);
-                    }
-                    if (listView.getAdapter() == null) {
-                        listView.setAdapter(menuListAdapter);
-                    } else {
-                        if (listView.getAdapter() != menuListAdapter) {
-                            listView.setAdapter(menuListAdapter);
-                        } else {
-                            menuListAdapter.notifyDataSetChanged();
-                        }
-                    }
-                }
+                refreshUI();
             }
         });
-        super.refreshUI();
     }
     
     @Override
@@ -633,7 +637,7 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setMenuList(List<CharSequence> menuList) {
         this.menuList = menuList;
         this.menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -648,7 +652,7 @@ public class BottomMenu extends BottomDialog {
         this.menuList = new ArrayList<>();
         this.menuList.addAll(menuList);
         this.menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -656,14 +660,14 @@ public class BottomMenu extends BottomDialog {
         this.menuList = new ArrayList<>();
         this.menuList.addAll(Arrays.asList(menuList));
         this.menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setMenuList(CharSequence[] menuList) {
         this.menuList = Arrays.asList(menuList);
         this.menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -682,7 +686,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -714,7 +718,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setCancelable(boolean cancelable) {
         this.privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -728,13 +732,13 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setTitle(CharSequence title) {
         this.title = title;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setTitle(int titleResId) {
         this.title = getString(titleResId);
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -744,13 +748,13 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setMessage(CharSequence message) {
         this.message = message;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setMessage(int messageResId) {
         this.message = getString(messageResId);
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -760,13 +764,13 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setCancelButton(CharSequence cancelText) {
         this.cancelText = cancelText;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setCancelButton(int cancelTextResId) {
         this.cancelText = getString(cancelTextResId);
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -778,20 +782,20 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setCancelButton(int cancelTextResId, OnDialogButtonClickListener cancelButtonClickListener) {
         this.cancelText = getString(cancelTextResId);
         this.cancelButtonClickListener = cancelButtonClickListener;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setCustomView(OnBindView<BottomDialog> onBindView) {
         this.onBindView = onBindView;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -802,7 +806,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu removeCustomView() {
         this.onBindView.clean();
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -812,7 +816,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setAllowInterceptTouch(boolean allowInterceptTouch) {
         this.allowInterceptTouch = allowInterceptTouch;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -858,7 +862,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setTitleTextInfo(TextInfo titleTextInfo) {
         this.titleTextInfo = titleTextInfo;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -868,7 +872,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setMessageTextInfo(TextInfo messageTextInfo) {
         this.messageTextInfo = messageTextInfo;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -878,7 +882,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setCancelTextInfo(TextInfo cancelTextInfo) {
         this.cancelTextInfo = cancelTextInfo;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -888,7 +892,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -905,7 +909,7 @@ public class BottomMenu extends BottomDialog {
         this.selectionIndex = selectionIndex;
         this.selectionItems = null;
         menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -914,7 +918,7 @@ public class BottomMenu extends BottomDialog {
         this.selectionIndex = -1;
         this.selectionItems = null;
         menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -928,7 +932,7 @@ public class BottomMenu extends BottomDialog {
             }
         }
         menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -937,7 +941,7 @@ public class BottomMenu extends BottomDialog {
         this.selectionIndex = -1;
         this.selectionItems = new ArrayList<>();
         menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -946,7 +950,7 @@ public class BottomMenu extends BottomDialog {
         this.selectionIndex = -1;
         this.selectionItems = new ArrayList<>(selectionItems);
         menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -955,13 +959,13 @@ public class BottomMenu extends BottomDialog {
         this.selectionIndex = -1;
         this.selectionItems = null;
         menuListAdapter = null;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setBackgroundColorRes(@ColorRes int backgroundRes) {
         this.backgroundColor = getColor(backgroundRes);
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -971,13 +975,13 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setOkButton(CharSequence okText) {
         this.okText = okText;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setOkButton(int OkTextResId) {
         this.okText = getString(OkTextResId);
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -1004,13 +1008,13 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setOtherButton(CharSequence otherText) {
         this.otherText = otherText;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
     public BottomMenu setOtherButton(int OtherTextResId) {
         this.otherText = getString(OtherTextResId);
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
@@ -1033,7 +1037,7 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setMaskColor(@ColorInt int maskColor) {
         this.maskColor = maskColor;
-        refreshUI();
+        preRefreshUI();
         return this;
     }
     
