@@ -131,7 +131,7 @@ allprojects {
 2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-implementation 'com.github.kongzue.dialogx:DialogX:0.0.38'
+implementation 'com.github.kongzue.DialogX:DialogX:0.0.38'
 ```
 
 #### 方式二：Gradle 引入 jCenter 源
