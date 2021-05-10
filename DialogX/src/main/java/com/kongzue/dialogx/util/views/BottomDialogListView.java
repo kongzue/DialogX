@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.util.views;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
@@ -49,7 +51,14 @@ public class BottomDialogListView extends ListView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, expandSpec);
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(dip2px(55)*size+size, MeasureSpec.EXACTLY));
+    
+        //super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(expandSpec, MeasureSpec.AT_MOST));
+    }
+    
+    private int dip2px(float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
     
     private int mPosition;
@@ -89,6 +98,14 @@ public class BottomDialogListView extends ListView {
     
     public BottomMenuListViewTouchEvent getBottomMenuListViewTouchEvent() {
         return bottomMenuListViewTouchEvent;
+    }
+    
+    private int size =1;
+    
+    @Override
+    public void setAdapter(ListAdapter adapter) {
+        size = adapter.getCount();
+        super.setAdapter(adapter);
     }
     
     public BottomDialogListView setBottomMenuListViewTouchEvent(BottomMenuListViewTouchEvent bottomMenuListViewTouchEvent) {
