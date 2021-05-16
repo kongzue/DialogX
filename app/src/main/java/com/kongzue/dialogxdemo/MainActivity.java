@@ -9,6 +9,11 @@ import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -265,6 +270,7 @@ public class MainActivity extends BaseActivity {
                         return false;
                     }
                 });
+//                showSecondDialog1();
             }
         });
         
@@ -723,6 +729,28 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+    
+//    private void showSecondDialog1() {
+//        SpannableString spannableString = new SpannableString("这里是一段文本，点击链接");
+//        spannableString.setSpan(new ClickableSpan(){
+//            @Override
+//            public void onClick(@NonNull View widget) {
+//                showSecondDialog2();
+//            }
+//        },9, spannableString.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//        MessageDialog.show("标题", spannableString, "确定");
+//    }
+//
+//    private void showSecondDialog2() {
+//        SpannableString spannableString = new SpannableString("这里是另一段一段文本，再次点击链接");
+//        spannableString.setSpan(new ClickableSpan(){
+//            @Override
+//            public void onClick(@NonNull View widget) {
+//                showSecondDialog1();
+//            }
+//        },14, spannableString.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//        MessageDialog.show("标题", spannableString, "确定");
+//    }
     
     private void initFullScreenLoginDemo(final FullScreenDialog fullScreenDialog) {
         btnCancel.setOnClickListener(new View.OnClickListener() {

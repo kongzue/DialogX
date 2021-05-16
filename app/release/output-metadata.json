@@ -5,13 +5,13 @@
     "kind": "Directory"
   },
   "applicationId": "com.kongzue.dialogxdemo",
-  "variantName": "processReleaseResources",
+  "variantName": "release",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 37,
-      "versionName": "0.0.37.beta1",
+      "versionCode": 38,
+      "versionName": "0.0.39.beta1",
       "outputFile": "app-release.apk"
     }
   ]

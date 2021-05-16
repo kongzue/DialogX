@@ -51,17 +51,24 @@ public abstract class BaseDialog {
     private WeakReference<View> dialogView;
     
     public static void init(Context context) {
+        if (context instanceof Activity) {
+            initActivityContext((Activity) context);
+        }
         ActivityLifecycleImpl.init(context, new ActivityLifecycleImpl.onActivityResumeCallBack() {
             @Override
             public void getActivity(Activity activity) {
-                try {
-                    contextWeakReference = new WeakReference<>(activity);
-                    rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
-                } catch (Exception e) {
-                    error("DialogX.init: 初始化异常，找不到Activity的根布局");
-                }
+                initActivityContext(activity);
             }
         });
+    }
+    
+    private static void initActivityContext(Activity activity) {
+        try {
+            contextWeakReference = new WeakReference<>(activity);
+            rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
+        } catch (Exception e) {
+            error("DialogX.init: 初始化异常，找不到Activity的根布局");
+        }
     }
     
     protected static void log(Object o) {
@@ -344,7 +351,7 @@ public abstract class BaseDialog {
     }
     
     public static void recycleDialog(Activity activity) {
-        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.WINDOW){
+        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.WINDOW) {
             if (runningDialogList != null) {
                 CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
                 for (BaseDialog baseDialog : copyOnWriteList) {

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -276,6 +277,8 @@ public class MessageDialog extends BaseDialog {
             btnSelectNegative.getPaint().setFakeBoldText(true);
             btnSelectPositive.getPaint().setFakeBoldText(true);
             btnSelectOther.getPaint().setFakeBoldText(true);
+            
+            txtDialogTip.setMovementMethod(LinkMovementMethod.getInstance());
             
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
