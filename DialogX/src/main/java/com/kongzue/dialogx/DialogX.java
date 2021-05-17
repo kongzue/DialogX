@@ -106,6 +106,9 @@ public class DialogX {
     //是否自动在主线程执行
     public static boolean autoRunOnUIThread = true;
     
+    //使用振动反馈
+    public static boolean useHaptic = true;
+    
     public enum THEME {
         LIGHT, DARK, AUTO
     }

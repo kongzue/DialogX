@@ -19,6 +19,7 @@ import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.Nullable;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
 
@@ -210,7 +211,7 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         if (tickShowRunnable != null) {
             tickShowRunnable.run();
-            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            if (DialogX.useHaptic) performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             tickShowRunnable = null;
         }
         switch (status) {
