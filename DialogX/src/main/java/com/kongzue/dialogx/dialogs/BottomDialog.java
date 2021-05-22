@@ -440,7 +440,6 @@ public class BottomDialog extends BaseDialog {
         private ViewTreeObserver.OnGlobalLayoutListener onContentViewLayoutChangeListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                log("A");
                 if (boxContent != null) {
                     if (style.overrideBottomDialogRes() != null &&style.overrideBottomDialogRes().touchSlide()) {
                         //若内容布已经超出屏幕可用范围，且预设的对话框最大高度已知

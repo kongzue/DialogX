@@ -25,8 +25,6 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
-import static com.kongzue.dialogx.DialogX.log;
-
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/

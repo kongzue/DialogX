@@ -147,11 +147,11 @@ public abstract class BaseDialog {
         removeDialogToRunningList(baseDialog);
         if (baseDialog.dialogView != null) baseDialog.dialogView.clear();
         if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
-            if (rootFrameLayout == null) return;
             runOnMain(new Runnable() {
                 @Override
                 public void run() {
                     if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
+                        if (rootFrameLayout == null) return;
                         rootFrameLayout.get().removeView(dialogView);
                     } else {
                         ((ViewGroup) dialogView.getParent()).removeView(dialogView);

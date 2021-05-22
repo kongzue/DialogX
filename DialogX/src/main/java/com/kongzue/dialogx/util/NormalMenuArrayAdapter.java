@@ -19,10 +19,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.BottomMenu;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.kongzue.dialogx.DialogX.log;
 
 /**
  * @author: Kongzue

@@ -270,7 +270,6 @@ public class MainActivity extends BaseActivity {
                         return false;
                     }
                 });
-//                showSecondDialog1();
             }
         });
         
@@ -477,7 +476,7 @@ public class MainActivity extends BaseActivity {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
                                     PopTip.show(text);
-                                    dialog.setMenuList(new String[]{"test","test2","test3"});
+                                    dialog.setMenuList(new String[]{"test", "test2", "test3"});
                                     return false;
                                 }
                             });
@@ -729,7 +728,7 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-    
+
 //    private void showSecondDialog1() {
 //        SpannableString spannableString = new SpannableString("这里是一段文本，点击链接");
 //        spannableString.setSpan(new ClickableSpan(){

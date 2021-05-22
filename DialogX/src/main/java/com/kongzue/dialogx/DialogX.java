@@ -125,10 +125,6 @@ public class DialogX {
         BaseDialog.init(context);
     }
     
-    public static void log(Object o) {
-        if (DEBUGMODE) Log.i(">>>", o.toString());
-    }
-    
     public static void error(Object o) {
         if (DEBUGMODE) Log.e(">>>", o.toString());
     }
