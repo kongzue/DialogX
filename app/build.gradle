@@ -31,9 +31,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.github.kongzue:BaseFramework:6.7.9.5'
 
-    implementation 'com.github.kongzue.DialogX:DialogXIOSStyle:0.0.39.beta4'
-    implementation 'com.github.kongzue.DialogX:DialogXKongzueStyle:0.0.39.beta4'
-    implementation 'com.github.kongzue.DialogX:DialogXMIUIStyle:0.0.39.beta4'
+    implementation 'com.github.kongzue.DialogX:DialogXIOSStyle:0.0.39.debug4'
+    implementation 'com.github.kongzue.DialogX:DialogXKongzueStyle:0.0.39.debug4'
+    implementation 'com.github.kongzue.DialogX:DialogXMIUIStyle:0.0.39.debug4'
 
     implementation 'com.github.kongzue:DialogXStyle-Snackbar:1.0.6'
     //implementation 'com.github.kongzue.dialogx:DialogX:0.0.37'

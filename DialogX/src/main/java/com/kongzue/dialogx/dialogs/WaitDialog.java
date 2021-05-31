@@ -79,7 +79,7 @@ public class WaitDialog extends BaseDialog {
         DialogImpl dialogImpl = me().dialogImpl;
         me().message = message;
         me().showType = -1;
-        if (dialogImpl != null) {
+        if (dialogImpl != null && dialogImpl.progressView != null) {
             dialogImpl.progressView.loading();
             setMessage(message);
             return me();
@@ -95,7 +95,7 @@ public class WaitDialog extends BaseDialog {
         DialogImpl dialogImpl = me().dialogImpl;
         me().message = message;
         me().showType = -1;
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+        if (dialogImpl != null&& dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
             dialogImpl.progressView.loading();
             setMessage(message);
             return me();
@@ -111,7 +111,7 @@ public class WaitDialog extends BaseDialog {
         DialogImpl dialogImpl = me().dialogImpl;
         me().preMessage(messageResId);
         me().showType = -1;
-        if (dialogImpl != null) {
+        if (dialogImpl != null&& dialogImpl.progressView != null) {
             dialogImpl.progressView.loading();
             setMessage(messageResId);
             return me();
@@ -127,7 +127,7 @@ public class WaitDialog extends BaseDialog {
         DialogImpl dialogImpl = me().dialogImpl;
         me().preMessage(messageResId);
         me().showType = -1;
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+        if (dialogImpl != null&& dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
             dialogImpl.progressView.loading();
             setMessage(messageResId);
             return me();
@@ -143,7 +143,7 @@ public class WaitDialog extends BaseDialog {
         DialogImpl dialogImpl = me().dialogImpl;
         me().showType = -1;
         me().preMessage(message);
-        if (dialogImpl != null) {
+        if (dialogImpl != null&& dialogImpl.progressView != null) {
             setMessage(message);
             me().setProgress(progress);
             return me();
@@ -160,7 +160,7 @@ public class WaitDialog extends BaseDialog {
         DialogImpl dialogImpl = me().dialogImpl;
         me().showType = -1;
         me().preMessage(message);
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+        if (dialogImpl != null && dialogImpl.progressView != null&& dialogImpl.bkg.getContext() == activity) {
             setMessage(message);
             me().setProgress(progress);
             return me();
@@ -177,7 +177,7 @@ public class WaitDialog extends BaseDialog {
         DialogImpl dialogImpl = me().dialogImpl;
         me().showType = -1;
         me().preMessage(messageResId);
-        if (dialogImpl != null) {
+        if (dialogImpl != null&& dialogImpl.progressView != null) {
             setMessage(messageResId);
             me().setProgress(progress);
             return me();
@@ -194,7 +194,7 @@ public class WaitDialog extends BaseDialog {
         DialogImpl dialogImpl = me().dialogImpl;
         me().showType = -1;
         me().preMessage(messageResId);
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+        if (dialogImpl != null&& dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
             setMessage(messageResId);
             me().setProgress(progress);
             return me();
@@ -210,7 +210,7 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(Activity activity, float progress) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().showType = -1;
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
+        if (dialogImpl != null&& dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
             me().setProgress(progress);
             return me();
         } else {
@@ -224,7 +224,7 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(float progress) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().showType = -1;
-        if (dialogImpl != null) {
+        if (dialogImpl != null&& dialogImpl.progressView != null) {
             me().setProgress(progress);
             return me();
         } else {
@@ -300,7 +300,7 @@ public class WaitDialog extends BaseDialog {
             this.layoutResId = layoutResId;
         }
         
-        public void lazyCreate(){
+        public void lazyCreate() {
             dialogView = createView(layoutResId);
             boxRoot = dialogView.findViewById(R.id.box_root);
             bkg = dialogView.findViewById(R.id.bkg);
