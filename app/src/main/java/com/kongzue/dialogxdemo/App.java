@@ -25,6 +25,7 @@ public class App extends BaseApp<App> {
     public void init() {
         DialogX.init(this);
         DialogX.implIMPLMode= DialogX.IMPL_MODE.VIEW;
+        DialogX.useHaptic = false;
         DialogX.globalStyle = new MaterialStyle() {
             @Override
             public PopTipSettings popTipSettings() {

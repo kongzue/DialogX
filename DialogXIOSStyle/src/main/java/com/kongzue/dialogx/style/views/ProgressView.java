@@ -20,6 +20,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
 import com.kongzue.dialogx.iostheme.R;
 
@@ -215,7 +216,7 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         if (tickShowRunnable != null) {
             tickShowRunnable.run();
-            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            if (DialogX.useHaptic)performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             tickShowRunnable = null;
         }
         switch (status) {
