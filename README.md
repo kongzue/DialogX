@@ -1,7 +1,8 @@
- <div>
-    <img src="https://github.com/kongzue/DialogX/raw/master/readme/img_logo_dialogx.jpg" style="vertical-align:middle;" height="80">
-     <span style="font-weight:bold;font-size:2em;">Kongzue DialogX</span>
-</div>
+<center>    
+    <img src="https://github.com/kongzue/DialogX/raw/master/readme/img_logo_dialogx.jpg" width="100">    
+    <center><h1>Kongzue DialogX</h1></center> 
+</center>
+
 
 经过三代的更迭，全新的 Kongzue DialogX 已经到来，不仅仅保留了以往的优势，更带来了更灵活的扩展性和全新的流畅体验。
 
