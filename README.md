@@ -1,7 +1,8 @@
 <div align=center>    
-    <img src="https://github.com/kongzue/DialogX/raw/master/readme/img_logo_dialogx.jpg" width="100">    
+    <img src="https://github.com/kongzue/DialogX/raw/master/readme/img_logo_dialogx.jpg" width="150">    
     <center><h1>Kongzue DialogX</h1></center> 
 </div>
+
 
 
 经过三代的更迭，全新的 Kongzue DialogX 已经到来，不仅仅保留了以往的优势，更带来了更灵活的扩展性和全新的流畅体验。
@@ -142,9 +143,7 @@ implementation 'com.github.kongzue.DialogX:DialogX:0.0.39'
 
 #### 方式二：Gradle 引入 jCenter 源
 
-<a href="https://bintray.com/myzchh/maven/dialogX/">
-<img src="https://api.bintray.com/packages/myzchh/maven/dialogX/images/download.svg" alt="jCenter">
-</a> 
+⚠️警告：jCenter已停止运行！
 
 想要在您的项目引入 DialogX，您需要在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
