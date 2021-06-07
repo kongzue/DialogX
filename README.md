@@ -1,4 +1,4 @@
-<center>    
+<center align=center>    
     <img src="https://github.com/kongzue/DialogX/raw/master/readme/img_logo_dialogx.jpg" width="100">    
     <center><h1>Kongzue DialogX</h1></center> 
 </center>
