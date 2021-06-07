@@ -1,3 +1,5 @@
+|![Logo](https://github.com/kongzue/DialogX/raw/master/readme/img_logo_dialogx.jpg)| DialogX |
+
 经过三代的更迭，全新的 Kongzue DialogX 已经到来，不仅仅保留了以往的优势，更带来了更灵活的扩展性和全新的流畅体验。
 
 <a href="https://github.com/kongzue/dialogX/">

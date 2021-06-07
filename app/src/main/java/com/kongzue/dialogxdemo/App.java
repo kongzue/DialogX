@@ -25,7 +25,7 @@ import com.kongzue.dialogx.util.views.ProgressView;
 public class App extends BaseApp<App> {
     @Override
     public void init() {
-        //DialogX.init(this);
+        DialogX.init(this);
         DialogX.implIMPLMode= DialogX.IMPL_MODE.VIEW;
         DialogX.useHaptic = false;
         DialogX.globalStyle = new MaterialStyle() {
