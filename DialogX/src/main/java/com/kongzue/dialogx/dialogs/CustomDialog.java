@@ -88,7 +88,7 @@ public class CustomDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -96,7 +96,7 @@ public class CustomDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -106,6 +106,7 @@ public class CustomDialog extends BaseDialog {
         public RelativeLayout boxCustom;
         
         public DialogImpl(View convertView) {
+            if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             boxCustom = convertView.findViewById(R.id.box_custom);
             
@@ -471,7 +472,7 @@ public class CustomDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
 }

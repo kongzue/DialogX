@@ -184,7 +184,7 @@ public class BottomDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -197,7 +197,7 @@ public class BottomDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null) dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -228,6 +228,7 @@ public class BottomDialog extends BaseDialog {
         public TextView btnSelectPositive;
         
         public DialogImpl(View convertView) {
+            if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
@@ -294,7 +295,7 @@ public class BottomDialog extends BaseDialog {
                     
                     isShow = true;
                     boxRoot.setAlpha(0f);
-    
+                    
                     boxContent.getViewTreeObserver().addOnGlobalLayoutListener(onContentViewLayoutChangeListener);
                     
                     getDialogLifecycleCallback().onShow(me);
@@ -312,7 +313,7 @@ public class BottomDialog extends BaseDialog {
                                 blurView.setTag("blurView");
                                 blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 boxBody.addView(blurView, 0, params);
-        
+                                
                                 cancelBlurView = new BlurView(boxCancel.getContext(), null);
                                 RelativeLayout.LayoutParams cancelButtonLp = new RelativeLayout.LayoutParams(boxCancel.getWidth(), boxCancel.getHeight());
                                 cancelBlurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
@@ -400,7 +401,7 @@ public class BottomDialog extends BaseDialog {
             });
             
             bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
-    
+            
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
@@ -425,7 +426,7 @@ public class BottomDialog extends BaseDialog {
                         bkg.setY(bkgEnterAimY);
                         bkg.startAnimation(enterAnim);
                     }
-    
+                    
                     boxRoot.animate()
                             .setDuration(enterAnimDurationTemp)
                             .alpha(1f)
@@ -436,16 +437,17 @@ public class BottomDialog extends BaseDialog {
         }
         
         private boolean isEnterAnimFinished = false;
-    
+        
         private ViewTreeObserver.OnGlobalLayoutListener onContentViewLayoutChangeListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (boxContent != null) {
-                    if (style.overrideBottomDialogRes() != null &&style.overrideBottomDialogRes().touchSlide()) {
+                    if (style.overrideBottomDialogRes() != null && style.overrideBottomDialogRes().touchSlide()) {
                         //若内容布已经超出屏幕可用范围，且预设的对话框最大高度已知
                         if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
                             //先将内容布局放置到屏幕底部以外区域，然后执行上移动画
-                            if (!isEnterAnimFinished)bkg.setY(getRootFrameLayout().getMeasuredHeight());
+                            if (!isEnterAnimFinished)
+                                bkg.setY(getRootFrameLayout().getMeasuredHeight());
                             //执行上移动画
                             if (bottomDialogMaxHeight <= 1) {
                                 //bottomDialogMaxHeight 值若为小于 1 的小数，视为比例
@@ -466,7 +468,7 @@ public class BottomDialog extends BaseDialog {
                             keepBottomAnim.start();
                         } else {
                             bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
-                            if (!isEnterAnimFinished)bkg.setY(boxRoot.getHeight());
+                            if (!isEnterAnimFinished) bkg.setY(boxRoot.getHeight());
                             bkg.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -484,7 +486,7 @@ public class BottomDialog extends BaseDialog {
                                 }
                             });
                         }
-                    }else{
+                    } else {
                         bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
                     }
                 }
@@ -946,7 +948,7 @@ public class BottomDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
 }

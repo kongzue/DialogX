@@ -278,7 +278,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -314,7 +314,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -369,6 +369,7 @@ public class PopTip extends BaseDialog {
         public TextView txtDialogxButton;
         
         public DialogImpl(View convertView) {
+            if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBody = convertView.findViewById(R.id.box_body);
             imgDialogxPopIcon = convertView.findViewById(R.id.img_dialogx_pop_icon);
@@ -845,7 +846,7 @@ public class PopTip extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
 }

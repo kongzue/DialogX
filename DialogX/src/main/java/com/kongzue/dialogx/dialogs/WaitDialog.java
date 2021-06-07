@@ -258,7 +258,7 @@ public class WaitDialog extends BaseDialog {
             @Override
             public void run() {
                 dialogImpl.lazyCreate();
-                dialogView.setTag(me.get());
+                if (dialogView!=null)dialogView.setTag(me.get());
                 show(dialogView);
             }
         });
@@ -276,7 +276,7 @@ public class WaitDialog extends BaseDialog {
             @Override
             public void run() {
                 dialogImpl.lazyCreate();
-                dialogView.setTag(me.get());
+                if (dialogView!=null)dialogView.setTag(me.get());
                 show(activity, dialogView);
             }
         });
@@ -320,6 +320,7 @@ public class WaitDialog extends BaseDialog {
         }
         
         public DialogImpl(View convertView) {
+            if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             bkg = convertView.findViewById(R.id.bkg);
             blurView = convertView.findViewById(R.id.blurView);

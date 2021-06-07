@@ -205,7 +205,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -216,7 +216,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -246,6 +246,7 @@ public class MessageDialog extends BaseDialog {
         public TextView btnSelectPositive;
         
         public DialogImpl(View convertView) {
+            if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             bkg = convertView.findViewById(R.id.bkg);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
@@ -1032,7 +1033,7 @@ public class MessageDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
 }

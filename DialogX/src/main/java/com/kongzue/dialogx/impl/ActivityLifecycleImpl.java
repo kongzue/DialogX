@@ -2,9 +2,13 @@ package com.kongzue.dialogx.impl;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -14,6 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.kongzue.dialogx.DialogX.error;
 
 /**
  * @author: Kongzue
@@ -31,7 +40,57 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     }
     
     public static void init(Context context, ActivityLifecycleImpl.onActivityResumeCallBack onActivityResumeCallBack) {
-        ((Application) context.getApplicationContext()).registerActivityLifecycleCallbacks(new ActivityLifecycleImpl(onActivityResumeCallBack));
+        (getApplicationContext(context)).registerActivityLifecycleCallbacks(new ActivityLifecycleImpl(onActivityResumeCallBack));
+    }
+    
+    public static Application getApplicationContext(Context context) {
+        if (context != null) {
+            return (Application) context.getApplicationContext();
+        }
+        try {
+            Application application = (Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null);
+            return application;
+        } catch (Exception e) {
+        }
+        try {
+            Application application = (Application) Class.forName("android.app.AppGlobals").getMethod("getInitialApplication").invoke(null, (Object[]) null);
+            return application;
+        } catch (Exception e) {
+        }
+        error("DialogX.init: 初始化异常，请确保init方法内传入的Context是有效的。");
+        return null;
+    }
+    
+    public static Activity getTopActivity() {
+        try {
+            Class activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
+            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
+            activitiesField.setAccessible(true);
+            Map<Object, Object> activities;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                activities = (HashMap<Object, Object>) activitiesField.get(activityThread);
+            } else {
+                activities = (ArrayMap<Object, Object>) activitiesField.get(activityThread);
+            }
+            if (activities.size() < 1) {
+                return null;
+            }
+            for (Object activityRecord : activities.values()) {
+                Class activityRecordClass = activityRecord.getClass();
+                Field pausedField = activityRecordClass.getDeclaredField("paused");
+                pausedField.setAccessible(true);
+                if (!pausedField.getBoolean(activityRecord)) {
+                    Field activityField = activityRecordClass.getDeclaredField("activity");
+                    activityField.setAccessible(true);
+                    Activity activity = (Activity) activityField.get(activityRecord);
+                    return activity;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     
     @Override
@@ -71,7 +130,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
-        if (BaseDialog.getContext()==activity){
+        if (BaseDialog.getContext() == activity) {
             BaseDialog.cleanContext();
         }
     }

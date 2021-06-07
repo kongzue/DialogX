@@ -75,7 +75,7 @@ public class FullScreenDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -83,7 +83,7 @@ public class FullScreenDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -100,6 +100,7 @@ public class FullScreenDialog extends BaseDialog {
         public RelativeLayout boxCustom;
         
         public DialogImpl(View convertView) {
+            if (convertView == null) return;
             imgZoomActivity = convertView.findViewById(R.id.img_zoom_activity);
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
@@ -401,7 +402,7 @@ public class FullScreenDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
-        dialogView.setTag(me);
+        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
 }
