@@ -40,7 +40,12 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     }
     
     public static void init(Context context, ActivityLifecycleImpl.onActivityResumeCallBack onActivityResumeCallBack) {
-        (getApplicationContext(context)).registerActivityLifecycleCallbacks(new ActivityLifecycleImpl(onActivityResumeCallBack));
+        Application application = getApplicationContext(context);
+        if (application == null) {
+            error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+            return;
+        }
+        application.registerActivityLifecycleCallbacks(new ActivityLifecycleImpl(onActivityResumeCallBack));
     }
     
     public static Application getApplicationContext(Context context) {

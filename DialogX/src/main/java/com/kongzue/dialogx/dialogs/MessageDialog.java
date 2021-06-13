@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -443,6 +442,7 @@ public class MessageDialog extends BaseDialog {
         }
         
         public void refreshView() {
+            log("#refreshView");
             if (backgroundColor != -1) {
                 tintColor(bkg, backgroundColor);
                 if (style instanceof MaterialStyle) {
@@ -451,7 +451,7 @@ public class MessageDialog extends BaseDialog {
                     tintColor(btnSelectPositive, backgroundColor);
                 }
             }
-            
+    
             bkg.setMaxWidth(DialogX.dialogMaxWidth);
             if (me instanceof InputDialog) {
                 txtInput.setVisibility(View.VISIBLE);

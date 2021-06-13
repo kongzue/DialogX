@@ -62,7 +62,7 @@ public class WaitDialog extends BaseDialog {
     protected CharSequence message;
     protected long tipShowDuration = 1500;
     protected float waitProgress = -1;
-    protected int showType = -1;        //-1:Waitdialog 状态标示符，其余为 TipDialog 状态标示
+    protected int showType = -1;        //-1:WaitDialog 状态标示符，其余为 TipDialog 状态标示
     protected TextInfo messageTextInfo;
     protected int maskColor = -1;
     protected BOOLEAN privateCancelable;
@@ -748,5 +748,21 @@ public class WaitDialog extends BaseDialog {
     
     public static WaitDialog getInstance() {
         return me();
+    }
+    
+    /**
+     * 获取当前 WaitDialog 显示状态
+     *
+     * 值的含义：
+     * -1:  WaitDialog 等待状态
+     * 0:   TipDialog 无状态（与 WaitDialog 等待状态相同）
+     * 1:   TipDialog 完成状态
+     * 2:   TipDialog 警告状态
+     * 3:   TipDialog 错误状态
+     *
+     * @return showType
+     */
+    public static int getType() {
+        return me().showType;
     }
 }

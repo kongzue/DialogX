@@ -84,7 +84,7 @@ public class MaxRelativeLayout extends RelativeLayout {
     }
     
     public MaxRelativeLayout setMaxWidth(int maxWidth) {
-        if (maxWidth > 0 && this.maxWidth != 0) this.maxWidth = maxWidth;
+        if (maxWidth > 0) this.maxWidth = maxWidth;
         return this;
     }
     
@@ -102,7 +102,7 @@ public class MaxRelativeLayout extends RelativeLayout {
             preWidth = widthSize;
         }
         if (lockWidth) {
-            maxWidth = Math.min(widthSize, preWidth);
+            maxWidth = Math.min(maxWidth, Math.min(widthSize, preWidth));
         }
         if (maxHeight > 0) {
             heightSize = Math.min(heightSize, maxHeight);
@@ -118,10 +118,10 @@ public class MaxRelativeLayout extends RelativeLayout {
             if (widthTemp < minWidth) widthTemp = minWidth;
             if (heightTemp < minHeight) heightTemp = minHeight;
             if (blurView != null) {
-                if (heightMode == EXACTLY){
+                if (heightMode == EXACTLY) {
                     heightTemp = heightSize;
                 }
-                if (widthMode == EXACTLY){
+                if (widthMode == EXACTLY) {
                     widthTemp = widthSize;
                 }
                 LayoutParams lp = (LayoutParams) blurView.getLayoutParams();

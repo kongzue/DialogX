@@ -286,7 +286,8 @@ public class BottomDialog extends BaseDialog {
             if (btnCancel != null) btnCancel.getPaint().setFakeBoldText(true);
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
-            
+    
+            bkg.setMaxWidth(DialogX.dialogMaxWidth);
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
