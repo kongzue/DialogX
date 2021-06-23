@@ -445,7 +445,7 @@ public class BlurView extends View {
         return DEBUGMODE && DialogX.DEBUGMODE;
     }
     
-    public static void log(Object o) {
+    private static void log(Object o) {
         if (isDebug()) Log.i(">>>", o.toString());
     }
     

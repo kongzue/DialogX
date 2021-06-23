@@ -77,6 +77,11 @@ public class PopTip extends BaseDialog {
         super();
     }
     
+    @Override
+    public boolean isCancelable() {
+        return false;
+    }
+    
     public static PopTip build() {
         return new PopTip();
     }

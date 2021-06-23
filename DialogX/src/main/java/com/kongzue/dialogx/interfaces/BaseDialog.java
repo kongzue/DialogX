@@ -215,6 +215,8 @@ public abstract class BaseDialog {
         autoShowInputKeyboard = DialogX.autoShowInputKeyboard;
     }
     
+    public abstract boolean isCancelable();
+    
     public View createView(int layoutId) {
         if (getContext() == null) {
             error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
@@ -361,6 +363,11 @@ public abstract class BaseDialog {
         new Handler(Looper.getMainLooper()).post(runnable);
     }
     
+    public View getDialogView() {
+        if (dialogView == null) return null;
+        return dialogView.get();
+    }
+    
     public Activity getActivity() {
         return ownActivity == null ? null : ownActivity.get();
     }
@@ -380,5 +387,9 @@ public abstract class BaseDialog {
                 }
             }
         }
+    }
+    
+    public static List<BaseDialog> getRunningDialogList() {
+        return new CopyOnWriteArrayList<>(runningDialogList);
     }
 }

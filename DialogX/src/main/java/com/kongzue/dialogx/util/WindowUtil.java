@@ -6,12 +6,14 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
 import static android.view.WindowManager.LayoutParams.*;
@@ -26,6 +28,25 @@ import static android.view.WindowManager.LayoutParams.*;
 public class WindowUtil {
     
     public static void show(Activity activity, View dialogView, boolean touchEnable) {
+        try {
+            if (activity.getWindow().getDecorView().isAttachedToWindow()) {
+                showNow(activity, dialogView, touchEnable);
+            } else {
+                activity.getWindow().getDecorView().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        showNow(activity, dialogView, touchEnable);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            if (activity != null && !activity.isDestroyed()) {
+                showNow(activity, dialogView, touchEnable);
+            }
+        }
+    }
+    
+    private static void showNow(Activity activity, View dialogView, boolean touchEnable) {
         WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         
@@ -38,12 +59,24 @@ public class WindowUtil {
                 FLAG_LAYOUT_IN_SCREEN
         ;
         if (!touchEnable) {
-            layoutParams.flags = layoutParams.flags | FLAG_NOT_FOCUSABLE;
+            dialogView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    for (BaseDialog baseDialog : BaseDialog.getRunningDialogList()) {
+                        if (!(baseDialog instanceof PopTip) && !baseDialog.isCancelable() && baseDialog.getActivity() == activity) {
+                            if (baseDialog.getDialogView() == null) {
+                                return false;
+                            }
+                            return baseDialog.getDialogView().dispatchTouchEvent(event);
+                        }
+                    }
+                    return activity.dispatchTouchEvent(event);
+                }
+            });
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             layoutParams.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
-        
         manager.addView(dialogView, layoutParams);
     }
     

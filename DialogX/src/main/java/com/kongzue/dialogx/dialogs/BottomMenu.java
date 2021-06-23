@@ -528,16 +528,10 @@ public class BottomMenu extends BottomDialog {
                                     if (!onMenuItemSelectListener.onClick(me, menuList.get(position), position)) {
                                         dismiss();
                                     } else {
-                                        boolean select = false;
-                                        if (selectionIndex == position) {
-                                            selectionIndex = -1;
-                                        } else {
-                                            selectionIndex = position;
-                                            select = true;
-                                        }
+                                        selectionIndex = position;
                                         menuListAdapter.notifyDataSetInvalidated();
                                         menuListAdapter.notifyDataSetChanged();
-                                        onMenuItemSelectListener.onOneItemSelect(me, menuList.get(position), position, select);
+                                        onMenuItemSelectListener.onOneItemSelect(me, menuList.get(position), position, true);
                                     }
                                 } else {
                                     if (onMenuItemClickListener != null) {

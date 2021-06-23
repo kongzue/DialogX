@@ -671,7 +671,7 @@ public class MainActivity extends BaseActivity {
                         @Override
                         public boolean onClick(PopTip popTip, View v) {
                             //点击“撤回”按钮回调
-                            toastS("邮件已撤回");
+                            toast("邮件已撤回");
                             return false;
                         }
                     }).showLong();
