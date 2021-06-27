@@ -143,7 +143,7 @@ public class CustomDialog extends BaseDialog {
                 @Override
                 public void onDismiss() {
                     isShow = false;
-                    getDialogLifecycleCallback().onDismiss(me);
+                    if (!preShowFlag) getDialogLifecycleCallback().onDismiss(me);
                 }
             });
             

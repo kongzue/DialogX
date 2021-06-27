@@ -126,6 +126,8 @@ public abstract class BaseDialog {
         baseDialog.dialogView = new WeakReference<>(view);
         baseDialog.preShowFlag = false;
         
+        log(baseDialog.dialogKey() + ".preShow");
+        
         if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
         runOnMain(new Runnable() {
             @Override

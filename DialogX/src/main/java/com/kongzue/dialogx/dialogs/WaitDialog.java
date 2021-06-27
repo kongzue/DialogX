@@ -393,7 +393,7 @@ public class WaitDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     dialogImpl = null;
-                    getDialogLifecycleCallback().onDismiss(me());
+                    if (!preShowFlag) getDialogLifecycleCallback().onDismiss(me());
                     me.clear();
                 }
             });
@@ -756,7 +756,7 @@ public class WaitDialog extends BaseDialog {
     
     /**
      * 获取当前 WaitDialog 显示状态
-     *
+     * <p>
      * 值的含义：
      * -1:  WaitDialog 等待状态
      * 0:   TipDialog 无状态（与 WaitDialog 等待状态相同）

@@ -297,7 +297,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -333,7 +333,7 @@ public class PopTip extends BaseDialog {
         }
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -426,7 +426,7 @@ public class PopTip extends BaseDialog {
                 public void onDismiss() {
                     if (popTipList != null) popTipList.remove(PopTip.this);
                     isShow = false;
-                    getDialogLifecycleCallback().onDismiss(me);
+                    if (!preShowFlag) getDialogLifecycleCallback().onDismiss(me);
                 }
             });
             
@@ -572,7 +572,7 @@ public class PopTip extends BaseDialog {
                         public void run() {
                             dismiss(dialogView);
                         }
-                    },exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                    }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
                 }
             });
         }
@@ -865,7 +865,7 @@ public class PopTip extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
 }
