@@ -95,6 +95,20 @@ public class MessageDialog extends BaseDialog {
         return new MessageDialog();
     }
     
+    public static MessageDialog build(OnBindView<MessageDialog> onBindView) {
+        MessageDialog messageDialog = new MessageDialog().setCustomView(onBindView);
+        if (onBindView.isPreLoading()) {
+            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
+                @Override
+                public void onFinish(View view) {
+                    messageDialog.preShow();
+                    messageDialog.show();
+                }
+            });
+        }
+        return messageDialog;
+    }
+    
     public MessageDialog(CharSequence title, CharSequence message) {
         this.title = title;
         this.message = message;
@@ -629,7 +643,7 @@ public class MessageDialog extends BaseDialog {
                 boxRoot.setOnClickListener(null);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null) {
+            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
                 onBindView.bindParent(boxCustom, me);
                 boxCustom.setVisibility(View.VISIBLE);
             } else {

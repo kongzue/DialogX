@@ -75,6 +75,10 @@ public class WaitDialog extends BaseDialog {
         cancelable = DialogX.cancelableTipDialog;
     }
     
+    public static WaitDialog build() {
+        return new WaitDialog();
+    }
+    
     public static WaitDialog show(CharSequence message) {
         DialogImpl dialogImpl = me().dialogImpl;
         me().message = message;

@@ -1,159 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="600dp"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="取消"
-            android:textColor="@color/dialogxIOSBlue"
-            android:textSize="18dp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/btn_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="下一步"
-            android:textColor="@color/dialogxIOSBlue"
-            android:textSize="18dp" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="30dp"
-        android:src="@mipmap/img_login" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp">
-
-        <RelativeLayout
-            android:id="@+id/box_userName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp">
-
-            <EditText
-                android:id="@+id/edit_userName"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/ios_edit_box_bkg"
-                android:gravity="center"
-                android:hint="请输入账号"
-                android:inputType="textEmailAddress" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/box_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:visibility="gone">
-
-            <EditText
-                android:id="@+id/edit_password"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/ios_edit_box_bkg"
-                android:gravity="center"
-                android:hint="请输入密码"
-                android:inputType="textPassword" />
-
-        </RelativeLayout>
-
-    </FrameLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:gravity="center"
-        android:text="登录后，您可以："
-        android:textColor="@color/black"
-        android:textSize="13dp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="取消"
+                android:textColor="@color/dialogxIOSBlue"
+                android:textSize="18dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="下一步"
+                android:textColor="@color/dialogxIOSBlue"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="30dp"
+            android:src="@mipmap/img_login" />
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="· 使用云同步备份您的存档文件"
-            android:textColor="@color/black75"
-            android:textSize="13dp" />
+            android:layout_marginTop="25dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:text="· 享受随时随地的客户服务及7*24小时电话咨询服务"
-            android:textColor="@color/black75"
-            android:textSize="13dp" />
+            <RelativeLayout
+                android:id="@+id/box_userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:text="· 免费的远程协助和更大的云端存储空间"
-            android:textColor="@color/black75"
-            android:textSize="13dp" />
+                <EditText
+                    android:id="@+id/edit_userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ios_edit_box_bkg"
+                    android:gravity="center"
+                    android:hint="请输入账号"
+                    android:inputType="textEmailAddress" />
 
-    </LinearLayout>
+            </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/box_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:visibility="gone">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/edit_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/ios_edit_box_bkg"
+                    android:gravity="center"
+                    android:hint="请输入密码"
+                    android:inputType="textPassword" />
+
+            </RelativeLayout>
+
+        </FrameLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:gravity="center"
-            android:text="登录代表您同意"
+            android:text="登录后，您可以："
             android:textColor="@color/black"
-            android:textSize="13dp" />
+            android:textSize="13dp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:gravity="center"
-            android:text="《用户服务条款》"
-            android:textColor="@color/dialogxIOSBlue"
-            android:textSize="13dp" />
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="· 使用云同步备份您的存档文件"
+                android:textColor="@color/black75"
+                android:textSize="13dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="· 享受随时随地的客户服务及7*24小时电话咨询服务"
+                android:textColor="@color/black75"
+                android:textSize="13dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:text="· 免费的远程协助和更大的云端存储空间"
+                android:textColor="@color/black75"
+                android:textSize="13dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:gravity="center"
+                android:text="登录代表您同意"
+                android:textColor="@color/black"
+                android:textSize="13dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:gravity="center"
+                android:text="《用户服务条款》"
+                android:textColor="@color/dialogxIOSBlue"
+                android:textSize="13dp" />
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>

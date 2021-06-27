@@ -67,6 +67,20 @@ public class CustomDialog extends BaseDialog {
         return new CustomDialog();
     }
     
+    public static CustomDialog build(OnBindView<CustomDialog> onBindView) {
+        CustomDialog customDialog = new CustomDialog().setCustomView(onBindView);
+        if (onBindView.isPreLoading()) {
+            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
+                @Override
+                public void onFinish(View view) {
+                    customDialog.preShow();
+                    customDialog.show();
+                }
+            });
+        }
+        return customDialog;
+    }
+    
     public CustomDialog(OnBindView<CustomDialog> onBindView) {
         this.onBindView = onBindView;
     }
@@ -247,7 +261,7 @@ public class CustomDialog extends BaseDialog {
                 boxRoot.setOnClickListener(null);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null) {
+            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
                 onBindView.bindParent(boxCustom, me);
             }
         }

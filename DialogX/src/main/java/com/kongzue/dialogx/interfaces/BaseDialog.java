@@ -86,6 +86,10 @@ public abstract class BaseDialog {
     protected static void show(final View view) {
         if (view == null) return;
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
+        if (baseDialog.preShowFlag) {
+            preShow(view);
+            return;
+        }
         baseDialog.ownActivity = new WeakReference<>(contextWeakReference.get());
         baseDialog.dialogView = new WeakReference<>(view);
         
@@ -107,6 +111,35 @@ public abstract class BaseDialog {
                 }
             });
         }
+    }
+    
+    protected boolean preShowFlag;
+    
+    protected void preShow() {
+        preShowFlag = true;
+    }
+    
+    protected static void preShow(final View view) {
+        if (view == null) return;
+        final BaseDialog baseDialog = (BaseDialog) view.getTag();
+        baseDialog.ownActivity = new WeakReference<>(contextWeakReference.get());
+        baseDialog.dialogView = new WeakReference<>(view);
+        baseDialog.preShowFlag = false;
+        
+        if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                view.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+                rootFrameLayout.get().addView(view);
+                runOnMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        rootFrameLayout.get().removeView(view);
+                    }
+                });
+            }
+        });
     }
     
     protected static void show(final Activity activity, final View view) {
@@ -361,6 +394,11 @@ public abstract class BaseDialog {
     protected static void runOnMain(Runnable runnable) {
         if (!DialogX.autoRunOnUIThread) runnable.run();
         new Handler(Looper.getMainLooper()).post(runnable);
+    }
+    
+    protected static void runOnMainDelay(Runnable runnable, long delay) {
+        if (!DialogX.autoRunOnUIThread) runnable.run();
+        new Handler(Looper.getMainLooper()).postDelayed(runnable, delay);
     }
     
     public View getDialogView() {

@@ -97,6 +97,20 @@ public class BottomDialog extends BaseDialog {
         return new BottomDialog();
     }
     
+    public static BottomDialog build(OnBindView<BottomDialog> onBindView) {
+        BottomDialog bottomDialog = new BottomDialog().setCustomView(onBindView);
+        if (onBindView.isPreLoading()) {
+            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
+                @Override
+                public void onFinish(View view) {
+                    bottomDialog.preShow();
+                    bottomDialog.show();
+                }
+            });
+        }
+        return bottomDialog;
+    }
+    
     public BottomDialog(CharSequence title, CharSequence message) {
         this.title = title;
         this.message = message;
@@ -533,7 +547,7 @@ public class BottomDialog extends BaseDialog {
             
             if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
             
-            if (onBindView != null && onBindView.getCustomView() != null) {
+            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
                 onBindView.bindParent(boxCustom, me);
             }
             

@@ -86,6 +86,20 @@ public class PopTip extends BaseDialog {
         return new PopTip();
     }
     
+    public static PopTip build(OnBindView<PopTip> onBindView) {
+        PopTip popTip = new PopTip().setCustomView(onBindView);
+        if (onBindView.isPreLoading()) {
+            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
+                @Override
+                public void onFinish(View view) {
+                    popTip.preShow();
+                    popTip.show();
+                }
+            });
+        }
+        return popTip;
+    }
+    
     public PopTip(OnBindView<PopTip> onBindView) {
         this.onBindView = onBindView;
     }
@@ -494,7 +508,7 @@ public class PopTip extends BaseDialog {
                 tintColor(boxBody, backgroundColor);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null) {
+            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
                 onBindView.bindParent(boxCustom, me);
                 boxCustom.setVisibility(View.VISIBLE);
             } else {

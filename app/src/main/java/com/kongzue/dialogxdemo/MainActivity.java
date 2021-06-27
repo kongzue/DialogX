@@ -568,7 +568,7 @@ public class MainActivity extends BaseActivity {
         btnFullScreenDialogLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FullScreenDialog.show(new OnBindView<FullScreenDialog>(R.layout.layout_full_login) {
+                FullScreenDialog.build(new OnBindView<FullScreenDialog>(R.layout.layout_full_login,true) {
                     @Override
                     public void onBind(FullScreenDialog dialog, View v) {
                         btnCancel = v.findViewById(R.id.btn_cancel);
@@ -577,10 +577,10 @@ public class MainActivity extends BaseActivity {
                         editUserName = v.findViewById(R.id.edit_userName);
                         boxPassword = v.findViewById(R.id.box_password);
                         editPassword = v.findViewById(R.id.edit_password);
-                        
+            
                         initFullScreenLoginDemo(dialog);
                     }
-                });
+                }).show();
             }
         });
         

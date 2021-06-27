@@ -61,6 +61,20 @@ public class FullScreenDialog extends BaseDialog {
         return new FullScreenDialog();
     }
     
+    public static FullScreenDialog build(OnBindView<FullScreenDialog> onBindView) {
+        FullScreenDialog fullScreenDialog = new FullScreenDialog(onBindView);
+        if (onBindView.isPreLoading()) {
+            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
+                @Override
+                public void onFinish(View view) {
+                    fullScreenDialog.preShow();
+                    fullScreenDialog.show();
+                }
+            });
+        }
+        return fullScreenDialog;
+    }
+    
     public FullScreenDialog(OnBindView<FullScreenDialog> onBindView) {
         this.onBindView = onBindView;
     }
@@ -75,7 +89,7 @@ public class FullScreenDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -83,7 +97,7 @@ public class FullScreenDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -215,7 +229,7 @@ public class FullScreenDialog extends BaseDialog {
                 boxRoot.setOnClickListener(null);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null) {
+            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
                 onBindView.bindParent(boxCustom, me);
             }
             
@@ -248,7 +262,7 @@ public class FullScreenDialog extends BaseDialog {
                 public void run() {
                     dismiss(dialogView);
                 }
-            },exitAnimDurationTemp);
+            }, exitAnimDurationTemp);
         }
         
         public void preDismiss() {
@@ -402,7 +416,7 @@ public class FullScreenDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
 }

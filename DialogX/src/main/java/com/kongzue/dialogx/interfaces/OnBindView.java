@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import com.kongzue.dialogx.DialogX;
 
 import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
+import static com.kongzue.dialogx.interfaces.BaseDialog.log;
 
 /**
  * @author: Kongzue
@@ -17,8 +18,10 @@ import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
  * @createTime: 2020/10/8 17:00
  */
 public abstract class OnBindView<D> {
+    
     int layoutResId;
     View customView;
+    OnViewLoadFinishListener onViewLoadFinishListener;
     
     public OnBindView(int layoutResId) {
         if (BaseDialog.getContext() == null) {
@@ -27,6 +30,34 @@ public abstract class OnBindView<D> {
         }
         this.layoutResId = layoutResId;
         customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
+    }
+    
+    private boolean preLoading;
+    
+    public OnBindView(int layoutResId, boolean preLoading) {
+        if (BaseDialog.getContext() == null) {
+            DialogX.error(ERROR_INIT_TIPS);
+            return;
+        }
+        this.layoutResId = layoutResId;
+        this.preLoading = true;
+        if (preLoading) {
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
+                    int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                    int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                    customView.measure(widthSpec, heightSpec);
+                    customView.invalidate();
+                    
+                    if (onViewLoadFinishListener!=null)onViewLoadFinishListener.onFinish(customView);
+                }
+            }.start();
+        }else{
+            customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
+        }
     }
     
     public OnBindView(View customView) {
@@ -45,6 +76,9 @@ public abstract class OnBindView<D> {
     }
     
     public View getCustomView() {
+        if (preLoading && customView == null) {
+            customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
+        }
         return customView;
     }
     
@@ -59,35 +93,51 @@ public abstract class OnBindView<D> {
     }
     
     public OnBindView<D> bindParent(ViewGroup parentView) {
-        if (customView == null) return this;
-        if (customView.getParent() != null) {
-            if (customView.getParent()==parentView){
+        if (getCustomView() == null) return this;
+        if (getCustomView().getParent() != null) {
+            if (getCustomView().getParent() == parentView) {
                 return this;
             }
-            ((ViewGroup) customView.getParent()).removeView(customView);
+            ((ViewGroup) getCustomView().getParent()).removeView(getCustomView());
         }
         ViewGroup.LayoutParams lp = parentView.getLayoutParams();
         if (lp == null) {
             lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
-        parentView.addView(customView, lp);
+        parentView.addView(getCustomView(), lp);
         return this;
     }
     
+    long loadStamp;
+    
     public OnBindView<D> bindParent(ViewGroup parentView, BaseDialog dialog) {
-        if (customView == null) return this;
-        if (customView.getParent() != null) {
-            if (customView.getParent()==parentView){
+        loadStamp = System.currentTimeMillis();
+        if (getCustomView() == null) return this;
+        if (getCustomView().getParent() != null) {
+            if (getCustomView().getParent() == parentView) {
                 return this;
             }
-            ((ViewGroup) customView.getParent()).removeView(customView);
+            ((ViewGroup) getCustomView().getParent()).removeView(getCustomView());
         }
-        ViewGroup.LayoutParams lp = customView.getLayoutParams();
+        ViewGroup.LayoutParams lp = getCustomView().getLayoutParams();
         if (lp == null) {
             lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
-        parentView.addView(customView, lp);
-        onBind((D) dialog, customView);
+        parentView.addView(getCustomView(), lp);
+        onBind((D) dialog, getCustomView());
+        return this;
+    }
+    
+    public boolean isPreLoading() {
+        return preLoading;
+    }
+    
+    public interface OnViewLoadFinishListener{
+        void onFinish(View view);
+    }
+    
+    public OnBindView<D> setOnViewLoadFinishListener(OnViewLoadFinishListener onViewLoadFinishListener) {
+        this.onViewLoadFinishListener = onViewLoadFinishListener;
         return this;
     }
 }

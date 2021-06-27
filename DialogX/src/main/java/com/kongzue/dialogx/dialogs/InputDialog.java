@@ -32,6 +32,20 @@ public class InputDialog extends MessageDialog {
         return new InputDialog();
     }
     
+    public static InputDialog build(OnBindView<MessageDialog> onBindView) {
+        InputDialog inputDialog = new InputDialog().setCustomView(onBindView);
+        if (onBindView.isPreLoading()) {
+            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
+                @Override
+                public void onFinish(View view) {
+                    inputDialog.preShow();
+                    inputDialog.show();
+                }
+            });
+        }
+        return inputDialog;
+    }
+    
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText) {
         cancelable = DialogX.cancelable;
         this.title = title;
