@@ -87,17 +87,7 @@ public class PopTip extends BaseDialog {
     }
     
     public static PopTip build(OnBindView<PopTip> onBindView) {
-        PopTip popTip = new PopTip().setCustomView(onBindView);
-        if (onBindView.isPreLoading()) {
-            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
-                @Override
-                public void onFinish(View view) {
-                    popTip.preShow();
-                    popTip.show();
-                }
-            });
-        }
-        return popTip;
+        return new PopTip().setCustomView(onBindView);
     }
     
     public PopTip(OnBindView<PopTip> onBindView) {
@@ -472,7 +462,6 @@ public class PopTip extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     if (enterAnimDuration != -1) {
@@ -556,7 +545,7 @@ public class PopTip extends BaseDialog {
                 public void run() {
                     if (v != null) v.setEnabled(false);
                     
-                    Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+                    Animation exitAnim = AnimationUtils.loadAnimation(getContext()==null?boxRoot.getContext():getContext(), exitAnimResId);
                     if (exitAnimDuration != -1) {
                         exitAnim.setDuration(exitAnimResId);
                     }

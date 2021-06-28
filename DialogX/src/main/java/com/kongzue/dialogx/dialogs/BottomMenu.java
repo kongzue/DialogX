@@ -59,17 +59,7 @@ public class BottomMenu extends BottomDialog {
     }
     
     public static BottomMenu build(OnBindView<BottomDialog> onBindView) {
-        BottomMenu bottomMenu = new BottomMenu().setCustomView(onBindView);
-        if (onBindView.isPreLoading()) {
-            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
-                @Override
-                public void onFinish(View view) {
-                    bottomMenu.preShow();
-                    bottomMenu.show();
-                }
-            });
-        }
-        return bottomMenu;
+        return new BottomMenu().setCustomView(onBindView);
     }
     
     protected BottomMenu() {

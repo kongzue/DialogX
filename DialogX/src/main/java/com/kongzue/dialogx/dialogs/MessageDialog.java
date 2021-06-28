@@ -96,17 +96,7 @@ public class MessageDialog extends BaseDialog {
     }
     
     public static MessageDialog build(OnBindView<MessageDialog> onBindView) {
-        MessageDialog messageDialog = new MessageDialog().setCustomView(onBindView);
-        if (onBindView.isPreLoading()) {
-            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
-                @Override
-                public void onFinish(View view) {
-                    messageDialog.preShow();
-                    messageDialog.show();
-                }
-            });
-        }
-        return messageDialog;
+        return new MessageDialog().setCustomView(onBindView);
     }
     
     public MessageDialog(CharSequence title, CharSequence message) {
@@ -218,7 +208,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -229,7 +219,7 @@ public class MessageDialog extends BaseDialog {
         
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -465,7 +455,7 @@ public class MessageDialog extends BaseDialog {
                     tintColor(btnSelectPositive, backgroundColor);
                 }
             }
-    
+            
             bkg.setMaxWidth(DialogX.dialogMaxWidth);
             if (me instanceof InputDialog) {
                 txtInput.setVisibility(View.VISIBLE);
@@ -653,6 +643,7 @@ public class MessageDialog extends BaseDialog {
         
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
+            if (getContext() == null) return;
             
             int exitAnimResId = style.exitAnimResId() == 0 ? R.anim.anim_dialogx_default_exit : style.exitAnimResId();
             if (overrideExitAnimRes != 0) {
@@ -680,7 +671,7 @@ public class MessageDialog extends BaseDialog {
                 public void run() {
                     dismiss(dialogView);
                 }
-            },exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+            }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
         }
     }
     
@@ -1047,7 +1038,7 @@ public class MessageDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
 }

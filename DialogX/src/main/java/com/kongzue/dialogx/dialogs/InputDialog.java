@@ -33,17 +33,7 @@ public class InputDialog extends MessageDialog {
     }
     
     public static InputDialog build(OnBindView<MessageDialog> onBindView) {
-        InputDialog inputDialog = new InputDialog().setCustomView(onBindView);
-        if (onBindView.isPreLoading()) {
-            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
-                @Override
-                public void onFinish(View view) {
-                    inputDialog.preShow();
-                    inputDialog.show();
-                }
-            });
-        }
-        return inputDialog;
+        return new InputDialog().setCustomView(onBindView);
     }
     
     public InputDialog(CharSequence title, CharSequence message, CharSequence okText) {

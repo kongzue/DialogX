@@ -474,6 +474,7 @@ public class WaitDialog extends BaseDialog {
         
         public void doDismiss(final View v) {
             if (boxRoot == null) return;
+            if (getContext() == null) return;
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {

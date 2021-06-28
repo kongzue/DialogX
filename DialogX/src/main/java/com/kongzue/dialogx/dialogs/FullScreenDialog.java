@@ -62,17 +62,7 @@ public class FullScreenDialog extends BaseDialog {
     }
     
     public static FullScreenDialog build(OnBindView<FullScreenDialog> onBindView) {
-        FullScreenDialog fullScreenDialog = new FullScreenDialog(onBindView);
-        if (onBindView.isPreLoading()) {
-            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
-                @Override
-                public void onFinish(View view) {
-                    fullScreenDialog.preShow();
-                    fullScreenDialog.show();
-                }
-            });
-        }
-        return fullScreenDialog;
+        return new FullScreenDialog(onBindView);
     }
     
     public FullScreenDialog(OnBindView<FullScreenDialog> onBindView) {
@@ -239,6 +229,7 @@ public class FullScreenDialog extends BaseDialog {
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
+            if (getContext() == null) return;
             
             long exitAnimDurationTemp = 300;
             if (overrideExitDuration >= 0) {

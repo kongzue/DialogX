@@ -68,17 +68,7 @@ public class CustomDialog extends BaseDialog {
     }
     
     public static CustomDialog build(OnBindView<CustomDialog> onBindView) {
-        CustomDialog customDialog = new CustomDialog().setCustomView(onBindView);
-        if (onBindView.isPreLoading()) {
-            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
-                @Override
-                public void onFinish(View view) {
-                    customDialog.preShow();
-                    customDialog.show();
-                }
-            });
-        }
-        return customDialog;
+        return new CustomDialog().setCustomView(onBindView);
     }
     
     public CustomDialog(OnBindView<CustomDialog> onBindView) {
@@ -102,7 +92,7 @@ public class CustomDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
     
@@ -110,7 +100,7 @@ public class CustomDialog extends BaseDialog {
         super.beforeShow();
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -270,47 +260,53 @@ public class CustomDialog extends BaseDialog {
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
             
-            int exitAnimResIdTemp = R.anim.anim_dialogx_default_exit;
-            if (overrideExitAnimRes != 0) {
-                exitAnimResIdTemp = overrideExitAnimRes;
-            }
-            if (exitAnimResId != 0) {
-                exitAnimResIdTemp = exitAnimResId;
-            }
-            Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResIdTemp);
-            
-            long exitAnimDurationTemp = exitAnim.getDuration();
-            if (overrideExitDuration >= 0) {
-                exitAnimDurationTemp = overrideExitDuration;
-            }
-            if (exitAnimDuration >= 0) {
-                exitAnimDurationTemp = exitAnimDuration;
-            }
-            exitAnim.setDuration(exitAnimDurationTemp);
-            exitAnim.setAnimationListener(new Animation.AnimationListener() {
+            boxCustom.post(new Runnable() {
                 @Override
-                public void onAnimationStart(Animation animation) {
-                
-                }
-                
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    dismiss(dialogView);
-                }
-                
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                
+                public void run() {
+                    int exitAnimResIdTemp = R.anim.anim_dialogx_default_exit;
+                    if (overrideExitAnimRes != 0) {
+                        exitAnimResIdTemp = overrideExitAnimRes;
+                    }
+                    if (exitAnimResId != 0) {
+                        exitAnimResIdTemp = exitAnimResId;
+                    }
+                    
+                    Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxCustom.getContext() : getContext(), exitAnimResIdTemp);
+                    
+                    long exitAnimDurationTemp = exitAnim.getDuration();
+                    if (overrideExitDuration >= 0) {
+                        exitAnimDurationTemp = overrideExitDuration;
+                    }
+                    if (exitAnimDuration >= 0) {
+                        exitAnimDurationTemp = exitAnimDuration;
+                    }
+                    exitAnim.setDuration(exitAnimDurationTemp);
+                    exitAnim.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        
+                        }
+                        
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            dismiss(dialogView);
+                        }
+                        
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        
+                        }
+                    });
+                    boxCustom.startAnimation(exitAnim);
+                    
+                    if (overrideMaskExitAnimRes != 0) {
+                        Animation maskExitAnim = AnimationUtils.loadAnimation(getContext(), overrideMaskExitAnimRes);
+                        maskExitAnim.setDuration(exitAnimDurationTemp);
+                        maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
+                        boxRoot.startAnimation(maskExitAnim);
+                    }
                 }
             });
-            boxCustom.startAnimation(exitAnim);
-            
-            if (overrideMaskExitAnimRes != 0) {
-                Animation maskExitAnim = AnimationUtils.loadAnimation(getContext(), overrideMaskExitAnimRes);
-                maskExitAnim.setDuration(exitAnimDurationTemp);
-                maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
-                boxRoot.startAnimation(maskExitAnim);
-            }
         }
     }
     
@@ -486,7 +482,7 @@ public class CustomDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
 }

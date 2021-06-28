@@ -98,17 +98,7 @@ public class BottomDialog extends BaseDialog {
     }
     
     public static BottomDialog build(OnBindView<BottomDialog> onBindView) {
-        BottomDialog bottomDialog = new BottomDialog().setCustomView(onBindView);
-        if (onBindView.isPreLoading()) {
-            onBindView.setOnViewLoadFinishListener(new OnBindView.OnViewLoadFinishListener() {
-                @Override
-                public void onFinish(View view) {
-                    bottomDialog.preShow();
-                    bottomDialog.show();
-                }
-            });
-        }
-        return bottomDialog;
+        return new BottomDialog().setCustomView(onBindView);
     }
     
     public BottomDialog(CharSequence title, CharSequence message) {
@@ -583,6 +573,7 @@ public class BottomDialog extends BaseDialog {
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
+            if (getContext() == null) return;
             
             if (boxContent != null)
                 boxContent.getViewTreeObserver().removeOnGlobalLayoutListener(onContentViewLayoutChangeListener);

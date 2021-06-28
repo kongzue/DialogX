@@ -21,7 +21,6 @@ public abstract class OnBindView<D> {
     
     int layoutResId;
     View customView;
-    OnViewLoadFinishListener onViewLoadFinishListener;
     
     public OnBindView(int layoutResId) {
         if (BaseDialog.getContext() == null) {
@@ -30,34 +29,6 @@ public abstract class OnBindView<D> {
         }
         this.layoutResId = layoutResId;
         customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
-    }
-    
-    private boolean preLoading;
-    
-    public OnBindView(int layoutResId, boolean preLoading) {
-        if (BaseDialog.getContext() == null) {
-            DialogX.error(ERROR_INIT_TIPS);
-            return;
-        }
-        this.layoutResId = layoutResId;
-        this.preLoading = true;
-        if (preLoading) {
-            new Thread() {
-                @Override
-                public void run() {
-                    super.run();
-                    customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
-                    int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                    int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                    customView.measure(widthSpec, heightSpec);
-                    customView.invalidate();
-                    
-                    if (onViewLoadFinishListener!=null)onViewLoadFinishListener.onFinish(customView);
-                }
-            }.start();
-        }else{
-            customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
-        }
     }
     
     public OnBindView(View customView) {
@@ -76,7 +47,7 @@ public abstract class OnBindView<D> {
     }
     
     public View getCustomView() {
-        if (preLoading && customView == null) {
+        if (customView == null) {
             customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
         }
         return customView;
@@ -108,10 +79,7 @@ public abstract class OnBindView<D> {
         return this;
     }
     
-    long loadStamp;
-    
     public OnBindView<D> bindParent(ViewGroup parentView, BaseDialog dialog) {
-        loadStamp = System.currentTimeMillis();
         if (getCustomView() == null) return this;
         if (getCustomView().getParent() != null) {
             if (getCustomView().getParent() == parentView) {
@@ -125,19 +93,6 @@ public abstract class OnBindView<D> {
         }
         parentView.addView(getCustomView(), lp);
         onBind((D) dialog, getCustomView());
-        return this;
-    }
-    
-    public boolean isPreLoading() {
-        return preLoading;
-    }
-    
-    public interface OnViewLoadFinishListener{
-        void onFinish(View view);
-    }
-    
-    public OnBindView<D> setOnViewLoadFinishListener(OnViewLoadFinishListener onViewLoadFinishListener) {
-        this.onViewLoadFinishListener = onViewLoadFinishListener;
         return this;
     }
 }
