@@ -105,6 +105,10 @@ public abstract class BaseDialog {
                 runOnMain(new Runnable() {
                     @Override
                     public void run() {
+                        if (view.getParent() == rootFrameLayout.get()){
+                            error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
+                            return;
+                        }
                         rootFrameLayout.get().addView(view);
                     }
                 });
@@ -147,6 +151,10 @@ public abstract class BaseDialog {
                 runOnMain(new Runnable() {
                     @Override
                     public void run() {
+                        if (view.getParent() == rootFrameLayout.get()){
+                            error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
+                            return;
+                        }
                         activityRootView.addView(view);
                     }
                 });
