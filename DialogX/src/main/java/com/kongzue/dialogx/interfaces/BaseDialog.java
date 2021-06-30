@@ -86,94 +86,78 @@ public abstract class BaseDialog {
     protected static void show(final View view) {
         if (view == null) return;
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
-        if (baseDialog.preShowFlag) {
-            preShow(view);
-            return;
-        }
-        baseDialog.ownActivity = new WeakReference<>(contextWeakReference.get());
-        baseDialog.dialogView = new WeakReference<>(view);
-        
-        log(baseDialog.dialogKey() + ".show");
-        addDialogToRunningList(baseDialog);
-        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
-            if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
-            runOnMain(new Runnable() {
-                @Override
-                public void run() {
-                    rootFrameLayout.get().addView(view);
+        if (baseDialog != null) {
+            if (baseDialog.isShow) {
+                if (baseDialog.getDialogView() != null) {
+                    baseDialog.getDialogView().setVisibility(View.VISIBLE);
+                    return;
                 }
-            });
-        } else {
-            runOnMain(new Runnable() {
-                @Override
-                public void run() {
-                    WindowUtil.show(contextWeakReference.get(), view, !(baseDialog instanceof PopTip));
-                }
-            });
-        }
-    }
-    
-    protected boolean preShowFlag;
-    
-    protected void preShow() {
-        preShowFlag = true;
-    }
-    
-    protected static void preShow(final View view) {
-        if (view == null) return;
-        final BaseDialog baseDialog = (BaseDialog) view.getTag();
-        baseDialog.ownActivity = new WeakReference<>(contextWeakReference.get());
-        baseDialog.dialogView = new WeakReference<>(view);
-        baseDialog.preShowFlag = false;
-        
-        log(baseDialog.dialogKey() + ".preShow");
-        
-        if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
-        runOnMain(new Runnable() {
-            @Override
-            public void run() {
-                view.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
-                rootFrameLayout.get().addView(view);
+                error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
+                return;
+            }
+            baseDialog.ownActivity = new WeakReference<>(contextWeakReference.get());
+            baseDialog.dialogView = new WeakReference<>(view);
+            
+            log(baseDialog.dialogKey() + ".show");
+            addDialogToRunningList(baseDialog);
+            if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
+                if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
                 runOnMain(new Runnable() {
                     @Override
                     public void run() {
-                        rootFrameLayout.get().removeView(view);
+                        rootFrameLayout.get().addView(view);
+                    }
+                });
+            } else {
+                runOnMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        WindowUtil.show(contextWeakReference.get(), view, !(baseDialog instanceof PopTip));
                     }
                 });
             }
-        });
+        }
     }
     
     protected static void show(final Activity activity, final View view) {
         if (activity == null || view == null) return;
-        if (activity.isDestroyed()) {
-            error(((BaseDialog) view.getTag()).dialogKey() + ".show ERROR: activity is Destroyed.");
-            return;
-        }
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
-        baseDialog.ownActivity = new WeakReference<>(activity);
-        baseDialog.dialogView = new WeakReference<>(view);
-        
-        log(baseDialog + ".show");
-        addDialogToRunningList(baseDialog);
-        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
-            final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
-            if (activityRootView == null) {
+        if (baseDialog != null) {
+            if (baseDialog.getDialogView() != null) {
+                baseDialog.getDialogView().setVisibility(View.VISIBLE);
+            }
+            if (baseDialog.isShow) {
+                error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                 return;
             }
-            runOnMain(new Runnable() {
-                @Override
-                public void run() {
-                    activityRootView.addView(view);
+            if (activity.isDestroyed()) {
+                error(((BaseDialog) view.getTag()).dialogKey() + ".show ERROR: activity is Destroyed.");
+                return;
+            }
+            baseDialog.ownActivity = new WeakReference<>(activity);
+            baseDialog.dialogView = new WeakReference<>(view);
+            
+            log(baseDialog + ".show");
+            addDialogToRunningList(baseDialog);
+            if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
+                final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
+                if (activityRootView == null) {
+                    return;
                 }
-            });
-        } else {
-            runOnMain(new Runnable() {
-                @Override
-                public void run() {
-                    WindowUtil.show(activity, view, !(baseDialog instanceof PopTip));
-                }
-            });
+                runOnMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        activityRootView.addView(view);
+                    }
+                });
+            } else {
+                runOnMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        WindowUtil.show(activity, view, !(baseDialog instanceof PopTip));
+                    }
+                });
+            }
         }
     }
     

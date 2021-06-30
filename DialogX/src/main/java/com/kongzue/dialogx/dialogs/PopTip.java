@@ -257,73 +257,77 @@ public class PopTip extends BaseDialog {
     
     public void show() {
         super.beforeShow();
-        if (DialogX.onlyOnePopTip) {
-            PopTip oldInstance = null;
-            if (popTipList != null && !popTipList.isEmpty()) {
-                oldInstance = popTipList.get(popTipList.size() - 1);
-            }
-            if (oldInstance != null) {
-                oldInstance.dismiss();
-            }
-        } else {
-            if (popTipList != null) {
-                for (int i = 0; i < popTipList.size(); i++) {
-                    PopTip popInstance = popTipList.get(i);
-                    popInstance.moveUp();
+        if (getDialogView() == null) {
+            if (DialogX.onlyOnePopTip) {
+                PopTip oldInstance = null;
+                if (popTipList != null && !popTipList.isEmpty()) {
+                    oldInstance = popTipList.get(popTipList.size() - 1);
+                }
+                if (oldInstance != null) {
+                    oldInstance.dismiss();
+                }
+            } else {
+                if (popTipList != null) {
+                    for (int i = 0; i < popTipList.size(); i++) {
+                        PopTip popInstance = popTipList.get(i);
+                        popInstance.moveUp();
+                    }
                 }
             }
-        }
-        if (popTipList == null) popTipList = new ArrayList<>();
-        popTipList.add(PopTip.this);
-        int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
-        if (style.popTipSettings() != null) {
-            if (style.popTipSettings().layout(isLightTheme()) != 0) {
-                layoutResId = style.popTipSettings().layout(isLightTheme());
+            if (popTipList == null) popTipList = new ArrayList<>();
+            popTipList.add(PopTip.this);
+            int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
+            if (style.popTipSettings() != null) {
+                if (style.popTipSettings().layout(isLightTheme()) != 0) {
+                    layoutResId = style.popTipSettings().layout(isLightTheme());
+                }
+                align = style.popTipSettings().align();
+                if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+                enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
+                exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
             }
-            align = style.popTipSettings().align();
-            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
-            enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
-            exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
+            dialogView = createView(layoutResId);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
         }
-        dialogView = createView(layoutResId);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
     
     public void show(Activity activity) {
         super.beforeShow();
-        if (DialogX.onlyOnePopTip) {
-            PopTip oldInstance = null;
-            if (popTipList != null && !popTipList.isEmpty()) {
-                oldInstance = popTipList.get(popTipList.size() - 1);
-            }
-            if (oldInstance != null) {
-                oldInstance.dismiss();
-            }
-        } else {
-            if (popTipList != null) {
-                for (int i = 0; i < popTipList.size(); i++) {
-                    PopTip popInstance = popTipList.get(i);
-                    popInstance.moveUp();
+        if (dialogView!=null) {
+            if (DialogX.onlyOnePopTip) {
+                PopTip oldInstance = null;
+                if (popTipList != null && !popTipList.isEmpty()) {
+                    oldInstance = popTipList.get(popTipList.size() - 1);
+                }
+                if (oldInstance != null) {
+                    oldInstance.dismiss();
+                }
+            } else {
+                if (popTipList != null) {
+                    for (int i = 0; i < popTipList.size(); i++) {
+                        PopTip popInstance = popTipList.get(i);
+                        popInstance.moveUp();
+                    }
                 }
             }
-        }
-        if (popTipList == null) popTipList = new ArrayList<>();
-        popTipList.add(PopTip.this);
-        int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
-        if (style.popTipSettings() != null) {
-            if (style.popTipSettings().layout(isLightTheme()) != 0) {
-                layoutResId = style.popTipSettings().layout(isLightTheme());
+            if (popTipList == null) popTipList = new ArrayList<>();
+            popTipList.add(PopTip.this);
+            int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
+            if (style.popTipSettings() != null) {
+                if (style.popTipSettings().layout(isLightTheme()) != 0) {
+                    layoutResId = style.popTipSettings().layout(isLightTheme());
+                }
+                align = style.popTipSettings().align();
+                if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+                enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
+                exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
             }
-            align = style.popTipSettings().align();
-            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
-            enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
-            exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
+            dialogView = createView(layoutResId);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
         }
-        dialogView = createView(layoutResId);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView != null) dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -416,7 +420,7 @@ public class PopTip extends BaseDialog {
                 public void onDismiss() {
                     if (popTipList != null) popTipList.remove(PopTip.this);
                     isShow = false;
-                    if (!preShowFlag) getDialogLifecycleCallback().onDismiss(me);
+                    getDialogLifecycleCallback().onDismiss(me);
                 }
             });
             
@@ -497,7 +501,7 @@ public class PopTip extends BaseDialog {
                 tintColor(boxBody, backgroundColor);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
+            if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
                 boxCustom.setVisibility(View.VISIBLE);
             } else {
@@ -856,5 +860,11 @@ public class PopTip extends BaseDialog {
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
+    }
+    
+    public void hide() {
+        if (getDialogView() != null) {
+            getDialogView().setVisibility(View.GONE);
+        }
     }
 }

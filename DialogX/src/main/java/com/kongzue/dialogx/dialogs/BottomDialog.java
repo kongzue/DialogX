@@ -181,27 +181,31 @@ public class BottomDialog extends BaseDialog {
     
     public void show() {
         super.beforeShow();
-        int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
-        if (style.overrideBottomDialogRes() != null) {
-            layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
+        if (getDialogView() == null) {
+            int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
+            if (style.overrideBottomDialogRes() != null) {
+                layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
+            }
+            
+            dialogView = createView(layoutId);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
         }
-        
-        dialogView = createView(layoutId);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
         show(dialogView);
     }
     
     public void show(Activity activity) {
         super.beforeShow();
-        int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
-        if (style.overrideBottomDialogRes() != null) {
-            layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
+        if (getDialogView() == null) {
+            int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
+            if (style.overrideBottomDialogRes() != null) {
+                layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
+            }
+            
+            dialogView = createView(layoutId);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
         }
-        
-        dialogView = createView(layoutId);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null) dialogView.setTag(me);
         show(activity, dialogView);
     }
     
@@ -290,7 +294,7 @@ public class BottomDialog extends BaseDialog {
             if (btnCancel != null) btnCancel.getPaint().setFakeBoldText(true);
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
-    
+            
             bkg.setMaxWidth(DialogX.dialogMaxWidth);
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
@@ -333,7 +337,7 @@ public class BottomDialog extends BaseDialog {
                 @Override
                 public void onDismiss() {
                     isShow = false;
-                    if (!preShowFlag)getDialogLifecycleCallback().onDismiss(me);
+                    getDialogLifecycleCallback().onDismiss(me);
                 }
             });
             
@@ -537,7 +541,7 @@ public class BottomDialog extends BaseDialog {
             
             if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
             
-            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
+            if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
             }
             
@@ -954,7 +958,13 @@ public class BottomDialog extends BaseDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
+    }
+    
+    public void hide() {
+        if (getDialogView() != null) {
+            getDialogView().setVisibility(View.GONE);
+        }
     }
 }

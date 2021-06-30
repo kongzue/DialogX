@@ -203,23 +203,27 @@ public class MessageDialog extends BaseDialog {
     
     public void show() {
         super.beforeShow();
-        int layoutId = style.layout(isLightTheme());
-        layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
-        
-        dialogView = createView(layoutId);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView != null) dialogView.setTag(me);
+        if (getDialogView() == null) {
+            int layoutId = style.layout(isLightTheme());
+            layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
+            
+            dialogView = createView(layoutId);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
+        }
         show(dialogView);
     }
     
     public void show(Activity activity) {
         super.beforeShow();
-        int layoutId = style.layout(isLightTheme());
-        layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
-        
-        dialogView = createView(layoutId);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView != null) dialogView.setTag(me);
+        if (getDialogView() == null) {
+            int layoutId = style.layout(isLightTheme());
+            layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
+            
+            dialogView = createView(layoutId);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
+        }
         show(activity, dialogView);
     }
     
@@ -357,7 +361,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public void onDismiss() {
                     isShow = false;
-                    if (!preShowFlag) getDialogLifecycleCallback().onDismiss(me);
+                    getDialogLifecycleCallback().onDismiss(me);
                 }
             });
             
@@ -633,7 +637,7 @@ public class MessageDialog extends BaseDialog {
                 boxRoot.setOnClickListener(null);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
+            if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
                 boxCustom.setVisibility(View.VISIBLE);
             } else {
@@ -1040,5 +1044,11 @@ public class MessageDialog extends BaseDialog {
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
+    }
+    
+    public void hide() {
+        if (getDialogView() != null) {
+            getDialogView().setVisibility(View.GONE);
+        }
     }
 }

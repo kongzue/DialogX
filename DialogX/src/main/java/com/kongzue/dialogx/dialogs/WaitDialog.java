@@ -393,7 +393,7 @@ public class WaitDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     dialogImpl = null;
-                    if (!preShowFlag) getDialogLifecycleCallback().onDismiss(me());
+                    getDialogLifecycleCallback().onDismiss(me());
                     me.clear();
                 }
             });

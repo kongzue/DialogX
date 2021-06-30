@@ -77,17 +77,21 @@ public class FullScreenDialog extends BaseDialog {
     
     public void show() {
         super.beforeShow();
-        dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView != null) dialogView.setTag(me);
+        if (getDialogView() == null) {
+            dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
+        }
         show(dialogView);
     }
     
     public void show(Activity activity) {
         super.beforeShow();
-        dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView != null) dialogView.setTag(me);
+        if (getDialogView() == null) {
+            dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
+        }
         show(activity, dialogView);
     }
     
@@ -133,7 +137,7 @@ public class FullScreenDialog extends BaseDialog {
                 @Override
                 public void onDismiss() {
                     isShow = false;
-                    if (!preShowFlag) getDialogLifecycleCallback().onDismiss(me);
+                    getDialogLifecycleCallback().onDismiss(me);
                 }
             });
             
@@ -219,7 +223,7 @@ public class FullScreenDialog extends BaseDialog {
                 boxRoot.setOnClickListener(null);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
+            if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
             }
             
@@ -409,5 +413,11 @@ public class FullScreenDialog extends BaseDialog {
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
+    }
+    
+    public void hide() {
+        if (getDialogView() != null) {
+            getDialogView().setVisibility(View.GONE);
+        }
     }
 }

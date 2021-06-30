@@ -90,17 +90,21 @@ public class CustomDialog extends BaseDialog {
     
     public void show() {
         super.beforeShow();
-        dialogView = createView(R.layout.layout_dialogx_custom);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView != null) dialogView.setTag(me);
+        if (getDialogView() == null) {
+            dialogView = createView(R.layout.layout_dialogx_custom);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
+        }
         show(dialogView);
     }
     
     public void show(Activity activity) {
         super.beforeShow();
-        dialogView = createView(R.layout.layout_dialogx_custom);
-        dialogImpl = new DialogImpl(dialogView);
-        if (dialogView != null) dialogView.setTag(me);
+        if (getDialogView() == null) {
+            dialogView = createView(R.layout.layout_dialogx_custom);
+            dialogImpl = new DialogImpl(dialogView);
+            if (dialogView != null) dialogView.setTag(me);
+        }
         show(activity, dialogView);
     }
     
@@ -133,7 +137,7 @@ public class CustomDialog extends BaseDialog {
                 @Override
                 public void onDismiss() {
                     isShow = false;
-                    if (!preShowFlag) getDialogLifecycleCallback().onDismiss(me);
+                    getDialogLifecycleCallback().onDismiss(me);
                 }
             });
             
@@ -251,7 +255,7 @@ public class CustomDialog extends BaseDialog {
                 boxRoot.setOnClickListener(null);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null && !preShowFlag) {
+            if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
             }
         }
@@ -484,5 +488,11 @@ public class CustomDialog extends BaseDialog {
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
+    }
+    
+    public void hide() {
+        if (getDialogView() != null) {
+            getDialogView().setVisibility(View.GONE);
+        }
     }
 }
