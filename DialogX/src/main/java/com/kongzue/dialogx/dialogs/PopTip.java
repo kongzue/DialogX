@@ -54,12 +54,17 @@ public class PopTip extends BaseDialog {
     public static final int TIME_NO_AUTO_DISMISS_DELAY = -1;
     protected static List<PopTip> popTipList;
     
+    public static long overrideEnterDuration = -1;
+    public static long overrideExitDuration = -1;
+    public static int overrideEnterAnimRes = 0;
+    public static int overrideExitAnimRes = 0;
+    
     protected OnBindView<PopTip> onBindView;
     protected DialogLifecycleCallback<PopTip> dialogLifecycleCallback;
     protected PopTip me = this;
     protected DialogImpl dialogImpl;
-    protected int enterAnimResId = R.anim.anim_dialogx_default_enter;
-    protected int exitAnimResId = R.anim.anim_dialogx_default_exit;
+    protected int enterAnimResId = 0;
+    protected int exitAnimResId = 0;
     private View dialogView;
     protected DialogXStyle.PopTipSettings.ALIGN align;
     protected OnDialogButtonClickListener<PopTip> onButtonClickListener;
@@ -283,8 +288,20 @@ public class PopTip extends BaseDialog {
                 }
                 align = style.popTipSettings().align();
                 if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
-                enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
-                exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
+                int styleEnterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme());
+                int styleExitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme());
+                enterAnimResId = enterAnimResId == 0 ? (
+                        overrideEnterAnimRes == 0 ? (styleEnterAnimResId != 0 ? styleEnterAnimResId : R.anim.anim_dialogx_default_enter) : overrideEnterAnimRes
+                ) : enterAnimResId;
+                exitAnimResId = exitAnimResId == 0 ? (
+                        overrideExitAnimRes == 0 ? (styleExitAnimResId != 0 ? styleExitAnimResId : R.anim.anim_dialogx_default_exit) : overrideExitAnimRes
+                ) : exitAnimResId;
+                enterAnimDuration = enterAnimDuration == -1 ? (
+                        overrideEnterDuration
+                ) : enterAnimDuration;
+                exitAnimDuration = exitAnimDuration == -1 ? (
+                        overrideExitDuration
+                ) : exitAnimDuration;
             }
             dialogView = createView(layoutResId);
             dialogImpl = new DialogImpl(dialogView);
@@ -295,7 +312,7 @@ public class PopTip extends BaseDialog {
     
     public void show(Activity activity) {
         super.beforeShow();
-        if (dialogView!=null) {
+        if (dialogView != null) {
             if (DialogX.onlyOnePopTip) {
                 PopTip oldInstance = null;
                 if (popTipList != null && !popTipList.isEmpty()) {
@@ -321,8 +338,20 @@ public class PopTip extends BaseDialog {
                 }
                 align = style.popTipSettings().align();
                 if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
-                enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
-                exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
+                int styleEnterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme());
+                int styleExitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme());
+                enterAnimResId = enterAnimResId == 0 ? (
+                        overrideEnterAnimRes == 0 ? (styleEnterAnimResId != 0 ? styleEnterAnimResId : R.anim.anim_dialogx_default_enter) : overrideEnterAnimRes
+                ) : enterAnimResId;
+                exitAnimResId = exitAnimResId == 0 ? (
+                        overrideExitAnimRes == 0 ? (styleExitAnimResId != 0 ? styleExitAnimResId : R.anim.anim_dialogx_default_exit) : overrideExitAnimRes
+                ) : exitAnimResId;
+                enterAnimDuration = enterAnimDuration == -1 ? (
+                        overrideEnterDuration
+                ) : enterAnimDuration;
+                exitAnimDuration = exitAnimDuration == -1 ? (
+                        overrideExitDuration
+                ) : exitAnimDuration;
             }
             dialogView = createView(layoutResId);
             dialogImpl = new DialogImpl(dialogView);
@@ -466,7 +495,7 @@ public class PopTip extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
+                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId == 0 ? R.anim.anim_dialogx_default_enter : enterAnimResId);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     if (enterAnimDuration != -1) {
                         enterAnim.setDuration(enterAnimDuration);
@@ -549,9 +578,9 @@ public class PopTip extends BaseDialog {
                 public void run() {
                     if (v != null) v.setEnabled(false);
                     
-                    Animation exitAnim = AnimationUtils.loadAnimation(getContext()==null?boxRoot.getContext():getContext(), exitAnimResId);
+                    Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
                     if (exitAnimDuration != -1) {
-                        exitAnim.setDuration(exitAnimResId);
+                        exitAnim.setDuration(exitAnimDuration);
                     }
                     boxBody.startAnimation(exitAnim);
                     
@@ -852,8 +881,20 @@ public class PopTip extends BaseDialog {
             }
             align = style.popTipSettings().align();
             if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
-            enterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme()) != 0 ? style.popTipSettings().enterAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_enter;
-            exitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme()) != 0 ? style.popTipSettings().exitAnimResId(isLightTheme()) : R.anim.anim_dialogx_default_exit;
+            int styleEnterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme());
+            int styleExitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme());
+            enterAnimResId = enterAnimResId == 0 ? (
+                    overrideEnterAnimRes == 0 ? (styleEnterAnimResId != 0 ? styleEnterAnimResId : R.anim.anim_dialogx_default_enter) : overrideEnterAnimRes
+            ) : enterAnimResId;
+            exitAnimResId = exitAnimResId == 0 ? (
+                    overrideExitAnimRes == 0 ? (styleExitAnimResId != 0 ? styleExitAnimResId : R.anim.anim_dialogx_default_exit) : overrideExitAnimRes
+            ) : exitAnimResId;
+            enterAnimDuration = enterAnimDuration == -1 ? (
+                    overrideEnterDuration
+            ) : enterAnimDuration;
+            exitAnimDuration = exitAnimDuration == -1 ? (
+                    overrideExitDuration
+            ) : exitAnimDuration;
         }
         enterAnimDuration = 0;
         dialogView = createView(layoutResId);
@@ -866,5 +907,21 @@ public class PopTip extends BaseDialog {
         if (getDialogView() != null) {
             getDialogView().setVisibility(View.GONE);
         }
+    }
+    
+    public PopTip setAnimResId(int enterResId, int exitResId) {
+        this.enterAnimResId = enterResId;
+        this.exitAnimResId = exitResId;
+        return this;
+    }
+    
+    public PopTip setEnterAnimResId(int enterResId) {
+        this.enterAnimResId = enterResId;
+        return this;
+    }
+    
+    public PopTip setExitAnimResId(int exitResId) {
+        this.exitAnimResId = exitResId;
+        return this;
     }
 }

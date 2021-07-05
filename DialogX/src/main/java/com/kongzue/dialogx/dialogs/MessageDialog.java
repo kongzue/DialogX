@@ -60,6 +60,8 @@ public class MessageDialog extends BaseDialog {
     protected OnBindView<MessageDialog> onBindView;
     protected MessageDialog me = this;
     protected BOOLEAN privateCancelable;
+    protected int customEnterAnimResId;
+    protected int customExitAnimResId;
     
     private DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
     
@@ -297,6 +299,9 @@ public class MessageDialog extends BaseDialog {
                     int enterAnimResId = style.enterAnimResId() == 0 ? R.anim.anim_dialogx_default_enter : style.enterAnimResId();
                     if (overrideEnterAnimRes != 0) {
                         enterAnimResId = overrideEnterAnimRes;
+                    }
+                    if (customEnterAnimResId != 0) {
+                        enterAnimResId = customEnterAnimResId;
                     }
                     Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
                     long enterAnimDurationTemp = enterAnim.getDuration();
@@ -652,6 +657,9 @@ public class MessageDialog extends BaseDialog {
             int exitAnimResId = style.exitAnimResId() == 0 ? R.anim.anim_dialogx_default_exit : style.exitAnimResId();
             if (overrideExitAnimRes != 0) {
                 exitAnimResId = overrideExitAnimRes;
+            }
+            if (customExitAnimResId != 0) {
+                exitAnimResId = customExitAnimResId;
             }
             Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
             long exitAnimDurationTemp = exitAnim.getDuration();
@@ -1050,5 +1058,21 @@ public class MessageDialog extends BaseDialog {
         if (getDialogView() != null) {
             getDialogView().setVisibility(View.GONE);
         }
+    }
+    
+    public MessageDialog setAnimResId(int enterResId, int exitResId) {
+        customEnterAnimResId = enterResId;
+        customExitAnimResId = exitResId;
+        return this;
+    }
+    
+    public MessageDialog setEnterAnimResId(int enterResId) {
+        customEnterAnimResId = enterResId;
+        return this;
+    }
+    
+    public MessageDialog setExitAnimResId(int exitResId) {
+        customExitAnimResId = exitResId;
+        return this;
     }
 }

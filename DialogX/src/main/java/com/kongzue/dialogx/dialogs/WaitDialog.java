@@ -50,6 +50,8 @@ public class WaitDialog extends BaseDialog {
     public static int overrideExitAnimRes = 0;
     public static BOOLEAN overrideCancelable;
     protected OnBindView<WaitDialog> onBindView;
+    protected int customEnterAnimResId;
+    protected int customExitAnimResId;
     
     public enum TYPE {
         NONE,
@@ -366,6 +368,9 @@ public class WaitDialog extends BaseDialog {
                             if (overrideEnterAnimRes != 0) {
                                 enterAnimResId = overrideEnterAnimRes;
                             }
+                            if (customEnterAnimResId != 0) {
+                                enterAnimResId = customEnterAnimResId;
+                            }
                             Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
                             long enterAnimDurationTemp = enterAnim.getDuration();
                             enterAnim.setInterpolator(new DecelerateInterpolator());
@@ -483,6 +488,9 @@ public class WaitDialog extends BaseDialog {
                     int exitAnimResId = R.anim.anim_dialogx_default_exit;
                     if (overrideExitAnimRes != 0) {
                         exitAnimResId = overrideExitAnimRes;
+                    }
+                    if (customExitAnimResId != 0) {
+                        exitAnimResId = customExitAnimResId;
                     }
                     Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
                     long exitAnimDurationTemp = exitAnim.getDuration();
@@ -769,5 +777,21 @@ public class WaitDialog extends BaseDialog {
      */
     public static int getType() {
         return me().showType;
+    }
+    
+    public WaitDialog setAnimResId(int enterResId, int exitResId) {
+        customEnterAnimResId = enterResId;
+        customExitAnimResId = exitResId;
+        return this;
+    }
+    
+    public WaitDialog setEnterAnimResId(int enterResId) {
+        customEnterAnimResId = enterResId;
+        return this;
+    }
+    
+    public WaitDialog setExitAnimResId(int exitResId) {
+        customExitAnimResId = exitResId;
+        return this;
     }
 }

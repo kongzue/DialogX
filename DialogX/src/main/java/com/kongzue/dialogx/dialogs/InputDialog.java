@@ -551,4 +551,20 @@ public class InputDialog extends MessageDialog {
         show(dialogView);
         setInputText(inputText);
     }
+    
+    public InputDialog setAnimResId(int enterResId, int exitResId) {
+        customEnterAnimResId = enterResId;
+        customExitAnimResId = exitResId;
+        return this;
+    }
+    
+    public InputDialog setEnterAnimResId(int enterResId) {
+        customEnterAnimResId = enterResId;
+        return this;
+    }
+    
+    public InputDialog setExitAnimResId(int exitResId) {
+        customExitAnimResId = exitResId;
+        return this;
+    }
 }
