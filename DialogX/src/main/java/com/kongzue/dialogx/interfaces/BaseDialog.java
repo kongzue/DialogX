@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -105,7 +107,7 @@ public abstract class BaseDialog {
                 runOnMain(new Runnable() {
                     @Override
                     public void run() {
-                        if (view.getParent() == rootFrameLayout.get()){
+                        if (view.getParent() == rootFrameLayout.get()) {
                             error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                             return;
                         }
@@ -151,7 +153,7 @@ public abstract class BaseDialog {
                 runOnMain(new Runnable() {
                     @Override
                     public void run() {
-                        if (view.getParent() == rootFrameLayout.get()){
+                        if (view.getParent() == rootFrameLayout.get()) {
                             error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                             return;
                         }
@@ -423,5 +425,15 @@ public abstract class BaseDialog {
     
     public static List<BaseDialog> getRunningDialogList() {
         return new CopyOnWriteArrayList<>(runningDialogList);
+    }
+    
+    protected void imeShow(EditText editText, boolean show) {
+        if (getContext() == null) return;
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (show) {
+            imm.showSoftInput(editText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
+        } else {
+            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        }
     }
 }

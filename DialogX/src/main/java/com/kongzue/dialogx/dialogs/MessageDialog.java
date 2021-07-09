@@ -346,8 +346,7 @@ public class MessageDialog extends BaseDialog {
                                 if (txtInput == null) return;
                                 txtInput.requestFocus();
                                 txtInput.setFocusableInTouchMode(true);
-                                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.showSoftInput(txtInput, InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                                imeShow(txtInput,true);
                                 txtInput.setSelection(txtInput.getText().length());
                                 if (inputInfo != null && inputInfo.isSelectAllText()) {
                                     txtInput.selectAll();
@@ -387,8 +386,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public void onClick(View v) {
                     if (txtInput != null) {
-                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(txtInput.getWindowToken(), 0);
+                        imeShow(txtInput,false);
                     }
                     if (okButtonClickListener != null) {
                         if (okButtonClickListener instanceof OnInputDialogButtonClickListener) {
@@ -410,8 +408,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public void onClick(View v) {
                     if (txtInput != null) {
-                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(txtInput.getWindowToken(), 0);
+                        imeShow(txtInput,false);
                     }
                     if (cancelButtonClickListener != null) {
                         if (cancelButtonClickListener instanceof OnInputDialogButtonClickListener) {
@@ -433,8 +430,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public void onClick(View v) {
                     if (txtInput != null) {
-                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(txtInput.getWindowToken(), 0);
+                        imeShow(txtInput,false);
                     }
                     if (otherButtonClickListener != null) {
                         if (otherButtonClickListener instanceof OnInputDialogButtonClickListener) {
