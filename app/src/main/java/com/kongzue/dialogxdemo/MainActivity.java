@@ -416,7 +416,12 @@ public class MainActivity extends BaseActivity {
                         new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
-                            
+                                v.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                    
+                                    }
+                                });
                             }
                         })
                         .show();
@@ -561,7 +566,7 @@ public class MainActivity extends BaseActivity {
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jump(MainActivity.class, new JumpParameter().put("showBreak", true));
+                jump(AppCompatActivityTest.class, new JumpParameter().put("showBreak", true));
             }
         });
         

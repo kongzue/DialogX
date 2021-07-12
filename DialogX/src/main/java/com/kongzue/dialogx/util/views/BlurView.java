@@ -3,16 +3,26 @@ package com.kongzue.dialogx.util.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Outline;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 
 import androidx.annotation.ColorInt;
@@ -81,6 +91,9 @@ public class BlurView extends View {
     
     private boolean isInit = false;
     
+    Paint cutPaint;
+    Paint overlayPaint;
+    
     private void init(Context context, AttributeSet attrs) {
         if (!isInit) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RealtimeBlurView);
@@ -95,6 +108,13 @@ public class BlurView extends View {
             mPaint = new Paint();
             mPaint.setAntiAlias(true);
             mRectF = new RectF();
+            
+            cutPaint = new Paint();
+            cutPaint.setAntiAlias(true);
+            cutPaint.setColor(mOverlayColor);
+            
+            overlayPaint = new Paint();
+            overlayPaint.setAntiAlias(true);
             
             mRadius = a.getDimension(R.styleable.RealtimeBlurView_radius, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, context.getResources().getDisplayMetrics()));
             a.recycle();
@@ -338,9 +358,6 @@ public class BlurView extends View {
     @Override
     public void draw(Canvas canvas) {
         if (!useBlur) {
-            Paint cutPaint = new Paint();
-            cutPaint.setAntiAlias(true);
-            cutPaint.setColor(mOverlayColor);
             mRectF.right = getWidth();
             mRectF.bottom = getHeight();
             canvas.drawRoundRect(mRectF, mRadius, mRadius, cutPaint);
@@ -351,14 +368,6 @@ public class BlurView extends View {
             } else if (RENDERING_COUNT > 0) {
                 // Doesn't support blurview overlap on another blurview
             } else {
-                if (mRadius != 0) {
-                    Rect rect = new Rect();
-                    getLocalVisibleRect(rect);
-                    rect.right = rect.left + getWidth();
-                    rect.bottom = rect.top + getHeight();
-                    mBoundPath = caculateRoundRectPath(rect);
-                    canvas.clipPath(mBoundPath);
-                }
                 super.draw(canvas);
             }
         }
@@ -386,14 +395,55 @@ public class BlurView extends View {
      * @param overlayColor
      */
     protected void drawBlurredBitmap(Canvas canvas, Bitmap blurredBitmap, int overlayColor) {
+        mRectDst.right = getWidth();
+        mRectDst.bottom = getHeight();
         if (blurredBitmap != null) {
             mRectSrc.right = blurredBitmap.getWidth();
             mRectSrc.bottom = blurredBitmap.getHeight();
-            mRectDst.right = getWidth();
-            mRectDst.bottom = getHeight();
-            canvas.drawBitmap(blurredBitmap, mRectSrc, mRectDst, null);
+            blurredBitmap = getRoundedCornerBitmap(blurredBitmap, mRectDst);
+            if (blurredBitmap != null) canvas.drawBitmap(blurredBitmap, 0, 0, null);
         }
-        canvas.drawColor((supportRenderScript && useBlur) ? overlayColor : removeAlphaColor(overlayColor));
+    }
+    
+    private Bitmap getRoundedCornerBitmap(Bitmap bitmap,  Rect mRectDst) {
+        bitmap = drawOverlyColor(resizeImage(bitmap, mRectDst.width(), mRectDst.height()));
+        if (bitmap == null) return null;
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(bitmapShader);
+        canvas.drawRoundRect(new RectF(mRectDst), mRadius, mRadius, paint);
+        return output;
+    }
+    
+    private Bitmap drawOverlyColor(Bitmap bitmap) {
+        if (bitmap != null) {
+            Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(output);
+            Rect originRect = new Rect();
+            originRect.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
+            canvas.drawBitmap(bitmap, originRect, originRect, overlayPaint);
+            canvas.drawColor((supportRenderScript && useBlur) ? mOverlayColor : removeAlphaColor(mOverlayColor));
+            return output;
+        } else {
+            return null;
+        }
+    }
+    
+    private Bitmap resizeImage(Bitmap bitmap, int newWidth, int newHeight) {
+        if (bitmap != null) {
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
+            Matrix matrix = new Matrix();
+            matrix.postScale(scaleWidth, scaleHeight);
+            return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        } else {
+            return null;
+        }
     }
     
     private static boolean supportRenderScript = false;
@@ -407,6 +457,13 @@ public class BlurView extends View {
         this.useBlur = useBlur;
         invalidate();
         return this;
+    }
+    
+    private static int replaceAlphaColor(@ColorInt int color, int alpha) {
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
     }
     
     private static int removeAlphaColor(@ColorInt int color) {
@@ -439,7 +496,7 @@ public class BlurView extends View {
         }.start();
     }
     
-    public static boolean DEBUGMODE = false;
+    public static boolean DEBUGMODE = true;
     
     static boolean isDebug() {
         return DEBUGMODE && DialogX.DEBUGMODE;

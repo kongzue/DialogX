@@ -68,7 +68,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             setForceDarkAllowed(false);
         }
-        if (!isInited ) {
+        if (!isInited) {
             if (attrs != null) {
                 TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DialogXBaseRelativeLayout);
                 focusable = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_baseFocusable, true);
@@ -126,7 +126,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         super.onAttachedToWindow();
         final ViewParent parent = getParent();
         
-        if (parent instanceof View)ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
+        if (parent instanceof View)
+            ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
         ViewCompat.requestApplyInsets(this);
         
         if (BaseDialog.getContext() == null) return;
@@ -190,6 +191,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     protected Rect unsafePlace = new Rect();
     
     private void paddingView(int left, int top, int right, int bottom) {
+        if (unsafePlace.top == top && unsafePlace.left == left && unsafePlace.right == right && bottom == 0) {
+            //for Github issues #69: https://github.com/kongzue/DialogX/issues/69
+            return;
+        }
         unsafePlace = new Rect(left, top, right, bottom);
         if (onSafeInsetsChangeListener != null) onSafeInsetsChangeListener.onChange(unsafePlace);
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
