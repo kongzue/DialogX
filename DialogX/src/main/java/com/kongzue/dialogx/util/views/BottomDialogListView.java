@@ -51,8 +51,8 @@ public class BottomDialogListView extends ListView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(dip2px(55)*size+size, MeasureSpec.EXACTLY));
-    
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(dip2px(55) * size + size, MeasureSpec.EXACTLY));
+        
         //super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(expandSpec, MeasureSpec.AT_MOST));
     }
     
@@ -62,12 +62,14 @@ public class BottomDialogListView extends ListView {
     }
     
     private int mPosition;
+    private float touchDownY;
     
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         final int actionMasked = ev.getActionMasked() & MotionEvent.ACTION_MASK;
         
         if (actionMasked == MotionEvent.ACTION_DOWN) {
+            touchDownY = ev.getY();
             if (bottomMenuListViewTouchEvent != null) {
                 bottomMenuListViewTouchEvent.down(ev);
             }
@@ -78,6 +80,11 @@ public class BottomDialogListView extends ListView {
         if (actionMasked == MotionEvent.ACTION_MOVE) {
             if (bottomMenuListViewTouchEvent != null) {
                 bottomMenuListViewTouchEvent.move(ev);
+            }
+            if (Math.abs(touchDownY - ev.getY()) > dip2px(5)) {
+                ev.setAction(MotionEvent.ACTION_CANCEL);
+                dispatchTouchEvent(ev);
+                return false;
             }
             return true;
         }
@@ -100,7 +107,7 @@ public class BottomDialogListView extends ListView {
         return bottomMenuListViewTouchEvent;
     }
     
-    private int size =1;
+    private int size = 1;
     
     @Override
     public void setAdapter(ListAdapter adapter) {
