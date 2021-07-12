@@ -360,14 +360,10 @@ public class BlurView extends View {
         if (!useBlur) {
             mRectF.right = getWidth();
             mRectF.bottom = getHeight();
-            canvas.drawRoundRect(mRectF, mRadius, mRadius, cutPaint);
+            overlayPaint.setColor((supportRenderScript && useBlur) ? mOverlayColor : removeAlphaColor(mOverlayColor));
+            canvas.drawRoundRect(mRectF, mRadius, mRadius, overlayPaint);
         } else {
-            if (mIsRendering) {
-                // Quit here, don't draw views above me
-                //throw STOP_EXCEPTION;
-            } else if (RENDERING_COUNT > 0) {
-                // Doesn't support blurview overlap on another blurview
-            } else {
+            if (!mIsRendering && RENDERING_COUNT <= 0) {
                 super.draw(canvas);
             }
         }
@@ -402,10 +398,13 @@ public class BlurView extends View {
             mRectSrc.bottom = blurredBitmap.getHeight();
             blurredBitmap = getRoundedCornerBitmap(blurredBitmap, mRectDst);
             if (blurredBitmap != null) canvas.drawBitmap(blurredBitmap, 0, 0, null);
+        } else {
+            Bitmap overlyBitmap = drawOverlyColor(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
+            if (overlyBitmap != null) canvas.drawBitmap(overlyBitmap, 0, 0, null);
         }
     }
     
-    private Bitmap getRoundedCornerBitmap(Bitmap bitmap,  Rect mRectDst) {
+    private Bitmap getRoundedCornerBitmap(Bitmap bitmap, Rect mRectDst) {
         bitmap = drawOverlyColor(resizeImage(bitmap, mRectDst.width(), mRectDst.height()));
         if (bitmap == null) return null;
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);

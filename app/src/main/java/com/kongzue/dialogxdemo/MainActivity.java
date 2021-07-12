@@ -566,7 +566,7 @@ public class MainActivity extends BaseActivity {
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jump(AppCompatActivityTest.class, new JumpParameter().put("showBreak", true));
+                jump(MainActivity.class, new JumpParameter().put("showBreak", true));
             }
         });
         
