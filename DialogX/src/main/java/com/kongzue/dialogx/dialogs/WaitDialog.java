@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.animation.Animator;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -20,7 +19,6 @@ import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
@@ -73,8 +71,12 @@ public class WaitDialog extends BaseDialog {
     
     protected WaitDialog() {
         super();
-        me = new WeakReference<>(this);
         cancelable = DialogX.cancelableTipDialog;
+    }
+    
+    protected static WaitDialog instanceBuild() {
+        me = new WeakReference<>(new WaitDialog());
+        return me.get();
     }
     
     public static WaitDialog build() {
@@ -82,163 +84,90 @@ public class WaitDialog extends BaseDialog {
     }
     
     public static WaitDialog show(CharSequence message) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().message = message;
-        me().showType = -1;
-        if (dialogImpl != null && dialogImpl.progressView != null) {
-            dialogImpl.progressView.loading();
-            setMessage(message);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.message = message;
-            waitDialog.show();
-            return waitDialog;
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(message, TYPE.NONE);
+        showWithInstance(noInstance);
+        return me();
     }
     
     public static WaitDialog show(Activity activity, CharSequence message) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().message = message;
-        me().showType = -1;
-        if (dialogImpl != null && dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
-            dialogImpl.progressView.loading();
-            setMessage(message);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.message = message;
-            waitDialog.show(activity);
-            return waitDialog;
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(message, TYPE.NONE);
+        showWithInstance(noInstance, activity);
+        return instance;
     }
     
     public static WaitDialog show(int messageResId) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(messageResId);
-        me().showType = -1;
-        if (dialogImpl != null && dialogImpl.progressView != null) {
-            dialogImpl.progressView.loading();
-            setMessage(messageResId);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.preMessage(messageResId);
-            waitDialog.show();
-            return waitDialog;
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, TYPE.NONE);
+        showWithInstance(noInstance);
+        return me();
     }
     
     public static WaitDialog show(Activity activity, int messageResId) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(messageResId);
-        me().showType = -1;
-        if (dialogImpl != null && dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
-            dialogImpl.progressView.loading();
-            setMessage(messageResId);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.preMessage(messageResId);
-            waitDialog.show(activity);
-            return waitDialog;
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, TYPE.NONE);
+        showWithInstance(noInstance, activity);
+        return me();
     }
     
     public static WaitDialog show(CharSequence message, float progress) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().showType = -1;
-        me().preMessage(message);
-        if (dialogImpl != null && dialogImpl.progressView != null) {
-            setMessage(message);
-            me().setProgress(progress);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.preMessage(message);
-            waitDialog.show();
-            waitDialog.setProgress(progress);
-            return waitDialog;
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(message, TYPE.NONE);
+        me().setProgress(progress);
+        showWithInstance(noInstance);
+        return me();
     }
     
     public static WaitDialog show(Activity activity, CharSequence message, float progress) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().showType = -1;
-        me().preMessage(message);
-        if (dialogImpl != null && dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
-            setMessage(message);
-            me().setProgress(progress);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.preMessage(message);
-            waitDialog.show(activity);
-            waitDialog.setProgress(progress);
-            return waitDialog;
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(message, TYPE.NONE);
+        me().setProgress(progress);
+        showWithInstance(noInstance, activity);
+        return me();
     }
     
     public static WaitDialog show(int messageResId, float progress) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().showType = -1;
-        me().preMessage(messageResId);
-        if (dialogImpl != null && dialogImpl.progressView != null) {
-            setMessage(messageResId);
-            me().setProgress(progress);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.preMessage(messageResId);
-            waitDialog.show();
-            waitDialog.setProgress(progress);
-            return waitDialog;
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, TYPE.NONE);
+        me().setProgress(progress);
+        showWithInstance(noInstance);
+        return me();
     }
     
     public static WaitDialog show(Activity activity, int messageResId, float progress) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().showType = -1;
-        me().preMessage(messageResId);
-        if (dialogImpl != null && dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
-            setMessage(messageResId);
-            me().setProgress(progress);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.preMessage(messageResId);
-            waitDialog.show(activity);
-            waitDialog.setProgress(progress);
-            return waitDialog;
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, TYPE.NONE);
+        me().setProgress(progress);
+        showWithInstance(noInstance, activity);
+        return me();
     }
     
     public static WaitDialog show(Activity activity, float progress) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().showType = -1;
-        if (dialogImpl != null && dialogImpl.progressView != null && dialogImpl.bkg.getContext() == activity) {
-            me().setProgress(progress);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.show(activity);
-            waitDialog.setProgress(progress);
-            return waitDialog;
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(TYPE.NONE);
+        me().setProgress(progress);
+        showWithInstance(noInstance, activity);
+        return me();
     }
     
     public static WaitDialog show(float progress) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().showType = -1;
-        if (dialogImpl != null && dialogImpl.progressView != null) {
-            me().setProgress(progress);
-            return me();
-        } else {
-            WaitDialog waitDialog = new WaitDialog();
-            waitDialog.show();
-            waitDialog.setProgress(progress);
-            return waitDialog;
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(TYPE.NONE);
+        me().setProgress(progress);
+        showWithInstance(noInstance);
+        return me();
     }
     
     public float getProgress() {
@@ -400,6 +329,7 @@ public class WaitDialog extends BaseDialog {
                     dialogImpl = null;
                     getDialogLifecycleCallback().onDismiss(me());
                     me.clear();
+                    me = null;
                 }
             });
             
@@ -431,26 +361,31 @@ public class WaitDialog extends BaseDialog {
         private float oldProgress;
         
         public void refreshView() {
+            if (bkg == null) return;
             if (style.overrideWaitTipRes() != null) {
                 int overrideBackgroundColorRes = style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme());
                 if (overrideBackgroundColorRes == 0) {
                     overrideBackgroundColorRes = isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight;
                 }
-                blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(overrideBackgroundColorRes) : backgroundColor);
+                if (blurView != null) {
+                    blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(overrideBackgroundColorRes) : backgroundColor);
+                    blurView.setUseBlur(style.overrideWaitTipRes().blurBackground());
+                }
                 int overrideTextColorRes = style.overrideWaitTipRes().overrideTextColorRes(isLightTheme());
                 if (overrideTextColorRes == 0) {
                     overrideTextColorRes = isLightTheme() ? R.color.white : R.color.black;
                 }
                 txtInfo.setTextColor(getResources().getColor(overrideTextColorRes));
                 progressView.setColor(getResources().getColor(overrideTextColorRes));
-                blurView.setUseBlur(style.overrideWaitTipRes().blurBackground());
             } else {
                 if (isLightTheme()) {
-                    blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgDark) : backgroundColor);
+                    if (blurView != null)
+                        blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgDark) : backgroundColor);
                     progressView.setColor(Color.WHITE);
                     txtInfo.setTextColor(Color.WHITE);
                 } else {
-                    blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgLight) : backgroundColor);
+                    if (blurView != null)
+                        blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgLight) : backgroundColor);
                     progressView.setColor(Color.BLACK);
                     txtInfo.setTextColor(Color.BLACK);
                 }
@@ -594,7 +529,16 @@ public class WaitDialog extends BaseDialog {
     }
     
     protected static WaitDialog me() {
-        if (me == null || me.get() == null) me = new WeakReference<>(new WaitDialog());
+        for (BaseDialog baseDialog : getRunningDialogList()) {
+            if (baseDialog instanceof WaitDialog) {
+                if (baseDialog.isShow() && baseDialog.getActivity() == getContext()) {
+                    return (WaitDialog) baseDialog;
+                }
+            }
+        }
+        if (me == null || me.get() == null) {
+            return instanceBuild();
+        }
         return me.get();
     }
     
@@ -626,6 +570,45 @@ public class WaitDialog extends BaseDialog {
         this.message = getString(messageResId);
         readyTipType = type;
         show(activity);
+    }
+    
+    protected void showTip(TYPE type) {
+        showType = type.ordinal();
+        readyTipType = type;
+        if (getDialogImpl() != null) getDialogImpl().showTip(type);
+    }
+    
+    protected void setTip(TYPE type) {
+        showType = type.ordinal();
+        readyTipType = type;
+    }
+    
+    protected void setTip(Activity activity, int messageResId, TYPE type) {
+        showType = type.ordinal();
+        this.message = getString(messageResId);
+        readyTipType = type;
+    }
+    
+    protected void setTip(CharSequence message, TYPE type) {
+        showType = type.ordinal();
+        this.message = message;
+        readyTipType = type;
+    }
+    
+    protected void setTip(Activity activity, CharSequence message, TYPE type) {
+        showType = type.ordinal();
+        this.message = message;
+        readyTipType = type;
+    }
+    
+    protected void setTip(int messageResId, TYPE type) {
+        showType = type.ordinal();
+        this.message = getString(messageResId);
+        readyTipType = type;
+    }
+    
+    protected void setTipShowDuration(long tipShowDuration) {
+        this.tipShowDuration = tipShowDuration;
     }
     
     public static CharSequence getMessage() {
@@ -793,5 +776,57 @@ public class WaitDialog extends BaseDialog {
     public WaitDialog setExitAnimResId(int exitResId) {
         customExitAnimResId = exitResId;
         return this;
+    }
+    
+    protected static boolean noInstance() {
+        if (getContext() != null && getContext() instanceof Activity && getInstance((Activity) getContext()) != null) {
+            return false;
+        }
+        return me == null || me.get() == null || me.get().dialogImpl == null || me.get().getActivity() != getContext();
+    }
+    
+    protected static boolean noInstance(Activity activity) {
+        if (getContext() != null && getInstance(activity) != null) {
+            return false;
+        }
+        return me == null || me.get() == null || me.get().dialogImpl == null || me.get().getActivity() != activity;
+    }
+    
+    public static WaitDialog getInstanceNotNull(Activity activity) {
+        for (BaseDialog baseDialog : getRunningDialogList()) {
+            if (baseDialog instanceof WaitDialog) {
+                if (baseDialog.isShow() && baseDialog.getActivity() == activity) {
+                    return (WaitDialog) baseDialog;
+                }
+            }
+        }
+        return instanceBuild();
+    }
+    
+    public static WaitDialog getInstance(Activity activity) {
+        for (BaseDialog baseDialog : getRunningDialogList()) {
+            if (baseDialog instanceof WaitDialog) {
+                if (baseDialog.isShow() && baseDialog.getActivity() == activity) {
+                    return (WaitDialog) baseDialog;
+                }
+            }
+        }
+        return null;
+    }
+    
+    protected static void showWithInstance(boolean noInstance) {
+        if (noInstance) {
+            me().show();
+        } else {
+            me().refreshUI();
+        }
+    }
+    
+    protected static void showWithInstance(boolean noInstance, Activity activity) {
+        if (noInstance) {
+            getInstanceNotNull(activity).show(activity);
+        } else {
+            getInstanceNotNull(activity).refreshUI();
+        }
     }
 }

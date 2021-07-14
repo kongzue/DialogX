@@ -190,7 +190,6 @@ public class BlurView extends View {
     }
     
     protected void release() {
-        log("release");
         releaseBitmap();
         releaseScript();
     }
@@ -495,7 +494,7 @@ public class BlurView extends View {
         }.start();
     }
     
-    public static boolean DEBUGMODE = true;
+    public static boolean DEBUGMODE = false;
     
     static boolean isDebug() {
         return DEBUGMODE && DialogX.DEBUGMODE;

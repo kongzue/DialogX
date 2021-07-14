@@ -20,143 +20,125 @@ public class TipDialog extends WaitDialog {
     }
     
     public static WaitDialog show(int messageResId) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(messageResId);
-        if (dialogImpl != null) {
-            dialogImpl.showTip(TYPE.WARNING);
-        } else {
-            me().showTip(messageResId, TYPE.WARNING);
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, TYPE.WARNING);
+        showWithInstance(noInstance);
         return me();
     }
     
     public static WaitDialog show(Activity activity, int messageResId) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(messageResId);
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
-            dialogImpl.showTip(TYPE.WARNING);
-        } else {
-            me().showTip(activity, messageResId, TYPE.WARNING);
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, TYPE.WARNING);
+        showWithInstance(noInstance, activity);
         return me();
     }
     
     public static WaitDialog show(CharSequence message) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(message);
-        if (dialogImpl != null) {
-            dialogImpl.showTip(TYPE.WARNING);
-        } else {
-            me().showTip(message, TYPE.WARNING);
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(message, TYPE.WARNING);
+        showWithInstance(noInstance);
         return me();
     }
     
     public static WaitDialog show(Activity activity, CharSequence message) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(message);
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
-            dialogImpl.showTip(TYPE.WARNING);
-        } else {
-            me().showTip(activity, message, TYPE.WARNING);
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(message, TYPE.WARNING);
+        showWithInstance(noInstance, activity);
         return me();
     }
     
     public static WaitDialog show(int messageResId, TYPE tip) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(messageResId);
-        if (dialogImpl != null) {
-            dialogImpl.showTip(tip);
-        } else {
-            me().showTip(messageResId, tip);
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, tip);
+        showWithInstance(noInstance);
         return me();
     }
     
     public static WaitDialog show(Activity activity, int messageResId, TYPE tip) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(messageResId);
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
-            dialogImpl.showTip(tip);
-        } else {
-            me().showTip(activity, messageResId, tip);
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, tip);
+        showWithInstance(noInstance, activity);
         return me();
     }
     
     public static WaitDialog show(CharSequence message, TYPE tip) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(message);
-        if (dialogImpl != null) {
-            dialogImpl.showTip(tip);
-        } else {
-            me().showTip(message, tip);
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(message, tip);
+        showWithInstance(noInstance);
         return me();
     }
     
     public static WaitDialog show(Activity activity, CharSequence message, TYPE tip) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(message);
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
-            dialogImpl.showTip(tip);
-        } else {
-            me().showTip(activity, message, tip);
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(message, tip);
+        showWithInstance(noInstance, activity);
         return me();
     }
     
     public static WaitDialog show(int messageResId, TYPE tip, long duration) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(messageResId);
-        me().tipShowDuration = duration;
-        if (dialogImpl != null) {
-            dialogImpl.showTip(tip);
-        } else {
-            me().showTip(messageResId, tip);
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, tip);
+        me().setTipShowDuration(duration);
+        showWithInstance(noInstance);
         return me();
     }
     
     public static WaitDialog show(Activity activity, int messageResId, TYPE tip, long duration) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(messageResId);
-        me().tipShowDuration = duration;
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
-            dialogImpl.showTip(tip);
-        } else {
-            me().showTip(activity, messageResId, tip);
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(messageResId, tip);
+        me().setTipShowDuration(duration);
+        showWithInstance(noInstance, activity);
         return me();
     }
     
     public static WaitDialog show(CharSequence message, TYPE tip, long duration) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(message);
-        me().tipShowDuration = duration;
-        if (dialogImpl != null) {
-            dialogImpl.showTip(tip);
-        } else {
-            me().showTip(message, tip);
-        }
+        boolean noInstance = noInstance();
+        if (noInstance) instanceBuild();
+        me().setTip(message, tip);
+        me().setTipShowDuration(duration);
+        showWithInstance(noInstance);
         return me();
     }
     
     public static WaitDialog show(Activity activity, CharSequence message, TYPE tip, long duration) {
-        DialogImpl dialogImpl = me().dialogImpl;
-        me().preMessage(message);
-        me().tipShowDuration = duration;
-        if (dialogImpl != null && dialogImpl.bkg.getContext() == activity) {
-            dialogImpl.showTip(tip);
-        } else {
-            me().showTip(activity, message, tip);
-        }
+        boolean noInstance = noInstance(activity);
+        if (noInstance) instanceBuild();
+        me().setTip(message, tip);
+        me().setTipShowDuration(duration);
+        showWithInstance(noInstance, activity);
         return me();
     }
     
     @Override
     public String dialogKey() {
         return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
+    }
+    
+    protected static void showWithInstance(boolean noInstance) {
+        if (noInstance) {
+            me().show();
+        } else {
+            me().refreshUI();
+            me().showTip(me().readyTipType);
+        }
+    }
+    
+    protected static void showWithInstance(boolean noInstance, Activity activity) {
+        if (noInstance) {
+            me().show(activity);
+        } else {
+            me().refreshUI();
+            me().showTip(me().readyTipType);
+        }
     }
 }

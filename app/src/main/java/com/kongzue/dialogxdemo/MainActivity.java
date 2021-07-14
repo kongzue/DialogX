@@ -164,7 +164,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initDatas(JumpParameter parameter) {
         refreshUIMode();
-        
         boolean showBreak = parameter.getBoolean("showBreak");
         if (showBreak) {
             txtTitle.setText("显示Dialog时关闭Activity演示");
@@ -323,19 +322,30 @@ public class MainActivity extends BaseActivity {
         });
         
         btnWaitAndTipDialog.setOnClickListener(new View.OnClickListener() {
+            
+            boolean closeFlag = false;
+            
             @Override
             public void onClick(View v) {
+                closeFlag = false;
                 WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener() {
                     @Override
                     public boolean onBackPressed() {
-                        PopTip.show("按下返回");
+                        PopTip.show("按下返回", "关闭").setButton(new OnDialogButtonClickListener<PopTip>() {
+                            @Override
+                            public boolean onClick(PopTip baseDialog, View v) {
+                                closeFlag = true;
+                                WaitDialog.dismiss();
+                                return false;
+                            }
+                        });
                         return false;
                     }
                 });
-                runDelayed(new Runnable() {
+                if (!closeFlag) runDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        TipDialog.show("Success!", WaitDialog.TYPE.SUCCESS);
+                        if (!closeFlag) TipDialog.show("完成！", WaitDialog.TYPE.SUCCESS);
                     }
                 }, 2000);
             }
@@ -566,7 +576,7 @@ public class MainActivity extends BaseActivity {
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jump(MainActivity.class, new JumpParameter().put("showBreak", true));
+                jump(MainActivity.class, new JumpParameter().put("showBreak", true).put("fromActivity",getInstanceKey()));
             }
         });
         
@@ -734,28 +744,6 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
-//    private void showSecondDialog1() {
-//        SpannableString spannableString = new SpannableString("这里是一段文本，点击链接");
-//        spannableString.setSpan(new ClickableSpan(){
-//            @Override
-//            public void onClick(@NonNull View widget) {
-//                showSecondDialog2();
-//            }
-//        },9, spannableString.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-//        MessageDialog.show("标题", spannableString, "确定");
-//    }
-//
-//    private void showSecondDialog2() {
-//        SpannableString spannableString = new SpannableString("这里是另一段一段文本，再次点击链接");
-//        spannableString.setSpan(new ClickableSpan(){
-//            @Override
-//            public void onClick(@NonNull View widget) {
-//                showSecondDialog1();
-//            }
-//        },14, spannableString.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-//        MessageDialog.show("标题", spannableString, "确定");
-//    }
     
     private void initFullScreenLoginDemo(final FullScreenDialog fullScreenDialog) {
         btnCancel.setOnClickListener(new View.OnClickListener() {

@@ -424,6 +424,7 @@ public abstract class BaseDialog {
     }
     
     public static List<BaseDialog> getRunningDialogList() {
+        if (runningDialogList == null) return new ArrayList<>();
         return new CopyOnWriteArrayList<>(runningDialogList);
     }
     
