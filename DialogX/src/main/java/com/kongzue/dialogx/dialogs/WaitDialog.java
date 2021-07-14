@@ -111,9 +111,10 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(Activity activity, int messageResId) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(messageResId, TYPE.NONE);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(messageResId, TYPE.NONE);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(CharSequence message, float progress) {
@@ -128,10 +129,11 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(Activity activity, CharSequence message, float progress) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(message, TYPE.NONE);
-        me().setProgress(progress);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(message, TYPE.NONE);
+        instance.setProgress(progress);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(int messageResId, float progress) {
@@ -146,19 +148,21 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(Activity activity, int messageResId, float progress) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(messageResId, TYPE.NONE);
-        me().setProgress(progress);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(messageResId, TYPE.NONE);
+        instance.setProgress(progress);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(Activity activity, float progress) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(TYPE.NONE);
-        me().setProgress(progress);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(TYPE.NONE);
+        instance.setProgress(progress);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(float progress) {

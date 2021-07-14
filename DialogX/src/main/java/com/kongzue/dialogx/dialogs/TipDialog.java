@@ -30,9 +30,10 @@ public class TipDialog extends WaitDialog {
     public static WaitDialog show(Activity activity, int messageResId) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(messageResId, TYPE.WARNING);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(messageResId, TYPE.WARNING);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(CharSequence message) {
@@ -46,9 +47,10 @@ public class TipDialog extends WaitDialog {
     public static WaitDialog show(Activity activity, CharSequence message) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(message, TYPE.WARNING);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(message, TYPE.WARNING);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(int messageResId, TYPE tip) {
@@ -62,9 +64,10 @@ public class TipDialog extends WaitDialog {
     public static WaitDialog show(Activity activity, int messageResId, TYPE tip) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(messageResId, tip);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(messageResId, tip);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(CharSequence message, TYPE tip) {
@@ -78,9 +81,10 @@ public class TipDialog extends WaitDialog {
     public static WaitDialog show(Activity activity, CharSequence message, TYPE tip) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(message, tip);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(message, tip);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(int messageResId, TYPE tip, long duration) {
@@ -95,10 +99,11 @@ public class TipDialog extends WaitDialog {
     public static WaitDialog show(Activity activity, int messageResId, TYPE tip, long duration) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(messageResId, tip);
-        me().setTipShowDuration(duration);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(messageResId, tip);
+        instance.setTipShowDuration(duration);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     public static WaitDialog show(CharSequence message, TYPE tip, long duration) {
@@ -113,10 +118,11 @@ public class TipDialog extends WaitDialog {
     public static WaitDialog show(Activity activity, CharSequence message, TYPE tip, long duration) {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
-        me().setTip(message, tip);
-        me().setTipShowDuration(duration);
+        WaitDialog instance = getInstanceNotNull(activity);
+        instance.setTip(message, tip);
+        instance.setTipShowDuration(duration);
         showWithInstance(noInstance, activity);
-        return me();
+        return instance;
     }
     
     @Override
