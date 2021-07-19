@@ -183,7 +183,7 @@ implementation(name: 'AAR文件名', ext: 'aar')
 
 ### ▶️使用
 
-![如何使用](https://github.com/kongzue/DialogX/raw/master/readme/img_how_to_use.png)
+![如何使用](https://github.com/kongzue/DialogX/raw/master/readme/img_how_to_use_tip.png)
 
 具体的使用说明，请参阅 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
 
