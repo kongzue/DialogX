@@ -173,17 +173,6 @@ repositories{
 implementation(name: 'AAR文件名', ext: 'aar')
 ```
 
-#### 方式四：手动配置 Maven
-
-```xml
-<dependency>
-  <groupId>com.kongzue.dialogx</groupId>
-  <artifactId>DialogX</artifactId>
-  <version>0.0.37</version>
-  <type>pom</type>
-</dependency>
-```
-
 ### ▶️使用
 
 <a href="https://github.com/kongzue/DialogX/wiki/"><img src="https://github.com/kongzue/DialogX/raw/master/readme/img_how_to_use_tip.png" alt="如何使用" width="450" height="280" /></a>
