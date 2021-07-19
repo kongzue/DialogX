@@ -119,9 +119,12 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 #### 方式一：Gradle 引入  jitPack 源
 
+<div>
+<b>最新版本：</b>
 <a href="https://jitpack.io/#kongzue/DialogX">
 <img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
 </a> 
+</div>
 
 1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
 
