@@ -356,7 +356,7 @@ public class BlurView extends View {
     
     @Override
     public void draw(Canvas canvas) {
-        if (!useBlur) {
+        if (!useBlur || !supportRenderScript) {
             mRectF.right = getWidth();
             mRectF.bottom = getHeight();
             overlayPaint.setColor((supportRenderScript && useBlur) ? mOverlayColor : removeAlphaColor(mOverlayColor));
@@ -494,7 +494,7 @@ public class BlurView extends View {
         }.start();
     }
     
-    public static boolean DEBUGMODE = false;
+    public static boolean DEBUGMODE = true;
     
     static boolean isDebug() {
         return DEBUGMODE && DialogX.DEBUGMODE;

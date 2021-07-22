@@ -46,14 +46,13 @@ public class BottomDialogListView extends ListView {
     public BottomDialogListView(BottomDialog.DialogImpl dialog, Context context) {
         super(context);
         dialogImpl = dialog;
+        setVerticalScrollBarEnabled(false);
     }
     
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(dip2px(55) * size + size, MeasureSpec.EXACTLY));
-        
-        //super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(expandSpec, MeasureSpec.AT_MOST));
+        super.onMeasure(widthMeasureSpec, expandSpec);
     }
     
     private int dip2px(float dpValue) {
