@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.interfaces;
 
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,6 @@ import android.widget.RelativeLayout;
 import com.kongzue.dialogx.DialogX;
 
 import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
-import static com.kongzue.dialogx.interfaces.BaseDialog.log;
 
 /**
  * @author: Kongzue
@@ -21,14 +21,45 @@ public abstract class OnBindView<D> {
     
     int layoutResId;
     View customView;
+    Runnable privateRunnable;
     
-    public OnBindView(int layoutResId) {
+    public OnBindView(int resId) {
+        createView(resId, false);
+    }
+    
+    public OnBindView(int resId, boolean async) {
+        if (async) {
+            new Thread() {
+                @Override
+                public void run() {
+                    createView(resId, true);
+                }
+            }.start();
+        } else {
+            createView(resId, false);
+        }
+    }
+    
+    public void createView(int resId, boolean async) {
         if (BaseDialog.getContext() == null) {
             DialogX.error(ERROR_INIT_TIPS);
             return;
         }
-        this.layoutResId = layoutResId;
+        layoutResId = resId;
         customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
+    
+        runSuccessRunnable(async, createViewSuccessRunnable());
+        runSuccessRunnable(async, privateRunnable);
+    }
+    
+    private void runSuccessRunnable(boolean async, Runnable runnable) {
+        if (runnable != null) {
+            if (async) {
+                BaseDialog.runOnMain(runnable);
+            } else {
+                runnable.run();
+            }
+        }
     }
     
     public OnBindView(View customView) {
@@ -93,6 +124,22 @@ public abstract class OnBindView<D> {
         }
         parentView.addView(getCustomView(), lp);
         onBind((D) dialog, getCustomView());
+        return this;
+    }
+    
+    public Runnable createViewSuccessRunnable() {
+        return null;
+    }
+    
+    /**
+     * @hide 内部方法，请勿使用
+     */
+    public OnBindView<D> setPrivateRunnable(Runnable privateRunnable) {
+        if (customView != null) {
+            runSuccessRunnable(false, privateRunnable);
+        } else {
+            this.privateRunnable = privateRunnable;
+        }
         return this;
     }
 }

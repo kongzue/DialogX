@@ -40,6 +40,7 @@ import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
@@ -299,7 +300,7 @@ public class MainActivity extends BaseActivity {
                 }, 2000);
             }
         });
-       
+        
         btnWaitAndTipDialog.setOnClickListener(new View.OnClickListener() {
             
             boolean closeFlag = false;
@@ -555,14 +556,20 @@ public class MainActivity extends BaseActivity {
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jump(MainActivity.class, new JumpParameter().put("showBreak", true).put("fromActivity",getInstanceKey()));
+                jump(MainActivity.class, new JumpParameter().put("showBreak", true).put("fromActivity", getInstanceKey()));
             }
         });
         
         btnFullScreenDialogLogin.setOnClickListener(new View.OnClickListener() {
+    
+            /**
+             * 采用异步加载布局防止卡顿测试
+             */
+
+            OnBindView<FullScreenDialog> onBindView;
             @Override
             public void onClick(View v) {
-                FullScreenDialog.show(new OnBindView<FullScreenDialog>(R.layout.layout_full_login) {
+                onBindView = new OnBindView<FullScreenDialog>(R.layout.layout_full_login, true) {
                     @Override
                     public void onBind(FullScreenDialog dialog, View v) {
                         btnCancel = v.findViewById(R.id.btn_cancel);
@@ -571,10 +578,20 @@ public class MainActivity extends BaseActivity {
                         editUserName = v.findViewById(R.id.edit_userName);
                         boxPassword = v.findViewById(R.id.box_password);
                         editPassword = v.findViewById(R.id.edit_password);
-                        
+            
                         initFullScreenLoginDemo(dialog);
                     }
-                });
+    
+                    @Override
+                    public Runnable createViewSuccessRunnable() {
+                        return new Runnable() {
+                            @Override
+                            public void run() {
+                                FullScreenDialog.show(onBindView);
+                            }
+                        };
+                    }
+                };
             }
         });
         

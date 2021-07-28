@@ -35,6 +35,7 @@
                     android:id="@+id/box_custom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="200dp"
                     android:clickable="true"
                     android:orientation="vertical"/>
 

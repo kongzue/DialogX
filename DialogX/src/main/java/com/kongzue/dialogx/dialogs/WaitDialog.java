@@ -525,8 +525,13 @@ public class WaitDialog extends BaseDialog {
     }
     
     public void doDismiss() {
-        if (dialogImpl == null) return;
-        dialogImpl.doDismiss(null);
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                if (dialogImpl == null) return;
+                dialogImpl.doDismiss(null);
+            }
+        });
     }
     
     public static void dismiss() {

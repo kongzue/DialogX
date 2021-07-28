@@ -223,8 +223,13 @@ public class FullScreenDialog extends BaseDialog {
                 boxRoot.setOnClickListener(null);
             }
             
-            if (onBindView != null && onBindView.getCustomView() != null) {
-                onBindView.bindParent(boxCustom, me);
+            if (onBindView != null) {
+                onBindView.setPrivateRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        onBindView.bindParent(boxCustom, me);
+                    }
+                });
             }
             
             fullScreenDialogTouchEventInterceptor.refresh(me, this);
