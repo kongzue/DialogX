@@ -3,4 +3,9 @@
     <style name="DialogXCompatThemeLight" parent="Theme.AppCompat.Light.NoActionBar"/>
 
     <style name="DialogXCompatThemeDark" parent="Theme.AppCompat.NoActionBar"/>
+
+    <style name="DialogXFragmentTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:padding">0dp</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>

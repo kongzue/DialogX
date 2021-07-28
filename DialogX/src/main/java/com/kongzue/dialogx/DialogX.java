@@ -114,7 +114,7 @@ public class DialogX {
     }
     
     public enum IMPL_MODE {
-        VIEW, WINDOW
+        VIEW, WINDOW, DIALOG_FRAGMENT
     }
     
     public static void init(Context context) {

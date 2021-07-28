@@ -303,7 +303,6 @@ public class BottomDialog extends BaseDialog {
                     bkg.setY(getRootFrameLayout().getMeasuredHeight());
                     
                     isShow = true;
-                    boxRoot.setAlpha(0f);
                     
                     boxContent.getViewTreeObserver().addOnGlobalLayoutListener(onContentViewLayoutChangeListener);
                     
@@ -435,12 +434,6 @@ public class BottomDialog extends BaseDialog {
                         bkg.setY(bkgEnterAimY);
                         bkg.startAnimation(enterAnim);
                     }
-                    
-                    boxRoot.animate()
-                            .setDuration(enterAnimDurationTemp)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(null);
                 }
             });
         }
@@ -592,11 +585,6 @@ public class BottomDialog extends BaseDialog {
             }
             exitAnim.setDuration(exitAnimDurationTemp);
             exitAnim.start();
-            
-            boxRoot.animate()
-                    .alpha(0f)
-                    .setInterpolator(new AccelerateInterpolator())
-                    .setDuration(exitAnimDurationTemp);
             
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override

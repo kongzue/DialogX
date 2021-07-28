@@ -23,11 +23,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.FragmentManager;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
+import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.WindowUtil;
 
@@ -52,6 +55,7 @@ public abstract class BaseDialog {
     protected WeakReference<Activity> ownActivity;
     private static List<BaseDialog> runningDialogList;
     private WeakReference<View> dialogView;
+    protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
     
     public static void init(Context context) {
         if (context == null) context = ActivityLifecycleImpl.getTopActivity();
@@ -102,27 +106,40 @@ public abstract class BaseDialog {
             
             log(baseDialog.dialogKey() + ".show");
             addDialogToRunningList(baseDialog);
-            if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
-                if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
-                runOnMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (view.getParent() == rootFrameLayout.get()) {
-                            error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
-                            return;
+            
+            switch (DialogX.implIMPLMode) {
+                case WINDOW:
+                    runOnMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            WindowUtil.show(contextWeakReference.get(), view, !(baseDialog instanceof PopTip));
                         }
-                        rootFrameLayout.get().addView(view);
-                    }
-                });
-            } else {
-                runOnMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        WindowUtil.show(contextWeakReference.get(), view, !(baseDialog instanceof PopTip));
-                    }
-                });
+                    });
+                    break;
+                case DIALOG_FRAGMENT:
+                    DialogFragmentImpl dialogFragment = new DialogFragmentImpl(baseDialog, view);
+                    dialogFragment.show(getSupportFragmentManager(contextWeakReference.get()), "DialogX");
+                    baseDialog.ownDialogFragmentImpl = new WeakReference<>(dialogFragment);
+                    break;
+                default:
+                    if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
+                    runOnMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (view.getParent() == rootFrameLayout.get()) {
+                                error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
+                                return;
+                            }
+                            rootFrameLayout.get().addView(view);
+                        }
+                    });
+                    break;
             }
         }
+    }
+    
+    private static FragmentManager getSupportFragmentManager(Activity activity) {
+        return (activity instanceof AppCompatActivity) ? ((AppCompatActivity) activity).getSupportFragmentManager() : null;
     }
     
     protected static void show(final Activity activity, final View view) {
@@ -145,28 +162,34 @@ public abstract class BaseDialog {
             
             log(baseDialog + ".show");
             addDialogToRunningList(baseDialog);
-            if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
-                final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
-                if (activityRootView == null) {
-                    return;
-                }
-                runOnMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (view.getParent() == rootFrameLayout.get()) {
-                            error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
-                            return;
+            switch (DialogX.implIMPLMode) {
+                case WINDOW:
+                    runOnMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            WindowUtil.show(activity, view, !(baseDialog instanceof PopTip));
                         }
-                        activityRootView.addView(view);
+                    });
+                    break;
+                case DIALOG_FRAGMENT:
+                    
+                    break;
+                default:
+                    final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
+                    if (activityRootView == null) {
+                        return;
                     }
-                });
-            } else {
-                runOnMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        WindowUtil.show(activity, view, !(baseDialog instanceof PopTip));
-                    }
-                });
+                    runOnMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (view.getParent() == rootFrameLayout.get()) {
+                                error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
+                                return;
+                            }
+                            activityRootView.addView(view);
+                        }
+                    });
+                    break;
             }
         }
     }
@@ -177,25 +200,34 @@ public abstract class BaseDialog {
         log(baseDialog.dialogKey() + ".dismiss");
         removeDialogToRunningList(baseDialog);
         if (baseDialog.dialogView != null) baseDialog.dialogView.clear();
-        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.VIEW) {
-            runOnMain(new Runnable() {
-                @Override
-                public void run() {
-                    if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
-                        if (rootFrameLayout == null) return;
-                        rootFrameLayout.get().removeView(dialogView);
-                    } else {
-                        ((ViewGroup) dialogView.getParent()).removeView(dialogView);
+        
+        switch (DialogX.implIMPLMode) {
+            case WINDOW:
+                runOnMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        WindowUtil.dismiss(dialogView);
                     }
+                });
+                break;
+            case DIALOG_FRAGMENT:
+                if (baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
+                    baseDialog.ownDialogFragmentImpl.get().dismiss();
                 }
-            });
-        } else {
-            runOnMain(new Runnable() {
-                @Override
-                public void run() {
-                    WindowUtil.dismiss(dialogView);
-                }
-            });
+                break;
+            default:
+                runOnMain(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
+                            if (rootFrameLayout == null) return;
+                            rootFrameLayout.get().removeView(dialogView);
+                        } else {
+                            ((ViewGroup) dialogView.getParent()).removeView(dialogView);
+                        }
+                    }
+                });
+                break;
         }
     }
     
@@ -411,15 +443,27 @@ public abstract class BaseDialog {
     }
     
     public static void recycleDialog(Activity activity) {
-        if (DialogX.implIMPLMode == DialogX.IMPL_MODE.WINDOW) {
-            if (runningDialogList != null) {
-                CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
-                for (BaseDialog baseDialog : copyOnWriteList) {
-                    if (baseDialog.getActivity() == activity && baseDialog.dialogView != null) {
-                        WindowUtil.dismiss(baseDialog.dialogView.get());
+        switch (DialogX.implIMPLMode) {
+            case WINDOW:
+                if (runningDialogList != null) {
+                    CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
+                    for (BaseDialog baseDialog : copyOnWriteList) {
+                        if (baseDialog.getActivity() == activity && baseDialog.dialogView != null) {
+                            WindowUtil.dismiss(baseDialog.dialogView.get());
+                        }
                     }
                 }
-            }
+                break;
+            case DIALOG_FRAGMENT:
+                if (runningDialogList != null) {
+                    CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
+                    for (BaseDialog baseDialog : copyOnWriteList) {
+                        if (baseDialog.getActivity() == activity && baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
+                            baseDialog.ownDialogFragmentImpl.get().dismiss();
+                        }
+                    }
+                }
+                break;
         }
     }
     

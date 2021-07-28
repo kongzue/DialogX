@@ -129,7 +129,6 @@ public class FullScreenDialog extends BaseDialog {
                 @Override
                 public void onShow() {
                     isShow = true;
-                    boxRoot.setAlpha(0f);
                     
                     getDialogLifecycleCallback().onShow(me);
                 }
@@ -170,11 +169,6 @@ public class FullScreenDialog extends BaseDialog {
                 public void run() {
                     bkgEnterAimY = boxRoot.getSafeHeight() - boxCustom.getHeight();
                     if (bkgEnterAimY < 0) bkgEnterAimY = 0;
-                    boxRoot.animate()
-                            .setDuration(enterAnimDurationTemp)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(null);
                     
                     ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
                     exitAnim.setDuration(enterAnimDurationTemp);
@@ -251,11 +245,6 @@ public class FullScreenDialog extends BaseDialog {
             ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
             exitAnim.setDuration(exitAnimDurationTemp);
             exitAnim.start();
-            
-            boxRoot.animate()
-                    .alpha(0f)
-                    .setInterpolator(new AccelerateInterpolator())
-                    .setDuration(exitAnimDurationTemp);
             
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
