@@ -9,8 +9,4 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="DialogXBottomMenuAnim">
-        <item name="android:windowEnterAnimation">@anim/anim_dialogx_bottom_enter</item>
-        <item name="android:windowExitAnimation">@anim/anim_dialogx_bottom_exit</item>
-    </style>
 </resources>
