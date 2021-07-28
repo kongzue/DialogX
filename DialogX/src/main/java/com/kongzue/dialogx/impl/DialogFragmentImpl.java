@@ -19,6 +19,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
@@ -65,7 +68,7 @@ public class DialogFragmentImpl extends DialogFragment {
         Window dialogWindow = getDialog().getWindow();
         if (dialogWindow == null) return;
         dialogWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-    
+        
         dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();

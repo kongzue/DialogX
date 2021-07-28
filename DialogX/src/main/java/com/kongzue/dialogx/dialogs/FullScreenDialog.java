@@ -46,6 +46,7 @@ public class FullScreenDialog extends BaseDialog {
     
     protected OnBindView<FullScreenDialog> onBindView;
     protected BOOLEAN privateCancelable;
+    protected boolean hideZoomBackground;
     
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
     
@@ -114,6 +115,14 @@ public class FullScreenDialog extends BaseDialog {
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
             boxCustom = convertView.findViewById(R.id.box_custom);
+            
+            if (hideZoomBackground) {
+                dialogView.setBackgroundResource(R.color.black20);
+                imgZoomActivity.setVisibility(View.GONE);
+            } else {
+                dialogView.setBackgroundResource(R.color.black);
+                imgZoomActivity.setVisibility(View.VISIBLE);
+            }
             init();
             dialogImpl = this;
             refreshView();
@@ -164,15 +173,22 @@ public class FullScreenDialog extends BaseDialog {
                 enterAnimDurationTemp = enterAnimDuration;
             }
             
+            bkg.setY(boxRoot.getHeight());
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
                     bkgEnterAimY = boxRoot.getSafeHeight() - boxCustom.getHeight();
                     if (bkgEnterAimY < 0) bkgEnterAimY = 0;
+                    boxRoot.animate()
+                            .setDuration(enterAnimDurationTemp)
+                            .alpha(1f)
+                            .setInterpolator(new DecelerateInterpolator())
+                            .setListener(null);
                     
                     ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
                     exitAnim.setDuration(enterAnimDurationTemp);
                     exitAnim.start();
+                    bkg.setVisibility(View.VISIBLE);
                 }
             });
             
@@ -181,10 +197,12 @@ public class FullScreenDialog extends BaseDialog {
                 public void y(float y) {
                     float zoomScale = 1 - (boxRoot.getHeight() - y) * 0.00002f;
                     if (zoomScale > 1) zoomScale = 1;
-                    imgZoomActivity.setScaleX(zoomScale);
-                    imgZoomActivity.setScaleY(zoomScale);
-                    
-                    imgZoomActivity.setRadius(dip2px(15) * ((boxRoot.getHeight() - y) / boxRoot.getHeight()));
+                    if (!hideZoomBackground) {
+                        imgZoomActivity.setScaleX(zoomScale);
+                        imgZoomActivity.setScaleY(zoomScale);
+                        
+                        imgZoomActivity.setRadius(dip2px(15) * ((boxRoot.getHeight() - y) / boxRoot.getHeight()));
+                    }
                 }
             });
             
@@ -224,6 +242,14 @@ public class FullScreenDialog extends BaseDialog {
                         onBindView.bindParent(boxCustom, me);
                     }
                 });
+            }
+            
+            if (hideZoomBackground) {
+                dialogView.setBackgroundResource(R.color.black20);
+                imgZoomActivity.setVisibility(View.GONE);
+            } else {
+                dialogView.setBackgroundResource(R.color.black);
+                imgZoomActivity.setVisibility(View.VISIBLE);
             }
             
             fullScreenDialogTouchEventInterceptor.refresh(me, this);
@@ -391,6 +417,16 @@ public class FullScreenDialog extends BaseDialog {
     
     public FullScreenDialog setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
+        return this;
+    }
+    
+    public boolean isHideZoomBackground() {
+        return hideZoomBackground;
+    }
+    
+    public FullScreenDialog setHideZoomBackground(boolean hideZoomBackground) {
+        this.hideZoomBackground = hideZoomBackground;
+        refreshUI();
         return this;
     }
     

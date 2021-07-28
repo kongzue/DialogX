@@ -164,6 +164,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onDismiss();
         }
+        onSafeInsetsChangeListener = null;
         super.onDetachedFromWindow();
     }
     
@@ -246,4 +247,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         super.onConfigurationChanged(newConfig);
         getParentDialog().onUIModeChange(newConfig);
     }
+    
+    
 }
