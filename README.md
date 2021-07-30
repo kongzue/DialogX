@@ -107,7 +107,7 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 您可以先下载 Demo 进行尝试：http://beta.kongzue.com/DialogXDemo
 
-<div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/download_demo_img.png" alt="下载 DialogX Demo" width="1050" height="722" /></div>
+[![下载Demo](https://github.com/kongzue/DialogX/raw/master/readme/download_demo_img.png)](http://beta.kongzue.com/DialogXDemo)
 
 # 开始使用 DialogX
 
