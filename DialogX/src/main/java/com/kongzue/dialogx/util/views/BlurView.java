@@ -210,6 +210,7 @@ public class BlurView extends View {
                         mBlurScript = ScriptIntrinsicBlur.create(mRenderScript, Element.U8_4(mRenderScript));
                         
                     } catch (Exception e) {
+                        supportRenderScript = false;
                         if (isDebug()) {
                             e.printStackTrace();
                         }
