@@ -87,7 +87,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         
-        refreshImage();
+        if (isAttachedToWindow()) refreshImage();
     }
     
     private int screenWidth, screenHeight;
@@ -104,15 +104,18 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
         if (BaseDialog.getRootFrameLayout() == null) return;
         final View view = BaseDialog.getRootFrameLayout().getChildAt(0);
         //先执行一次绘制，防止出现闪屏问题
-        drawViewImage(view);
+        if (!inited) drawViewImage(view);
         view.post(new Runnable() {
             @Override
             public void run() {
                 //当view渲染完成后再次通知刷新一下界面（当旋转屏幕执行时，很可能出现渲染延迟的问题）
                 drawViewImage(view);
+                inited = true;
             }
         });
     }
+    
+    private boolean inited = false;
     
     private void drawViewImage(View view) {
         view.destroyDrawingCache();

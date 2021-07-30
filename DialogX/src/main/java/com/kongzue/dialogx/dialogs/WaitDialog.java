@@ -839,4 +839,9 @@ public class WaitDialog extends BaseDialog {
             getInstanceNotNull(activity).refreshUI();
         }
     }
+    
+    @Override
+    protected void shutdown() {
+        dismiss();
+    }
 }

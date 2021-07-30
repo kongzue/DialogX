@@ -251,11 +251,18 @@ public abstract class BaseDialog {
         return contextWeakReference.get();
     }
     
+    /**
+     * 自动执行，不建议自行调用此方法
+     *
+     * @hide
+     */
     public static void cleanContext() {
-        contextWeakReference.clear();
+        if (contextWeakReference != null) contextWeakReference.clear();
         contextWeakReference = null;
         System.gc();
     }
+    
+    protected abstract void shutdown();
     
     protected boolean cancelable = true;
     protected OnBackPressedListener onBackPressedListener;
@@ -440,6 +447,18 @@ public abstract class BaseDialog {
     
     protected void cleanActivityContext() {
         if (ownActivity != null) ownActivity.clear();
+        ownActivity = null;
+    }
+    
+    public static void cleanAll(){
+        if (runningDialogList != null) {
+            CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
+            for (BaseDialog baseDialog : copyOnWriteList) {
+                if (baseDialog.isShow())baseDialog.shutdown();
+                baseDialog.cleanActivityContext();
+                runningDialogList.remove(baseDialog);
+            }
+        }
     }
     
     public static void recycleDialog(Activity activity) {
@@ -464,6 +483,20 @@ public abstract class BaseDialog {
                     }
                 }
                 break;
+            default:
+                if (runningDialogList != null) {
+                    CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
+                    for (BaseDialog baseDialog : copyOnWriteList) {
+                        if (baseDialog.getActivity() == activity) {
+                            baseDialog.cleanActivityContext();
+                            runningDialogList.remove(baseDialog);
+                        }
+                    }
+                }
+                break;
+        }
+        if (activity == getContext()) {
+            cleanContext();
         }
     }
     

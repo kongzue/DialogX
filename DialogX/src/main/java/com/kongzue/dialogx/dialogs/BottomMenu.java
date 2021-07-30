@@ -1060,4 +1060,9 @@ public class BottomMenu extends BottomDialog {
     public SELECT_MODE getSelectMode() {
         return selectMode;
     }
+    
+    @Override
+    protected void shutdown() {
+        dismiss();
+    }
 }

@@ -924,4 +924,9 @@ public class PopTip extends BaseDialog {
         this.exitAnimResId = exitResId;
         return this;
     }
+    
+    @Override
+    protected void shutdown() {
+        dismiss();
+    }
 }

@@ -116,6 +116,60 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
+                    android:text="实现方式"
+                    android:textColor="#dc000000"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="请注意后两者属于测试阶段，且存在已知未解决bug。"
+                    android:textColor="#80000000"
+                    android:textSize="14dp" />
+
+                <RadioGroup
+                    android:id="@+id/grp_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rdo_mode_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:padding="10dp"
+                        android:text="View"
+                        android:textColor="#7b000000"
+                        android:textSize="12dp" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_mode_window"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Window"
+                        android:textColor="#7b000000"
+                        android:textSize="12dp" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_mode_dialogFragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="DialogFragment"
+                        android:textColor="#7b000000" />
+
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:text="选择风格"
                     android:textColor="#dc000000"
                     android:textSize="14dp"

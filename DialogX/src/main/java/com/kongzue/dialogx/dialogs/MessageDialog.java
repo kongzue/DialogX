@@ -1071,4 +1071,9 @@ public class MessageDialog extends BaseDialog {
         customExitAnimResId = exitResId;
         return this;
     }
+    
+    @Override
+    protected void shutdown() {
+        dismiss();
+    }
 }

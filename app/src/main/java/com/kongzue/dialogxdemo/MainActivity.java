@@ -66,6 +66,10 @@ public class MainActivity extends BaseActivity {
     private ImageView btnShare;
     private TextView txtTitle;
     private LinearLayout boxBody;
+    private RadioGroup grpMode;
+    private RadioButton rdoModeView;
+    private RadioButton rdoModeWindow;
+    private RadioButton rdoModeDialogFragment;
     private RadioGroup grpStyle;
     private RadioButton rdoMaterial;
     private RadioButton rdoIos;
@@ -107,6 +111,10 @@ public class MainActivity extends BaseActivity {
         btnShare = findViewById(R.id.btn_share);
         txtTitle = findViewById(R.id.txt_title);
         boxBody = findViewById(R.id.box_body);
+        grpMode = findViewById(R.id.grp_mode);
+        rdoModeView = findViewById(R.id.rdo_mode_view);
+        rdoModeWindow = findViewById(R.id.rdo_mode_window);
+        rdoModeDialogFragment = findViewById(R.id.rdo_mode_dialogFragment);
         grpStyle = findViewById(R.id.grp_style);
         rdoMaterial = findViewById(R.id.rdo_material);
         rdoIos = findViewById(R.id.rdo_ios);
@@ -172,6 +180,20 @@ public class MainActivity extends BaseActivity {
                     })
                     .setCancelable(false);
         }
+        
+        switch (DialogX.implIMPLMode){
+            case VIEW:
+                rdoModeView.setChecked(true);
+                break;
+            case WINDOW:
+                rdoModeWindow.setChecked(true);
+                break;
+            case DIALOG_FRAGMENT:
+                rdoModeDialogFragment.setChecked(true);
+                break;
+        }
+        
+        txtTitle.setText("Kongzue DialogX (" + BuildConfig.VERSION_NAME +")");
     }
     
     //用于模拟进度提示
@@ -201,6 +223,24 @@ public class MainActivity extends BaseActivity {
     
     @Override
     public void setEvents() {
+        grpMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                BaseDialog.cleanAll();
+                switch (checkedId){
+                    case R.id.rdo_mode_view:
+                        DialogX.implIMPLMode = DialogX.IMPL_MODE.VIEW;
+                        break;
+                    case R.id.rdo_mode_window:
+                        DialogX.implIMPLMode = DialogX.IMPL_MODE.WINDOW;
+                        break;
+                    case R.id.rdo_mode_dialogFragment:
+                        DialogX.implIMPLMode = DialogX.IMPL_MODE.DIALOG_FRAGMENT;
+                        break;
+                }
+            }
+        });
+        
         grpTheme.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

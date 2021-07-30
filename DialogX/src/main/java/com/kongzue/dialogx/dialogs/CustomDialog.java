@@ -495,4 +495,9 @@ public class CustomDialog extends BaseDialog {
             getDialogView().setVisibility(View.GONE);
         }
     }
+    
+    @Override
+    protected void shutdown() {
+        dismiss();
+    }
 }
