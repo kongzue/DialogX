@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'android-maven'
 
 def siteUrl = 'https://github.com/kongzue/DialogX' //项目在github主页地址
 def gitUrl = 'https://github.com/kongzue/DialogX.git'   //Git仓库的地址
@@ -13,8 +12,6 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode BUILD_VERSION_INT as int
-        versionName BUILD_VERSION
 
     }
 

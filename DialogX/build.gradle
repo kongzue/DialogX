@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'android-maven'
 
 group = "com.kongzue.dialogx"
 version = BUILD_VERSION
@@ -10,8 +9,6 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode BUILD_VERSION_INT as int
-        versionName BUILD_VERSION
 
         consumerProguardFiles "consumer-rules.pro"
     }

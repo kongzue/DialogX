@@ -397,10 +397,18 @@ public abstract class BaseDialog {
             init(null);
             if (getContext() == null) {
                 error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+                return;
             }
         }
         if (style.styleVer != DialogXStyle.styleVer) {
             error("DialogX 所引用的 Style 不符合当前适用版本：" + DialogXStyle.styleVer + " 引入的 Style(" + style.getClass().getSimpleName() + ") 版本" + style.styleVer);
+        }
+    
+        //Hide IME
+        View view = ((Activity)BaseDialog.getContext()).getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) BaseDialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
     
