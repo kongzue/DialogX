@@ -449,7 +449,7 @@ public class MainActivity extends BaseActivity {
                                 v.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                    
+                                        PopTip.show("Click Custom View");
                                     }
                                 });
                             }

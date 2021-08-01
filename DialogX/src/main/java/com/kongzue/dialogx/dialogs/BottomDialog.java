@@ -470,6 +470,7 @@ public class BottomDialog extends BaseDialog {
                             keepBottomAnim.start();
                         } else {
                             bkgEnterAimY = boxBkg.getHeight() - bkg.getHeight();
+                            log("bkg.getHeight():"+bkg.getHeight());
                             if (!isEnterAnimFinished) bkg.setY(boxRoot.getHeight());
                             bkg.post(new Runnable() {
                                 @Override

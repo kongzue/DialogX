@@ -184,7 +184,16 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
     
-    private View dialogView;
+    private WeakReference<View> dialogView;
+    
+    protected View getWaitDialogView() {
+        if (dialogView == null) return null;
+        return dialogView.get();
+    }
+    
+    protected void setWaitDialogView(View v) {
+        dialogView = new WeakReference<>(v);
+    }
     
     public WaitDialog show() {
         super.beforeShow();
@@ -192,13 +201,15 @@ public class WaitDialog extends BaseDialog {
         if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
             layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
         }
-        dialogImpl = new DialogImpl(layoutResId);
+        dialogImpl = new WeakReference<>(new DialogImpl(layoutResId));
         runOnMain(new Runnable() {
             @Override
             public void run() {
-                dialogImpl.lazyCreate();
-                if (dialogView != null) dialogView.setTag(me.get());
-                show(dialogView);
+                if (getDialogImpl() != null) {
+                    getDialogImpl().lazyCreate();
+                    if (getWaitDialogView() != null) getWaitDialogView().setTag(me.get());
+                    show(getWaitDialogView());
+                }
             }
         });
         return this;
@@ -210,19 +221,21 @@ public class WaitDialog extends BaseDialog {
         if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
             layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
         }
-        dialogImpl = new DialogImpl(layoutResId);
+        dialogImpl = new WeakReference<>(new DialogImpl(layoutResId));
         runOnMain(new Runnable() {
             @Override
             public void run() {
-                dialogImpl.lazyCreate();
-                if (dialogView != null) dialogView.setTag(me.get());
-                show(activity, dialogView);
+                if (getDialogImpl() != null) {
+                    getDialogImpl().lazyCreate();
+                    if (getWaitDialogView() != null) getWaitDialogView().setTag(me.get());
+                    show(activity, getWaitDialogView());
+                }
             }
         });
         return this;
     }
     
-    protected DialogImpl dialogImpl;
+    protected WeakReference<DialogImpl> dialogImpl;
     
     public class DialogImpl implements DialogConvertViewInterface {
         public DialogXBaseRelativeLayout boxRoot;
@@ -240,7 +253,8 @@ public class WaitDialog extends BaseDialog {
         }
         
         public void lazyCreate() {
-            dialogView = createView(layoutResId);
+            View dialogView;
+            setWaitDialogView(dialogView = createView(layoutResId));
             boxRoot = dialogView.findViewById(R.id.box_root);
             bkg = dialogView.findViewById(R.id.bkg);
             blurView = dialogView.findViewById(R.id.blurView);
@@ -254,7 +268,7 @@ public class WaitDialog extends BaseDialog {
             boxCustomView = dialogView.findViewById(R.id.box_customView);
             txtInfo = dialogView.findViewById(R.id.txt_info);
             init();
-            dialogImpl = this;
+            setDialogImpl(this);
             refreshView();
         }
         
@@ -273,7 +287,7 @@ public class WaitDialog extends BaseDialog {
             boxCustomView = convertView.findViewById(R.id.box_customView);
             txtInfo = convertView.findViewById(R.id.txt_info);
             init();
-            dialogImpl = this;
+            setDialogImpl(this);
             refreshView();
         }
         
@@ -330,8 +344,11 @@ public class WaitDialog extends BaseDialog {
                 @Override
                 public void onDismiss() {
                     isShow = false;
-                    dialogImpl = null;
                     getDialogLifecycleCallback().onDismiss(me());
+                    dialogImpl.clear();
+                    dialogImpl = null;
+                    dialogView.clear();
+                    dialogView = null;
                     me.clear();
                     me = null;
                 }
@@ -452,7 +469,7 @@ public class WaitDialog extends BaseDialog {
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            dismiss(dialogView);
+                            dismiss(getWaitDialogView());
                         }
                     }, exitAnimDurationTemp);
                 }
@@ -501,6 +518,10 @@ public class WaitDialog extends BaseDialog {
         }
     }
     
+    private void setDialogImpl(DialogImpl d) {
+        dialogImpl = new WeakReference<>(d);
+    }
+    
     @Override
     public String dialogKey() {
         return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
@@ -519,7 +540,7 @@ public class WaitDialog extends BaseDialog {
         runOnMain(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl != null) dialogImpl.refreshView();
+                if (getDialogImpl() != null) getDialogImpl().refreshView();
             }
         });
     }
@@ -528,8 +549,9 @@ public class WaitDialog extends BaseDialog {
         runOnMain(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl == null) return;
-                dialogImpl.doDismiss(null);
+                if (getDialogImpl() != null) {
+                    getDialogImpl().doDismiss(null);
+                }
             }
         });
     }
@@ -681,7 +703,8 @@ public class WaitDialog extends BaseDialog {
     }
     
     public DialogImpl getDialogImpl() {
-        return dialogImpl;
+        if (dialogImpl == null) return null;
+        return dialogImpl.get();
     }
     
     public WaitDialog setCustomView(OnBindView<WaitDialog> onBindView) {
@@ -792,14 +815,14 @@ public class WaitDialog extends BaseDialog {
         if (getContext() != null && getContext() instanceof Activity && getInstance((Activity) getContext()) != null) {
             return false;
         }
-        return me == null || me.get() == null || me.get().dialogImpl == null || (me.get().getActivity() != null && me.get().getActivity() != getContext());
+        return me == null || me.get() == null || me.get().getDialogImpl() == null || (me.get().getActivity() != null && me.get().getActivity() != getContext());
     }
     
     protected static boolean noInstance(Activity activity) {
         if (getContext() != null && getInstance(activity) != null) {
             return false;
         }
-        return me == null || me.get() == null || me.get().dialogImpl == null || (me.get().getActivity() != null && me.get().getActivity() != activity);
+        return me == null || me.get() == null || me.get().getDialogImpl() == null || (me.get().getActivity() != null && me.get().getActivity() != activity);
     }
     
     public static WaitDialog getInstanceNotNull(Activity activity) {

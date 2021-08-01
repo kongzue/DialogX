@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.PopTip;
+import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.TextInfo;

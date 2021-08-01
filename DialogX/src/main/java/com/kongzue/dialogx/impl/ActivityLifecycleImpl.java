@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.ArrayMap;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -101,6 +103,17 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
         if (onActivityResumeCallBack != null) {
+            Window window = activity.getWindow();
+            if (window != null) {
+                /**
+                 *  若不存在SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION标记则自动添加此标记，
+                 *  此标记影响的问题主要是在BottomDialog以及FullScreenDialog弹出后，
+                 *  显示其它对话框出现的底部非安全区高度异常的情况
+                 */
+                if ((window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) != View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) {
+                    window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                }
+            }
             onActivityResumeCallBack.getActivity(activity);
         }
     }
