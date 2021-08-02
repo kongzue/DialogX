@@ -96,7 +96,7 @@ public class WaitDialog extends BaseDialog {
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(message, TYPE.NONE);
-        showWithInstance(noInstance, activity);
+        showWithInstance(instance, activity);
         return instance;
     }
     
@@ -113,7 +113,7 @@ public class WaitDialog extends BaseDialog {
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(messageResId, TYPE.NONE);
-        showWithInstance(noInstance, activity);
+        showWithInstance(instance, activity);
         return instance;
     }
     
@@ -132,7 +132,7 @@ public class WaitDialog extends BaseDialog {
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(message, TYPE.NONE);
         instance.setProgress(progress);
-        showWithInstance(noInstance, activity);
+        showWithInstance(instance, activity);
         return instance;
     }
     
@@ -151,7 +151,7 @@ public class WaitDialog extends BaseDialog {
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(messageResId, TYPE.NONE);
         instance.setProgress(progress);
-        showWithInstance(noInstance, activity);
+        showWithInstance(instance, activity);
         return instance;
     }
     
@@ -161,7 +161,7 @@ public class WaitDialog extends BaseDialog {
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(TYPE.NONE);
         instance.setProgress(progress);
-        showWithInstance(noInstance, activity);
+        showWithInstance(instance, activity);
         return instance;
     }
     
@@ -855,11 +855,11 @@ public class WaitDialog extends BaseDialog {
         }
     }
     
-    protected static void showWithInstance(boolean noInstance, Activity activity) {
-        if (noInstance) {
-            getInstanceNotNull(activity).show(activity);
+    protected static void showWithInstance(WaitDialog instance, Activity activity) {
+        if (activity == null) {
+            instance.show();
         } else {
-            getInstanceNotNull(activity).refreshUI();
+            instance.show(activity);
         }
     }
     

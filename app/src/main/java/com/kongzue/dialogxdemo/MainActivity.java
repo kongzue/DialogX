@@ -181,7 +181,7 @@ public class MainActivity extends BaseActivity {
                     .setCancelable(false);
         }
         
-        switch (DialogX.implIMPLMode){
+        switch (DialogX.implIMPLMode) {
             case VIEW:
                 rdoModeView.setChecked(true);
                 break;
@@ -193,7 +193,7 @@ public class MainActivity extends BaseActivity {
                 break;
         }
         
-        txtTitle.setText("Kongzue DialogX (" + BuildConfig.VERSION_NAME +")");
+        txtTitle.setText("Kongzue DialogX (" + BuildConfig.VERSION_NAME + ")");
     }
     
     //用于模拟进度提示
@@ -227,7 +227,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 BaseDialog.cleanAll();
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.rdo_mode_view:
                         DialogX.implIMPLMode = DialogX.IMPL_MODE.VIEW;
                         break;
@@ -464,7 +464,7 @@ public class MainActivity extends BaseActivity {
                 if (rdoMaterial.isChecked()) {
                     //Material 可滑动展开 BottomMenu 演示
                     //因数据量大，尝试异步线程启动
-                    new Thread(){
+                    new Thread() {
                         @Override
                         public void run() {
                             super.run();
@@ -608,12 +608,13 @@ public class MainActivity extends BaseActivity {
         });
         
         btnFullScreenDialogLogin.setOnClickListener(new View.OnClickListener() {
-    
+            
             /**
              * 采用异步加载布局防止卡顿测试
              */
-
+            
             OnBindView<FullScreenDialog> onBindView;
+            
             @Override
             public void onClick(View v) {
                 onBindView = new OnBindView<FullScreenDialog>(R.layout.layout_full_login, true) {
@@ -625,10 +626,10 @@ public class MainActivity extends BaseActivity {
                         editUserName = v.findViewById(R.id.edit_userName);
                         boxPassword = v.findViewById(R.id.box_password);
                         editPassword = v.findViewById(R.id.edit_password);
-            
+                        
                         initFullScreenLoginDemo(dialog);
                     }
-    
+                    
                     @Override
                     public Runnable createViewSuccessRunnable() {
                         return new Runnable() {

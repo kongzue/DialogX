@@ -193,7 +193,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     private void paddingView(int left, int top, int right, int bottom) {
         unsafePlace = new Rect(left, top, right, bottom);
-        Log.i(">>>", "paddingView: (" +this.hashCode()+ ")"+unsafePlace);
         if (onSafeInsetsChangeListener != null) onSafeInsetsChangeListener.onChange(unsafePlace);
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
         if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
