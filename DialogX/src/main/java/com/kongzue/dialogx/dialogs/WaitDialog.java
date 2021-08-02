@@ -560,6 +560,11 @@ public class WaitDialog extends BaseDialog {
         me().doDismiss();
     }
     
+    public static void dismiss(Activity activity) {
+        WaitDialog instance = getInstance(activity);
+        if (instance != null) instance.doDismiss();
+    }
+    
     protected static WaitDialog me() {
         for (BaseDialog baseDialog : getRunningDialogList()) {
             if (baseDialog instanceof WaitDialog) {
