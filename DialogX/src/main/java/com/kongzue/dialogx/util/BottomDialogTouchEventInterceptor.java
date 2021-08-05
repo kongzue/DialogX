@@ -9,6 +9,7 @@ import android.view.animation.DecelerateInterpolator;
 
 import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
+import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
@@ -74,19 +75,23 @@ public class BottomDialogTouchEventInterceptor {
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
                                 float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
-                                if (impl.bkg.isChildScrollViewCanScroll()) {
+                                //Log.e(">>>", "isCanScroll: "+impl.scrollView.isCanScroll() );
+                                if (impl.scrollView.isCanScroll()) {
+//                                    Log.e(">>>", "impl.bkg.getY(): "+impl.bkg.getY());
+//                                    Log.e(">>>", "deltaY(): "+(event.getY() - bkgTouchDownY));
+                                    Log.e(">>>", "impl.scrollView.getScrollDistance(): "+impl.scrollView.getScrollDistance());
                                     if (aimY > 0) {
-                                        if (impl.scrollView.getScrollY() == 0) {
-                                            if (impl.scrollView instanceof BottomDialogScrollView) {
-                                                ((BottomDialogScrollView) impl.scrollView).lockScroll(true);
+                                        if (impl.scrollView.getScrollDistance() == 0) {
+                                            if (impl.scrollView instanceof ScrollController) {
+                                                ((ScrollController) impl.scrollView).lockScroll(true);
                                             }
                                             impl.bkg.setY(aimY);
                                         } else {
                                             bkgTouchDownY = event.getY();
                                         }
                                     } else {
-                                        if (impl.scrollView instanceof BottomDialogScrollView) {
-                                            ((BottomDialogScrollView) impl.scrollView).lockScroll(false);
+                                        if (impl.scrollView instanceof ScrollController) {
+                                            ((ScrollController) impl.scrollView).lockScroll(false);
                                         }
                                         impl.bkg.setY(0);
                                     }
@@ -101,7 +106,7 @@ public class BottomDialogTouchEventInterceptor {
                             break;
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
-                            scrolledY = impl.scrollView.getScrollY();
+                            scrolledY = impl.scrollView.getScrollDistance();
                             isBkgTouched = false;
                             if (bkgOldY == 0) {
                                 if (impl.bkg.getY() < dip2px(35)) {

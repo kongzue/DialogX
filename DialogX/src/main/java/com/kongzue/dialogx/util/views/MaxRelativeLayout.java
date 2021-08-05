@@ -154,6 +154,7 @@ public class MaxRelativeLayout extends RelativeLayout {
         return null;
     }
     
+    @Deprecated
     public boolean isChildScrollViewCanScroll() {
         if (childScrollView == null) return false;
         if (!childScrollView.isEnabled()) {

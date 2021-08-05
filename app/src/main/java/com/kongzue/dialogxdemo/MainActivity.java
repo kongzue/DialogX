@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.kongzue.baseframework.BaseActivity;
 import com.kongzue.baseframework.interfaces.DarkNavigationBarTheme;
@@ -40,7 +42,6 @@ import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
-import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
@@ -53,6 +54,10 @@ import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogxdemo.custom.CustomRecycleViewAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Layout(R.layout.activity_main)
 @DarkStatusBarTheme(true)
@@ -95,6 +100,7 @@ public class MainActivity extends BaseActivity {
     private TextView btnBottomReply;
     private TextView btnBottomSelectMenu;
     private TextView btnBottomMultiSelectMenu;
+    private TextView btnBottomCustomRecycleView;
     private TextView btnCustomMessageDialog;
     private TextView btnCustomInputDialog;
     private TextView btnCustomBottomMenu;
@@ -140,6 +146,7 @@ public class MainActivity extends BaseActivity {
         btnBottomReply = findViewById(R.id.btn_bottom_reply);
         btnBottomSelectMenu = findViewById(R.id.btn_bottom_select_menu);
         btnBottomMultiSelectMenu = findViewById(R.id.btn_bottom_multiSelect_menu);
+        btnBottomCustomRecycleView = findViewById(R.id.btn_bottom_custom_recycleView);
         btnCustomMessageDialog = findViewById(R.id.btn_customMessageDialog);
         btnCustomInputDialog = findViewById(R.id.btn_customInputDialog);
         btnCustomBottomMenu = findViewById(R.id.btn_customBottomMenu);
@@ -785,6 +792,33 @@ public class MainActivity extends BaseActivity {
                             }
                         })
                         .setSelection(selectMenuIndexArray);
+            }
+        });
+    
+        btnBottomCustomRecycleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomDialog.build()
+                        .setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_recycleview) {
+                            @Override
+                            public void onBind(BottomDialog dialog, View v) {
+                                List<CustomRecycleViewAdapter.Data> fruitList = new ArrayList<>();
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 1"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 2"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 3"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 4"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 5"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 6"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 7"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 8"));
+                                RecyclerView recyclerView = (RecyclerView) v;
+                                LinearLayoutManager layoutManager = new LinearLayoutManager(me);
+                                recyclerView.setLayoutManager(layoutManager);
+                                CustomRecycleViewAdapter adapter = new CustomRecycleViewAdapter(fruitList);
+                                recyclerView.setAdapter(adapter);
+                            }
+                        })
+                        .show();
             }
         });
     }

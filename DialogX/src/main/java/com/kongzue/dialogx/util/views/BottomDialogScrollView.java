@@ -2,11 +2,10 @@ package com.kongzue.dialogx.util.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ScrollView;
-
-import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.interfaces.ScrollController;
 
 /**
  * @author: Kongzue
@@ -15,7 +14,7 @@ import com.kongzue.dialogx.dialogs.BottomDialog;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/11/17 15:29
  */
-public class BottomDialogScrollView extends ScrollView {
+public class BottomDialogScrollView extends ScrollView implements ScrollController {
     
     public BottomDialogScrollView(Context context) {
         super(context);
@@ -35,8 +34,28 @@ public class BottomDialogScrollView extends ScrollView {
     
     boolean lockScroll;
     
+    @Override
+    public boolean isLockScroll() {
+        return lockScroll;
+    }
+    
     public void lockScroll(boolean lockScroll) {
         this.lockScroll = lockScroll;
+    }
+    
+    @Override
+    public int getScrollDistance() {
+        return getScrollY();
+    }
+    
+    @Override
+    public boolean isCanScroll() {
+        View child = getChildAt(0);
+        if (child != null) {
+            int childHeight = child.getHeight();
+            return getHeight() < childHeight;
+        }
+        return false;
     }
     
     @Override

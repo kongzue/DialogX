@@ -33,6 +33,7 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
+import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
@@ -221,7 +222,7 @@ public class BottomDialog extends BaseDialog {
         public ViewGroup boxBody;
         public ImageView imgTab;
         public TextView txtDialogTitle;
-        public ScrollView scrollView;
+        public ScrollController scrollView;
         public LinearLayout boxContent;
         public TextView txtDialogTip;
         public View imgSplit;
@@ -446,7 +447,7 @@ public class BottomDialog extends BaseDialog {
                 if (boxContent != null) {
                     if (style.overrideBottomDialogRes() != null && style.overrideBottomDialogRes().touchSlide()) {
                         //若内容布已经超出屏幕可用范围，且预设的对话框最大高度已知
-                        if (bkg.isChildScrollViewCanScroll() && bottomDialogMaxHeight != 0) {
+                        if (scrollView.isCanScroll() && bottomDialogMaxHeight != 0) {
                             //先将内容布局放置到屏幕底部以外区域，然后执行上移动画
                             if (!isEnterAnimFinished)
                                 bkg.setY(getRootFrameLayout().getMeasuredHeight());
@@ -536,6 +537,9 @@ public class BottomDialog extends BaseDialog {
             
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
+                if (onBindView.getCustomView() instanceof ScrollController) {
+                    scrollView = (ScrollController) onBindView.getCustomView();
+                }
             }
             
             if (isAllowInterceptTouch() && isCancelable()) {
