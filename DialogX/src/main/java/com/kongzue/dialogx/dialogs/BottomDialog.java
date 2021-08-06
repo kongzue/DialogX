@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Handler;
@@ -39,8 +40,6 @@ import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
-
-import static androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK;
 
 /**
  * @author: Kongzue
@@ -338,6 +337,9 @@ public class BottomDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    dialogImpl = null;
+                    bottomDialogTouchEventInterceptor = null;
+                    System.gc();
                 }
             });
             
@@ -420,7 +422,6 @@ public class BottomDialog extends BaseDialog {
                      * 其他情况不适用，请参考 onContentViewLayoutChangeListener 的代码实现。
                      */
                     if (style.overrideBottomDialogRes() == null || !style.overrideBottomDialogRes().touchSlide()) {
-                        //bkg.setY(getRootFrameLayout().getMeasuredHeight());
                         Animation enterAnim = AnimationUtils.loadAnimation(getContext(), R.anim.anim_dialogx_bottom_enter);
                         enterAnimDurationTemp = enterAnim.getDuration();
                         if (overrideEnterDuration >= 0) {
@@ -435,6 +436,17 @@ public class BottomDialog extends BaseDialog {
                         bkg.setY(bkgEnterAimY);
                         bkg.startAnimation(enterAnim);
                     }
+                    
+                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                    bkgAlpha.setDuration(enterAnimDurationTemp);
+                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                        }
+                    });
+                    bkgAlpha.start();
                 }
             });
         }
@@ -467,6 +479,7 @@ public class BottomDialog extends BaseDialog {
                             }
                             ObjectAnimator keepBottomAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
                             keepBottomAnim.setDuration(enterAnimDurationTemp);
+                            keepBottomAnim.setAutoCancel(true);
                             keepBottomAnim.setInterpolator(new DecelerateInterpolator(2f));
                             keepBottomAnim.start();
                         } else {
@@ -484,6 +497,7 @@ public class BottomDialog extends BaseDialog {
                                         enterAnimDurationTemp = enterAnimDuration;
                                     }
                                     enterAnim.setDuration(enterAnimDurationTemp);
+                                    enterAnim.setAutoCancel(true);
                                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                                     enterAnim.start();
                                 }
@@ -576,10 +590,10 @@ public class BottomDialog extends BaseDialog {
             if (v != null) v.setEnabled(false);
             if (getContext() == null) return;
             
-            if (boxContent != null)
+            if (boxContent != null) {
                 boxContent.getViewTreeObserver().removeOnGlobalLayoutListener(onContentViewLayoutChangeListener);
+            }
             
-            ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
             long exitAnimDurationTemp = 300;
             if (overrideExitDuration >= 0) {
                 exitAnimDurationTemp = overrideExitDuration;
@@ -587,8 +601,21 @@ public class BottomDialog extends BaseDialog {
             if (exitAnimDuration >= 0) {
                 exitAnimDurationTemp = exitAnimDuration;
             }
+            
+            ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
             exitAnim.setDuration(exitAnimDurationTemp);
             exitAnim.start();
+            
+            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+            bkgAlpha.setDuration(exitAnimDurationTemp);
+            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    boxRoot.setBkgAlpha(value);
+                }
+            });
+            bkgAlpha.start();
             
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
@@ -620,6 +647,7 @@ public class BottomDialog extends BaseDialog {
     }
     
     public void refreshUI() {
+        if (!isShow) return;
         runOnMain(new Runnable() {
             @Override
             public void run() {

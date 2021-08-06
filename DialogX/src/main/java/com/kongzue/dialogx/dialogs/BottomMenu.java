@@ -597,6 +597,7 @@ public class BottomMenu extends BottomDialog {
     
     @Override
     public void refreshUI() {
+        if (!isShow) return;
         if (listView != null) {
             if (menuListAdapter == null) {
                 menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), menuList);
@@ -614,7 +615,8 @@ public class BottomMenu extends BottomDialog {
         super.refreshUI();
     }
     
-    public void preRefreshUI(){
+    public void preRefreshUI() {
+        if (!isShow) return;
         runOnMain(new Runnable() {
             @Override
             public void run() {

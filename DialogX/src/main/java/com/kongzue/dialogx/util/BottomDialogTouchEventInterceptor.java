@@ -75,11 +75,7 @@ public class BottomDialogTouchEventInterceptor {
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
                                 float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
-                                //Log.e(">>>", "isCanScroll: "+impl.scrollView.isCanScroll() );
                                 if (impl.scrollView.isCanScroll()) {
-//                                    Log.e(">>>", "impl.bkg.getY(): "+impl.bkg.getY());
-//                                    Log.e(">>>", "deltaY(): "+(event.getY() - bkgTouchDownY));
-                                    Log.e(">>>", "impl.scrollView.getScrollDistance(): "+impl.scrollView.getScrollDistance());
                                     if (aimY > 0) {
                                         if (impl.scrollView.getScrollDistance() == 0) {
                                             if (impl.scrollView instanceof ScrollController) {

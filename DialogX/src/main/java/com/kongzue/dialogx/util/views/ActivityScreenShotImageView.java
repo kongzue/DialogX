@@ -3,6 +3,7 @@ package com.kongzue.dialogx.util.views;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -64,6 +65,9 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         if (width >= mRadius && height > mRadius) {
+            if (isScreenshotSuccess){
+                canvas.drawColor(Color.BLACK);
+            }
             Path path = new Path();
             path.moveTo(mRadius, 0);
             path.lineTo(width - mRadius, 0);
@@ -116,12 +120,16 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     }
     
     private boolean inited = false;
+    private boolean isScreenshotSuccess;
     
     private void drawViewImage(View view) {
         view.destroyDrawingCache();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
         Bitmap bmp = view.getDrawingCache();
+        if (bmp!=null){
+            isScreenshotSuccess=true;
+        }
         setImageBitmap(bmp);
     }
 }

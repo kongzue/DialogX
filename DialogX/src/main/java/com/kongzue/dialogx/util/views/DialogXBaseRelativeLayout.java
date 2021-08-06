@@ -170,7 +170,14 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     public boolean performClick() {
+        if (!isEnabled()) return false;
         return super.performClick();
+    }
+    
+    @Override
+    public boolean callOnClick() {
+        if (!isEnabled()) return false;
+        return super.callOnClick();
     }
     
     public DialogXBaseRelativeLayout setOnLifecycleCallBack(OnLifecycleCallBack onLifecycleCallBack) {
@@ -244,5 +251,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         getParentDialog().onUIModeChange(newConfig);
     }
     
-    
+    public DialogXBaseRelativeLayout setBkgAlpha(float alpha) {
+        if (getBackground() != null) getBackground().setAlpha((int) (alpha * 255));
+        return this;
+    }
 }

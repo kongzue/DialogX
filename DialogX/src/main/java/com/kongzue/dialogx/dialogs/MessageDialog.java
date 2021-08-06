@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -230,6 +231,7 @@ public class MessageDialog extends BaseDialog {
     }
     
     public void refreshUI() {
+        if (!isShow) return;
         runOnMain(new Runnable() {
             @Override
             public void run() {
@@ -290,12 +292,12 @@ public class MessageDialog extends BaseDialog {
             
             txtDialogTip.setMovementMethod(LinkMovementMethod.getInstance());
             
+            boxRoot.setBkgAlpha(0f);
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
                     isShow = true;
-                    boxRoot.setAlpha(0f);
                     int enterAnimResId = style.enterAnimResId() == 0 ? R.anim.anim_dialogx_default_enter : style.enterAnimResId();
                     if (overrideEnterAnimRes != 0) {
                         enterAnimResId = overrideEnterAnimRes;
@@ -315,11 +317,16 @@ public class MessageDialog extends BaseDialog {
                     enterAnim.setInterpolator(new DecelerateInterpolator());
                     bkg.startAnimation(enterAnim);
                     
-                    boxRoot.animate()
-                            .setDuration(enterAnimDurationTemp)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(null);
+                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                    bkgAlpha.setDuration(enterAnimDurationTemp);
+                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                        }
+                    });
+                    bkgAlpha.start();
                     
                     getDialogLifecycleCallback().onShow(me);
                     
@@ -346,7 +353,7 @@ public class MessageDialog extends BaseDialog {
                                 if (txtInput == null) return;
                                 txtInput.requestFocus();
                                 txtInput.setFocusableInTouchMode(true);
-                                imeShow(txtInput,true);
+                                imeShow(txtInput, true);
                                 txtInput.setSelection(txtInput.getText().length());
                                 if (inputInfo != null && inputInfo.isSelectAllText()) {
                                     txtInput.selectAll();
@@ -366,6 +373,8 @@ public class MessageDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    dialogView = null;
+                    System.gc();
                 }
             });
             
@@ -386,7 +395,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public void onClick(View v) {
                     if (txtInput != null) {
-                        imeShow(txtInput,false);
+                        imeShow(txtInput, false);
                     }
                     if (okButtonClickListener != null) {
                         if (okButtonClickListener instanceof OnInputDialogButtonClickListener) {
@@ -408,7 +417,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public void onClick(View v) {
                     if (txtInput != null) {
-                        imeShow(txtInput,false);
+                        imeShow(txtInput, false);
                     }
                     if (cancelButtonClickListener != null) {
                         if (cancelButtonClickListener instanceof OnInputDialogButtonClickListener) {
@@ -430,7 +439,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public void onClick(View v) {
                     if (txtInput != null) {
-                        imeShow(txtInput,false);
+                        imeShow(txtInput, false);
                     }
                     if (otherButtonClickListener != null) {
                         if (otherButtonClickListener instanceof OnInputDialogButtonClickListener) {
@@ -669,10 +678,15 @@ public class MessageDialog extends BaseDialog {
             exitAnim.setDuration(exitAnimDurationTemp);
             bkg.startAnimation(exitAnim);
             
-            boxRoot.animate()
-                    .alpha(0f)
-                    .setInterpolator(new AccelerateInterpolator())
-                    .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+            bkgAlpha.setDuration(exitAnimDurationTemp);
+            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    boxRoot.setBkgAlpha(value);
+                }
+            });
             
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override

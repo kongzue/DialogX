@@ -138,6 +138,8 @@ public class CustomDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    dialogImpl = null;
+                    System.gc();
                 }
             });
             
@@ -320,6 +322,7 @@ public class CustomDialog extends BaseDialog {
     }
     
     public void refreshUI() {
+        if (!isShow) return;
         runOnMain(new Runnable() {
             @Override
             public void run() {

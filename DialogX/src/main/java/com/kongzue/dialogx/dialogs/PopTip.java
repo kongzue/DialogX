@@ -450,6 +450,8 @@ public class PopTip extends BaseDialog {
                     if (popTipList != null) popTipList.remove(PopTip.this);
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    dialogImpl = null;
+                    System.gc();
                 }
             });
             
@@ -638,6 +640,7 @@ public class PopTip extends BaseDialog {
     }
     
     public void refreshUI() {
+        if (!isShow) return;
         runOnMain(new Runnable() {
             @Override
             public void run() {

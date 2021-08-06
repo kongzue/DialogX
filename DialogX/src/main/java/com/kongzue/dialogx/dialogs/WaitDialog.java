@@ -351,6 +351,7 @@ public class WaitDialog extends BaseDialog {
                     dialogView = null;
                     me.clear();
                     me = null;
+                    System.gc();
                 }
             });
             
@@ -537,6 +538,7 @@ public class WaitDialog extends BaseDialog {
     }
     
     public void refreshUI() {
+        if (!isShow) return;
         runOnMain(new Runnable() {
             @Override
             public void run() {

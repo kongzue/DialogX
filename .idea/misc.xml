@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_bottom_material.xml" value="0.36944444444444446" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_bottom_material_dark.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_fullscreen.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_fullscreen_dark.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/drawable/ios_edit_box_bkg.xml" value="0.425" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/drawable/rect_ios_edit_box_bkg_focus.xml" value="0.425" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/activity_app_compat_test.xml" value="0.5328205128205128" />
@@ -13,6 +16,7 @@
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/layout_custom_scrollview.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/layout_custom_view.xml" value="0.5328205128205128" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/layout_full_login.xml" value="0.3824074074074074" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/layout_full_webview.xml" value="0.5411458333333333" />
       </map>
     </option>
   </component>

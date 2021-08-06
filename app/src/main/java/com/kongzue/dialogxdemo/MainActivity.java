@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -475,7 +476,8 @@ public class MainActivity extends BaseActivity {
                         @Override
                         public void run() {
                             super.run();
-                            BottomMenu.show(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"})
+                            BottomMenu.build()
+                                    .setMenuList(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"})
                                     .setOnIconChangeCallBack(new OnIconChangeCallBack(true) {
                                         @Override
                                         public int getIcon(BottomMenu bottomMenu, int index, String menuText) {
@@ -516,7 +518,8 @@ public class MainActivity extends BaseActivity {
                                             PopTip.show(text);
                                             return false;
                                         }
-                                    });
+                                    })
+                                    .show();
                         }
                     }.start();
                 } else {
@@ -624,7 +627,7 @@ public class MainActivity extends BaseActivity {
             
             @Override
             public void onClick(View v) {
-                onBindView = new OnBindView<FullScreenDialog>(R.layout.layout_full_login, true) {
+                onBindView = new OnBindView<FullScreenDialog>(R.layout.layout_full_login) {
                     @Override
                     public void onBind(FullScreenDialog dialog, View v) {
                         btnCancel = v.findViewById(R.id.btn_cancel);
@@ -636,17 +639,8 @@ public class MainActivity extends BaseActivity {
                         
                         initFullScreenLoginDemo(dialog);
                     }
-                    
-                    @Override
-                    public Runnable createViewSuccessRunnable() {
-                        return new Runnable() {
-                            @Override
-                            public void run() {
-                                FullScreenDialog.show(onBindView);
-                            }
-                        };
-                    }
                 };
+                FullScreenDialog.show(onBindView);
             }
         });
         
@@ -694,7 +688,7 @@ public class MainActivity extends BaseActivity {
                             }
                         });
                         
-                        webView.loadUrl("https://github.com/kongzue/DialogV3/");
+                        webView.loadUrl("https://www.kongzue.com/");
                     }
                 });
             }
@@ -794,7 +788,7 @@ public class MainActivity extends BaseActivity {
                         .setSelection(selectMenuIndexArray);
             }
         });
-    
+        
         btnBottomCustomRecycleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

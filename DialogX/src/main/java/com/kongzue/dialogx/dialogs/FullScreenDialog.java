@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.Rect;
@@ -146,6 +147,9 @@ public class FullScreenDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    fullScreenDialogTouchEventInterceptor = null;
+                    dialogImpl = null;
+                    System.gc();
                 }
             });
             
@@ -172,6 +176,7 @@ public class FullScreenDialog extends BaseDialog {
             if (enterAnimDuration >= 0) {
                 enterAnimDurationTemp = enterAnimDuration;
             }
+            boxRoot.setBkgAlpha(0f);
             
             bkg.setY(boxRoot.getHeight());
             boxRoot.post(new Runnable() {
@@ -179,16 +184,23 @@ public class FullScreenDialog extends BaseDialog {
                 public void run() {
                     bkgEnterAimY = boxRoot.getSafeHeight() - boxCustom.getHeight();
                     if (bkgEnterAimY < 0) bkgEnterAimY = 0;
-                    boxRoot.animate()
-                            .setDuration(enterAnimDurationTemp)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(null);
                     
-                    ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
-                    exitAnim.setDuration(enterAnimDurationTemp);
-                    exitAnim.start();
+                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
+                    enterAnim.setDuration(enterAnimDurationTemp);
+                    enterAnim.setInterpolator(new DecelerateInterpolator());
+                    enterAnim.start();
                     bkg.setVisibility(View.VISIBLE);
+                    
+                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                    bkgAlpha.setDuration(enterAnimDurationTemp);
+                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                        }
+                    });
+                    bkgAlpha.start();
                 }
             });
             
@@ -236,12 +248,7 @@ public class FullScreenDialog extends BaseDialog {
             }
             
             if (onBindView != null) {
-                onBindView.setPrivateRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        onBindView.bindParent(boxCustom, me);
-                    }
-                });
+                onBindView.bindParent(boxCustom, me);
             }
             
             if (hideZoomBackground) {
@@ -271,6 +278,17 @@ public class FullScreenDialog extends BaseDialog {
             ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
             exitAnim.setDuration(exitAnimDurationTemp);
             exitAnim.start();
+            
+            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+            bkgAlpha.setDuration(exitAnimDurationTemp);
+            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    boxRoot.setBkgAlpha(value);
+                }
+            });
+            bkgAlpha.start();
             
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
@@ -305,6 +323,7 @@ public class FullScreenDialog extends BaseDialog {
     }
     
     public void refreshUI() {
+        if (!isShow) return;
         runOnMain(new Runnable() {
             @Override
             public void run() {
