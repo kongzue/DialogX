@@ -90,12 +90,14 @@ public abstract class BaseDialog {
     }
     
     public static void onActivityResume(Activity activity) {
-        for (BaseDialog baseDialog : runningDialogList) {
-            if (baseDialog.getActivity() == activity && baseDialog.isShow && baseDialog.getDialogView() != null) {
-                View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
-                if (boxRoot != null) {
-                    log("DialogX: boxRoot is requestFocus.");
-                    boxRoot.requestFocus();
+        if (runningDialogList!=null) {
+            for (BaseDialog baseDialog : runningDialogList) {
+                if (baseDialog.getActivity() == activity && baseDialog.isShow && baseDialog.getDialogView() != null) {
+                    View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
+                    if (boxRoot != null) {
+                        log("DialogX: boxRoot is requestFocus.");
+                        boxRoot.requestFocus();
+                    }
                 }
             }
         }
