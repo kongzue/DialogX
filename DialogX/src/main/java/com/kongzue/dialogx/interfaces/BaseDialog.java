@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentManager;
 
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
@@ -86,6 +87,18 @@ public abstract class BaseDialog {
     
     protected static void error(Object o) {
         if (DEBUGMODE) Log.e(">>>", o.toString());
+    }
+    
+    public static void onActivityResume(Activity activity) {
+        for (BaseDialog baseDialog : runningDialogList) {
+            if (baseDialog.getActivity() == activity && baseDialog.isShow && baseDialog.getDialogView() != null) {
+                View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
+                if (boxRoot != null) {
+                    log("DialogX: boxRoot is requestFocus.");
+                    boxRoot.requestFocus();
+                }
+            }
+        }
     }
     
     public abstract void onUIModeChange(Configuration newConfig);
@@ -404,9 +417,9 @@ public abstract class BaseDialog {
         if (style.styleVer != DialogXStyle.styleVer) {
             error("DialogX 所引用的 Style 不符合当前适用版本：" + DialogXStyle.styleVer + " 引入的 Style(" + style.getClass().getSimpleName() + ") 版本" + style.styleVer);
         }
-    
+        
         //Hide IME
-        View view = ((Activity)BaseDialog.getContext()).getCurrentFocus();
+        View view = ((Activity) BaseDialog.getContext()).getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) BaseDialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -459,11 +472,11 @@ public abstract class BaseDialog {
         ownActivity = null;
     }
     
-    public static void cleanAll(){
+    public static void cleanAll() {
         if (runningDialogList != null) {
             CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
             for (BaseDialog baseDialog : copyOnWriteList) {
-                if (baseDialog.isShow())baseDialog.shutdown();
+                if (baseDialog.isShow()) baseDialog.shutdown();
                 baseDialog.cleanActivityContext();
                 runningDialogList.remove(baseDialog);
             }

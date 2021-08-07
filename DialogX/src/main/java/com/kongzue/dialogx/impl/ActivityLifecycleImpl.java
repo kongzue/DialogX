@@ -131,6 +131,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         if (onActivityResumeCallBack != null) {
             onActivityResumeCallBack.getActivity(activity);
         }
+        BaseDialog.onActivityResume(activity);
     }
     
     @Override
