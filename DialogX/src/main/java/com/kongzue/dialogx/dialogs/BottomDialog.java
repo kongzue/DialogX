@@ -994,4 +994,13 @@ public class BottomDialog extends BaseDialog {
     protected void shutdown() {
         dismiss();
     }
+    
+    public float getBottomDialogMaxHeight() {
+        return bottomDialogMaxHeight;
+    }
+    
+    public BottomDialog setBottomDialogMaxHeight(float bottomDialogMaxHeight) {
+        this.bottomDialogMaxHeight = bottomDialogMaxHeight;
+        return this;
+    }
 }
