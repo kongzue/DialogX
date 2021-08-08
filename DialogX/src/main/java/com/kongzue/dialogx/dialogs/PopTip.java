@@ -640,7 +640,7 @@ public class PopTip extends BaseDialog {
     }
     
     public void refreshUI() {
-        if (!isShow) return;
+        if (getDialogImpl() == null) return;
         runOnMain(new Runnable() {
             @Override
             public void run() {

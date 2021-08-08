@@ -79,6 +79,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 setFocusableInTouchMode(true);
                 requestFocus();
             }
+            setBkgAlpha(0f);
+            isInited=true;
         }
     }
     
