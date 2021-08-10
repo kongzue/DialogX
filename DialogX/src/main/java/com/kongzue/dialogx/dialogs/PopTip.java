@@ -260,7 +260,7 @@ public class PopTip extends BaseDialog {
         return popTip;
     }
     
-    public void show() {
+    public PopTip show() {
         super.beforeShow();
         if (getDialogView() == null) {
             if (DialogX.onlyOnePopTip) {
@@ -308,9 +308,10 @@ public class PopTip extends BaseDialog {
             if (dialogView != null) dialogView.setTag(me);
         }
         show(dialogView);
+        return this;
     }
     
-    public void show(Activity activity) {
+    public PopTip show(Activity activity) {
         super.beforeShow();
         if (dialogView != null) {
             if (DialogX.onlyOnePopTip) {
@@ -358,6 +359,7 @@ public class PopTip extends BaseDialog {
             if (dialogView != null) dialogView.setTag(me);
         }
         show(activity, dialogView);
+        return this;
     }
     
     @Override

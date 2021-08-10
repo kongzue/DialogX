@@ -36,6 +36,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:gravity="left|center_vertical"
+            android:layout_weight="1"
             android:singleLine="true"
             android:text="Sure?"
             android:textColor="@color/white"
