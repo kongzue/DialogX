@@ -687,6 +687,7 @@ public class MessageDialog extends BaseDialog {
                     boxRoot.setBkgAlpha(value);
                 }
             });
+            bkgAlpha.start();
             
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override

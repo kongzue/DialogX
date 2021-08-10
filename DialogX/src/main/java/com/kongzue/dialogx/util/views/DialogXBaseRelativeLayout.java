@@ -254,7 +254,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
     
     public DialogXBaseRelativeLayout setBkgAlpha(float alpha) {
-        if (getBackground() != null) getBackground().setAlpha((int) (alpha * 255));
+        Log.e(">>>", "setBkgAlpha: " + alpha + " hash:"+this.hashCode());
+        if (getBackground() != null) getBackground().mutate().setAlpha((int) (alpha * 255));
         return this;
     }
 }
