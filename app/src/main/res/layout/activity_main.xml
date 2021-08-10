@@ -121,14 +121,6 @@
                     android:textSize="14dp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="请注意后两者属于测试阶段，且存在已知未解决bug。"
-                    android:textColor="#80000000"
-                    android:textSize="14dp" />
-
                 <RadioGroup
                     android:id="@+id/grp_mode"
                     android:layout_width="match_parent"
