@@ -374,6 +374,7 @@ public class MessageDialog extends BaseDialog {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     dialogView = null;
+                    dialogLifecycleCallback = null;
                     System.gc();
                 }
             });

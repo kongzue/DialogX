@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -329,6 +330,17 @@ public class WaitDialog extends BaseDialog {
                             }
                             enterAnim.setDuration(enterAnimDurationTemp);
                             bkg.startAnimation(enterAnim);
+    
+                            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                            bkgAlpha.setDuration(enterAnimDurationTemp);
+                            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    float value = (float) animation.getAnimatedValue();
+                                    boxRoot.setBkgAlpha(value);
+                                }
+                            });
+                            bkgAlpha.start();
                             
                             boxRoot.animate()
                                     .setDuration(enterAnimDurationTemp)
@@ -349,6 +361,7 @@ public class WaitDialog extends BaseDialog {
                     dialogImpl = null;
                     dialogView.clear();
                     dialogView = null;
+                    dialogLifecycleCallback = null;
                     me.clear();
                     me = null;
                     System.gc();
@@ -466,6 +479,17 @@ public class WaitDialog extends BaseDialog {
                             .alpha(0f)
                             .setInterpolator(new AccelerateInterpolator())
                             .setDuration(exitAnimDurationTemp);
+    
+                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                    bkgAlpha.setDuration(exitAnimDurationTemp);
+                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                        }
+                    });
+                    bkgAlpha.start();
                     
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override

@@ -149,6 +149,7 @@ public class FullScreenDialog extends BaseDialog {
                     getDialogLifecycleCallback().onDismiss(me);
                     fullScreenDialogTouchEventInterceptor = null;
                     dialogImpl = null;
+                    dialogLifecycleCallback = null;
                     System.gc();
                 }
             });

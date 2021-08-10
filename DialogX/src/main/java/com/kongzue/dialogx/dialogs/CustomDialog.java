@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -139,6 +140,7 @@ public class CustomDialog extends BaseDialog {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     dialogImpl = null;
+                    dialogLifecycleCallback = null;
                     System.gc();
                 }
             });
@@ -210,6 +212,17 @@ public class CustomDialog extends BaseDialog {
                         maskEnterAnim.setDuration(enterAnimDurationTemp);
                         boxRoot.startAnimation(maskEnterAnim);
                     }
+    
+                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                    bkgAlpha.setDuration(enterAnimDurationTemp);
+                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                        }
+                    });
+                    bkgAlpha.start();
                 }
             });
         }
@@ -311,6 +324,17 @@ public class CustomDialog extends BaseDialog {
                         maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
                         boxRoot.startAnimation(maskExitAnim);
                     }
+                    
+                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                    bkgAlpha.setDuration(exitAnimDurationTemp);
+                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                        }
+                    });
+                    bkgAlpha.start();
                 }
             });
         }

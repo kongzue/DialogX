@@ -341,6 +341,7 @@ public class BottomDialog extends BaseDialog {
                     getDialogLifecycleCallback().onDismiss(me);
                     dialogImpl = null;
                     bottomDialogTouchEventInterceptor = null;
+                    dialogLifecycleCallback = null;
                     System.gc();
                 }
             });

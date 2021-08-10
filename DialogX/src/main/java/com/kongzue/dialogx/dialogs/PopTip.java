@@ -609,6 +609,7 @@ public class PopTip extends BaseDialog {
             getDialogImpl().boxBody.post(new Runnable() {
                 @Override
                 public void run() {
+                    if (getDialogImpl() == null || getDialogImpl().boxBody == null) return;
                     if (style.popTipSettings() != null) align = style.popTipSettings().align();
                     if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
                     switch (align) {
