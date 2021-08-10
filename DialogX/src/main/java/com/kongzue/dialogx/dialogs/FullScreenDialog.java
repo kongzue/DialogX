@@ -285,8 +285,11 @@ public class FullScreenDialog extends BaseDialog {
             bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    float value = (float) animation.getAnimatedValue();
-                    boxRoot.setBkgAlpha(value);
+                    if (boxRoot != null) {
+                        float value = (float) animation.getAnimatedValue();
+                        boxRoot.setBkgAlpha(value);
+                        if (value == 0) boxRoot.setVisibility(View.GONE);
+                    }
                 }
             });
             bkgAlpha.start();
