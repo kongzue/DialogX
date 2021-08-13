@@ -109,6 +109,13 @@ public class DialogX {
     //使用振动反馈
     public static boolean useHaptic = true;
     
+    /**
+     * 使用沉浸式适配
+     *
+     * 请注意，若你没有使用沉浸式适配，请关闭此选项，此选项将影响对话框布局是否允许延伸至导航栏背后显示
+     */
+    public static boolean useActivityLayoutTranslationNavigationBar = true;
+    
     public enum THEME {
         LIGHT, DARK, AUTO
     }

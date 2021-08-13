@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
 import java.lang.ref.WeakReference;
@@ -110,7 +111,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
                  *  此标记影响的问题主要是在BottomDialog以及FullScreenDialog弹出后，
                  *  显示其它对话框出现的底部非安全区高度异常的情况
                  */
-                if ((window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) != View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) {
+                if (DialogX.useActivityLayoutTranslationNavigationBar && ((window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) != View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)) {
                     window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
                 }
             }
