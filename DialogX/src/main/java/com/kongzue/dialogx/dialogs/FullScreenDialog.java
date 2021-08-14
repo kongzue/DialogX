@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -9,8 +8,6 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
@@ -19,7 +16,6 @@ import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
@@ -183,25 +179,25 @@ public class FullScreenDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    bkgEnterAimY = boxRoot.getSafeHeight() - boxCustom.getHeight();
-                    if (bkgEnterAimY < 0) bkgEnterAimY = 0;
-                    
-                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
-                    enterAnim.setDuration(enterAnimDurationTemp);
-                    enterAnim.setInterpolator(new DecelerateInterpolator());
-                    enterAnim.start();
-                    bkg.setVisibility(View.VISIBLE);
-                    
-                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-                    bkgAlpha.setDuration(enterAnimDurationTemp);
-                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            float value = (float) animation.getAnimatedValue();
-                            boxRoot.setBkgAlpha(value);
-                        }
-                    });
-                    bkgAlpha.start();
+                    int customViewHeight = boxCustom.getHeight();
+                    if (customViewHeight == 0) {
+                        //实测在 Android 10 中，离屏情况下 View可能无法得到正确高度（恒 0），此时直接按照全屏高度处理
+                        //其他版本 Android 未发现此问题
+                        showEnterAnim((int) boxRoot.getSafeHeight());
+                    } else {
+                        showEnterAnim(customViewHeight);
+                    }
+                }
+            });
+            
+            boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {
+                @Override
+                public void onChange(Rect unsafeRect) {
+                    if (unsafeRect.bottom > dip2px(100)) {
+                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), 0);
+                        enterAnim.setDuration(enterAnimDurationTemp);
+                        enterAnim.start();
+                    }
                 }
             });
             
@@ -218,17 +214,28 @@ public class FullScreenDialog extends BaseDialog {
                     }
                 }
             });
+        }
+        
+        private void showEnterAnim(int customViewHeight) {
+            bkgEnterAimY = boxRoot.getSafeHeight() - customViewHeight;
+            if (bkgEnterAimY < 0) bkgEnterAimY = 0;
             
-            boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {
+            ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
+            enterAnim.setDuration(enterAnimDurationTemp);
+            enterAnim.setInterpolator(new DecelerateInterpolator());
+            enterAnim.start();
+            bkg.setVisibility(View.VISIBLE);
+            
+            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+            bkgAlpha.setDuration(enterAnimDurationTemp);
+            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
-                public void onChange(Rect unsafeRect) {
-                    if (unsafeRect.bottom > dip2px(100)) {
-                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), 0);
-                        enterAnim.setDuration(enterAnimDurationTemp);
-                        enterAnim.start();
-                    }
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    boxRoot.setBkgAlpha(value);
                 }
             });
+            bkgAlpha.start();
         }
         
         @Override
@@ -314,9 +321,9 @@ public class FullScreenDialog extends BaseDialog {
                     exitAnimDurationTemp = exitAnimDuration;
                 }
                 
-                ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
-                enterAnim.setDuration(exitAnimDurationTemp);
-                enterAnim.start();
+                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
+                exitAnim.setDuration(exitAnimDurationTemp);
+                exitAnim.start();
             }
         }
     }
