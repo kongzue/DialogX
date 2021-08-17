@@ -28,33 +28,7 @@ public class App extends BaseApp<App> {
         DialogX.init(this);
         DialogX.implIMPLMode= DialogX.IMPL_MODE.VIEW;
         DialogX.useHaptic = true;
-        DialogX.globalStyle = new MaterialStyle() {
-            @Override
-            public PopTipSettings popTipSettings() {
-                return new PopTipSettings() {
-                    @Override
-                    public int layout(boolean light) {
-                        return light ? R.layout.layout_dialogx_poptip_snackbar : R.layout.layout_dialogx_poptip_snackbar_dark;
-                    }
-
-                    @Override
-                    public ALIGN align() {
-                        return ALIGN.BOTTOM;
-                    }
-
-                    @Override
-                    public int enterAnimResId(boolean light) {
-                        return com.kongzue.dialogx.R.anim.anim_dialogx_default_enter;
-                    }
-
-                    @Override
-                    public int exitAnimResId(boolean light) {
-                        return com.kongzue.dialogx.R.anim.anim_dialogx_default_exit;
-                    }
-                };
-            }
-        };
-    
+        DialogX.globalStyle = new MaterialStyle();
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.onlyOnePopTip = false;
     }

@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 
 import androidx.core.view.ViewCompat;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -86,14 +87,14 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     protected boolean fitSystemWindows(Rect insets) {
-        paddingView(insets.left, insets.top, insets.right, insets.bottom);
+        if (DialogX.useActivityLayoutTranslationNavigationBar)paddingView(insets.left, insets.top, insets.right, insets.bottom);
         return super.fitSystemWindows(insets);
     }
     
     @Override
     public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            if (DialogX.useActivityLayoutTranslationNavigationBar)paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
         }
         return super.dispatchApplyWindowInsets(insets);
     }

@@ -114,7 +114,7 @@ public class DialogX {
      *
      * 请注意，若你没有使用沉浸式适配，请关闭此选项，此选项将影响对话框布局是否允许延伸至导航栏背后显示
      */
-    public static boolean useActivityLayoutTranslationNavigationBar = true;
+    public static boolean useActivityLayoutTranslationNavigationBar = false;
     
     public enum THEME {
         LIGHT, DARK, AUTO

@@ -190,7 +190,9 @@ public abstract class BaseDialog {
                     });
                     break;
                 case DIALOG_FRAGMENT:
-                    
+                    DialogFragmentImpl dialogFragment = new DialogFragmentImpl(baseDialog, view);
+                    dialogFragment.show(getSupportFragmentManager(activity), "DialogX");
+                    baseDialog.ownDialogFragmentImpl = new WeakReference<>(dialogFragment);
                     break;
                 default:
                     final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
