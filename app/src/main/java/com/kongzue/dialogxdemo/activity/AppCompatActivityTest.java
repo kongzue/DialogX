@@ -1,4 +1,4 @@
-package com.kongzue.dialogxdemo;
+package com.kongzue.dialogxdemo.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogxdemo.R;
 
 /**
  * AppCompatActivity 试验场，完成一些原生 UI 相关测试

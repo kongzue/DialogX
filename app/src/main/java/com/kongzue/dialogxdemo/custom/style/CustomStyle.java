@@ -1,4 +1,4 @@
-package com.kongzue.dialogxdemo;
+package com.kongzue.dialogxdemo.custom.style;
 
 import android.content.Context;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;

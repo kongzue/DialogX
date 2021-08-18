@@ -1,4 +1,4 @@
-package com.kongzue.dialogxdemo.custom;
+package com.kongzue.dialogxdemo.custom.recycleview;
 
 import android.view.LayoutInflater;
 import android.view.View;

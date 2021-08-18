@@ -2,16 +2,11 @@ package com.kongzue.dialogx.util;
 
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 
 import com.kongzue.dialogx.dialogs.BottomDialog;
-import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.ScrollController;
-import com.kongzue.dialogx.util.views.BottomDialogScrollView;
-import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 /**
  * @author: Kongzue

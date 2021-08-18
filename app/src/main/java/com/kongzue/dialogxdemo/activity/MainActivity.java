@@ -1,14 +1,12 @@
-package com.kongzue.dialogxdemo;
+package com.kongzue.dialogxdemo.activity;
 
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -56,7 +54,10 @@ import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogxdemo.custom.CustomRecycleViewAdapter;
+import com.kongzue.dialogxdemo.BuildConfig;
+import com.kongzue.dialogxdemo.R;
+import com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleViewAdapter;
+import com.kongzue.dialogxdemo.fragment.CustomFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,7 @@ public class MainActivity extends BaseActivity {
     private TextView btnCustomDialog;
     private TextView btnFullScreenDialogWebPage;
     private TextView btnFullScreenDialogLogin;
+    private TextView btnFullScreenDialogFragment;
     private TextView btnShowBreak;
     
     @Override
@@ -155,6 +157,7 @@ public class MainActivity extends BaseActivity {
         btnCustomDialog = findViewById(R.id.btn_customDialog);
         btnFullScreenDialogWebPage = findViewById(R.id.btn_fullScreenDialog_webPage);
         btnFullScreenDialogLogin = findViewById(R.id.btn_fullScreenDialog_login);
+        btnFullScreenDialogFragment = findViewById(R.id.btn_fullScreenDialog_fragment);
         btnShowBreak = findViewById(R.id.btn_showBreak);
     }
     
@@ -286,6 +289,19 @@ public class MainActivity extends BaseActivity {
                         DialogX.globalStyle = MIUIStyle.style();
                         break;
                 }
+            }
+        });
+        
+        btnFullScreenDialogFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomFragment customFragment = new CustomFragment();
+                FullScreenDialog.show(new OnBindView<FullScreenDialog>(customFragment) {
+                    @Override
+                    public void onBind(FullScreenDialog dialog, View v) {
+                    
+                    }
+                });
             }
         });
         
@@ -614,7 +630,7 @@ public class MainActivity extends BaseActivity {
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jump(AppCompatActivityTest.class, new JumpParameter().put("showBreak", true).put("fromActivity", getInstanceKey()));
+                jump(MainActivity.class, new JumpParameter().put("showBreak", true).put("fromActivity", getInstanceKey()));
             }
         });
         

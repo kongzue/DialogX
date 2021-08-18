@@ -1,4 +1,4 @@
-package com.kongzue.dialogxdemo.custom;
+package com.kongzue.dialogxdemo.custom.recycleview;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -69,10 +69,7 @@ public class CustomRecycleView extends RecyclerView implements ScrollController 
      */
     @Override
     public boolean isCanScroll() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) getLayoutManager();
-        RecyclerView.Adapter adapter = getAdapter();
-        if (layoutManager == null || adapter == null) return false;
-        return layoutManager.findLastCompletelyVisibleItemPosition() < adapter.getItemCount() - 1;
+        return canScrollVertically(1) || canScrollVertically(-1);
     }
     
     /**

@@ -1,14 +1,18 @@
 package com.kongzue.dialogx.interfaces;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.R;
 
 import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
-import static com.kongzue.dialogx.interfaces.BaseDialog.log;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * @author: Kongzue
@@ -33,6 +37,25 @@ public abstract class OnBindView<D> {
     
     public OnBindView(View customView) {
         this.customView = customView;
+    }
+    
+    private androidx.fragment.app.Fragment fragment;
+    private android.app.Fragment supportFragment;
+    
+    public OnBindView(androidx.fragment.app.Fragment fragment) {
+        if (BaseDialog.getContext() == null) return;
+        this.customView = new FrameLayout(BaseDialog.getContext());
+        this.customView.setId(R.id.id_frame_layout_custom);
+        this.fragment = fragment;
+        this.supportFragment = null;
+    }
+    
+    public OnBindView(android.app.Fragment supportFragment) {
+        if (BaseDialog.getContext() == null) return;
+        this.customView = new FrameLayout(BaseDialog.getContext());
+        this.customView.setId(R.id.id_frame_layout_custom);
+        this.supportFragment = supportFragment;
+        this.fragment = null;
     }
     
     public abstract void onBind(D dialog, View v);
@@ -63,6 +86,7 @@ public abstract class OnBindView<D> {
         customView = null;
     }
     
+    @Deprecated
     public OnBindView<D> bindParent(ViewGroup parentView) {
         if (getCustomView() == null) return this;
         if (getCustomView().getParent() != null) {
@@ -93,6 +117,23 @@ public abstract class OnBindView<D> {
         }
         parentView.addView(getCustomView(), lp);
         onBind((D) dialog, getCustomView());
+        if (fragment != null || supportFragment != null) getCustomView().post(new Runnable() {
+            @Override
+            public void run() {
+                if (fragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getContext() instanceof AppCompatActivity) {
+                    AppCompatActivity appCompatActivity = (AppCompatActivity) BaseDialog.getContext();
+                    androidx.fragment.app.FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
+                    transaction.add(R.id.id_frame_layout_custom, fragment);
+                    transaction.commit();
+                }
+                if (supportFragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getContext() instanceof Activity) {
+                    Activity activity = (Activity) BaseDialog.getContext();
+                    android.app.FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
+                    transaction.add(R.id.id_frame_layout_custom, supportFragment);
+                    transaction.commit();
+                }
+            }
+        });
         return this;
     }
 }

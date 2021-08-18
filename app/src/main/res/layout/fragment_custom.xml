@@ -4,10 +4,9 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/txt_item"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="20dp" />
+        android:text="看到这个说明\nFragment 已经正常显示"/>
 
 </RelativeLayout>

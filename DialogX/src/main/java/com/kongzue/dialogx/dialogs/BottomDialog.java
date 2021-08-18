@@ -17,7 +17,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -38,6 +37,7 @@ import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
+import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
@@ -555,6 +555,9 @@ public class BottomDialog extends BaseDialog {
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
                 if (onBindView.getCustomView() instanceof ScrollController) {
+                    if (scrollView instanceof BottomDialogScrollView) {
+                        ((BottomDialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
+                    }
                     scrollView = (ScrollController) onBindView.getCustomView();
                 }
             }
