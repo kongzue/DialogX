@@ -60,6 +60,12 @@ public abstract class OnBindView<D> {
     
     public abstract void onBind(D dialog, View v);
     
+    public void onFragmentBind(D dialog, View frameLayout, androidx.fragment.app.Fragment fragment, androidx.fragment.app.FragmentManager fragmentManager) {
+    }
+    
+    public void onFragmentBind(D dialog, View frameLayout, android.app.Fragment fragment, android.app.FragmentManager fragmentManager) {
+    }
+    
     public int getLayoutResId() {
         return layoutResId;
     }
@@ -125,12 +131,14 @@ public abstract class OnBindView<D> {
                     androidx.fragment.app.FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
                     transaction.add(R.id.id_frame_layout_custom, fragment);
                     transaction.commit();
+                    onFragmentBind((D) dialog, getCustomView(), fragment, appCompatActivity.getSupportFragmentManager());
                 }
                 if (supportFragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getContext() instanceof Activity) {
                     Activity activity = (Activity) BaseDialog.getContext();
                     android.app.FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
                     transaction.add(R.id.id_frame_layout_custom, supportFragment);
                     transaction.commit();
+                    onFragmentBind((D) dialog, getCustomView(), supportFragment, activity.getFragmentManager());
                 }
             }
         });

@@ -73,6 +73,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (attrs != null) {
                 TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DialogXBaseRelativeLayout);
                 focusable = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_baseFocusable, true);
+                autoUnsafePlacePadding = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_autoSafeArea, true);
                 a.recycle();
             }
             if (focusable) {
@@ -81,20 +82,22 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 requestFocus();
             }
             setBkgAlpha(0f);
-            isInited=true;
+            isInited = true;
         }
     }
     
     @Override
     protected boolean fitSystemWindows(Rect insets) {
-        if (DialogX.useActivityLayoutTranslationNavigationBar)paddingView(insets.left, insets.top, insets.right, insets.bottom);
+        if (DialogX.useActivityLayoutTranslationNavigationBar)
+            paddingView(insets.left, insets.top, insets.right, insets.bottom);
         return super.fitSystemWindows(insets);
     }
     
     @Override
     public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (DialogX.useActivityLayoutTranslationNavigationBar)paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            if (DialogX.useActivityLayoutTranslationNavigationBar)
+                paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
         }
         return super.dispatchApplyWindowInsets(insets);
     }
@@ -234,6 +237,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         return autoUnsafePlacePadding;
     }
     
+    public Rect getUnsafePlace() {
+        return unsafePlace;
+    }
+    
     public DialogXBaseRelativeLayout setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
         this.autoUnsafePlacePadding = autoUnsafePlacePadding;
         return this;
@@ -257,5 +264,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public DialogXBaseRelativeLayout setBkgAlpha(float alpha) {
         if (getBackground() != null) getBackground().mutate().setAlpha((int) (alpha * 255));
         return this;
+    }
+    
+    public boolean isBaseFocusable() {
+        return focusable;
     }
 }

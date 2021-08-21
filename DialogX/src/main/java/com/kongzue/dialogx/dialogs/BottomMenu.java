@@ -3,7 +3,6 @@ package com.kongzue.dialogx.dialogs;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
@@ -22,7 +21,7 @@ import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
-import com.kongzue.dialogx.util.NormalMenuArrayAdapter;
+import com.kongzue.dialogx.util.BottomMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BottomDialogListView;
 
@@ -600,7 +599,7 @@ public class BottomMenu extends BottomDialog {
         if (getDialogImpl() == null) return;
         if (listView != null) {
             if (menuListAdapter == null) {
-                menuListAdapter = new NormalMenuArrayAdapter(me, getContext(), menuList);
+                menuListAdapter = new BottomMenuArrayAdapter(me, getContext(), menuList);
             }
             if (listView.getAdapter() == null) {
                 listView.setAdapter(menuListAdapter);

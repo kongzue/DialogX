@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_gravity="center_vertical"
+    android:layout_height="300dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="300dp">
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/img_custom_dialog_bkg" />
 
-        <ImageView
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/img_custom_dialog_bkg" />
+    <ImageView
+        android:id="@+id/btn_ok"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:src="@mipmap/img_custom_dialog_button" />
 
-        <ImageView
-            android:id="@+id/btn_ok"
-            android:layout_width="200dp"
-            android:layout_height="80dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:src="@mipmap/img_custom_dialog_button" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

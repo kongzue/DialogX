@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -20,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +39,7 @@ import com.kongzue.dialogx.dialogs.CustomDialog;
 import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
+import com.kongzue.dialogx.dialogs.PopMenu;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
@@ -111,6 +114,8 @@ public class MainActivity extends BaseActivity {
     private TextView btnFullScreenDialogWebPage;
     private TextView btnFullScreenDialogLogin;
     private TextView btnFullScreenDialogFragment;
+    private TextView btnContextMenu;
+    private TextView btnSelectMenu;
     private TextView btnShowBreak;
     
     @Override
@@ -158,6 +163,8 @@ public class MainActivity extends BaseActivity {
         btnFullScreenDialogWebPage = findViewById(R.id.btn_fullScreenDialog_webPage);
         btnFullScreenDialogLogin = findViewById(R.id.btn_fullScreenDialog_login);
         btnFullScreenDialogFragment = findViewById(R.id.btn_fullScreenDialog_fragment);
+        btnContextMenu = findViewById(R.id.btn_contextMenu);
+        btnSelectMenu = findViewById(R.id.btn_selectMenu);
         btnShowBreak = findViewById(R.id.btn_showBreak);
     }
     
@@ -289,6 +296,26 @@ public class MainActivity extends BaseActivity {
                         DialogX.globalStyle = MIUIStyle.style();
                         break;
                 }
+            }
+        });
+        
+        btnContextMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopMenu.show(new String[]{"添加", "编辑", "删除", "设置"});
+            }
+        });
+        
+        btnSelectMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopMenu.show(v, new String[]{"选项1", "选项2", "选项3"}).setOverlayBaseView(true).setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
+                    @Override
+                    public boolean onClick(PopMenu dialog, CharSequence text, int index) {
+                        btnSelectMenu.setText(text);
+                        return false;
+                    }
+                });
             }
         });
         
@@ -471,6 +498,9 @@ public class MainActivity extends BaseActivity {
                         new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
+                                if (dialog.getDialogImpl().imgTab!=null){
+                                    ((ViewGroup)dialog.getDialogImpl().imgTab.getParent()).removeView(dialog.getDialogImpl().imgTab);
+                                }
                                 v.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {

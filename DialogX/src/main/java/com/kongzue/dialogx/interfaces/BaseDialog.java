@@ -35,6 +35,7 @@ import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.WindowUtil;
+import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -96,9 +97,11 @@ public abstract class BaseDialog {
                 BaseDialog baseDialog = copyOnWriteList.get(i);
                 if (baseDialog.getActivity() == activity && baseDialog.isShow && baseDialog.getDialogView() != null) {
                     View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
-                    if (boxRoot != null) {
-                        boxRoot.requestFocus();
-                        return;
+                    if (boxRoot instanceof DialogXBaseRelativeLayout) {
+                        if (((DialogXBaseRelativeLayout)boxRoot).isBaseFocusable()) {
+                            boxRoot.requestFocus();
+                            return;
+                        }
                     }
                 }
             }

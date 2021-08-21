@@ -1,19 +1,8 @@
 package com.kongzue.dialogxdemo;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.graphics.Color;
-
 import com.kongzue.baseframework.BaseApp;
 import com.kongzue.dialogx.DialogX;
-import com.kongzue.dialogx.dialogs.CustomDialog;
-import com.kongzue.dialogx.dialogs.WaitDialog;
-import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
-import com.kongzue.dialogx.interfaces.ProgressViewInterface;
-import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
-import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.ProgressView;
 
 /**
  * @author: Kongzue

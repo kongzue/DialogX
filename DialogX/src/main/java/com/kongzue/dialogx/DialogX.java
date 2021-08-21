@@ -110,10 +110,11 @@ public class DialogX {
     public static boolean useHaptic = true;
     
     /**
-     * 使用沉浸式适配
+     * 声明：若 Activity 已使用沉浸式适配请开启（已废弃）
      *
      * 请注意，若你没有使用沉浸式适配，请关闭此选项，此选项将影响对话框布局是否允许延伸至导航栏背后显示
      */
+    @Deprecated
     public static boolean useActivityLayoutTranslationNavigationBar = false;
     
     public enum THEME {

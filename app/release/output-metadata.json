@@ -11,7 +11,7 @@
       "type": "SINGLE",
       "filters": [],
       "versionCode": 42,
-      "versionName": "0.0.42",
+      "versionName": "0.0.43.beta5",
       "outputFile": "app-release.apk"
     }
   ]

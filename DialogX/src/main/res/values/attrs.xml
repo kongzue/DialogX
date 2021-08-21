@@ -22,6 +22,7 @@
 
     <declare-styleable name="DialogXBaseRelativeLayout">
         <attr name="baseFocusable" format="boolean"/>
+        <attr name="autoSafeArea" format="boolean"/>
     </declare-styleable>
 
     <item name="id_frame_layout_custom" type="id"/>
