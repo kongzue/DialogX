@@ -9,7 +9,7 @@ import com.kongzue.dialogx.dialogs.BottomMenu;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/10/9 14:54
  */
-public abstract class OnIconChangeCallBack {
+public abstract class OnIconChangeCallBack<D extends BaseDialog> {
     
     private boolean autoTintIconInLightOrDarkMode;
     
@@ -20,7 +20,7 @@ public abstract class OnIconChangeCallBack {
         this.autoTintIconInLightOrDarkMode = autoTintIconInLightOrDarkMode;
     }
     
-    public abstract int getIcon(BottomMenu bottomMenu, int index, String menuText);
+    public abstract int getIcon(D dialog, int index, String menuText);
     
     public boolean isAutoTintIconInLightOrDarkMode() {
         return autoTintIconInLightOrDarkMode;

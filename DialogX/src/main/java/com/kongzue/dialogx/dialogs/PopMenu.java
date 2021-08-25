@@ -27,6 +27,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.PopMenuArrayAdapter;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
@@ -57,6 +58,7 @@ public class PopMenu extends BaseDialog {
     protected View baseView;
     protected boolean overlayBaseView = true;
     protected OnMenuItemClickListener<PopMenu> onMenuItemClickListener;
+    private OnIconChangeCallBack<PopMenu> onIconChangeCallBack;
     
     public PopMenu() {
         super();
@@ -142,7 +144,7 @@ public class PopMenu extends BaseDialog {
         @Override
         public void init() {
             if (menuListAdapter == null) {
-                menuListAdapter = new PopMenuArrayAdapter(getContext(), menuList);
+                menuListAdapter = new PopMenuArrayAdapter(me,getContext(), menuList);
             }
             
             boxRoot.setParentDialog(me);
@@ -454,6 +456,15 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setOnMenuItemClickListener(OnMenuItemClickListener<PopMenu> onMenuItemClickListener) {
         this.onMenuItemClickListener = onMenuItemClickListener;
+        return this;
+    }
+    
+    public OnIconChangeCallBack<PopMenu> getOnIconChangeCallBack() {
+        return onIconChangeCallBack;
+    }
+    
+    public PopMenu setOnIconChangeCallBack(OnIconChangeCallBack<PopMenu> onIconChangeCallBack) {
+        this.onIconChangeCallBack = onIconChangeCallBack;
         return this;
     }
 }

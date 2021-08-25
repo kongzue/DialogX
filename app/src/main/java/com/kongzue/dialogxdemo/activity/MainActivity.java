@@ -302,7 +302,23 @@ public class MainActivity extends BaseActivity {
         btnContextMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopMenu.show(new String[]{"添加", "编辑", "删除", "设置"});
+                PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"}).setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>() {
+                    @Override
+                    public int getIcon(PopMenu dialog, int index, String menuText) {
+                        switch (index){
+                            case 0:
+                                return R.mipmap.img_dialogx_demo_add;
+                            case 1:
+                                return R.mipmap.img_dialogx_demo_edit;
+                            case 2:
+                                return R.mipmap.img_dialogx_demo_delete;
+                            case 3:
+                                return R.mipmap.img_dialogx_demo_share;
+                            default:
+                                return 0;
+                        }
+                    }
+                });
             }
         });
         
@@ -525,7 +541,7 @@ public class MainActivity extends BaseActivity {
                             super.run();
                             BottomMenu.build()
                                     .setMenuList(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"})
-                                    .setOnIconChangeCallBack(new OnIconChangeCallBack(true) {
+                                    .setOnIconChangeCallBack(new OnIconChangeCallBack<BottomMenu>(true) {
                                         @Override
                                         public int getIcon(BottomMenu bottomMenu, int index, String menuText) {
                                             switch (menuText) {

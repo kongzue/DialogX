@@ -71,7 +71,7 @@ public class BottomMenu extends BottomDialog {
         }
     }
     
-    private OnIconChangeCallBack onIconChangeCallBack;
+    private OnIconChangeCallBack<BottomMenu> onIconChangeCallBack;
     private BottomDialogListView listView;
     private BaseAdapter menuListAdapter;
     private List<CharSequence> menuList;
@@ -670,11 +670,11 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
     
-    public OnIconChangeCallBack getOnIconChangeCallBack() {
+    public OnIconChangeCallBack<BottomMenu> getOnIconChangeCallBack() {
         return onIconChangeCallBack;
     }
     
-    public BottomMenu setOnIconChangeCallBack(OnIconChangeCallBack onIconChangeCallBack) {
+    public BottomMenu setOnIconChangeCallBack(OnIconChangeCallBack<BottomMenu> onIconChangeCallBack) {
         this.onIconChangeCallBack = onIconChangeCallBack;
         return this;
     }
