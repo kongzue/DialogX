@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="MaxRelativeLayout">
+    <declare-styleable name="DialogXMaxLayout">
         <attr name="maxLayoutWidth" format="dimension"/>
         <attr name="maxLayoutHeight" format="dimension"/>
+        <attr name="minLayoutWidth" format="dimension"/>
+        <attr name="minLayoutHeight" format="dimension"/>
         <attr name="lockWidth" format="boolean"/>
         <attr name="interceptTouch" format="boolean"/>
     </declare-styleable>

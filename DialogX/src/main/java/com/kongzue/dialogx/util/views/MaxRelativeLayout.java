@@ -51,16 +51,18 @@ public class MaxRelativeLayout extends RelativeLayout {
     
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MaxRelativeLayout);
-            maxWidth = a.getDimensionPixelSize(R.styleable.MaxRelativeLayout_maxLayoutWidth, 0);
-            maxHeight = a.getDimensionPixelSize(R.styleable.MaxRelativeLayout_maxLayoutHeight, 0);
-            lockWidth = a.getBoolean(R.styleable.MaxRelativeLayout_lockWidth, false);
-            interceptTouch = a.getBoolean(R.styleable.MaxRelativeLayout_interceptTouch, true);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DialogXMaxLayout);
+            maxWidth = a.getDimensionPixelSize(R.styleable.DialogXMaxLayout_maxLayoutWidth, 0);
+            maxHeight = a.getDimensionPixelSize(R.styleable.DialogXMaxLayout_maxLayoutHeight, 0);
+            minWidth = a.getDimensionPixelSize(R.styleable.DialogXMaxLayout_minLayoutWidth, 0);
+            minHeight = a.getDimensionPixelSize(R.styleable.DialogXMaxLayout_minLayoutHeight, 0);
+            lockWidth = a.getBoolean(R.styleable.DialogXMaxLayout_lockWidth, false);
+            interceptTouch = a.getBoolean(R.styleable.DialogXMaxLayout_interceptTouch, true);
             
             a.recycle();
         }
-        minWidth = getMinimumWidth();
-        minHeight = getMinimumHeight();
+        minWidth = minWidth == 0 ? getMinimumWidth() : minWidth;
+        minHeight = minHeight == 0 ? getMinimumHeight() : minHeight;
         
         if (!isInEditMode()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

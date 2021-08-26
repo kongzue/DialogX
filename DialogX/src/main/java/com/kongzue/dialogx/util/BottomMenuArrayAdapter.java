@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.util;
 
+import static com.kongzue.dialogx.interfaces.BaseDialog.isNull;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
@@ -74,8 +76,7 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                 if (resourceId == 0) {
                     resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
                 } else {
-                    if (bottomMenu.getDialogImpl().txtDialogTitle.getVisibility() == View.VISIBLE ||
-                            bottomMenu.getDialogImpl().txtDialogTip.getVisibility() == View.VISIBLE ||
+                    if (!isNull(bottomMenu.getTitle()) || !isNull(bottomMenu.getMessage()) ||
                             bottomMenu.getCustomView() != null) {
                         if (position == 0) {
                             resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), position, getCount(), true);
@@ -137,19 +138,10 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
             overrideSelectionBackgroundColorRes = bottomMenu.getStyle().overrideBottomDialogRes().overrideSelectionMenuBackgroundColor(bottomMenu.isLightTheme());
         }
         if (bottomMenu.getSelection() == position) {
-            
+            //选中的背景变色
             if (overrideSelectionBackgroundColorRes != 0) {
                 convertView.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(overrideSelectionBackgroundColorRes)));
-                final View finalRootView = convertView;
-                convertView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        finalRootView.setPressed(true);
-                    }
-                });
             }
-        } else {
-            convertView.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.empty)));
         }
         CharSequence text = objects.get(position);
         

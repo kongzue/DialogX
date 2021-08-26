@@ -12,11 +12,15 @@
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_fullscreen_dark.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_material.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_popmenu_material.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_popmenu_material_dark.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_poptip_material.xml" value="0.4101851851851852" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_poptip_material_dark.xml" value="0.4101851851851852" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_blue.xml" value="0.5487179487179488" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_center_light.xml" value="0.5487179487179488" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_center_night.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/editbox_dialogx_miui_light.xml" value="0.47129629629629627" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/scrollbar_dialogx_vertical.xml" value="0.5487179487179488" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_center_dark.xml" value="0.5212962962962963" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/drawable/ios_edit_box_bkg.xml" value="0.425" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/drawable/rect_ios_edit_box_bkg_focus.xml" value="0.425" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/activity_app_compat_test.xml" value="0.5328205128205128" />

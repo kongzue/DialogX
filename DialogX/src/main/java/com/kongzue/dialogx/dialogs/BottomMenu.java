@@ -533,7 +533,6 @@ public class BottomMenu extends BottomDialog {
                                     } else {
                                         selectionIndex = position;
                                         menuListAdapter.notifyDataSetInvalidated();
-                                        menuListAdapter.notifyDataSetChanged();
                                         onMenuItemSelectListener.onOneItemSelect(me, menuList.get(position), position, true);
                                     }
                                 } else {
@@ -558,7 +557,6 @@ public class BottomMenu extends BottomDialog {
                                             selectionItems.add(position);
                                         }
                                         menuListAdapter.notifyDataSetInvalidated();
-                                        menuListAdapter.notifyDataSetChanged();
                                         int[] resultArray = new int[selectionItems.size()];
                                         CharSequence[] selectTextArray = new CharSequence[selectionItems.size()];
                                         for (int i = 0; i < selectionItems.size(); i++) {
@@ -591,6 +589,27 @@ public class BottomMenu extends BottomDialog {
             dialog.boxList.addView(listView, listViewLp);
             
             refreshUI();
+            
+            //部分主题下选中项默认按下效果
+            listView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (menuListAdapter instanceof BottomMenuArrayAdapter) {
+                        BottomMenuArrayAdapter bottomMenuArrayAdapter = ((BottomMenuArrayAdapter) menuListAdapter);
+                        
+                        View selectItemView = listView.getChildAt(getSelection());
+                        if (selectItemView != null) {
+                            selectItemView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    selectItemView.setPressed(true);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+            
         }
     }
     

@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -52,11 +54,13 @@ import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
+import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogxdemo.BuildConfig;
 import com.kongzue.dialogxdemo.R;
 import com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleViewAdapter;
@@ -71,6 +75,7 @@ import java.util.List;
 @NavigationBarBackgroundColorRes(R.color.emptyNavBar)
 public class MainActivity extends BaseActivity {
     
+    private DialogXBaseRelativeLayout boxRoot;
     private RelativeLayout boxTable;
     private LinearLayout boxTableChild;
     private LinearLayout btnBack;
@@ -117,9 +122,11 @@ public class MainActivity extends BaseActivity {
     private TextView btnContextMenu;
     private TextView btnSelectMenu;
     private TextView btnShowBreak;
+    private TextView txtVer;
     
     @Override
     public void initViews() {
+        boxRoot = findViewById(R.id.box_root);
         boxTable = findViewById(R.id.box_table);
         boxTableChild = findViewById(R.id.box_table_child);
         btnBack = findViewById(R.id.btn_back);
@@ -166,6 +173,7 @@ public class MainActivity extends BaseActivity {
         btnContextMenu = findViewById(R.id.btn_contextMenu);
         btnSelectMenu = findViewById(R.id.btn_selectMenu);
         btnShowBreak = findViewById(R.id.btn_showBreak);
+        txtVer = findViewById(R.id.txt_ver);
     }
     
     @Override
@@ -212,7 +220,7 @@ public class MainActivity extends BaseActivity {
                 break;
         }
         
-        txtTitle.setText("Kongzue DialogX (" + BuildConfig.VERSION_NAME + ")");
+        txtVer.setText("当前版本：" + BuildConfig.VERSION_NAME);
     }
     
     //用于模拟进度提示
@@ -299,13 +307,20 @@ public class MainActivity extends BaseActivity {
             }
         });
         
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUrl("https://github.com/kongzue/DialogX");
+            }
+        });
+        
         btnContextMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"}).setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>() {
+                PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"}).setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(true) {
                     @Override
                     public int getIcon(PopMenu dialog, int index, String menuText) {
-                        switch (index){
+                        switch (index) {
                             case 0:
                                 return R.mipmap.img_dialogx_demo_add;
                             case 1:
@@ -325,13 +340,15 @@ public class MainActivity extends BaseActivity {
         btnSelectMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopMenu.show(v, new String[]{"选项1", "选项2", "选项3"}).setOverlayBaseView(true).setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
-                    @Override
-                    public boolean onClick(PopMenu dialog, CharSequence text, int index) {
-                        btnSelectMenu.setText(text);
-                        return false;
-                    }
-                });
+                PopMenu.show(v, new String[]{"选项1", "选项2", "选项3"})
+                        .setOverlayBaseView(true)
+                        .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
+                            @Override
+                            public boolean onClick(PopMenu dialog, CharSequence text, int index) {
+                                btnSelectMenu.setText(text);
+                                return false;
+                            }
+                        });
             }
         });
         
@@ -514,8 +531,8 @@ public class MainActivity extends BaseActivity {
                         new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
-                                if (dialog.getDialogImpl().imgTab!=null){
-                                    ((ViewGroup)dialog.getDialogImpl().imgTab.getParent()).removeView(dialog.getDialogImpl().imgTab);
+                                if (dialog.getDialogImpl().imgTab != null) {
+                                    ((ViewGroup) dialog.getDialogImpl().imgTab.getParent()).removeView(dialog.getDialogImpl().imgTab);
                                 }
                                 v.setOnClickListener(new View.OnClickListener() {
                                     @Override
