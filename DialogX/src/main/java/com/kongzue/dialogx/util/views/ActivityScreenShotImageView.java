@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -65,7 +66,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         if (width >= mRadius && height > mRadius) {
-            if (isScreenshotSuccess){
+            if (isScreenshotSuccess) {
                 canvas.drawColor(Color.BLACK);
             }
             Path path = new Path();
@@ -88,11 +89,17 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
         }
     }
     
+//    @Override
+//    protected void onAttachedToWindow() {
+//        super.onAttachedToWindow();
+//        refreshImage();
+//    }
+    
+    
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        
-        if (isAttachedToWindow()) refreshImage();
+        if (isAttachedToWindow() && !isScreenshotSuccess) refreshImage();
     }
     
     private int screenWidth, screenHeight;
@@ -107,7 +114,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     
     private void doScreenshotActivityAndZoom() {
         if (BaseDialog.getRootFrameLayout() == null) return;
-        final View view = BaseDialog.getRootFrameLayout().getChildAt(0);
+        final View view = BaseDialog.getRootFrameLayout();
         //先执行一次绘制，防止出现闪屏问题
         if (!inited) drawViewImage(view);
         view.post(new Runnable() {
@@ -127,10 +134,10 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
         view.destroyDrawingCache();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-        Bitmap bmp = view.getDrawingCache();
-        if (bmp!=null){
-            isScreenshotSuccess=true;
+        Bitmap screenshot = view.getDrawingCache();
+        if (screenshot != null) {
+            isScreenshotSuccess = true;
         }
-        setImageBitmap(bmp);
+        setImageBitmap(screenshot);
     }
 }

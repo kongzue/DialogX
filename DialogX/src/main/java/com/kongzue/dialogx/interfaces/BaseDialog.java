@@ -108,7 +108,7 @@ public abstract class BaseDialog {
         }
     }
     
-    public abstract void onUIModeChange(Configuration newConfig);
+    public abstract void restartDialog();
     
     protected static void show(final View view) {
         if (view == null) return;

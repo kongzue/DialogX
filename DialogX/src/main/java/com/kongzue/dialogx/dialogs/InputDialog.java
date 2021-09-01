@@ -533,9 +533,10 @@ public class InputDialog extends MessageDialog {
     }
     
     @Override
-    public void onUIModeChange(Configuration newConfig) {
+    public void restartDialog() {
         if (dialogView != null) {
             dismiss(dialogView);
+            isShow = false;
         }
         if (getDialogImpl().boxCustom!=null){
             getDialogImpl().boxCustom.removeAllViews();

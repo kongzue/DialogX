@@ -805,7 +805,7 @@ public class WaitDialog extends BaseDialog {
     }
     
     @Override
-    public void onUIModeChange(Configuration newConfig) {
+    public void restartDialog() {
         refreshUI();
     }
     

@@ -144,6 +144,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onShow();
         }
+        isLightMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
     }
     
     private ViewTreeObserver.OnGlobalLayoutListener decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -255,10 +256,15 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         return this;
     }
     
+    boolean isLightMode = true;
+    
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        getParentDialog().onUIModeChange(newConfig);
+        boolean newLightStatus = ((newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO);
+        if (isLightMode != newLightStatus && DialogX.globalTheme == DialogX.THEME.AUTO) {
+            getParentDialog().restartDialog();
+        }
     }
     
     public DialogXBaseRelativeLayout setBkgAlpha(float alpha) {
