@@ -142,7 +142,7 @@ allprojects {
 
 ```
 def dialogx_version = "0.0.43"
-implementation 'com.github.kongzue.DialogX:DialogX:${dialogx_version}'
+implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 ```
 
 #### 方式二：Gradle 引入 jCenter 源
