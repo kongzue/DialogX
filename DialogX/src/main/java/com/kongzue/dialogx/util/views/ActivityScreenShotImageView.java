@@ -114,7 +114,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     
     private void doScreenshotActivityAndZoom() {
         if (BaseDialog.getRootFrameLayout() == null) return;
-        final View view = BaseDialog.getRootFrameLayout();
+        final View view = BaseDialog.getRootFrameLayout().getChildAt(0);
         //先执行一次绘制，防止出现闪屏问题
         if (!inited) drawViewImage(view);
         view.post(new Runnable() {
