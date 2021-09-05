@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable-v21/button_dialogx_material_light.xml" value="0.3484375" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable-v21/button_dialogx_material_night.xml" value="0.3484375" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/button_dialogx_material_light.xml" value="0.3484375" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/button_dialogx_material_night.xml" value="0.3484375" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/rect_dialogx_low_api_material_button_press.xml" value="0.3484375" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/rect_dialogx_low_api_material_button_press_dark.xml" value="0.3484375" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/rect_dialogx_material_bkg_light.xml" value="0.4787037037037037" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/item_dialogx_material_bottom_menu_normal_text.xml" value="0.5328205128205128" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/item_dialogx_material_context_menu_normal_text.xml" value="0.5411458333333333" />
@@ -15,12 +21,32 @@
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_popmenu_material_dark.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_poptip_material.xml" value="0.4101851851851852" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_poptip_material_dark.xml" value="0.4101851851851852" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXIOSStyle/src/main/res/drawable/button_dialogx_ios_left_light.xml" value="0.3484375" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXIOSStyle/src/main/res/layout/item_dialogx_ios_bottom_menu_top_dark.xml" value="0.33229166666666665" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_blue.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_center_light.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_center_night.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/editbox_dialogx_miui_light.xml" value="0.47129629629629627" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_button_gray_normal_night.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_button_gray_press.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_button_gray_press_night.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_button_top_gray_press.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_button_top_gray_press_night.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_button_top_light.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_editbox_focus.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_editbox_focus_night.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_editbox_normal.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/rect_dialogx_miui_editbox_normal_night.xml" value="0.5572916666666666" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/scrollbar_dialogx_vertical.xml" value="0.5487179487179488" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/scrollbar_dialogx_vertical_dark.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_bottom_dark.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_bottom_light.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_center_dark.xml" value="0.5212962962962963" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_center_light.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_top_dark.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_top_light.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/layout_dialogx_miui.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/layout_dialogx_miui_dark.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/drawable/ios_edit_box_bkg.xml" value="0.425" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/drawable/rect_ios_edit_box_bkg_focus.xml" value="0.425" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/activity_app_compat_test.xml" value="0.5328205128205128" />
@@ -36,6 +62,8 @@
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/layout_custom_view.xml" value="0.5328205128205128" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/layout_full_login.xml" value="0.3824074074074074" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/layout/layout_full_webview.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.5572916666666666" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.5572916666666666" />
       </map>
     </option>
   </component>

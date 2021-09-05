@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,9 +80,10 @@ public class PopMenuArrayAdapter extends BaseAdapter {
             if (resId != 0) {
                 viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
                 viewHolder.imgDialogxMenuIcon.setImageResource(resId);
-            
-                if (autoTintIconInLightOrDarkMode) {
-                    viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (autoTintIconInLightOrDarkMode) {
+                        viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                    }
                 }
             } else {
                 viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);

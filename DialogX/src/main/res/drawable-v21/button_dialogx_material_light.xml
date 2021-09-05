@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="@color/black10">
+
+    <item android:drawable="@drawable/rect_dialogx_material_button_light_forword"/>
+</ripple>

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -551,10 +552,12 @@ public class PopTip extends BaseDialog {
             if (iconResId != 0) {
                 imgDialogxPopIcon.setVisibility(View.VISIBLE);
                 imgDialogxPopIcon.setImageResource(iconResId);
-                if (autoTintIconInLightOrDarkMode) {
-                    imgDialogxPopIcon.setImageTintList(txtDialogxPopText.getTextColors());
-                } else {
-                    imgDialogxPopIcon.setImageTintList(null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (autoTintIconInLightOrDarkMode) {
+                        imgDialogxPopIcon.setImageTintList(txtDialogxPopText.getTextColors());
+                    } else {
+                        imgDialogxPopIcon.setImageTintList(null);
+                    }
                 }
             } else {
                 imgDialogxPopIcon.setVisibility(View.GONE);

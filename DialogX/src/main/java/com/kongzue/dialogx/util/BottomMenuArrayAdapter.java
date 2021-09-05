@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -158,11 +159,13 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
             if (DialogX.menuTextInfo != null) {
                 useTextInfo(viewHolder.txtDialogxMenuText, DialogX.menuTextInfo);
             }
-            if (viewHolder.imgDialogxMenuSelection != null) {
-                if (bottomMenu.getStyle().overrideBottomDialogRes() != null && bottomMenu.getStyle().overrideBottomDialogRes().selectionImageTint(bottomMenu.isLightTheme())) {
-                    viewHolder.imgDialogxMenuSelection.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
-                } else {
-                    viewHolder.imgDialogxMenuSelection.setImageTintList(null);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (viewHolder.imgDialogxMenuSelection != null) {
+                    if (bottomMenu.getStyle().overrideBottomDialogRes() != null && bottomMenu.getStyle().overrideBottomDialogRes().selectionImageTint(bottomMenu.isLightTheme())) {
+                        viewHolder.imgDialogxMenuSelection.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                    } else {
+                        viewHolder.imgDialogxMenuSelection.setImageTintList(null);
+                    }
                 }
             }
             
@@ -173,9 +176,10 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                 if (resId != 0) {
                     viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
                     viewHolder.imgDialogxMenuIcon.setImageResource(resId);
-                    
-                    if (autoTintIconInLightOrDarkMode) {
-                        viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (autoTintIconInLightOrDarkMode) {
+                            viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                        }
                     }
                 } else {
                     viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);

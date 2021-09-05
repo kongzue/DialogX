@@ -4,6 +4,7 @@ import static android.view.View.OVER_SCROLL_NEVER;
 
 import android.animation.ValueAnimator;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -389,7 +390,9 @@ public class PopMenu extends BaseDialog {
                         rLp.leftMargin = dip2px(50);
                         rLp.rightMargin = dip2px(50);
                         boxBody.setAlpha(0f);
-                        boxBody.setElevation(dip2px(20));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            boxBody.setElevation(dip2px(20));
+                        }
                         boxBody.setVisibility(View.VISIBLE);
                         boxBody.animate().alpha(1f).setDuration(enterAnimDurationTemp);
                         
