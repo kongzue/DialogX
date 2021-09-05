@@ -10,7 +10,7 @@ android {
         versionCode BUILD_VERSION_INT as int
         versionName BUILD_VERSION
 
-        renderscriptTargetApi 21
+        renderscriptTargetApi 19
         renderscriptSupportModeEnabled true    // Enable RS support
     }
 
