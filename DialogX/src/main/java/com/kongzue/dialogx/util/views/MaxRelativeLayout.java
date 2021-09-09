@@ -190,6 +190,26 @@ public class MaxRelativeLayout extends RelativeLayout {
     
     private OnYChanged onYChangedListener;
     
+    int navBarHeight;
+    Paint navBarPaint;
+    
+    public void setNavBarHeight(int height) {
+        navBarHeight = height;
+        invalidate();
+    }
+    
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (navBarHeight != 0 && DialogX.bottomDialogNavbarColor != 0) {
+            if (navBarPaint == null) {
+                navBarPaint = new Paint();
+                navBarPaint.setColor(DialogX.bottomDialogNavbarColor);
+            }
+            canvas.drawRect(0, getHeight() - navBarHeight, getWidth(), getHeight(), navBarPaint);
+        }
+    }
+    
     public interface OnYChanged {
         void y(float y);
     }

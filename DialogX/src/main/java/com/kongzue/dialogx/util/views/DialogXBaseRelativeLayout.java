@@ -215,22 +215,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
             LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
             if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
-                if (!DialogX.noTranslation_for_a_man_custom) {
-                    bkgView.setPadding(0, 0, 0, bottom);
-                } else {
-                    View boxBkg = findViewById(R.id.box_bkg);
-                    BottomDialogScrollView scrollView = findViewById(R.id.scrollView);
-                    if (!scrollView.isCanScroll()){
-                        if (boxBkg.getPaddingBottom() == 0) {
-                            boxBkg.setPadding(0, 0, 0, bottom);
-                        } else {
-                            bkgView.setPadding(0, 0, 0, bottom);
-                        }
-                    }else{
-                        boxBkg.setPadding(0, 0, 0, 0);
-                        bkgView.setPadding(0, 0, 0, bottom);
-                    }
-                }
+                bkgView.setPadding(0, 0, 0, bottom);
+                bkgView.setNavBarHeight(bottom);
                 setPadding(left, top, right, 0);
                 return;
             }

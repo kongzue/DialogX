@@ -1,6 +1,7 @@
 package com.kongzue.dialogx;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.kongzue.dialogx.interfaces.BaseDialog;
@@ -118,10 +119,10 @@ public class DialogX {
     public static boolean useActivityLayoutTranslationNavigationBar = false;
     
     /**
-     * 新增属性 `DialogX.noTranslation_for_a_man_custom` 在不适用沉浸式的情况下开启此选项，BottomDialog 的导航栏部分将不会沉浸式（对话框内容布局不会叠加在导航栏下）
+     * 设置 BottomDialog 导航栏背景颜色
      * 彩蛋：a_man 私人定制款属性
      */
-    public static boolean noTranslation_for_a_man_custom = true;
+    public static int bottomDialogNavbarColor = Color.TRANSPARENT;
     
     public enum THEME {
         LIGHT, DARK, AUTO
