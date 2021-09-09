@@ -3,6 +3,9 @@ package com.kongzue.dialogx.util.views;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.view.ViewParent;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 
 import static android.view.View.MeasureSpec.EXACTLY;
@@ -107,10 +111,10 @@ public class MaxRelativeLayout extends RelativeLayout {
             maxWidth = Math.min(maxWidth, Math.min(widthSize, preWidth));
         }
         if (maxHeight > 0) {
-            heightSize = Math.min(heightSize, maxHeight);
+            heightSize = Math.max(heightSize, maxHeight);
         }
         if (maxWidth > 0) {
-            widthSize = Math.min(widthSize, maxWidth);
+            widthSize = Math.max(widthSize, maxWidth);
         }
         View blurView = findViewWithTag("blurView");
         View contentView = findViewWithoutTag("blurView");

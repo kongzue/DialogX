@@ -43,11 +43,6 @@ public class MaxLinearLayout extends LinearLayout {
         init(context, attrs);
     }
     
-    public MaxLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context, attrs);
-    }
-    
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DialogXMaxLayout);
@@ -86,10 +81,10 @@ public class MaxLinearLayout extends LinearLayout {
             preWidth = widthSize;
         }
         if (maxHeight > 0) {
-            heightSize = Math.min(heightSize, maxHeight);
+            heightSize = Math.max(heightSize, maxHeight);
         }
         if (maxWidth > 0) {
-            widthSize = Math.min(widthSize, maxWidth);
+            widthSize = Math.max(widthSize, maxWidth);
         }
         View blurView = findViewWithTag("blurView");
         View contentView = findViewWithoutTag("blurView");
