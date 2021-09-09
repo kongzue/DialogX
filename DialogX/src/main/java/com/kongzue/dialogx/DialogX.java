@@ -118,7 +118,7 @@ public class DialogX {
     public static boolean useActivityLayoutTranslationNavigationBar = false;
     
     /**
-     * 不适用沉浸式的情况下请开启此选项，导航栏部分将显示为黑色背景
+     * 新增属性 `DialogX.noTranslation_for_a_man_custom` 在不适用沉浸式的情况下开启此选项，BottomDialog 的导航栏部分将不会沉浸式（对话框内容布局不会叠加在导航栏下）
      * 彩蛋：a_man 私人定制款属性
      */
     public static boolean noTranslation_for_a_man_custom = true;
