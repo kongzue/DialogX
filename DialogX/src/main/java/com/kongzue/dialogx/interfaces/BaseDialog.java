@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -39,6 +40,7 @@ import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -255,7 +257,7 @@ public abstract class BaseDialog {
     }
     
     private static void addDialogToRunningList(BaseDialog baseDialog) {
-        if (runningDialogList == null) runningDialogList = new ArrayList<>();
+        if (runningDialogList == null) runningDialogList = new CopyOnWriteArrayList<>();
         runningDialogList.add(baseDialog);
     }
     
@@ -412,7 +414,9 @@ public abstract class BaseDialog {
     }
     
     public void tintColor(View view, int color) {
-        view.setBackgroundTintList(ColorStateList.valueOf(color));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view.setBackgroundTintList(ColorStateList.valueOf(color));
+        }
     }
     
     protected void beforeShow() {
