@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util;
 
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -130,6 +131,9 @@ public class BottomDialogTouchEventInterceptor {
                 }
             });
         } else {
+            if (impl.scrollView instanceof ScrollController) {
+                ((ScrollController) impl.scrollView).lockScroll(false);
+            }
             impl.bkg.setOnTouchListener(null);
         }
     }

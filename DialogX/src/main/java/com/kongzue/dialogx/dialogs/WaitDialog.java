@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Handler;
@@ -198,18 +199,20 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog show() {
         super.beforeShow();
-        int layoutResId = R.layout.layout_dialogx_wait;
-        if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
-            layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
-        }
-        dialogImpl = new WeakReference<>(new DialogImpl(layoutResId));
         runOnMain(new Runnable() {
             @Override
             public void run() {
+                int layoutResId = R.layout.layout_dialogx_wait;
+                if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
+                    layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
+                }
+                dialogImpl = new WeakReference<>(new DialogImpl(layoutResId));
                 if (getDialogImpl() != null) {
                     getDialogImpl().lazyCreate();
-                    if (getWaitDialogView() != null) getWaitDialogView().setTag(me.get());
-                    show(getWaitDialogView());
+                    if (getWaitDialogView() != null) {
+                        getWaitDialogView().setTag(me.get());
+                        show(getWaitDialogView());
+                    }
                 }
             }
         });
@@ -218,18 +221,20 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog show(final Activity activity) {
         super.beforeShow();
-        int layoutResId = R.layout.layout_dialogx_wait;
-        if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
-            layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
-        }
-        dialogImpl = new WeakReference<>(new DialogImpl(layoutResId));
         runOnMain(new Runnable() {
             @Override
             public void run() {
+                int layoutResId = R.layout.layout_dialogx_wait;
+                if (style.overrideWaitTipRes() != null && style.overrideWaitTipRes().overrideWaitLayout(isLightTheme()) != 0) {
+                    layoutResId = style.overrideWaitTipRes().overrideWaitLayout(isLightTheme());
+                }
+                dialogImpl = new WeakReference<>(new DialogImpl(layoutResId));
                 if (getDialogImpl() != null) {
                     getDialogImpl().lazyCreate();
-                    if (getWaitDialogView() != null) getWaitDialogView().setTag(me.get());
-                    show(activity, getWaitDialogView());
+                    if (getWaitDialogView() != null) {
+                        getWaitDialogView().setTag(me.get());
+                        show(activity, getWaitDialogView());
+                    }
                 }
             }
         });
@@ -254,8 +259,9 @@ public class WaitDialog extends BaseDialog {
         }
         
         public void lazyCreate() {
-            View dialogView;
-            setWaitDialogView(dialogView = createView(layoutResId));
+            View dialogView = createView(layoutResId);
+            if (dialogView == null) return;
+            setWaitDialogView(dialogView);
             boxRoot = dialogView.findViewById(R.id.box_root);
             bkg = dialogView.findViewById(R.id.bkg);
             blurView = dialogView.findViewById(R.id.blurView);
@@ -330,7 +336,7 @@ public class WaitDialog extends BaseDialog {
                             }
                             enterAnim.setDuration(enterAnimDurationTemp);
                             bkg.startAnimation(enterAnim);
-    
+                            
                             ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
                             bkgAlpha.setDuration(enterAnimDurationTemp);
                             bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -454,6 +460,10 @@ public class WaitDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
+                    Context context = getContext();
+                    if (context == null) context = boxRoot.getContext();
+                    if (context == null) return;
+                    
                     if (v != null) v.setEnabled(false);
                     
                     int exitAnimResId = R.anim.anim_dialogx_default_exit;
@@ -463,7 +473,7 @@ public class WaitDialog extends BaseDialog {
                     if (customExitAnimResId != 0) {
                         exitAnimResId = customExitAnimResId;
                     }
-                    Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+                    Animation exitAnim = AnimationUtils.loadAnimation(context, exitAnimResId);
                     long exitAnimDurationTemp = exitAnim.getDuration();
                     if (overrideExitDuration >= 0) {
                         exitAnimDurationTemp = overrideExitDuration;
@@ -479,7 +489,7 @@ public class WaitDialog extends BaseDialog {
                             .alpha(0f)
                             .setInterpolator(new AccelerateInterpolator())
                             .setDuration(exitAnimDurationTemp);
-    
+                    
                     ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
                     bkgAlpha.setDuration(exitAnimDurationTemp);
                     bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
