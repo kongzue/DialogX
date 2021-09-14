@@ -110,6 +110,12 @@ public abstract class BaseDialog {
         }
     }
     
+    private static void requestDialogFocus(){
+        if (getContext() instanceof  Activity) {
+            onActivityResume((Activity) getContext());
+        }
+    }
+    
     public abstract void restartDialog();
     
     protected static void show(final View view) {
@@ -250,6 +256,7 @@ public abstract class BaseDialog {
                         } else {
                             ((ViewGroup) dialogView.getParent()).removeView(dialogView);
                         }
+                        requestDialogFocus();
                     }
                 });
                 break;
