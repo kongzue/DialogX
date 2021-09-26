@@ -180,6 +180,16 @@ implementation(name: 'AAR文件名', ext: 'aar')
 
 具体的使用说明，请参阅 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
 
+### 🧩 扩展包
+
+目前 DialogX 依然仅提供最基础的对话框实现，不提供进阶的功能模块，这是为了避免是您的应用变得臃肿。
+
+但为了保证一些常用功能，例如 地址选择、日期选择以及“分享到”对话框等较为通用且常见的功能更为简单的能够使用，我们提供了扩展包以满足这些需求。
+
+扩展包中，各个模块是单独引入的，您无需担心引入不必要的功能和资源。
+
+扩展包目前尚处于初步开发阶段，要预览或提出你的建议，请访问：[DialogXSample](https://github.com/kongzue/DialogXSample)
+
 ### ℹ️使用过程遇到问题？
 
 查看 [常见问题](https://github.com/kongzue/DialogX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
