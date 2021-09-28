@@ -15,6 +15,12 @@ import java.lang.ref.WeakReference;
  */
 public class TipDialog extends WaitDialog {
     
+    /**
+     * 参数 duration 使用此值，或小于 0 的任意整数时，
+     * TipDialog 将不自动关闭
+     */
+    public static final int NO_AUTO_DISMISS = -1;
+    
     protected TipDialog() {
         super();
     }

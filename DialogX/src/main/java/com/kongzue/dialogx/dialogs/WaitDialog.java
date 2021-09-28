@@ -541,14 +541,16 @@ public class WaitDialog extends BaseDialog {
                         public void run() {
                             getDialogLifecycleCallback().onShow(WaitDialog.this);
                             refreshView();
-                            ((View) progressView).postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (showType > -1) {
-                                        doDismiss(null);
+                            if (tipShowDuration > 0) {
+                                ((View) progressView).postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (showType > -1) {
+                                            doDismiss(null);
+                                        }
                                     }
-                                }
-                            }, tipShowDuration);
+                                }, tipShowDuration);
+                            }
                         }
                     });
                 }
