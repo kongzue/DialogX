@@ -1085,4 +1085,10 @@ public class BottomMenu extends BottomDialog {
     protected void shutdown() {
         dismiss();
     }
+    
+    public BottomMenu setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
+    }
 }

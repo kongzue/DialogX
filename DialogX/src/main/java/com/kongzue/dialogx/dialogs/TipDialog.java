@@ -153,4 +153,10 @@ public class TipDialog extends WaitDialog {
             me().showTip(me().readyTipType);
         }
     }
+    
+    public TipDialog setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
+    }
 }

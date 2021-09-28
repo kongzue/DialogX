@@ -100,7 +100,7 @@ public abstract class BaseDialog {
                 if (baseDialog.getActivity() == activity && baseDialog.isShow && baseDialog.getDialogView() != null) {
                     View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
                     if (boxRoot instanceof DialogXBaseRelativeLayout) {
-                        if (((DialogXBaseRelativeLayout)boxRoot).isBaseFocusable()) {
+                        if (((DialogXBaseRelativeLayout) boxRoot).isBaseFocusable()) {
                             boxRoot.requestFocus();
                             return;
                         }
@@ -110,8 +110,8 @@ public abstract class BaseDialog {
         }
     }
     
-    private static void requestDialogFocus(){
-        if (getContext() instanceof  Activity) {
+    private static void requestDialogFocus() {
+        if (getContext() instanceof Activity) {
             onActivityResume((Activity) getContext());
         }
     }
@@ -305,6 +305,7 @@ public abstract class BaseDialog {
     protected int backgroundColor = -1;
     protected long enterAnimDuration = -1;
     protected long exitAnimDuration = -1;
+    protected int maxWidth;
     
     public BaseDialog() {
         cancelable = DialogX.cancelable;
@@ -555,5 +556,10 @@ public abstract class BaseDialog {
         } else {
             imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
         }
+    }
+    
+    public int getMaxWidth() {
+        if (maxWidth == 0) return DialogX.dialogMaxWidth;
+        return maxWidth;
     }
 }

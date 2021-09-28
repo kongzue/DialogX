@@ -568,4 +568,10 @@ public class InputDialog extends MessageDialog {
         customExitAnimResId = exitResId;
         return this;
     }
+    
+    public InputDialog setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
+    }
 }

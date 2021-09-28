@@ -244,6 +244,8 @@ public class FullScreenDialog extends BaseDialog {
                 tintColor(bkg, backgroundColor);
             }
             
+            bkg.setMaxWidth(getMaxWidth());
+            
             if (isCancelable()) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -485,5 +487,11 @@ public class FullScreenDialog extends BaseDialog {
     @Override
     protected void shutdown() {
         dismiss();
+    }
+    
+    public FullScreenDialog setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
     }
 }

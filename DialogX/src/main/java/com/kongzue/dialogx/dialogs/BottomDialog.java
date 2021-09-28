@@ -296,7 +296,7 @@ public class BottomDialog extends BaseDialog {
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
             
-            bkg.setMaxWidth(DialogX.dialogMaxWidth);
+            bkg.setMaxWidth(getMaxWidth());
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
@@ -1011,6 +1011,12 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setBottomDialogMaxHeight(float bottomDialogMaxHeight) {
         this.bottomDialogMaxHeight = bottomDialogMaxHeight;
+        return this;
+    }
+    
+    public BottomDialog setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        refreshUI();
         return this;
     }
 }

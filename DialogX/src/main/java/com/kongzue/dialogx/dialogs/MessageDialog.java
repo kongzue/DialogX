@@ -471,7 +471,7 @@ public class MessageDialog extends BaseDialog {
                 }
             }
             
-            bkg.setMaxWidth(DialogX.dialogMaxWidth);
+            bkg.setMaxWidth(getMaxWidth());
             if (me instanceof InputDialog) {
                 txtInput.setVisibility(View.VISIBLE);
             } else {
@@ -1095,5 +1095,11 @@ public class MessageDialog extends BaseDialog {
     @Override
     protected void shutdown() {
         dismiss();
+    }
+    
+    public MessageDialog setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
     }
 }

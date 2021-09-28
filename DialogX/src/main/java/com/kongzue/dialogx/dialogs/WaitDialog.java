@@ -404,6 +404,9 @@ public class WaitDialog extends BaseDialog {
         public void refreshView() {
             if (bkg == null) return;
             if (getContext() == null) return;
+            
+            bkg.setMaxWidth(getMaxWidth());
+            
             if (style.overrideWaitTipRes() != null) {
                 int overrideBackgroundColorRes = style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme());
                 if (overrideBackgroundColorRes == 0) {
@@ -912,5 +915,11 @@ public class WaitDialog extends BaseDialog {
     @Override
     protected void shutdown() {
         dismiss();
+    }
+    
+    public WaitDialog setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
     }
 }
