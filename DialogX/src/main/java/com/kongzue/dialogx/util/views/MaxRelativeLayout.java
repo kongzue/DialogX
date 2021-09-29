@@ -110,10 +110,10 @@ public class MaxRelativeLayout extends RelativeLayout {
         if (lockWidth) {
             maxWidth = Math.min(maxWidth, Math.min(widthSize, preWidth));
         }
-        if (maxHeight > 0) {
+        if (heightSize > maxHeight && maxHeight!=0) {
             heightSize = maxHeight;
         }
-        if (maxWidth > 0) {
+        if (widthSize > maxWidth && maxWidth!=0) {
             widthSize = maxWidth;
         }
         View blurView = findViewWithTag("blurView");
