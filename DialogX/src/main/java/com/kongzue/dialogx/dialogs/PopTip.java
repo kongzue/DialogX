@@ -369,8 +369,10 @@ public class PopTip extends BaseDialog {
     }
     
     protected Timer autoDismissTimer;
+    protected long autoDismissDelay;
     
     public PopTip autoDismiss(long delay) {
+        autoDismissDelay = delay;
         if (autoDismissTimer != null) {
             autoDismissTimer.cancel();
         }
@@ -383,6 +385,10 @@ public class PopTip extends BaseDialog {
             }
         }, delay);
         return this;
+    }
+    
+    public void resetAutoDismissTimer() {
+        autoDismiss(autoDismissDelay);
     }
     
     public PopTip showShort() {
@@ -505,6 +511,7 @@ public class PopTip extends BaseDialog {
                     if (enterAnimDuration != -1) {
                         enterAnim.setDuration(enterAnimDuration);
                     }
+                    enterAnim.setFillAfter(true);
                     boxBody.startAnimation(enterAnim);
                     
                     boxRoot.animate()
@@ -541,7 +548,6 @@ public class PopTip extends BaseDialog {
             } else {
                 boxCustom.setVisibility(View.GONE);
             }
-            
             
             showText(txtDialogxPopText, message);
             showText(txtDialogxButton, buttonText);
@@ -589,6 +595,7 @@ public class PopTip extends BaseDialog {
                     if (exitAnimDuration != -1) {
                         exitAnim.setDuration(exitAnimDuration);
                     }
+                    exitAnim.setFillAfter(true);
                     boxBody.startAnimation(exitAnim);
                     
                     boxRoot.animate()
@@ -599,7 +606,7 @@ public class PopTip extends BaseDialog {
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            dismiss(dialogView);
+                            waitForDismiss();
                         }
                     }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
                 }
@@ -607,41 +614,56 @@ public class PopTip extends BaseDialog {
         }
     }
     
+    protected boolean preRecycle = false;
+    
+    /**
+     * 之所以这样处理，在较为频繁的启停 PopTip 时可能存在 PopTip 关闭动画位置错误无法计算的问题
+     * 使用 preRecycle 标记记录是否需要回收，而不是立即销毁
+     * 等待所有 PopTip 处于待回收状态时一并回收可以避免此问题
+     */
+    private void waitForDismiss() {
+        preRecycle = true;
+        if (popTipList != null) {
+            for (PopTip popTip : popTipList) {
+                if (!popTip.preRecycle) {
+                    return;
+                }
+            }
+            for (PopTip popTip : popTipList) {
+                dismiss(popTip.dialogView);
+            }
+        }
+    }
+    
     private void moveUp() {
         if (getDialogImpl() != null && getDialogImpl().boxBody != null) {
-            getDialogImpl().boxBody.post(new Runnable() {
+            getDialogImpl().boxBody.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     if (getDialogImpl() == null || getDialogImpl().boxBody == null) return;
                     if (style.popTipSettings() != null) align = style.popTipSettings().align();
                     if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+                    float moveAimTop = 0;
                     switch (align) {
                         case TOP:
-                            getDialogImpl().boxBody.animate()
-                                    .y(getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() * 1.3f)
-                                    .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
-                                    .setInterpolator(new DecelerateInterpolator(2f))
-                            ;
+                            moveAimTop = getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() * 1.3f;
                             break;
                         case TOP_INSIDE:
-                            getDialogImpl().boxBody.animate()
-                                    .y(getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() - getDialogImpl().boxBody.getPaddingTop())
-                                    .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
-                                    .setInterpolator(new DecelerateInterpolator(2f))
-                            ;
+                            moveAimTop = getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() - getDialogImpl().boxBody.getPaddingTop();
                             break;
                         case CENTER:
                         case BOTTOM:
                         case BOTTOM_INSIDE:
-                            getDialogImpl().boxBody.animate()
-                                    .y(getDialogImpl().boxBody.getY() - getDialogImpl().boxBody.getHeight() * 1.3f)
-                                    .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
-                                    .setInterpolator(new DecelerateInterpolator(2f))
-                            ;
+                            moveAimTop = getDialogImpl().boxBody.getY() - getDialogImpl().boxBody.getHeight() * 1.3f;
                             break;
                     }
+                    getDialogImpl().boxBody.animate()
+                            .y(moveAimTop)
+                            .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
+                            .setInterpolator(new DecelerateInterpolator(2f))
+                    ;
                 }
-            });
+            },150);
         }
     }
     
