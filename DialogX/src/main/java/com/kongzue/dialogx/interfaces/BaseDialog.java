@@ -173,6 +173,9 @@ public abstract class BaseDialog {
     
     protected static void show(final Activity activity, final View view) {
         if (activity == null || view == null) return;
+        if (contextWeakReference == null || contextWeakReference.get() == null) {
+            initActivityContext(activity);
+        }
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
         if (baseDialog != null) {
             if (baseDialog.getDialogView() != null) {
@@ -276,7 +279,7 @@ public abstract class BaseDialog {
         if (contextWeakReference == null) {
             init(null);
             if (contextWeakReference == null) {
-                return null;
+                return ActivityLifecycleImpl.getTopActivity();
             }
             return contextWeakReference.get();
         }

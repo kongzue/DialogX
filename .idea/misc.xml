@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable-v21/btn_default_mtrl_shape.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable-v21/button_dialogx_material_light.xml" value="0.3484375" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable-v21/button_dialogx_material_night.xml" value="0.3484375" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/button_dialogx_material_light.xml" value="0.3484375" />
@@ -10,6 +11,7 @@
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/rect_dialogx_low_api_material_button_press.xml" value="0.3484375" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/rect_dialogx_low_api_material_button_press_dark.xml" value="0.3484375" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/rect_dialogx_material_bkg_light.xml" value="0.4787037037037037" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable/rect_dialogx_material_button_light_forword.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/item_dialogx_material_bottom_menu_normal_text.xml" value="0.5328205128205128" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/item_dialogx_material_context_menu_normal_text.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/layout/layout_dialogx_bottom_material.xml" value="0.36944444444444446" />

@@ -524,6 +524,10 @@ public class BottomDialog extends BaseDialog {
                     blurView.setOverlayColor(backgroundColor);
                     cancelBlurView.setOverlayColor(backgroundColor);
                 }
+    
+                tintColor(btnSelectOther, backgroundColor);
+                tintColor(btnCancel, backgroundColor);
+                tintColor(btnSelectPositive, backgroundColor);
             }
             
             showText(txtDialogTitle, title);
