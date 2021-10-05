@@ -192,6 +192,8 @@ implementation(name: 'AAR文件名', ext: 'aar')
 
 扩展包目前尚处于初步开发阶段，要预览或提出你的建议，请访问：[DialogXSample](https://github.com/kongzue/DialogXSample)
 
+[![DialogXSample](https://github.com/kongzue/DialogXSample/raw/master/img_dialogx_sample.png)](https://github.com/kongzue/DialogXSample)
+
 ### ℹ️使用过程遇到问题？
 
 查看 [常见问题](https://github.com/kongzue/DialogX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
