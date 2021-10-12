@@ -415,8 +415,6 @@ public class BottomDialog extends BaseDialog {
                 }
             });
             
-            bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
-            
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
@@ -448,6 +446,9 @@ public class BottomDialog extends BaseDialog {
                         public void onAnimationUpdate(ValueAnimator animation) {
                             float value = (float) animation.getAnimatedValue();
                             boxRoot.setBkgAlpha(value);
+                            if (value == 1f) {
+                                bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
+                            }
                         }
                     });
                     bkgAlpha.start();
@@ -524,7 +525,7 @@ public class BottomDialog extends BaseDialog {
                     blurView.setOverlayColor(backgroundColor);
                     cancelBlurView.setOverlayColor(backgroundColor);
                 }
-    
+                
                 tintColor(btnSelectOther, backgroundColor);
                 tintColor(btnCancel, backgroundColor);
                 tintColor(btnSelectPositive, backgroundColor);
@@ -574,7 +575,9 @@ public class BottomDialog extends BaseDialog {
                 if (imgTab != null) imgTab.setVisibility(View.GONE);
             }
             
-            bottomDialogTouchEventInterceptor.refresh(me, this);
+            if (bottomDialogTouchEventInterceptor != null) {
+                bottomDialogTouchEventInterceptor.refresh(me, this);
+            }
             
             if (imgSplit != null) {
                 if (txtDialogTitle.getVisibility() == View.VISIBLE || txtDialogTip.getVisibility() == View.VISIBLE) {
