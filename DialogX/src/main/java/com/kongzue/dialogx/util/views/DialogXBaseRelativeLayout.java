@@ -133,21 +133,22 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        final ViewParent parent = getParent();
-        
-        if (parent instanceof View)
-            ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
-        ViewCompat.requestApplyInsets(this);
-        
-        if (BaseDialog.getContext() == null) return;
         if (!isInEditMode()) {
+            final ViewParent parent = getParent();
+            if (parent instanceof View)
+                ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
+            ViewCompat.requestApplyInsets(this);
+    
+            if (BaseDialog.getContext() == null) return;
+            
             ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener);
+    
+    
+            if (onLifecycleCallBack != null) {
+                onLifecycleCallBack.onShow();
+            }
+            isLightMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
         }
-        
-        if (onLifecycleCallBack != null) {
-            onLifecycleCallBack.onShow();
-        }
-        isLightMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
     }
     
     private ViewTreeObserver.OnGlobalLayoutListener decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {

@@ -66,6 +66,7 @@ import com.kongzue.dialogxdemo.BuildConfig;
 import com.kongzue.dialogxdemo.R;
 import com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleViewAdapter;
 import com.kongzue.dialogxdemo.fragment.CustomFragment;
+import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,6 @@ import java.util.List;
 @NavigationBarBackgroundColorRes(R.color.emptyNavBar)
 public class MainActivity extends BaseActivity {
     
-    private DialogXBaseRelativeLayout boxRoot;
     private RelativeLayout boxTable;
     private LinearLayout boxTableChild;
     private LinearLayout btnBack;
@@ -92,6 +92,7 @@ public class MainActivity extends BaseActivity {
     private RadioButton rdoIos;
     private RadioButton rdoKongzue;
     private RadioButton rdoMiui;
+    private RadioButton rdoMaterialYou;
     private RadioGroup grpTheme;
     private RadioButton rdoAuto;
     private RadioButton rdoLight;
@@ -127,7 +128,6 @@ public class MainActivity extends BaseActivity {
     
     @Override
     public void initViews() {
-        boxRoot = findViewById(R.id.box_root);
         boxTable = findViewById(R.id.box_table);
         boxTableChild = findViewById(R.id.box_table_child);
         btnBack = findViewById(R.id.btn_back);
@@ -143,6 +143,7 @@ public class MainActivity extends BaseActivity {
         rdoIos = findViewById(R.id.rdo_ios);
         rdoKongzue = findViewById(R.id.rdo_kongzue);
         rdoMiui = findViewById(R.id.rdo_miui);
+        rdoMaterialYou = findViewById(R.id.rdo_material_you);
         grpTheme = findViewById(R.id.grp_theme);
         rdoAuto = findViewById(R.id.rdo_auto);
         rdoLight = findViewById(R.id.rdo_light);
@@ -305,6 +306,9 @@ public class MainActivity extends BaseActivity {
                         break;
                     case R.id.rdo_miui:
                         DialogX.globalStyle = MIUIStyle.style();
+                        break;
+                    case R.id.rdo_material_you:
+                        DialogX.globalStyle = MaterialYouStyle.style();
                         break;
                 }
             }

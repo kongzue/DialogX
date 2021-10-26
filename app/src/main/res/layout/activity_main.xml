@@ -157,52 +157,70 @@
                     android:textSize="14dp"
                     android:textStyle="bold" />
 
-                <RadioGroup
-                    android:id="@+id/grp_style"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
+                    android:fadingEdge="horizontal"
+                    android:requiresFadingEdge="horizontal"
+                    android:scrollbars="none">
 
-                    <RadioButton
-                        android:id="@+id/rdo_material"
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:id="@+id/grp_style"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="true"
-                        android:text="Material"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/rdo_ios"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="iOS"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        <RadioButton
+                            android:id="@+id/rdo_material"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:checked="true"
+                            android:text="Material"
+                            android:textColor="#7b000000"
+                            android:textSize="12dp" />
 
-                    <RadioButton
-                        android:id="@+id/rdo_kongzue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Kongzue"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        <RadioButton
+                            android:id="@+id/rdo_ios"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="iOS"
+                            android:textColor="#7b000000"
+                            android:textSize="12dp" />
 
-                    <RadioButton
-                        android:id="@+id/rdo_miui"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="MIUI"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        <RadioButton
+                            android:id="@+id/rdo_kongzue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="Kongzue"
+                            android:textColor="#7b000000"
+                            android:textSize="12dp" />
 
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/rdo_miui"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="MIUI"
+                            android:textColor="#7b000000"
+                            android:textSize="12dp" />
+
+                        <RadioButton
+                            android:id="@+id/rdo_material_you"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:text="Material You"
+                            android:textColor="#7b000000"
+                            android:textSize="12dp" />
+
+                    </RadioGroup>
+
+                </HorizontalScrollView>
 
                 <TextView
                     android:layout_width="wrap_content"

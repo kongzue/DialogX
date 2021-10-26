@@ -5,3 +5,4 @@ include ':DialogXIOSStyle'
 include ':DialogX'
 include ':app'
 rootProject.name = "DialogXDemo"
+include ':DialogXMaterialYou'

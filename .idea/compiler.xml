@@ -6,6 +6,7 @@
       <module name="DialogXDemo.DialogX" target="11" />
       <module name="DialogXDemo.DialogXIOSStyle" target="11" />
       <module name="DialogXDemo.DialogXKongzueStyle" target="11" />
+      <module name="DialogXDemo.DialogXMaterialYou" target="11" />
       <module name="DialogXDemo.DialogXMIUIStyle" target="11" />
       <module name="DialogXInterface" target="1.7" />
     </bytecodeTargetLevel>
