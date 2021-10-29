@@ -33,7 +33,7 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_vertical"
                     android:paddingLeft="20dp"
-                    android:paddingTop="15dp"
+                    android:paddingTop="18dp"
                     android:paddingRight="20dp"
                     android:paddingBottom="15dp"
                     android:text="Title"
@@ -98,10 +98,10 @@
                     android:layout_marginTop="5dp"
                     android:gravity="right|center_vertical"
                     android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="10dp">
+                    android:paddingLeft="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="15dp">
 
                     <TextView
                         android:id="@+id/btn_selectOther"
