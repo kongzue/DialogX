@@ -425,6 +425,9 @@ public abstract class BaseDialog {
     }
     
     public void tintColor(View view, int color) {
+        if (view == null) {
+            return;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             view.setBackgroundTintList(ColorStateList.valueOf(color));
         }
