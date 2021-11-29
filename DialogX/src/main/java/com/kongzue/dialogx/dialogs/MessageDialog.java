@@ -470,6 +470,7 @@ public class MessageDialog extends BaseDialog {
             bkg.setMaxWidth(getMaxWidth());
             if (me instanceof InputDialog) {
                 txtInput.setVisibility(View.VISIBLE);
+                boxRoot.bindFocusView(txtInput);
             } else {
                 txtInput.setVisibility(View.GONE);
             }

@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author: Kongzue
@@ -629,7 +630,7 @@ public class PopTip extends BaseDialog {
                     return;
                 }
             }
-            for (PopTip popTip : popTipList) {
+            for (PopTip popTip : new CopyOnWriteArrayList<>(popTipList)) {
                 dismiss(popTip.dialogView);
             }
         }

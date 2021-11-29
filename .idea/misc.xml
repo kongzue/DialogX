@@ -40,6 +40,7 @@
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXIOSStyle/src/main/res/layout/item_dialogx_ios_bottom_menu_top_dark.xml" value="0.33229166666666665" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXIOSStyle/src/main/res/layout/layout_dialogx_bottom_ios.xml" value="0.5328205128205128" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXIOSStyle/src/main/res/layout/layout_dialogx_bottom_ios_dark.xml" value="0.5328205128205128" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXIOSStyle/src/main/res/layout/layout_dialogx_ios.xml" value="0.5328205128205128" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_blue.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_center_light.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/drawable/button_dialogx_miui_center_night.xml" value="0.5487179487179488" />
@@ -62,6 +63,8 @@
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_center_light.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_top_dark.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/item_dialogx_miui_bottom_menu_top_light.xml" value="0.5411458333333333" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/layout_dialogx_bottom_miui.xml" value="0.5328205128205128" />
+        <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/layout_dialogx_bottom_miui_dark.xml" value="0.5328205128205128" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/layout_dialogx_miui.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMIUIStyle/src/main/res/layout/layout_dialogx_miui_dark.xml" value="0.5411458333333333" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogXMaterialYou/src/main/res/drawable-v21/button_dialogx_material_you_light.xml" value="0.5487179487179488" />

@@ -19,6 +19,7 @@ import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.core.view.ViewCompat;
@@ -28,6 +29,8 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
+
+import java.lang.ref.WeakReference;
 
 /**
  * @author: Kongzue
@@ -58,11 +61,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     public DialogXBaseRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
-    }
-    
-    public DialogXBaseRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs);
     }
     
@@ -138,12 +136,12 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (parent instanceof View)
                 ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
             ViewCompat.requestApplyInsets(this);
-    
+            
             if (BaseDialog.getContext() == null) return;
             
             ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener);
-    
-    
+            
+            
             if (onLifecycleCallBack != null) {
                 onLifecycleCallBack.onShow();
             }
@@ -198,6 +196,20 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     public float getSafeHeight() {
         return getMeasuredHeight() - unsafePlace.bottom - unsafePlace.top;
+    }
+    
+    private WeakReference<View> requestFocusView;
+    
+    public void bindFocusView(View view) {
+        requestFocusView = new WeakReference<>(view);
+    }
+    
+    @Override
+    public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
+        if (direction == View.FOCUS_DOWN && requestFocusView != null && requestFocusView.get() != null) {
+            return requestFocusView.get().requestFocus();
+        }
+        return super.requestFocus(direction, previouslyFocusedRect);
     }
     
     public abstract static class OnLifecycleCallBack {

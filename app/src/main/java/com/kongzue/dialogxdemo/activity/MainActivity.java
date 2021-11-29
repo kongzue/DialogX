@@ -602,7 +602,8 @@ public class MainActivity extends BaseActivity {
                                     .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                                         @Override
                                         public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                            PopTip.show(text);
+                                            //PopTip.show(text);
+                                            btnInputDialog.callOnClick();
                                             return false;
                                         }
                                     })
@@ -700,7 +701,7 @@ public class MainActivity extends BaseActivity {
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jump(AppCompatActivityTest.class, new JumpParameter().put("showBreak", true).put("fromActivity", getInstanceKey()));
+                jump(MainActivity.class, new JumpParameter().put("showBreak", true).put("fromActivity", getInstanceKey()));
             }
         });
         

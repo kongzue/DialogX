@@ -24,8 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:orientation="vertical"
-                android:paddingTop="20dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/txt_dialog_title"
@@ -34,9 +33,8 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
                     android:paddingLeft="20dp"
-                    android:paddingTop="7dp"
+                    android:paddingTop="27dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="10dp"
                     android:text="Title"
                     android:textColor="@color/dialogxMIUITextDark"
                     android:textSize="18dp" />
@@ -61,6 +59,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="10dp"
                             android:layout_marginLeft="26dp"
                             android:layout_marginRight="26dp"
                             android:gravity="left"
