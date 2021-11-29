@@ -602,8 +602,7 @@ public class MainActivity extends BaseActivity {
                                     .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                                         @Override
                                         public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                                            //PopTip.show(text);
-                                            btnInputDialog.callOnClick();
+                                            PopTip.show(text);
                                             return false;
                                         }
                                     })
