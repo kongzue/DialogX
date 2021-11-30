@@ -356,13 +356,15 @@ public abstract class BaseDialog {
         }
         if (textInfo.isShowEllipsis()) {
             textView.setEllipsize(TextUtils.TruncateAt.END);
-        }else{
+        } else {
             textView.setEllipsize(null);
         }
         if (textInfo.getMaxLines() != -1) {
             textView.setMaxLines(textInfo.getMaxLines());
+        } else {
+            textView.setMaxLines(Integer.MAX_VALUE);
         }
-    
+        
         textView.getPaint().setFakeBoldText(textInfo.isBold());
     }
     
