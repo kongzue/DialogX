@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.util;
 
+import static com.kongzue.dialogx.interfaces.BaseDialog.useTextInfo;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -10,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.PopMenu;
 
@@ -69,6 +72,10 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         }
         viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
         viewHolder.txtDialogxMenuText.setText(menuList.get(position));
+        
+        if (DialogX.menuTextInfo != null) {
+            useTextInfo(viewHolder.txtDialogxMenuText, DialogX.menuTextInfo);
+        }
     
         int textColor = popMenu.isLightTheme() ? R.color.black90 : R.color.white90;
         viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));

@@ -1,12 +1,14 @@
 package com.kongzue.dialogx.util;
 
 import static com.kongzue.dialogx.interfaces.BaseDialog.isNull;
+import static com.kongzue.dialogx.interfaces.BaseDialog.useTextInfo;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -192,19 +194,4 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         return convertView;
     }
     
-    protected void useTextInfo(TextView textView, TextInfo textInfo) {
-        if (textInfo == null) return;
-        if (textView == null) return;
-        if (textInfo.getFontSize() > 0) {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textInfo.getFontSize());
-        }
-        if (textInfo.getFontColor() != 1) {
-            textView.setTextColor(textInfo.getFontColor());
-        }
-        if (textInfo.getGravity() != -1) {
-            textView.setGravity(textInfo.getGravity());
-        }
-        Typeface font = Typeface.create(Typeface.SANS_SERIF, textInfo.isBold() ? Typeface.BOLD : Typeface.NORMAL);
-        textView.setTypeface(font);
-    }
 }

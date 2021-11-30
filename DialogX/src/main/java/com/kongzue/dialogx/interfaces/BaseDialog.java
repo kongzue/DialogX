@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -341,7 +342,7 @@ public abstract class BaseDialog {
         return theme;
     }
     
-    protected void useTextInfo(TextView textView, TextInfo textInfo) {
+    public static void useTextInfo(TextView textView, TextInfo textInfo) {
         if (textInfo == null) return;
         if (textView == null) return;
         if (textInfo.getFontSize() > 0) {
@@ -353,6 +354,15 @@ public abstract class BaseDialog {
         if (textInfo.getGravity() != -1) {
             textView.setGravity(textInfo.getGravity());
         }
+        if (textInfo.isShowEllipsis()) {
+            textView.setEllipsize(TextUtils.TruncateAt.END);
+        }else{
+            textView.setEllipsize(null);
+        }
+        if (textInfo.getMaxLines() != -1) {
+            textView.setMaxLines(textInfo.getMaxLines());
+        }
+    
         textView.getPaint().setFakeBoldText(textInfo.isBold());
     }
     
