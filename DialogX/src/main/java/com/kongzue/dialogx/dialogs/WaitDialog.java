@@ -864,14 +864,14 @@ public class WaitDialog extends BaseDialog {
         if (getContext() != null && getContext() instanceof Activity && getInstance((Activity) getContext()) != null) {
             return false;
         }
-        return me == null || me.get() == null || me.get().getDialogImpl() == null || (me.get().getActivity() != null && me.get().getActivity() != getContext());
+        return me == null || me.get() == null || (me.get().getActivity() != null && me.get().getActivity() != getContext());
     }
     
     protected static boolean noInstance(Activity activity) {
         if (getContext() != null && getInstance(activity) != null) {
             return false;
         }
-        return me == null || me.get() == null || me.get().getDialogImpl() == null || (me.get().getActivity() != null && me.get().getActivity() != activity);
+        return me == null || me.get() == null || (me.get().getActivity() != null && me.get().getActivity() != activity);
     }
     
     public static WaitDialog getInstanceNotNull(Activity activity) {

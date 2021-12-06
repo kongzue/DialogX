@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.kongzue.dialogx.R;
@@ -47,6 +48,8 @@ public class WindowUtil {
     }
     
     private static void showNow(Activity activity, View dialogView, boolean touchEnable) {
+        FrameLayout rootLayout = new FrameLayout(activity);
+        rootLayout.addView(dialogView,new FrameLayout.LayoutParams(MATCH_PARENT,MATCH_PARENT));
         WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         
@@ -77,14 +80,14 @@ public class WindowUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             layoutParams.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
-        manager.addView(dialogView, layoutParams);
+        manager.addView(rootLayout, layoutParams);
     }
     
     public static void dismiss(View dialogView) {
         BaseDialog baseDialog = (BaseDialog) dialogView.getTag();
         if (baseDialog != null && baseDialog.getActivity() != null) {
             WindowManager manager = (WindowManager) baseDialog.getActivity().getSystemService(Context.WINDOW_SERVICE);
-            manager.removeViewImmediate(dialogView);
+            manager.removeViewImmediate((View) dialogView.getParent());
         }
     }
 }

@@ -78,6 +78,7 @@ public abstract class OnBindView<D> {
     public View getCustomView() {
         if (customView == null) {
             customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
+            customView.setId(R.id.id_frame_layout_custom);
         }
         return customView;
     }
