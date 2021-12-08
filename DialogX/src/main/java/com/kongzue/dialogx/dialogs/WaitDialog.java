@@ -397,6 +397,17 @@ public class WaitDialog extends BaseDialog {
                     return false;
                 }
             });
+            
+            if (isCancelable()) {
+                boxRoot.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doDismiss(v);
+                    }
+                });
+            } else {
+                boxRoot.setOnClickListener(null);
+            }
         }
         
         private float oldProgress;
@@ -715,7 +726,7 @@ public class WaitDialog extends BaseDialog {
         if (overrideCancelable != null) {
             return overrideCancelable == BOOLEAN.TRUE;
         }
-        return cancelable;
+        return false;
     }
     
     public WaitDialog setCancelable(boolean cancelable) {

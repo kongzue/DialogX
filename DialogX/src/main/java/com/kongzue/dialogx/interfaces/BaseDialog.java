@@ -160,6 +160,9 @@ public abstract class BaseDialog {
                                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                                 return;
                             }
+                            if (view.getParent() != null) {
+                                ((ViewGroup) view.getParent()).removeView(view);
+                            }
                             rootFrameLayout.get().addView(view);
                         }
                     });
@@ -220,6 +223,9 @@ public abstract class BaseDialog {
                             if (view.getParent() == rootFrameLayout.get()) {
                                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                                 return;
+                            }
+                            if (view.getParent() != null) {
+                                ((ViewGroup) view.getParent()).removeView(view);
                             }
                             activityRootView.addView(view);
                         }
