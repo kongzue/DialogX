@@ -1,14 +1,17 @@
 package com.kongzue.dialogx.util.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -89,12 +92,6 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
         }
     }
     
-//    @Override
-//    protected void onAttachedToWindow() {
-//        super.onAttachedToWindow();
-//        refreshImage();
-//    }
-    
     
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -114,7 +111,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     
     private void doScreenshotActivityAndZoom() {
         if (BaseDialog.getRootFrameLayout() == null) return;
-        final View view = BaseDialog.getRootFrameLayout().getChildAt(0);
+        final View view = BaseDialog.getRootFrameLayout();
         //先执行一次绘制，防止出现闪屏问题
         if (!inited) drawViewImage(view);
         view.post(new Runnable() {
@@ -131,13 +128,12 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     private boolean isScreenshotSuccess;
     
     private void drawViewImage(View view) {
-        view.destroyDrawingCache();
-        view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-        Bitmap screenshot = view.getDrawingCache();
-        if (screenshot != null) {
-            isScreenshotSuccess = true;
-        }
-        setImageBitmap(screenshot);
+        Rect rect = new Rect();
+        view.getWindowVisibleDisplayFrame(rect);
+        view.setDrawingCacheEnabled(true);
+        setImageBitmap(Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getWidth(), view.getHeight()));
+        view.destroyDrawingCache();
+        isScreenshotSuccess = true;
     }
 }
