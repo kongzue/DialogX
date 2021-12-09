@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -62,6 +63,7 @@ public abstract class BaseDialog {
     private static List<BaseDialog> runningDialogList;
     private WeakReference<View> dialogView;
     protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
+    protected DialogX.IMPL_MODE dialogImplMode = DialogX.implIMPLMode;
     
     public static void init(Context context) {
         if (context == null) context = ActivityLifecycleImpl.getTopActivity();
@@ -80,7 +82,11 @@ public abstract class BaseDialog {
         try {
             contextWeakReference = new WeakReference<>(activity);
             rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                publicWindowInsets(rootFrameLayout.get().getRootWindowInsets());
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             error("DialogX.init: 初始化异常，找不到Activity的根布局");
         }
     }
@@ -137,7 +143,7 @@ public abstract class BaseDialog {
             log(baseDialog.dialogKey() + ".show");
             addDialogToRunningList(baseDialog);
             
-            switch (DialogX.implIMPLMode) {
+            switch (baseDialog.dialogImplMode) {
                 case WINDOW:
                     runOnMain(new Runnable() {
                         @Override
@@ -198,7 +204,7 @@ public abstract class BaseDialog {
             
             log(baseDialog + ".show");
             addDialogToRunningList(baseDialog);
-            switch (DialogX.implIMPLMode) {
+            switch (baseDialog.dialogImplMode) {
                 case WINDOW:
                     runOnMain(new Runnable() {
                         @Override
@@ -242,7 +248,7 @@ public abstract class BaseDialog {
         removeDialogToRunningList(baseDialog);
         if (baseDialog.dialogView != null) baseDialog.dialogView.clear();
         
-        switch (DialogX.implIMPLMode) {
+        switch (baseDialog.dialogImplMode) {
             case WINDOW:
                 runOnMain(new Runnable() {
                     @Override
@@ -585,5 +591,31 @@ public abstract class BaseDialog {
     public int getMaxWidth() {
         if (maxWidth == 0) return DialogX.dialogMaxWidth;
         return maxWidth;
+    }
+    
+    public DialogX.IMPL_MODE getDialogImplMode() {
+        return dialogImplMode;
+    }
+    
+    protected static WindowInsets windowInsets;
+    
+    public static WindowInsets publicWindowInsets() {
+        return windowInsets;
+    }
+    
+    public static void publicWindowInsets(WindowInsets windowInsets) {
+        if (windowInsets != null) BaseDialog.windowInsets = windowInsets;
+        if (runningDialogList != null) {
+            CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
+            for (int i = copyOnWriteList.size() - 1; i >= 0; i--) {
+                BaseDialog baseDialog = copyOnWriteList.get(i);
+                if (baseDialog.isShow && baseDialog.getDialogView() != null) {
+                    View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
+                    if (boxRoot instanceof DialogXBaseRelativeLayout) {
+                        ((DialogXBaseRelativeLayout) boxRoot).paddingView(windowInsets);
+                    }
+                }
+            }
+        }
     }
 }

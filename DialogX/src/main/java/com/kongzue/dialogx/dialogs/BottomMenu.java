@@ -1091,4 +1091,9 @@ public class BottomMenu extends BottomDialog {
         refreshUI();
         return this;
     }
+    
+    public BottomMenu setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
+        return this;
+    }
 }

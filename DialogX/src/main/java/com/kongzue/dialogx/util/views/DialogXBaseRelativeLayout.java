@@ -76,6 +76,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 focusable = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_baseFocusable, true);
                 autoUnsafePlacePadding = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_autoSafeArea, true);
                 a.recycle();
+                isInited = true;
             }
             if (focusable) {
                 setFocusable(true);
@@ -83,7 +84,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 requestFocus();
             }
             setBkgAlpha(0f);
-            isInited = true;
+            if (parentDialog != null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
+                setFitsSystemWindows(true);
+            }
         }
     }
     
@@ -96,6 +99,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
+        BaseDialog.publicWindowInsets(insets);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (DialogX.useActivityLayoutTranslationNavigationBar)
                 paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
@@ -104,7 +108,13 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
     
     public void paddingView(WindowInsets insets) {
-        if (insets == null) return;
+        if (insets == null) {
+            if (BaseDialog.publicWindowInsets() != null) {
+                insets = BaseDialog.publicWindowInsets();
+            } else {
+                return;
+            }
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
         }
@@ -270,6 +280,12 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     public DialogXBaseRelativeLayout setParentDialog(BaseDialog parentDialog) {
         this.parentDialog = parentDialog;
+        if (parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
+            setFitsSystemWindows(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                paddingView(getRootWindowInsets());
+            }
+        }
         return this;
     }
     

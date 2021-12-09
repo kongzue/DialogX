@@ -933,4 +933,9 @@ public class WaitDialog extends BaseDialog {
         refreshUI();
         return this;
     }
+    
+    public WaitDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
+        return this;
+    }
 }

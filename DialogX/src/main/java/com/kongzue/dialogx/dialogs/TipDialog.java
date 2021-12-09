@@ -2,6 +2,7 @@ package com.kongzue.dialogx.dialogs;
 
 import android.app.Activity;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 
 import java.lang.ref.WeakReference;
@@ -157,6 +158,11 @@ public class TipDialog extends WaitDialog {
     public TipDialog setMaxWidth(int maxWidth) {
         this.maxWidth = maxWidth;
         refreshUI();
+        return this;
+    }
+    
+    public TipDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
         return this;
     }
 }

@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
@@ -705,6 +706,11 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setAlignGravity(int alignGravity) {
         this.alignGravity = alignGravity;
+        return this;
+    }
+    
+    public PopMenu setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
         return this;
     }
 }

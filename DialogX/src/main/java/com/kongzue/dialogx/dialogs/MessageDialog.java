@@ -1100,4 +1100,9 @@ public class MessageDialog extends BaseDialog {
         refreshUI();
         return this;
     }
+    
+    public MessageDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
+        return this;
+    }
 }

@@ -494,4 +494,9 @@ public class FullScreenDialog extends BaseDialog {
         refreshUI();
         return this;
     }
+    
+    public FullScreenDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
+        return this;
+    }
 }

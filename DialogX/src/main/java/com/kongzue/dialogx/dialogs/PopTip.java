@@ -962,4 +962,9 @@ public class PopTip extends BaseDialog {
     protected void shutdown() {
         dismiss();
     }
+    
+    public PopTip setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
+        return this;
+    }
 }

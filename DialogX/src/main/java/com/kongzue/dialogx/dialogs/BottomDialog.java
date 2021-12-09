@@ -1026,4 +1026,9 @@ public class BottomDialog extends BaseDialog {
         refreshUI();
         return this;
     }
+    
+    public BottomDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
+        return this;
+    }
 }

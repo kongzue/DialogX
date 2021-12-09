@@ -574,4 +574,9 @@ public class InputDialog extends MessageDialog {
         refreshUI();
         return this;
     }
+    
+    public InputDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
+        return this;
+    }
 }

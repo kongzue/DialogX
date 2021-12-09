@@ -531,4 +531,9 @@ public class CustomDialog extends BaseDialog {
     protected void shutdown() {
         dismiss();
     }
+    
+    public CustomDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        this.dialogImplMode = dialogImplMode;
+        return this;
+    }
 }
