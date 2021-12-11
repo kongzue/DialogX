@@ -276,39 +276,42 @@ public class FullScreenDialog extends BaseDialog {
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
             if (getContext() == null) return;
-            
-            long exitAnimDurationTemp = 300;
-            if (overrideExitDuration >= 0) {
-                exitAnimDurationTemp = overrideExitDuration;
-            }
-            if (exitAnimDuration >= 0) {
-                exitAnimDurationTemp = exitAnimDuration;
-            }
-            
-            ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
-            exitAnim.setDuration(exitAnimDurationTemp);
-            exitAnim.start();
-            
-            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-            bkgAlpha.setDuration(exitAnimDurationTemp);
-            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    if (boxRoot != null) {
-                        float value = (float) animation.getAnimatedValue();
-                        boxRoot.setBkgAlpha(value);
-                        if (value == 0) boxRoot.setVisibility(View.GONE);
+    
+            if (!dismissAnimFlag) {
+                dismissAnimFlag = true;
+                long exitAnimDurationTemp = 300;
+                if (overrideExitDuration >= 0) {
+                    exitAnimDurationTemp = overrideExitDuration;
+                }
+                if (exitAnimDuration >= 0) {
+                    exitAnimDurationTemp = exitAnimDuration;
+                }
+    
+                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
+                exitAnim.setDuration(exitAnimDurationTemp);
+                exitAnim.start();
+    
+                ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                bkgAlpha.setDuration(exitAnimDurationTemp);
+                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        if (boxRoot != null) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                            if (value == 0) boxRoot.setVisibility(View.GONE);
+                        }
                     }
-                }
-            });
-            bkgAlpha.start();
-            
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    dismiss(dialogView);
-                }
-            }, exitAnimDurationTemp);
+                });
+                bkgAlpha.start();
+    
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismiss(dialogView);
+                    }
+                }, exitAnimDurationTemp);
+            }
         }
         
         public void preDismiss() {

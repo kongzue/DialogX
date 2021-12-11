@@ -471,61 +471,65 @@ public class WaitDialog extends BaseDialog {
         public void doDismiss(final View v) {
             if (boxRoot == null) return;
             if (getContext() == null) return;
-            boxRoot.post(new Runnable() {
-                @Override
-                public void run() {
-                    Context context = getContext();
-                    if (context == null) context = boxRoot.getContext();
-                    if (context == null) return;
-                    
-                    if (v != null) v.setEnabled(false);
-                    
-                    int exitAnimResId = R.anim.anim_dialogx_default_exit;
-                    if (overrideExitAnimRes != 0) {
-                        exitAnimResId = overrideExitAnimRes;
-                    }
-                    if (customExitAnimResId != 0) {
-                        exitAnimResId = customExitAnimResId;
-                    }
-                    Animation exitAnim = AnimationUtils.loadAnimation(context, exitAnimResId);
-                    long exitAnimDurationTemp = exitAnim.getDuration();
-                    if (overrideExitDuration >= 0) {
-                        exitAnimDurationTemp = overrideExitDuration;
-                    }
-                    if (exitAnimDuration != -1) {
-                        exitAnimDurationTemp = exitAnimDuration;
-                    }
-                    exitAnim.setDuration(exitAnimDurationTemp);
-                    exitAnim.setInterpolator(new AccelerateInterpolator());
-                    bkg.startAnimation(exitAnim);
-                    
-                    boxRoot.animate()
-                            .alpha(0f)
-                            .setInterpolator(new AccelerateInterpolator())
-                            .setDuration(exitAnimDurationTemp);
-                    
-                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-                    bkgAlpha.setDuration(exitAnimDurationTemp);
-                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            if (boxRoot != null) {
-                                float value = (float) animation.getAnimatedValue();
-                                boxRoot.setBkgAlpha(value);
-                                if (value == 0) boxRoot.setVisibility(View.GONE);
+            
+            if (!dismissAnimFlag) {
+                dismissAnimFlag = true;
+                boxRoot.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Context context = getContext();
+                        if (context == null) context = boxRoot.getContext();
+                        if (context == null) return;
+                        
+                        if (v != null) v.setEnabled(false);
+                        
+                        int exitAnimResId = R.anim.anim_dialogx_default_exit;
+                        if (overrideExitAnimRes != 0) {
+                            exitAnimResId = overrideExitAnimRes;
+                        }
+                        if (customExitAnimResId != 0) {
+                            exitAnimResId = customExitAnimResId;
+                        }
+                        Animation exitAnim = AnimationUtils.loadAnimation(context, exitAnimResId);
+                        long exitAnimDurationTemp = exitAnim.getDuration();
+                        if (overrideExitDuration >= 0) {
+                            exitAnimDurationTemp = overrideExitDuration;
+                        }
+                        if (exitAnimDuration != -1) {
+                            exitAnimDurationTemp = exitAnimDuration;
+                        }
+                        exitAnim.setDuration(exitAnimDurationTemp);
+                        exitAnim.setInterpolator(new AccelerateInterpolator());
+                        bkg.startAnimation(exitAnim);
+                        
+                        boxRoot.animate()
+                                .alpha(0f)
+                                .setInterpolator(new AccelerateInterpolator())
+                                .setDuration(exitAnimDurationTemp);
+                        
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                        bkgAlpha.setDuration(exitAnimDurationTemp);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                if (boxRoot != null) {
+                                    float value = (float) animation.getAnimatedValue();
+                                    boxRoot.setBkgAlpha(value);
+                                    if (value == 0) boxRoot.setVisibility(View.GONE);
+                                }
                             }
-                        }
-                    });
-                    bkgAlpha.start();
-                    
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            dismiss(getWaitDialogView());
-                        }
-                    }, exitAnimDurationTemp);
-                }
-            });
+                        });
+                        bkgAlpha.start();
+                        
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismiss(getWaitDialogView());
+                            }
+                        }, exitAnimDurationTemp);
+                    }
+                });
+            }
         }
         
         public void showTip(final TYPE tip) {

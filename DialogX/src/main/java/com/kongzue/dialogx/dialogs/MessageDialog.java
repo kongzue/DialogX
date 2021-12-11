@@ -658,45 +658,48 @@ public class MessageDialog extends BaseDialog {
             if (v != null) v.setEnabled(false);
             if (getContext() == null) return;
             
-            int exitAnimResId = style.exitAnimResId() == 0 ? R.anim.anim_dialogx_default_exit : style.exitAnimResId();
-            if (overrideExitAnimRes != 0) {
-                exitAnimResId = overrideExitAnimRes;
-            }
-            if (customExitAnimResId != 0) {
-                exitAnimResId = customExitAnimResId;
-            }
-            Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
-            long exitAnimDurationTemp = exitAnim.getDuration();
-            exitAnim.setInterpolator(new AccelerateInterpolator());
-            if (overrideExitDuration >= 0) {
-                exitAnimDurationTemp = overrideExitDuration;
-            }
-            if (exitAnimDuration >= 0) {
-                exitAnimDurationTemp = exitAnimDuration;
-            }
-            exitAnim.setDuration(exitAnimDurationTemp);
-            bkg.startAnimation(exitAnim);
-            
-            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-            bkgAlpha.setDuration(exitAnimDurationTemp);
-            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    if (boxRoot != null) {
-                        float value = (float) animation.getAnimatedValue();
-                        boxRoot.setBkgAlpha(value);
-                        if (value == 0) boxRoot.setVisibility(View.GONE);
+            if (!dismissAnimFlag) {
+                dismissAnimFlag = true;
+                int exitAnimResId = style.exitAnimResId() == 0 ? R.anim.anim_dialogx_default_exit : style.exitAnimResId();
+                if (overrideExitAnimRes != 0) {
+                    exitAnimResId = overrideExitAnimRes;
+                }
+                if (customExitAnimResId != 0) {
+                    exitAnimResId = customExitAnimResId;
+                }
+                Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+                long exitAnimDurationTemp = exitAnim.getDuration();
+                exitAnim.setInterpolator(new AccelerateInterpolator());
+                if (overrideExitDuration >= 0) {
+                    exitAnimDurationTemp = overrideExitDuration;
+                }
+                if (exitAnimDuration >= 0) {
+                    exitAnimDurationTemp = exitAnimDuration;
+                }
+                exitAnim.setDuration(exitAnimDurationTemp);
+                bkg.startAnimation(exitAnim);
+                
+                ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                bkgAlpha.setDuration(exitAnimDurationTemp);
+                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        if (boxRoot != null) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                            if (value == 0) boxRoot.setVisibility(View.GONE);
+                        }
                     }
-                }
-            });
-            bkgAlpha.start();
-            
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    dismiss(dialogView);
-                }
-            }, exitAnimDurationTemp);
+                });
+                bkgAlpha.start();
+                
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismiss(dialogView);
+                    }
+                }, exitAnimDurationTemp);
+            }
         }
     }
     

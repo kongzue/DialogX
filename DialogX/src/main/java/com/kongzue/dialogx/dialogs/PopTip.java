@@ -587,31 +587,35 @@ public class PopTip extends BaseDialog {
         
         @Override
         public void doDismiss(final View v) {
-            boxRoot.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (v != null) v.setEnabled(false);
-                    
-                    Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
-                    if (exitAnimDuration != -1) {
-                        exitAnim.setDuration(exitAnimDuration);
-                    }
-                    exitAnim.setFillAfter(true);
-                    boxBody.startAnimation(exitAnim);
-                    
-                    boxRoot.animate()
-                            .alpha(0f)
-                            .setInterpolator(new AccelerateInterpolator())
-                            .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-                    
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            waitForDismiss();
+            if (v != null) v.setEnabled(false);
+    
+            if (!dismissAnimFlag) {
+                dismissAnimFlag = true;
+                boxRoot.post(new Runnable() {
+                    @Override
+                    public void run() {
+            
+                        Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
+                        if (exitAnimDuration != -1) {
+                            exitAnim.setDuration(exitAnimDuration);
                         }
-                    }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-                }
-            });
+                        exitAnim.setFillAfter(true);
+                        boxBody.startAnimation(exitAnim);
+            
+                        boxRoot.animate()
+                                .alpha(0f)
+                                .setInterpolator(new AccelerateInterpolator())
+                                .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+            
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                waitForDismiss();
+                            }
+                        }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                    }
+                });
+            }
         }
     }
     

@@ -2,11 +2,8 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -278,68 +275,70 @@ public class CustomDialog extends BaseDialog {
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
+            if (!dismissAnimFlag){
+                dismissAnimFlag = true;
+                boxCustom.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int exitAnimResIdTemp = R.anim.anim_dialogx_default_exit;
+                        if (overrideExitAnimRes != 0) {
+                            exitAnimResIdTemp = overrideExitAnimRes;
+                        }
+                        if (exitAnimResId != 0) {
+                            exitAnimResIdTemp = exitAnimResId;
+                        }
             
-            boxCustom.post(new Runnable() {
-                @Override
-                public void run() {
-                    int exitAnimResIdTemp = R.anim.anim_dialogx_default_exit;
-                    if (overrideExitAnimRes != 0) {
-                        exitAnimResIdTemp = overrideExitAnimRes;
-                    }
-                    if (exitAnimResId != 0) {
-                        exitAnimResIdTemp = exitAnimResId;
-                    }
-                    
-                    Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxCustom.getContext() : getContext(), exitAnimResIdTemp);
-                    
-                    long exitAnimDurationTemp = exitAnim.getDuration();
-                    if (overrideExitDuration >= 0) {
-                        exitAnimDurationTemp = overrideExitDuration;
-                    }
-                    if (exitAnimDuration >= 0) {
-                        exitAnimDurationTemp = exitAnimDuration;
-                    }
-                    exitAnim.setDuration(exitAnimDurationTemp);
-                    exitAnim.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                        
+                        Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxCustom.getContext() : getContext(), exitAnimResIdTemp);
+            
+                        long exitAnimDurationTemp = exitAnim.getDuration();
+                        if (overrideExitDuration >= 0) {
+                            exitAnimDurationTemp = overrideExitDuration;
                         }
-                        
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            dismiss(dialogView);
+                        if (exitAnimDuration >= 0) {
+                            exitAnimDurationTemp = exitAnimDuration;
                         }
-                        
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-                        
-                        }
-                    });
-                    boxCustom.startAnimation(exitAnim);
+                        exitAnim.setDuration(exitAnimDurationTemp);
+                        exitAnim.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
                     
-                    if (overrideMaskExitAnimRes != 0) {
-                        Animation maskExitAnim = AnimationUtils.loadAnimation(getContext(), overrideMaskExitAnimRes);
-                        maskExitAnim.setDuration(exitAnimDurationTemp);
-                        maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
-                        boxRoot.startAnimation(maskExitAnim);
-                    }
-                    
-                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-                    bkgAlpha.setDuration(exitAnimDurationTemp);
-                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            if (boxRoot != null) {
-                                float value = (float) animation.getAnimatedValue();
-                                boxRoot.setBkgAlpha(value);
-                                if (value == 0) boxRoot.setVisibility(View.GONE);
                             }
+                
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                dismiss(dialogView);
+                            }
+                
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                    
+                            }
+                        });
+                        boxCustom.startAnimation(exitAnim);
+            
+                        if (overrideMaskExitAnimRes != 0) {
+                            Animation maskExitAnim = AnimationUtils.loadAnimation(getContext(), overrideMaskExitAnimRes);
+                            maskExitAnim.setDuration(exitAnimDurationTemp);
+                            maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
+                            boxRoot.startAnimation(maskExitAnim);
                         }
-                    });
-                    bkgAlpha.start();
-                }
-            });
+            
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                        bkgAlpha.setDuration(exitAnimDurationTemp);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                if (boxRoot != null) {
+                                    float value = (float) animation.getAnimatedValue();
+                                    boxRoot.setBkgAlpha(value);
+                                    if (value == 0) boxRoot.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                        bkgAlpha.start();
+                    }
+                });
+            }
         }
     }
     

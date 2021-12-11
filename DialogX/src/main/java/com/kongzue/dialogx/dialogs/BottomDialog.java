@@ -1,20 +1,16 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,11 +18,9 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.core.view.ViewCompat;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
@@ -604,43 +598,46 @@ public class BottomDialog extends BaseDialog {
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
             if (getContext() == null) return;
-            
-            if (boxContent != null) {
-                boxContent.getViewTreeObserver().removeOnGlobalLayoutListener(onContentViewLayoutChangeListener);
-            }
-            
-            long exitAnimDurationTemp = 300;
-            if (overrideExitDuration >= 0) {
-                exitAnimDurationTemp = overrideExitDuration;
-            }
-            if (exitAnimDuration >= 0) {
-                exitAnimDurationTemp = exitAnimDuration;
-            }
-            
-            ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
-            exitAnim.setDuration(exitAnimDurationTemp);
-            exitAnim.start();
-            
-            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-            bkgAlpha.setDuration(exitAnimDurationTemp);
-            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    if (boxRoot != null) {
-                        float value = (float) animation.getAnimatedValue();
-                        boxRoot.setBkgAlpha(value);
-                        if (value == 0) boxRoot.setVisibility(View.GONE);
+    
+            if (!dismissAnimFlag) {
+                dismissAnimFlag = true;
+                if (boxContent != null) {
+                    boxContent.getViewTreeObserver().removeOnGlobalLayoutListener(onContentViewLayoutChangeListener);
+                }
+    
+                long exitAnimDurationTemp = 300;
+                if (overrideExitDuration >= 0) {
+                    exitAnimDurationTemp = overrideExitDuration;
+                }
+                if (exitAnimDuration >= 0) {
+                    exitAnimDurationTemp = exitAnimDuration;
+                }
+    
+                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
+                exitAnim.setDuration(exitAnimDurationTemp);
+                exitAnim.start();
+    
+                ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                bkgAlpha.setDuration(exitAnimDurationTemp);
+                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        if (boxRoot != null) {
+                            float value = (float) animation.getAnimatedValue();
+                            boxRoot.setBkgAlpha(value);
+                            if (value == 0) boxRoot.setVisibility(View.GONE);
+                        }
                     }
-                }
-            });
-            bkgAlpha.start();
-            
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    dismiss(dialogView);
-                }
-            }, exitAnimDurationTemp);
+                });
+                bkgAlpha.start();
+    
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismiss(dialogView);
+                    }
+                }, exitAnimDurationTemp);
+            }
         }
         
         public void preDismiss() {

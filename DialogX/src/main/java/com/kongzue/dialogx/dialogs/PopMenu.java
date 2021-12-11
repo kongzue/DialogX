@@ -471,44 +471,48 @@ public class PopMenu extends BaseDialog {
         
         @Override
         public void doDismiss(View v) {
-            boxRoot.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (v != null) v.setEnabled(false);
-                    
-                    if (overrideExitDuration != -1) exitAnimDuration = overrideExitDuration;
-                    Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), R.anim.anim_dialogx_default_exit);
-                    if (exitAnimDuration != -1) {
-                        exitAnim.setDuration(exitAnimDuration);
-                    }
-                    boxBody.startAnimation(exitAnim);
-                    
-                    boxRoot.animate()
-                            .alpha(0f)
-                            .setInterpolator(new AccelerateInterpolator())
-                            .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-                    
-                    if (baseView == null) {
-                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1, 0f);
-                        bkgAlpha.setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animation) {
-                                float value = (float) animation.getAnimatedValue();
-                                boxRoot.setBkgAlpha(value);
-                            }
-                        });
-                        bkgAlpha.start();
-                    }
-                    
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            dismiss(dialogView);
+            if (v != null) v.setEnabled(false);
+    
+            if (!dismissAnimFlag) {
+                dismissAnimFlag = true;
+                boxRoot.post(new Runnable() {
+                    @Override
+                    public void run() {
+            
+                        if (overrideExitDuration != -1) exitAnimDuration = overrideExitDuration;
+                        Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), R.anim.anim_dialogx_default_exit);
+                        if (exitAnimDuration != -1) {
+                            exitAnim.setDuration(exitAnimDuration);
                         }
-                    }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-                }
-            });
+                        boxBody.startAnimation(exitAnim);
+            
+                        boxRoot.animate()
+                                .alpha(0f)
+                                .setInterpolator(new AccelerateInterpolator())
+                                .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+            
+                        if (baseView == null) {
+                            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1, 0f);
+                            bkgAlpha.setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    float value = (float) animation.getAnimatedValue();
+                                    boxRoot.setBkgAlpha(value);
+                                }
+                            });
+                            bkgAlpha.start();
+                        }
+            
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dismiss(dialogView);
+                            }
+                        }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                    }
+                });
+            }
         }
     }
     

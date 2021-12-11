@@ -1,13 +1,11 @@
 package com.kongzue.dialogx.interfaces;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,22 +16,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentManager;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.PopTip;
-import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.TextInfo;
@@ -42,7 +36,6 @@ import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -457,7 +450,13 @@ public abstract class BaseDialog {
         }
     }
     
+    /**
+     * 此标记用于拦截重复 dismiss 指令导致的关闭动画抖动异常
+     */
+    protected boolean dismissAnimFlag;
+    
     protected void beforeShow() {
+        dismissAnimFlag = false;
         if (getContext() == null) {
             init(null);
             if (getContext() == null) {
