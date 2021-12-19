@@ -9,7 +9,7 @@
     android:orientation="vertical"
     app:baseFocusable="true">
 
-    <LinearLayout
+    <com.kongzue.dialogx.util.views.MaxLinearLayout
         android:id="@+id/box_body"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -31,6 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+    </com.kongzue.dialogx.util.views.MaxLinearLayout>
 
 </com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>
