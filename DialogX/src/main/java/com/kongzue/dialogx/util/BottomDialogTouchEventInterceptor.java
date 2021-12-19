@@ -90,6 +90,7 @@ public class BottomDialogTouchEventInterceptor {
                                 } else {
                                     if (aimY > impl.bkgEnterAimY) {
                                         impl.bkg.setY(aimY);
+                                        return true;
                                     } else {
                                         impl.bkg.setY(impl.bkgEnterAimY);
                                     }

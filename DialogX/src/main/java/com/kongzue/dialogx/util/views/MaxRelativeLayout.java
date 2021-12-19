@@ -241,11 +241,18 @@ public class MaxRelativeLayout extends RelativeLayout {
         onTouchListener = l;
     }
     
+    boolean reInterceptTouch;
+    
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (onTouchListener != null) {
-            onTouchListener.onTouch(this, ev);
+            reInterceptTouch = onTouchListener.onTouch(this, ev);
         }
         return super.dispatchTouchEvent(ev);
+    }
+    
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return reInterceptTouch;
     }
 }
