@@ -111,6 +111,14 @@
                     android:textSize="14dp"
                     android:textStyle="bold" />
 
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fadingEdge="horizontal"
+                    android:requiresFadingEdge="horizontal"
+                    android:scrollbars="none">
+
                 <RadioGroup
                     android:id="@+id/grp_mode"
                     android:layout_width="match_parent"
@@ -146,7 +154,17 @@
                         android:text="DialogFragment"
                         android:textColor="#7b000000" />
 
+                    <RadioButton
+                        android:id="@+id/rdo_mode_floatingActivity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="FloatingActivity"
+                        android:textColor="#7b000000" />
+
                 </RadioGroup>
+
+                </HorizontalScrollView>
 
                 <TextView
                     android:layout_width="wrap_content"

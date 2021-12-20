@@ -2,6 +2,7 @@ package com.kongzue.dialogx.interfaces;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -30,13 +31,17 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
+import com.kongzue.dialogx.util.ActivityRunnable;
+import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.WindowUtil;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.kongzue.dialogx.DialogX.DEBUGMODE;
@@ -57,6 +62,7 @@ public abstract class BaseDialog {
     private WeakReference<View> dialogView;
     protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
     protected DialogX.IMPL_MODE dialogImplMode = DialogX.implIMPLMode;
+    protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
     
     public static void init(Context context) {
         if (context == null) context = ActivityLifecycleImpl.getTopActivity();
@@ -150,6 +156,48 @@ public abstract class BaseDialog {
                     dialogFragment.show(getSupportFragmentManager(contextWeakReference.get()), "DialogX");
                     baseDialog.ownDialogFragmentImpl = new WeakReference<>(dialogFragment);
                     break;
+                case FLOATING_ACTIVITY:
+                    if (waitRunDialogX == null) {
+                        waitRunDialogX = new HashMap<>();
+                    }
+                    waitRunDialogX.put(baseDialog.dialogKey(), new ActivityRunnable() {
+                        @Override
+                        public void run(Activity activity) {
+                            baseDialog.floatingWindowActivity = new WeakReference<>((DialogXFloatingWindowActivity) activity);
+                            final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
+                            if (activityRootView == null) {
+                                return;
+                            }
+                            runOnMain(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (view.getParent() == rootFrameLayout.get()) {
+                                        error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
+                                        return;
+                                    }
+                                    if (view.getParent() != null) {
+                                        ((ViewGroup) view.getParent()).removeView(view);
+                                    }
+                                    activityRootView.addView(view);
+                                }
+                            });
+                        }
+                    });
+                    DialogXFloatingWindowActivity dialogXFloatingWindowActivity = DialogXFloatingWindowActivity.getDialogXFloatingWindowActivity();
+                    if (dialogXFloatingWindowActivity != null && dialogXFloatingWindowActivity.isSameFrom(contextWeakReference.get().hashCode())) {
+                        dialogXFloatingWindowActivity.showDialogX(baseDialog.dialogKey());
+                        return;
+                    }
+                    Intent intent = new Intent(contextWeakReference.get(), DialogXFloatingWindowActivity.class);
+                    intent.putExtra("dialogXKey", baseDialog.dialogKey());
+                    intent.putExtra("fromActivityUiStatus", contextWeakReference.get().getWindow().getDecorView().getSystemUiVisibility());
+                    intent.putExtra("from", contextWeakReference.get().hashCode());
+                    contextWeakReference.get().startActivity(intent);
+                    int version = Integer.valueOf(Build.VERSION.SDK_INT);
+                    if (version > 5) {
+                        contextWeakReference.get().overridePendingTransition(0, 0);
+                    }
+                    break;
                 default:
                     if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
                     runOnMain(new Runnable() {
@@ -172,6 +220,13 @@ public abstract class BaseDialog {
     
     private static FragmentManager getSupportFragmentManager(Activity activity) {
         return (activity instanceof AppCompatActivity) ? ((AppCompatActivity) activity).getSupportFragmentManager() : null;
+    }
+    
+    private static Map<String, ActivityRunnable> waitRunDialogX;
+    
+    public static ActivityRunnable getActivityRunnable(String dialogXKey) {
+        if (dialogXKey == null) return null;
+        return waitRunDialogX.get(dialogXKey);
     }
     
     protected static void show(final Activity activity, final View view) {
@@ -210,6 +265,48 @@ public abstract class BaseDialog {
                     DialogFragmentImpl dialogFragment = new DialogFragmentImpl(baseDialog, view);
                     dialogFragment.show(getSupportFragmentManager(activity), "DialogX");
                     baseDialog.ownDialogFragmentImpl = new WeakReference<>(dialogFragment);
+                    break;
+                case FLOATING_ACTIVITY:
+                    if (waitRunDialogX == null) {
+                        waitRunDialogX = new HashMap<>();
+                    }
+                    waitRunDialogX.put(baseDialog.dialogKey(), new ActivityRunnable() {
+                        @Override
+                        public void run(Activity activity) {
+                            baseDialog.floatingWindowActivity = new WeakReference<>((DialogXFloatingWindowActivity) activity);
+                            final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
+                            if (activityRootView == null) {
+                                return;
+                            }
+                            runOnMain(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (view.getParent() == rootFrameLayout.get()) {
+                                        error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
+                                        return;
+                                    }
+                                    if (view.getParent() != null) {
+                                        ((ViewGroup) view.getParent()).removeView(view);
+                                    }
+                                    activityRootView.addView(view);
+                                }
+                            });
+                        }
+                    });
+                    DialogXFloatingWindowActivity dialogXFloatingWindowActivity = DialogXFloatingWindowActivity.getDialogXFloatingWindowActivity();
+                    if (dialogXFloatingWindowActivity != null && dialogXFloatingWindowActivity.isSameFrom(activity.hashCode())) {
+                        dialogXFloatingWindowActivity.showDialogX(baseDialog.dialogKey());
+                        return;
+                    }
+                    Intent intent = new Intent(activity, DialogXFloatingWindowActivity.class);
+                    intent.putExtra("dialogXKey", baseDialog.dialogKey());
+                    intent.putExtra("from", activity.hashCode());
+                    intent.putExtra("fromActivityUiStatus", activity.getWindow().getDecorView().getSystemUiVisibility());
+                    activity.startActivity(intent);
+                    int version = Integer.valueOf(Build.VERSION.SDK_INT);
+                    if (version > 5) {
+                        activity.overridePendingTransition(0, 0);
+                    }
                     break;
                 default:
                     final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
@@ -253,6 +350,14 @@ public abstract class BaseDialog {
             case DIALOG_FRAGMENT:
                 if (baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
                     baseDialog.ownDialogFragmentImpl.get().dismiss();
+                }
+                break;
+            case FLOATING_ACTIVITY:
+                if (baseDialog.floatingWindowActivity != null && baseDialog.floatingWindowActivity.get() != null) {
+                    FrameLayout rootView = ((FrameLayout) baseDialog.floatingWindowActivity.get().getWindow().getDecorView());
+                    if (rootView != null) rootView.removeView(dialogView);
+                    baseDialog.floatingWindowActivity.get().finish(baseDialog.dialogKey());
+                    requestDialogFocus();
                 }
                 break;
             default:
@@ -555,6 +660,9 @@ public abstract class BaseDialog {
                     }
                 }
                 break;
+            case FLOATING_ACTIVITY:
+                
+                break;
             default:
                 if (runningDialogList != null) {
                     CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
@@ -616,5 +724,9 @@ public abstract class BaseDialog {
                 }
             }
         }
+    }
+    
+    protected void bindFloatingActivity(DialogXFloatingWindowActivity activity) {
+        floatingWindowActivity = new WeakReference<>(activity);
     }
 }

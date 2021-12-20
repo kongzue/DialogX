@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -119,6 +120,9 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
                     window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
                 }
             }
+            if (activity instanceof DialogXFloatingWindowActivity) {
+                return;
+            }
             onActivityResumeCallBack.getActivity(activity);
         }
     }
@@ -130,7 +134,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        if (activity.isDestroyed() || activity.isFinishing()) {
+        if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
             return;
         }
         if (onActivityResumeCallBack != null) {

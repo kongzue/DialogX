@@ -62,6 +62,7 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
+import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogxdemo.BuildConfig;
@@ -89,6 +90,7 @@ public class MainActivity extends BaseActivity {
     private RadioButton rdoModeView;
     private RadioButton rdoModeWindow;
     private RadioButton rdoModeDialogFragment;
+    private RadioButton rdoModeFloatingActivity;
     private RadioGroup grpStyle;
     private RadioButton rdoMaterial;
     private RadioButton rdoIos;
@@ -140,6 +142,7 @@ public class MainActivity extends BaseActivity {
         rdoModeView = findViewById(R.id.rdo_mode_view);
         rdoModeWindow = findViewById(R.id.rdo_mode_window);
         rdoModeDialogFragment = findViewById(R.id.rdo_mode_dialogFragment);
+        rdoModeFloatingActivity = findViewById(R.id.rdo_mode_floatingActivity);
         grpStyle = findViewById(R.id.grp_style);
         rdoMaterial = findViewById(R.id.rdo_material);
         rdoIos = findViewById(R.id.rdo_ios);
@@ -224,6 +227,9 @@ public class MainActivity extends BaseActivity {
             case DIALOG_FRAGMENT:
                 rdoModeDialogFragment.setChecked(true);
                 break;
+            case FLOATING_ACTIVITY:
+                rdoModeFloatingActivity.setChecked(true);
+                break;
         }
         
         txtVer.setText("当前版本：" + BuildConfig.VERSION_NAME);
@@ -269,6 +275,9 @@ public class MainActivity extends BaseActivity {
                         break;
                     case R.id.rdo_mode_dialogFragment:
                         DialogX.implIMPLMode = DialogX.IMPL_MODE.DIALOG_FRAGMENT;
+                        break;
+                    case R.id.rdo_mode_floatingActivity:
+                        DialogX.implIMPLMode = DialogX.IMPL_MODE.FLOATING_ACTIVITY;
                         break;
                 }
             }

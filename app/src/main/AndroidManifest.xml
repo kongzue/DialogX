@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.AppCompatActivityTest"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".activity.AppCompatActivityTest"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection">
@@ -23,6 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.kongzue.dialogx.util.DialogXFloatingWindowActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|mcc|mnc|locale|touchscreen|keyboard|navigation|fontScale"
+            android:exported="false"
+            android:theme="@style/DialogXFloatingWindow"
+            android:windowSoftInputMode="adjustResize" />
+
     </application>
 
 </manifest>
