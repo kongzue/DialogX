@@ -58,7 +58,9 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() != MotionEvent.ACTION_CANCEL) {
-                    return ((Activity) BaseDialog.getContext()).dispatchTouchEvent(event);
+                    if (BaseDialog.getContext() != null) {
+                        return ((Activity) BaseDialog.getContext()).dispatchTouchEvent(event);
+                    }
                 }
                 return false;
             }
