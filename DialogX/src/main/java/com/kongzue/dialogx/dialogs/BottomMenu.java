@@ -1096,4 +1096,14 @@ public class BottomMenu extends BottomDialog {
         this.dialogImplMode = dialogImplMode;
         return this;
     }
+    
+    public TextInfo getMenuTextInfo() {
+        if (menuTextInfo == null) return DialogX.menuTextInfo;
+        return menuTextInfo;
+    }
+    
+    public BottomMenu setMenuTextInfo(TextInfo menuTextInfo) {
+        this.menuTextInfo = menuTextInfo;
+        return this;
+    }
 }

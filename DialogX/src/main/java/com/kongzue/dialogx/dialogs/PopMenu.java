@@ -31,6 +31,7 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.PopMenuArrayAdapter;
+import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxLinearLayout;
 import com.kongzue.dialogx.util.views.PopMenuListView;
@@ -63,6 +64,7 @@ public class PopMenu extends BaseDialog {
     protected OnIconChangeCallBack<PopMenu> onIconChangeCallBack;           //设置图标
     protected int width = -1;                                               //指定菜单宽度
     protected int height = -1;                                              //指定菜单高度
+    protected TextInfo menuTextInfo;
     
     protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
     
@@ -198,8 +200,6 @@ public class PopMenu extends BaseDialog {
                         
                         int width = baseView.getWidth();
                         int height = baseView.getHeight();
-                        
-                        log("width=" + width);
                         
                         int left = baseViewLoc[0];
                         int top = baseViewLoc[1] + (overlayBaseView ? 0 : height);
@@ -390,6 +390,7 @@ public class PopMenu extends BaseDialog {
                         rLp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
                         rLp.leftMargin = dip2px(50);
                         rLp.rightMargin = dip2px(50);
+                        boxBody.setLayoutParams(rLp);
                         boxBody.setAlpha(0f);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             boxBody.setElevation(dip2px(20));
@@ -472,25 +473,25 @@ public class PopMenu extends BaseDialog {
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
-    
+            
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
-            
+                        
                         if (overrideExitDuration != -1) exitAnimDuration = overrideExitDuration;
                         Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), R.anim.anim_dialogx_default_exit);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
                         }
                         boxBody.startAnimation(exitAnim);
-            
+                        
                         boxRoot.animate()
                                 .alpha(0f)
                                 .setInterpolator(new AccelerateInterpolator())
                                 .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-            
+                        
                         if (baseView == null) {
                             ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1, 0f);
                             bkgAlpha.setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
@@ -503,7 +504,7 @@ public class PopMenu extends BaseDialog {
                             });
                             bkgAlpha.start();
                         }
-            
+                        
                         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -715,6 +716,16 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
+        return this;
+    }
+    
+    public TextInfo getMenuTextInfo() {
+        if (menuTextInfo == null) return DialogX.menuTextInfo;
+        return menuTextInfo;
+    }
+    
+    public PopMenu setMenuTextInfo(TextInfo menuTextInfo) {
+        this.menuTextInfo = menuTextInfo;
         return this;
     }
 }

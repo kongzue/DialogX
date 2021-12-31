@@ -335,7 +335,8 @@ public class MainActivity extends BaseActivity {
         btnContextMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"}).setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(true) {
+                PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"})
+                        .setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(true) {
                     @Override
                     public int getIcon(PopMenu dialog, int index, String menuText) {
                         switch (index) {
@@ -903,6 +904,12 @@ public class MainActivity extends BaseActivity {
                                 fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 6"));
                                 fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 7"));
                                 fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 8"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 9"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 10"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 11"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 12"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 13"));
+                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 14"));
                                 RecyclerView recyclerView = (RecyclerView) v;
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(me);
                                 recyclerView.setLayoutManager(layoutManager);

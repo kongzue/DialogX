@@ -38,6 +38,13 @@
             android:textColor="@color/black90"
             android:textSize="16dp" />
 
+        <Space
+            android:id="@+id/space_dialogx_right_padding"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="8dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 </RelativeLayout>

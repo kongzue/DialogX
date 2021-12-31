@@ -63,6 +63,7 @@ public class BottomDialog extends BaseDialog {
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
+    protected TextInfo menuTextInfo;
     protected TextInfo cancelTextInfo = new TextInfo().setBold(true);
     protected TextInfo okTextInfo = new TextInfo().setBold(true);
     protected TextInfo otherTextInfo = new TextInfo().setBold(true);

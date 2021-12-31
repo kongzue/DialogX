@@ -44,6 +44,14 @@
             android:src="@mipmap/img_dialogx_bottom_menu_miui_item_selection"
             android:visibility="gone" />
 
+        <Space
+            android:id="@+id/space_dialogx_right_padding"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="-5dp"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 </RelativeLayout>

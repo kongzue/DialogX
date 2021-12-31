@@ -374,7 +374,7 @@ public abstract class BaseDialog {
                         }
                         requestDialogFocus();
                     }
-                });
+                }, true);
                 break;
         }
     }
@@ -610,6 +610,10 @@ public abstract class BaseDialog {
             runnable.run();
             return;
         }
+        runOnMain(runnable, true);
+    }
+    
+    protected static void runOnMain(Runnable runnable, boolean needWaitMainLooper) {
         new Handler(Looper.getMainLooper()).post(runnable);
     }
     

@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
+import android.widget.Space;
 import android.widget.TextView;
 
 import com.kongzue.dialogx.DialogX;
@@ -47,8 +48,9 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
     
     class ViewHolder {
         ImageView imgDialogxMenuIcon;
-        TextView txtDialogxMenuText;
         ImageView imgDialogxMenuSelection;
+        TextView txtDialogxMenuText;
+        Space spaceDialogxRightPadding;
     }
     
     @Override
@@ -90,8 +92,9 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
             convertView = mInflater.inflate(resourceId, null);
             
             viewHolder.imgDialogxMenuIcon = convertView.findViewById(R.id.img_dialogx_menu_icon);
-            viewHolder.txtDialogxMenuText = convertView.findViewById(R.id.txt_dialogx_menu_text);
             viewHolder.imgDialogxMenuSelection = convertView.findViewById(R.id.img_dialogx_menu_selection);
+            viewHolder.txtDialogxMenuText = convertView.findViewById(R.id.txt_dialogx_menu_text);
+            viewHolder.spaceDialogxRightPadding = convertView.findViewById(R.id.space_dialogx_right_padding);
             
             convertView.setTag(viewHolder);
         } else {
@@ -158,8 +161,8 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         if (null != text) {
             viewHolder.txtDialogxMenuText.setText(text);
             viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
-            if (DialogX.menuTextInfo != null) {
-                useTextInfo(viewHolder.txtDialogxMenuText, DialogX.menuTextInfo);
+            if (bottomMenu.getMenuTextInfo() != null) {
+                useTextInfo(viewHolder.txtDialogxMenuText, bottomMenu.getMenuTextInfo());
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (viewHolder.imgDialogxMenuSelection != null) {
@@ -178,6 +181,9 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                 if (resId != 0) {
                     viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
                     viewHolder.imgDialogxMenuIcon.setImageResource(resId);
+                    if (viewHolder.spaceDialogxRightPadding != null) {
+                        viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
+                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if (autoTintIconInLightOrDarkMode) {
                             viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
@@ -185,9 +191,15 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                     }
                 } else {
                     viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
+                    if (viewHolder.spaceDialogxRightPadding != null) {
+                        viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                    }
                 }
             } else {
                 viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
+                if (viewHolder.spaceDialogxRightPadding != null) {
+                    viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                }
             }
         }
         
