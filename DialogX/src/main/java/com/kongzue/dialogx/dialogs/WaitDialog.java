@@ -553,24 +553,39 @@ public class WaitDialog extends BaseDialog {
                             break;
                     }
                     
-                    //此事件是在完成衔接动画绘制后执行的逻辑
-                    progressView.whenShowTick(new Runnable() {
-                        @Override
-                        public void run() {
-                            getDialogLifecycleCallback().onShow(WaitDialog.this);
-                            refreshView();
-                            if (tipShowDuration > 0) {
-                                ((View) progressView).postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (showType > -1) {
-                                            doDismiss(null);
+                    if (boxProgress != null && boxProgress.getVisibility() == View.VISIBLE) {
+                        //此事件是在完成衔接动画绘制后执行的逻辑
+                        progressView.whenShowTick(new Runnable() {
+                            @Override
+                            public void run() {
+                                getDialogLifecycleCallback().onShow(WaitDialog.this);
+                                refreshView();
+                                if (tipShowDuration > 0) {
+                                    ((View) progressView).postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (showType > -1) {
+                                                doDismiss(null);
+                                            }
                                         }
-                                    }
-                                }, tipShowDuration);
+                                    }, tipShowDuration);
+                                }
                             }
+                        });
+                    } else {
+                        getDialogLifecycleCallback().onShow(WaitDialog.this);
+                        refreshView();
+                        if (tipShowDuration > 0) {
+                            runOnMainDelay(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (showType > -1) {
+                                        doDismiss(null);
+                                    }
+                                }
+                            }, tipShowDuration);
                         }
-                    });
+                    }
                 }
             });
         }
