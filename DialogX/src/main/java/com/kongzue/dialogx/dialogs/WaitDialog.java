@@ -745,7 +745,7 @@ public class WaitDialog extends BaseDialog {
         if (overrideCancelable != null) {
             return overrideCancelable == BOOLEAN.TRUE;
         }
-        return false;
+        return DialogX.cancelableTipDialog;
     }
     
     public WaitDialog setCancelable(boolean cancelable) {

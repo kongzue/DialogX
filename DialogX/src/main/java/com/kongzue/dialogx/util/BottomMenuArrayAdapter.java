@@ -68,6 +68,8 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         return position;
     }
     
+    TextInfo defaultMenuTextInfo;
+    
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
@@ -146,7 +148,9 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         if (bottomMenu.getSelection() == position) {
             //选中的背景变色
             if (overrideSelectionBackgroundColorRes != 0) {
-                convertView.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(overrideSelectionBackgroundColorRes)));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    convertView.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(overrideSelectionBackgroundColorRes)));
+                }
             }
         }
         CharSequence text = objects.get(position);
@@ -159,10 +163,32 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         }
         
         if (null != text) {
+            if (defaultMenuTextInfo == null) {
+                defaultMenuTextInfo = new TextInfo()
+                        .setShowEllipsis(viewHolder.txtDialogxMenuText.getEllipsize() == TextUtils.TruncateAt.END)
+                        .setFontColor(viewHolder.txtDialogxMenuText.getTextColors().getDefaultColor())
+                        .setBold(viewHolder.txtDialogxMenuText.getPaint().isFakeBoldText())
+                        .setFontSize(px2dip(viewHolder.txtDialogxMenuText.getTextSize()))
+                        .setGravity(viewHolder.txtDialogxMenuText.getGravity())
+                        .setMaxLines(viewHolder.txtDialogxMenuText.getMaxLines());
+            }
             viewHolder.txtDialogxMenuText.setText(text);
             viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
-            if (bottomMenu.getMenuTextInfo() != null) {
-                useTextInfo(viewHolder.txtDialogxMenuText, bottomMenu.getMenuTextInfo());
+            if (bottomMenu.getMenuItemTextInfoInterceptor() != null) {
+                TextInfo textInfo = bottomMenu.getMenuItemTextInfoInterceptor().menuItemTextInfo(bottomMenu, position, text.toString());
+                if (textInfo != null) {
+                    useTextInfo(viewHolder.txtDialogxMenuText, textInfo);
+                } else {
+                    if (bottomMenu.getMenuTextInfo() != null) {
+                        useTextInfo(viewHolder.txtDialogxMenuText, bottomMenu.getMenuTextInfo());
+                    } else {
+                        useTextInfo(viewHolder.txtDialogxMenuText, defaultMenuTextInfo);
+                    }
+                }
+            } else {
+                if (bottomMenu.getMenuTextInfo() != null) {
+                    useTextInfo(viewHolder.txtDialogxMenuText, bottomMenu.getMenuTextInfo());
+                }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (viewHolder.imgDialogxMenuSelection != null) {
@@ -206,4 +232,8 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         return convertView;
     }
     
+    private int px2dip(float pxValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
 }

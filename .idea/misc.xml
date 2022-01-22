@@ -3,6 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/WorkSpace/Android/DialogX/DialogX/src/main/res/layout/layout_dialogx_wait.xml" value="0.3494791666666667" />
+        <entry key="..\:/WorkSpace/Android/DialogX/DialogXIOSStyle/src/main/res/drawable/rect_dialogx_ios_left_light.xml" value="0.365625" />
+        <entry key="..\:/WorkSpace/Android/DialogX/DialogXIOSStyle/src/main/res/layout/item_dialogx_ios_bottom_menu_top_dark.xml" value="0.3494791666666667" />
+        <entry key="..\:/WorkSpace/Android/DialogX/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/WorkSpace/Android/DialogX/app/src/main/res/layout/layout_custom_dialog.xml" value="0.3494791666666667" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable-v21/btn_default_mtrl_shape.xml" value="0.5487179487179488" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable-v21/button_dialogx_material_light.xml" value="0.3484375" />
         <entry key="..\:/WorkSpace/Android/DialogXDemo/DialogX/src/main/res/drawable-v21/button_dialogx_material_night.xml" value="0.3484375" />

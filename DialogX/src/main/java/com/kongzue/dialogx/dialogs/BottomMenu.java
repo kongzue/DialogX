@@ -15,6 +15,7 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BottomMenuListViewTouchEvent;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
+import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
@@ -72,6 +73,7 @@ public class BottomMenu extends BottomDialog {
     }
     
     private OnIconChangeCallBack<BottomMenu> onIconChangeCallBack;
+    private MenuItemTextInfoInterceptor<BottomMenu> menuItemTextInfoInterceptor;
     private BottomDialogListView listView;
     private BaseAdapter menuListAdapter;
     private List<CharSequence> menuList;
@@ -1104,6 +1106,15 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setMenuTextInfo(TextInfo menuTextInfo) {
         this.menuTextInfo = menuTextInfo;
+        return this;
+    }
+    
+    public MenuItemTextInfoInterceptor<BottomMenu> getMenuItemTextInfoInterceptor() {
+        return menuItemTextInfoInterceptor;
+    }
+    
+    public BottomMenu setMenuItemTextInfoInterceptor(MenuItemTextInfoInterceptor<BottomMenu> menuItemTextInfoInterceptor) {
+        this.menuItemTextInfoInterceptor = menuItemTextInfoInterceptor;
         return this;
     }
 }

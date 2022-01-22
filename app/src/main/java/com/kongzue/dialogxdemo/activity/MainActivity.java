@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +46,7 @@ import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
@@ -72,11 +74,10 @@ import java.util.List;
 @NavigationBarBackgroundColorRes(R.color.emptyNavBar)
 public class MainActivity extends BaseActivity {
     
-    private RelativeLayout boxTable;
-    private LinearLayout boxTableChild;
-    private LinearLayout btnBack;
-    private ImageView btnShare;
+    private ConstraintLayout boxTable;
     private TextView txtTitle;
+    private ImageView btnShare;
+    private ImageView splitBody;
     private LinearLayout boxBody;
     private RadioGroup grpMode;
     private RadioButton rdoModeView;
@@ -125,8 +126,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initViews() {
         boxTable = findViewById(R.id.box_table);
-        boxTableChild = findViewById(R.id.box_table_child);
-        btnBack = findViewById(R.id.btn_back);
         btnShare = findViewById(R.id.btn_share);
         txtTitle = findViewById(R.id.txt_title);
         boxBody = findViewById(R.id.box_body);
@@ -616,11 +615,21 @@ public class MainActivity extends BaseActivity {
                 } else {
                     BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
                             .setMessage("http://www.kongzue.com/DialogX")
+                            .setMenuItemTextInfoInterceptor(new MenuItemTextInfoInterceptor<BottomMenu>() {
+                                @Override
+                                public TextInfo menuItemTextInfo(BottomMenu dialog, int index, String menuText) {
+                                    if (index==2){
+                                        return new TextInfo()
+                                                .setFontColor(Color.RED)
+                                                .setBold(true);
+                                    }
+                                    return null;
+                                }
+                            })
                             .setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                                 @Override
                                 public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
                                     PopTip.show(text);
-                                    dialog.setMenuList(new String[]{"test", "test2", "test3"});
                                     return false;
                                 }
                             });
