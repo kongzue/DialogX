@@ -240,6 +240,9 @@ public class FullScreenDialog extends BaseDialog {
         
         @Override
         public void refreshView() {
+            if (boxRoot == null || getContext() == null) {
+                return;
+            }
             if (backgroundColor != -1) {
                 tintColor(bkg, backgroundColor);
             }
@@ -349,8 +352,13 @@ public class FullScreenDialog extends BaseDialog {
     }
     
     public void dismiss() {
-        if (dialogImpl == null) return;
-        dialogImpl.doDismiss(null);
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                if (dialogImpl == null) return;
+                dialogImpl.doDismiss(null);
+            }
+        });
     }
     
     public DialogLifecycleCallback<FullScreenDialog> getDialogLifecycleCallback() {

@@ -539,6 +539,9 @@ public class PopTip extends BaseDialog {
         
         @Override
         public void refreshView() {
+            if (boxRoot == null || getContext() == null) {
+                return;
+            }
             if (backgroundColor != -1) {
                 tintColor(boxBody, backgroundColor);
             }
@@ -683,8 +686,13 @@ public class PopTip extends BaseDialog {
     }
     
     public void dismiss() {
-        if (dialogImpl == null) return;
-        dialogImpl.doDismiss(null);
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                if (dialogImpl == null) return;
+                dialogImpl.doDismiss(null);
+            }
+        });
     }
     
     public DialogLifecycleCallback<PopTip> getDialogLifecycleCallback() {

@@ -458,6 +458,9 @@ public class MessageDialog extends BaseDialog {
         
         public void refreshView() {
             log("#refreshView");
+            if (boxRoot == null || getContext() == null) {
+                return;
+            }
             if (backgroundColor != -1) {
                 tintColor(bkg, backgroundColor);
                 if (style instanceof MaterialStyle) {
@@ -709,8 +712,13 @@ public class MessageDialog extends BaseDialog {
     }
     
     public void dismiss() {
-        if (dialogImpl == null) return;
-        dialogImpl.doDismiss(dialogImpl.bkg);
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                if (dialogImpl == null) return;
+                dialogImpl.doDismiss(dialogImpl.bkg);
+            }
+        });
     }
     
     public DialogLifecycleCallback<MessageDialog> getDialogLifecycleCallback() {

@@ -439,6 +439,9 @@ public class PopMenu extends BaseDialog {
         
         @Override
         public void refreshView() {
+            if (boxRoot == null || getContext() == null) {
+                return;
+            }
             if (listMenu.getAdapter() == null) {
                 listMenu.setAdapter(menuListAdapter);
             } else {
@@ -528,8 +531,13 @@ public class PopMenu extends BaseDialog {
     }
     
     public void dismiss() {
-        if (dialogImpl == null) return;
-        dialogImpl.doDismiss(null);
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                if (dialogImpl == null) return;
+                dialogImpl.doDismiss(null);
+            }
+        });
     }
     
     @Override

@@ -318,6 +318,7 @@ public class WaitDialog extends BaseDialog {
                     bkg.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (getContext() == null) return;
                             int enterAnimResId = R.anim.anim_dialogx_default_enter;
                             if (overrideEnterAnimRes != 0) {
                                 enterAnimResId = overrideEnterAnimRes;
@@ -413,8 +414,9 @@ public class WaitDialog extends BaseDialog {
         private float oldProgress;
         
         public void refreshView() {
-            if (bkg == null) return;
-            if (getContext() == null) return;
+            if (boxRoot == null || getContext() == null) {
+                return;
+            }
             
             bkg.setMaxWidth(getMaxWidth());
             

@@ -227,6 +227,9 @@ public class CustomDialog extends BaseDialog {
         
         @Override
         public void refreshView() {
+            if (boxRoot == null || getContext() == null) {
+                return;
+            }
             RelativeLayout.LayoutParams rlp;
             rlp = ((RelativeLayout.LayoutParams) boxCustom.getLayoutParams());
             if (rlp == null) {
@@ -362,8 +365,13 @@ public class CustomDialog extends BaseDialog {
     }
     
     public void dismiss() {
-        if (dialogImpl == null) return;
-        dialogImpl.doDismiss(null);
+        runOnMain(new Runnable() {
+            @Override
+            public void run() {
+                if (dialogImpl == null) return;
+                dialogImpl.doDismiss(null);
+            }
+        });
     }
     
     public DialogLifecycleCallback<CustomDialog> getDialogLifecycleCallback() {
