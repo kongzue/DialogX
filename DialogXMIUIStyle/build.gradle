@@ -29,6 +29,6 @@ artifacts {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    compileOnly project(path: ':DialogX')
+    implementation project(path: ':DialogX')
     compileOnly project(path: ':DialogXInterface')
 }

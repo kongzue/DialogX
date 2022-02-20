@@ -66,7 +66,9 @@ public abstract class BaseDialog {
     protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
     
     public static void init(Context context) {
-        if (context == null) context = ActivityLifecycleImpl.getTopActivity();
+        if (context == null) {
+            context = ActivityLifecycleImpl.getTopActivity();
+        }
         if (context instanceof Activity) {
             initActivityContext((Activity) context);
         }
@@ -93,11 +95,15 @@ public abstract class BaseDialog {
     }
     
     protected static void log(Object o) {
-        if (DEBUGMODE) Log.i(">>>", o.toString());
+        if (DEBUGMODE) {
+            Log.i(">>>", o.toString());
+        }
     }
     
     protected static void error(Object o) {
-        if (DEBUGMODE) Log.e(">>>", o.toString());
+        if (DEBUGMODE) {
+            Log.e(">>>", o.toString());
+        }
     }
     
     public static void onActivityResume(Activity activity) {
@@ -127,7 +133,9 @@ public abstract class BaseDialog {
     public abstract void restartDialog();
     
     protected static void show(final View view) {
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
         if (baseDialog != null) {
             if (baseDialog.isShow) {
@@ -201,7 +209,9 @@ public abstract class BaseDialog {
                     }
                     break;
                 default:
-                    if (rootFrameLayout == null || rootFrameLayout.get() == null) return;
+                    if (rootFrameLayout == null || rootFrameLayout.get() == null) {
+                        return;
+                    }
                     runOnMain(new Runnable() {
                         @Override
                         public void run() {
@@ -227,12 +237,16 @@ public abstract class BaseDialog {
     private static Map<String, ActivityRunnable> waitRunDialogX;
     
     public static ActivityRunnable getActivityRunnable(String dialogXKey) {
-        if (dialogXKey == null) return null;
+        if (dialogXKey == null) {
+            return null;
+        }
         return waitRunDialogX.get(dialogXKey);
     }
     
     protected static void show(final Activity activity, final View view) {
-        if (activity == null || view == null) return;
+        if (activity == null || view == null) {
+            return;
+        }
         if (contextWeakReference == null || contextWeakReference.get() == null) {
             initActivityContext(activity);
         }
@@ -334,11 +348,15 @@ public abstract class BaseDialog {
     }
     
     protected static void dismiss(final View dialogView) {
-        if (dialogView == null) return;
+        if (dialogView == null) {
+            return;
+        }
         final BaseDialog baseDialog = (BaseDialog) dialogView.getTag();
         log(baseDialog.dialogKey() + ".dismiss");
         removeDialogToRunningList(baseDialog);
-        if (baseDialog.dialogView != null) baseDialog.dialogView.clear();
+        if (baseDialog.dialogView != null) {
+            baseDialog.dialogView.clear();
+        }
         
         switch (baseDialog.dialogImplMode) {
             case WINDOW:
@@ -357,7 +375,9 @@ public abstract class BaseDialog {
             case FLOATING_ACTIVITY:
                 if (baseDialog.floatingWindowActivity != null && baseDialog.floatingWindowActivity.get() != null) {
                     FrameLayout rootView = ((FrameLayout) baseDialog.floatingWindowActivity.get().getWindow().getDecorView());
-                    if (rootView != null) rootView.removeView(dialogView);
+                    if (rootView != null) {
+                        rootView.removeView(dialogView);
+                    }
                     baseDialog.floatingWindowActivity.get().finish(baseDialog.dialogKey());
                     requestDialogFocus();
                 }
@@ -367,7 +387,9 @@ public abstract class BaseDialog {
                     @Override
                     public void run() {
                         if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
-                            if (rootFrameLayout == null) return;
+                            if (rootFrameLayout == null) {
+                                return;
+                            }
                             rootFrameLayout.get().removeView(dialogView);
                         } else {
                             ((ViewGroup) dialogView.getParent()).removeView(dialogView);
@@ -380,12 +402,16 @@ public abstract class BaseDialog {
     }
     
     private static void addDialogToRunningList(BaseDialog baseDialog) {
-        if (runningDialogList == null) runningDialogList = new CopyOnWriteArrayList<>();
+        if (runningDialogList == null) {
+            runningDialogList = new CopyOnWriteArrayList<>();
+        }
         runningDialogList.add(baseDialog);
     }
     
     private static void removeDialogToRunningList(BaseDialog baseDialog) {
-        if (runningDialogList != null) runningDialogList.remove(baseDialog);
+        if (runningDialogList != null) {
+            runningDialogList.remove(baseDialog);
+        }
     }
     
     public static Context getContext() {
@@ -405,7 +431,9 @@ public abstract class BaseDialog {
      * @hide
      */
     public static void cleanContext() {
-        if (contextWeakReference != null) contextWeakReference.clear();
+        if (contextWeakReference != null) {
+            contextWeakReference.clear();
+        }
         contextWeakReference = null;
         System.gc();
     }
@@ -455,8 +483,12 @@ public abstract class BaseDialog {
     }
     
     public static void useTextInfo(TextView textView, TextInfo textInfo) {
-        if (textInfo == null) return;
-        if (textView == null) return;
+        if (textInfo == null) {
+            return;
+        }
+        if (textView == null) {
+            return;
+        }
         if (textInfo.getFontSize() > 0) {
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textInfo.getFontSize());
         }
@@ -481,7 +513,9 @@ public abstract class BaseDialog {
     }
     
     protected void showText(TextView textView, CharSequence text) {
-        if (textView == null) return;
+        if (textView == null) {
+            return;
+        }
         if (isNull(text)) {
             textView.setVisibility(View.GONE);
             textView.setText("");
@@ -523,7 +557,9 @@ public abstract class BaseDialog {
     }
     
     public Resources getResources() {
-        if (getContext() == null) return Resources.getSystem();
+        if (getContext() == null) {
+            return Resources.getSystem();
+        }
         return getContext().getResources();
     }
     
@@ -534,7 +570,9 @@ public abstract class BaseDialog {
     
     public boolean isLightTheme() {
         if (theme == DialogX.THEME.AUTO) {
-            if (getContext() == null) return theme == DialogX.THEME.LIGHT;
+            if (getContext() == null) {
+                return theme == DialogX.THEME.LIGHT;
+            }
             return (getContext().getApplicationContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
         }
         return theme == DialogX.THEME.LIGHT;
@@ -614,16 +652,20 @@ public abstract class BaseDialog {
     }
     
     protected static void runOnMain(Runnable runnable, boolean needWaitMainLooper) {
-        new Handler(Looper.getMainLooper()).post(runnable);
+        getMainHandler().post(runnable);
     }
     
     protected static void runOnMainDelay(Runnable runnable, long delay) {
-        if (!DialogX.autoRunOnUIThread) runnable.run();
-        new Handler(Looper.getMainLooper()).postDelayed(runnable, delay);
+        if (!DialogX.autoRunOnUIThread) {
+            runnable.run();
+        }
+        getMainHandler().postDelayed(runnable, delay);
     }
     
     public View getDialogView() {
-        if (dialogView == null) return null;
+        if (dialogView == null) {
+            return null;
+        }
         return dialogView.get();
     }
     
@@ -632,7 +674,9 @@ public abstract class BaseDialog {
     }
     
     protected void cleanActivityContext() {
-        if (ownActivity != null) ownActivity.clear();
+        if (ownActivity != null) {
+            ownActivity.clear();
+        }
         ownActivity = null;
     }
     
@@ -640,7 +684,9 @@ public abstract class BaseDialog {
         if (runningDialogList != null) {
             CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
             for (BaseDialog baseDialog : copyOnWriteList) {
-                if (baseDialog.isShow()) baseDialog.shutdown();
+                if (baseDialog.isShow()) {
+                    baseDialog.shutdown();
+                }
                 baseDialog.cleanActivityContext();
                 runningDialogList.remove(baseDialog);
             }
@@ -690,12 +736,16 @@ public abstract class BaseDialog {
     }
     
     public static List<BaseDialog> getRunningDialogList() {
-        if (runningDialogList == null) return new ArrayList<>();
+        if (runningDialogList == null) {
+            return new ArrayList<>();
+        }
         return new CopyOnWriteArrayList<>(runningDialogList);
     }
     
     protected void imeShow(EditText editText, boolean show) {
-        if (getContext() == null) return;
+        if (getContext() == null) {
+            return;
+        }
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (show) {
             imm.showSoftInput(editText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
@@ -705,7 +755,9 @@ public abstract class BaseDialog {
     }
     
     public int getMaxWidth() {
-        if (maxWidth == 0) return DialogX.dialogMaxWidth;
+        if (maxWidth == 0) {
+            return DialogX.dialogMaxWidth;
+        }
         return maxWidth;
     }
     
@@ -720,7 +772,9 @@ public abstract class BaseDialog {
     }
     
     public static void publicWindowInsets(WindowInsets windowInsets) {
-        if (windowInsets != null) BaseDialog.windowInsets = windowInsets;
+        if (windowInsets != null) {
+            BaseDialog.windowInsets = windowInsets;
+        }
         if (runningDialogList != null) {
             CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
             for (int i = copyOnWriteList.size() - 1; i >= 0; i--) {
@@ -737,5 +791,15 @@ public abstract class BaseDialog {
     
     protected void bindFloatingActivity(DialogXFloatingWindowActivity activity) {
         floatingWindowActivity = new WeakReference<>(activity);
+    }
+    
+    static WeakReference<Handler> mMainHandler;
+    
+    private static Handler getMainHandler(){
+        if (mMainHandler != null && mMainHandler.get() != null) {
+            return mMainHandler.get();
+        }
+        mMainHandler = new WeakReference<>(new Handler(Looper.getMainLooper()));
+        return mMainHandler.get();
     }
 }
