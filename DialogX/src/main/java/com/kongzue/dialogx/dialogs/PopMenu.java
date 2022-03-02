@@ -65,6 +65,7 @@ public class PopMenu extends BaseDialog {
     protected int width = -1;                                               //指定菜单宽度
     protected int height = -1;                                              //指定菜单高度
     protected TextInfo menuTextInfo;
+    protected boolean offScreen = false;                                    //超出屏幕
     
     protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
     
@@ -187,7 +188,9 @@ public class PopMenu extends BaseDialog {
             
             dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
-            if (dialogView != null) dialogView.setTag(me);
+            if (dialogView != null) {
+                dialogView.setTag(me);
+            }
         }
         show(dialogView);
         if (baseView != null) {
@@ -318,49 +321,67 @@ public class PopMenu extends BaseDialog {
                         //菜单位置计算逻辑
                         int baseViewLeft = baseViewLoc[0];
                         int baseViewTop = baseViewLoc[1];
+                        int calX = 0, calY = 0;
                         if (alignGravity != -1) {
                             if (isAlignGravity(Gravity.CENTER_VERTICAL)) {
-                                boxBody.setY(Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
+                                calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
                             }
                             if (isAlignGravity(Gravity.CENTER_HORIZONTAL)) {
-                                boxBody.setX(Math.max(0, baseViewLeft + (
+                                calX = (Math.max(0, baseViewLeft + (
                                         getWidth() > 0 ? baseView.getMeasuredWidth() / 2 - getWidth() / 2 : 0
                                 )));
                             }
                             if (isAlignGravity(Gravity.CENTER)) {
-                                boxBody.setX(Math.max(0, baseViewLeft + (
+                                calX = (Math.max(0, baseViewLeft + (
                                         getWidth() > 0 ? (baseView.getMeasuredWidth() / 2 - getWidth() / 2) : 0
                                 )));
-                                boxBody.setY(Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
+                                calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
                             }
                             if (overlayBaseView) {
                                 //菜单覆盖在 baseView 上时
                                 if (isAlignGravity(Gravity.TOP)) {
-                                    boxBody.setY(baseViewTop - boxBody.getHeight() + baseView.getHeight());
+                                    calY = (baseViewTop - boxBody.getHeight() + baseView.getHeight());
                                 }
                                 if (isAlignGravity(Gravity.LEFT)) {
-                                    boxBody.setX(baseViewLeft);
+                                    calX = (baseViewLeft);
                                 }
                                 if (isAlignGravity(Gravity.RIGHT)) {
-                                    boxBody.setX(baseViewLeft + (getWidth() > 0 ? baseView.getMeasuredWidth() - width : 0));
+                                    calX = (baseViewLeft + (getWidth() > 0 ? baseView.getMeasuredWidth() - width : 0));
                                 }
                                 if (isAlignGravity(Gravity.BOTTOM)) {
-                                    boxBody.setY(baseViewTop);
+                                    calY = (baseViewTop);
                                 }
                             } else {
                                 if (isAlignGravity(Gravity.TOP)) {
-                                    boxBody.setY(Math.max(0, baseViewTop - boxBody.getHeight()));
+                                    calY = (Math.max(0, baseViewTop - boxBody.getHeight()));
                                 }
                                 if (isAlignGravity(Gravity.LEFT)) {
-                                    boxBody.setX(Math.max(0, baseViewLeft - boxBody.getWidth()));
+                                    calX = (Math.max(0, baseViewLeft - boxBody.getWidth()));
                                 }
                                 if (isAlignGravity(Gravity.RIGHT)) {
-                                    boxBody.setX(Math.max(0, baseViewLeft + baseView.getWidth()));
+                                    calX = (Math.max(0, baseViewLeft + baseView.getWidth()));
                                 }
                                 if (isAlignGravity(Gravity.BOTTOM)) {
-                                    boxBody.setY(Math.max(0, baseViewTop + baseView.getHeight()));
+                                    calY = (Math.max(0, baseViewTop + baseView.getHeight()));
                                 }
                             }
+                            if (!offScreen) {
+                                if (calX < 0) {
+                                    calX = 0;
+                                }
+                                if ((calX + boxBody.getWidth()) > boxRoot.getWidth()) {
+                                    calX = boxRoot.getWidth() - boxBody.getWidth();
+                                }
+                                if (calY < 0) {
+                                    calY = 0;
+                                }
+                                if ((calY + boxBody.getHeight()) > boxRoot.getHeight()) {
+                                    calY = boxRoot.getHeight() - boxBody.getHeight();
+                                }
+                            }
+                            
+                            if (calX != 0) boxBody.setX(calX);
+                            if (calY != 0) boxBody.setY(calY);
                         }
                         
                         //展开动画
@@ -372,6 +393,26 @@ public class PopMenu extends BaseDialog {
                                 if ((boxBody.getY() + aimHeight) > boxRoot.getSafeHeight()) {
                                     boxBody.setY(boxRoot.getSafeHeight() - aimHeight);
                                 }
+                                
+                                if (!offScreen) {
+                                    float calX = boxBody.getX();
+                                    float calY = boxBody.getY();
+                                    if (calX < 0) {
+                                        calX = 0;
+                                    }
+                                    if ((calX + boxBody.getWidth()) > boxRoot.getWidth()) {
+                                        calX = boxRoot.getWidth() - boxBody.getWidth();
+                                    }
+                                    if (calY < 0) {
+                                        calY = 0;
+                                    }
+                                    if ((calY + boxBody.getHeight()) > boxRoot.getHeight()) {
+                                        calY = boxRoot.getHeight() - boxBody.getHeight();
+                                    }
+                                    boxBody.setX(calX);
+                                    boxBody.setY(calY);
+                                }
+                                
                                 boxBody.requestLayout();
                             }
                             
@@ -460,6 +501,9 @@ public class PopMenu extends BaseDialog {
             
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
+                boxCustom.setVisibility(View.VISIBLE);
+            } else {
+                boxCustom.setVisibility(View.GONE);
             }
             
             if (width != -1) {
@@ -475,7 +519,9 @@ public class PopMenu extends BaseDialog {
         
         @Override
         public void doDismiss(View v) {
-            if (v != null) v.setEnabled(false);
+            if (v != null) {
+                v.setEnabled(false);
+            }
             
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
@@ -483,7 +529,9 @@ public class PopMenu extends BaseDialog {
                     @Override
                     public void run() {
                         
-                        if (overrideExitDuration != -1) exitAnimDuration = overrideExitDuration;
+                        if (overrideExitDuration != -1) {
+                            exitAnimDuration = overrideExitDuration;
+                        }
                         Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), R.anim.anim_dialogx_default_exit);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
@@ -521,7 +569,9 @@ public class PopMenu extends BaseDialog {
     }
     
     private int getBodyRealHeight() {
-        if (getDialogImpl() == null) return 0;
+        if (getDialogImpl() == null) {
+            return 0;
+        }
         
         int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) getDialogImpl().boxBody.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
         int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) getDialogImpl().boxBody.getParent()).getHeight(), View.MeasureSpec.AT_MOST);
@@ -534,7 +584,9 @@ public class PopMenu extends BaseDialog {
         runOnMain(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl == null) return;
+                if (dialogImpl == null) {
+                    return;
+                }
                 dialogImpl.doDismiss(null);
             }
         });
@@ -557,8 +609,11 @@ public class PopMenu extends BaseDialog {
     
     }
     
+    @Override
     public View getDialogView() {
-        if (dialogView == null) return null;
+        if (dialogView == null) {
+            return null;
+        }
         return dialogView;
     }
     
@@ -586,11 +641,15 @@ public class PopMenu extends BaseDialog {
     }
     
     public void refreshUI() {
-        if (getDialogImpl() == null) return;
+        if (getDialogImpl() == null) {
+            return;
+        }
         runOnMain(new Runnable() {
             @Override
             public void run() {
-                if (dialogImpl != null) dialogImpl.refreshView();
+                if (dialogImpl != null) {
+                    dialogImpl.refreshView();
+                }
             }
         });
     }
@@ -616,7 +675,9 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setDialogLifecycleCallback(DialogLifecycleCallback<PopMenu> dialogLifecycleCallback) {
         this.dialogLifecycleCallback = dialogLifecycleCallback;
-        if (isShow) dialogLifecycleCallback.onShow(me);
+        if (isShow) {
+            dialogLifecycleCallback.onShow(me);
+        }
         return this;
     }
     
@@ -661,7 +722,9 @@ public class PopMenu extends BaseDialog {
     }
     
     public View getCustomView() {
-        if (onBindView == null) return null;
+        if (onBindView == null) {
+            return null;
+        }
         return onBindView.getCustomView();
     }
     
@@ -728,12 +791,30 @@ public class PopMenu extends BaseDialog {
     }
     
     public TextInfo getMenuTextInfo() {
-        if (menuTextInfo == null) return DialogX.menuTextInfo;
+        if (menuTextInfo == null) {
+            return DialogX.menuTextInfo;
+        }
         return menuTextInfo;
     }
     
     public PopMenu setMenuTextInfo(TextInfo menuTextInfo) {
         this.menuTextInfo = menuTextInfo;
+        return this;
+    }
+    
+    public boolean isOffScreen() {
+        return offScreen;
+    }
+    
+    /**
+     * 是否允许超出屏幕显示
+     * PopMenu 默认位置显示在屏幕内，开启后将无视屏幕范围限制。
+     *
+     * @param offScreen 超出屏幕
+     * @return  PopMenu实例
+     */
+    public PopMenu setOffScreen(boolean offScreen) {
+        this.offScreen = offScreen;
         return this;
     }
 }

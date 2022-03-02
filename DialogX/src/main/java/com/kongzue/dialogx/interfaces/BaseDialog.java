@@ -490,7 +490,7 @@ public abstract class BaseDialog {
             return;
         }
         if (textInfo.getFontSize() > 0) {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textInfo.getFontSize());
+            textView.setTextSize(textInfo.getFontSizeComplexUnit(), textInfo.getFontSize());
         }
         if (textInfo.getFontColor() != 1) {
             textView.setTextColor(textInfo.getFontColor());

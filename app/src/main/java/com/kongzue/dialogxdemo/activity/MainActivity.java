@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -351,7 +352,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 PopMenu.show(v, new String[]{"选项1", "选项2", "选项3"})
-                        .setOverlayBaseView(true)
+                        .setOverlayBaseView(false)
+                        .setAlignGravity(Gravity.RIGHT)
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
                             public boolean onClick(PopMenu dialog, CharSequence text, int index) {
@@ -547,6 +549,7 @@ public class MainActivity extends BaseActivity {
                                 v.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        dialog.dismiss();
                                         PopTip.show("Click Custom View");
                                     }
                                 });

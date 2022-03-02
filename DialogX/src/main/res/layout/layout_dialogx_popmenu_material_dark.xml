@@ -2,11 +2,11 @@
 <com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/box_root"
-    app:autoSafeArea="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black20"
     android:orientation="vertical"
+    app:autoSafeArea="false"
     app:baseFocusable="true">
 
     <com.kongzue.dialogx.util.views.MaxLinearLayout
@@ -15,10 +15,11 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rect_dialogx_material_poptip_bkg_night"
         android:elevation="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:clickable="true"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
         <RelativeLayout
             android:id="@+id/box_custom"
@@ -29,7 +30,7 @@
         <com.kongzue.dialogx.util.views.PopMenuListView
             android:id="@+id/listMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </com.kongzue.dialogx.util.views.MaxLinearLayout>
 
