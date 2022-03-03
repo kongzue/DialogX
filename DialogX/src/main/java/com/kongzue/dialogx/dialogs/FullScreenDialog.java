@@ -272,7 +272,7 @@ public class FullScreenDialog extends BaseDialog {
                 } else {
                     View scrollController = onBindView.getCustomView().findViewWithTag("ScrollController");
                     if (scrollController instanceof ScrollController) {
-                        scrollView = (ScrollController) onBindView.getCustomView();
+                        scrollView = (ScrollController) scrollController;
                     }
                 }
             }

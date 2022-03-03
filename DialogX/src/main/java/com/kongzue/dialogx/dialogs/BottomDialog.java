@@ -572,7 +572,7 @@ public class BottomDialog extends BaseDialog {
                         if (scrollView instanceof BottomDialogScrollView) {
                             ((BottomDialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
                         }
-                        scrollView = (ScrollController) onBindView.getCustomView();
+                        scrollView = (ScrollController) scrollController;
                     }
                 }
             }
