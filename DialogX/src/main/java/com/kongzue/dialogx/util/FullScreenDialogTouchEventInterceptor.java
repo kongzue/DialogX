@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.kongzue.dialogx.dialogs.FullScreenDialog;
+import com.kongzue.dialogx.interfaces.ScrollController;
 
 /**
  * @author: Kongzue
@@ -35,8 +36,11 @@ public class FullScreenDialogTouchEventInterceptor {
         if (me == null || impl == null || impl.bkg == null) {
             return;
         }
-        
-        impl.boxCustom.setOnTouchListener(new View.OnTouchListener() {
+        View touchView = impl.boxCustom;
+        if (impl.scrollView != null) {
+            touchView = impl.bkg;
+        }
+        touchView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -48,10 +52,28 @@ public class FullScreenDialogTouchEventInterceptor {
                     case MotionEvent.ACTION_MOVE:
                         if (isBkgTouched) {
                             float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
-                            if (aimY < 0) {
-                                aimY = 0;
+                            if (impl.scrollView != null && impl.scrollView.isCanScroll()) {
+                                if (aimY > 0) {
+                                    if (impl.scrollView.getScrollDistance() == 0) {
+                                        if (impl.scrollView instanceof ScrollController) {
+                                            ((ScrollController) impl.scrollView).lockScroll(true);
+                                        }
+                                        impl.bkg.setY(aimY);
+                                    } else {
+                                        bkgTouchDownY = event.getY();
+                                    }
+                                } else {
+                                    if (impl.scrollView instanceof ScrollController) {
+                                        ((ScrollController) impl.scrollView).lockScroll(false);
+                                    }
+                                    impl.bkg.setY(0);
+                                }
+                            } else {
+                                if (aimY < 0) {
+                                    aimY = 0;
+                                }
+                                impl.bkg.setY(aimY);
                             }
-                            impl.bkg.setY(aimY);
                         }
                         break;
                     case MotionEvent.ACTION_UP:
@@ -84,7 +106,7 @@ public class FullScreenDialogTouchEventInterceptor {
                         }
                         break;
                 }
-                return true;
+                return false;
             }
         });
     }

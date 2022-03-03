@@ -23,8 +23,10 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
+import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.FullScreenDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
+import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
@@ -104,6 +106,7 @@ public class FullScreenDialog extends BaseDialog {
         public RelativeLayout boxBkg;
         public MaxRelativeLayout bkg;
         public RelativeLayout boxCustom;
+        public ScrollController scrollView;
         
         public DialogImpl(View convertView) {
             if (convertView == null) return;
@@ -153,8 +156,10 @@ public class FullScreenDialog extends BaseDialog {
             boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
-                    if (onBackPressedListener != null && onBackPressedListener.onBackPressed()) {
-                        dismiss();
+                    if (onBackPressedListener != null ) {
+                        if (onBackPressedListener.onBackPressed()){
+                            dismiss();
+                        }
                         return false;
                     }
                     if (isCancelable()) {
@@ -262,6 +267,14 @@ public class FullScreenDialog extends BaseDialog {
             
             if (onBindView != null) {
                 onBindView.bindParent(boxCustom, me);
+                if (onBindView.getCustomView() instanceof ScrollController) {
+                    scrollView = (ScrollController) onBindView.getCustomView();
+                } else {
+                    View scrollController = onBindView.getCustomView().findViewWithTag("ScrollController");
+                    if (scrollController instanceof ScrollController) {
+                        scrollView = (ScrollController) onBindView.getCustomView();
+                    }
+                }
             }
             
             if (hideZoomBackground) {

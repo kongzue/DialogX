@@ -399,8 +399,10 @@ public class BottomDialog extends BaseDialog {
             boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
-                    if (onBackPressedListener != null && onBackPressedListener.onBackPressed()) {
-                        dismiss();
+                    if (onBackPressedListener != null) {
+                        if (onBackPressedListener.onBackPressed()) {
+                            dismiss();
+                        }
                         return false;
                     }
                     if (isCancelable()) {
@@ -564,6 +566,14 @@ public class BottomDialog extends BaseDialog {
                         ((BottomDialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
                     }
                     scrollView = (ScrollController) onBindView.getCustomView();
+                } else {
+                    View scrollController = onBindView.getCustomView().findViewWithTag("ScrollController");
+                    if (scrollController instanceof ScrollController) {
+                        if (scrollView instanceof BottomDialogScrollView) {
+                            ((BottomDialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
+                        }
+                        scrollView = (ScrollController) onBindView.getCustomView();
+                    }
                 }
             }
             
@@ -602,13 +612,13 @@ public class BottomDialog extends BaseDialog {
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
             if (getContext() == null) return;
-    
+            
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
                 if (boxContent != null) {
                     boxContent.getViewTreeObserver().removeOnGlobalLayoutListener(onContentViewLayoutChangeListener);
                 }
-    
+                
                 long exitAnimDurationTemp = 300;
                 if (overrideExitDuration >= 0) {
                     exitAnimDurationTemp = overrideExitDuration;
@@ -616,11 +626,11 @@ public class BottomDialog extends BaseDialog {
                 if (exitAnimDuration >= 0) {
                     exitAnimDurationTemp = exitAnimDuration;
                 }
-    
+                
                 ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
                 exitAnim.setDuration(exitAnimDurationTemp);
                 exitAnim.start();
-    
+                
                 ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
                 bkgAlpha.setDuration(exitAnimDurationTemp);
                 bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -634,7 +644,7 @@ public class BottomDialog extends BaseDialog {
                     }
                 });
                 bkgAlpha.start();
-    
+                
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {

@@ -146,8 +146,10 @@ public class CustomDialog extends BaseDialog {
             boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
-                    if (onBackPressedListener != null && onBackPressedListener.onBackPressed()) {
-                        dismiss();
+                    if (onBackPressedListener != null) {
+                        if (onBackPressedListener.onBackPressed()){
+                            dismiss();
+                        }
                         return false;
                     }
                     if (isCancelable()) {
