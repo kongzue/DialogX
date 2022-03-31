@@ -23,8 +23,12 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -612,6 +616,17 @@ public abstract class BaseDialog {
         if (style.styleVer != DialogXStyle.styleVer) {
             error("DialogX 所引用的 Style 不符合当前适用版本：" + DialogXStyle.styleVer + " 引入的 Style(" + style.getClass().getSimpleName() + ") 版本" + style.styleVer);
         }
+        if (dialogImplMode != DialogX.IMPL_MODE.VIEW && getContext() instanceof LifecycleOwner) {
+            Lifecycle lifecycle = ((LifecycleOwner) getContext()).getLifecycle();
+            lifecycle.addObserver(new LifecycleEventObserver() {
+                @Override
+                public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
+                    if (event == Lifecycle.Event.ON_DESTROY) {
+                        recycleDialog((Activity) getContext());
+                    }
+                }
+            });
+        }
         
         //Hide IME
         View view = ((Activity) BaseDialog.getContext()).getCurrentFocus();
@@ -795,7 +810,7 @@ public abstract class BaseDialog {
     
     static WeakReference<Handler> mMainHandler;
     
-    private static Handler getMainHandler(){
+    private static Handler getMainHandler() {
         if (mMainHandler != null && mMainHandler.get() != null) {
             return mMainHandler.get();
         }

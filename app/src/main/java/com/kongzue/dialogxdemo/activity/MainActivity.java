@@ -352,7 +352,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 PopMenu.show(v, new String[]{"选项1", "选项2", "选项3"})
-                        .setOverlayBaseView(false)
+                        .setOverlayBaseView(true)
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
                             public boolean onClick(PopMenu dialog, CharSequence text, int index) {
@@ -790,7 +790,7 @@ public class MainActivity extends BaseActivity {
                             }
                         });
                         
-                        webView.loadUrl("https://www.kongzue.com/");
+                        webView.loadUrl("https://github.com/kongzue/DialogX");
                     }
                 });
             }
