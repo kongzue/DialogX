@@ -3,6 +3,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/layout_dialogx_menu_item"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:gravity="center_vertical"
@@ -29,9 +30,8 @@
 
         <TextView
             android:id="@+id/txt_dialogx_menu_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="left|center_vertical"
             android:maxLines="1"
             android:text=""

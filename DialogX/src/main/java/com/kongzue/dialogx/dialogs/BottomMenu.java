@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,7 @@ public class BottomMenu extends BottomDialog {
     protected int selectionIndex = -1;
     protected SELECT_MODE selectMode = SELECT_MODE.NONE;
     protected ArrayList<Integer> selectionItems;
-    
+
     protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
     
     public static BottomMenu build() {
@@ -77,6 +78,7 @@ public class BottomMenu extends BottomDialog {
     private BottomDialogListView listView;
     private BaseAdapter menuListAdapter;
     private List<CharSequence> menuList;
+    private int menuItemGravity = Gravity.CENTER_VERTICAL;
     
     public static BottomMenu show(List<CharSequence> menuList) {
         BottomMenu bottomMenu = new BottomMenu();
@@ -1115,6 +1117,15 @@ public class BottomMenu extends BottomDialog {
     
     public BottomMenu setMenuItemTextInfoInterceptor(MenuItemTextInfoInterceptor<BottomMenu> menuItemTextInfoInterceptor) {
         this.menuItemTextInfoInterceptor = menuItemTextInfoInterceptor;
+        return this;
+    }
+
+    public int getMenuItemGravity(){
+        return this.menuItemGravity;
+    }
+
+    public BottomMenu setMenuItemGravity(int gravity){
+        this.menuItemGravity = gravity;
         return this;
     }
 }

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Space;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         ImageView imgDialogxMenuSelection;
         TextView txtDialogxMenuText;
         Space spaceDialogxRightPadding;
+        LinearLayout menuItemLayout;
     }
     
     @Override
@@ -97,6 +99,7 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
             viewHolder.imgDialogxMenuSelection = convertView.findViewById(R.id.img_dialogx_menu_selection);
             viewHolder.txtDialogxMenuText = convertView.findViewById(R.id.txt_dialogx_menu_text);
             viewHolder.spaceDialogxRightPadding = convertView.findViewById(R.id.space_dialogx_right_padding);
+            viewHolder.menuItemLayout = convertView.findViewById(R.id.layout_dialogx_menu_item);
             
             convertView.setTag(viewHolder);
         } else {
@@ -228,7 +231,8 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                 }
             }
         }
-        
+        viewHolder.menuItemLayout.setGravity(bottomMenu.getMenuItemGravity());
+
         return convertView;
     }
     
