@@ -1,21 +1,25 @@
 package com.kongzue.dialogx.util.views;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 
 import androidx.annotation.ColorInt;
@@ -76,12 +80,6 @@ public class BlurView extends View {
         init(context, attrs);
     }
     
-    public BlurView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        
-        init(context, attrs);
-    }
-    
     private boolean isInit = false;
     
     Paint cutPaint;
@@ -113,7 +111,22 @@ public class BlurView extends View {
             a.recycle();
             
             isInit = true;
+            
+            if (!isCompatMode()) {
+                setOutlineProvider(new ViewOutlineProvider() {
+                    @Override
+                    public void getOutline(View view, Outline outline) {
+                        log(mBlurRadius);
+                        outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), mRadius);
+                    }
+                });
+                setClipToOutline(true);
+            }
         }
+    }
+    
+    private boolean isCompatMode() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
     }
     
     public void setBlurRadius(float radius) {
@@ -279,7 +292,6 @@ public class BlurView extends View {
             View decor = mDecorView;
             if (decor != null && isShown() && prepare()) {
                 boolean redrawBitmap = mBlurredBitmap != oldBmp;
-                oldBmp = null;
                 decor.getLocationOnScreen(locations);
                 int x = -locations[0];
                 int y = -locations[1];
@@ -362,35 +374,43 @@ public class BlurView extends View {
         }
     }
     
-    private Path caculateRoundRectPath(Rect r) {
-        Path path = new Path();
-        float radius = mRadius;
-        float elevation = 0;
-        path.addRoundRect(new RectF(r.left + elevation, r.top + elevation, r.right - elevation, r.bottom - elevation), radius, radius, Path.Direction.CW);
-        return path;
-    }
-    
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawBlurredBitmap(canvas, mBlurredBitmap, mOverlayColor);
+        if (isCompatMode()) {
+            drawBlurredBitmapCompat(canvas);
+        } else {
+            drawBlurredBitmap(canvas, mBlurredBitmap);
+        }
     }
     
-    /**
-     * Custom draw the blurred bitmap and color to define your own shape
-     *
-     * @param canvas
-     * @param blurredBitmap
-     * @param overlayColor
-     */
-    protected void drawBlurredBitmap(Canvas canvas, Bitmap blurredBitmap, int overlayColor) {
-        mRectDst.right = getWidth();
-        mRectDst.bottom = getHeight();
+    private void drawBlurredBitmapCompat(Canvas canvas) {
+        if (mBlurredBitmap != null) {
+            mRectDst.right = getWidth();
+            mRectDst.bottom = getHeight();
+            if (getWidth() > 0 && getHeight() > 0) {
+                Bitmap readyDrawBitmap = getRoundedCornerBitmap(resizeImage(mBlurredBitmap, getWidth(), getHeight()), mRectDst);
+                if (readyDrawBitmap != null) {
+                    canvas.drawBitmap(readyDrawBitmap, 0, 0, null);
+                } else {
+                    Bitmap overlyBitmap = drawOverlyColor(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
+                    if (overlyBitmap != null) canvas.drawBitmap(overlyBitmap, 0, 0, null);
+                }
+            }
+        } else {
+            Bitmap overlyBitmap = drawOverlyColor(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
+            if (overlyBitmap != null) canvas.drawBitmap(overlyBitmap, 0, 0, null);
+        }
+    }
+    
+    protected void drawBlurredBitmap(Canvas canvas, Bitmap blurredBitmap) {
         if (blurredBitmap != null) {
             mRectSrc.right = blurredBitmap.getWidth();
             mRectSrc.bottom = blurredBitmap.getHeight();
-            blurredBitmap = getRoundedCornerBitmap(blurredBitmap, mRectDst);
-            if (blurredBitmap != null) canvas.drawBitmap(blurredBitmap, 0, 0, null);
+            mRectDst.right = getWidth();
+            mRectDst.bottom = getHeight();
+            canvas.drawBitmap(blurredBitmap, mRectSrc, mRectDst, null);
+            canvas.drawColor((supportRenderScript && useBlur) ? mOverlayColor : removeAlphaColor(mOverlayColor));
         } else {
             Bitmap overlyBitmap = drawOverlyColor(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
             if (overlyBitmap != null) canvas.drawBitmap(overlyBitmap, 0, 0, null);
@@ -488,7 +508,7 @@ public class BlurView extends View {
         }.start();
     }
     
-    public static boolean DEBUGMODE = false;
+    public static boolean DEBUGMODE = true;
     
     static boolean isDebug() {
         return DEBUGMODE && DialogX.DEBUGMODE;
