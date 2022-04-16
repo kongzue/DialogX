@@ -72,7 +72,7 @@ public class BottomDialog extends BaseDialog {
      * 此值用于，当禁用滑动时（style.overrideBottomDialogRes.touchSlide = false时）的最大显示高度。
      * 0：不限制，最大显示到屏幕可用高度。
      */
-    protected float bottomDialogMaxHeight = 0.6f;
+    protected float bottomDialogMaxHeight = 0f;
     
     protected DialogLifecycleCallback<BottomDialog> dialogLifecycleCallback;
     
@@ -290,7 +290,7 @@ public class BottomDialog extends BaseDialog {
             if (btnCancel != null) btnCancel.getPaint().setFakeBoldText(true);
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
-    
+            
             boxBkg.setY(getRootFrameLayout().getMeasuredHeight());
             bkg.setMaxWidth(getMaxWidth());
             boxRoot.setParentDialog(me);
@@ -409,14 +409,23 @@ public class BottomDialog extends BaseDialog {
                     return false;
                 }
             });
-    
+            
             boxBkg.post(new Runnable() {
                 @Override
                 public void run() {
                     long enterAnimDurationTemp = 300;
                     
+                    float customDialogTop = 0;
+                    if (bottomDialogMaxHeight > 0 && bottomDialogMaxHeight <= 1) {
+                        customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight * boxBkg.getHeight();
+                    } else if (bottomDialogMaxHeight>1){
+                        customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight;
+                    }
+                    
                     //上移动画
-                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(), boxRoot.getUnsafePlace().top);
+                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(),
+                            boxRoot.getUnsafePlace().top + customDialogTop
+                    );
                     if (overrideEnterDuration >= 0) {
                         enterAnimDurationTemp = overrideEnterDuration;
                     }
@@ -427,7 +436,7 @@ public class BottomDialog extends BaseDialog {
                     enterAnim.setAutoCancel(true);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     enterAnim.start();
-    
+                    
                     //遮罩层动画
                     ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
                     bkgAlpha.setDuration(enterAnimDurationTemp);

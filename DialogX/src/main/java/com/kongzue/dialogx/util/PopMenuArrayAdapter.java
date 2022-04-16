@@ -5,6 +5,7 @@ import static com.kongzue.dialogx.interfaces.BaseDialog.useTextInfo;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +34,13 @@ public class PopMenuArrayAdapter extends BaseAdapter {
     public List<CharSequence> menuList;
     public Context context;
     private PopMenu popMenu;
+    LayoutInflater mInflater;
     
     public PopMenuArrayAdapter(PopMenu popMenu, Context context, List<CharSequence> menuList) {
         this.popMenu = popMenu;
         this.menuList = menuList;
         this.context = context;
+        mInflater = LayoutInflater.from(context);
     }
     
     @Override
@@ -60,8 +63,13 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            LayoutInflater mInflater = LayoutInflater.from(context);
             int resourceId = R.layout.item_dialogx_material_context_menu_normal_text;
+            if (popMenu.getStyle().popMenuSettings() != null) {
+                int customItemLayout = popMenu.getStyle().popMenuSettings().overrideMenuItemLayoutRes(popMenu.isLightTheme());
+                if (customItemLayout != 0) {
+                    resourceId = customItemLayout;
+                }
+            }
             
             convertView = mInflater.inflate(resourceId, null);
             
@@ -73,8 +81,21 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        int customBackgroundRes = popMenu.getStyle().popMenuSettings() == null ? 0 : popMenu.getStyle().popMenuSettings().overrideMenuItemBackgroundRes(popMenu.isLightTheme(), position, getCount(), false);
+        if (customBackgroundRes != 0) {
+            convertView.setBackgroundResource(customBackgroundRes);
+        }
         viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
         viewHolder.txtDialogxMenuText.setText(menuList.get(position));
+        if (popMenu.getStyle().popMenuSettings() != null && popMenu.getStyle().popMenuSettings().paddingVertical() != 0) {
+            if (position == 0) {
+                convertView.setPadding(0, popMenu.getStyle().popMenuSettings().paddingVertical(), 0, 0);
+            } else if (position == getCount() - 1) {
+                convertView.setPadding(0, 0, 0, popMenu.getStyle().popMenuSettings().paddingVertical());
+            } else {
+                convertView.setPadding(0, 0, 0, 0);
+            }
+        }
         
         if (popMenu.getMenuTextInfo() != null) {
             useTextInfo(viewHolder.txtDialogxMenuText, popMenu.getMenuTextInfo());
@@ -91,7 +112,9 @@ public class PopMenuArrayAdapter extends BaseAdapter {
                 viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
                 viewHolder.imgDialogxMenuIcon.setImageResource(resId);
                 if (isHaveProperties(viewHolder.txtDialogxMenuText.getGravity(), Gravity.CENTER) || isHaveProperties(viewHolder.txtDialogxMenuText.getGravity(), Gravity.CENTER_HORIZONTAL)) {
-                    viewHolder.spaceRightPadding.setVisibility(View.VISIBLE);
+                    if (viewHolder.spaceRightPadding != null) {
+                        viewHolder.spaceRightPadding.setVisibility(View.VISIBLE);
+                    }
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (autoTintIconInLightOrDarkMode) {
@@ -100,11 +123,15 @@ public class PopMenuArrayAdapter extends BaseAdapter {
                 }
             } else {
                 viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
-                viewHolder.spaceRightPadding.setVisibility(View.GONE);
+                if (viewHolder.spaceRightPadding != null) {
+                    viewHolder.spaceRightPadding.setVisibility(View.GONE);
+                }
             }
         } else {
             viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
-            viewHolder.spaceRightPadding.setVisibility(View.GONE);
+            if (viewHolder.spaceRightPadding != null) {
+                viewHolder.spaceRightPadding.setVisibility(View.GONE);
+            }
         }
         return convertView;
     }

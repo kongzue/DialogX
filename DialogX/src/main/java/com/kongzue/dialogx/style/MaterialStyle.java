@@ -188,12 +188,12 @@ public class MaterialStyle implements DialogXStyle {
             public int overrideSelectionImage(boolean light, boolean isSelected) {
                 return isSelected ? R.mipmap.img_dialogx_bottom_menu_material_item_selection : R.mipmap.img_dialogx_bottom_menu_material_item_non_select;
             }
-    
+            
             @Override
             public int overrideMultiSelectionImage(boolean light, boolean isSelected) {
                 return isSelected ? R.mipmap.img_dialogx_bottom_menu_material_item_multi_selection : R.mipmap.img_dialogx_bottom_menu_material_item_non_multi_select;
             }
-    
+            
         };
     }
     
@@ -222,4 +222,64 @@ public class MaterialStyle implements DialogXStyle {
         };
     }
     
+    @Override
+    public PopMenuSettings popMenuSettings() {
+        return new PopMenuSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light ? R.layout.layout_dialogx_popmenu_material : R.layout.layout_dialogx_popmenu_material_dark;
+            }
+            
+            @Override
+            public BlurBackgroundSetting blurBackgroundSettings() {
+                return null;
+            }
+    
+            @Override
+            public int backgroundMaskColorRes() {
+                return 0;
+            }
+    
+            @Override
+            public int overrideMenuDividerDrawableRes(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideMenuDividerHeight(boolean b) {
+                return 0;
+            }
+            
+            @Override
+            public int overrideMenuTextColor(boolean light) {
+                return light ? R.color.black90 : R.color.white90;
+            }
+    
+            @Override
+            public int overrideMenuItemLayoutRes(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideMenuItemBackgroundRes(boolean b, int i, int i1, boolean b1) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideSelectionMenuBackgroundColor(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public boolean selectionImageTint(boolean b) {
+                return false;
+            }
+    
+            @Override
+            public int paddingVertical() {
+                return 0;
+            }
+    
+        };
+    }
 }

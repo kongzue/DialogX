@@ -8,7 +8,7 @@ public interface DialogXStyle {
      * DialogXStyle 版本
      * 相关文档请参阅：https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98
      */
-    int styleVer = 3;
+    int styleVer = 4;
     
     /**
      * 按钮类型常量
@@ -137,9 +137,16 @@ public interface DialogXStyle {
     /**
      * 自定义 PopTip 样式
      *
-     * @return
+     * @return PopTipSettings
      */
     PopTipSettings popTipSettings();
+    
+    /**
+     * 自定义 PopMenu 样式
+     *
+     * @return PopMenuSettings
+     */
+    PopMenuSettings popMenuSettings();
     
     /**
      * 模糊背景设置
@@ -339,5 +346,54 @@ public interface DialogXStyle {
         
         //设置关闭动画效果。
         int exitAnimResId(boolean light);
+    }
+    
+    interface PopMenuSettings{
+    
+        //PopMenu 的默认布局样式，请参考具体布局实现：PopMenu 默认亮色布局 和 PopMenu 默认暗色布局
+        int layout(boolean light);
+    
+        BlurBackgroundSetting blurBackgroundSettings();
+        
+        int backgroundMaskColorRes();
+    
+        //用于修改默认分隔线的粗细，单位像素。
+        int overrideMenuDividerDrawableRes(boolean light);
+    
+        //修改默认分隔线的粗细，单位像素。
+        int overrideMenuDividerHeight(boolean light);
+    
+        //修改默认菜单文字的颜色，值采用为 color 的资源 ID。
+        int overrideMenuTextColor(boolean light);
+    
+        //自定义菜单的布局资源 ID。
+        int overrideMenuItemLayoutRes(boolean light);
+        
+        /**
+         * 定义菜单条目的布局背景资源。
+         * 例如当使用 iOS 样式时，第一条菜单默认采用左上角和右上角都为圆角的样式，当显示菜单标题、正文或自定义布局时，
+         * 则第一条菜单背景使用无圆角样式。当index == count - 1时为最后一个菜单，使用 iOS 样式时，
+         * 最后一个菜单应该采用左下角和右下角都为圆角的背景样式。菜单的布局请参照 底部菜单亮色样式参考布局 和 底部菜单暗色样式参考布局 。
+         * <p>
+         * 此接口return 0时使用默认实现。
+         *
+         * @param light               判断亮/暗色模式
+         * @param index               当前菜单项的索引值
+         * @param count               菜单数量
+         * @param isContentVisibility 确认当菜单显示时，是否还有其他内容显示（例如对话框标题、正文或自定义布局）
+         * @return 条目布局背景资源
+         */
+        int overrideMenuItemBackgroundRes(boolean light, int index, int count, boolean isContentVisibility);
+    
+        //定义已选中的菜单默认背景颜色，
+        // 例如在使用 MIUI 主题样式且开启了单选模式时，默认打开菜单后会选中上次已选择的条目，此接口用预设定已选中菜单的背景颜色。
+        int overrideSelectionMenuBackgroundColor(boolean light);
+    
+        //用于确定使用此主题时，默认会不会重定义图标的颜色，
+        // 若开启，那么所有菜单图标会根据主题的亮/暗色的文字颜色重新覆盖颜色，若关闭，则使用图标原本的颜色。
+        boolean selectionImageTint(boolean light);
+        
+        //PopMenu 的顶部和底部的额外 padding
+        int paddingVertical();
     }
 }

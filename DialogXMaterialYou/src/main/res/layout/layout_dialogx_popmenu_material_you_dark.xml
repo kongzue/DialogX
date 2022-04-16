@@ -2,23 +2,23 @@
 <com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/box_root"
-    app:autoSafeArea="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black20"
     android:orientation="vertical"
+    app:autoSafeArea="false"
     app:baseFocusable="true">
 
-    <LinearLayout
+    <com.kongzue.dialogx.util.views.MaxRelativeLayout
         android:id="@+id/box_body"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/rect_dialogx_material_poptip_bkg_night"
-        android:elevation="2dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:background="@drawable/rect_dialogx_material_you_popmenu_bkg_night"
+        android:elevation="3dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
         <RelativeLayout
             android:id="@+id/box_custom"
@@ -29,8 +29,9 @@
         <com.kongzue.dialogx.util.views.PopMenuListView
             android:id="@+id/listMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/box_custom" />
 
-    </LinearLayout>
+    </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 
 </com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>

@@ -395,7 +395,7 @@ public class MainActivity extends BaseActivity {
                 MessageDialog messageDialog = new MessageDialog("多选对话框", "移除App会将它从主屏幕移除并保留其所有数据。", "删除App", "取消", "移至App资源库")
                         .setButtonOrientation(LinearLayout.VERTICAL);
                 if (!rdoMiui.isChecked()) {
-                    messageDialog.setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545")));
+                    messageDialog.setOkTextInfo(new TextInfo().setFontColor(Color.parseColor("#EB5545")).setBold(true));
                 }
                 messageDialog.show();
             }
@@ -569,6 +569,7 @@ public class MainActivity extends BaseActivity {
                         public void run() {
                             super.run();
                             BottomMenu.build()
+                                    .setBottomDialogMaxHeight(0.6f)
                                     .setMenuList(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"})
                                     .setOnIconChangeCallBack(new OnIconChangeCallBack<BottomMenu>(true) {
                                         @Override

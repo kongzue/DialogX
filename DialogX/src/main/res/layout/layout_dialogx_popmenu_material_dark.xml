@@ -9,7 +9,7 @@
     app:autoSafeArea="false"
     app:baseFocusable="true">
 
-    <com.kongzue.dialogx.util.views.MaxLinearLayout
+    <com.kongzue.dialogx.util.views.MaxRelativeLayout
         android:id="@+id/box_body"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -29,9 +29,11 @@
 
         <com.kongzue.dialogx.util.views.PopMenuListView
             android:id="@+id/listMenu"
+            android:layout_below="@+id/box_custom"
+            android:theme="@style/DialogXCompatThemeDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-    </com.kongzue.dialogx.util.views.MaxLinearLayout>
+    </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 
 </com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>

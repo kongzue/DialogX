@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/box_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black20"
+    android:orientation="vertical"
+    app:autoSafeArea="false"
+    app:baseFocusable="true">
+
+    <com.kongzue.dialogx.util.views.MaxRelativeLayout
+        android:id="@+id/box_body"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/box_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <com.kongzue.dialogx.util.views.PopMenuListView
+            android:id="@+id/listMenu"
+            android:listSelector="@color/empty"
+            android:layout_below="@+id/box_custom"
+            android:theme="@style/DialogXCompatThemeDark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+
+</com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>

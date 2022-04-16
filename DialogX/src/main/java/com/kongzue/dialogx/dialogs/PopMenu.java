@@ -32,8 +32,10 @@ import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.PopMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxLinearLayout;
+import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.views.PopMenuListView;
 
 import java.util.ArrayList;
@@ -185,6 +187,11 @@ public class PopMenu extends BaseDialog {
         super.beforeShow();
         if (getDialogView() == null) {
             int layoutId = isLightTheme() ? R.layout.layout_dialogx_popmenu_material : R.layout.layout_dialogx_popmenu_material_dark;
+            if (getStyle().popMenuSettings() != null) {
+                if (getStyle().popMenuSettings().layout(isLightTheme()) != 0) {
+                    layoutId = getStyle().popMenuSettings().layout(isLightTheme());
+                }
+            }
             
             dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
@@ -228,9 +235,10 @@ public class PopMenu extends BaseDialog {
     public class DialogImpl implements DialogConvertViewInterface {
         
         private DialogXBaseRelativeLayout boxRoot;
-        private MaxLinearLayout boxBody;
+        private MaxRelativeLayout boxBody;
         private RelativeLayout boxCustom;
         private PopMenuListView listMenu;
+        private BlurView blurView;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);
@@ -271,7 +279,7 @@ public class PopMenu extends BaseDialog {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()){
+                        if (onBackPressedListener.onBackPressed()) {
                             dismiss();
                         }
                         return false;
@@ -294,6 +302,7 @@ public class PopMenu extends BaseDialog {
                     long enterAnimDurationTemp = enterAnimDuration != -1 ? enterAnimDuration : (overrideEnterDuration == -1 ? 150 : overrideEnterDuration);
                     
                     if (baseView != null) {
+                        //有绑定按钮的情况下
                         int targetHeight = getBodyRealHeight();
                         boxBody.getLayoutParams().height = 1;
                         
@@ -314,8 +323,6 @@ public class PopMenu extends BaseDialog {
                                     int itemHeight = listMenu.getChildAt(selectMenuIndex).getMeasuredHeight();
                                     listMenu.getChildAt(selectMenuIndex).getLocationOnScreen(viewLoc);
                                     boxBody.setY(baseViewLoc[1] + (baseView.getMeasuredHeight() / 2f) - (viewLoc[1] - boxBody.getY()) - (itemHeight / 2f));
-                                    
-                                    log("baseViewLoc[1]=" + baseViewLoc[1]);
                                 }
                             }
                         }
@@ -427,7 +434,35 @@ public class PopMenu extends BaseDialog {
                         enterAnim.setDuration(enterAnimDurationTemp);
                         boxBody.startAnimation(enterAnim);
                         boxBody.setVisibility(View.VISIBLE);
+                        
+                        //模糊背景
+                        if (getStyle().popMenuSettings() != null &&
+                                getStyle().popMenuSettings().blurBackgroundSettings() != null &&
+                                getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
+                        ) {
+                            int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
+                            blurView = new BlurView(boxBody.getContext(), null);
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), targetHeight);
+                            blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
+                            blurView.setTag("blurView");
+                            blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
+                            boxBody.addView(blurView, 0, params);
+                        }
+                        if (getStyle().popMenuSettings() != null &&
+                                getStyle().popMenuSettings().backgroundMaskColorRes() != 0) {
+                            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                            bkgAlpha.setDuration(enterAnimDurationTemp);
+                            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    float value = (float) animation.getAnimatedValue();
+                                    boxRoot.setBkgAlpha(value);
+                                }
+                            });
+                            bkgAlpha.start();
+                        }
                     } else {
+                        //无绑定按钮的情况下
                         RelativeLayout.LayoutParams rLp = (RelativeLayout.LayoutParams) boxBody.getLayoutParams();
                         rLp.addRule(RelativeLayout.CENTER_IN_PARENT);
                         rLp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
@@ -440,6 +475,35 @@ public class PopMenu extends BaseDialog {
                         }
                         boxBody.setVisibility(View.VISIBLE);
                         boxBody.animate().alpha(1f).setDuration(enterAnimDurationTemp);
+                        boxBody.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                //模糊背景
+                                if (getStyle().popMenuSettings() != null &&
+                                        getStyle().popMenuSettings().blurBackgroundSettings() != null &&
+                                        getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
+                                ) {
+                                    int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
+                                    blurView = new BlurView(boxBody.getContext(), null);
+                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
+                                    blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
+                                    blurView.setTag("blurView");
+                                    blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
+                                    boxBody.addView(blurView, 0, params);
+                                    
+                                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                                    bkgAlpha.setDuration(enterAnimDurationTemp);
+                                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                        @Override
+                                        public void onAnimationUpdate(ValueAnimator animation) {
+                                            float value = (float) animation.getAnimatedValue();
+                                            boxRoot.setBkgAlpha(value);
+                                        }
+                                    });
+                                    bkgAlpha.start();
+                                }
+                            }
+                        });
                         
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
                         bkgAlpha.setDuration(enterAnimDurationTemp);
@@ -456,10 +520,10 @@ public class PopMenu extends BaseDialog {
             });
             
             int dividerDrawableResId = 0;
-            int dividerHeight = 1;
-            if (style.overrideBottomDialogRes() != null) {
-                dividerDrawableResId = style.overrideBottomDialogRes().overrideMenuDividerDrawableRes(isLightTheme());
-                dividerHeight = style.overrideBottomDialogRes().overrideMenuDividerHeight(isLightTheme());
+            int dividerHeight = 0;
+            if (style.popMenuSettings() != null) {
+                dividerDrawableResId = style.popMenuSettings().overrideMenuDividerDrawableRes(isLightTheme());
+                dividerHeight = style.popMenuSettings().overrideMenuDividerHeight(isLightTheme());
             }
             if (dividerDrawableResId == 0) {
                 dividerDrawableResId = isLightTheme() ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
@@ -468,7 +532,7 @@ public class PopMenu extends BaseDialog {
             listMenu.setOverScrollMode(OVER_SCROLL_NEVER);
             listMenu.setVerticalScrollBarEnabled(false);
             listMenu.setDivider(getResources().getDrawable(dividerDrawableResId));
-            listMenu.setDividerHeight(0);
+            listMenu.setDividerHeight(dividerHeight);
             
             listMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -813,7 +877,7 @@ public class PopMenu extends BaseDialog {
      * PopMenu 默认位置显示在屏幕内，开启后将无视屏幕范围限制。
      *
      * @param offScreen 超出屏幕
-     * @return  PopMenu实例
+     * @return PopMenu实例
      */
     public PopMenu setOffScreen(boolean offScreen) {
         this.offScreen = offScreen;

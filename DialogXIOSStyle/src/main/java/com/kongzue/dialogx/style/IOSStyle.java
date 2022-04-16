@@ -2,6 +2,7 @@ package com.kongzue.dialogx.style;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
@@ -252,13 +253,104 @@ public class IOSStyle implements DialogXStyle {
             }
             
             @Override
-            public int enterAnimResId(boolean b) {
+            public int enterAnimResId(boolean light) {
                 return R.anim.anim_dialogx_ios_top_enter;
             }
             
             @Override
-            public int exitAnimResId(boolean b) {
+            public int exitAnimResId(boolean light) {
                 return R.anim.anim_dialogx_ios_top_exit;
+            }
+        };
+    }
+    
+    @Override
+    public PopMenuSettings popMenuSettings() {
+        return new PopMenuSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light ? R.layout.layout_dialogx_popmenu_ios : R.layout.layout_dialogx_popmenu_ios_dark;
+            }
+            
+            @Override
+            public BlurBackgroundSetting blurBackgroundSettings() {
+                return new BlurBackgroundSetting() {
+                    @Override
+                    public boolean blurBackground() {
+                        return true;
+                    }
+                    
+                    @Override
+                    public int blurForwardColorRes(boolean light) {
+                        return light ? R.color.dialogxIOSBkgLight : R.color.dialogxIOSBkgDark;
+                    }
+                    
+                    @Override
+                    public int blurBackgroundRoundRadiusPx() {
+                        return dip2px(15);
+                    }
+                };
+            }
+            
+            @Override
+            public int backgroundMaskColorRes() {
+                return R.color.black20;
+            }
+            
+            @Override
+            public int overrideMenuDividerDrawableRes(boolean light) {
+                return light ? R.drawable.rect_dialogx_ios_menu_split_divider : R.drawable.rect_dialogx_ios_menu_split_divider_night;
+            }
+            
+            @Override
+            public int overrideMenuDividerHeight(boolean light) {
+                return 1;
+            }
+            
+            @Override
+            public int overrideMenuTextColor(boolean light) {
+                return 0;
+            }
+            
+            @Override
+            public int overrideMenuItemLayoutRes(boolean light) {
+                return light ? R.layout.item_dialogx_ios_popmenu_light : R.layout.item_dialogx_ios_popmenu_dark;
+            }
+            
+            @Override
+            public int overrideMenuItemBackgroundRes(boolean light, int index, int count, boolean isContentVisibility) {
+                if (light) {
+                    if (index == 0) {
+                        return R.drawable.button_dialogx_ios_top_light;
+                    } else if (index == count - 1) {
+                        return R.drawable.button_dialogx_ios_bottom_light;
+                    } else {
+                        return R.drawable.button_dialogx_ios_center_light;
+                    }
+                } else {
+                    if (index == 0) {
+                        return R.drawable.button_dialogx_ios_top_night;
+                    } else if (index == count - 1) {
+                        return R.drawable.button_dialogx_ios_bottom_night;
+                    } else {
+                        return R.drawable.button_dialogx_ios_center_night;
+                    }
+                }
+            }
+            
+            @Override
+            public int overrideSelectionMenuBackgroundColor(boolean light) {
+                return 0;
+            }
+            
+            @Override
+            public boolean selectionImageTint(boolean light) {
+                return false;
+            }
+    
+            @Override
+            public int paddingVertical() {
+                return 0;
             }
         };
     }

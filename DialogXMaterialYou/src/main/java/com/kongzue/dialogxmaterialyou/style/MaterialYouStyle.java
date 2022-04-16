@@ -226,4 +226,64 @@ public class MaterialYouStyle implements DialogXStyle {
         };
     }
     
+    @Override
+    public PopMenuSettings popMenuSettings() {
+        return new PopMenuSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light?R.layout.layout_dialogx_popmenu_material_you:R.layout.layout_dialogx_popmenu_material_you_dark;
+            }
+    
+            @Override
+            public BlurBackgroundSetting blurBackgroundSettings() {
+                return null;
+            }
+    
+            @Override
+            public int backgroundMaskColorRes() {
+                return 0;
+            }
+    
+            @Override
+            public int overrideMenuDividerDrawableRes(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideMenuDividerHeight(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideMenuTextColor(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideMenuItemLayoutRes(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideMenuItemBackgroundRes(boolean b, int i, int i1, boolean b1) {
+                return 0;
+            }
+    
+            @Override
+            public int overrideSelectionMenuBackgroundColor(boolean b) {
+                return 0;
+            }
+    
+            @Override
+            public boolean selectionImageTint(boolean b) {
+                return false;
+            }
+    
+            @Override
+            public int paddingVertical() {
+                return 0;
+            }
+        };
+    }
+    
 }
