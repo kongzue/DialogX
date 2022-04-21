@@ -212,7 +212,7 @@ implementation(name: 'AAR文件名', ext: 'aar')
 
 [![密码键盘](https://github.com/kongzue/DialogX/raw/master/readme/pb_passkeyboard.jpg)](http://www.passkeyboard.com/)
 
-[更多 >](https://github.com/kongzue/DialogX/wiki/❤️Powered-By-DialogX)
+🚀 [更多 >](https://github.com/kongzue/DialogX/wiki/❤️Powered-By-DialogX)
 
 ### 🔁如何从 DialogV3 迁移至 DialogX
 
