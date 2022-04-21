@@ -202,6 +202,18 @@ implementation(name: 'AAR文件名', ext: 'aar')
 
 <div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/feedback_qq_qrcode.png" alt="反馈 DialogX" width="250" height="250" /></div>
 
+### ❤️Powered By DialogX
+
+##### 给未来写封信
+
+[![给未来写封信](https://github.com/kongzue/DialogX/raw/master/readme/pb_to_future.jpg)](https://www.to-future.net/)
+
+##### 密码键盘
+
+[![密码键盘](https://github.com/kongzue/DialogX/raw/master/readme/pb_passkeyboard.jpg)](http://www.passkeyboard.com/)
+
+[更多 >]([❤️Powered By DialogX · kongzue/DialogX Wiki (github.com)](https://github.com/kongzue/DialogX/wiki/❤️Powered-By-DialogX))
+
 ### 🔁如何从 DialogV3 迁移至 DialogX
 
 请参考文章 [从 DialogV3 迁移至 DialogX](https://github.com/kongzue/DialogX/wiki/%E4%BB%8E-DialogV3-%E8%BF%81%E7%A7%BB%E8%87%B3-DialogX)
