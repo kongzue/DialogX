@@ -14,17 +14,25 @@ import androidx.lifecycle.LifecycleRegistry;
  */
 public abstract class DialogLifecycleCallback<T extends BaseDialog> implements LifecycleOwner {
     
-    private LifecycleRegistry registry = new LifecycleRegistry(this);
+    private final LifecycleRegistry registry = new LifecycleRegistry(this);
     
     public void onShow(T dialog) {
-        if (registry.getCurrentState()!= Lifecycle.State.CREATED){
-            registry.setCurrentState(Lifecycle.State.CREATED);
+        try {
+            //概率性报 no event down from INITIALIZED，目前尚不清楚为何
+            if (registry.getCurrentState() != Lifecycle.State.CREATED) {
+                registry.setCurrentState(Lifecycle.State.CREATED);
+            }
+        } catch (Exception e) {
         }
     }
     
     public void onDismiss(T dialog) {
-        if (registry.getCurrentState()!= Lifecycle.State.DESTROYED){
-            registry.setCurrentState(Lifecycle.State.DESTROYED);
+        try {
+            if (registry.getCurrentState() != Lifecycle.State.DESTROYED) {
+                //概率性报 no event down from INITIALIZED，目前尚不清楚为何
+                registry.setCurrentState(Lifecycle.State.DESTROYED);
+            }
+        } catch (Exception e) {
         }
     }
     

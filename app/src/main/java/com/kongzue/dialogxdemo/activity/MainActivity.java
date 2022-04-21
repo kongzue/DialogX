@@ -329,30 +329,29 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"})
                         .setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(true) {
-                    @Override
-                    public int getIcon(PopMenu dialog, int index, String menuText) {
-                        switch (index) {
-                            case 0:
-                                return R.mipmap.img_dialogx_demo_add;
-                            case 1:
-                                return R.mipmap.img_dialogx_demo_edit;
-                            case 2:
-                                return R.mipmap.img_dialogx_demo_delete;
-                            case 3:
-                                return R.mipmap.img_dialogx_demo_share;
-                            default:
-                                return 0;
-                        }
-                    }
-                });
+                            @Override
+                            public int getIcon(PopMenu dialog, int index, String menuText) {
+                                switch (index) {
+                                    case 0:
+                                        return R.mipmap.img_dialogx_demo_add;
+                                    case 1:
+                                        return R.mipmap.img_dialogx_demo_edit;
+                                    case 2:
+                                        return R.mipmap.img_dialogx_demo_delete;
+                                    case 3:
+                                        return R.mipmap.img_dialogx_demo_share;
+                                    default:
+                                        return 0;
+                                }
+                            }
+                        });
             }
         });
         
         btnSelectMenu.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                PopMenu.show(v, new String[]{"选项1", "选项2", "选项3"})
-                        .setOverlayBaseView(true)
+            public void onClick(View view) {
+                PopMenu.show(view, new String[]{"选项1", "选项2", "选项3"})
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
                             public boolean onClick(PopMenu dialog, CharSequence text, int index) {
@@ -621,7 +620,7 @@ public class MainActivity extends BaseActivity {
                             .setMenuItemTextInfoInterceptor(new MenuItemTextInfoInterceptor<BottomMenu>() {
                                 @Override
                                 public TextInfo menuItemTextInfo(BottomMenu dialog, int index, String menuText) {
-                                    if (index==2){
+                                    if (index == 2) {
                                         return new TextInfo()
                                                 .setFontColor(Color.RED)
                                                 .setBold(true);
