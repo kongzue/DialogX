@@ -205,7 +205,7 @@ implementation(name: 'AAR文件名', ext: 'aar')
 ### ❤️Powered By DialogX
 
 [![Powered By DialogX](https://github.com/kongzue/DialogX/raw/master/readme/img_powered_by_dialogx.png)](https://github.com/kongzue/DialogX/wiki/%E2%9D%A4%EF%B8%8FPowered-By-DialogX)
-
+ 
 🚀 [更多 >](https://github.com/kongzue/DialogX/wiki/❤️Powered-By-DialogX)
 
 ### 🔁如何从 DialogV3 迁移至 DialogX
