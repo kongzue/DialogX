@@ -24,13 +24,13 @@
 
             <com.kongzue.dialogx.util.views.MaxRelativeLayout
                 android:id="@+id/bkg"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/rect_dialogx_material_bottom_bkg_night"
                 android:focusableInTouchMode="true"
-                android:visibility="gone">
+                android:visibility="invisible">
 
                 <RelativeLayout
                     android:id="@+id/box_custom"
