@@ -204,13 +204,7 @@ implementation(name: 'AAR文件名', ext: 'aar')
 
 ### ❤️Powered By DialogX
 
-##### 给未来写封信
-
-[![给未来写封信](https://github.com/kongzue/DialogX/raw/master/readme/pb_to_future.jpg)](https://www.to-future.net/)
-
-##### 密码键盘
-
-[![密码键盘](https://github.com/kongzue/DialogX/raw/master/readme/pb_passkeyboard.jpg)](http://www.passkeyboard.com/)
+[![Powered By DialogX](https://github.com/kongzue/DialogX/raw/master/readme/img_powered_by_dialogx.png)](https://github.com/kongzue/DialogX/wiki/%E2%9D%A4%EF%B8%8FPowered-By-DialogX)
 
 🚀 [更多 >](https://github.com/kongzue/DialogX/wiki/❤️Powered-By-DialogX)
 
