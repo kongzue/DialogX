@@ -1,8 +1,8 @@
 ---
 name: 申请加入 Powered By DialogX
 about: 若您的应用正好在使用 DialogX 且愿意加入《Powered By DialogX》计划，请在此提交申请。
-title: ''
-labels: ''
+title: 【申请PBD】请填写标题
+labels: 申请Powered By DialogX
 assignees: ''
 
 ---

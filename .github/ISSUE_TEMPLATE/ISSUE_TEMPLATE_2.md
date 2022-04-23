@@ -1,8 +1,8 @@
 ---
 name: 功能建议
 about: 如果你希望 DialogX 增加新功能请选择此项
-title: ''
-labels: ''
+title: 【功能建议】请填写标题
+labels: enhancement
 assignees: ''
 
 ---

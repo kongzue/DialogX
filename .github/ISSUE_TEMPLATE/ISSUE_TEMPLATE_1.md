@@ -1,8 +1,8 @@
 ---
 name: BUG 反馈
 about: 如果你有遇到 BUG 请选择此项进行反馈
-title: ''
-labels: ''
+title: 【BUG反馈】请填写标题
+labels: bug
 assignees: ''
 
 ---
