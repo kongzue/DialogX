@@ -1,6 +1,10 @@
 ---
 name: BUG 反馈
 about: 如果你有遇到 BUG 请选择此项进行反馈
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
 ## BUG 反馈
