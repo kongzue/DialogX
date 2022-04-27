@@ -14,6 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.AppCompatActivityTest"
+            android:theme="@style/AppCompatTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.MainActivity"

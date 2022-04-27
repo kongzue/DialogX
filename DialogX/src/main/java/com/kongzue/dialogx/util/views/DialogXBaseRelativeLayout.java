@@ -99,7 +99,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
-        BaseDialog.publicWindowInsets(insets);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (DialogX.useActivityLayoutTranslationNavigationBar)
                 paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());

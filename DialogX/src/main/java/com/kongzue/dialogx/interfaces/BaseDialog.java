@@ -797,6 +797,7 @@ public abstract class BaseDialog {
                 if (baseDialog.isShow && baseDialog.getDialogView() != null) {
                     View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
                     if (boxRoot instanceof DialogXBaseRelativeLayout) {
+                        log("publicWindowInsets");
                         ((DialogXBaseRelativeLayout) boxRoot).paddingView(windowInsets);
                     }
                 }
