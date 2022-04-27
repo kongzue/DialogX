@@ -98,7 +98,7 @@ public class WaitDialog extends BaseDialog {
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(message, TYPE.NONE);
-        showWithInstance(instance, activity);
+        if (noInstance) showWithInstance(instance, activity);
         return instance;
     }
     
@@ -115,7 +115,7 @@ public class WaitDialog extends BaseDialog {
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(messageResId, TYPE.NONE);
-        showWithInstance(instance, activity);
+        if (noInstance) showWithInstance(instance, activity);
         return instance;
     }
     
@@ -134,7 +134,7 @@ public class WaitDialog extends BaseDialog {
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(message, TYPE.NONE);
         instance.setProgress(progress);
-        showWithInstance(instance, activity);
+        if (noInstance) showWithInstance(instance, activity);
         return instance;
     }
     
@@ -153,7 +153,7 @@ public class WaitDialog extends BaseDialog {
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(messageResId, TYPE.NONE);
         instance.setProgress(progress);
-        showWithInstance(instance, activity);
+        if (noInstance) showWithInstance(instance, activity);
         return instance;
     }
     
@@ -163,7 +163,7 @@ public class WaitDialog extends BaseDialog {
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(TYPE.NONE);
         instance.setProgress(progress);
-        showWithInstance(instance, activity);
+        if (noInstance) showWithInstance(instance, activity);
         return instance;
     }
     
@@ -221,7 +221,7 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog show(final Activity activity) {
         super.beforeShow();
-        runOnMain(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 int layoutResId = R.layout.layout_dialogx_wait;
@@ -232,7 +232,7 @@ public class WaitDialog extends BaseDialog {
                 if (getDialogImpl() != null) {
                     getDialogImpl().lazyCreate();
                     if (getWaitDialogView() != null) {
-                        getWaitDialogView().setTag(me.get());
+                        getWaitDialogView().setTag(me());
                         show(activity, getWaitDialogView());
                     }
                 }
@@ -309,7 +309,7 @@ public class WaitDialog extends BaseDialog {
             }
             boxRoot.setClickable(true);
             
-            boxRoot.setParentDialog(me.get());
+            boxRoot.setParentDialog(me());
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -463,7 +463,7 @@ public class WaitDialog extends BaseDialog {
             if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
             
             if (onBindView != null && onBindView.getCustomView() != null) {
-                onBindView.bindParent(boxCustomView, me.get());
+                onBindView.bindParent(boxCustomView, WaitDialog.this);
                 boxCustomView.setVisibility(View.VISIBLE);
                 boxProgress.setVisibility(View.GONE);
             } else {
@@ -596,7 +596,7 @@ public class WaitDialog extends BaseDialog {
     }
     
     private void setDialogImpl(DialogImpl d) {
-        dialogImpl = new WeakReference<>(d);
+        if (dialogImpl != null && dialogImpl.get() != d) dialogImpl = new WeakReference<>(d);
     }
     
     @Override
@@ -696,34 +696,40 @@ public class WaitDialog extends BaseDialog {
     protected void setTip(TYPE type) {
         showType = type.ordinal();
         readyTipType = type;
+        refreshUI();
     }
     
     protected void setTip(Activity activity, int messageResId, TYPE type) {
         showType = type.ordinal();
         this.message = getString(messageResId);
         readyTipType = type;
+        refreshUI();
     }
     
     protected void setTip(CharSequence message, TYPE type) {
         showType = type.ordinal();
         this.message = message;
         readyTipType = type;
+        refreshUI();
     }
     
     protected void setTip(Activity activity, CharSequence message, TYPE type) {
         showType = type.ordinal();
         this.message = message;
         readyTipType = type;
+        refreshUI();
     }
     
     protected void setTip(int messageResId, TYPE type) {
         showType = type.ordinal();
         this.message = getString(messageResId);
         readyTipType = type;
+        refreshUI();
     }
     
     protected void setTipShowDuration(long tipShowDuration) {
         this.tipShowDuration = tipShowDuration;
+        refreshUI();
     }
     
     public static CharSequence getMessage() {
@@ -754,6 +760,7 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setCancelable(boolean cancelable) {
         privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
+        refreshUI();
         return this;
     }
     
