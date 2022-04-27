@@ -232,7 +232,7 @@ public class WaitDialog extends BaseDialog {
                 if (getDialogImpl() != null) {
                     getDialogImpl().lazyCreate();
                     if (getWaitDialogView() != null) {
-                        getWaitDialogView().setTag(me());
+                        getWaitDialogView().setTag(WaitDialog.this);
                         show(activity, getWaitDialogView());
                     }
                 }
