@@ -56,7 +56,7 @@ public class TipDialog extends WaitDialog {
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(message, TYPE.WARNING);
-        showWithInstance(noInstance, activity);
+        if (noInstance) showWithInstance(noInstance, activity);
         return instance;
     }
     
@@ -73,7 +73,7 @@ public class TipDialog extends WaitDialog {
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(messageResId, tip);
-        showWithInstance(noInstance, activity);
+        if (noInstance) showWithInstance(noInstance, activity);
         return instance;
     }
     
@@ -90,7 +90,7 @@ public class TipDialog extends WaitDialog {
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(message, tip);
-        showWithInstance(noInstance, activity);
+        if (noInstance) showWithInstance(noInstance, activity);
         return instance;
     }
     
@@ -109,7 +109,7 @@ public class TipDialog extends WaitDialog {
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(messageResId, tip);
         instance.setTipShowDuration(duration);
-        showWithInstance(noInstance, activity);
+        if (noInstance) showWithInstance(noInstance, activity);
         return instance;
     }
     
@@ -128,7 +128,7 @@ public class TipDialog extends WaitDialog {
         WaitDialog instance = getInstanceNotNull(activity);
         instance.setTip(message, tip);
         instance.setTipShowDuration(duration);
-        showWithInstance(noInstance, activity);
+        if (noInstance) showWithInstance(noInstance, activity);
         return instance;
     }
     

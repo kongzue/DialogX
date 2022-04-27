@@ -117,7 +117,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
                  *  显示其它对话框出现的底部非安全区高度异常的情况
                  */
                 if ((window.getDecorView().getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) != View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) {
-                    window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                    window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE);
                 }
             }
             if (activity instanceof DialogXFloatingWindowActivity) {
