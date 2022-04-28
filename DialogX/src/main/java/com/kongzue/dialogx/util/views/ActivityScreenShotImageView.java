@@ -128,6 +128,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     private boolean isScreenshotSuccess;
     
     private void drawViewImage(View view) {
+        if (view.getWidth()==0 || view.getHeight()==0)return;
         view.buildDrawingCache();
         Rect rect = new Rect();
         view.getWindowVisibleDisplayFrame(rect);

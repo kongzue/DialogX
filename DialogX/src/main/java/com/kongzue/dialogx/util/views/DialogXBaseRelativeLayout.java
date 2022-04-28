@@ -45,6 +45,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private BaseDialog parentDialog;
     private boolean autoUnsafePlacePadding = true;
     private boolean focusable = true;
+    private boolean interceptBack = true;
     
     private OnLifecycleCallBack onLifecycleCallBack;
     private OnBackPressedListener onBackPressedListener;
@@ -75,6 +76,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DialogXBaseRelativeLayout);
                 focusable = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_baseFocusable, true);
                 autoUnsafePlacePadding = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_autoSafeArea, true);
+                interceptBack = a.getBoolean(R.styleable.DialogXBaseRelativeLayout_interceptBack, true);
                 a.recycle();
                 isInited = true;
             }
@@ -121,7 +123,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (isAttachedToWindow() && event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+        if (isAttachedToWindow() && event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK && interceptBack) {
             if (onBackPressedListener != null) {
                 onBackPressedListener.onBackPressed();
             }
@@ -306,5 +308,14 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     public boolean isBaseFocusable() {
         return focusable;
+    }
+    
+    public boolean isInterceptBack() {
+        return interceptBack;
+    }
+    
+    public DialogXBaseRelativeLayout setInterceptBack(boolean interceptBack) {
+        this.interceptBack = interceptBack;
+        return this;
     }
 }
