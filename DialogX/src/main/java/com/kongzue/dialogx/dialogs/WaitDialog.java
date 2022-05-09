@@ -49,6 +49,7 @@ public class WaitDialog extends BaseDialog {
     public static int overrideEnterAnimRes = 0;
     public static int overrideExitAnimRes = 0;
     public static BOOLEAN overrideCancelable;
+    protected boolean bkgInterceptTouch = true;
     protected OnBindView<WaitDialog> onBindView;
     protected int customEnterAnimResId;
     protected int customExitAnimResId;
@@ -400,17 +401,6 @@ public class WaitDialog extends BaseDialog {
                     return false;
                 }
             });
-            
-            if (isCancelable()) {
-                boxRoot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        doDismiss(v);
-                    }
-                });
-            } else {
-                boxRoot.setOnClickListener(null);
-            }
         }
         
         private float oldProgress;
@@ -469,6 +459,21 @@ public class WaitDialog extends BaseDialog {
             } else {
                 boxCustomView.setVisibility(View.GONE);
                 boxProgress.setVisibility(View.VISIBLE);
+            }
+            
+            if (bkgInterceptTouch) {
+                if (isCancelable()) {
+                    boxRoot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doDismiss(v);
+                        }
+                    });
+                } else {
+                    boxRoot.setOnClickListener(null);
+                }
+            } else {
+                boxRoot.setClickable(false);
             }
         }
         
@@ -966,6 +971,15 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
+        return this;
+    }
+    
+    public boolean isBkgInterceptTouch() {
+        return bkgInterceptTouch;
+    }
+    
+    public WaitDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
+        this.bkgInterceptTouch = bkgInterceptTouch;
         return this;
     }
 }

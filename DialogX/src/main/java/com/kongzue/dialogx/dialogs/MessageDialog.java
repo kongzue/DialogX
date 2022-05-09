@@ -54,6 +54,7 @@ public class MessageDialog extends BaseDialog {
     public static int overrideEnterAnimRes = 0;
     public static int overrideExitAnimRes = 0;
     public static BOOLEAN overrideCancelable;
+    protected boolean bkgInterceptTouch = true;
     protected OnBindView<MessageDialog> onBindView;
     protected MessageDialog me = this;
     protected BOOLEAN privateCancelable;
@@ -379,7 +380,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()){
+                        if (onBackPressedListener.onBackPressed()) {
                             dismiss();
                         }
                         return false;
@@ -640,15 +641,19 @@ public class MessageDialog extends BaseDialog {
             }
             
             //Events
-            if (isCancelable()) {
-                boxRoot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        doDismiss(v);
-                    }
-                });
+            if (bkgInterceptTouch) {
+                if (isCancelable()) {
+                    boxRoot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doDismiss(v);
+                        }
+                    });
+                } else {
+                    boxRoot.setOnClickListener(null);
+                }
             } else {
-                boxRoot.setOnClickListener(null);
+                boxRoot.setClickable(false);
             }
             
             if (onBindView != null && onBindView.getCustomView() != null) {
@@ -1116,6 +1121,15 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
+        return this;
+    }
+    
+    public boolean isBkgInterceptTouch() {
+        return bkgInterceptTouch;
+    }
+    
+    public MessageDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
+        this.bkgInterceptTouch = bkgInterceptTouch;
         return this;
     }
 }

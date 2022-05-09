@@ -49,6 +49,7 @@ public class CustomDialog extends BaseDialog {
     private View dialogView;
     protected int maskColor = Color.TRANSPARENT;
     protected BOOLEAN privateCancelable;
+    protected boolean bkgInterceptTouch = true;
     
     public enum ALIGN {
         CENTER,
@@ -265,15 +266,19 @@ public class CustomDialog extends BaseDialog {
             boxCustom.setLayoutParams(rlp);
             
             boxRoot.setAutoUnsafePlacePadding(autoUnsafePlacePadding);
-            if (isCancelable()) {
-                boxRoot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        doDismiss(v);
-                    }
-                });
-            } else {
-                boxRoot.setOnClickListener(null);
+            if (bkgInterceptTouch) {
+                if (isCancelable()) {
+                    boxRoot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doDismiss(v);
+                        }
+                    });
+                } else {
+                    boxRoot.setOnClickListener(null);
+                }
+            }else{
+                boxRoot.setClickable(false);
             }
             
             if (onBindView != null && onBindView.getCustomView() != null) {
@@ -547,6 +552,15 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
+        return this;
+    }
+    
+    public boolean isBkgInterceptTouch() {
+        return bkgInterceptTouch;
+    }
+    
+    public CustomDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
+        this.bkgInterceptTouch = bkgInterceptTouch;
         return this;
     }
 }

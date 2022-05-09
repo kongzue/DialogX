@@ -165,4 +165,13 @@ public class TipDialog extends WaitDialog {
         this.dialogImplMode = dialogImplMode;
         return this;
     }
+    
+    public boolean isBkgInterceptTouch() {
+        return bkgInterceptTouch;
+    }
+    
+    public TipDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
+        this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
 }

@@ -579,4 +579,13 @@ public class InputDialog extends MessageDialog {
         this.dialogImplMode = dialogImplMode;
         return this;
     }
+    
+    public boolean isBkgInterceptTouch() {
+        return bkgInterceptTouch;
+    }
+    
+    public InputDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
+        this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
 }

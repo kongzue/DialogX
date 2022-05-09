@@ -1116,4 +1116,13 @@ public class BottomMenu extends BottomDialog {
         this.menuItemTextInfoInterceptor = menuItemTextInfoInterceptor;
         return this;
     }
+    
+    public boolean isBkgInterceptTouch() {
+        return bkgInterceptTouch;
+    }
+    
+    public BottomMenu setBkgInterceptTouch(boolean bkgInterceptTouch) {
+        this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
 }

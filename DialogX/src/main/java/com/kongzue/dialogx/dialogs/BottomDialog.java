@@ -60,6 +60,7 @@ public class BottomDialog extends BaseDialog {
     protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> otherButtonClickListener;
     protected BOOLEAN privateCancelable;
+    protected boolean bkgInterceptTouch = true;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -418,13 +419,13 @@ public class BottomDialog extends BaseDialog {
                     float customDialogTop = 0;
                     if (bottomDialogMaxHeight > 0 && bottomDialogMaxHeight <= 1) {
                         customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight * boxBkg.getHeight();
-                    } else if (bottomDialogMaxHeight>1){
+                    } else if (bottomDialogMaxHeight > 1) {
                         customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight;
                     }
                     
                     //上移动画
                     ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(),
-                            boxRoot.getUnsafePlace().top + customDialogTop
+                            bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop
                     );
                     if (overrideEnterDuration >= 0) {
                         enterAnimDurationTemp = overrideEnterDuration;
@@ -481,15 +482,19 @@ public class BottomDialog extends BaseDialog {
             useTextInfo(btnSelectOther, otherTextInfo);
             useTextInfo(btnSelectPositive, okTextInfo);
             
-            if (isCancelable()) {
-                boxRoot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        doDismiss(v);
-                    }
-                });
+            if (bkgInterceptTouch) {
+                if (isCancelable()) {
+                    boxRoot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doDismiss(v);
+                        }
+                    });
+                } else {
+                    boxRoot.setOnClickListener(null);
+                }
             } else {
-                boxRoot.setOnClickListener(null);
+                boxRoot.setClickable(false);
             }
             boxBkg.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -603,7 +608,7 @@ public class BottomDialog extends BaseDialog {
                 if (exitAnimDuration >= 0) {
                     exitAnimDurationTemp = exitAnimDuration;
                 }
-                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), bkgEnterAimY);
+                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(), boxBkg.getHeight());
                 exitAnim.setDuration(exitAnimDurationTemp);
                 exitAnim.start();
             }
@@ -983,6 +988,15 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
+        return this;
+    }
+    
+    public boolean isBkgInterceptTouch() {
+        return bkgInterceptTouch;
+    }
+    
+    public BottomDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
+        this.bkgInterceptTouch = bkgInterceptTouch;
         return this;
     }
 }

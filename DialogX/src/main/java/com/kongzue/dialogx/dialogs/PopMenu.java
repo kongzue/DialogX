@@ -55,6 +55,7 @@ public class PopMenu extends BaseDialog {
     public static long overrideExitDuration = -1;
     
     protected PopMenu me = this;
+    protected boolean bkgInterceptTouch = true;
     protected OnBindView<PopMenu> onBindView;                               //自定义布局
     protected DialogLifecycleCallback<PopMenu> dialogLifecycleCallback;     //对话框生命周期
     protected View dialogView;
@@ -554,15 +555,20 @@ public class PopMenu extends BaseDialog {
             } else {
                 menuListAdapter.notifyDataSetChanged();
             }
-            if (isCancelable()) {
-                boxRoot.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        doDismiss(v);
-                    }
-                });
+            
+            if (bkgInterceptTouch) {
+                if (isCancelable()) {
+                    boxRoot.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doDismiss(v);
+                        }
+                    });
+                } else {
+                    boxRoot.setOnClickListener(null);
+                }
             } else {
-                boxRoot.setOnClickListener(null);
+                boxRoot.setClickable(false);
             }
             
             if (onBindView != null && onBindView.getCustomView() != null) {
@@ -881,6 +887,15 @@ public class PopMenu extends BaseDialog {
      */
     public PopMenu setOffScreen(boolean offScreen) {
         this.offScreen = offScreen;
+        return this;
+    }
+    
+    public boolean isBkgInterceptTouch() {
+        return bkgInterceptTouch;
+    }
+    
+    public PopMenu setBkgInterceptTouch(boolean bkgInterceptTouch) {
+        this.bkgInterceptTouch = bkgInterceptTouch;
         return this;
     }
 }
