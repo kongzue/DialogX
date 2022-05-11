@@ -101,19 +101,19 @@ public class BottomDialogTouchEventInterceptor {
                         case MotionEvent.ACTION_CANCEL:
                             scrolledY = impl.scrollView.getScrollDistance();
                             isBkgTouched = false;
-                            if (bkgOldY == 0) {
-                                if (impl.boxBkg.getY() > impl.bkgEnterAimY + dip2px(35)) {
+                            if (bkgOldY == impl.boxRoot.getUnsafePlace().top) {
+                                if (impl.boxBkg.getY() > impl.boxRoot.getUnsafePlace().top + impl.bkgEnterAimY + dip2px(35)) {
                                     impl.preDismiss();
-                                } else {
-                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(), impl.boxRoot.getUnsafePlace().top);
+                                } else if (impl.boxBkg.getY() != bkgOldY) {
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(), impl.boxRoot.getUnsafePlace().top + impl.bkgEnterAimY);
                                     enterAnim.setDuration(300);
                                     enterAnim.start();
                                 }
                             } else {
                                 if (impl.boxBkg.getY() > bkgOldY + dip2px(35)) {
                                     impl.preDismiss();
-                                } else {
-                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(), impl.bkgEnterAimY);
+                                } else if (impl.boxBkg.getY() != bkgOldY) {
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(), impl.boxRoot.getUnsafePlace().top);
                                     enterAnim.setDuration(300);
                                     enterAnim.start();
                                 }

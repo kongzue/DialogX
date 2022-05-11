@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -378,8 +377,9 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageDialog.show("标题", "这里是正文内容。", "确定").setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
-                    @Override
+                MessageDialog.show("标题", "这里是正文内容。", "确定")
+                        .setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                            @Override
                     public boolean onClick(MessageDialog baseDialog, View v) {
                         PopTip.show("点击确定按钮");
                         return false;
