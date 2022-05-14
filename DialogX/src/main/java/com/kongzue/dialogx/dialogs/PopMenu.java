@@ -400,6 +400,7 @@ public class PopMenu extends BaseDialog {
                             protected void applyTransformation(float interpolatedTime, Transformation t) {
                                 int aimHeight = interpolatedTime == 1 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) (targetHeight * interpolatedTime);
                                 boxBody.getLayoutParams().height = aimHeight;
+                                boxBody.getLayoutParams().width = getWidth() == -1 ? baseView.getWidth() : getWidth();
                                 if ((boxBody.getY() + aimHeight) > boxRoot.getSafeHeight()) {
                                     boxBody.setY(boxRoot.getSafeHeight() - aimHeight);
                                 }
@@ -466,7 +467,7 @@ public class PopMenu extends BaseDialog {
                         //无绑定按钮的情况下
                         RelativeLayout.LayoutParams rLp = (RelativeLayout.LayoutParams) boxBody.getLayoutParams();
                         rLp.addRule(RelativeLayout.CENTER_IN_PARENT);
-                        rLp.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                        rLp.width = getWidth() == -1 ? RelativeLayout.LayoutParams.MATCH_PARENT : getWidth();
                         rLp.leftMargin = dip2px(50);
                         rLp.rightMargin = dip2px(50);
                         boxBody.setLayoutParams(rLp);
