@@ -105,7 +105,8 @@ public class BottomDialogTouchEventInterceptor {
                                 if (impl.boxBkg.getY() > impl.boxRoot.getUnsafePlace().top + impl.bkgEnterAimY + dip2px(35)) {
                                     impl.preDismiss();
                                 } else if (impl.boxBkg.getY() != bkgOldY) {
-                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(), impl.boxRoot.getUnsafePlace().top + impl.bkgEnterAimY);
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(),
+                                             impl.bkgEnterAimY);
                                     enterAnim.setDuration(300);
                                     enterAnim.start();
                                 }
