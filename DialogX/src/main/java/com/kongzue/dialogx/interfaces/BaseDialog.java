@@ -156,7 +156,6 @@ public abstract class BaseDialog {
             baseDialog.dialogView = new WeakReference<>(view);
             
             log(baseDialog.dialogKey() + ".show");
-            log(baseDialog + ".impl=" + baseDialog.dialogImplMode.name());
             
             addDialogToRunningList(baseDialog);
             
@@ -275,7 +274,6 @@ public abstract class BaseDialog {
             baseDialog.dialogView = new WeakReference<>(view);
             
             log(baseDialog + ".show");
-            log(baseDialog + ".impl=" + baseDialog.dialogImplMode.name());
             addDialogToRunningList(baseDialog);
             
             switch (baseDialog.dialogImplMode) {
