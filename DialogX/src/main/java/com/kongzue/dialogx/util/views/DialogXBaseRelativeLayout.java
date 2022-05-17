@@ -151,7 +151,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (BaseDialog.getContext() == null) return;
             
             ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener);
-            
+            decorViewLayoutListener.onGlobalLayout();
             
             if (onLifecycleCallBack != null) {
                 onLifecycleCallBack.onShow();

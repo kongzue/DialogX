@@ -183,8 +183,8 @@ public class MainActivity extends BaseActivity {
         if (showBreak) {
             txtTitle.setText("显示Dialog时关闭Activity演示");
             MessageDialog.show("提示", "接下来会直接运行一个 WaitDialog，2 秒后直接关闭 Activity，并回到原 Activity，保证程序不会出现 WindowLeaked 错误。\n\n" +
-                    "Android 原生 AlertDialog 常出现因 Dialog 先于 Activity 关闭而导致此错误引发程序崩溃。\n\n" +
-                    "而使用 DialogX 构建的对话框不仅仅不会出现此问题，还可避免因句柄持续持有导致的内存泄漏。", "开始测试", "取消")
+                            "Android 原生 AlertDialog 常出现因 Dialog 先于 Activity 关闭而导致此错误引发程序崩溃。\n\n" +
+                            "而使用 DialogX 构建的对话框不仅仅不会出现此问题，还可避免因句柄持续持有导致的内存泄漏。", "开始测试", "取消")
                     .setOkButton(new OnDialogButtonClickListener() {
                         @Override
                         public boolean onClick(BaseDialog baseDialog, View v) {
@@ -380,11 +380,11 @@ public class MainActivity extends BaseActivity {
                 MessageDialog.show("标题", "这里是正文内容。", "确定")
                         .setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                             @Override
-                    public boolean onClick(MessageDialog baseDialog, View v) {
-                        PopTip.show("点击确定按钮");
-                        return false;
-                    }
-                });
+                            public boolean onClick(MessageDialog baseDialog, View v) {
+                                PopTip.show("点击确定按钮");
+                                return false;
+                            }
+                        });
             }
         });
         
@@ -749,50 +749,53 @@ public class MainActivity extends BaseActivity {
         btnFullScreenDialogWebPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FullScreenDialog.show(new OnBindView<FullScreenDialog>(R.layout.layout_full_webview) {
-                    @Override
-                    public void onBind(final FullScreenDialog dialog, View v) {
-                        btnClose = v.findViewById(R.id.btn_close);
-                        webView = v.findViewById(R.id.webView);
-                        
-                        btnClose.setOnClickListener(new View.OnClickListener() {
+                FullScreenDialog.build(new OnBindView<FullScreenDialog>(R.layout.layout_full_webview) {
                             @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
+                            public void onBind(final FullScreenDialog dialog, View v) {
+                                btnClose = v.findViewById(R.id.btn_close);
+                                webView = v.findViewById(R.id.webView);
+                                
+                                btnClose.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //dialog.dismiss();
+                                        btnFullScreenDialogLogin.callOnClick();
+                                    }
+                                });
+                                
+                                WebSettings webSettings = webView.getSettings();
+                                webSettings.setJavaScriptEnabled(true);
+                                webSettings.setLoadWithOverviewMode(true);
+                                webSettings.setUseWideViewPort(true);
+                                webSettings.setSupportZoom(false);
+                                webSettings.setAllowFileAccess(true);
+                                webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+                                webSettings.setLoadsImagesAutomatically(true);
+                                webSettings.setDefaultTextEncodingName("utf-8");
+                                
+                                webView.setWebViewClient(new WebViewClient() {
+                                    @Override
+                                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                                        try {
+                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                            startActivity(intent);
+                                        } catch (ActivityNotFoundException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return true;
+                                    }
+                                    
+                                    @Override
+                                    public void onPageFinished(WebView view, String url) {
+                                        super.onPageFinished(view, url);
+                                    }
+                                });
+                                
+                                webView.loadUrl("https://github.com/kongzue/DialogX");
                             }
-                        });
-                        
-                        WebSettings webSettings = webView.getSettings();
-                        webSettings.setJavaScriptEnabled(true);
-                        webSettings.setLoadWithOverviewMode(true);
-                        webSettings.setUseWideViewPort(true);
-                        webSettings.setSupportZoom(false);
-                        webSettings.setAllowFileAccess(true);
-                        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-                        webSettings.setLoadsImagesAutomatically(true);
-                        webSettings.setDefaultTextEncodingName("utf-8");
-                        
-                        webView.setWebViewClient(new WebViewClient() {
-                            @Override
-                            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                                try {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                                    startActivity(intent);
-                                } catch (ActivityNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-                                return true;
-                            }
-                            
-                            @Override
-                            public void onPageFinished(WebView view, String url) {
-                                super.onPageFinished(view, url);
-                            }
-                        });
-                        
-                        webView.loadUrl("https://github.com/kongzue/DialogX");
-                    }
-                });
+                        })
+                        .setDurabilityDialogImplMode(DialogX.IMPL_MODE.FLOATING_ACTIVITY)
+                        .show();
             }
         });
         
@@ -800,18 +803,18 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
-                    @Override
-                    public void onBind(final CustomDialog dialog, View v) {
-                        ImageView btnOk;
-                        btnOk = v.findViewById(R.id.btn_ok);
-                        btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
+                            public void onBind(final CustomDialog dialog, View v) {
+                                ImageView btnOk;
+                                btnOk = v.findViewById(R.id.btn_ok);
+                                btnOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
                             }
-                        });
-                    }
-                })
+                        })
                         .setMaskColor(getResources().getColor(R.color.black30));
             }
         });

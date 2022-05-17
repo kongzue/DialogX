@@ -24,6 +24,7 @@ import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
+import com.kongzue.dialogx.util.DialogXImplModeAgent;
 import com.kongzue.dialogx.util.FullScreenDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
 import com.kongzue.dialogx.util.views.BottomDialogScrollView;
@@ -156,8 +157,8 @@ public class FullScreenDialog extends BaseDialog {
             boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
-                    if (onBackPressedListener != null ) {
-                        if (onBackPressedListener.onBackPressed()){
+                    if (onBackPressedListener != null) {
+                        if (onBackPressedListener.onBackPressed()) {
                             dismiss();
                         }
                         return false;
@@ -292,7 +293,7 @@ public class FullScreenDialog extends BaseDialog {
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
             if (getContext() == null) return;
-    
+            
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
                 long exitAnimDurationTemp = 300;
@@ -302,11 +303,11 @@ public class FullScreenDialog extends BaseDialog {
                 if (exitAnimDuration >= 0) {
                     exitAnimDurationTemp = exitAnimDuration;
                 }
-    
+                
                 ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
                 exitAnim.setDuration(exitAnimDurationTemp);
                 exitAnim.start();
-    
+                
                 ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
                 bkgAlpha.setDuration(exitAnimDurationTemp);
                 bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -320,7 +321,7 @@ public class FullScreenDialog extends BaseDialog {
                     }
                 });
                 bkgAlpha.start();
-    
+                
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -521,6 +522,11 @@ public class FullScreenDialog extends BaseDialog {
     
     public FullScreenDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
+        return this;
+    }
+    
+    public FullScreenDialog setDurabilityDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
+        durabilityDialogImplMode = new DialogXImplModeAgent(dialogImplMode, this);
         return this;
     }
 }

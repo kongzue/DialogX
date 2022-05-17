@@ -16,10 +16,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
 
 /**
  * @author: Kongzue
@@ -110,15 +113,28 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     }
     
     private void doScreenshotActivityAndZoom() {
-        if (BaseDialog.getRootFrameLayout() == null) return;
-        final View view = BaseDialog.getRootFrameLayout();
+        Activity screenshotActivity = ActivityLifecycleImpl.getTopActivity();
+        if (screenshotActivity == null) {
+            return;
+        }
+        View activityView;
+        if (screenshotActivity instanceof DialogXFloatingWindowActivity) {
+            if (((DialogXFloatingWindowActivity) screenshotActivity).isScreenshot()) {
+                activityView = (FrameLayout) screenshotActivity.getWindow().getDecorView();
+            } else {
+                activityView = BaseDialog.getRootFrameLayout();
+                ((DialogXFloatingWindowActivity) screenshotActivity).setScreenshot(true);
+            }
+        } else {
+            activityView = BaseDialog.getRootFrameLayout();
+        }
         //先执行一次绘制，防止出现闪屏问题
-        if (!inited) drawViewImage(view);
-        view.post(new Runnable() {
+        if (!inited) drawViewImage(activityView);
+        activityView.post(new Runnable() {
             @Override
             public void run() {
                 //当view渲染完成后再次通知刷新一下界面（当旋转屏幕执行时，很可能出现渲染延迟的问题）
-                drawViewImage(view);
+                drawViewImage(activityView);
                 inited = true;
             }
         });
@@ -128,7 +144,7 @@ public class ActivityScreenShotImageView extends AppCompatImageView {
     private boolean isScreenshotSuccess;
     
     private void drawViewImage(View view) {
-        if (view.getWidth()==0 || view.getHeight()==0)return;
+        if (view.getWidth() == 0 || view.getHeight() == 0) return;
         view.buildDrawingCache();
         Rect rect = new Rect();
         view.getWindowVisibleDisplayFrame(rect);

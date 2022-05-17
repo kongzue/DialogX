@@ -37,6 +37,7 @@ import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.ActivityRunnable;
 import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
+import com.kongzue.dialogx.util.DialogXImplModeAgent;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.WindowUtil;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
@@ -66,7 +67,8 @@ public abstract class BaseDialog {
     private static List<BaseDialog> runningDialogList;
     private WeakReference<View> dialogView;
     protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
-    protected DialogX.IMPL_MODE dialogImplMode = DialogX.implIMPLMode;
+    protected DialogX.IMPL_MODE dialogImplMode;
+    protected static DialogXImplModeAgent durabilityDialogImplMode = null;
     protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
     
     public static void init(Context context) {
@@ -154,6 +156,8 @@ public abstract class BaseDialog {
             baseDialog.dialogView = new WeakReference<>(view);
             
             log(baseDialog.dialogKey() + ".show");
+            log(baseDialog + ".impl=" + baseDialog.dialogImplMode.name());
+            
             addDialogToRunningList(baseDialog);
             
             switch (baseDialog.dialogImplMode) {
@@ -271,7 +275,9 @@ public abstract class BaseDialog {
             baseDialog.dialogView = new WeakReference<>(view);
             
             log(baseDialog + ".show");
+            log(baseDialog + ".impl=" + baseDialog.dialogImplMode.name());
             addDialogToRunningList(baseDialog);
+            
             switch (baseDialog.dialogImplMode) {
                 case WINDOW:
                     runOnMain(new Runnable() {
@@ -356,6 +362,10 @@ public abstract class BaseDialog {
             return;
         }
         final BaseDialog baseDialog = (BaseDialog) dialogView.getTag();
+        if (durabilityDialogImplMode!=null && durabilityDialogImplMode.getDialog() == baseDialog) {
+            durabilityDialogImplMode.recycle();
+            durabilityDialogImplMode = null;
+        }
         log(baseDialog.dialogKey() + ".dismiss");
         removeDialogToRunningList(baseDialog);
         if (baseDialog.dialogView != null) {
@@ -615,6 +625,14 @@ public abstract class BaseDialog {
         }
         if (style.styleVer != DialogXStyle.styleVer) {
             error("DialogX 所引用的 Style 不符合当前适用版本：" + DialogXStyle.styleVer + " 引入的 Style(" + style.getClass().getSimpleName() + ") 版本" + style.styleVer);
+        }
+        
+        if (dialogImplMode == null) {
+            if (durabilityDialogImplMode != null && durabilityDialogImplMode.getDialog() != null) {
+                dialogImplMode = durabilityDialogImplMode.getImplMode();
+            } else {
+                dialogImplMode = DialogX.implIMPLMode;
+            }
         }
         if (dialogImplMode != DialogX.IMPL_MODE.VIEW && getContext() instanceof LifecycleOwner) {
             Lifecycle lifecycle = ((LifecycleOwner) getContext()).getLifecycle();

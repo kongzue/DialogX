@@ -115,4 +115,15 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
         }
     }
+    
+    boolean isScreenshot;
+    
+    public boolean isScreenshot() {
+        return isScreenshot;
+    }
+    
+    public DialogXFloatingWindowActivity setScreenshot(boolean screenshot) {
+        isScreenshot = screenshot;
+        return this;
+    }
 }
