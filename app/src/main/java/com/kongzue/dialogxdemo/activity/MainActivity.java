@@ -758,8 +758,7 @@ public class MainActivity extends BaseActivity {
                                 btnClose.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        //dialog.dismiss();
-                                        btnFullScreenDialogLogin.callOnClick();
+                                        dialog.dismiss();
                                     }
                                 });
                                 
@@ -794,7 +793,6 @@ public class MainActivity extends BaseActivity {
                                 webView.loadUrl("https://github.com/kongzue/DialogX");
                             }
                         })
-                        .setDurabilityDialogImplMode(DialogX.IMPL_MODE.FLOATING_ACTIVITY)
                         .show();
             }
         });
