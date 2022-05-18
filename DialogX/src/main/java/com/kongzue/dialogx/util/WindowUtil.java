@@ -49,7 +49,7 @@ public class WindowUtil {
     
     private static void showNow(Activity activity, View dialogView, boolean touchEnable) {
         FrameLayout rootLayout = new FrameLayout(activity);
-        rootLayout.addView(dialogView,new FrameLayout.LayoutParams(MATCH_PARENT,MATCH_PARENT));
+        rootLayout.addView(dialogView, new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
         WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         
@@ -65,8 +65,9 @@ public class WindowUtil {
             dialogView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    for (BaseDialog baseDialog : BaseDialog.getRunningDialogList()) {
-                        if (!(baseDialog instanceof PopTip) && !baseDialog.isCancelable() && baseDialog.getActivity() == activity) {
+                    for (int i = BaseDialog.getRunningDialogList().size() - 1; i >= 0; i--) {
+                        BaseDialog baseDialog = BaseDialog.getRunningDialogList().get(i);
+                        if (!(baseDialog instanceof PopTip)  && baseDialog.getActivity() == activity) {
                             if (baseDialog.getDialogView() == null) {
                                 return false;
                             }

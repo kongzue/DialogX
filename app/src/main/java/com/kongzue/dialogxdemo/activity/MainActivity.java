@@ -240,6 +240,7 @@ public class MainActivity extends BaseActivity {
     private EditText editUserName;
     private RelativeLayout boxPassword;
     private EditText editPassword;
+    private TextView btnLicense;
     
     private TextView btnClose;
     private WebView webView;
@@ -738,6 +739,7 @@ public class MainActivity extends BaseActivity {
                         editUserName = v.findViewById(R.id.edit_userName);
                         boxPassword = v.findViewById(R.id.box_password);
                         editPassword = v.findViewById(R.id.edit_password);
+                        btnLicense = v.findViewById(R.id.btn_license);
                         
                         initFullScreenLoginDemo(dialog);
                     }
@@ -936,6 +938,14 @@ public class MainActivity extends BaseActivity {
         
         btnCancel.setText("取消");
         btnSubmit.setText("下一步");
+    
+        btnLicense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopTip.show("点击用户服务条款");
+            }
+        });
+        
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

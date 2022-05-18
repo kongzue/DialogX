@@ -108,7 +108,12 @@ public class FullScreenDialog extends BaseDialog {
         public MaxRelativeLayout bkg;
         public RelativeLayout boxCustom;
         public ScrollController scrollView;
-        
+    
+        public DialogImpl setScrollView(ScrollController scrollView) {
+            this.scrollView = scrollView;
+            return this;
+        }
+    
         public DialogImpl(View convertView) {
             if (convertView == null) return;
             imgZoomActivity = convertView.findViewById(R.id.img_zoom_activity);
@@ -522,11 +527,6 @@ public class FullScreenDialog extends BaseDialog {
     
     public FullScreenDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
-        return this;
-    }
-    
-    public FullScreenDialog setDurabilityDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
-        durabilityDialogImplMode = new DialogXImplModeAgent(dialogImplMode, this);
         return this;
     }
 }

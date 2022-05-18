@@ -67,8 +67,7 @@ public abstract class BaseDialog {
     private static List<BaseDialog> runningDialogList;
     private WeakReference<View> dialogView;
     protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
-    protected DialogX.IMPL_MODE dialogImplMode;
-    protected static DialogXImplModeAgent durabilityDialogImplMode = null;
+    protected DialogX.IMPL_MODE dialogImplMode = DialogX.implIMPLMode;
     protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
     
     public static void init(Context context) {
@@ -360,10 +359,6 @@ public abstract class BaseDialog {
             return;
         }
         final BaseDialog baseDialog = (BaseDialog) dialogView.getTag();
-        if (durabilityDialogImplMode!=null && durabilityDialogImplMode.getDialog() == baseDialog) {
-            durabilityDialogImplMode.recycle();
-            durabilityDialogImplMode = null;
-        }
         log(baseDialog.dialogKey() + ".dismiss");
         removeDialogToRunningList(baseDialog);
         if (baseDialog.dialogView != null) {
@@ -625,13 +620,6 @@ public abstract class BaseDialog {
             error("DialogX 所引用的 Style 不符合当前适用版本：" + DialogXStyle.styleVer + " 引入的 Style(" + style.getClass().getSimpleName() + ") 版本" + style.styleVer);
         }
         
-        if (dialogImplMode == null) {
-            if (durabilityDialogImplMode != null && durabilityDialogImplMode.getDialog() != null) {
-                dialogImplMode = durabilityDialogImplMode.getImplMode();
-            } else {
-                dialogImplMode = DialogX.implIMPLMode;
-            }
-        }
         if (dialogImplMode != DialogX.IMPL_MODE.VIEW && getContext() instanceof LifecycleOwner) {
             Lifecycle lifecycle = ((LifecycleOwner) getContext()).getLifecycle();
             lifecycle.addObserver(new LifecycleEventObserver() {

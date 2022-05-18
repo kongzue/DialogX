@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.util;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -58,7 +59,7 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() != MotionEvent.ACTION_CANCEL) {
-                    if (BaseDialog.getContext() != null) {
+                    if (BaseDialog.getContext() != null && !(BaseDialog.getContext() instanceof DialogXFloatingWindowActivity)) {
                         return ((Activity) BaseDialog.getContext()).dispatchTouchEvent(event);
                     }
                 }
@@ -96,7 +97,9 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
     public void finish(String dialogXKey) {
         shownDialogXList.remove(dialogXKey);
         if (shownDialogXList.isEmpty()) {
-            dialogXFloatingWindowActivity.clear();
+            if (dialogXFloatingWindowActivity != null) {
+                dialogXFloatingWindowActivity.clear();
+            }
             dialogXFloatingWindowActivity = null;
             super.finish();
             int version = Integer.valueOf(Build.VERSION.SDK_INT);
@@ -107,7 +110,9 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
     }
     
     public void finish() {
-        dialogXFloatingWindowActivity.clear();
+        if (dialogXFloatingWindowActivity != null) {
+            dialogXFloatingWindowActivity.clear();
+        }
         dialogXFloatingWindowActivity = null;
         super.finish();
         int version = Integer.valueOf(Build.VERSION.SDK_INT);
