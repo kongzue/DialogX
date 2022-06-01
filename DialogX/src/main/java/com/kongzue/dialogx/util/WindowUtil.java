@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
@@ -67,7 +63,7 @@ public class WindowUtil {
                 public boolean onTouch(View v, MotionEvent event) {
                     for (int i = BaseDialog.getRunningDialogList().size() - 1; i >= 0; i--) {
                         BaseDialog baseDialog = BaseDialog.getRunningDialogList().get(i);
-                        if (!(baseDialog instanceof PopTip)  && baseDialog.getActivity() == activity) {
+                        if (!(baseDialog instanceof PopTip)  && baseDialog.getOwnActivity() == activity) {
                             if (baseDialog.getDialogView() == null) {
                                 return false;
                             }
@@ -86,8 +82,8 @@ public class WindowUtil {
     
     public static void dismiss(View dialogView) {
         BaseDialog baseDialog = (BaseDialog) dialogView.getTag();
-        if (baseDialog != null && baseDialog.getActivity() != null) {
-            WindowManager manager = (WindowManager) baseDialog.getActivity().getSystemService(Context.WINDOW_SERVICE);
+        if (baseDialog != null && baseDialog.getOwnActivity() != null) {
+            WindowManager manager = (WindowManager) baseDialog.getOwnActivity().getSystemService(Context.WINDOW_SERVICE);
             manager.removeViewImmediate((View) dialogView.getParent());
         }
     }

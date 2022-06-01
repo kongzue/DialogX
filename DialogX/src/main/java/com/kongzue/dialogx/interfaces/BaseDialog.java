@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,6 @@ import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.ActivityRunnable;
 import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
-import com.kongzue.dialogx.util.DialogXImplModeAgent;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.WindowUtil;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
@@ -60,9 +58,9 @@ import static com.kongzue.dialogx.DialogX.DEBUGMODE;
  */
 public abstract class BaseDialog {
     
-    protected static WeakReference<Thread> uiThread;
+    protected static Thread uiThread;
     private static WeakReference<FrameLayout> rootFrameLayout;
-    private static WeakReference<Activity> contextWeakReference;
+    private static WeakReference<Activity> activityWeakReference;
     protected WeakReference<Activity> ownActivity;
     private static List<BaseDialog> runningDialogList;
     private WeakReference<View> dialogView;
@@ -87,8 +85,8 @@ public abstract class BaseDialog {
     
     private static void initActivityContext(Activity activity) {
         try {
-            uiThread = new WeakReference<>(Thread.currentThread());
-            contextWeakReference = new WeakReference<>(activity);
+            uiThread = Thread.currentThread();
+            activityWeakReference = new WeakReference<>(activity);
             rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 publicWindowInsets(rootFrameLayout.get().getRootWindowInsets());
@@ -116,7 +114,7 @@ public abstract class BaseDialog {
             CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
             for (int i = copyOnWriteList.size() - 1; i >= 0; i--) {
                 BaseDialog baseDialog = copyOnWriteList.get(i);
-                if (baseDialog.getActivity() == activity && baseDialog.isShow && baseDialog.getDialogView() != null) {
+                if (baseDialog.getOwnActivity() == activity && baseDialog.isShow && baseDialog.getDialogView() != null) {
                     View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
                     if (boxRoot instanceof DialogXBaseRelativeLayout) {
                         if (((DialogXBaseRelativeLayout) boxRoot).isBaseFocusable()) {
@@ -130,8 +128,8 @@ public abstract class BaseDialog {
     }
     
     private static void requestDialogFocus() {
-        if (getContext() instanceof Activity) {
-            onActivityResume((Activity) getContext());
+        if (getTopActivity() instanceof Activity) {
+            onActivityResume((Activity) getTopActivity());
         }
     }
     
@@ -151,7 +149,7 @@ public abstract class BaseDialog {
                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                 return;
             }
-            baseDialog.ownActivity = new WeakReference<>(contextWeakReference.get());
+            baseDialog.ownActivity = new WeakReference<>(activityWeakReference.get());
             baseDialog.dialogView = new WeakReference<>(view);
             
             log(baseDialog.dialogKey() + ".show");
@@ -163,13 +161,13 @@ public abstract class BaseDialog {
                     runOnMain(new Runnable() {
                         @Override
                         public void run() {
-                            WindowUtil.show(contextWeakReference.get(), view, !(baseDialog instanceof PopTip));
+                            WindowUtil.show(activityWeakReference.get(), view, !(baseDialog instanceof PopTip));
                         }
                     });
                     break;
                 case DIALOG_FRAGMENT:
                     DialogFragmentImpl dialogFragment = new DialogFragmentImpl(baseDialog, view);
-                    dialogFragment.show(getSupportFragmentManager(contextWeakReference.get()), "DialogX");
+                    dialogFragment.show(getSupportFragmentManager(activityWeakReference.get()), "DialogX");
                     baseDialog.ownDialogFragmentImpl = new WeakReference<>(dialogFragment);
                     break;
                 case FLOATING_ACTIVITY:
@@ -200,18 +198,18 @@ public abstract class BaseDialog {
                         }
                     });
                     DialogXFloatingWindowActivity dialogXFloatingWindowActivity = DialogXFloatingWindowActivity.getDialogXFloatingWindowActivity();
-                    if (dialogXFloatingWindowActivity != null && dialogXFloatingWindowActivity.isSameFrom(contextWeakReference.get().hashCode())) {
+                    if (dialogXFloatingWindowActivity != null && dialogXFloatingWindowActivity.isSameFrom(activityWeakReference.get().hashCode())) {
                         dialogXFloatingWindowActivity.showDialogX(baseDialog.dialogKey());
                         return;
                     }
-                    Intent intent = new Intent(contextWeakReference.get(), DialogXFloatingWindowActivity.class);
+                    Intent intent = new Intent(activityWeakReference.get(), DialogXFloatingWindowActivity.class);
                     intent.putExtra("dialogXKey", baseDialog.dialogKey());
-                    intent.putExtra("fromActivityUiStatus", contextWeakReference.get().getWindow().getDecorView().getSystemUiVisibility());
-                    intent.putExtra("from", contextWeakReference.get().hashCode());
-                    contextWeakReference.get().startActivity(intent);
+                    intent.putExtra("fromActivityUiStatus", activityWeakReference.get().getWindow().getDecorView().getSystemUiVisibility());
+                    intent.putExtra("from", activityWeakReference.get().hashCode());
+                    activityWeakReference.get().startActivity(intent);
                     int version = Integer.valueOf(Build.VERSION.SDK_INT);
                     if (version > 5) {
-                        contextWeakReference.get().overridePendingTransition(0, 0);
+                        activityWeakReference.get().overridePendingTransition(0, 0);
                     }
                     break;
                 default:
@@ -253,7 +251,7 @@ public abstract class BaseDialog {
         if (activity == null || view == null) {
             return;
         }
-        if (contextWeakReference == null || contextWeakReference.get() == null) {
+        if (activityWeakReference == null || activityWeakReference.get() == null) {
             initActivityContext(activity);
         }
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
@@ -421,15 +419,19 @@ public abstract class BaseDialog {
         }
     }
     
-    public static Context getContext() {
-        if (contextWeakReference == null) {
+    public static Activity getTopActivity() {
+        if (activityWeakReference == null) {
             init(null);
-            if (contextWeakReference == null) {
+            if (activityWeakReference == null) {
                 return ActivityLifecycleImpl.getTopActivity();
             }
-            return contextWeakReference.get();
+            return activityWeakReference.get();
         }
-        return contextWeakReference.get();
+        return activityWeakReference.get();
+    }
+    
+    public static Context getApplicationContext() {
+        return ActivityLifecycleImpl.getApplicationContext();
     }
     
     /**
@@ -438,10 +440,10 @@ public abstract class BaseDialog {
      * @hide
      */
     public static void cleanContext() {
-        if (contextWeakReference != null) {
-            contextWeakReference.clear();
+        if (activityWeakReference != null) {
+            activityWeakReference.clear();
         }
-        contextWeakReference = null;
+        activityWeakReference = null;
         System.gc();
     }
     
@@ -470,11 +472,11 @@ public abstract class BaseDialog {
     public abstract boolean isCancelable();
     
     public View createView(int layoutId) {
-        if (getContext() == null) {
+        if (getApplicationContext() == null) {
             error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return null;
         }
-        return LayoutInflater.from(getContext()).inflate(layoutId, null);
+        return LayoutInflater.from(getApplicationContext()).inflate(layoutId, null);
     }
     
     public boolean isShow() {
@@ -532,22 +534,6 @@ public abstract class BaseDialog {
         }
     }
     
-    protected View createHorizontalSplitView(int color) {
-        View splitView = new View(getContext());
-        splitView.setBackgroundColor(color);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-        splitView.setLayoutParams(lp);
-        return splitView;
-    }
-    
-    protected View createVerticalSplitView(int color, int height) {
-        View splitView = new View(getContext());
-        splitView.setBackgroundColor(color);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1, dip2px(height));
-        splitView.setLayoutParams(lp);
-        return splitView;
-    }
-    
     public static boolean isNull(String s) {
         if (s == null || s.trim().isEmpty() || "null".equals(s) || "(null)".equals(s)) {
             return true;
@@ -564,23 +550,23 @@ public abstract class BaseDialog {
     }
     
     public Resources getResources() {
-        if (getContext() == null) {
+        if (getApplicationContext() == null) {
             return Resources.getSystem();
         }
-        return getContext().getResources();
+        return getApplicationContext().getResources();
     }
     
     public int dip2px(float dpValue) {
-        final float scale = getContext().getResources().getDisplayMetrics().density;
+        final float scale = getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
     }
     
     public boolean isLightTheme() {
         if (theme == DialogX.THEME.AUTO) {
-            if (getContext() == null) {
+            if (getApplicationContext() == null) {
                 return theme == DialogX.THEME.LIGHT;
             }
-            return (getContext().getApplicationContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
+            return (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
         }
         return theme == DialogX.THEME.LIGHT;
     }
@@ -609,9 +595,9 @@ public abstract class BaseDialog {
     
     protected void beforeShow() {
         dismissAnimFlag = false;
-        if (getContext() == null) {
+        if (getTopActivity() == null) {
             init(null);
-            if (getContext() == null) {
+            if (getTopActivity() == null) {
                 error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
                 return;
             }
@@ -620,36 +606,36 @@ public abstract class BaseDialog {
             error("DialogX 所引用的 Style 不符合当前适用版本：" + DialogXStyle.styleVer + " 引入的 Style(" + style.getClass().getSimpleName() + ") 版本" + style.styleVer);
         }
         
-        if (dialogImplMode != DialogX.IMPL_MODE.VIEW && getContext() instanceof LifecycleOwner) {
-            Lifecycle lifecycle = ((LifecycleOwner) getContext()).getLifecycle();
+        if (dialogImplMode != DialogX.IMPL_MODE.VIEW && getTopActivity() instanceof LifecycleOwner) {
+            Lifecycle lifecycle = ((LifecycleOwner) getTopActivity()).getLifecycle();
             lifecycle.addObserver(new LifecycleEventObserver() {
                 @Override
                 public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
                     if (event == Lifecycle.Event.ON_DESTROY) {
-                        recycleDialog((Activity) getContext());
+                        recycleDialog(getTopActivity());
                     }
                 }
             });
         }
         
         //Hide IME
-        View view = ((Activity) BaseDialog.getContext()).getCurrentFocus();
+        View view = (BaseDialog.getTopActivity()).getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) BaseDialog.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) BaseDialog.getTopActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
     
     protected String getString(int titleResId) {
-        if (getContext() == null) {
+        if (getApplicationContext() == null) {
             error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return null;
         }
-        return getContext().getString(titleResId);
+        return getResources().getString(titleResId);
     }
     
     protected int getColor(int backgroundRes) {
-        if (getContext() == null) {
+        if (getApplicationContext() == null) {
             error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return Color.BLACK;
         }
@@ -663,7 +649,7 @@ public abstract class BaseDialog {
     public abstract String dialogKey();
     
     protected static void runOnMain(Runnable runnable) {
-        if (!DialogX.autoRunOnUIThread || (uiThread != null && Thread.currentThread() == uiThread.get())) {
+        if (!DialogX.autoRunOnUIThread || (uiThread != null && Thread.currentThread() == uiThread)) {
             runnable.run();
             return;
         }
@@ -688,7 +674,7 @@ public abstract class BaseDialog {
         return dialogView.get();
     }
     
-    public Activity getActivity() {
+    public Activity getOwnActivity() {
         return ownActivity == null ? null : ownActivity.get();
     }
     
@@ -718,7 +704,7 @@ public abstract class BaseDialog {
                 if (runningDialogList != null) {
                     CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
                     for (BaseDialog baseDialog : copyOnWriteList) {
-                        if (baseDialog.getActivity() == activity && baseDialog.dialogView != null) {
+                        if (baseDialog.getOwnActivity() == activity && baseDialog.dialogView != null) {
                             WindowUtil.dismiss(baseDialog.dialogView.get());
                         }
                     }
@@ -728,7 +714,7 @@ public abstract class BaseDialog {
                 if (runningDialogList != null) {
                     CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
                     for (BaseDialog baseDialog : copyOnWriteList) {
-                        if (baseDialog.getActivity() == activity && baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
+                        if (baseDialog.getOwnActivity() == activity && baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
                             baseDialog.ownDialogFragmentImpl.get().dismiss();
                         }
                     }
@@ -741,7 +727,7 @@ public abstract class BaseDialog {
                 if (runningDialogList != null) {
                     CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
                     for (BaseDialog baseDialog : copyOnWriteList) {
-                        if (baseDialog.getActivity() == activity) {
+                        if (baseDialog.getOwnActivity() == activity) {
                             baseDialog.cleanActivityContext();
                             runningDialogList.remove(baseDialog);
                         }
@@ -749,7 +735,7 @@ public abstract class BaseDialog {
                 }
                 break;
         }
-        if (activity == getContext()) {
+        if (activity == getTopActivity()) {
             cleanContext();
         }
     }
@@ -762,10 +748,10 @@ public abstract class BaseDialog {
     }
     
     protected void imeShow(EditText editText, boolean show) {
-        if (getContext() == null) {
+        if (getTopActivity() == null) {
             return;
         }
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getTopActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (show) {
             imm.showSoftInput(editText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
         } else {

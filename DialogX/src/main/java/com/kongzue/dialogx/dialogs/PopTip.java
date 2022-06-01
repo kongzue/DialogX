@@ -1,14 +1,11 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.animation.Animator;
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -20,11 +17,9 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.annotation.IdRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-import com.kongzue.dialogx.impl.AnimatorListenerEndCallBack;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
@@ -33,11 +28,9 @@ import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
-import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -507,7 +500,7 @@ public class PopTip extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId == 0 ? R.anim.anim_dialogx_default_enter : enterAnimResId);
+                    Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_default_enter : enterAnimResId);
                     enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     if (enterAnimDuration != -1) {
                         enterAnim.setDuration(enterAnimDuration);
@@ -539,7 +532,7 @@ public class PopTip extends BaseDialog {
         
         @Override
         public void refreshView() {
-            if (boxRoot == null || getContext() == null) {
+            if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
             if (backgroundColor != -1) {
@@ -598,7 +591,7 @@ public class PopTip extends BaseDialog {
                     @Override
                     public void run() {
             
-                        Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
+                        Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxRoot.getContext() : getTopActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
                         }

@@ -3,7 +3,6 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,10 +23,8 @@ import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
-import com.kongzue.dialogx.util.DialogXImplModeAgent;
 import com.kongzue.dialogx.util.FullScreenDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
-import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
@@ -251,7 +248,7 @@ public class FullScreenDialog extends BaseDialog {
         
         @Override
         public void refreshView() {
-            if (boxRoot == null || getContext() == null) {
+            if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
             if (backgroundColor != -1) {
@@ -297,7 +294,7 @@ public class FullScreenDialog extends BaseDialog {
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
-            if (getContext() == null) return;
+            if (getTopActivity() == null) return;
             
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;

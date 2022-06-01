@@ -302,7 +302,7 @@ public class MessageDialog extends BaseDialog {
                     if (customEnterAnimResId != 0) {
                         enterAnimResId = customEnterAnimResId;
                     }
-                    Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
+                    Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
                     long enterAnimDurationTemp = enterAnim.getDuration();
                     if (overrideEnterDuration >= 0) {
                         enterAnimDurationTemp = overrideEnterDuration;
@@ -461,7 +461,7 @@ public class MessageDialog extends BaseDialog {
         
         public void refreshView() {
             log("#refreshView");
-            if (boxRoot == null || getContext() == null) {
+            if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
             if (backgroundColor != -1) {
@@ -565,13 +565,13 @@ public class MessageDialog extends BaseDialog {
                                 }
                                 break;
                             case DialogXStyle.SPACE:
-                                Space space = new Space(getContext());
+                                Space space = new Space(getTopActivity());
                                 LinearLayout.LayoutParams spaceLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                                 spaceLp.weight = 1;
                                 boxButton.addView(space, spaceLp);
                                 break;
                             case DialogXStyle.SPLIT:
-                                View splitView = new View(getContext());
+                                View splitView = new View(getTopActivity());
                                 splitView.setBackgroundColor(getResources().getColor(style.splitColorRes(isLightTheme())));
                                 LinearLayout.LayoutParams viewLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, style.splitWidthPx());
                                 boxButton.addView(splitView, viewLp);
@@ -617,7 +617,7 @@ public class MessageDialog extends BaseDialog {
                                 } else {
                                     break;
                                 }
-                                Space space = new Space(getContext());
+                                Space space = new Space(getTopActivity());
                                 LinearLayout.LayoutParams spaceLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                                 spaceLp.weight = 1;
                                 boxButton.addView(space, spaceLp);
@@ -630,7 +630,7 @@ public class MessageDialog extends BaseDialog {
                                 } else {
                                     break;
                                 }
-                                View splitView = new View(getContext());
+                                View splitView = new View(getTopActivity());
                                 splitView.setBackgroundColor(getResources().getColor(style.splitColorRes(isLightTheme())));
                                 LinearLayout.LayoutParams viewLp = new LinearLayout.LayoutParams(style.splitWidthPx(), ViewGroup.LayoutParams.MATCH_PARENT);
                                 boxButton.addView(splitView, viewLp);
@@ -666,7 +666,7 @@ public class MessageDialog extends BaseDialog {
         
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
-            if (getContext() == null) return;
+            if (getTopActivity() == null) return;
             
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
@@ -677,7 +677,7 @@ public class MessageDialog extends BaseDialog {
                 if (customExitAnimResId != 0) {
                     exitAnimResId = customExitAnimResId;
                 }
-                Animation exitAnim = AnimationUtils.loadAnimation(getContext(), exitAnimResId);
+                Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity(), exitAnimResId);
                 long exitAnimDurationTemp = exitAnim.getDuration();
                 exitAnim.setInterpolator(new AccelerateInterpolator());
                 if (overrideExitDuration >= 0) {

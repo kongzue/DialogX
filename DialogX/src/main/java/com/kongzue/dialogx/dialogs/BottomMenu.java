@@ -491,9 +491,9 @@ public class BottomMenu extends BottomDialog {
             
             
             if (!isLightTheme()) {
-                listView = new BottomDialogListView(dialog, getContext(), R.style.DialogXCompatThemeDark);
+                listView = new BottomDialogListView(dialog, getTopActivity(), R.style.DialogXCompatThemeDark);
             } else {
-                listView = new BottomDialogListView(dialog, getContext());
+                listView = new BottomDialogListView(dialog, getTopActivity());
             }
             listView.setOverScrollMode(OVER_SCROLL_NEVER);
             listView.setDivider(getResources().getDrawable(dividerDrawableResId));
@@ -619,7 +619,7 @@ public class BottomMenu extends BottomDialog {
         if (getDialogImpl() == null) return;
         if (listView != null) {
             if (menuListAdapter == null) {
-                menuListAdapter = new BottomMenuArrayAdapter(me, getContext(), menuList);
+                menuListAdapter = new BottomMenuArrayAdapter(me, getTopActivity(), menuList);
             }
             if (listView.getAdapter() == null) {
                 listView.setAdapter(menuListAdapter);

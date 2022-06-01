@@ -27,12 +27,12 @@ public abstract class OnBindView<D> {
     View customView;
     
     public OnBindView(int layoutResId) {
-        if (BaseDialog.getContext() == null) {
+        if (BaseDialog.getTopActivity() == null) {
             DialogX.error(ERROR_INIT_TIPS);
             return;
         }
         this.layoutResId = layoutResId;
-        customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
+        customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
     }
     
     public OnBindView(View customView) {
@@ -43,16 +43,16 @@ public abstract class OnBindView<D> {
     private android.app.Fragment supportFragment;
     
     public OnBindView(androidx.fragment.app.Fragment fragment) {
-        if (BaseDialog.getContext() == null) return;
-        this.customView = new FrameLayout(BaseDialog.getContext());
+        if (BaseDialog.getTopActivity() == null) return;
+        this.customView = new FrameLayout(BaseDialog.getTopActivity());
         this.customView.setId(R.id.id_frame_layout_custom);
         this.fragment = fragment;
         this.supportFragment = null;
     }
     
     public OnBindView(android.app.Fragment supportFragment) {
-        if (BaseDialog.getContext() == null) return;
-        this.customView = new FrameLayout(BaseDialog.getContext());
+        if (BaseDialog.getTopActivity() == null) return;
+        this.customView = new FrameLayout(BaseDialog.getTopActivity());
         this.customView.setId(R.id.id_frame_layout_custom);
         this.supportFragment = supportFragment;
         this.fragment = null;
@@ -77,7 +77,7 @@ public abstract class OnBindView<D> {
     
     public View getCustomView() {
         if (customView == null) {
-            customView = LayoutInflater.from(BaseDialog.getContext()).inflate(layoutResId, new RelativeLayout(BaseDialog.getContext()), false);
+            customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
             customView.setId(R.id.id_frame_layout_custom);
         }
         return customView;
@@ -127,15 +127,15 @@ public abstract class OnBindView<D> {
         if (fragment != null || supportFragment != null) getCustomView().post(new Runnable() {
             @Override
             public void run() {
-                if (fragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getContext() instanceof AppCompatActivity) {
-                    AppCompatActivity appCompatActivity = (AppCompatActivity) BaseDialog.getContext();
+                if (fragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof AppCompatActivity) {
+                    AppCompatActivity appCompatActivity = (AppCompatActivity) BaseDialog.getTopActivity();
                     androidx.fragment.app.FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
                     transaction.add(R.id.id_frame_layout_custom, fragment);
                     transaction.commit();
                     onFragmentBind((D) dialog, getCustomView(), fragment, appCompatActivity.getSupportFragmentManager());
                 }
-                if (supportFragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getContext() instanceof Activity) {
-                    Activity activity = (Activity) BaseDialog.getContext();
+                if (supportFragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof Activity) {
+                    Activity activity = (Activity) BaseDialog.getTopActivity();
                     android.app.FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
                     transaction.add(R.id.id_frame_layout_custom, supportFragment);
                     transaction.commit();

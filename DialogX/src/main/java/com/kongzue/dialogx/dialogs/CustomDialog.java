@@ -183,7 +183,7 @@ public class CustomDialog extends BaseDialog {
                                 exitAnimResId = R.anim.anim_dialogx_right_exit;
                                 break;
                         }
-                        enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
+                        enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                     } else {
                         int enterAnimResIdTemp = R.anim.anim_dialogx_default_enter;
@@ -193,7 +193,7 @@ public class CustomDialog extends BaseDialog {
                         if (enterAnimResId != 0) {
                             enterAnimResIdTemp = enterAnimResId;
                         }
-                        enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResIdTemp);
+                        enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResIdTemp);
                     }
                     long enterAnimDurationTemp = enterAnim.getDuration();
                     if (overrideEnterDuration >= 0) {
@@ -208,7 +208,7 @@ public class CustomDialog extends BaseDialog {
                     
                     boxRoot.setBackgroundColor(maskColor);
                     if (overrideMaskEnterAnimRes != 0) {
-                        Animation maskEnterAnim = AnimationUtils.loadAnimation(getContext(), overrideMaskEnterAnimRes);
+                        Animation maskEnterAnim = AnimationUtils.loadAnimation(getTopActivity(), overrideMaskEnterAnimRes);
                         maskEnterAnim.setInterpolator(new DecelerateInterpolator(2f));
                         maskEnterAnim.setDuration(enterAnimDurationTemp);
                         boxRoot.startAnimation(maskEnterAnim);
@@ -230,7 +230,7 @@ public class CustomDialog extends BaseDialog {
         
         @Override
         public void refreshView() {
-            if (boxRoot == null || getContext() == null) {
+            if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
             RelativeLayout.LayoutParams rlp;
@@ -302,7 +302,7 @@ public class CustomDialog extends BaseDialog {
                             exitAnimResIdTemp = exitAnimResId;
                         }
                         
-                        Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxCustom.getContext() : getContext(), exitAnimResIdTemp);
+                        Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxCustom.getContext() : getTopActivity(), exitAnimResIdTemp);
                         
                         long exitAnimDurationTemp = exitAnim.getDuration();
                         if (overrideExitDuration >= 0) {
@@ -331,7 +331,7 @@ public class CustomDialog extends BaseDialog {
                         boxCustom.startAnimation(exitAnim);
                         
                         if (overrideMaskExitAnimRes != 0) {
-                            Animation maskExitAnim = AnimationUtils.loadAnimation(getContext(), overrideMaskExitAnimRes);
+                            Animation maskExitAnim = AnimationUtils.loadAnimation(getTopActivity(), overrideMaskExitAnimRes);
                             maskExitAnim.setDuration(exitAnimDurationTemp);
                             maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
                             boxRoot.startAnimation(maskExitAnim);

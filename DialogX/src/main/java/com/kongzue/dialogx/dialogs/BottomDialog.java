@@ -7,9 +7,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -458,7 +455,7 @@ public class BottomDialog extends BaseDialog {
         
         @Override
         public void refreshView() {
-            if (boxRoot == null || getContext() == null) {
+            if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
             if (backgroundColor != -1) {
@@ -557,7 +554,7 @@ public class BottomDialog extends BaseDialog {
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
-            if (getContext() == null) return;
+            if (getTopActivity() == null) return;
             
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
@@ -608,7 +605,7 @@ public class BottomDialog extends BaseDialog {
                 if (exitAnimDuration >= 0) {
                     exitAnimDurationTemp = exitAnimDuration;
                 }
-                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(), boxBkg.getHeight());
+                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(),boxRoot.getUnsafePlace().top );
                 exitAnim.setDuration(exitAnimDurationTemp);
                 exitAnim.start();
             }

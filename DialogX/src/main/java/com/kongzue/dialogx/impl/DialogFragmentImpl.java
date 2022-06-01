@@ -19,9 +19,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.kongzue.dialogx.R;
-import com.kongzue.dialogx.dialogs.BottomDialog;
-import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
@@ -58,8 +55,8 @@ public class DialogFragmentImpl extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (BaseDialog.getContext() != null && BaseDialog.getContext() instanceof Activity) {
-            activityWeakReference = new WeakReference<>(((Activity) BaseDialog.getContext()));
+        if (BaseDialog.getTopActivity() != null && BaseDialog.getTopActivity() instanceof Activity) {
+            activityWeakReference = new WeakReference<>(((Activity) BaseDialog.getTopActivity()));
         }
         if (activityWeakReference == null || activityWeakReference.get() == null) return;
         final Activity activity = activityWeakReference.get();
@@ -80,7 +77,7 @@ public class DialogFragmentImpl extends DialogFragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 for (BaseDialog baseDialog : BaseDialog.getRunningDialogList()) {
-                    if (baseDialog.getActivity() == activity) {
+                    if (baseDialog.getOwnActivity() == activity) {
                         if (!(baseDialog instanceof PopTip)) {
                             return false;
                         }

@@ -3,7 +3,6 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
@@ -267,9 +266,9 @@ public class WaitDialog extends BaseDialog {
             bkg = dialogView.findViewById(R.id.bkg);
             blurView = dialogView.findViewById(R.id.blurView);
             boxProgress = dialogView.findViewById(R.id.box_progress);
-            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getContext(), isLightTheme());
+            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getTopActivity(), isLightTheme());
             if (progressViewCache == null) {
-                progressViewCache = new ProgressView(getContext());
+                progressViewCache = new ProgressView(getTopActivity());
             }
             progressView = (ProgressViewInterface) progressViewCache;
             boxProgress.addView(progressViewCache, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -286,9 +285,9 @@ public class WaitDialog extends BaseDialog {
             bkg = convertView.findViewById(R.id.bkg);
             blurView = convertView.findViewById(R.id.blurView);
             boxProgress = convertView.findViewById(R.id.box_progress);
-            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getContext(), isLightTheme());
+            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getTopActivity(), isLightTheme());
             if (progressViewCache == null) {
-                progressViewCache = new ProgressView(getContext());
+                progressViewCache = new ProgressView(getTopActivity());
             }
             progressView = (ProgressViewInterface) progressViewCache;
             boxProgress.addView(progressViewCache, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -319,7 +318,7 @@ public class WaitDialog extends BaseDialog {
                     bkg.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (getContext() == null) return;
+                            if (getTopActivity() == null) return;
                             int enterAnimResId = R.anim.anim_dialogx_default_enter;
                             if (overrideEnterAnimRes != 0) {
                                 enterAnimResId = overrideEnterAnimRes;
@@ -327,7 +326,7 @@ public class WaitDialog extends BaseDialog {
                             if (customEnterAnimResId != 0) {
                                 enterAnimResId = customEnterAnimResId;
                             }
-                            Animation enterAnim = AnimationUtils.loadAnimation(getContext(), enterAnimResId);
+                            Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
                             long enterAnimDurationTemp = enterAnim.getDuration();
                             enterAnim.setInterpolator(new DecelerateInterpolator());
                             if (overrideEnterDuration >= 0) {
@@ -406,7 +405,7 @@ public class WaitDialog extends BaseDialog {
         private float oldProgress;
         
         public void refreshView() {
-            if (boxRoot == null || getContext() == null) {
+            if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
             
@@ -479,14 +478,14 @@ public class WaitDialog extends BaseDialog {
         
         public void doDismiss(final View v) {
             if (boxRoot == null) return;
-            if (getContext() == null) return;
+            if (getTopActivity() == null) return;
             
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
-                        Context context = getContext();
+                        Context context = getTopActivity();
                         if (context == null) context = boxRoot.getContext();
                         if (context == null) return;
                         
@@ -651,7 +650,7 @@ public class WaitDialog extends BaseDialog {
     protected static WaitDialog me() {
         for (BaseDialog baseDialog : getRunningDialogList()) {
             if (baseDialog instanceof WaitDialog) {
-                if (baseDialog.isShow() && baseDialog.getActivity() == getContext()) {
+                if (baseDialog.isShow() && baseDialog.getOwnActivity() == getTopActivity()) {
                     return (WaitDialog) baseDialog;
                 }
             }
@@ -907,23 +906,23 @@ public class WaitDialog extends BaseDialog {
     }
     
     protected static boolean noInstance() {
-        if (getContext() != null && getContext() instanceof Activity && getInstance((Activity) getContext()) != null) {
+        if (getTopActivity() != null && getTopActivity() instanceof Activity && getInstance((Activity) getTopActivity()) != null) {
             return false;
         }
-        return me == null || me.get() == null || me.get().getActivity() == null || me.get().getActivity() != getContext();
+        return me == null || me.get() == null || me.get().getOwnActivity() == null || me.get().getOwnActivity() != getTopActivity();
     }
     
     protected static boolean noInstance(Activity activity) {
-        if (getContext() != null && getInstance(activity) != null) {
+        if (getTopActivity() != null && getInstance(activity) != null) {
             return false;
         }
-        return me == null || me.get() == null || me.get().getActivity() == null || me.get().getActivity() != activity;
+        return me == null || me.get() == null || me.get().getOwnActivity() == null || me.get().getOwnActivity() != activity;
     }
     
     public static WaitDialog getInstanceNotNull(Activity activity) {
         for (BaseDialog baseDialog : getRunningDialogList()) {
             if (baseDialog instanceof WaitDialog) {
-                if (baseDialog.isShow() && baseDialog.getActivity() == activity) {
+                if (baseDialog.isShow() && baseDialog.getOwnActivity() == activity) {
                     return (WaitDialog) baseDialog;
                 }
             }
@@ -934,7 +933,7 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog getInstance(Activity activity) {
         for (BaseDialog baseDialog : getRunningDialogList()) {
             if (baseDialog instanceof WaitDialog) {
-                if (baseDialog.isShow() && baseDialog.getActivity() == activity) {
+                if (baseDialog.isShow() && baseDialog.getOwnActivity() == activity) {
                     return (WaitDialog) baseDialog;
                 }
             }

@@ -4,14 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +15,6 @@ import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import androidx.core.view.ViewCompat;
@@ -148,9 +143,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
             ViewCompat.requestApplyInsets(this);
             
-            if (BaseDialog.getContext() == null) return;
+            if (BaseDialog.getTopActivity() == null) return;
             
-            ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener);
+            ((Activity) BaseDialog.getTopActivity()).getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener);
             decorViewLayoutListener.onGlobalLayout();
             
             if (onLifecycleCallBack != null) {
@@ -166,11 +161,11 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 paddingView(getRootWindowInsets());
             } else {
-                if (BaseDialog.getContext() == null) return;
+                if (BaseDialog.getTopActivity() == null) return;
                 DisplayMetrics displayMetrics = new DisplayMetrics();
-                ((Activity) BaseDialog.getContext()).getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
+                ((Activity) BaseDialog.getTopActivity()).getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
                 Rect rect = new Rect();
-                ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+                ((Activity) BaseDialog.getTopActivity()).getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
                 paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
             }
         }
@@ -178,8 +173,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     protected void onDetachedFromWindow() {
-        if (decorViewLayoutListener != null && ((Activity) BaseDialog.getContext()) != null) {
-            ((Activity) BaseDialog.getContext()).getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(decorViewLayoutListener);
+        if (decorViewLayoutListener != null && ((Activity) BaseDialog.getTopActivity()) != null) {
+            ((Activity) BaseDialog.getTopActivity()).getWindow().getDecorView().getViewTreeObserver().removeOnGlobalLayoutListener(decorViewLayoutListener);
         }
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onDismiss();

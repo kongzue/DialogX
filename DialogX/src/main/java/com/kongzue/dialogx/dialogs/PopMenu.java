@@ -3,7 +3,6 @@ package com.kongzue.dialogx.dialogs;
 import static android.view.View.OVER_SCROLL_NEVER;
 
 import android.animation.ValueAnimator;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,7 +33,6 @@ import com.kongzue.dialogx.util.PopMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
-import com.kongzue.dialogx.util.views.MaxLinearLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.views.PopMenuListView;
 
@@ -252,7 +250,7 @@ public class PopMenu extends BaseDialog {
         @Override
         public void init() {
             if (menuListAdapter == null) {
-                menuListAdapter = new PopMenuArrayAdapter(me, getContext(), menuList);
+                menuListAdapter = new PopMenuArrayAdapter(me, getTopActivity(), menuList);
             }
             
             boxRoot.setParentDialog(me);
@@ -548,7 +546,7 @@ public class PopMenu extends BaseDialog {
         
         @Override
         public void refreshView() {
-            if (boxRoot == null || getContext() == null) {
+            if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
             if (listMenu.getAdapter() == null) {
@@ -605,7 +603,7 @@ public class PopMenu extends BaseDialog {
                         if (overrideExitDuration != -1) {
                             exitAnimDuration = overrideExitDuration;
                         }
-                        Animation exitAnim = AnimationUtils.loadAnimation(getContext() == null ? boxRoot.getContext() : getContext(), R.anim.anim_dialogx_default_exit);
+                        Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxRoot.getContext() : getTopActivity(), R.anim.anim_dialogx_default_exit);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
                         }
