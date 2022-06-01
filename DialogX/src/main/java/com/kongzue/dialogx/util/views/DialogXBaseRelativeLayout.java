@@ -267,6 +267,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     public DialogXBaseRelativeLayout setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
         this.autoUnsafePlacePadding = autoUnsafePlacePadding;
+        if (!autoUnsafePlacePadding) {
+            setPadding(0, 0, 0, 0);
+        }
         return this;
     }
     

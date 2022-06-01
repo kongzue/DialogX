@@ -135,7 +135,9 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-    
+        if (application == null) {
+            BaseDialog.init(activity);
+        }
     }
     
     @Override
