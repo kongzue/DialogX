@@ -5,12 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+<!--    保留一层额外的 RelativeLayout 的原因是对于子布局设置 layout_centerInParent 时，-->
+<!--    DialogXBaseRelativeLayout 的安全区 padding不生效-->
     <RelativeLayout
-        android:id="@+id/box_custom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:clickable="true">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/box_custom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="true"/>
 
     </RelativeLayout>
 
