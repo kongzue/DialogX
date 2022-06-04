@@ -148,8 +148,9 @@ public class ProgressView extends View implements ProgressViewInterface {
         oval = new RectF(mCenterX - mRadius, mCenterY - mRadius, mCenterX + mRadius, mCenterY + mRadius);
     }
     
-    protected float oldAnimAngle;
     private int successStep = 0;
+    private float nowLoadingProgressValue;
+    private float nowLoadingProgressEndAngle;
     
     @Override
     protected void onDraw(Canvas canvas) {
@@ -164,9 +165,14 @@ public class ProgressView extends View implements ProgressViewInterface {
             return;
         }
         
-        float sweepAngle = (float) (halfSweepA * Math.sin(Math.toRadians(followRotateDegrees))) + halfSweepA + halfSweepAMinValue / 2;
         switch (status) {
             case STATUS_LOADING:
+                float sweepAngle = (float) (halfSweepA * Math.sin(Math.toRadians(followRotateDegrees))) + halfSweepA + halfSweepAMinValue / 2;
+                nowLoadingProgressValue = currentRotateDegrees - sweepAngle;
+                if (nowLoadingProgressValue < 0) {
+                    nowLoadingProgressValue = 360 + nowLoadingProgressValue;
+                }
+                nowLoadingProgressEndAngle = sweepAngle;
                 canvas.drawArc(oval, currentRotateDegrees, -sweepAngle, false, mPaint);
                 break;
             case STATUS_SUCCESS:
@@ -174,22 +180,13 @@ public class ProgressView extends View implements ProgressViewInterface {
             case STATUS_ERROR:
                 switch (successStep) {
                     case 0:
-                        canvas.drawArc(oval, currentRotateDegrees, -sweepAngle, false, mPaint);
-                        if ((currentRotateDegrees - sweepAngle) > 270) {
+                        nowLoadingProgressEndAngle = nowLoadingProgressEndAngle + 5;
+                        canvas.drawArc(oval, nowLoadingProgressValue, nowLoadingProgressEndAngle, false, mPaint);
+                        if (nowLoadingProgressEndAngle - 360 >= nowLoadingProgressValue) {
                             successStep = 1;
                         }
                         break;
                     case 1:
-                        float aimAngle = currentRotateDegrees > 270 ? currentRotateDegrees - 270 : 90 + currentRotateDegrees;
-                        canvas.drawArc(oval, 270, aimAngle, false, mPaint);
-                        if (oldAnimAngle > aimAngle && oldAnimAngle > 300) {
-                            successStep = 2;
-                            canvas.drawArc(oval, 0, 360, false, mPaint);
-                            break;
-                        }
-                        oldAnimAngle = aimAngle;
-                        break;
-                    case 2:
                         canvas.drawArc(oval, 0, 360, false, mPaint);
                         drawDoneMark(status, canvas);
                         break;
@@ -331,7 +328,7 @@ public class ProgressView extends View implements ProgressViewInterface {
                 @Override
                 public void run() {
                     tickStep = 0;
-                    successStep = 2;
+                    successStep = 1;
                     interpolator = new AccelerateDecelerateInterpolator();
                     status = STATUS_SUCCESS;
                 }
@@ -351,7 +348,7 @@ public class ProgressView extends View implements ProgressViewInterface {
                 @Override
                 public void run() {
                     tickStep = 0;
-                    successStep = 2;
+                    successStep = 1;
                     interpolator = new DecelerateInterpolator(2);
                     status = STATUS_WARNING;
                 }
@@ -371,7 +368,7 @@ public class ProgressView extends View implements ProgressViewInterface {
                 @Override
                 public void run() {
                     tickStep = 0;
-                    successStep = 2;
+                    successStep = 1;
                     interpolator = new DecelerateInterpolator(2);
                     status = STATUS_ERROR;
                 }
@@ -414,7 +411,6 @@ public class ProgressView extends View implements ProgressViewInterface {
     
     public void loading() {
         noShowLoading = false;
-        oldAnimAngle = 0;
         successStep = 0;
         line1X = 0;
         line1Y = 0;

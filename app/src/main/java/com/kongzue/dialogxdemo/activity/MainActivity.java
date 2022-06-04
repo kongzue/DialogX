@@ -67,6 +67,7 @@ import com.kongzue.dialogxmaterialyou.style.MaterialYouStyle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Layout(R.layout.activity_main)
 @DarkStatusBarTheme(true)
@@ -183,7 +184,7 @@ public class MainActivity extends BaseActivity {
         if (showBreak) {
             txtTitle.setText("显示Dialog时关闭Activity演示");
             MessageDialog.show("提示", "接下来会直接运行一个 WaitDialog，2 秒后直接关闭 Activity，并回到原 Activity，保证程序不会出现 WindowLeaked 错误。\n\n" +
-                            "Android 原生 AlertDialog 常出现因 Dialog 先于 Activity 关闭而导致此错误引发程序崩溃。\n\n" +
+                            "Android 原生 AlertDialog 常出现因 Activity 先于 Dialog 关闭而导致此错误引发程序崩溃。\n\n" +
                             "而使用 DialogX 构建的对话框不仅仅不会出现此问题，还可避免因句柄持续持有导致的内存泄漏。", "开始测试", "取消")
                     .setOkButton(new OnDialogButtonClickListener() {
                         @Override
@@ -406,7 +407,6 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 new InputDialog("标题", "正文内容", "确定", "取消", "正在输入的文字")
                         .setInputText("Hello World")
-                        .setCancelable(false)
                         .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
                             @Override
                             public boolean onClick(InputDialog baseDialog, View v, String inputStr) {
@@ -433,7 +433,7 @@ public class MainActivity extends BaseActivity {
                     public void run() {
                         WaitDialog.dismiss();
                     }
-                }, 2000);
+                }, 1500);
             }
         });
         
@@ -463,7 +463,7 @@ public class MainActivity extends BaseActivity {
                     public void run() {
                         if (!closeFlag) TipDialog.show("完成！", WaitDialog.TYPE.SUCCESS);
                     }
-                }, 2000);
+                }, 1500 + new Random().nextInt(1000));
             }
         });
         
@@ -723,7 +723,7 @@ public class MainActivity extends BaseActivity {
             
             @Override
             public void onClick(View v) {
-                onBindView = new OnBindView<FullScreenDialog>(R.layout.layout_full_login) {
+                onBindView = new OnBindView<FullScreenDialog>(R.layout.layout_full_login, true) {
                     @Override
                     public void onBind(FullScreenDialog dialog, View v) {
                         btnCancel = v.findViewById(R.id.btn_cancel);
@@ -931,7 +931,7 @@ public class MainActivity extends BaseActivity {
         
         btnCancel.setText("取消");
         btnSubmit.setText("下一步");
-    
+        
         btnLicense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

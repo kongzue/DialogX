@@ -692,48 +692,36 @@ public class WaitDialog extends BaseDialog {
     }
     
     protected void showTip(TYPE type) {
+        if (readyTipType == type) {
+            return;
+        }
         showType = type.ordinal();
         readyTipType = type;
-        if (getDialogImpl() != null) getDialogImpl().showTip(type);
+        if (getDialogImpl() != null) {
+            getDialogImpl().showTip(type);
+        }
     }
     
     protected void setTip(TYPE type) {
-        showType = type.ordinal();
         readyTipType = type;
-        refreshUI();
-    }
-    
-    protected void setTip(Activity activity, int messageResId, TYPE type) {
-        showType = type.ordinal();
-        this.message = getString(messageResId);
-        readyTipType = type;
-        refreshUI();
+        showTip(readyTipType);
     }
     
     protected void setTip(CharSequence message, TYPE type) {
-        showType = type.ordinal();
         this.message = message;
-        readyTipType = type;
-        refreshUI();
-    }
-    
-    protected void setTip(Activity activity, CharSequence message, TYPE type) {
-        showType = type.ordinal();
-        this.message = message;
-        readyTipType = type;
+        showTip(type);
         refreshUI();
     }
     
     protected void setTip(int messageResId, TYPE type) {
-        showType = type.ordinal();
         this.message = getString(messageResId);
-        readyTipType = type;
+        showTip(type);
         refreshUI();
     }
     
     protected void setTipShowDuration(long tipShowDuration) {
         this.tipShowDuration = tipShowDuration;
-        refreshUI();
+        showTip(readyTipType);
     }
     
     public static CharSequence getMessage() {

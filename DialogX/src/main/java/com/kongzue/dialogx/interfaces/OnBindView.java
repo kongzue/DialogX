@@ -35,6 +35,31 @@ public abstract class OnBindView<D> {
         customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
     }
     
+    public OnBindView(int layoutResId, boolean async) {
+        if (BaseDialog.getTopActivity() == null) {
+            DialogX.error(ERROR_INIT_TIPS);
+            return;
+        }
+        this.layoutResId = layoutResId;
+        if (async) {
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    synchronized (OnBindView.this){
+                        customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
+                        if (waitBindRunnable != null) {
+                            waitBindRunnable.run();
+                            waitBindRunnable = null;
+                        }
+                    }
+                }
+            }.start();
+        } else {
+            customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
+        }
+    }
+    
     public OnBindView(View customView) {
         this.customView = customView;
     }
@@ -94,11 +119,14 @@ public abstract class OnBindView<D> {
     }
     
     @Deprecated
-    public OnBindView<D> bindParent(ViewGroup parentView) {
-        if (getCustomView() == null) return this;
+    public void bindParent(ViewGroup parentView) {
+        if (getCustomView() == null) {
+            waitBind(parentView, null);
+            return;
+        }
         if (getCustomView().getParent() != null) {
             if (getCustomView().getParent() == parentView) {
-                return this;
+                return;
             }
             ((ViewGroup) getCustomView().getParent()).removeView(getCustomView());
         }
@@ -107,14 +135,16 @@ public abstract class OnBindView<D> {
             lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         parentView.addView(getCustomView(), lp);
-        return this;
     }
     
-    public OnBindView<D> bindParent(ViewGroup parentView, BaseDialog dialog) {
-        if (getCustomView() == null) return this;
+    public void bindParent(ViewGroup parentView, BaseDialog dialog) {
+        if (getCustomView() == null) {
+            waitBind(parentView, null);
+            return;
+        }
         if (getCustomView().getParent() != null) {
             if (getCustomView().getParent() == parentView) {
-                return this;
+                return;
             }
             ((ViewGroup) getCustomView().getParent()).removeView(getCustomView());
         }
@@ -143,6 +173,22 @@ public abstract class OnBindView<D> {
                 }
             }
         });
-        return this;
+    }
+    
+    private Runnable waitBindRunnable;
+    
+    private void waitBind(ViewGroup parentView, BaseDialog dialog) {
+        waitBindRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (getCustomView() == null) {
+                    if (dialog == null) {
+                        bindParent(parentView);
+                    } else {
+                        bindParent(parentView, dialog);
+                    }
+                }
+            }
+        };
     }
 }

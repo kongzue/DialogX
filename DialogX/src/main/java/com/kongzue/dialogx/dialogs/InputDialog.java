@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.content.res.Configuration;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
@@ -10,7 +9,6 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
-import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;

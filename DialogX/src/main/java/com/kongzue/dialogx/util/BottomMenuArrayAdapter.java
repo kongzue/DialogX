@@ -5,23 +5,16 @@ import static com.kongzue.dialogx.interfaces.BaseDialog.useTextInfo;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Typeface;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.Space;
 import android.widget.TextView;
 
-import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.BottomMenu;
 

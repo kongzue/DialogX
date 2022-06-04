@@ -3,9 +3,6 @@ package com.kongzue.dialogx.dialogs;
 import android.app.Activity;
 
 import com.kongzue.dialogx.DialogX;
-import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
-
-import java.lang.ref.WeakReference;
 
 /**
  * @author: Kongzue
