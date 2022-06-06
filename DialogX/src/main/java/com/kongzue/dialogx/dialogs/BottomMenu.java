@@ -474,9 +474,6 @@ public class BottomMenu extends BottomDialog {
             
             if (!isAllowInterceptTouch()) {
                 dialog.bkg.setMaxHeight((int) bottomDialogMaxHeight);
-                if (bottomDialogMaxHeight != 0) {
-                    dialogImpl.scrollView.lockScroll(true);
-                }
             }
             
             int dividerDrawableResId = 0;
