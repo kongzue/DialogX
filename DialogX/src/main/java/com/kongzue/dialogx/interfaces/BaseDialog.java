@@ -58,7 +58,7 @@ import static com.kongzue.dialogx.DialogX.DEBUGMODE;
  */
 public abstract class BaseDialog {
     
-    protected static Thread uiThread;
+    private static Thread uiThread;
     private static WeakReference<FrameLayout> rootFrameLayout;
     private static WeakReference<Activity> activityWeakReference;
     protected WeakReference<Activity> ownActivity;
@@ -85,7 +85,7 @@ public abstract class BaseDialog {
     
     private static void initActivityContext(Activity activity) {
         try {
-            uiThread = Thread.currentThread();
+            uiThread = Looper.getMainLooper().getThread();
             activityWeakReference = new WeakReference<>(activity);
             rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -662,11 +662,18 @@ public abstract class BaseDialog {
     public abstract String dialogKey();
     
     protected static void runOnMain(Runnable runnable) {
-        if (!DialogX.autoRunOnUIThread || (uiThread != null && Thread.currentThread() == uiThread)) {
+        if (!DialogX.autoRunOnUIThread || (getUiThread() != null && Thread.currentThread() == getUiThread())) {
             runnable.run();
             return;
         }
         runOnMain(runnable, true);
+    }
+    
+    protected static Thread getUiThread() {
+        if (uiThread == null) {
+            uiThread = Looper.getMainLooper().getThread();
+        }
+        return uiThread;
     }
     
     protected static void runOnMain(Runnable runnable, boolean needWaitMainLooper) {
