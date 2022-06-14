@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -500,7 +501,10 @@ public class BottomDialog extends BaseDialog {
                 }
             });
             
-            if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
+            if (maskColor != -1) {
+                boxRoot.setBackgroundColor(maskColor);
+                boxRoot.setBkgAlpha(0f);
+            }
             
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
@@ -605,7 +609,7 @@ public class BottomDialog extends BaseDialog {
                 if (exitAnimDuration >= 0) {
                     exitAnimDurationTemp = exitAnimDuration;
                 }
-                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(),boxRoot.getUnsafePlace().top );
+                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(), boxRoot.getUnsafePlace().top);
                 exitAnim.setDuration(exitAnimDurationTemp);
                 exitAnim.start();
             }

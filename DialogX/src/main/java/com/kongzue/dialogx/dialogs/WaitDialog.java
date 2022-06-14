@@ -450,6 +450,7 @@ public class WaitDialog extends BaseDialog {
             useTextInfo(txtInfo, messageTextInfo);
             
             if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
+            boxRoot.setBkgAlpha(0f);
             
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustomView, WaitDialog.this);
