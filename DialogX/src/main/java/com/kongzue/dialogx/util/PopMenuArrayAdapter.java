@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.PopMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +43,9 @@ public class PopMenuArrayAdapter extends BaseAdapter {
     
     @Override
     public int getCount() {
+        if (menuList == null) {
+            menuList = new ArrayList<>();
+        }
         return menuList.size();
     }
     

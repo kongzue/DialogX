@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img_bkg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/img_custom_align_dialog_bkg"/>
+
+    <TextView
+        android:id="@+id/btn_selectPositive"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:background="@drawable/button_dialogx_material_light"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="我知道了"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/img_bkg"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="65dp"
+        android:textColor="@color/colorAccent"
+        android:textSize="15dp" />
+
+</RelativeLayout>

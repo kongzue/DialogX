@@ -3,8 +3,10 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -21,6 +23,9 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
+import com.kongzue.dialogx.util.views.MaxRelativeLayout;
+
+import java.lang.ref.WeakReference;
 
 /**
  * @author: Kongzue
@@ -50,6 +55,13 @@ public class CustomDialog extends BaseDialog {
     protected int maskColor = Color.TRANSPARENT;
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
+    
+    protected View baseView;
+    protected int alignViewGravity = -1;                                    //指定菜单相对 baseView 的位置
+    protected int width = -1;                                               //指定菜单宽度
+    protected int height = -1;                                              //指定菜单高度
+    protected int[] baseViewLoc;
+    protected int[] marginRelativeBaseView = new int[4];
     
     public enum ALIGN {
         CENTER,
@@ -111,7 +123,7 @@ public class CustomDialog extends BaseDialog {
     public class DialogImpl implements DialogConvertViewInterface {
         
         public DialogXBaseRelativeLayout boxRoot;
-        public RelativeLayout boxCustom;
+        public MaxRelativeLayout boxCustom;
         
         public DialogImpl(View convertView) {
             if (convertView == null) return;
@@ -148,7 +160,7 @@ public class CustomDialog extends BaseDialog {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()){
+                        if (onBackPressedListener.onBackPressed()) {
                             dismiss();
                         }
                         return false;
@@ -164,7 +176,9 @@ public class CustomDialog extends BaseDialog {
                 @Override
                 public void run() {
                     Animation enterAnim;
-                    if (enterAnimResId == R.anim.anim_dialogx_default_enter && exitAnimResId == R.anim.anim_dialogx_default_exit) {
+                    if (enterAnimResId == R.anim.anim_dialogx_default_enter &&
+                            exitAnimResId == R.anim.anim_dialogx_default_exit &&
+                            baseView == null) {
                         switch (align) {
                             case TOP:
                                 enterAnimResId = R.anim.anim_dialogx_top_enter;
@@ -228,42 +242,97 @@ public class CustomDialog extends BaseDialog {
             });
         }
         
+        boolean initSetCustomViewLayoutListener = false;
+        
         @Override
         public void refreshView() {
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
-            RelativeLayout.LayoutParams rlp;
-            rlp = ((RelativeLayout.LayoutParams) boxCustom.getLayoutParams());
-            if (rlp == null) {
-                rlp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            if (baseView != null) {
+                if (!initSetCustomViewLayoutListener) {
+                    RelativeLayout.LayoutParams rlp;
+                    rlp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    boxCustom.setLayoutParams(rlp);
+                    
+                    Runnable onLayoutChangeRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            int baseViewLeft = baseViewLoc[0];
+                            int baseViewTop = baseViewLoc[1];
+                            int calX = 0, calY = 0;
+                            if (alignViewGravity != -1) {
+                                if (isAlignBaseViewGravity(Gravity.CENTER_VERTICAL)) {
+                                    calY = (baseViewTop + baseView.getMeasuredHeight() / 2 - boxCustom.getHeight() / 2);
+                                }
+                                if (isAlignBaseViewGravity(Gravity.CENTER_HORIZONTAL)) {
+                                    calX = (baseViewLeft + baseView.getMeasuredWidth() / 2 - boxCustom.getWidth() / 2);
+                                }
+                                if (isAlignBaseViewGravity(Gravity.CENTER)) {
+                                    calX = (baseViewLeft + baseView.getMeasuredWidth() / 2 - boxCustom.getWidth() / 2);
+                                    calY = (baseViewTop + baseView.getMeasuredHeight() / 2 - boxCustom.getHeight() / 2);
+                                }
+                                
+                                if (isAlignBaseViewGravity(Gravity.TOP)) {
+                                    calY = baseViewTop - boxCustom.getHeight() - marginRelativeBaseView[3];
+                                }
+                                if (isAlignBaseViewGravity(Gravity.LEFT)) {
+                                    calX = baseViewLeft - boxCustom.getWidth() - marginRelativeBaseView[2];
+                                }
+                                if (isAlignBaseViewGravity(Gravity.RIGHT)) {
+                                    calX = baseViewLeft + baseView.getWidth() + marginRelativeBaseView[0];
+                                }
+                                if (isAlignBaseViewGravity(Gravity.BOTTOM)) {
+                                    calY = baseViewTop + baseView.getHeight() + marginRelativeBaseView[1];
+                                }
+                                
+                                if (calX != 0) boxCustom.setX(calX);
+                                if (calY != 0) boxCustom.setY(calY);
+                            }
+                        }
+                    };
+                    
+                    boxCustom.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            onLayoutChangeRunnable.run();
+                        }
+                    });
+                    initSetCustomViewLayoutListener = true;
+                }
+            } else {
+                RelativeLayout.LayoutParams rlp;
+                rlp = ((RelativeLayout.LayoutParams) boxCustom.getLayoutParams());
+                if (rlp == null) {
+                    rlp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+                switch (align) {
+                    case TOP:
+                        rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        break;
+                    case BOTTOM:
+                        rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        break;
+                    case CENTER:
+                        rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        rlp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        rlp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                        break;
+                    case LEFT:
+                        rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                        break;
+                    case RIGHT:
+                        rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        break;
+                }
+                boxCustom.setLayoutParams(rlp);
             }
-            switch (align) {
-                case TOP:
-                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    break;
-                case BOTTOM:
-                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    break;
-                case CENTER:
-                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    rlp.addRule(RelativeLayout.CENTER_IN_PARENT);
-                    break;
-                case LEFT:
-                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                    break;
-                case RIGHT:
-                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    break;
-            }
-            boxCustom.setLayoutParams(rlp);
             
             boxRoot.setAutoUnsafePlacePadding(autoUnsafePlacePadding);
             if (bkgInterceptTouch) {
@@ -277,12 +346,22 @@ public class CustomDialog extends BaseDialog {
                 } else {
                     boxRoot.setOnClickListener(null);
                 }
-            }else{
+            } else {
                 boxRoot.setClickable(false);
             }
             
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
+            }
+            
+            if (width != -1) {
+                boxCustom.setMaxWidth(width);
+                boxCustom.setMinimumWidth(width);
+            }
+            
+            if (height != -1) {
+                boxCustom.setMaxHeight(height);
+                boxCustom.setMinimumHeight(height);
             }
         }
         
@@ -561,6 +640,122 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
+    
+    public int getAlignBaseViewGravity() {
+        return alignViewGravity;
+    }
+    
+    /**
+     * 判断是否有设置对应的位置关系
+     *
+     * @param gravity 位置关系
+     * @return 是否具备位置关系
+     */
+    public boolean isAlignBaseViewGravity(int gravity) {
+        return (alignViewGravity & gravity) == gravity;
+    }
+    
+    public CustomDialog setAlignBaseViewGravity(View baseView, int alignGravity) {
+        this.baseView = baseView;
+        this.alignViewGravity = alignGravity;
+        baseViewLoc = new int[2];
+        baseView.getLocationOnScreen(baseViewLoc);
+        setFullScreen(true);
+        return this;
+    }
+    
+    public CustomDialog setAlignBaseViewGravity(View baseView, int alignGravity, int marginLeft,
+                                                int marginTop, int marginRight, int marginBottom) {
+        this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
+        return setAlignBaseViewGravity(baseView, alignGravity);
+    }
+    
+    public int[] getBaseViewMargin() {
+        return marginRelativeBaseView;
+    }
+    
+    public CustomDialog setBaseViewMargin(int[] marginRelativeBaseView) {
+        this.marginRelativeBaseView = marginRelativeBaseView;
+        return this;
+    }
+    
+    public CustomDialog setBaseViewMargin(int marginLeft, int marginTop,
+                                                  int marginRight, int marginBottom) {
+        this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
+        return this;
+    }
+    
+    public CustomDialog setBaseViewMarginLeft(int marginLeft){
+        this.marginRelativeBaseView[0] = marginLeft;
+        return this;
+    }
+    
+    public CustomDialog setBaseViewMarginTop(int marginTop){
+        this.marginRelativeBaseView[1] = marginTop;
+        return this;
+    }
+    
+    public CustomDialog setBaseViewMarginRight(int marginRight){
+        this.marginRelativeBaseView[2] = marginRight;
+        return this;
+    }
+    
+    public CustomDialog setBaseViewMarginBottom(int marginBottom){
+        this.marginRelativeBaseView[3] = marginBottom;
+        return this;
+    }
+    
+    public int getBaseViewMarginLeft(int marginLeft){
+        return this.marginRelativeBaseView[0];
+    }
+    
+    public int getBaseViewMarginTop(int marginLeft){
+        return this.marginRelativeBaseView[1];
+    }
+    
+    public int getBaseViewMarginRight(int marginLeft){
+        return this.marginRelativeBaseView[2];
+    }
+    
+    public int getBaseViewMarginBottom(int marginLeft){
+        return this.marginRelativeBaseView[3];
+    }
+    
+    public View getBaseView() {
+        return baseView;
+    }
+    
+    public int getWidth() {
+        return width;
+    }
+    
+    /**
+     * 设置菜单 UI 宽度（单位：像素）
+     *
+     * @param width 宽度（像素）
+     * @return PopMenu实例
+     */
+    public CustomDialog setWidth(int width) {
+        this.width = width;
+        refreshUI();
+        return this;
+    }
+    
+    public int getHeight() {
+        return height;
+    }
+    
+    /**
+     * 设置菜单 UI 高度（单位：像素）
+     *
+     * @param height 高度（像素）
+     * @return PopMenu实例
+     */
+    public CustomDialog setHeight(int height) {
+        this.height = height;
+        refreshUI();
         return this;
     }
 }

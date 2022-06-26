@@ -785,7 +785,6 @@ public class PopMenu extends BaseDialog {
         return this;
     }
     
-    
     public PopMenu setCustomView(OnBindView<PopMenu> onBindView) {
         this.onBindView = onBindView;
         refreshUI();

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -116,6 +117,7 @@ public class MainActivity extends BaseActivity {
     private TextView btnCustomInputDialog;
     private TextView btnCustomBottomMenu;
     private TextView btnCustomDialog;
+    private TextView btnCustomDialogAlign;
     private TextView btnFullScreenDialogWebPage;
     private TextView btnFullScreenDialogLogin;
     private TextView btnFullScreenDialogFragment;
@@ -166,6 +168,7 @@ public class MainActivity extends BaseActivity {
         btnCustomInputDialog = findViewById(R.id.btn_customInputDialog);
         btnCustomBottomMenu = findViewById(R.id.btn_customBottomMenu);
         btnCustomDialog = findViewById(R.id.btn_customDialog);
+        btnCustomDialogAlign = findViewById(R.id.btn_customDialogAlign);
         btnFullScreenDialogWebPage = findViewById(R.id.btn_fullScreenDialog_webPage);
         btnFullScreenDialogLogin = findViewById(R.id.btn_fullScreenDialog_login);
         btnFullScreenDialogFragment = findViewById(R.id.btn_fullScreenDialog_fragment);
@@ -809,6 +812,35 @@ public class MainActivity extends BaseActivity {
                             }
                         })
                         .setMaskColor(getResources().getColor(R.color.black30));
+            }
+        });
+        
+        btnCustomDialogAlign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog_align) {
+            
+                            private TextView btnSelectPositive;
+                            
+                            @Override
+                            public void onBind(final CustomDialog dialog, View v) {
+                                btnSelectPositive = v.findViewById(R.id.btn_selectPositive);
+                                btnSelectPositive.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        PopTip.show("我知道了");
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        })
+                        .setCancelable(false)
+                        .setMaskColor(getResources().getColor(R.color.black30))
+                        .setEnterAnimResId(R.anim.anim_custom_pop_enter)
+                        .setExitAnimResId(R.anim.anim_custom_pop_exit)
+                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP)
+                        .setBaseViewMarginBottom(-dip2px(45))
+                        .show();
             }
         });
         
