@@ -732,10 +732,10 @@ public class CustomDialog extends BaseDialog {
     }
     
     /**
-     * 设置菜单 UI 宽度（单位：像素）
+     * 设置对话框 UI 宽度（单位：像素）
      *
      * @param width 宽度（像素）
-     * @return PopMenu实例
+     * @return CustomDialog实例
      */
     public CustomDialog setWidth(int width) {
         this.width = width;
@@ -748,10 +748,10 @@ public class CustomDialog extends BaseDialog {
     }
     
     /**
-     * 设置菜单 UI 高度（单位：像素）
+     * 设置对话框 UI 高度（单位：像素）
      *
      * @param height 高度（像素）
-     * @return PopMenu实例
+     * @return CustomDialog实例
      */
     public CustomDialog setHeight(int height) {
         this.height = height;
