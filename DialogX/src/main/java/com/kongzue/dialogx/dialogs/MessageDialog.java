@@ -481,8 +481,10 @@ public class MessageDialog extends BaseDialog {
                 txtInput.setVisibility(View.GONE);
             }
             boxRoot.setClickable(true);
-            if (maskColor != -1) boxRoot.setBackgroundColor(maskColor);
-            boxRoot.setBkgAlpha(0f);
+            if (maskColor != -1) {
+                boxRoot.setBackgroundColor(maskColor);
+                boxRoot.setBkgAlpha(0f);
+            }
             
             showText(txtDialogTitle, title);
             showText(txtDialogTip, message);
