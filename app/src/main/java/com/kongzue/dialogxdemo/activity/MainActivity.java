@@ -1050,6 +1050,7 @@ public class MainActivity extends BaseActivity {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         refreshUIMode();
+      
     }
     
     /**

@@ -149,7 +149,7 @@ public abstract class BaseDialog {
                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                 return;
             }
-            baseDialog.ownActivity = new WeakReference<>(activityWeakReference.get());
+            baseDialog.ownActivity = new WeakReference<>(getTopActivity());
             baseDialog.dialogView = new WeakReference<>(view);
             
             log(baseDialog.dialogKey() + ".show");
@@ -161,13 +161,13 @@ public abstract class BaseDialog {
                     runOnMain(new Runnable() {
                         @Override
                         public void run() {
-                            WindowUtil.show(activityWeakReference.get(), view, !(baseDialog instanceof PopTip));
+                            WindowUtil.show(getTopActivity(), view, !(baseDialog instanceof PopTip));
                         }
                     });
                     break;
                 case DIALOG_FRAGMENT:
                     DialogFragmentImpl dialogFragment = new DialogFragmentImpl(baseDialog, view);
-                    dialogFragment.show(getSupportFragmentManager(activityWeakReference.get()), "DialogX");
+                    dialogFragment.show(getSupportFragmentManager(getTopActivity()), "DialogX");
                     baseDialog.ownDialogFragmentImpl = new WeakReference<>(dialogFragment);
                     break;
                 case FLOATING_ACTIVITY:
@@ -198,18 +198,18 @@ public abstract class BaseDialog {
                         }
                     });
                     DialogXFloatingWindowActivity dialogXFloatingWindowActivity = DialogXFloatingWindowActivity.getDialogXFloatingWindowActivity();
-                    if (dialogXFloatingWindowActivity != null && dialogXFloatingWindowActivity.isSameFrom(activityWeakReference.get().hashCode())) {
+                    if (dialogXFloatingWindowActivity != null && dialogXFloatingWindowActivity.isSameFrom(getTopActivity().hashCode())) {
                         dialogXFloatingWindowActivity.showDialogX(baseDialog.dialogKey());
                         return;
                     }
-                    Intent intent = new Intent(activityWeakReference.get(), DialogXFloatingWindowActivity.class);
+                    Intent intent = new Intent(getTopActivity(), DialogXFloatingWindowActivity.class);
                     intent.putExtra("dialogXKey", baseDialog.dialogKey());
-                    intent.putExtra("fromActivityUiStatus", activityWeakReference.get().getWindow().getDecorView().getSystemUiVisibility());
-                    intent.putExtra("from", activityWeakReference.get().hashCode());
-                    activityWeakReference.get().startActivity(intent);
+                    intent.putExtra("fromActivityUiStatus", getTopActivity().getWindow().getDecorView().getSystemUiVisibility());
+                    intent.putExtra("from", getTopActivity().hashCode());
+                    getTopActivity().startActivity(intent);
                     int version = Integer.valueOf(Build.VERSION.SDK_INT);
                     if (version > 5) {
-                        activityWeakReference.get().overridePendingTransition(0, 0);
+                        getTopActivity().overridePendingTransition(0, 0);
                     }
                     break;
                 default:
@@ -250,9 +250,6 @@ public abstract class BaseDialog {
     protected static void show(final Activity activity, final View view) {
         if (activity == null || view == null) {
             return;
-        }
-        if (activityWeakReference == null || activityWeakReference.get() == null) {
-            initActivityContext(activity);
         }
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
         if (baseDialog != null) {
