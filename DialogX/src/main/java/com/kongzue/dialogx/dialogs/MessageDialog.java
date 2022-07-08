@@ -30,6 +30,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -61,7 +62,8 @@ public class MessageDialog extends BaseDialog {
     protected int customEnterAnimResId;
     protected int customExitAnimResId;
     
-    private DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
+    protected DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
+    protected OnBackgroundMaskClickListener<MessageDialog> onBackgroundMaskClickListener;
     
     protected MessageDialog() {
         super();
@@ -649,7 +651,9 @@ public class MessageDialog extends BaseDialog {
                     boxRoot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doDismiss(v);
+                            if (onBackgroundMaskClickListener == null || !onBackgroundMaskClickListener.onClick(me, v)) {
+                                doDismiss(v);
+                            }
                         }
                     });
                 } else {
@@ -1133,6 +1137,15 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
+    
+    public OnBackgroundMaskClickListener<MessageDialog> getOnBackgroundMaskClickListener() {
+        return (OnBackgroundMaskClickListener<MessageDialog>) onBackgroundMaskClickListener;
+    }
+    
+    public MessageDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<MessageDialog> onBackgroundMaskClickListener) {
+        this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
 }

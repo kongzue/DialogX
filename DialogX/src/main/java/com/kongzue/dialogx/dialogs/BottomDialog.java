@@ -24,6 +24,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
@@ -59,6 +60,7 @@ public class BottomDialog extends BaseDialog {
     protected OnDialogButtonClickListener<BottomDialog> otherButtonClickListener;
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
+    protected OnBackgroundMaskClickListener<BottomDialog> onBackgroundMaskClickListener;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -485,7 +487,9 @@ public class BottomDialog extends BaseDialog {
                     boxRoot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doDismiss(v);
+                            if (onBackgroundMaskClickListener == null || !onBackgroundMaskClickListener.onClick(me, v)) {
+                                doDismiss(v);
+                            }
                         }
                     });
                 } else {
@@ -998,6 +1002,15 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
+    
+    public OnBackgroundMaskClickListener<BottomDialog> getOnBackgroundMaskClickListener() {
+        return (OnBackgroundMaskClickListener<BottomDialog>) onBackgroundMaskClickListener;
+    }
+    
+    public BottomDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<BottomDialog> onBackgroundMaskClickListener) {
+        this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
 }

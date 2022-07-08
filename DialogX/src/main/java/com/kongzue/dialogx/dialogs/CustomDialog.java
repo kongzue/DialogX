@@ -21,6 +21,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -55,6 +56,7 @@ public class CustomDialog extends BaseDialog {
     protected int maskColor = Color.TRANSPARENT;
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
+    protected OnBackgroundMaskClickListener<CustomDialog> onBackgroundMaskClickListener;
     
     protected View baseView;
     protected int alignViewGravity = -1;                                    //指定菜单相对 baseView 的位置
@@ -340,7 +342,9 @@ public class CustomDialog extends BaseDialog {
                     boxRoot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doDismiss(v);
+                            if (onBackgroundMaskClickListener == null || !onBackgroundMaskClickListener.onClick(me, v)) {
+                                doDismiss(v);
+                            }
                         }
                     });
                 } else {
@@ -756,6 +760,15 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setHeight(int height) {
         this.height = height;
         refreshUI();
+        return this;
+    }
+    
+    public OnBackgroundMaskClickListener<CustomDialog> getOnBackgroundMaskClickListener() {
+        return onBackgroundMaskClickListener;
+    }
+    
+    public CustomDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<CustomDialog> onBackgroundMaskClickListener) {
+        this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
 }

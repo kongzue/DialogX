@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.app.Activity;
 
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 
 /**
  * @author: Kongzue
@@ -169,6 +170,15 @@ public class TipDialog extends WaitDialog {
     
     public TipDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
+    
+    public OnBackgroundMaskClickListener<WaitDialog> getOnBackgroundMaskClickListener() {
+        return onBackgroundMaskClickListener;
+    }
+    
+    public TipDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<WaitDialog> onBackgroundMaskClickListener) {
+        this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
 }

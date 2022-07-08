@@ -72,7 +72,7 @@ public class PopTip extends BaseDialog {
     
     protected TextInfo messageTextInfo;
     protected TextInfo buttonTextInfo = new TextInfo().setBold(true);
-    protected int[] bodyMargin = new int[4];
+    protected int[] bodyMargin = new int[]{-1, -1, -1, -1};
     
     protected PopTip() {
         super();
@@ -462,10 +462,6 @@ public class PopTip extends BaseDialog {
             RelativeLayout.LayoutParams rlp;
             rlp = ((RelativeLayout.LayoutParams) boxBody.getLayoutParams());
             if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
-            rlp.leftMargin = bodyMargin[0];
-            rlp.topMargin = bodyMargin[1];
-            rlp.rightMargin = bodyMargin[2];
-            rlp.bottomMargin = bodyMargin[3];
             switch (align) {
                 case TOP:
                     rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
@@ -584,6 +580,13 @@ public class PopTip extends BaseDialog {
                 boxBody.setOnClickListener(null);
                 boxBody.setClickable(false);
             }
+            
+            RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams) boxBody.getLayoutParams());
+            if (bodyMargin[0] != -1) rlp.leftMargin = bodyMargin[0];
+            if (bodyMargin[1] != -1) rlp.topMargin = bodyMargin[1];
+            if (bodyMargin[2] != -1) rlp.rightMargin = bodyMargin[2];
+            if (bodyMargin[3] != -1) rlp.bottomMargin = bodyMargin[3];
+            boxBody.setLayoutParams(rlp);
         }
         
         @Override
@@ -983,26 +986,31 @@ public class PopTip extends BaseDialog {
         bodyMargin[1] = top;
         bodyMargin[2] = right;
         bodyMargin[3] = bottom;
+        refreshUI();
         return this;
     }
     
     public PopTip setMarginLeft(int left) {
         bodyMargin[0] = left;
+        refreshUI();
         return this;
     }
     
     public PopTip setMarginTop(int top) {
         bodyMargin[1] = top;
+        refreshUI();
         return this;
     }
     
     public PopTip setMarginRight(int right) {
         bodyMargin[2] = right;
+        refreshUI();
         return this;
     }
     
     public PopTip setMarginBottom(int bottom) {
         bodyMargin[3] = bottom;
+        refreshUI();
         return this;
     }
     

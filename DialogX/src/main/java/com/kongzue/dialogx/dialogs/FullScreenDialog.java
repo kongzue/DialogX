@@ -20,6 +20,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
@@ -46,6 +47,7 @@ public class FullScreenDialog extends BaseDialog {
     protected boolean hideZoomBackground;
     
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
+    protected OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener;
     
     protected FullScreenDialog me = this;
     
@@ -261,7 +263,9 @@ public class FullScreenDialog extends BaseDialog {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        doDismiss(v);
+                        if (onBackgroundMaskClickListener == null || !onBackgroundMaskClickListener.onClick(me, v)) {
+                            doDismiss(v);
+                        }
                     }
                 });
             } else {
@@ -524,6 +528,15 @@ public class FullScreenDialog extends BaseDialog {
     
     public FullScreenDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
+        return this;
+    }
+    
+    public OnBackgroundMaskClickListener<FullScreenDialog> getOnBackgroundMaskClickListener() {
+        return onBackgroundMaskClickListener;
+    }
+    
+    public FullScreenDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener) {
+        this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
 }

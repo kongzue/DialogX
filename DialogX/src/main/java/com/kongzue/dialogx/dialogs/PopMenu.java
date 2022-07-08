@@ -26,6 +26,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
@@ -56,6 +57,7 @@ public class PopMenu extends BaseDialog {
     protected boolean bkgInterceptTouch = true;
     protected OnBindView<PopMenu> onBindView;                               //自定义布局
     protected DialogLifecycleCallback<PopMenu> dialogLifecycleCallback;     //对话框生命周期
+    protected OnBackgroundMaskClickListener<PopMenu> onBackgroundMaskClickListener;
     protected View dialogView;
     protected List<CharSequence> menuList;
     protected DialogImpl dialogImpl;
@@ -563,7 +565,9 @@ public class PopMenu extends BaseDialog {
                     boxRoot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doDismiss(v);
+                            if (onBackgroundMaskClickListener == null || !onBackgroundMaskClickListener.onClick(me, v)) {
+                                doDismiss(v);
+                            }
                         }
                     });
                 } else {
@@ -900,6 +904,15 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
+    
+    public OnBackgroundMaskClickListener<PopMenu> getOnBackgroundMaskClickListener() {
+        return onBackgroundMaskClickListener;
+    }
+    
+    public PopMenu setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<PopMenu> onBackgroundMaskClickListener) {
+        this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
 }

@@ -24,6 +24,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
 import com.kongzue.dialogx.util.TextInfo;
@@ -69,7 +70,8 @@ public class WaitDialog extends BaseDialog {
     protected int maskColor = -1;
     protected BOOLEAN privateCancelable;
     
-    private DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
+    protected DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
+    protected OnBackgroundMaskClickListener<WaitDialog> onBackgroundMaskClickListener;
     
     protected WaitDialog() {
         super();
@@ -468,7 +470,9 @@ public class WaitDialog extends BaseDialog {
                     boxRoot.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            doDismiss(v);
+                            if (onBackgroundMaskClickListener == null || !onBackgroundMaskClickListener.onClick(WaitDialog.this, v)) {
+                                doDismiss(v);
+                            }
                         }
                     });
                 } else {
@@ -970,6 +974,15 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
+        return this;
+    }
+    
+    public OnBackgroundMaskClickListener<WaitDialog> getOnBackgroundMaskClickListener() {
+        return onBackgroundMaskClickListener;
+    }
+    
+    public WaitDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<WaitDialog> onBackgroundMaskClickListener) {
+        this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
 }
