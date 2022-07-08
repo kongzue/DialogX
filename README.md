@@ -103,6 +103,12 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 你还可以更深入的 [了解如何开发 DialogX 主题](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98)
 
+# Future
+
+```
+DialogX 正在收集关于新功能的建议，你可以在这里填写调查问卷： https://docs.qq.com/form/page/DTnRJbklQa1hoUWpi?groupUin=mTUtmfKWzAvVKKdZXAClMA%253D%253D#/fill
+```
+
 # Demo
 
 您可以先下载 Demo 进行尝试：http://beta.kongzue.com/DialogXDemo
