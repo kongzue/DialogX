@@ -47,6 +47,7 @@ import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
@@ -820,7 +821,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog_align) {
-            
+                            
                             private TextView btnSelectPositive;
                             
                             @Override
@@ -1050,7 +1051,7 @@ public class MainActivity extends BaseActivity {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         refreshUIMode();
-      
+        
     }
     
     /**

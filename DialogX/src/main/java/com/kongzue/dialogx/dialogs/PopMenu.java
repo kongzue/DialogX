@@ -249,6 +249,7 @@ public class PopMenu extends BaseDialog {
         
         @Override
         public void init() {
+            closing = false;
             if (menuListAdapter == null) {
                 menuListAdapter = new PopMenuArrayAdapter(me, getTopActivity(), menuList);
             }
@@ -537,8 +538,10 @@ public class PopMenu extends BaseDialog {
             listMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (!getOnMenuItemClickListener().onClick(me, menuList.get(position), position)) {
-                        dismiss();
+                    if (!closing) {
+                        if (!getOnMenuItemClickListener().onClick(me, menuList.get(position), position)) {
+                            dismiss();
+                        }
                     }
                 }
             });
@@ -651,7 +654,10 @@ public class PopMenu extends BaseDialog {
         return getDialogImpl().boxBody.getMeasuredHeight();
     }
     
+    private boolean closing;
+    
     public void dismiss() {
+        closing = true;
         runOnMain(new Runnable() {
             @Override
             public void run() {

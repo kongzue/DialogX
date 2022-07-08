@@ -72,6 +72,7 @@ public class PopTip extends BaseDialog {
     
     protected TextInfo messageTextInfo;
     protected TextInfo buttonTextInfo = new TextInfo().setBold(true);
+    protected int[] bodyMargin = new int[4];
     
     protected PopTip() {
         super();
@@ -461,6 +462,10 @@ public class PopTip extends BaseDialog {
             RelativeLayout.LayoutParams rlp;
             rlp = ((RelativeLayout.LayoutParams) boxBody.getLayoutParams());
             if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+            rlp.leftMargin = bodyMargin[0];
+            rlp.topMargin = bodyMargin[1];
+            rlp.rightMargin = bodyMargin[2];
+            rlp.bottomMargin = bodyMargin[3];
             switch (align) {
                 case TOP:
                     rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
@@ -483,7 +488,7 @@ public class PopTip extends BaseDialog {
                 @Override
                 public void onChange(Rect unsafeRect) {
                     if (align == DialogXStyle.PopTipSettings.ALIGN.TOP) {
-                        boxBody.setY(unsafeRect.top);
+                        boxBody.setY(unsafeRect.top + bodyMargin[1]);
                     } else if (align == DialogXStyle.PopTipSettings.ALIGN.TOP_INSIDE) {
                         boxBody.setPadding(0, unsafeRect.top, 0, 0);
                     }
@@ -584,25 +589,25 @@ public class PopTip extends BaseDialog {
         @Override
         public void doDismiss(final View v) {
             if (v != null) v.setEnabled(false);
-    
+            
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
-            
+                        
                         Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxRoot.getContext() : getTopActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
                         }
                         exitAnim.setFillAfter(true);
                         boxBody.startAnimation(exitAnim);
-            
+                        
                         boxRoot.animate()
                                 .alpha(0f)
                                 .setInterpolator(new AccelerateInterpolator())
                                 .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-            
+                        
                         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -664,7 +669,7 @@ public class PopTip extends BaseDialog {
                             .setInterpolator(new DecelerateInterpolator(2f))
                     ;
                 }
-            },150);
+            }, 150);
         }
     }
     
@@ -971,5 +976,49 @@ public class PopTip extends BaseDialog {
     public PopTip setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
         return this;
+    }
+    
+    public PopTip setMargin(int left, int top, int right, int bottom) {
+        bodyMargin[0] = left;
+        bodyMargin[1] = top;
+        bodyMargin[2] = right;
+        bodyMargin[3] = bottom;
+        return this;
+    }
+    
+    public PopTip setMarginLeft(int left) {
+        bodyMargin[0] = left;
+        return this;
+    }
+    
+    public PopTip setMarginTop(int top) {
+        bodyMargin[1] = top;
+        return this;
+    }
+    
+    public PopTip setMarginRight(int right) {
+        bodyMargin[2] = right;
+        return this;
+    }
+    
+    public PopTip setMarginBottom(int bottom) {
+        bodyMargin[3] = bottom;
+        return this;
+    }
+    
+    public int getMarginLeft() {
+        return bodyMargin[0];
+    }
+    
+    public int getMarginTop() {
+        return bodyMargin[1];
+    }
+    
+    public int getMarginRight() {
+        return bodyMargin[2];
+    }
+    
+    public int getMarginBottom() {
+        return bodyMargin[3];
     }
 }
