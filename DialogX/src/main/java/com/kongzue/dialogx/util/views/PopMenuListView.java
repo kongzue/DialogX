@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 /**
@@ -25,10 +26,6 @@ public class PopMenuListView extends ListView {
     
     public PopMenuListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-    
-    public PopMenuListView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
     
     public boolean isCanScroll() {
@@ -55,5 +52,15 @@ public class PopMenuListView extends ListView {
             heightMeasureSpec = MeasureSpec.makeMeasureSpec(Float.valueOf(maxHeight).intValue(), MeasureSpec.AT_MOST);
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+    
+    @Override
+    protected void layoutChildren() {
+        try {
+            super.layoutChildren();
+        } catch (IllegalStateException e) {
+            ((BaseAdapter) getAdapter()).notifyDataSetChanged();
+            super.layoutChildren();
+        }
     }
 }

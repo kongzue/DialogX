@@ -333,24 +333,55 @@ public class MainActivity extends BaseActivity {
         btnContextMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"})
-                        .setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(true) {
-                            @Override
-                            public int getIcon(PopMenu dialog, int index, String menuText) {
-                                switch (index) {
-                                    case 0:
-                                        return R.mipmap.img_dialogx_demo_add;
-                                    case 1:
-                                        return R.mipmap.img_dialogx_demo_edit;
-                                    case 2:
-                                        return R.mipmap.img_dialogx_demo_delete;
-                                    case 3:
-                                        return R.mipmap.img_dialogx_demo_share;
-                                    default:
-                                        return 0;
-                                }
-                            }
-                        });
+//                PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"})
+//                        .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
+//                            @Override
+//                            public boolean onClick(PopMenu dialog, CharSequence text, int index) {
+//                                if (index==0){
+//                                    dialog.setMenuList(new String[]{"A","B","C"});
+//                                    return true;
+//                                }
+//                                return false;
+//                            }
+//                        })
+//                        .setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(true) {
+//                            @Override
+//                            public int getIcon(PopMenu dialog, int index, String menuText) {
+//                                switch (menuText) {
+//                                    case "添加":
+//                                        return R.mipmap.img_dialogx_demo_add;
+//                                    case "编辑":
+//                                        return R.mipmap.img_dialogx_demo_edit;
+//                                    case "删除":
+//                                        return R.mipmap.img_dialogx_demo_delete;
+//                                    case "分享":
+//                                        return R.mipmap.img_dialogx_demo_share;
+//                                    default:
+//                                        return 0;
+//                                }
+//                            }
+//                        });
+                List<CharSequence> items = new ArrayList();
+                items.add("选项1");
+                items.add("选项2");
+                items.add("选项3");
+                PopMenu.show(items);
+    
+                //会造成闪退的代码
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        for (int i = 0; i < 10000; i++) {
+                            items.clear();
+                            items.add("选项4");
+                        }
+                    }
+                }.start();
             }
         });
         

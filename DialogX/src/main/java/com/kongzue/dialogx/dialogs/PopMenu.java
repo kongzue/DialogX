@@ -91,7 +91,8 @@ public class PopMenu extends BaseDialog {
     }
     
     public PopMenu(List<CharSequence> menuList) {
-        this.menuList = menuList;
+        this.menuList = new ArrayList<>();
+        this.menuList.addAll(menuList);
     }
     
     public PopMenu(CharSequence[] menuList) {
@@ -557,7 +558,12 @@ public class PopMenu extends BaseDialog {
             if (listMenu.getAdapter() == null) {
                 listMenu.setAdapter(menuListAdapter);
             } else {
-                menuListAdapter.notifyDataSetChanged();
+                if (menuListAdapter.getMenuList() != menuList) {
+                    menuListAdapter = new PopMenuArrayAdapter(me, getTopActivity(), menuList);
+                    listMenu.setAdapter(menuListAdapter);
+                } else {
+                    menuListAdapter.notifyDataSetChanged();
+                }
             }
             
             if (bkgInterceptTouch) {
@@ -704,6 +710,7 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setMenuList(List<CharSequence> menuList) {
         this.menuList = menuList;
+        refreshUI();
         return this;
     }
     

@@ -41,6 +41,10 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
     }
     
+    public List<CharSequence> getMenuList() {
+        return menuList;
+    }
+    
     @Override
     public int getCount() {
         if (menuList == null) {
