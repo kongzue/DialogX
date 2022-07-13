@@ -80,7 +80,8 @@ public class PopMenu extends BaseDialog {
     }
     
     public PopMenu(View baseView, List<CharSequence> menuList) {
-        this.menuList = menuList;
+        this.menuList = new ArrayList<>();
+        this.menuList.addAll(menuList);
         this.baseView = baseView;
     }
     
@@ -111,7 +112,8 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu(View baseView, List<CharSequence> menuList, OnBindView<PopMenu> onBindView) {
         this.baseView = baseView;
-        this.menuList = menuList;
+        this.menuList = new ArrayList<>();
+        this.menuList.addAll(menuList);
         this.onBindView = onBindView;
     }
     
@@ -123,7 +125,8 @@ public class PopMenu extends BaseDialog {
     }
     
     public PopMenu(List<CharSequence> menuList, OnBindView<PopMenu> onBindView) {
-        this.menuList = menuList;
+        this.menuList = new ArrayList<>();
+        this.menuList.addAll(menuList);
         this.onBindView = onBindView;
     }
     
@@ -709,7 +712,8 @@ public class PopMenu extends BaseDialog {
     }
     
     public PopMenu setMenuList(List<CharSequence> menuList) {
-        this.menuList = menuList;
+        this.menuList = new ArrayList<>();
+        this.menuList.addAll(menuList);
         refreshUI();
         return this;
     }
