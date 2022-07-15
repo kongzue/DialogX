@@ -1,6 +1,7 @@
 package com.kongzue.dialogx;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.Log;
 
@@ -112,7 +113,7 @@ public class DialogX {
     
     /**
      * 声明：若 Activity 已使用沉浸式适配请开启（已废弃）
-     *
+     * <p>
      * 请注意，若你没有使用沉浸式适配，请关闭此选项，此选项将影响对话框布局是否允许延伸至导航栏背后显示
      */
     @Deprecated
@@ -123,6 +124,9 @@ public class DialogX {
      * 彩蛋：a_man 私人定制款属性
      */
     public static int bottomDialogNavbarColor = Color.TRANSPARENT;
+    
+    //触摸滑动触发阈值，影响 BottomDialog、FullScreenDialog 下滑关闭触发距离，单位：像素
+    public static int touchSlideTriggerThreshold = dip2px(35);
     
     public enum THEME {
         LIGHT, DARK, AUTO
@@ -142,5 +146,10 @@ public class DialogX {
     
     public static void error(Object o) {
         if (DEBUGMODE) Log.e(">>>", o.toString());
+    }
+    
+    private static int dip2px(float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
 }

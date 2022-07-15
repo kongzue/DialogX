@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.interfaces.ScrollController;
 
@@ -101,7 +102,7 @@ public class BottomDialogTouchEventInterceptor {
                             scrolledY = impl.scrollView.getScrollDistance();
                             isBkgTouched = false;
                             if (bkgOldY == impl.boxRoot.getUnsafePlace().top) {
-                                if (impl.boxBkg.getY() > impl.boxRoot.getUnsafePlace().top + impl.bkgEnterAimY + dip2px(35)) {
+                                if (impl.boxBkg.getY() > impl.boxRoot.getUnsafePlace().top + impl.bkgEnterAimY + DialogX.touchSlideTriggerThreshold) {
                                     impl.preDismiss();
                                 } else if (impl.boxBkg.getY() != bkgOldY) {
                                     ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(),
@@ -110,7 +111,7 @@ public class BottomDialogTouchEventInterceptor {
                                     enterAnim.start();
                                 }
                             } else {
-                                if (impl.boxBkg.getY() > bkgOldY + dip2px(35)) {
+                                if (impl.boxBkg.getY() > bkgOldY + DialogX.touchSlideTriggerThreshold) {
                                     impl.preDismiss();
                                 } else if (impl.boxBkg.getY() != bkgOldY) {
                                     ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(), impl.boxRoot.getUnsafePlace().top);

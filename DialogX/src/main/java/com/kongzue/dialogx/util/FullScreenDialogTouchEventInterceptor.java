@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.interfaces.ScrollController;
 
@@ -80,11 +81,11 @@ public class FullScreenDialogTouchEventInterceptor {
                     case MotionEvent.ACTION_CANCEL:
                         isBkgTouched = false;
                         if (bkgOldY == 0) {
-                            if (impl.bkg.getY() < dip2px(35)) {
+                            if (impl.bkg.getY() < DialogX.touchSlideTriggerThreshold) {
                                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), 0);
                                 enterAnim.setDuration(300);
                                 enterAnim.start();
-                            } else if (impl.bkg.getY() > impl.bkgEnterAimY + dip2px(35)) {
+                            } else if (impl.bkg.getY() > impl.bkgEnterAimY + DialogX.touchSlideTriggerThreshold) {
                                 impl.preDismiss();
                             } else {
                                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
@@ -92,11 +93,11 @@ public class FullScreenDialogTouchEventInterceptor {
                                 enterAnim.start();
                             }
                         } else {
-                            if (impl.bkg.getY() < bkgOldY - dip2px(35)) {
+                            if (impl.bkg.getY() < bkgOldY - DialogX.touchSlideTriggerThreshold) {
                                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), 0);
                                 enterAnim.setDuration(300);
                                 enterAnim.start();
-                            } else if (impl.bkg.getY() > bkgOldY + dip2px(35)) {
+                            } else if (impl.bkg.getY() > bkgOldY + DialogX.touchSlideTriggerThreshold) {
                                 impl.preDismiss();
                             } else {
                                 ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
