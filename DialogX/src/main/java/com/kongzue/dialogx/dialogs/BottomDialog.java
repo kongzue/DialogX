@@ -94,6 +94,10 @@ public class BottomDialog extends BaseDialog {
         return new BottomDialog();
     }
     
+    public static BottomDialog build(DialogXStyle style) {
+        return new BottomDialog().setStyle(style);
+    }
+    
     public static BottomDialog build(OnBindView<BottomDialog> onBindView) {
         return new BottomDialog().setCustomView(onBindView);
     }
@@ -237,7 +241,7 @@ public class BottomDialog extends BaseDialog {
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
-            boxBody = convertView.findViewWithTag("body");
+            boxBody = convertView.findViewWithTag("blurBody");
             imgTab = convertView.findViewById(R.id.img_tab);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
             scrollView = convertView.findViewById(R.id.scrollView);
@@ -277,7 +281,6 @@ public class BottomDialog extends BaseDialog {
         
         @Override
         public void init() {
-            if (titleTextInfo == null) titleTextInfo = DialogX.menuTitleInfo;
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
             if (okTextInfo == null) okTextInfo = DialogX.okButtonTextInfo;
@@ -300,6 +303,7 @@ public class BottomDialog extends BaseDialog {
                 public void onShow() {
                     
                     isShow = true;
+                    preShow = false;
                     
                     getDialogLifecycleCallback().onShow(me);
                     

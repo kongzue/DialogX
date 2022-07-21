@@ -143,6 +143,7 @@ public class FullScreenDialog extends BaseDialog {
                 @Override
                 public void onShow() {
                     isShow = true;
+                    preShow = false;
                     
                     getDialogLifecycleCallback().onShow(me);
                 }

@@ -23,6 +23,7 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
@@ -316,6 +317,7 @@ public class WaitDialog extends BaseDialog {
                 @Override
                 public void onShow() {
                     isShow = true;
+                    preShow = false;
                     boxRoot.setAlpha(0f);
                     bkg.post(new Runnable() {
                         @Override
@@ -983,6 +985,26 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<WaitDialog> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
+        return this;
+    }
+    
+    public WaitDialog setStyle(DialogXStyle style) {
+        this.style = style;
+        return this;
+    }
+    
+    public WaitDialog setTheme(DialogX.THEME theme) {
+        this.theme = theme;
+        return this;
+    }
+    
+    public TextInfo getMessageTextInfo() {
+        return messageTextInfo;
+    }
+    
+    public WaitDialog setMessageTextInfo(TextInfo messageTextInfo) {
+        this.messageTextInfo = messageTextInfo;
+        refreshUI();
         return this;
     }
 }

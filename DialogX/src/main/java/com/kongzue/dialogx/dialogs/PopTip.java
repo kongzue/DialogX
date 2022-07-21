@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Build;
@@ -24,6 +25,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
+import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
@@ -44,7 +46,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/10/20 11:59
  */
-public class PopTip extends BaseDialog {
+public class PopTip extends BaseDialog implements NoTouchInterface {
     
     public static final int TIME_NO_AUTO_DISMISS_DELAY = -1;
     protected static List<PopTip> popTipList;
@@ -64,7 +66,7 @@ public class PopTip extends BaseDialog {
     protected DialogXStyle.PopTipSettings.ALIGN align;
     protected OnDialogButtonClickListener<PopTip> onButtonClickListener;
     protected OnDialogButtonClickListener<PopTip> onPopTipClickListener;
-    protected boolean autoTintIconInLightOrDarkMode = true;
+    protected BOOLEAN tintIcon;
     
     protected int iconResId;
     protected CharSequence message;
@@ -85,6 +87,10 @@ public class PopTip extends BaseDialog {
     
     public static PopTip build() {
         return new PopTip();
+    }
+    
+    public static PopTip build(DialogXStyle style) {
+        return new PopTip().setStyle(style);
     }
     
     public static PopTip build(OnBindView<PopTip> onBindView) {
@@ -388,11 +394,17 @@ public class PopTip extends BaseDialog {
     
     public PopTip showShort() {
         autoDismiss(2000);
+        if (!preShow && !isShow) {
+            show();
+        }
         return this;
     }
     
     public PopTip showLong() {
         autoDismiss(3500);
+        if (!preShow && !isShow) {
+            show();
+        }
         return this;
     }
     
@@ -444,6 +456,7 @@ public class PopTip extends BaseDialog {
                 @Override
                 public void onShow() {
                     isShow = true;
+                    preShow = false;
                     boxRoot.setAlpha(0f);
                     
                     getDialogLifecycleCallback().onShow(me);
@@ -557,7 +570,7 @@ public class PopTip extends BaseDialog {
                 imgDialogxPopIcon.setVisibility(View.VISIBLE);
                 imgDialogxPopIcon.setImageResource(iconResId);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (autoTintIconInLightOrDarkMode) {
+                    if (isTintIcon()) {
                         imgDialogxPopIcon.setImageTintList(txtDialogxPopText.getTextColors());
                     } else {
                         imgDialogxPopIcon.setImageTintList(null);
@@ -646,33 +659,45 @@ public class PopTip extends BaseDialog {
     
     private void moveUp() {
         if (getDialogImpl() != null && getDialogImpl().boxBody != null) {
-            getDialogImpl().boxBody.postDelayed(new Runnable() {
+            View bodyView = getDialogImpl().boxBody;
+            if (getDialogImpl() == null || bodyView == null) return;
+            if (style.popTipSettings() != null)
+                align = style.popTipSettings().align();
+            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.TOP;
+            float moveAimTop = 0;
+            switch (align) {
+                case TOP:
+                    moveAimTop = bodyView.getY() + bodyView.getHeight() * 1.3f;
+                    break;
+                case TOP_INSIDE:
+                    moveAimTop = bodyView.getY() + bodyView.getHeight() - bodyView.getPaddingTop();
+                    break;
+                case CENTER:
+                case BOTTOM:
+                case BOTTOM_INSIDE:
+                    moveAimTop = bodyView.getY() - bodyView.getHeight() * 1.3f;
+                    break;
+            }
+            if (bodyView.getTag() instanceof ValueAnimator) {
+                ((ValueAnimator) bodyView.getTag()).end();
+            }
+            ValueAnimator valueAnimator = ValueAnimator.ofFloat(bodyView.getY(), moveAimTop);
+            bodyView.setTag(valueAnimator);
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
-                public void run() {
-                    if (getDialogImpl() == null || getDialogImpl().boxBody == null) return;
-                    if (style.popTipSettings() != null) align = style.popTipSettings().align();
-                    if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
-                    float moveAimTop = 0;
-                    switch (align) {
-                        case TOP:
-                            moveAimTop = getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() * 1.3f;
-                            break;
-                        case TOP_INSIDE:
-                            moveAimTop = getDialogImpl().boxBody.getY() + getDialogImpl().boxBody.getHeight() - getDialogImpl().boxBody.getPaddingTop();
-                            break;
-                        case CENTER:
-                        case BOTTOM:
-                        case BOTTOM_INSIDE:
-                            moveAimTop = getDialogImpl().boxBody.getY() - getDialogImpl().boxBody.getHeight() * 1.3f;
-                            break;
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    if (getDialogImpl() == null || !isShow) {
+                        animation.cancel();
+                        return;
                     }
-                    getDialogImpl().boxBody.animate()
-                            .y(moveAimTop)
-                            .setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration)
-                            .setInterpolator(new DecelerateInterpolator(2f))
-                    ;
+                    View bodyView = getDialogImpl().boxBody;
+                    if (bodyView != null && bodyView.isAttachedToWindow()) {
+                        bodyView.setY((Float) animation.getAnimatedValue());
+                    }
                 }
-            }, 150);
+            });
+            valueAnimator.setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration).setInterpolator(new DecelerateInterpolator(2f));
+            valueAnimator.start();
         }
     }
     
@@ -837,13 +862,14 @@ public class PopTip extends BaseDialog {
         return this;
     }
     
+    @Deprecated
     public boolean isAutoTintIconInLightOrDarkMode() {
-        return autoTintIconInLightOrDarkMode;
+        return isTintIcon();
     }
     
+    @Deprecated
     public PopTip setAutoTintIconInLightOrDarkMode(boolean autoTintIconInLightOrDarkMode) {
-        this.autoTintIconInLightOrDarkMode = autoTintIconInLightOrDarkMode;
-        refreshUI();
+        setTintIcon(autoTintIconInLightOrDarkMode);
         return this;
     }
     
@@ -1028,5 +1054,48 @@ public class PopTip extends BaseDialog {
     
     public int getMarginBottom() {
         return bodyMargin[3];
+    }
+    
+    public PopTip iconSuccess() {
+        setTintIcon(false);
+        int resId = R.mipmap.ico_dialogx_success;
+        if (getStyle().popTipSettings() != null && getStyle().popTipSettings().defaultIconSuccess() != 0) {
+            resId = getStyle().popTipSettings().defaultIconSuccess();
+        }
+        setIconResId(resId);
+        return this;
+    }
+    
+    public PopTip iconWarning() {
+        setTintIcon(false);
+        int resId = R.mipmap.ico_dialogx_warning;
+        if (getStyle().popTipSettings() != null && getStyle().popTipSettings().defaultIconWarning() != 0) {
+            resId = getStyle().popTipSettings().defaultIconWarning();
+        }
+        setIconResId(resId);
+        return this;
+    }
+    
+    public PopTip iconError() {
+        setTintIcon(false);
+        int resId = R.mipmap.ico_dialogx_error;
+        if (getStyle().popTipSettings() != null && getStyle().popTipSettings().defaultIconError() != 0) {
+            resId = getStyle().popTipSettings().defaultIconError();
+        }
+        setIconResId(resId);
+        return this;
+    }
+    
+    public boolean isTintIcon() {
+        if (tintIcon == null && getStyle().popTipSettings() != null) {
+            return getStyle().popTipSettings().tintIcon();
+        }
+        return tintIcon == BOOLEAN.TRUE;
+    }
+    
+    public PopTip setTintIcon(boolean tintIcon) {
+        this.tintIcon = tintIcon ? BOOLEAN.TRUE : BOOLEAN.FALSE;
+        refreshUI();
+        return this;
     }
 }

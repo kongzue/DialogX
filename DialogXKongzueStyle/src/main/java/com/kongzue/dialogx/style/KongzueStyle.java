@@ -13,7 +13,7 @@ import com.kongzue.dialogx.kongzuetheme.R;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/9/26 13:09
  */
-public class KongzueStyle implements DialogXStyle {
+public class KongzueStyle extends DialogXStyle {
     
     public static KongzueStyle style() {
         return new KongzueStyle();
@@ -175,17 +175,22 @@ public class KongzueStyle implements DialogXStyle {
             
             @Override
             public ALIGN align() {
-                return ALIGN.TOP_INSIDE;
+                return ALIGN.BOTTOM;
             }
             
             @Override
             public int enterAnimResId(boolean b) {
-                return R.anim.anim_dialogx_kongzue_top_enter;
+                return 0;
             }
             
             @Override
             public int exitAnimResId(boolean b) {
-                return R.anim.anim_dialogx_kongzue_top_exit;
+                return 0;
+            }
+            
+            @Override
+            public boolean tintIcon() {
+                return true;
             }
         };
     }
@@ -246,6 +251,36 @@ public class KongzueStyle implements DialogXStyle {
             @Override
             public int paddingVertical() {
                 return 0;
+            }
+        };
+    }
+    
+    @Override
+    public PopNotificationSettings popNotificationSettings() {
+        return new PopNotificationSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light ? R.layout.layout_dialogx_popnotification_kongzue : R.layout.layout_dialogx_popnotification_kongzue_dark;
+            }
+            
+            @Override
+            public PopNotificationSettings.ALIGN align() {
+                return ALIGN.TOP_INSIDE;
+            }
+            
+            @Override
+            public int enterAnimResId(boolean light) {
+                return com.kongzue.dialogx.R.anim.anim_dialogx_notification_enter;
+            }
+            
+            @Override
+            public int exitAnimResId(boolean light) {
+                return com.kongzue.dialogx.R.anim.anim_dialogx_notification_exit;
+            }
+            
+            @Override
+            public boolean tintIcon() {
+                return false;
             }
         };
     }

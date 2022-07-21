@@ -37,12 +37,12 @@
             android:id="@+id/btn_share"
             android:layout_width="45dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:src="@mipmap/img_github"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -72,66 +72,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="实现方式"
-                android:textColor="#dc000000"
-                android:textSize="14dp"
-                android:textStyle="bold" />
-
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fadingEdge="horizontal"
-                android:requiresFadingEdge="horizontal"
-                android:scrollbars="none">
-
-                <RadioGroup
-                    android:id="@+id/grp_mode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rdo_mode_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:checked="true"
-                        android:padding="10dp"
-                        android:text="View"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
-
-                    <RadioButton
-                        android:id="@+id/rdo_mode_window"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:padding="10dp"
-                        android:text="Window"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
-
-                    <RadioButton
-                        android:id="@+id/rdo_mode_dialogFragment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:padding="10dp"
-                        android:text="DialogFragment"
-                        android:textColor="#7b000000" />
-
-                    <RadioButton
-                        android:id="@+id/rdo_mode_floatingActivity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:padding="10dp"
-                        android:text="FloatingActivity"
-                        android:textColor="#7b000000" />
-
-                </RadioGroup>
-
-            </HorizontalScrollView>
+                android:layout_marginTop="10dp"
+                android:text="💬 DialogX对话框组件库，更加方便易用，可自定义程度更高，扩展性更强，轻松实现各种对话框、菜单和提示效果，更有Material You、iOS、MIUI等主题扩展可选"
+                android:textColor="#DC373737"
+                android:textSize="14dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -253,6 +197,70 @@
 
             </RadioGroup>
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="实现方式（实验性）"
+                android:textColor="#dc000000"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fadingEdge="horizontal"
+                android:requiresFadingEdge="horizontal"
+                android:scrollbars="none">
+
+                <RadioGroup
+                    android:id="@+id/grp_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rdo_mode_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:checked="true"
+                        android:padding="10dp"
+                        android:text="View"
+                        android:textColor="#7b000000"
+                        android:textSize="12dp" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_mode_window"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:padding="10dp"
+                        android:text="Window"
+                        android:textColor="#7b000000"
+                        android:textSize="12dp" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_mode_dialogFragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:padding="10dp"
+                        android:text="DialogFragment"
+                        android:textColor="#7b000000" />
+
+                    <RadioButton
+                        android:id="@+id/rdo_mode_floatingActivity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:padding="10dp"
+                        android:text="FloatingActivity"
+                        android:textColor="#7b000000" />
+
+                </RadioGroup>
+
+            </HorizontalScrollView>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -321,7 +329,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="提示"
+                android:text="阻断提示"
                 android:textColor="#dc000000"
                 android:textSize="14dp"
                 android:textStyle="bold" />
@@ -430,6 +438,15 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="非阻断提示"
+                android:textColor="#dc000000"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -465,6 +482,109 @@
                     android:textSize="13dp"
                     android:textStyle="bold" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btn_poptip_success"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rect_button"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="完成"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_poptip_warning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rect_button"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="警告"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_poptip_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rect_button"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="错误"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btn_popnotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rect_button"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="通知样式"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_popnotification_bigMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rect_button"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="复杂通知样式"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_popnotification_overlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/rect_button"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="跨界面测试"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView

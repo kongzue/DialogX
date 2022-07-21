@@ -14,7 +14,7 @@ import com.kongzue.dialogx.miuistyle.R;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/9/26 17:04
  */
-public class MIUIStyle implements DialogXStyle {
+public class MIUIStyle extends DialogXStyle {
     
     public static MIUIStyle style() {
         return new MIUIStyle();
@@ -187,6 +187,36 @@ public class MIUIStyle implements DialogXStyle {
     }
     
     @Override
+    public PopNotificationSettings popNotificationSettings() {
+        return new PopNotificationSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light ? R.layout.layout_dialogx_popnotification_miui : R.layout.layout_dialogx_popnotification_miui_dark;
+            }
+            
+            @Override
+            public PopNotificationSettings.ALIGN align() {
+                return ALIGN.TOP;
+            }
+            
+            @Override
+            public int enterAnimResId(boolean light) {
+                return R.anim.anim_dialogx_notification_enter;
+            }
+            
+            @Override
+            public int exitAnimResId(boolean light) {
+                return R.anim.anim_dialogx_notification_exit;
+            }
+            
+            @Override
+            public boolean tintIcon() {
+                return false;
+            }
+        };
+    }
+    
+    @Override
     public PopMenuSettings popMenuSettings() {
         return new PopMenuSettings() {
             @Override
@@ -225,8 +255,24 @@ public class MIUIStyle implements DialogXStyle {
             }
             
             @Override
-            public int overrideMenuItemBackgroundRes(boolean b, int i, int i1, boolean b1) {
-                return 0;
+            public int overrideMenuItemBackgroundRes(boolean light, int index, int count, boolean isContentVisibility) {
+                if (light) {
+                    if (index == 0) {
+                        return R.drawable.button_dialogx_miui_top_light;
+                    } else if (index == count - 1) {
+                        return R.drawable.button_dialogx_miui_bottom_light;
+                    } else {
+                        return R.drawable.button_dialogx_miui_center_light;
+                    }
+                } else {
+                    if (index == 0) {
+                        return R.drawable.button_dialogx_miui_top_night;
+                    } else if (index == count - 1) {
+                        return R.drawable.button_dialogx_miui_bottom_night;
+                    } else {
+                        return R.drawable.button_dialogx_miui_center_night;
+                    }
+                }
             }
             
             @Override
@@ -244,6 +290,8 @@ public class MIUIStyle implements DialogXStyle {
                 return dip2px(10);
             }
         };
+        
+        
     }
     
     private int dip2px(float dpValue) {

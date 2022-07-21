@@ -59,6 +59,10 @@ public class BottomMenu extends BottomDialog {
         return new BottomMenu();
     }
     
+    public static BottomMenu build(DialogXStyle style) {
+        return new BottomMenu().setStyle(style);
+    }
+    
     public static BottomMenu build(OnBindView<BottomDialog> onBindView) {
         return new BottomMenu().setCustomView(onBindView);
     }

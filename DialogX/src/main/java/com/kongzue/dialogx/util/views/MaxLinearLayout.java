@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -99,14 +100,14 @@ public class MaxLinearLayout extends LinearLayout {
                 if (widthMode == EXACTLY) {
                     widthTemp = widthSize;
                 }
-                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) blurView.getLayoutParams();
+                ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) blurView.getLayoutParams();
                 lp.width = widthTemp;
                 lp.height = heightTemp;
                 blurView.setLayoutParams(lp);
             }
         } else {
             if (blurView != null) {
-                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) blurView.getLayoutParams();
+                ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) blurView.getLayoutParams();
                 lp.width = getMeasuredWidth();
                 lp.height = getMeasuredHeight();
                 blurView.setLayoutParams(lp);

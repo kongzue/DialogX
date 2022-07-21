@@ -155,15 +155,9 @@ public abstract class BaseDialog {
             log(baseDialog.dialogKey() + ".show");
             
             addDialogToRunningList(baseDialog);
-            
             switch (baseDialog.dialogImplMode) {
                 case WINDOW:
-                    runOnMain(new Runnable() {
-                        @Override
-                        public void run() {
-                            WindowUtil.show(getTopActivity(), view, !(baseDialog instanceof PopTip));
-                        }
-                    });
+                    WindowUtil.show(getTopActivity(), view, !(baseDialog instanceof NoTouchInterface));
                     break;
                 case DIALOG_FRAGMENT:
                     DialogFragmentImpl dialogFragment = new DialogFragmentImpl(baseDialog, view);
@@ -272,12 +266,7 @@ public abstract class BaseDialog {
             
             switch (baseDialog.dialogImplMode) {
                 case WINDOW:
-                    runOnMain(new Runnable() {
-                        @Override
-                        public void run() {
-                            WindowUtil.show(activity, view, !(baseDialog instanceof PopTip));
-                        }
-                    });
+                    WindowUtil.show(activity, view, !(baseDialog instanceof NoTouchInterface));
                     break;
                 case DIALOG_FRAGMENT:
                     DialogFragmentImpl dialogFragment = new DialogFragmentImpl(baseDialog, view);
@@ -362,12 +351,7 @@ public abstract class BaseDialog {
         
         switch (baseDialog.dialogImplMode) {
             case WINDOW:
-                runOnMain(new Runnable() {
-                    @Override
-                    public void run() {
-                        WindowUtil.dismiss(dialogView);
-                    }
-                });
+                WindowUtil.dismiss(dialogView);
                 break;
             case DIALOG_FRAGMENT:
                 if (baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
@@ -602,8 +586,10 @@ public abstract class BaseDialog {
      * 此标记用于拦截重复 dismiss 指令导致的关闭动画抖动异常
      */
     protected boolean dismissAnimFlag;
+    protected boolean preShow;
     
     protected void beforeShow() {
+        preShow = true;
         dismissAnimFlag = false;
         if (getTopActivity() == null) {
             init(null);

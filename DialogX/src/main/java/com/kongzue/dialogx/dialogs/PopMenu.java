@@ -25,6 +25,7 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
@@ -138,6 +139,10 @@ public class PopMenu extends BaseDialog {
     
     public static PopMenu build() {
         return new PopMenu();
+    }
+    
+    public static PopMenu build(DialogXStyle style) {
+        return new PopMenu().setStyle(style);
     }
     
     public static PopMenu show(CharSequence[] menus) {
@@ -265,6 +270,7 @@ public class PopMenu extends BaseDialog {
                 @Override
                 public void onShow() {
                     isShow = true;
+                    preShow = false;
                     getDialogLifecycleCallback().onShow(me);
                     refreshUI();
                 }
@@ -924,6 +930,16 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<PopMenu> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
+        return this;
+    }
+    
+    public PopMenu setStyle(DialogXStyle style) {
+        this.style = style;
+        return this;
+    }
+    
+    public PopMenu setTheme(DialogX.THEME theme) {
+        this.theme = theme;
         return this;
     }
 }

@@ -7,6 +7,7 @@ import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
@@ -29,6 +30,12 @@ public class InputDialog extends MessageDialog {
     
     public static InputDialog build() {
         return new InputDialog();
+    }
+    
+    public static InputDialog build(DialogXStyle style) {
+        InputDialog dialog = new InputDialog();
+        dialog.setStyle(style);
+        return dialog;
     }
     
     public static InputDialog build(OnBindView<MessageDialog> onBindView) {
@@ -537,7 +544,7 @@ public class InputDialog extends MessageDialog {
             dismiss(dialogView);
             isShow = false;
         }
-        if (getDialogImpl().boxCustom!=null){
+        if (getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
         int layoutId = style.layout(isLightTheme());
@@ -547,7 +554,7 @@ public class InputDialog extends MessageDialog {
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
-        if (dialogView!=null)dialogView.setTag(me);
+        if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
         setInputText(inputText);
     }
@@ -589,9 +596,9 @@ public class InputDialog extends MessageDialog {
     }
     
     public OnBackgroundMaskClickListener<MessageDialog> getOnBackgroundMaskClickListener() {
-        return  onBackgroundMaskClickListener;
+        return onBackgroundMaskClickListener;
     }
-
+    
     public InputDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<MessageDialog> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;

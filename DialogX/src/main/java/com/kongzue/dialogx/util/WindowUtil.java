@@ -2,15 +2,19 @@ package com.kongzue.dialogx.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
@@ -45,6 +49,13 @@ public class WindowUtil {
     }
     
     private static void showNow(Activity activity, View dialogView, boolean touchEnable) {
+        if (DialogX.globalHoverWindow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
+            Toast.makeText(activity, "使用 DialogX.globalHoverWindow 必须开启悬浮窗权限", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+            activity.startActivity(intent);
+            return;
+        }
         FrameLayout rootLayout = new FrameLayout(activity);
         if (dialogView.getParent() != null) {
             ((ViewGroup) dialogView.getParent()).removeView(dialogView);
@@ -52,10 +63,17 @@ public class WindowUtil {
         rootLayout.addView(dialogView, new FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
         WindowManager manager = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        
         layoutParams.gravity = Gravity.CENTER_VERTICAL;
         layoutParams.format = PixelFormat.TRANSPARENT;
-        layoutParams.type = TYPE_APPLICATION_ATTACHED_DIALOG;
+        if (DialogX.globalHoverWindow) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                layoutParams.type = TYPE_APPLICATION_OVERLAY;
+            } else {
+                layoutParams.type = TYPE_PHONE;
+            }
+        } else {
+            layoutParams.type = TYPE_APPLICATION_ATTACHED_DIALOG;
+        }
         layoutParams.flags = FLAG_FULLSCREEN |
                 FLAG_TRANSLUCENT_STATUS |
                 FLAG_TRANSLUCENT_NAVIGATION |
@@ -71,7 +89,7 @@ public class WindowUtil {
                             if (baseDialog.getDialogView() == null) {
                                 return false;
                             }
-                            return baseDialog.getDialogView().dispatchTouchEvent(event);
+                            return baseDialog.getOwnActivity().dispatchTouchEvent(event);
                         }
                     }
                     return activity.dispatchTouchEvent(event);

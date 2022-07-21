@@ -51,5 +51,9 @@
 
     <color name="dialogxWaitBkgLight">#F5F6F7</color>
     <color name="dialogxWaitBkgDark">#3F3F3F</color>
+    <color name="dialogxMIUISplitLine">#C4C4C4</color>
+    <color name="dialogxColorMIUINotificationButton">#5B5B5B</color>
+    <color name="dialogxMIUINotificationDark">#313131</color>
+    <color name="dialogxColorMIUINotificationButtonNight">#ffffff</color>
 
 </resources>

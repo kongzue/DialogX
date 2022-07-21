@@ -47,6 +47,9 @@ public class DialogX {
     //同时只显示一个 PopTip
     public static boolean onlyOnePopTip = false;
     
+    //同时只显示一个 PopNotification
+    public static boolean onlyOnePopNotification = true;
+    
     //默认按钮文字样式
     public static TextInfo buttonTextInfo;
     
@@ -127,6 +130,9 @@ public class DialogX {
     
     //触摸滑动触发阈值，影响 BottomDialog、FullScreenDialog 下滑关闭触发距离，单位：像素
     public static int touchSlideTriggerThreshold = dip2px(35);
+    
+    //Window 模式使用全局悬浮窗，需要 SYSTEM_ALERT_WINDOW 权限
+    public static boolean globalHoverWindow = false;
     
     public enum THEME {
         LIGHT, DARK, AUTO

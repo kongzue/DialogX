@@ -28,7 +28,7 @@
             android:id="@+id/img_dialogx_pop_icon"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="-5dp"
             android:visibility="gone" />
 

@@ -16,7 +16,7 @@ import com.kongzue.dialogxmaterialyou.R;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/9/26 13:09
  */
-public class MaterialYouStyle implements DialogXStyle {
+public class MaterialYouStyle extends DialogXStyle {
     
     public static MaterialYouStyle style() {
         DialogX.titleTextInfo = new TextInfo().setBold(false);
@@ -223,6 +223,11 @@ public class MaterialYouStyle implements DialogXStyle {
             public int exitAnimResId(boolean light) {
                 return R.anim.anim_dialogx_default_exit;
             }
+    
+            @Override
+            public boolean tintIcon() {
+                return true;
+            }
         };
     }
     
@@ -286,4 +291,33 @@ public class MaterialYouStyle implements DialogXStyle {
         };
     }
     
+    @Override
+    public PopNotificationSettings popNotificationSettings() {
+        return new PopNotificationSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light ? R.layout.layout_dialogx_popnotification_material_you : R.layout.layout_dialogx_popnotification_material_you_dark;
+            }
+    
+            @Override
+            public PopNotificationSettings.ALIGN align() {
+                return ALIGN.TOP;
+            }
+    
+            @Override
+            public int enterAnimResId(boolean light) {
+                return R.anim.anim_dialogx_notification_enter;
+            }
+    
+            @Override
+            public int exitAnimResId(boolean light) {
+                return R.anim.anim_dialogx_notification_exit;
+            }
+    
+            @Override
+            public boolean tintIcon() {
+                return false;
+            }
+        };
+    }
 }

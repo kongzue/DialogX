@@ -2,22 +2,22 @@ package com.kongzue.dialogx.interfaces;
 
 import android.content.Context;
 
-public interface DialogXStyle {
+public abstract class DialogXStyle {
     
     /**
      * DialogXStyle 版本
      * 相关文档请参阅：https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98
      */
-    int styleVer = 4;
+    public static final int styleVer = 5;
     
     /**
      * 按钮类型常量
      */
-    int BUTTON_OK = 1;
-    int BUTTON_CANCEL = 2;
-    int BUTTON_OTHER = 3;
-    int SPACE = 4;
-    int SPLIT = 5;
+    public static final int BUTTON_OK = 1;
+    public static final int BUTTON_CANCEL = 2;
+    public static final int BUTTON_OTHER = 3;
+    public static final int SPACE = 4;
+    public static final int SPLIT = 5;
     
     /**
      * 重写基础对话框布局资源
@@ -29,7 +29,9 @@ public interface DialogXStyle {
      * @param light 亮暗色
      * @return 布局资源 id
      */
-    int layout(boolean light);
+    public int layout(boolean light) {
+        return 0;
+    }
     
     /**
      * 修改默认对话框启动动画效果
@@ -39,7 +41,9 @@ public interface DialogXStyle {
      *
      * @return 布局资源 id
      */
-    int enterAnimResId();
+    public int enterAnimResId() {
+        return 0;
+    }
     
     /**
      * 修改默认对话框关闭动画效果
@@ -49,7 +53,9 @@ public interface DialogXStyle {
      *
      * @return 布局资源 id
      */
-    int exitAnimResId();
+    public int exitAnimResId() {
+        return 0;
+    }
     
     /**
      * 修改默认按钮排序(纵向)
@@ -60,7 +66,9 @@ public interface DialogXStyle {
      *
      * @return 排序数组
      */
-    int[] verticalButtonOrder();
+    public int[] verticalButtonOrder() {
+        return new int[]{BUTTON_OTHER, SPLIT, BUTTON_CANCEL, BUTTON_OK};
+    }
     
     /**
      * 修改默认按钮排序（横向）
@@ -71,7 +79,9 @@ public interface DialogXStyle {
      *
      * @return 排序数组
      */
-    int[] horizontalButtonOrder();
+    public int[] horizontalButtonOrder() {
+        return new int[]{BUTTON_OTHER, BUTTON_CANCEL, BUTTON_OK};
+    }
     
     /**
      * 按钮分割线宽度
@@ -80,7 +90,11 @@ public interface DialogXStyle {
      *
      * @return 像素值
      */
-    int splitWidthPx();
+    public int splitWidthPx() {
+        return 1;
+    }
+    
+    ;
     
     /**
      * 按钮分割线颜色
@@ -89,7 +103,11 @@ public interface DialogXStyle {
      *
      * @return 颜色资源 id
      */
-    int splitColorRes(boolean light);
+    public int splitColorRes(boolean light) {
+        return 0x1A000000;
+    }
+    
+    ;
     
     /**
      * 模糊背景
@@ -98,7 +116,9 @@ public interface DialogXStyle {
      *
      * @return BlurBackgroundSetting
      */
-    BlurBackgroundSetting messageDialogBlurSettings();
+    public BlurBackgroundSetting messageDialogBlurSettings() {
+        return null;
+    }
     
     /**
      * 自定义按钮样式
@@ -111,9 +131,13 @@ public interface DialogXStyle {
      *
      * @return HorizontalButtonRes
      */
-    HorizontalButtonRes overrideHorizontalButtonRes();
+    public HorizontalButtonRes overrideHorizontalButtonRes() {
+        return null;
+    }
     
-    VerticalButtonRes overrideVerticalButtonRes();
+    public VerticalButtonRes overrideVerticalButtonRes() {
+        return null;
+    }
     
     /**
      * 修改等待/提示框的样式
@@ -122,7 +146,9 @@ public interface DialogXStyle {
      *
      * @return WaitTipRes
      */
-    WaitTipRes overrideWaitTipRes();
+    public WaitTipRes overrideWaitTipRes() {
+        return null;
+    }
     
     /**
      * 自定义底部对话框/菜单样式
@@ -132,21 +158,36 @@ public interface DialogXStyle {
      *
      * @return BottomDialogRes
      */
-    BottomDialogRes overrideBottomDialogRes();
+    public BottomDialogRes overrideBottomDialogRes() {
+        return null;
+    }
     
     /**
      * 自定义 PopTip 样式
      *
      * @return PopTipSettings
      */
-    PopTipSettings popTipSettings();
+    public PopTipSettings popTipSettings() {
+        return null;
+    }
+    
+    /**
+     * 自定义 PopNotificationSettings 样式
+     *
+     * @return PopNotificationSettings
+     */
+    public PopNotificationSettings popNotificationSettings() {
+        return null;
+    }
     
     /**
      * 自定义 PopMenu 样式
      *
      * @return PopMenuSettings
      */
-    PopMenuSettings popMenuSettings();
+    public PopMenuSettings popMenuSettings() {
+        return null;
+    }
     
     /**
      * 模糊背景设置
@@ -158,13 +199,19 @@ public interface DialogXStyle {
      * blurForwardColorRes(boolean light)用于处理前景色（建议设置一定的透明度保证可以看到背后的模糊效果），
      * blurBackgroundRoundRadiusPx()用于给定模糊效果的圆角半径，单位为像素（Px）。
      */
-    interface BlurBackgroundSetting {
+    public abstract class BlurBackgroundSetting {
         
-        boolean blurBackground();
+        public boolean blurBackground() {
+            return false;
+        }
         
-        int blurForwardColorRes(boolean light);
+        public int blurForwardColorRes(boolean light) {
+            return 0;
+        }
         
-        int blurBackgroundRoundRadiusPx();
+        public int blurBackgroundRoundRadiusPx() {
+            return 0;
+        }
     }
     
     /**
@@ -176,22 +223,34 @@ public interface DialogXStyle {
      * <p>
      * overrideHorizontalButtonRes和overrideVerticalButtonRes返回值return null时默认不进行样式修改设置。
      */
-    interface HorizontalButtonRes {
+    public abstract class HorizontalButtonRes {
         
-        int overrideHorizontalOkButtonBackgroundRes(int visibleButtonCount, boolean light);
+        public int overrideHorizontalOkButtonBackgroundRes(int visibleButtonCount, boolean light) {
+            return 0;
+        }
         
-        int overrideHorizontalCancelButtonBackgroundRes(int visibleButtonCount, boolean light);
+        public int overrideHorizontalCancelButtonBackgroundRes(int visibleButtonCount, boolean light) {
+            return 0;
+        }
         
-        int overrideHorizontalOtherButtonBackgroundRes(int visibleButtonCount, boolean light);
+        public int overrideHorizontalOtherButtonBackgroundRes(int visibleButtonCount, boolean light) {
+            return 0;
+        }
     }
     
-    interface VerticalButtonRes {
+    public abstract class VerticalButtonRes {
         
-        int overrideVerticalOkButtonBackgroundRes(int visibleButtonCount, boolean light);
+        public int overrideVerticalOkButtonBackgroundRes(int visibleButtonCount, boolean light) {
+            return 0;
+        }
         
-        int overrideVerticalCancelButtonBackgroundRes(int visibleButtonCount, boolean light);
+        public int overrideVerticalCancelButtonBackgroundRes(int visibleButtonCount, boolean light) {
+            return 0;
+        }
         
-        int overrideVerticalOtherButtonBackgroundRes(int visibleButtonCount, boolean light);
+        public int overrideVerticalOtherButtonBackgroundRes(int visibleButtonCount, boolean light) {
+            return 0;
+        }
     }
     
     /**
@@ -199,22 +258,32 @@ public interface DialogXStyle {
      * <p>
      * 此接口return null时采用默认样式。
      */
-    interface WaitTipRes {
+    public abstract class WaitTipRes {
         
         //重写布局资源
-        int overrideWaitLayout(boolean light);
+        public int overrideWaitLayout(boolean light) {
+            return 0;
+        }
         
         //设置圆角像素
-        int overrideRadiusPx();
+        public int overrideRadiusPx() {
+            return 0;
+        }
         
         //判断是否需要模糊背景效果
-        boolean blurBackground();
+        public boolean blurBackground() {
+            return false;
+        }
         
         //重新设置前景色
-        int overrideBackgroundColorRes(boolean light);
+        public int overrideBackgroundColorRes(boolean light) {
+            return 0;
+        }
         
         //设置在亮/暗色时的文字颜色，注意，此颜色也将修改进度动画的颜色。
-        int overrideTextColorRes(boolean light);
+        public int overrideTextColorRes(boolean light) {
+            return 0;
+        }
         
         /**
          * 自定义等待提示动画组件接口 ProgressViewInterface
@@ -252,7 +321,9 @@ public interface DialogXStyle {
          * @param light   是否为亮色模式
          * @return ProgressViewInterface
          */
-        ProgressViewInterface overrideWaitView(Context context, boolean light);
+        public ProgressViewInterface overrideWaitView(Context context, boolean light) {
+            return null;
+        }
     }
     
     /**
@@ -265,27 +336,39 @@ public interface DialogXStyle {
      * <p>
      * overrideSelectionImage(boolean light, boolean isSelected)用于
      */
-    interface BottomDialogRes {
+    public abstract class BottomDialogRes {
         
         //定义是否支持滑动关闭操作。
-        boolean touchSlide();
+        public boolean touchSlide() {
+            return false;
+        }
         
         //用于设置底部对话框的布局，如需修改布局样式，请参照 底部对话框默认亮色布局 和 底部对话框默认暗色布局，请参照 Demo 布局的格式进行布局设计，不建议修改或去掉布局中的含有 id 的组件，当return 0时使用默认实现。
-        int overrideDialogLayout(boolean light);
+        public int overrideDialogLayout(boolean light) {
+            return 0;
+        }
         
         //用于修改默认分隔线的粗细，单位像素。
-        int overrideMenuDividerDrawableRes(boolean light);
+        public int overrideMenuDividerDrawableRes(boolean light) {
+            return 0;
+        }
         
         //修改默认分隔线的粗细，单位像素。
-        int overrideMenuDividerHeight(boolean light);
+        public int overrideMenuDividerHeight(boolean light) {
+            return 0;
+        }
         
         //修改默认菜单文字的颜色，值采用为 color 的资源 ID。
-        int overrideMenuTextColor(boolean light);
+        public int overrideMenuTextColor(boolean light) {
+            return 0;
+        }
         
         //设置默认情况下，当底部对话框内容大于屏幕可显示高度时，
         //默认启动后显示的高度比例，值为浮点型，例如设置为 0.6f 时，则当内容大于可显示高度时，启动后对话框只从屏幕底部弹出 0.6×屏幕高度的大小，需要再次向上拖拽才能展开全部对话框，
         //此功能需要和 touchSlide() 配合使用。
-        float overrideBottomDialogMaxHeight();
+        public float overrideBottomDialogMaxHeight() {
+            return 0;
+        }
         
         /**
          * 定义菜单条目的布局样式。
@@ -301,21 +384,31 @@ public interface DialogXStyle {
          * @param isContentVisibility 确认当菜单显示时，是否还有其他内容显示（例如对话框标题、正文或自定义布局）
          * @return 条目布局资源
          */
-        int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility);
+        public int overrideMenuItemLayout(boolean light, int index, int count, boolean isContentVisibility) {
+            return 0;
+        }
         
         //定义已选中的菜单默认背景颜色，
         // 例如在使用 MIUI 主题样式且开启了单选模式时，默认打开菜单后会选中上次已选择的条目，此接口用预设定已选中菜单的背景颜色。
-        int overrideSelectionMenuBackgroundColor(boolean light);
+        public int overrideSelectionMenuBackgroundColor(boolean light) {
+            return 0;
+        }
         
         //用于确定使用此主题时，默认会不会重定义图标的颜色，
         // 若开启，那么所有菜单图标会根据主题的亮/暗色的文字颜色重新覆盖颜色，若关闭，则使用图标原本的颜色。
-        boolean selectionImageTint(boolean light);
+        public boolean selectionImageTint(boolean light) {
+            return false;
+        }
         
         //设置默认单选菜单已选择/未选择时的图标资源，可使用 mipmap 图像或者 drawable 资源。
-        int overrideSelectionImage(boolean light, boolean isSelected);
+        public int overrideSelectionImage(boolean light, boolean isSelected) {
+            return 0;
+        }
         
         //设置默认多选菜单已选择/未选择时的图标资源，可使用 mipmap 图像或者 drawable 资源。
-        int overrideMultiSelectionImage(boolean light, boolean isSelected);
+        public int overrideMultiSelectionImage(boolean light, boolean isSelected) {
+            return 0;
+        }
     }
     
     /**
@@ -323,17 +416,21 @@ public interface DialogXStyle {
      * <p>
      * 当return null 时使用默认样式。
      */
-    interface PopTipSettings {
+    public abstract static class PopTipSettings {
         
         //PopTip 的默认布局样式，请参考具体布局实现：PopTip 默认亮色布局 和 PopTip 默认暗色布局
-        int layout(boolean light);
+        public int layout(boolean light) {
+            return 0;
+        }
         
         /**
          * align()接口用于判断 PopTip 的弹出规则，支持的值如下：
          */
-        ALIGN align();
+        public ALIGN align() {
+            return ALIGN.CENTER;
+        }
         
-        enum ALIGN {
+        public enum ALIGN {
             CENTER,         //屏幕中央弹出
             TOP,            //屏幕顶端弹出（非安全区）
             BOTTOM,         //屏幕底部弹出（非安全区）
@@ -342,32 +439,70 @@ public interface DialogXStyle {
         }
         
         //设置启动动画效果。
-        int enterAnimResId(boolean light);
+        public int enterAnimResId(boolean light) {
+            return 0;
+        }
         
         //设置关闭动画效果。
-        int exitAnimResId(boolean light);
+        public int exitAnimResId(boolean light) {
+            return 0;
+        }
+        
+        //使图标颜色和文字保持一致
+        public boolean tintIcon(){
+            return true;
+        }
+        
+        //默认完成图标
+        public int defaultIconSuccess(){
+            return 0;
+        }
+    
+        //默认警告图标
+        public int defaultIconWarning(){
+            return 0;
+        }
+    
+        //默认错误图标
+        public int defaultIconError(){
+            return 0;
+        }
     }
     
-    interface PopMenuSettings{
-    
-        //PopMenu 的默认布局样式，请参考具体布局实现：PopMenu 默认亮色布局 和 PopMenu 默认暗色布局
-        int layout(boolean light);
-    
-        BlurBackgroundSetting blurBackgroundSettings();
+    public abstract class PopMenuSettings {
         
-        int backgroundMaskColorRes();
-    
+        //PopMenu 的默认布局样式，请参考具体布局实现：PopMenu 默认亮色布局 和 PopMenu 默认暗色布局
+        public int layout(boolean light) {
+            return 0;
+        }
+        
+        public BlurBackgroundSetting blurBackgroundSettings() {
+            return null;
+        }
+        
+        public int backgroundMaskColorRes() {
+            return 0;
+        }
+        
         //用于修改默认分隔线的粗细，单位像素。
-        int overrideMenuDividerDrawableRes(boolean light);
-    
+        public int overrideMenuDividerDrawableRes(boolean light) {
+            return 0;
+        }
+        
         //修改默认分隔线的粗细，单位像素。
-        int overrideMenuDividerHeight(boolean light);
-    
+        public int overrideMenuDividerHeight(boolean light) {
+            return 0;
+        }
+        
         //修改默认菜单文字的颜色，值采用为 color 的资源 ID。
-        int overrideMenuTextColor(boolean light);
-    
+        public int overrideMenuTextColor(boolean light) {
+            return 0;
+        }
+        
         //自定义菜单的布局资源 ID。
-        int overrideMenuItemLayoutRes(boolean light);
+        public int overrideMenuItemLayoutRes(boolean light) {
+            return 0;
+        }
         
         /**
          * 定义菜单条目的布局背景资源。
@@ -383,17 +518,87 @@ public interface DialogXStyle {
          * @param isContentVisibility 确认当菜单显示时，是否还有其他内容显示（例如对话框标题、正文或自定义布局）
          * @return 条目布局背景资源
          */
-        int overrideMenuItemBackgroundRes(boolean light, int index, int count, boolean isContentVisibility);
-    
+        public int overrideMenuItemBackgroundRes(boolean light, int index, int count, boolean isContentVisibility) {
+            return 0;
+        }
+        
         //定义已选中的菜单默认背景颜色，
         // 例如在使用 MIUI 主题样式且开启了单选模式时，默认打开菜单后会选中上次已选择的条目，此接口用预设定已选中菜单的背景颜色。
-        int overrideSelectionMenuBackgroundColor(boolean light);
-    
+        public int overrideSelectionMenuBackgroundColor(boolean light) {
+            return 0;
+        }
+        
         //用于确定使用此主题时，默认会不会重定义图标的颜色，
         // 若开启，那么所有菜单图标会根据主题的亮/暗色的文字颜色重新覆盖颜色，若关闭，则使用图标原本的颜色。
-        boolean selectionImageTint(boolean light);
+        public boolean selectionImageTint(boolean light) {
+            return false;
+        }
         
         //PopMenu 的顶部和底部的额外 padding
-        int paddingVertical();
+        public int paddingVertical() {
+            return 0;
+        }
+    }
+    
+    /**
+     * 自定义 PopNotificationSettings 样式设置
+     * <p>
+     * 当return null 时使用默认样式。
+     */
+    public abstract static class PopNotificationSettings {
+        
+        //PopNotificationSettings 的默认布局样式，请参考具体布局实现：PopNotificationSettings 默认亮色布局 和 PopNotificationSettings 默认暗色布局
+        public int layout(boolean light) {
+            return 0;
+        }
+        
+        /**
+         * align()接口用于判断 PopNotificationSettings 的弹出规则，支持的值如下：
+         */
+        public ALIGN align() {
+            return ALIGN.CENTER;
+        }
+        
+        public enum ALIGN {
+            CENTER,         //屏幕中央弹出
+            TOP,            //屏幕顶端弹出（非安全区）
+            BOTTOM,         //屏幕底部弹出（非安全区）
+            TOP_INSIDE,     //屏幕顶端安全区内弹出
+            BOTTOM_INSIDE   //屏幕底部安全区内弹出
+        }
+        
+        //设置启动动画效果。
+        public int enterAnimResId(boolean light) {
+            return 0;
+        }
+        
+        //设置关闭动画效果。
+        public int exitAnimResId(boolean light) {
+            return 0;
+        }
+    
+        //使图标颜色和文字保持一致
+        public boolean tintIcon(){
+            return true;
+        }
+    
+        //默认完成图标
+        public int defaultIconSuccess(){
+            return 0;
+        }
+    
+        //默认警告图标
+        public int defaultIconWarning(){
+            return 0;
+        }
+    
+        //默认错误图标
+        public int defaultIconError(){
+            return 0;
+        }
+    
+        public BlurBackgroundSetting blurBackgroundSettings() {
+            return null;
+        }
     }
 }

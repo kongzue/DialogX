@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
@@ -32,6 +33,7 @@ public class MaxRelativeLayout extends RelativeLayout {
     private int minHeight;
     private boolean lockWidth;
     private boolean interceptTouch = true;
+    private View contentView;
     
     public MaxRelativeLayout(Context context) {
         super(context);
@@ -107,14 +109,14 @@ public class MaxRelativeLayout extends RelativeLayout {
         if (lockWidth) {
             maxWidth = Math.min(maxWidth, Math.min(widthSize, preWidth));
         }
-        if (heightSize > maxHeight && maxHeight!=0) {
+        if (heightSize > maxHeight && maxHeight != 0) {
             heightSize = maxHeight;
         }
-        if (widthSize > maxWidth && maxWidth!=0) {
+        if (widthSize > maxWidth && maxWidth != 0) {
             widthSize = maxWidth;
         }
         View blurView = findViewWithTag("blurView");
-        View contentView = findViewWithoutTag("blurView");
+        View contentView = this.contentView == null ? findViewWithoutTag("blurView") : this.contentView;
         if (contentView != null) {
             int widthTemp = contentView.getMeasuredWidth() == 0 ? getMeasuredWidth() : contentView.getMeasuredWidth();
             int heightTemp = contentView.getMeasuredHeight() == 0 ? getMeasuredHeight() : contentView.getMeasuredHeight();
@@ -205,6 +207,10 @@ public class MaxRelativeLayout extends RelativeLayout {
             }
             canvas.drawRect(0, getHeight() - navBarHeight, getWidth(), getHeight(), navBarPaint);
         }
+    }
+    
+    public void setContentView(View contentView) {
+        this.contentView = contentView;
     }
     
     public interface OnYChanged {

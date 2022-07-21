@@ -14,22 +14,23 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:background="@drawable/rect_dialogx_miui_popmenu_bkg"
-        android:elevation="30dp"
         android:clickable="true"
+        android:elevation="30dp"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/box_custom"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <com.kongzue.dialogx.util.views.PopMenuListView
             android:id="@+id/listMenu"
-            android:layout_below="@+id/box_custom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/box_custom"
+            android:listSelector="@color/empty" />
 
     </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 

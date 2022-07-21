@@ -16,7 +16,7 @@ import com.kongzue.dialogx.style.views.ProgressView;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/9/26 13:09
  */
-public class IOSStyle implements DialogXStyle {
+public class IOSStyle extends DialogXStyle {
     
     public static IOSStyle style() {
         return new IOSStyle();
@@ -261,6 +261,61 @@ public class IOSStyle implements DialogXStyle {
             public int exitAnimResId(boolean light) {
                 return R.anim.anim_dialogx_ios_top_exit;
             }
+            
+            @Override
+            public boolean tintIcon() {
+                return false;
+            }
+        };
+    }
+    
+    @Override
+    public PopNotificationSettings popNotificationSettings() {
+        return new PopNotificationSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light ? R.layout.layout_dialogx_popnotification_ios : R.layout.layout_dialogx_popnotification_ios_dark;
+            }
+            
+            @Override
+            public PopNotificationSettings.ALIGN align() {
+                return ALIGN.TOP;
+            }
+            
+            @Override
+            public int enterAnimResId(boolean light) {
+                return com.kongzue.dialogx.R.anim.anim_dialogx_notification_enter;
+            }
+            
+            @Override
+            public int exitAnimResId(boolean light) {
+                return com.kongzue.dialogx.R.anim.anim_dialogx_notification_exit;
+            }
+            
+            @Override
+            public boolean tintIcon() {
+                return false;
+            }
+            
+            @Override
+            public BlurBackgroundSetting blurBackgroundSettings() {
+                return new BlurBackgroundSetting() {
+                    @Override
+                    public boolean blurBackground() {
+                        return true;
+                    }
+                    
+                    @Override
+                    public int blurForwardColorRes(boolean light) {
+                        return light ? R.color.dialogxIOSNotificationBkgLight : R.color.dialogxIOSNotificationBkgDark;
+                    }
+                    
+                    @Override
+                    public int blurBackgroundRoundRadiusPx() {
+                        return dip2px(18);
+                    }
+                };
+            }
         };
     }
     
@@ -347,7 +402,7 @@ public class IOSStyle implements DialogXStyle {
             public boolean selectionImageTint(boolean light) {
                 return false;
             }
-    
+            
             @Override
             public int paddingVertical() {
                 return 0;

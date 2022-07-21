@@ -4,8 +4,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -42,6 +49,7 @@ import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.PopMenu;
+import com.kongzue.dialogx.dialogs.PopNotification;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
@@ -83,11 +91,6 @@ public class MainActivity extends BaseActivity {
     private ImageView btnShare;
     private ImageView splitBody;
     private LinearLayout boxBody;
-    private RadioGroup grpMode;
-    private RadioButton rdoModeView;
-    private RadioButton rdoModeWindow;
-    private RadioButton rdoModeDialogFragment;
-    private RadioButton rdoModeFloatingActivity;
     private RadioGroup grpStyle;
     private RadioButton rdoMaterial;
     private RadioButton rdoIos;
@@ -98,6 +101,11 @@ public class MainActivity extends BaseActivity {
     private RadioButton rdoAuto;
     private RadioButton rdoLight;
     private RadioButton rdoDark;
+    private RadioGroup grpMode;
+    private RadioButton rdoModeView;
+    private RadioButton rdoModeWindow;
+    private RadioButton rdoModeDialogFragment;
+    private RadioButton rdoModeFloatingActivity;
     private TextView btnMessageDialog;
     private TextView btnSelectDialog;
     private TextView btnInputDialog;
@@ -109,6 +117,12 @@ public class MainActivity extends BaseActivity {
     private TextView btnTipProgress;
     private TextView btnPoptip;
     private TextView btnPoptipBigMessage;
+    private TextView btnPoptipSuccess;
+    private TextView btnPoptipWarning;
+    private TextView btnPoptipError;
+    private TextView btnPopnotification;
+    private TextView btnPopnotificationBigMessage;
+    private TextView btnPopnotificationOverlay;
     private TextView btnBottomDialog;
     private TextView btnBottomMenu;
     private TextView btnBottomReply;
@@ -131,14 +145,10 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initViews() {
         boxTable = findViewById(R.id.box_table);
-        btnShare = findViewById(R.id.btn_share);
         txtTitle = findViewById(R.id.txt_title);
+        btnShare = findViewById(R.id.btn_share);
+        splitBody = findViewById(R.id.split_body);
         boxBody = findViewById(R.id.box_body);
-        grpMode = findViewById(R.id.grp_mode);
-        rdoModeView = findViewById(R.id.rdo_mode_view);
-        rdoModeWindow = findViewById(R.id.rdo_mode_window);
-        rdoModeDialogFragment = findViewById(R.id.rdo_mode_dialogFragment);
-        rdoModeFloatingActivity = findViewById(R.id.rdo_mode_floatingActivity);
         grpStyle = findViewById(R.id.grp_style);
         rdoMaterial = findViewById(R.id.rdo_material);
         rdoIos = findViewById(R.id.rdo_ios);
@@ -149,6 +159,11 @@ public class MainActivity extends BaseActivity {
         rdoAuto = findViewById(R.id.rdo_auto);
         rdoLight = findViewById(R.id.rdo_light);
         rdoDark = findViewById(R.id.rdo_dark);
+        grpMode = findViewById(R.id.grp_mode);
+        rdoModeView = findViewById(R.id.rdo_mode_view);
+        rdoModeWindow = findViewById(R.id.rdo_mode_window);
+        rdoModeDialogFragment = findViewById(R.id.rdo_mode_dialogFragment);
+        rdoModeFloatingActivity = findViewById(R.id.rdo_mode_floatingActivity);
         btnMessageDialog = findViewById(R.id.btn_messageDialog);
         btnSelectDialog = findViewById(R.id.btn_selectDialog);
         btnInputDialog = findViewById(R.id.btn_inputDialog);
@@ -160,6 +175,12 @@ public class MainActivity extends BaseActivity {
         btnTipProgress = findViewById(R.id.btn_tipProgress);
         btnPoptip = findViewById(R.id.btn_poptip);
         btnPoptipBigMessage = findViewById(R.id.btn_poptip_bigMessage);
+        btnPoptipSuccess = findViewById(R.id.btn_poptip_success);
+        btnPoptipWarning = findViewById(R.id.btn_poptip_warning);
+        btnPoptipError = findViewById(R.id.btn_poptip_error);
+        btnPopnotification = findViewById(R.id.btn_popnotification);
+        btnPopnotificationBigMessage = findViewById(R.id.btn_popnotification_bigMessage);
+        btnPopnotificationOverlay = findViewById(R.id.btn_popnotification_overlay);
         btnBottomDialog = findViewById(R.id.btn_bottom_dialog);
         btnBottomMenu = findViewById(R.id.btn_bottom_menu);
         btnBottomReply = findViewById(R.id.btn_bottom_reply);
@@ -302,6 +323,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 DialogX.cancelButtonText = "取消";
+                DialogX.titleTextInfo = null;
+                DialogX.buttonTextInfo = null;
                 switch (checkedId) {
                     case R.id.rdo_material:
                         DialogX.globalStyle = MaterialStyle.style();
@@ -337,8 +360,8 @@ public class MainActivity extends BaseActivity {
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
                             public boolean onClick(PopMenu dialog, CharSequence text, int index) {
-                                if (index==0){
-                                    dialog.setMenuList(new String[]{"A","B","C"});
+                                if (index == 0) {
+                                    dialog.setMenuList(new String[]{"A", "B", "C"});
                                     return true;
                                 }
                                 return false;
@@ -867,7 +890,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (rdoIos.isChecked()) {
-                    PopTip.show(R.mipmap.img_air_pods_pro, "AirPods Pro 已连接").setAutoTintIconInLightOrDarkMode(false).showLong();
+                    PopTip.show(R.mipmap.img_air_pods_pro, "AirPods Pro 已连接").setTintIcon(false).showLong();
                 } else {
                     PopTip.show(R.mipmap.img_mail_line_white, "邮件已发送", "撤回").setButton(new OnDialogButtonClickListener<PopTip>() {
                         @Override
@@ -876,8 +899,34 @@ public class MainActivity extends BaseActivity {
                             toast("邮件已撤回");
                             return false;
                         }
-                    }).showLong();
+                    }).setTintIcon(true).showLong();
                 }
+            }
+        });
+        
+        btnPoptipSuccess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopTip.show("操作已完成").iconSuccess();
+            }
+        });
+        
+        btnPoptipWarning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopTip.show("存储空间不足").setButton("立即清理", new OnDialogButtonClickListener<PopTip>() {
+                    @Override
+                    public boolean onClick(PopTip baseDialog, View v) {
+                        return false;
+                    }
+                }).iconWarning();
+            }
+        });
+        
+        btnPoptipError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopTip.show("无法连接网络").iconError();
             }
         });
         
@@ -963,7 +1012,83 @@ public class MainActivity extends BaseActivity {
                         .show();
             }
         });
+        
+        btnPopnotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notificationIndex++;
+                PopNotification.show("这是一条消息 " + notificationIndex).showLong();
+            }
+        });
+        
+        btnPopnotificationBigMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.img_demo_avatar);
+                notificationIndex++;
+                PopNotification.show("这是一条消息 " + notificationIndex, "吃了没？\uD83E\uDD6A")
+                        .setIcon(icon)
+                        .setButton("回复", new OnDialogButtonClickListener<PopNotification>() {
+                            @Override
+                            public boolean onClick(PopNotification baseDialog, View v) {
+                                PopTip.show("点击回复按钮");
+                                return false;
+                            }
+                        })
+                        .showLong();
+            }
+        });
+        
+        btnPopnotificationOverlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogX.globalHoverWindow = true;
+                //悬浮窗权限检查
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (!Settings.canDrawOverlays(me)) {
+                        Toast.makeText(me, "使用 DialogX.globalHoverWindow 必须开启悬浮窗权限", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                        startActivity(intent);
+                        return;
+                    }
+                }
+                
+                Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.img_demo_avatar);
+                notificationIndex++;
+                Toast.makeText(me, "会在1秒后显示悬浮窗！", Toast.LENGTH_LONG).show();
+                
+                //跳转到桌面
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                
+                //等待一秒后显示
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        PopNotification.build()
+                                .setDialogImplMode(DialogX.IMPL_MODE.WINDOW)
+                                .setTitle("这是一条消息 " + notificationIndex)
+                                .setIcon(icon)
+                                .setButton("回复", new OnDialogButtonClickListener<PopNotification>() {
+                                    @Override
+                                    public boolean onClick(PopNotification baseDialog, View v) {
+                                        Intent intent = new Intent(me, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                        startActivity(intent);
+                                        return false;
+                                    }
+                                })
+                                .showLong();
+                    }
+                }, 1000);
+            }
+        });
     }
+    
+    int notificationIndex;
     
     private void initFullScreenLoginDemo(final FullScreenDialog fullScreenDialog) {
         btnCancel.setOnClickListener(new View.OnClickListener() {

@@ -144,6 +144,7 @@ public class CustomDialog extends BaseDialog {
                 @Override
                 public void onShow() {
                     isShow = true;
+                    preShow = false;
                     getDialogLifecycleCallback().onShow(me);
                     boxCustom.setVisibility(View.GONE);
                 }

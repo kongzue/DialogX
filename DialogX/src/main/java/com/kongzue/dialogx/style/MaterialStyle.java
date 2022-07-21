@@ -14,7 +14,7 @@ import com.kongzue.dialogx.util.views.ProgressView;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/9/26 13:09
  */
-public class MaterialStyle implements DialogXStyle {
+public class MaterialStyle extends DialogXStyle {
     
     public static MaterialStyle style() {
         return new MaterialStyle();
@@ -219,6 +219,41 @@ public class MaterialStyle implements DialogXStyle {
             public int exitAnimResId(boolean light) {
                 return R.anim.anim_dialogx_default_exit;
             }
+            
+            @Override
+            public boolean tintIcon() {
+                return true;
+            }
+        };
+    }
+    
+    @Override
+    public PopNotificationSettings popNotificationSettings() {
+        return new PopNotificationSettings() {
+            @Override
+            public int layout(boolean light) {
+                return light ? R.layout.layout_dialogx_popnotification_material : R.layout.layout_dialogx_popnotification_material_dark;
+            }
+    
+            @Override
+            public PopNotificationSettings.ALIGN align() {
+                return ALIGN.TOP;
+            }
+    
+            @Override
+            public int enterAnimResId(boolean light) {
+                return R.anim.anim_dialogx_notification_enter;
+            }
+    
+            @Override
+            public int exitAnimResId(boolean light) {
+                return R.anim.anim_dialogx_notification_exit;
+            }
+    
+            @Override
+            public boolean tintIcon() {
+                return false;
+            }
         };
     }
     
@@ -234,17 +269,17 @@ public class MaterialStyle implements DialogXStyle {
             public BlurBackgroundSetting blurBackgroundSettings() {
                 return null;
             }
-    
+            
             @Override
             public int backgroundMaskColorRes() {
                 return 0;
             }
-    
+            
             @Override
             public int overrideMenuDividerDrawableRes(boolean b) {
                 return 0;
             }
-    
+            
             @Override
             public int overrideMenuDividerHeight(boolean b) {
                 return 0;
@@ -254,32 +289,31 @@ public class MaterialStyle implements DialogXStyle {
             public int overrideMenuTextColor(boolean light) {
                 return light ? R.color.black90 : R.color.white90;
             }
-    
+            
             @Override
             public int overrideMenuItemLayoutRes(boolean b) {
                 return 0;
             }
-    
+            
             @Override
             public int overrideMenuItemBackgroundRes(boolean b, int i, int i1, boolean b1) {
                 return 0;
             }
-    
+            
             @Override
             public int overrideSelectionMenuBackgroundColor(boolean b) {
                 return 0;
             }
-    
+            
             @Override
             public boolean selectionImageTint(boolean b) {
                 return false;
             }
-    
+            
             @Override
             public int paddingVertical() {
                 return 0;
             }
-    
         };
     }
 }

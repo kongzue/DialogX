@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/box_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:baseFocusable="false">
+
+    <com.kongzue.dialogx.util.views.MaxLinearLayout
+        android:id="@+id/box_body"
+        android:alpha="0.98"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/rect_dialogx_miui_popnotification_bkg_night"
+        android:clickable="true"
+        android:elevation="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/img_dialogx_pop_icon"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_gravity="top"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_dialogx_pop_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="18dp"
+                android:gravity="left|center_vertical"
+                android:text="Notification!"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_dialogx_pop_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="-15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="left|center_vertical"
+                android:text="Notification!"
+                android:textColor="@color/white60"
+                android:textSize="13dp"/>
+
+            <TextView
+                android:id="@+id/txt_dialogx_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="-10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="14dp"
+                android:background="@drawable/button_dialogx_miui_night"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingTop="6dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="6dp"
+                android:singleLine="true"
+                android:text="Dismiss"
+                android:textColor="@color/dialogxColorMIUINotificationButtonNight"
+                android:textSize="12dp" />
+
+            <RelativeLayout
+                android:id="@+id/box_custom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </com.kongzue.dialogx.util.views.MaxLinearLayout>
+
+</com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>

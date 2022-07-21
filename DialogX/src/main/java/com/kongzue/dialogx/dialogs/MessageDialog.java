@@ -97,6 +97,10 @@ public class MessageDialog extends BaseDialog {
         return new MessageDialog();
     }
     
+    public static MessageDialog build(DialogXStyle style) {
+        return new MessageDialog().setStyle(style);
+    }
+    
     public static MessageDialog build(OnBindView<MessageDialog> onBindView) {
         return new MessageDialog().setCustomView(onBindView);
     }
@@ -297,6 +301,7 @@ public class MessageDialog extends BaseDialog {
                 @Override
                 public void onShow() {
                     isShow = true;
+                    preShow = false;
                     int enterAnimResId = style.enterAnimResId() == 0 ? R.anim.anim_dialogx_default_enter : style.enterAnimResId();
                     if (overrideEnterAnimRes != 0) {
                         enterAnimResId = overrideEnterAnimRes;
