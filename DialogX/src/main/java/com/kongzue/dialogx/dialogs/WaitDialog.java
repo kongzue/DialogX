@@ -213,7 +213,7 @@ public class WaitDialog extends BaseDialog {
                 if (getDialogImpl() != null) {
                     getDialogImpl().lazyCreate();
                     if (getWaitDialogView() != null) {
-                        getWaitDialogView().setTag(me.get());
+                        getWaitDialogView().setTag(WaitDialog.this);
                         show(getWaitDialogView());
                     }
                 }
@@ -712,8 +712,7 @@ public class WaitDialog extends BaseDialog {
     }
     
     protected void setTip(TYPE type) {
-        readyTipType = type;
-        showTip(readyTipType);
+        showTip(type);
     }
     
     protected void setTip(CharSequence message, TYPE type) {
@@ -773,13 +772,13 @@ public class WaitDialog extends BaseDialog {
      * @return me
      */
     protected WaitDialog preMessage(CharSequence message) {
-        me().message = message;
-        return me();
+        this.message = message;
+        return this;
     }
     
     protected WaitDialog preMessage(int messageResId) {
-        me().message = getString(messageResId);
-        return me();
+        this.message = getString(messageResId);
+        return this;
     }
     
     public DialogLifecycleCallback<WaitDialog> getDialogLifecycleCallback() {
@@ -1005,6 +1004,27 @@ public class WaitDialog extends BaseDialog {
     public WaitDialog setMessageTextInfo(TextInfo messageTextInfo) {
         this.messageTextInfo = messageTextInfo;
         refreshUI();
+        return this;
+    }
+    
+    public WaitDialog setMessageContent(CharSequence message){
+        this.message = message;
+        refreshUI();
+        return this;
+    }
+    
+    public WaitDialog setMessageContent(int messageResId){
+        this.message = getString(messageResId);
+        refreshUI();
+        return this;
+    }
+    
+    public CharSequence getMessageContent(){
+        return message;
+    }
+    
+    public WaitDialog setTipType(TYPE type){
+        showTip(type);
         return this;
     }
 }
