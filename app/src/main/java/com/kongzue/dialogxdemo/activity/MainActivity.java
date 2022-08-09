@@ -34,6 +34,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.kongzue.baseframework.BaseActivity;
 import com.kongzue.baseframework.interfaces.DarkNavigationBarTheme;
 import com.kongzue.baseframework.interfaces.DarkStatusBarTheme;
@@ -91,56 +93,56 @@ public class MainActivity extends BaseActivity {
     private ImageView btnShare;
     private ImageView splitBody;
     private LinearLayout boxBody;
-    private RadioGroup grpStyle;
-    private RadioButton rdoMaterial;
-    private RadioButton rdoIos;
-    private RadioButton rdoKongzue;
-    private RadioButton rdoMiui;
-    private RadioButton rdoMaterialYou;
-    private RadioGroup grpTheme;
-    private RadioButton rdoAuto;
-    private RadioButton rdoLight;
-    private RadioButton rdoDark;
-    private RadioGroup grpMode;
-    private RadioButton rdoModeView;
-    private RadioButton rdoModeWindow;
-    private RadioButton rdoModeDialogFragment;
-    private RadioButton rdoModeFloatingActivity;
-    private TextView btnMessageDialog;
-    private TextView btnSelectDialog;
-    private TextView btnInputDialog;
-    private TextView btnWaitDialog;
-    private TextView btnWaitAndTipDialog;
-    private TextView btnTipSuccess;
-    private TextView btnTipWarning;
-    private TextView btnTipError;
-    private TextView btnTipProgress;
-    private TextView btnPoptip;
-    private TextView btnPoptipBigMessage;
-    private TextView btnPoptipSuccess;
-    private TextView btnPoptipWarning;
-    private TextView btnPoptipError;
-    private TextView btnPopnotification;
-    private TextView btnPopnotificationBigMessage;
-    private TextView btnPopnotificationOverlay;
-    private TextView btnBottomDialog;
-    private TextView btnBottomMenu;
-    private TextView btnBottomReply;
-    private TextView btnBottomSelectMenu;
-    private TextView btnBottomMultiSelectMenu;
-    private TextView btnBottomCustomRecycleView;
-    private TextView btnCustomMessageDialog;
-    private TextView btnCustomInputDialog;
-    private TextView btnCustomBottomMenu;
-    private TextView btnCustomDialog;
-    private TextView btnCustomDialogAlign;
-    private TextView btnFullScreenDialogWebPage;
-    private TextView btnFullScreenDialogLogin;
-    private TextView btnFullScreenDialogFragment;
-    private TextView btnContextMenu;
+    private MaterialButtonToggleGroup grpStyle;
+    private MaterialButton rdoMaterial;
+    private MaterialButton rdoIos;
+    private MaterialButton rdoKongzue;
+    private MaterialButton rdoMiui;
+    private MaterialButton rdoMaterialYou;
+    private MaterialButtonToggleGroup grpTheme;
+    private MaterialButton rdoAuto;
+    private MaterialButton rdoLight;
+    private MaterialButton rdoDark;
+    private MaterialButtonToggleGroup grpMode;
+    private MaterialButton rdoModeView;
+    private MaterialButton rdoModeWindow;
+    private MaterialButton rdoModeDialogFragment;
+    private MaterialButton rdoModeFloatingActivity;
+    private MaterialButton btnMessageDialog;
+    private MaterialButton btnSelectDialog;
+    private MaterialButton btnInputDialog;
+    private MaterialButton btnWaitDialog;
+    private MaterialButton btnWaitAndTipDialog;
+    private MaterialButton btnTipSuccess;
+    private MaterialButton btnTipWarning;
+    private MaterialButton btnTipError;
+    private MaterialButton btnTipProgress;
+    private MaterialButton btnPoptip;
+    private MaterialButton btnPoptipBigMessage;
+    private MaterialButton btnPoptipSuccess;
+    private MaterialButton btnPoptipWarning;
+    private MaterialButton btnPoptipError;
+    private MaterialButton btnPopnotification;
+    private MaterialButton btnPopnotificationBigMessage;
+    private MaterialButton btnPopnotificationOverlay;
+    private MaterialButton btnBottomDialog;
+    private MaterialButton btnBottomMenu;
+    private MaterialButton btnBottomReply;
+    private MaterialButton btnBottomSelectMenu;
+    private MaterialButton btnBottomMultiSelectMenu;
+    private MaterialButton btnBottomCustomRecycleView;
+    private MaterialButton btnCustomMessageDialog;
+    private MaterialButton btnCustomInputDialog;
+    private MaterialButton btnCustomBottomMenu;
+    private MaterialButton btnCustomDialog;
+    private MaterialButton btnCustomDialogAlign;
+    private MaterialButton btnFullScreenDialogWebPage;
+    private MaterialButton btnFullScreenDialogLogin;
+    private MaterialButton btnFullScreenDialogFragment;
+    private MaterialButton btnContextMenu;
     private TextView btnSelectMenu;
-    private TextView btnShowBreak;
-    private TextView btnListDialog;
+    private MaterialButton btnShowBreak;
+    private MaterialButton btnListDialog;
     private TextView txtVer;
     
     @Override
@@ -283,9 +285,9 @@ public class MainActivity extends BaseActivity {
     
     @Override
     public void setEvents() {
-        grpMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        grpMode.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
+            public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
                 BaseDialog.cleanAll();
                 switch (checkedId) {
                     case R.id.rdo_mode_view:
@@ -304,9 +306,9 @@ public class MainActivity extends BaseActivity {
             }
         });
         
-        grpTheme.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        grpTheme.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
+            public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
                 switch (checkedId) {
                     case R.id.rdo_auto:
                         DialogX.globalTheme = DialogX.THEME.AUTO;
@@ -320,10 +322,10 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-        
-        grpStyle.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+    
+        grpStyle.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
+            public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
                 DialogX.cancelButtonText = "取消";
                 DialogX.titleTextInfo = null;
                 DialogX.buttonTextInfo = null;

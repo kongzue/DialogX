@@ -93,61 +93,54 @@
                 android:requiresFadingEdge="horizontal"
                 android:scrollbars="none">
 
-                <RadioGroup
+                <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/grp_style"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
+                    app:checkedButton="@+id/rdo_material"
+                    app:singleSelection="true">
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_material"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:checked="true"
-                        android:paddingRight="10dp"
+                        android:layout_height="wrap_content"
                         android:text="Material"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        android:textAllCaps="false" />
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_ios"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:paddingRight="10dp"
+                        android:layout_height="wrap_content"
                         android:text="iOS"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        android:textAllCaps="false" />
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_kongzue"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:paddingRight="10dp"
+                        android:layout_height="wrap_content"
                         android:text="Kongzue"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        android:textAllCaps="false" />
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_miui"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:paddingRight="10dp"
+                        android:layout_height="wrap_content"
                         android:text="MIUI"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        android:textAllCaps="false" />
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_material_you"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:paddingRight="10dp"
+                        android:layout_height="wrap_content"
                         android:text="Material You"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        android:textAllCaps="false" />
 
-                </RadioGroup>
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
             </HorizontalScrollView>
 
@@ -160,43 +153,41 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
-            <RadioGroup
+            <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/grp_theme"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
+                app:checkedButton="@+id/rdo_auto"
+                app:singleSelection="true">
 
-                <RadioButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/rdo_auto"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:padding="10dp"
                     android:text="自动"
-                    android:textColor="#7b000000"
-                    android:textSize="12dp" />
+                    android:textAllCaps="false"
+                    app:icon="@mipmap/img_theme_auto" />
 
-                <RadioButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/rdo_light"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:text="亮色"
-                    android:textColor="#7b000000"
-                    android:textSize="12dp" />
+                    android:textAllCaps="false"
+                    app:icon="@mipmap/img_theme_light" />
 
-                <RadioButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/rdo_dark"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:text="暗色"
-                    android:textColor="#7b000000" />
+                    android:textAllCaps="false"
+                    app:icon="@mipmap/img_theme_night" />
 
-            </RadioGroup>
-
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -214,50 +205,46 @@
                 android:requiresFadingEdge="horizontal"
                 android:scrollbars="none">
 
-                <RadioGroup
+                <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/grp_mode"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:orientation="horizontal">
+                    app:checkedButton="@+id/rdo_mode_view"
+                    app:singleSelection="true">
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_mode_view"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:checked="true"
-                        android:padding="10dp"
+                        android:layout_height="wrap_content"
                         android:text="View"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        android:textAllCaps="false" />
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_mode_window"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:padding="10dp"
+                        android:layout_height="wrap_content"
                         android:text="Window"
-                        android:textColor="#7b000000"
-                        android:textSize="12dp" />
+                        android:textAllCaps="false" />
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_mode_dialogFragment"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:padding="10dp"
+                        android:layout_height="wrap_content"
                         android:text="DialogFragment"
-                        android:textColor="#7b000000" />
+                        android:textAllCaps="false" />
 
-                    <RadioButton
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/rdo_mode_floatingActivity"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:padding="10dp"
+                        android:layout_height="wrap_content"
                         android:text="FloatingActivity"
-                        android:textColor="#7b000000" />
+                        android:textAllCaps="false" />
 
-                </RadioGroup>
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
             </HorizontalScrollView>
 
@@ -270,60 +257,62 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_messageDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
+                    app:icon="@mipmap/img_button_messagedialog"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:text="消息对话框"
-                    android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_selectDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
+                    app:icon="@mipmap/img_button_selectdialog"
                     android:text="选择对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_inputDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
+                    app:icon="@mipmap/img_button_inputdialog"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:text="输入对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -334,32 +323,33 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_waitDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
+                    app:icon="@mipmap/img_button_waiting"
                     android:paddingBottom="10dp"
                     android:text="等待对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_waitAndTipDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
+                    app:icon="@mipmap/img_button_alert"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -367,36 +357,38 @@
                     android:text="等待＋提示对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_tipSuccess"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
+                    app:icon="@mipmap/img_button_right"
                     android:text="完成"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_tipWarning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
+                    app:icon="@mipmap/img_button_warning"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -404,14 +396,15 @@
                     android:text="警告"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_tipError"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:icon="@mipmap/img_button_error"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -419,24 +412,26 @@
                     android:text="错误"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_tipProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
+                    app:icon="@mipmap/img_button_progressing"
                     android:text="模拟进度"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -447,32 +442,33 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_poptip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:text="轻量消息提示"
+                    app:icon="@mipmap/img_button_simple_poptip"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_poptip_bigMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
+                    app:icon="@mipmap/img_button_big_poptip"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -480,36 +476,38 @@
                     android:text="复杂消息提示"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_poptip_success"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
+                    app:icon="@mipmap/img_button_right"
                     android:text="完成"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_poptip_warning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
+                    app:icon="@mipmap/img_button_warning"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -517,14 +515,15 @@
                     android:text="警告"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_poptip_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
+                    app:icon="@mipmap/img_button_error"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -532,36 +531,36 @@
                     android:text="错误"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_popnotification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
-                    android:text="通知样式"
+                    android:text="通知样式提示"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_popnotification_bigMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -569,14 +568,14 @@
                     android:text="复杂通知样式"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_popnotification_overlay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -584,8 +583,9 @@
                     android:text="跨界面测试"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
+            </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -596,17 +596,16 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_bottom_dialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -614,14 +613,14 @@
                     android:text="底部对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_bottom_menu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -629,14 +628,14 @@
                     android:text="底部菜单"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_bottom_reply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -644,21 +643,21 @@
                     android:text="底部输入框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_bottom_select_menu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -666,14 +665,14 @@
                     android:text="底部单选菜单"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_bottom_multiSelect_menu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -681,31 +680,33 @@
                     android:text="底部多选菜单"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_bottom_custom_recycleView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:text="底部自定义滑动布局 RecycleView"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
+            </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -716,17 +717,16 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_customMessageDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -734,14 +734,14 @@
                     android:text="对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_customInputDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -749,14 +749,14 @@
                     android:text="输入框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_customBottomMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -764,9 +764,10 @@
                     android:text="底部菜单"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -777,35 +778,42 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/btn_customDialog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/rect_button"
-                android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="10dp"
-                android:text="完全自定义对话框"
-                android:textColor="@color/white"
-                android:textSize="13dp"
-                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/btn_customDialogAlign"
-                android:layout_width="wrap_content"
+            <com.kongzue.stacklabelview.StackLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/rect_button"
-                android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="10dp"
-                android:text="对话框显示在按钮上"
-                android:textColor="@color/white"
-                android:textSize="13dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_customDialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="完全自定义对话框"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_customDialogAlign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="对话框显示在按钮上"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
+            </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -817,17 +825,16 @@
                 android:textStyle="bold" />
 
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_fullScreenDialog_webPage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -835,14 +842,14 @@
                     android:text="显示一个网页"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_fullScreenDialog_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -850,24 +857,26 @@
                     android:text="登录"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_fullScreenDialog_fragment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:text="Fragment 全屏对话框"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -883,13 +892,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_contextMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_marginTop="15dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -897,7 +905,8 @@
                     android:text="基础菜单"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
                 <TextView
                     android:id="@+id/btn_selectMenu"
@@ -926,32 +935,32 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <com.kongzue.stacklabelview.StackLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_showBreak"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:text="显示Dialog时关闭Activity"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_listDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:background="@drawable/rect_button"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -959,9 +968,10 @@
                     android:text="队列对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
 
-            </LinearLayout>
+            </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
                 android:id="@+id/txt_ver"
