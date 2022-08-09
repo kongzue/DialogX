@@ -910,7 +910,7 @@ public class MainActivity extends BaseActivity {
                         .setMaskColor(getResources().getColor(R.color.black30))
                         .setEnterAnimResId(R.anim.anim_custom_pop_enter)
                         .setExitAnimResId(R.anim.anim_custom_pop_exit)
-                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP)
+                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP|Gravity.CENTER_HORIZONTAL)
                         .setBaseViewMarginBottom(-dip2px(45))
                         .show();
             }
