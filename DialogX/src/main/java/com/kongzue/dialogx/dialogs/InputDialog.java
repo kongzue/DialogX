@@ -604,7 +604,7 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
-    public InputDialog setBackgroundRadius(float radiusPx) {
+    public InputDialog setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;

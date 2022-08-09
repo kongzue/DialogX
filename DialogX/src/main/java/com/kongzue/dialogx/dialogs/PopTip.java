@@ -1117,13 +1117,13 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         return this;
     }
     
-    public PopTip setBackgroundRadius(float radiusPx) {
+    public PopTip setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
     
-    public float getBackgroundRadius() {
+    public float getRadius() {
         return backgroundRadius;
     }
 }

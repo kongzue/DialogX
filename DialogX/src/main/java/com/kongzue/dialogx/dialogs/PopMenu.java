@@ -962,13 +962,13 @@ public class PopMenu extends BaseDialog {
         return this;
     }
     
-    public PopMenu setBackgroundRadius(float radiusPx) {
+    public PopMenu setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
     
-    public float getBackgroundRadius() {
+    public float getRadius() {
         return backgroundRadius;
     }
 }

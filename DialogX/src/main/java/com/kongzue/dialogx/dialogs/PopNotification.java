@@ -1270,13 +1270,13 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         return this;
     }
     
-    public PopNotification setBackgroundRadius(float radiusPx) {
+    public PopNotification setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
     
-    public float getBackgroundRadius() {
+    public float getRadius() {
         return backgroundRadius;
     }
 }

@@ -1046,13 +1046,13 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
     
-    public WaitDialog setBackgroundRadius(float radiusPx) {
+    public WaitDialog setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
     
-    public float getBackgroundRadius() {
+    public float getRadius() {
         return backgroundRadius;
     }
 }

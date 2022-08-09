@@ -1173,13 +1173,13 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
-    public MessageDialog setBackgroundRadius(float radiusPx) {
+    public MessageDialog setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
     
-    public float getBackgroundRadius() {
+    public float getRadius() {
         return backgroundRadius;
     }
 }

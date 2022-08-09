@@ -1037,13 +1037,13 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
-    public BottomDialog setBackgroundRadius(float radiusPx) {
+    public BottomDialog setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
     
-    public float getBackgroundRadius() {
+    public float getRadius() {
         return backgroundRadius;
     }
 }

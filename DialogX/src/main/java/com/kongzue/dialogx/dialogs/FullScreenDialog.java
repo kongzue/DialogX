@@ -561,13 +561,13 @@ public class FullScreenDialog extends BaseDialog {
         return this;
     }
     
-    public FullScreenDialog setBackgroundRadius(float radiusPx) {
+    public FullScreenDialog setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
     
-    public float getBackgroundRadius() {
+    public float getRadius() {
         return backgroundRadius;
     }
 }

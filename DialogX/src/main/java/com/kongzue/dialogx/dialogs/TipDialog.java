@@ -182,13 +182,13 @@ public class TipDialog extends WaitDialog {
         return this;
     }
     
-    public TipDialog setBackgroundRadius(float radiusPx) {
+    public TipDialog setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
     
-    public float getBackgroundRadius() {
+    public float getRadius() {
         return backgroundRadius;
     }
 }
