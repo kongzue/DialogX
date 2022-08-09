@@ -3,10 +3,13 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Outline;
 import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
@@ -45,6 +48,7 @@ public class FullScreenDialog extends BaseDialog {
     protected OnBindView<FullScreenDialog> onBindView;
     protected BOOLEAN privateCancelable;
     protected boolean hideZoomBackground;
+    protected float backgroundRadius = -1;
     
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener;
@@ -75,7 +79,7 @@ public class FullScreenDialog extends BaseDialog {
         return fullScreenDialog;
     }
     
-    public void show() {
+    public FullScreenDialog show() {
         super.beforeShow();
         if (getDialogView() == null) {
             dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
@@ -83,6 +87,7 @@ public class FullScreenDialog extends BaseDialog {
             if (dialogView != null) dialogView.setTag(me);
         }
         show(dialogView);
+        return this;
     }
     
     public void show(Activity activity) {
@@ -107,12 +112,12 @@ public class FullScreenDialog extends BaseDialog {
         public MaxRelativeLayout bkg;
         public RelativeLayout boxCustom;
         public ScrollController scrollView;
-    
+        
         public DialogImpl setScrollView(ScrollController scrollView) {
             this.scrollView = scrollView;
             return this;
         }
-    
+        
         public DialogImpl(View convertView) {
             if (convertView == null) return;
             imgZoomActivity = convertView.findViewById(R.id.img_zoom_activity);
@@ -271,6 +276,21 @@ public class FullScreenDialog extends BaseDialog {
                 });
             } else {
                 boxRoot.setOnClickListener(null);
+            }
+            if (backgroundRadius > -1) {
+                GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
+                if (gradientDrawable != null) gradientDrawable.setCornerRadii(new float[]{
+                        backgroundRadius, backgroundRadius, backgroundRadius, backgroundRadius, 0, 0, 0, 0
+                });
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    bkg.setOutlineProvider(new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            outline.setRoundRect(0, 0, view.getWidth(), (int) (view.getHeight() + backgroundRadius), backgroundRadius);
+                        }
+                    });
+                    bkg.setClipToOutline(true);
+                }
             }
             
             if (onBindView != null) {
@@ -539,5 +559,15 @@ public class FullScreenDialog extends BaseDialog {
     public FullScreenDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
+    }
+    
+    public FullScreenDialog setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
     }
 }

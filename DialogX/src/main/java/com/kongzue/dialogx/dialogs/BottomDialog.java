@@ -3,11 +3,13 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.graphics.Color;
+import android.graphics.Outline;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,9 +60,10 @@ public class BottomDialog extends BaseDialog {
     protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> otherButtonClickListener;
+    protected OnBackgroundMaskClickListener<BottomDialog> onBackgroundMaskClickListener;
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
-    protected OnBackgroundMaskClickListener<BottomDialog> onBackgroundMaskClickListener;
+    protected float backgroundRadius = -1;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -180,7 +183,7 @@ public class BottomDialog extends BaseDialog {
         return bottomDialog;
     }
     
-    public void show() {
+    public BottomDialog show() {
         super.beforeShow();
         if (getDialogView() == null) {
             int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
@@ -193,6 +196,7 @@ public class BottomDialog extends BaseDialog {
             if (dialogView != null) dialogView.setTag(me);
         }
         show(dialogView);
+        return this;
     }
     
     public void show(Activity activity) {
@@ -508,6 +512,21 @@ public class BottomDialog extends BaseDialog {
                     boxRoot.callOnClick();
                 }
             });
+            if (backgroundRadius > -1) {
+                GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
+                if (gradientDrawable != null) gradientDrawable.setCornerRadii(new float[]{
+                        backgroundRadius, backgroundRadius, backgroundRadius, backgroundRadius, 0, 0, 0, 0
+                });
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    bkg.setOutlineProvider(new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            outline.setRoundRect(0, 0, view.getWidth(), (int) (view.getHeight() + backgroundRadius), backgroundRadius);
+                        }
+                    });
+                    bkg.setClipToOutline(true);
+                }
+            }
             
             if (maskColor != -1) {
                 boxRoot.setBackgroundColor(maskColor);
@@ -1016,5 +1035,15 @@ public class BottomDialog extends BaseDialog {
     public BottomDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<BottomDialog> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
+    }
+    
+    public BottomDialog setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
     }
 }

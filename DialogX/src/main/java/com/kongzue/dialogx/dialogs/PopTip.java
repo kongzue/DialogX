@@ -2,11 +2,14 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Outline;
 import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -67,6 +70,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     protected OnDialogButtonClickListener<PopTip> onButtonClickListener;
     protected OnDialogButtonClickListener<PopTip> onPopTipClickListener;
     protected BOOLEAN tintIcon;
+    protected float backgroundRadius = -1;
     
     protected int iconResId;
     protected CharSequence message;
@@ -578,6 +582,20 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 }
             } else {
                 imgDialogxPopIcon.setVisibility(View.GONE);
+            }
+            
+            if (backgroundRadius > -1) {
+                GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
+                if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    boxBody.setOutlineProvider(new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), backgroundRadius);
+                        }
+                    });
+                    boxBody.setClipToOutline(true);
+                }
             }
             
             if (onPopTipClickListener != null) {
@@ -1097,5 +1115,15 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         this.tintIcon = tintIcon ? BOOLEAN.TRUE : BOOLEAN.FALSE;
         refreshUI();
         return this;
+    }
+    
+    public PopTip setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
     }
 }

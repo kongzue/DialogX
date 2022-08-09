@@ -181,4 +181,14 @@ public class TipDialog extends WaitDialog {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
+    
+    public TipDialog setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
+    }
 }

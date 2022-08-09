@@ -3,19 +3,21 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,7 +39,6 @@ import com.kongzue.dialogx.util.PopValueAnimator;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
-import com.kongzue.dialogx.util.views.MaxLinearLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     protected OnDialogButtonClickListener<PopNotification> onPopTipClickListener;
     protected boolean autoTintIconInLightOrDarkMode = true;
     protected BOOLEAN tintIcon;
+    protected float backgroundRadius = -1;
     
     protected int iconResId;
     protected Bitmap iconBitmap;
@@ -650,6 +652,20 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 boxCustom.setVisibility(View.VISIBLE);
             } else {
                 boxCustom.setVisibility(View.GONE);
+            }
+            
+            if (backgroundRadius > -1) {
+                GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
+                if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    boxBody.setOutlineProvider(new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), backgroundRadius);
+                        }
+                    });
+                    boxBody.setClipToOutline(true);
+                }
             }
             
             showText(txtDialogxPopTitle, title);
@@ -1252,5 +1268,15 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         this.titleTextInfo = titleTextInfo;
         refreshUI();
         return this;
+    }
+    
+    public PopNotification setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
     }
 }

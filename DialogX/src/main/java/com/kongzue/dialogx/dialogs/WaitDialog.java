@@ -4,10 +4,13 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Outline;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -54,6 +57,7 @@ public class WaitDialog extends BaseDialog {
     protected OnBindView<WaitDialog> onBindView;
     protected int customEnterAnimResId;
     protected int customExitAnimResId;
+    protected float backgroundRadius = -1;
     
     public enum TYPE {
         NONE,
@@ -448,6 +452,20 @@ public class WaitDialog extends BaseDialog {
             if (waitProgress >= 0 && waitProgress <= 1 && oldProgress != waitProgress) {
                 progressView.progress(waitProgress);
                 oldProgress = waitProgress;
+            }
+            if (backgroundRadius > -1) {
+                if (blurView != null) {
+                    blurView.setRadiusPx(backgroundRadius);
+                }
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    bkg.setOutlineProvider(new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), backgroundRadius);
+                        }
+                    });
+                    bkg.setClipToOutline(true);
+                }
             }
             
             showText(txtInfo, message);
@@ -1007,24 +1025,34 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
     
-    public WaitDialog setMessageContent(CharSequence message){
+    public WaitDialog setMessageContent(CharSequence message) {
         this.message = message;
         refreshUI();
         return this;
     }
     
-    public WaitDialog setMessageContent(int messageResId){
+    public WaitDialog setMessageContent(int messageResId) {
         this.message = getString(messageResId);
         refreshUI();
         return this;
     }
     
-    public CharSequence getMessageContent(){
+    public CharSequence getMessageContent() {
         return message;
     }
     
-    public WaitDialog setTipType(TYPE type){
+    public WaitDialog setTipType(TYPE type) {
         showTip(type);
         return this;
+    }
+    
+    public WaitDialog setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
     }
 }

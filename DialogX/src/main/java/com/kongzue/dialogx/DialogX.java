@@ -9,6 +9,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
+import com.kongzue.dialogx.util.DialogListBuilder;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
 
@@ -157,5 +158,9 @@ public class DialogX {
     private static int dip2px(float dpValue) {
         final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+    
+    public static DialogListBuilder showDialogList(BaseDialog... dialogs) {
+        return DialogListBuilder.create(dialogs).show();
     }
 }

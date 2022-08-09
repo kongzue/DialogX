@@ -13,5 +13,5 @@ import com.kongzue.dialogx.dialogs.MessageDialog;
  */
 public interface OnInputDialogButtonClickListener<D extends BaseDialog> extends BaseOnDialogClickCallback{
     
-    boolean onClick(D baseDialog, View v, String inputStr);
+    boolean onClick(D dialog, View v, String inputStr);
 }

@@ -11,6 +11,6 @@ import android.view.View;
  */
 public interface OnDialogButtonClickListener<D extends BaseDialog> extends BaseOnDialogClickCallback{
     
-    boolean onClick(D baseDialog, View v);
+    boolean onClick(D dialog, View v);
     
 }

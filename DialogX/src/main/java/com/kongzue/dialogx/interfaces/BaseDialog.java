@@ -19,7 +19,6 @@ import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,10 +30,10 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.ActivityRunnable;
+import com.kongzue.dialogx.util.DialogListBuilder;
 import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.WindowUtil;
@@ -67,6 +66,7 @@ public abstract class BaseDialog {
     protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
     protected DialogX.IMPL_MODE dialogImplMode = DialogX.implIMPLMode;
     protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
+    private WeakReference<DialogListBuilder> dialogListBuilder;
     
     public static void init(Context context) {
         if (context == null) {
@@ -384,6 +384,9 @@ public abstract class BaseDialog {
                     }
                 }, true);
                 break;
+        }
+        if (baseDialog.getDialogListBuilder() != null && !baseDialog.getDialogListBuilder().isEmpty()) {
+            baseDialog.getDialogListBuilder().showNext();
         }
     }
     
@@ -811,4 +814,25 @@ public abstract class BaseDialog {
         mMainHandler = new WeakReference<>(new Handler(Looper.getMainLooper()));
         return mMainHandler.get();
     }
+    
+    public DialogListBuilder getDialogListBuilder() {
+        if (dialogListBuilder == null) {
+            return null;
+        }
+        return dialogListBuilder.get();
+    }
+    
+    public void setDialogListBuilder(DialogListBuilder dialogListBuilder) {
+        this.dialogListBuilder = new WeakReference<>(dialogListBuilder);
+    }
+    
+    public void cleanDialogList() {
+        this.dialogListBuilder = null;
+    }
+    
+    public boolean isPreShow() {
+        return preShow;
+    }
+    
+    public abstract <D extends BaseDialog> D show();
 }

@@ -140,6 +140,7 @@ public class MainActivity extends BaseActivity {
     private TextView btnContextMenu;
     private TextView btnSelectMenu;
     private TextView btnShowBreak;
+    private TextView btnListDialog;
     private TextView txtVer;
     
     @Override
@@ -198,6 +199,7 @@ public class MainActivity extends BaseActivity {
         btnContextMenu = findViewById(R.id.btn_contextMenu);
         btnSelectMenu = findViewById(R.id.btn_selectMenu);
         btnShowBreak = findViewById(R.id.btn_showBreak);
+        btnListDialog = findViewById(R.id.btn_listDialog);
         txtVer = findViewById(R.id.txt_ver);
     }
     
@@ -748,6 +750,39 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 jump(MainActivity.class, new JumpParameter().put("showBreak", true).put("fromActivity", getInstanceKey()));
+            }
+        });
+    
+        btnListDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogX.showDialogList(
+                        MessageDialog.build().setTitle("提示").setMessage("这是一组消息对话框队列").setOkButton("开始").setCancelButton("取消")
+                                .setCancelButton(new OnDialogButtonClickListener<MessageDialog>() {
+                                    @Override
+                                    public boolean onClick(MessageDialog dialog, View v) {
+                                        dialog.cleanDialogList();
+                                        return false;
+                                    }
+                                }),
+                        PopTip.build().setMessage("每个对话框会依次显示"),
+                        PopNotification.build().setTitle("通知提示").setMessage("直到上一个对话框消失"),
+                        InputDialog.build().setTitle("请注意").setMessage("你必须使用 .build() 方法构建，并保证不要自己执行 .show() 方法").setInputText("输入文字").setOkButton("知道了"),
+                        TipDialog.build().setMessageContent("准备结束...").setTipType(WaitDialog.TYPE.SUCCESS),
+                        BottomDialog.build().setTitle("结束").setMessage("下滑以结束旅程，祝你编码愉快！").setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_dialog) {
+                            @Override
+                            public void onBind(BottomDialog dialog, View v) {
+                                ImageView btnOk;
+                                btnOk = v.findViewById(R.id.btn_ok);
+                                btnOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        })
+                );
             }
         });
         

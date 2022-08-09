@@ -26,8 +26,6 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
-import java.lang.ref.WeakReference;
-
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -102,7 +100,7 @@ public class CustomDialog extends BaseDialog {
         return customDialog;
     }
     
-    public void show() {
+    public CustomDialog show() {
         super.beforeShow();
         if (getDialogView() == null) {
             dialogView = createView(R.layout.layout_dialogx_custom);
@@ -110,6 +108,7 @@ public class CustomDialog extends BaseDialog {
             if (dialogView != null) dialogView.setTag(me);
         }
         show(dialogView);
+        return this;
     }
     
     public void show(Activity activity) {

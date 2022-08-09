@@ -3,6 +3,8 @@ package com.kongzue.dialogx.dialogs;
 import static android.view.View.OVER_SCROLL_NEVER;
 
 import android.animation.ValueAnimator;
+import android.graphics.Outline;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +12,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -70,6 +73,7 @@ public class PopMenu extends BaseDialog {
     protected int height = -1;                                              //指定菜单高度
     protected TextInfo menuTextInfo;
     protected boolean offScreen = false;                                    //超出屏幕
+    protected float backgroundRadius = -1;
     
     protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
     
@@ -193,7 +197,7 @@ public class PopMenu extends BaseDialog {
         return popMenu;
     }
     
-    public void show() {
+    public PopMenu show() {
         super.beforeShow();
         if (getDialogView() == null) {
             int layoutId = isLightTheme() ? R.layout.layout_dialogx_popmenu_material : R.layout.layout_dialogx_popmenu_material_dark;
@@ -238,6 +242,7 @@ public class PopMenu extends BaseDialog {
                 }
             });
         }
+        return this;
     }
     
     protected PopMenuArrayAdapter menuListAdapter;
@@ -592,6 +597,20 @@ public class PopMenu extends BaseDialog {
                 boxRoot.setClickable(false);
             }
             
+            if (backgroundRadius > -1) {
+                GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
+                if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    boxBody.setOutlineProvider(new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), backgroundRadius);
+                        }
+                    });
+                    boxBody.setClipToOutline(true);
+                }
+            }
+            
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
                 boxCustom.setVisibility(View.VISIBLE);
@@ -941,5 +960,15 @@ public class PopMenu extends BaseDialog {
     public PopMenu setTheme(DialogX.THEME theme) {
         this.theme = theme;
         return this;
+    }
+    
+    public PopMenu setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
     }
 }

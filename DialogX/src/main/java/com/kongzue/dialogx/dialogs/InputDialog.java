@@ -603,4 +603,10 @@ public class InputDialog extends MessageDialog {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
+    
+    public InputDialog setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
 }

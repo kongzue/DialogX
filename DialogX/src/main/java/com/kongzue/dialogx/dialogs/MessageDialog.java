@@ -2,6 +2,8 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Outline;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.InputFilter;
@@ -9,6 +11,7 @@ import android.text.InputType;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -79,6 +82,7 @@ public class MessageDialog extends BaseDialog {
     protected String inputText;
     protected String inputHintText;
     protected int maskColor = -1;
+    protected float backgroundRadius = -1;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -207,7 +211,7 @@ public class MessageDialog extends BaseDialog {
     
     protected DialogImpl dialogImpl;
     
-    public void show() {
+    public MessageDialog show() {
         super.beforeShow();
         if (getDialogView() == null) {
             int layoutId = style.layout(isLightTheme());
@@ -218,6 +222,7 @@ public class MessageDialog extends BaseDialog {
             if (dialogView != null) dialogView.setTag(me);
         }
         show(dialogView);
+        return this;
     }
     
     public void show(Activity activity) {
@@ -274,6 +279,7 @@ public class MessageDialog extends BaseDialog {
             btnSelectNegative = convertView.findViewById(R.id.btn_selectNegative);
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
             init();
+            
             dialogImpl = this;
             refreshView();
         }
@@ -491,6 +497,19 @@ public class MessageDialog extends BaseDialog {
             if (maskColor != -1) {
                 boxRoot.setBackgroundColor(maskColor);
                 boxRoot.setBkgAlpha(0f);
+            }
+            if (backgroundRadius > -1) {
+                GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
+                if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    bkg.setOutlineProvider(new ViewOutlineProvider() {
+                        @Override
+                        public void getOutline(View view, Outline outline) {
+                            outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), backgroundRadius);
+                        }
+                    });
+                    bkg.setClipToOutline(true);
+                }
             }
             
             showText(txtDialogTitle, title);
@@ -1152,5 +1171,15 @@ public class MessageDialog extends BaseDialog {
     public MessageDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<MessageDialog> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
+    }
+    
+    public MessageDialog setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
     }
 }

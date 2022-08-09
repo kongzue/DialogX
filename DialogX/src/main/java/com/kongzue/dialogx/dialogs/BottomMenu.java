@@ -1139,4 +1139,14 @@ public class BottomMenu extends BottomDialog {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
+    
+    public BottomMenu setBackgroundRadius(float radiusPx) {
+        backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public float getBackgroundRadius() {
+        return backgroundRadius;
+    }
 }
