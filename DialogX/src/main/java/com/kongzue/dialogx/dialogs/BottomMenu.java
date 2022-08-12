@@ -1,5 +1,8 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1148,5 +1151,23 @@ public class BottomMenu extends BottomDialog {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    public BottomMenu setTitleIcon(Bitmap titleIcon) {
+        this.titleIcon = new BitmapDrawable(getResources(), titleIcon);
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setTitleIcon(int titleIconResId) {
+        this.titleIcon = getResources().getDrawable(titleIconResId);
+        refreshUI();
+        return this;
+    }
+    
+    public BottomMenu setTitleIcon(Drawable titleIcon) {
+        this.titleIcon = titleIcon;
+        refreshUI();
+        return this;
     }
 }

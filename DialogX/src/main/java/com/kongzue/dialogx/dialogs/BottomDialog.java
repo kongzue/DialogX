@@ -3,7 +3,10 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Outline;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -64,6 +67,7 @@ public class BottomDialog extends BaseDialog {
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
     protected float backgroundRadius = -1;
+    protected Drawable titleIcon;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -489,6 +493,13 @@ public class BottomDialog extends BaseDialog {
             useTextInfo(btnCancel, cancelTextInfo);
             useTextInfo(btnSelectOther, otherTextInfo);
             useTextInfo(btnSelectPositive, okTextInfo);
+    
+            if (titleIcon != null) {
+                int size = (int) txtDialogTitle.getTextSize();
+                titleIcon.setBounds(0, 0, size, size);
+                txtDialogTitle.setCompoundDrawablePadding(dip2px(10));
+                txtDialogTitle.setCompoundDrawables(titleIcon, null, null, null);
+            }
             
             if (bkgInterceptTouch) {
                 if (isCancelable()) {
@@ -1045,5 +1056,27 @@ public class BottomDialog extends BaseDialog {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    public Drawable getTitleIcon() {
+        return titleIcon;
+    }
+    
+    public BottomDialog setTitleIcon(Bitmap titleIcon) {
+        this.titleIcon = new BitmapDrawable(getResources(), titleIcon);
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setTitleIcon(int titleIconResId) {
+        this.titleIcon = getResources().getDrawable(titleIconResId);
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setTitleIcon(Drawable titleIcon) {
+        this.titleIcon = titleIcon;
+        refreshUI();
+        return this;
     }
 }

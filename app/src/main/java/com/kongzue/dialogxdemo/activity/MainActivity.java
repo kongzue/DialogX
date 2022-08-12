@@ -422,6 +422,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 MessageDialog.show("标题", "这里是正文内容。", "确定")
+                        .setTitleIcon(R.mipmap.img_demo_avatar)
                         .setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                             @Override
                             public boolean onClick(MessageDialog baseDialog, View v) {

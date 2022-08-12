@@ -2,7 +2,10 @@ package com.kongzue.dialogx.dialogs;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Outline;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -83,6 +86,7 @@ public class MessageDialog extends BaseDialog {
     protected String inputHintText;
     protected int maskColor = -1;
     protected float backgroundRadius = -1;
+    protected Drawable titleIcon;
     
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -533,6 +537,13 @@ public class MessageDialog extends BaseDialog {
             useTextInfo(btnSelectPositive, okTextInfo);
             useTextInfo(btnSelectNegative, cancelTextInfo);
             useTextInfo(btnSelectOther, otherTextInfo);
+            
+            if (titleIcon != null) {
+                int size = (int) txtDialogTitle.getTextSize();
+                titleIcon.setBounds(0, 0, size, size);
+                txtDialogTitle.setCompoundDrawablePadding(dip2px(10));
+                txtDialogTitle.setCompoundDrawables(titleIcon, null, null, null);
+            }
             
             if (inputInfo != null) {
                 if (inputInfo.getMAX_LENGTH() != -1)
@@ -1181,5 +1192,27 @@ public class MessageDialog extends BaseDialog {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    public Drawable getTitleIcon() {
+        return titleIcon;
+    }
+    
+    public MessageDialog setTitleIcon(Bitmap titleIcon) {
+        this.titleIcon = new BitmapDrawable(getResources(), titleIcon);
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setTitleIcon(int titleIconResId) {
+        this.titleIcon = getResources().getDrawable(titleIconResId);
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setTitleIcon(Drawable titleIcon) {
+        this.titleIcon = titleIcon;
+        refreshUI();
+        return this;
     }
 }

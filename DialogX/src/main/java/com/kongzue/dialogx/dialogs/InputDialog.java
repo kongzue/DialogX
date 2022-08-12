@@ -1,5 +1,8 @@
 package com.kongzue.dialogx.dialogs;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
@@ -606,6 +609,24 @@ public class InputDialog extends MessageDialog {
     
     public InputDialog setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setTitleIcon(Bitmap titleIcon) {
+        this.titleIcon = new BitmapDrawable(getResources(), titleIcon);
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setTitleIcon(int titleIconResId) {
+        this.titleIcon = getResources().getDrawable(titleIconResId);
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setTitleIcon(Drawable titleIcon) {
+        this.titleIcon = titleIcon;
         refreshUI();
         return this;
     }
