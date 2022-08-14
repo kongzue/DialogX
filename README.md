@@ -179,6 +179,12 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 请参考文章 [从 DialogV3 迁移至 DialogX](https://github.com/kongzue/DialogX/wiki/%E4%BB%8E-DialogV3-%E8%BF%81%E7%A7%BB%E8%87%B3-DialogX)
 
+
+# ⭐观星者
+
+[![Stargazers over time](https://starchart.cc/kongzue/DialogX.svg)](https://starchart.cc/kongzue/DialogX)
+
+
 # 开源协议
 
 DialogX 遵循 Apache License 2.0 开源协议。
