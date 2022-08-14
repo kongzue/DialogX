@@ -13,7 +13,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -308,7 +307,6 @@ public class ProgressView extends View implements ProgressViewInterface {
         int start = (int) (mCenterY - mRadius * 4 / 10);
         int end = (int) (mCenterX + mRadius * 4 / 10);
         
-        Log.e(">>>", "tickAnimatorValue: " + tickAnimatorValue);
         if (tickAnimatorValue < 0.5f) {
             line1X = (int) (start + (tickAnimatorValue * 2) * (end - start));
             line1Y = (int) (start + (tickAnimatorValue * 2) * (end - start));
