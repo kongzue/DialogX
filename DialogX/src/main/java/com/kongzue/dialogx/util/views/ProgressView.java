@@ -8,13 +8,18 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.Nullable;
@@ -32,6 +37,11 @@ import com.kongzue.dialogx.interfaces.ProgressViewInterface;
  * @license: Apache License 2.0
  */
 public class ProgressView extends View implements ProgressViewInterface {
+    
+    //提示动画持续时间
+    public static long TIP_ANIMATOR_DURATION = 300;
+    //进度动画中的逐渐跟随动画时长
+    public static long PROGRESSING_ANIMATOR_DURATION = 1000;
     
     public static final int STATUS_LOADING = 0;
     public static final int STATUS_SUCCESS = 1;
@@ -56,11 +66,6 @@ public class ProgressView extends View implements ProgressViewInterface {
     
     public ProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(attrs);
-    }
-    
-    public ProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs);
     }
     
@@ -208,8 +213,32 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         if (tickShowRunnable != null) {
             tickShowRunnable.run();
-            if (DialogX.useHaptic) performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             tickShowRunnable = null;
+            
+            if (DialogX.useHaptic) {
+                switch (status) {
+                    case STATUS_SUCCESS:
+                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        break;
+                    case STATUS_WARNING:
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                            }
+                        }, (long) (TIP_ANIMATOR_DURATION * 0.8f));
+                        break;
+                    case STATUS_ERROR:
+                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                            }
+                        }, (long) (TIP_ANIMATOR_DURATION * 0.5f));
+                        break;
+                }
+            }
         }
         switch (status) {
             case STATUS_SUCCESS:
@@ -229,93 +258,70 @@ public class ProgressView extends View implements ProgressViewInterface {
     private int line2X = 0;
     private int line2Y = 0;
     
-    private int tickStep = 0;
+    private ValueAnimator tickAnimator;
+    private float tickAnimatorValue;
     
     //绘制对号
     private void showSuccessTick(Canvas canvas) {
-        int tickLeftPoint = (int) (mCenterX - mRadius * 1 / 2);
-        int tickTurnLeftPoint = (int) (mCenterX - mRadius / 10);
-        int tickRightPoint = (int) (mRadius * 0.99f);
-        int speed = 2;
-        switch (tickStep) {
-            case 0:
-                if (tickLeftPoint + line1X < tickTurnLeftPoint) {
-                    line1X = line1X + speed;
-                    line1Y = line1Y + speed;
-                } else {
-                    line2X = line1X;
-                    line2Y = line1Y;
-                    tickStep = 1;
-                }
-                break;
-            case 1:
-                if (line2X < tickRightPoint) {
-                    line2X = line2X + 4;
-                    line2Y = line2Y - 5;
-                }
-                break;
-        }
-        canvas.drawLine(tickLeftPoint, mCenterY, tickLeftPoint + line1X, mCenterY + line1Y, mPaint);
-        canvas.drawLine(tickLeftPoint + line1X, mCenterY + line1Y, tickLeftPoint + line2X, mCenterY + line2Y, mPaint);
+        int verticalAxisOffset = (int) (mRadius / 20);       //纵轴向下偏移量
+        int tickTurnLeftPoint = (int) (mCenterX - mRadius / 10 - verticalAxisOffset);       //转折点
+        int startX = (int) (mCenterX - mRadius / 2);
+        int startY = (int) (mCenterY + verticalAxisOffset);
+        int endX = (int) (mCenterX + mRadius / 2);
+        int tickAnimatorX = (int) (startX + ((endX - startX) * tickAnimatorValue));
         
-        postInvalidateDelayed(1);
+        Path path = new Path();
+        path.moveTo(startX, startY);
+        if (tickAnimatorX < tickTurnLeftPoint) {
+            line1X = tickAnimatorX;
+            line1Y = (int) (startY + (tickAnimatorX - startX));
+            path.lineTo(line1X, line1Y);
+        } else {
+            line1X = tickTurnLeftPoint;
+            line1Y = (int) (startY + (line1X - startX));
+            path.lineTo(line1X, line1Y);
+            
+            line2X = tickAnimatorX;
+            line2Y = line1Y - (tickAnimatorX - line1X);
+            path.lineTo(line2X, line2Y);
+        }
+        canvas.drawPath(path, mPaint);
     }
     
     //绘制感叹号
     private void showWarningTick(Canvas canvas) {
-        int tickLeftPoint = (int) mCenterX;
-        int line1StartY = (int) (mCenterY - mRadius * 1 / 2);
-        int line1EndY = (int) (mCenterY + mRadius * 1 / 8);
-        int line2StartY = (int) (mCenterY + mRadius * 3 / 7);
-        int speed = 4;
-        switch (tickStep) {
-            case 0:
-                if (line1Y < line1EndY - line1StartY) {
-                    line1Y = line1Y + speed;
-                } else {
-                    line1Y = line1EndY - line1StartY;
-                    tickStep = 1;
-                }
-                break;
-            case 1:
-                if (line2Y != line2StartY) {
-                    canvas.drawLine(tickLeftPoint, line2StartY, tickLeftPoint, line2StartY + 1, mPaint);
-                }
-                break;
+        int x = (int) mCenterX;
+        int startY = (int) (mCenterY - mRadius * 1 / 2);
+        int endY = (int) (mCenterY + mRadius * 1 / 8);
+        int line2Y = (int) (mCenterY + mRadius * 3 / 7);
+        
+        if (tickAnimatorValue < 0.9f) {
+            canvas.drawLine(x, startY, x, startY + (endY - startY) * tickAnimatorValue, mPaint);
+        } else {
+            canvas.drawLine(x, startY, x, endY, mPaint);
+            canvas.drawLine(x, line2Y, x, line2Y + 1, mPaint);
         }
-        canvas.drawLine(tickLeftPoint, line1StartY, tickLeftPoint, line1StartY + line1Y, mPaint);
-        postInvalidateDelayed(tickStep == 1 ? 100 : 1);
     }
     
     //绘制错误符号
     private void showErrorTick(Canvas canvas) {
-        int tickLeftPoint = (int) (mCenterX - mRadius * 4 / 10);
-        int tickRightPoint = (int) (mCenterX + mRadius * 4 / 10);
-        int tickTopPoint = (int) (mCenterY - mRadius * 4 / 10);
-        int speed = 4;
+        int start = (int) (mCenterY - mRadius * 4 / 10);
+        int end = (int) (mCenterX + mRadius * 4 / 10);
         
-        switch (tickStep) {
-            case 0:
-                if (tickRightPoint - line1X > tickLeftPoint) {
-                    line1X = line1X + speed;
-                    line1Y = line1Y + speed;
-                } else {
-                    tickStep = 1;
-                    canvas.drawLine(tickRightPoint, tickTopPoint, tickRightPoint - line1X, tickTopPoint + line1Y, mPaint);
-                    postInvalidateDelayed(150);
-                    return;
-                }
-                break;
-            case 1:
-                if (tickLeftPoint + line2X < tickRightPoint) {
-                    line2X = line2X + speed;
-                    line2Y = line2Y + speed;
-                }
-                canvas.drawLine(tickLeftPoint, tickTopPoint, tickLeftPoint + line2X, tickTopPoint + line2Y, mPaint);
-                break;
+        Log.e(">>>", "tickAnimatorValue: " + tickAnimatorValue);
+        if (tickAnimatorValue < 0.5f) {
+            line1X = (int) (start + (tickAnimatorValue * 2) * (end - start));
+            line1Y = (int) (start + (tickAnimatorValue * 2) * (end - start));
+            canvas.drawLine(start, start, line1X, line1Y, mPaint);
+        } else {
+            line1X = (int) (start + (tickAnimatorValue * 2) * (end - start));
+            line1Y = (int) (start + (tickAnimatorValue * 2) * (end - start));
+            canvas.drawLine(start, start, end, end, mPaint);
+            
+            line2X = (int) (end - ((tickAnimatorValue - 0.5f) * 2) * (end - start));
+            line2Y = (int) (start + ((tickAnimatorValue - 0.5f) * 2) * (end - start));
+            canvas.drawLine(end, start, line2X, line2Y, mPaint);
         }
-        canvas.drawLine(tickRightPoint, tickTopPoint, tickRightPoint - line1X, tickTopPoint + line1Y, mPaint);
-        postInvalidateDelayed(1);
     }
     
     private TimeInterpolator interpolator;
@@ -327,18 +333,13 @@ public class ProgressView extends View implements ProgressViewInterface {
             waitProgressingRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    tickStep = 0;
                     successStep = 1;
-                    interpolator = new AccelerateDecelerateInterpolator();
-                    status = STATUS_SUCCESS;
+                    initTipAnimator(STATUS_SUCCESS, new AccelerateDecelerateInterpolator());
                 }
             };
             return;
         }
-        tickStep = 0;
-        interpolator = new AccelerateDecelerateInterpolator();
-        status = STATUS_SUCCESS;
-        invalidate();
+        initTipAnimator(STATUS_SUCCESS, new AccelerateDecelerateInterpolator());
     }
     
     public void warning() {
@@ -347,18 +348,12 @@ public class ProgressView extends View implements ProgressViewInterface {
             waitProgressingRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    tickStep = 0;
-                    successStep = 1;
-                    interpolator = new DecelerateInterpolator(2);
-                    status = STATUS_WARNING;
+                    initTipAnimator(STATUS_WARNING, new DecelerateInterpolator(2));
                 }
             };
             return;
         }
-        tickStep = 0;
-        interpolator = new DecelerateInterpolator(2);
-        status = STATUS_WARNING;
-        invalidate();
+        initTipAnimator(STATUS_WARNING, new AccelerateInterpolator(2f));
     }
     
     public void error() {
@@ -367,18 +362,32 @@ public class ProgressView extends View implements ProgressViewInterface {
             waitProgressingRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    tickStep = 0;
-                    successStep = 1;
-                    interpolator = new DecelerateInterpolator(2);
-                    status = STATUS_ERROR;
+                    initTipAnimator(STATUS_ERROR, new DecelerateInterpolator(2));
                 }
             };
             return;
         }
-        tickStep = 0;
-        interpolator = new DecelerateInterpolator(2);
-        status = STATUS_ERROR;
-        invalidate();
+        initTipAnimator(STATUS_ERROR, new DecelerateInterpolator(2));
+    }
+    
+    private void initTipAnimator(int s, Interpolator i) {
+        interpolator = i;
+        status = s;
+        
+        if (tickAnimator != null) {
+            tickAnimator.cancel();
+            tickAnimator = null;
+        }
+        tickAnimator = ValueAnimator.ofFloat(0f, 1f);
+        tickAnimator.setDuration(TIP_ANIMATOR_DURATION);
+        tickAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                tickAnimatorValue = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        });
+        tickAnimator.start();
     }
     
     public void progress(float progress) {
@@ -388,7 +397,7 @@ public class ProgressView extends View implements ProgressViewInterface {
             currentRotateDegrees = 0;
         }
         rotateAnimator = ValueAnimator.ofFloat(currentRotateDegrees, 365 * progress);
-        rotateAnimator.setDuration(1000);
+        rotateAnimator.setDuration(PROGRESSING_ANIMATOR_DURATION);
         rotateAnimator.setInterpolator(new DecelerateInterpolator(2));
         rotateAnimator.setRepeatCount(0);
         rotateAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

@@ -49,6 +49,7 @@ public class FullScreenDialog extends BaseDialog {
     protected BOOLEAN privateCancelable;
     protected boolean hideZoomBackground;
     protected float backgroundRadius = -1;
+    protected boolean allowInterceptTouch = true;
     
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener;
@@ -569,5 +570,15 @@ public class FullScreenDialog extends BaseDialog {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    public boolean isAllowInterceptTouch() {
+        return allowInterceptTouch;
+    }
+    
+    public FullScreenDialog setAllowInterceptTouch(boolean allowInterceptTouch) {
+        this.allowInterceptTouch = allowInterceptTouch;
+        refreshUI();
+        return this;
     }
 }
