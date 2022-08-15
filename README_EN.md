@@ -1,3 +1,5 @@
+🌐 View [简体中文文档](https://github.com/kongzue/DialogX/blob/master/README.md) | [繁體中文文檔](https://github.com/kongzue/DialogX/blob/master/README_TC.md)
+
 <div align=center>    
     <img src="https://github.com/kongzue/DialogX/raw/master/readme/img_logo_dialogx.jpg" width="150">    
     <center><h1>Kongzue DialogX</h1></center> 
