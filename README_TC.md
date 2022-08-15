@@ -5,8 +5,6 @@
 
 經過三代的更迭，全新的 Kongzue DialogX 已經到來，不僅僅保留了以往的優勢，更帶來了更靈活的擴展性和全新的流暢體驗。
 
-🌐 View [English Document](https://github.com/kongzue/DialogX/blob/master/README_EN.md)
-
 <a href="https://github.com/kongzue/dialogX/">
 <img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
 </a> 
