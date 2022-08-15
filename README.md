@@ -206,6 +206,8 @@ limitations under the License.
 ```
 
 # 贡献者
+感谢所有为 DialogX 做出贡献的人！
+
 <a href="https://github.com/kongzue/DialogX/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=kongzue/DialogX" />
 </a>
