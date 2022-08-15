@@ -3,9 +3,9 @@
     <center><h1>Kongzue DialogX</h1></center> 
 </div>
 
-🌐 View [English Document](https://github.com/kongzue/DialogX/blob/master/README_EN.md)
-
 经过三代的更迭，全新的 Kongzue DialogX 已经到来，不仅仅保留了以往的优势，更带来了更灵活的扩展性和全新的流畅体验。
+
+🌐 View [English Document](https://github.com/kongzue/DialogX/blob/master/README_EN.md)
 
 <a href="https://github.com/kongzue/dialogX/">
 <img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
