@@ -1,7 +1,5 @@
 package com.kongzue.dialogxdemo;
 
-import android.graphics.Color;
-
 import com.kongzue.baseframework.BaseApp;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.style.MaterialStyle;
