@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.NoTouchInterface;
 
 import static android.view.WindowManager.LayoutParams.*;
 
@@ -85,7 +86,7 @@ public class WindowUtil {
                 public boolean onTouch(View v, MotionEvent event) {
                     for (int i = BaseDialog.getRunningDialogList().size() - 1; i >= 0; i--) {
                         BaseDialog baseDialog = BaseDialog.getRunningDialogList().get(i);
-                        if (!(baseDialog instanceof PopTip) && baseDialog.getOwnActivity() == activity) {
+                        if (!(baseDialog instanceof NoTouchInterface) && baseDialog.getOwnActivity() == activity) {
                             if (baseDialog.getDialogView() == null) {
                                 return false;
                             }

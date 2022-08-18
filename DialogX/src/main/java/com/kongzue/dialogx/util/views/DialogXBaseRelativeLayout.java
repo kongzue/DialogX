@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,16 +90,18 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     
     @Override
     protected boolean fitSystemWindows(Rect insets) {
-        if (DialogX.useActivityLayoutTranslationNavigationBar)
+        if (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
             paddingView(insets.left, insets.top, insets.right, insets.bottom);
+        }
         return super.fitSystemWindows(insets);
     }
     
     @Override
     public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (DialogX.useActivityLayoutTranslationNavigationBar)
+            if (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
                 paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            }
         }
         return super.dispatchApplyWindowInsets(insets);
     }

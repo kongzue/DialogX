@@ -6,6 +6,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.NoTouchInterface;
 
 import java.lang.ref.WeakReference;
 
@@ -76,10 +78,12 @@ public class DialogFragmentImpl extends DialogFragment {
         dialogView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                for (BaseDialog baseDialog : BaseDialog.getRunningDialogList()) {
-                    if (baseDialog.getOwnActivity() == activity) {
-                        if (!(baseDialog instanceof PopTip)) {
-                            return false;
+                for (BaseDialog dialog : BaseDialog.getRunningDialogList()) {
+                    if (dialog.getOwnActivity() == activity && dialog != baseDialog) {
+                        if (!(dialog instanceof NoTouchInterface)) {
+                            Log.e(">>>", "onTouch: "+dialog );
+                            dialog.getDialogView().dispatchTouchEvent(event);
+                            return true;
                         }
                     }
                 }

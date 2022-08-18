@@ -60,6 +60,12 @@ public class WaitDialog extends BaseDialog {
     protected float backgroundRadius = -1;
     
     public enum TYPE {
+        /**
+         * @deprecated 不建议使用，禁止使用此方法。
+         * 此类型等同于直接使用 WaitDialog，因此请勿使用 TipDialog 并指定使用 TYPE.NONE，
+         * 如有需要，请直接使用： WaitDialog.show(...)
+         */
+        @Deprecated
         NONE,
         SUCCESS,
         WARNING,

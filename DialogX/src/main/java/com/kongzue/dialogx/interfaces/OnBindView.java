@@ -154,25 +154,32 @@ public abstract class OnBindView<D> {
         }
         parentView.addView(getCustomView(), lp);
         onBind((D) dialog, getCustomView());
-        if (fragment != null || supportFragment != null) getCustomView().post(new Runnable() {
-            @Override
-            public void run() {
-                if (fragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof AppCompatActivity) {
-                    AppCompatActivity appCompatActivity = (AppCompatActivity) BaseDialog.getTopActivity();
-                    androidx.fragment.app.FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
-                    transaction.add(R.id.id_frame_layout_custom, fragment);
-                    transaction.commit();
-                    onFragmentBind((D) dialog, getCustomView(), fragment, appCompatActivity.getSupportFragmentManager());
-                }
-                if (supportFragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof Activity) {
-                    Activity activity = (Activity) BaseDialog.getTopActivity();
-                    android.app.FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
-                    transaction.add(R.id.id_frame_layout_custom, supportFragment);
-                    transaction.commit();
-                    onFragmentBind((D) dialog, getCustomView(), supportFragment, activity.getFragmentManager());
-                }
+        if (fragment != null || supportFragment != null){
+            if (dialog.getDialogImplMode()!= DialogX.IMPL_MODE.VIEW){
+                BaseDialog.error(dialog.dialogKey() + "非 VIEW 实现模式不支持 fragment 作为子布局显示。\n" +
+                        "其原因为 Window 中不存在 FragmentManager，无法对子布局中的 fragment 进行管理。");
+                return;
             }
-        });
+            getCustomView().post(new Runnable() {
+                @Override
+                public void run() {
+                    if (fragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof AppCompatActivity) {
+                        AppCompatActivity appCompatActivity = (AppCompatActivity) BaseDialog.getTopActivity();
+                        androidx.fragment.app.FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
+                        transaction.add(R.id.id_frame_layout_custom, fragment);
+                        transaction.commit();
+                        onFragmentBind((D) dialog, getCustomView(), fragment, appCompatActivity.getSupportFragmentManager());
+                    }
+                    if (supportFragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof Activity) {
+                        Activity activity = (Activity) BaseDialog.getTopActivity();
+                        android.app.FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
+                        transaction.add(R.id.id_frame_layout_custom, supportFragment);
+                        transaction.commit();
+                        onFragmentBind((D) dialog, getCustomView(), supportFragment, activity.getFragmentManager());
+                    }
+                }
+            });
+        }
     }
     
     private Runnable waitBindRunnable;

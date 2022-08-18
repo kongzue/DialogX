@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -28,7 +29,7 @@ import java.lang.ref.WeakReference;
  * @mail: myzcxhh@live.cn
  * @createTime: 2019/11/17 23:53
  */
-public class ActivityScreenShotImageView extends AppCompatImageView {
+public class ActivityScreenShotImageView extends ImageView {
     
     float width, height, mRadius;
     
