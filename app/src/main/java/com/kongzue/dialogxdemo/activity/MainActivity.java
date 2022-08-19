@@ -813,7 +813,7 @@ public class MainActivity extends BaseActivity {
                         initFullScreenLoginDemo(dialog);
                     }
                 };
-                FullScreenDialog.show(onBindView).setAllowInterceptTouch(false);
+                FullScreenDialog.show(onBindView);
             }
         });
         

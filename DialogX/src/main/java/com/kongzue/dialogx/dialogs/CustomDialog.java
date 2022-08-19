@@ -123,7 +123,7 @@ public class CustomDialog extends BaseDialog {
         return this;
     }
     
-    public void show(Activity activity) {
+    public CustomDialog show(Activity activity) {
         super.beforeShow();
         if (getDialogView() == null) {
             dialogView = createView(R.layout.layout_dialogx_custom);
@@ -131,6 +131,7 @@ public class CustomDialog extends BaseDialog {
             if (dialogView != null) dialogView.setTag(me);
         }
         show(activity, dialogView);
+        return this;
     }
     
     public class DialogImpl implements DialogConvertViewInterface {
