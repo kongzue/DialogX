@@ -79,6 +79,12 @@ DialogX contains the following dialog components：
   ![简单提示 PopTip](https://github.com/kongzue/DialogX/raw/master/readme/poptip.png)
 
   Provides a Toast-like text prompt feature, but with more powerful customization properties. You can set text tips, icons, and a control button, and you can set a continuous display or define the length of time it will automatically disappear. popTip is a non-blocking tip, which means that the user can still operate the interface while popTip is displayed.
+  
+- [PopNotification](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E9%80%9A%E7%9F%A5%E6%8F%90%E7%A4%BA-PopNotification)
+
+  ![简单通知提示 PopNotification](https://github.com/kongzue/DialogX/raw/master/readme/popnotification.png)
+
+  This component is not a replacement for Notification, does not support cross-platform display by default (you can use the hover permission to allow it), and is only used for in-app notification alerts, with more powerful customization properties. PopNotification is a non-blocking alert, meaning that the user can still operate the interface while PopNotification is displayed.
 
 - [FullScreenDialog](https://github.com/kongzue/DialogX/wiki/%E5%85%A8%E5%B1%8F%E5%AF%B9%E8%AF%9D%E6%A1%86-FullScreenDialog)
 
