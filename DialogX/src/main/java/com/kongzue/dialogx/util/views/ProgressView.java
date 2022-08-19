@@ -13,6 +13,7 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -188,6 +189,10 @@ public class ProgressView extends View implements ProgressViewInterface {
                         canvas.drawArc(oval, nowLoadingProgressValue, nowLoadingProgressEndAngle, false, mPaint);
                         if (nowLoadingProgressEndAngle - 360 >= nowLoadingProgressValue) {
                             successStep = 1;
+                            if (waitArticulationAnimationRunnable != null) {
+                                waitArticulationAnimationRunnable.run();
+                                waitArticulationAnimationRunnable = null;
+                            }
                         }
                         break;
                     case 1:
@@ -197,16 +202,27 @@ public class ProgressView extends View implements ProgressViewInterface {
                 }
                 break;
             case STATUS_PROGRESSING:
-                canvas.drawArc(oval, -90, currentRotateDegrees, false, mPaint);
-                if (currentRotateDegrees == 365 && waitProgressingRunnable != null) {
-                    waitProgressingRunnable.run();
-                    waitProgressingRunnable = null;
+                switch (successStep) {
+                    case 0:
+                        canvas.drawArc(oval, -90, currentRotateDegrees, false, mPaint);
+                        if (currentRotateDegrees == 365) {
+                            successStep = 1;
+                            if (waitArticulationAnimationRunnable != null) {
+                                waitArticulationAnimationRunnable.run();
+                                waitArticulationAnimationRunnable = null;
+                            }
+                        }
+                        break;
+                    case 1:
+                        canvas.drawArc(oval, 0, 360, false, mPaint);
+                        drawDoneMark(status, canvas);
+                        break;
                 }
-                break;
         }
     }
     
     private void drawDoneMark(int status, Canvas canvas) {
+        Log.e(">>>", "drawDoneMark.status: "+status );
         if (rotateAnimator.getInterpolator() != interpolator) {
             rotateAnimator.setInterpolator(interpolator);
         }
@@ -322,16 +338,14 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
     }
     
-    private TimeInterpolator interpolator;
-    private Runnable waitProgressingRunnable;
+    private Interpolator interpolator;
     
     public void success() {
         if (status == STATUS_PROGRESSING) {
             progress(1f);
-            waitProgressingRunnable = new Runnable() {
+            waitArticulationAnimationRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    successStep = 1;
                     initTipAnimator(STATUS_SUCCESS, new AccelerateDecelerateInterpolator());
                 }
             };
@@ -343,10 +357,10 @@ public class ProgressView extends View implements ProgressViewInterface {
     public void warning() {
         if (status == STATUS_PROGRESSING) {
             progress(1f);
-            waitProgressingRunnable = new Runnable() {
+            waitArticulationAnimationRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    initTipAnimator(STATUS_WARNING, new DecelerateInterpolator(2));
+                    initTipAnimator(STATUS_WARNING, new AccelerateInterpolator(2f));
                 }
             };
             return;
@@ -357,7 +371,7 @@ public class ProgressView extends View implements ProgressViewInterface {
     public void error() {
         if (status == STATUS_PROGRESSING) {
             progress(1f);
-            waitProgressingRunnable = new Runnable() {
+            waitArticulationAnimationRunnable = new Runnable() {
                 @Override
                 public void run() {
                     initTipAnimator(STATUS_ERROR, new DecelerateInterpolator(2));
@@ -368,20 +382,33 @@ public class ProgressView extends View implements ProgressViewInterface {
         initTipAnimator(STATUS_ERROR, new DecelerateInterpolator(2));
     }
     
+    Runnable waitArticulationAnimationRunnable;     //等待衔接完成后再执行
+    
     private void initTipAnimator(int s, Interpolator i) {
         interpolator = i;
         status = s;
+        if (successStep == 0) {
+            waitArticulationAnimationRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    initTipAnimator(status, interpolator);
+                }
+            };
+            return;
+        }
         
         if (tickAnimator != null) {
             tickAnimator.cancel();
             tickAnimator = null;
         }
+        tickAnimatorValue = 0;
         tickAnimator = ValueAnimator.ofFloat(0f, 1f);
         tickAnimator.setDuration(TIP_ANIMATOR_DURATION);
         tickAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 tickAnimatorValue = (float) animation.getAnimatedValue();
+                Log.e(">>>", "onAnimationUpdate: " + tickAnimatorValue);
                 invalidate();
             }
         });

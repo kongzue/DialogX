@@ -66,9 +66,21 @@ public class CustomDialog extends BaseDialog {
     public enum ALIGN {
         CENTER,
         TOP,
+        TOP_CENTER,
+        TOP_LEFT,
+        TOP_RIGHT,
         BOTTOM,
+        BOTTOM_CENTER,
+        BOTTOM_LEFT,
+        BOTTOM_RIGHT,
         LEFT,
-        RIGHT
+        LEFT_CENTER,
+        LEFT_TOP,
+        LEFT_BOTTOM,
+        RIGHT,
+        RIGHT_CENTER,
+        RIGHT_TOP,
+        RIGHT_BOTTOM
     }
     
     protected CustomDialog() {
@@ -183,18 +195,30 @@ public class CustomDialog extends BaseDialog {
                             baseView == null) {
                         switch (align) {
                             case TOP:
+                            case TOP_CENTER:
+                            case TOP_LEFT:
+                            case TOP_RIGHT:
                                 enterAnimResId = R.anim.anim_dialogx_top_enter;
                                 exitAnimResId = R.anim.anim_dialogx_top_exit;
                                 break;
                             case BOTTOM:
+                            case BOTTOM_CENTER:
+                            case BOTTOM_LEFT:
+                            case BOTTOM_RIGHT:
                                 enterAnimResId = R.anim.anim_dialogx_bottom_enter;
                                 exitAnimResId = R.anim.anim_dialogx_bottom_exit;
                                 break;
                             case LEFT:
+                            case LEFT_CENTER:
+                            case LEFT_TOP:
+                            case LEFT_BOTTOM:
                                 enterAnimResId = R.anim.anim_dialogx_left_enter;
                                 exitAnimResId = R.anim.anim_dialogx_left_exit;
                                 break;
                             case RIGHT:
+                            case RIGHT_CENTER:
+                            case RIGHT_TOP:
+                            case RIGHT_BOTTOM:
                                 enterAnimResId = R.anim.anim_dialogx_right_enter;
                                 exitAnimResId = R.anim.anim_dialogx_right_exit;
                                 break;
@@ -245,6 +269,7 @@ public class CustomDialog extends BaseDialog {
         }
         
         boolean initSetCustomViewLayoutListener = false;
+        ALIGN alignCache;
         
         @Override
         public void refreshView() {
@@ -305,17 +330,44 @@ public class CustomDialog extends BaseDialog {
             } else {
                 RelativeLayout.LayoutParams rlp;
                 rlp = ((RelativeLayout.LayoutParams) boxCustom.getLayoutParams());
-                if (rlp == null) {
+                if (rlp == null || (alignCache != null && alignCache != align)) {
                     rlp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 }
                 switch (align) {
-                    case TOP:
+                    case TOP_LEFT:
+                    case LEFT_TOP:
                         rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
                         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                         break;
-                    case BOTTOM:
+                    case TOP:
+                    case TOP_CENTER:
+                        rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        rlp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                        break;
+                    case TOP_RIGHT:
+                    case RIGHT_TOP:
+                        rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        break;
+                    case BOTTOM_LEFT:
+                    case LEFT_BOTTOM:
                         rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
                         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        break;
+                    case BOTTOM:
+                    case BOTTOM_CENTER:
+                        rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        rlp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                        break;
+                    case BOTTOM_RIGHT:
+                    case RIGHT_BOTTOM:
+                        rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                         break;
                     case CENTER:
                         rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -323,16 +375,19 @@ public class CustomDialog extends BaseDialog {
                         rlp.addRule(RelativeLayout.CENTER_IN_PARENT);
                         break;
                     case LEFT:
+                    case LEFT_CENTER:
                         rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
                         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                        rlp.addRule(RelativeLayout.CENTER_VERTICAL);
                         break;
                     case RIGHT:
+                    case RIGHT_CENTER:
                         rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                         rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        rlp.addRule(RelativeLayout.CENTER_VERTICAL);
                         break;
                 }
+                alignCache = align;
                 boxCustom.setLayoutParams(rlp);
             }
             
@@ -686,44 +741,44 @@ public class CustomDialog extends BaseDialog {
     }
     
     public CustomDialog setBaseViewMargin(int marginLeft, int marginTop,
-                                                  int marginRight, int marginBottom) {
+                                          int marginRight, int marginBottom) {
         this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
         return this;
     }
     
-    public CustomDialog setBaseViewMarginLeft(int marginLeft){
+    public CustomDialog setBaseViewMarginLeft(int marginLeft) {
         this.marginRelativeBaseView[0] = marginLeft;
         return this;
     }
     
-    public CustomDialog setBaseViewMarginTop(int marginTop){
+    public CustomDialog setBaseViewMarginTop(int marginTop) {
         this.marginRelativeBaseView[1] = marginTop;
         return this;
     }
     
-    public CustomDialog setBaseViewMarginRight(int marginRight){
+    public CustomDialog setBaseViewMarginRight(int marginRight) {
         this.marginRelativeBaseView[2] = marginRight;
         return this;
     }
     
-    public CustomDialog setBaseViewMarginBottom(int marginBottom){
+    public CustomDialog setBaseViewMarginBottom(int marginBottom) {
         this.marginRelativeBaseView[3] = marginBottom;
         return this;
     }
     
-    public int getBaseViewMarginLeft(int marginLeft){
+    public int getBaseViewMarginLeft(int marginLeft) {
         return this.marginRelativeBaseView[0];
     }
     
-    public int getBaseViewMarginTop(int marginLeft){
+    public int getBaseViewMarginTop(int marginLeft) {
         return this.marginRelativeBaseView[1];
     }
     
-    public int getBaseViewMarginRight(int marginLeft){
+    public int getBaseViewMarginRight(int marginLeft) {
         return this.marginRelativeBaseView[2];
     }
     
-    public int getBaseViewMarginBottom(int marginLeft){
+    public int getBaseViewMarginBottom(int marginLeft) {
         return this.marginRelativeBaseView[3];
     }
     
