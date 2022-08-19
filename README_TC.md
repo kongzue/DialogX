@@ -76,6 +76,12 @@ DialogX 包含以下對話框組件：
   ![簡單提示 PopTip](https://github.com/kongzue/DialogX/raw/master/readme/poptip.png)
 
   提供一個類似 Toast 的文本提示功能，但它擁有更強大的自訂屬性。你可以設置文本提示、圖示、以及一個控制按鈕，並可以設置持續顯示或定義自動消失的時長。PopTip 是非阻斷式提示，也就是說，在 PopTip 顯示時用戶依然可以操作界面。
+  
+- [簡單通知提示 PopNotification](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E9%80%9A%E7%9F%A5%E6%8F%90%E7%A4%BA-PopNotification)
+
+  ![簡單通知提示 PopNotification](https://github.com/kongzue/DialogX/raw/master/readme/popnotification.png)
+
+  提供一個類似 Notification 的通知樣式提示功能，請注意，此組件並不能取代 Notification，默認不支持不能跨界面顯示（可使用懸浮窗權限設定允許），僅用於應用內通知提示，擁有更強大的自訂屬性。你可以設置文本提示、圖示、以及一個控制按鈕，並可以設置持續顯示或定義自動消失的時長。PopNotification 是非阻斷式提示，也就是說，在 PopNotification 顯示時用戶依然可以操作界面。
 
 - [全螢幕對話框 FullScreenDialog](https://github.com/kongzue/DialogX/wiki/%E5%85%A8%E5%B1%8F%E5%AF%B9%E8%AF%9D%E6%A1%86-FullScreenDialog)
 
