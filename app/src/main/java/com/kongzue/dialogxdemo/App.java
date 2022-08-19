@@ -20,5 +20,6 @@ public class App extends BaseApp<App> {
         DialogX.globalStyle = new MaterialStyle();
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.onlyOnePopTip = false;
+        DialogX.onlyOnePopNotification = false;
     }
 }

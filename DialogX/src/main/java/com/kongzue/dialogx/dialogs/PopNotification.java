@@ -73,7 +73,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     private View dialogView;
     protected DialogXStyle.PopNotificationSettings.ALIGN align;
     protected OnDialogButtonClickListener<PopNotification> onButtonClickListener;
-    protected OnDialogButtonClickListener<PopNotification> onPopTipClickListener;
+    protected OnDialogButtonClickListener<PopNotification> onPopNotificationClickListener;
     protected boolean autoTintIconInLightOrDarkMode = true;
     protected BOOLEAN tintIcon;
     protected float backgroundRadius = -1;
@@ -713,8 +713,8 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             boxBody.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onPopTipClickListener != null) {
-                        if (!onPopTipClickListener.onClick(me, v)) {
+                    if (onPopNotificationClickListener != null) {
+                        if (!onPopNotificationClickListener.onClick(me, v)) {
                             dismiss();
                         }
                     } else {
@@ -1023,12 +1023,12 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         return this;
     }
     
-    public OnDialogButtonClickListener<PopNotification> getOnPopTipClickListener() {
-        return onPopTipClickListener;
+    public OnDialogButtonClickListener<PopNotification> getOnPopNotificationClickListener() {
+        return onPopNotificationClickListener;
     }
     
-    public PopNotification setOnPopTipClickListener(OnDialogButtonClickListener<PopNotification> onPopTipClickListener) {
-        this.onPopTipClickListener = onPopTipClickListener;
+    public PopNotification setOnPopNotificationClickListener(OnDialogButtonClickListener<PopNotification> onPopNotificationClickListener) {
+        this.onPopNotificationClickListener = onPopNotificationClickListener;
         refreshUI();
         return this;
     }
@@ -1202,8 +1202,8 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     public PopNotification iconSuccess() {
         setTintIcon(false);
         int resId = R.mipmap.ico_dialogx_success;
-        if (getStyle().popTipSettings() != null && getStyle().popTipSettings().defaultIconSuccess() != 0) {
-            resId = getStyle().popTipSettings().defaultIconSuccess();
+        if (getStyle().popNotificationSettings() != null && getStyle().popNotificationSettings().defaultIconSuccess() != 0) {
+            resId = getStyle().popNotificationSettings().defaultIconSuccess();
         }
         setIconSize(dip2px(26));
         setIconResId(resId);
@@ -1213,8 +1213,8 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     public PopNotification iconWarning() {
         setTintIcon(false);
         int resId = R.mipmap.ico_dialogx_warning;
-        if (getStyle().popTipSettings() != null && getStyle().popTipSettings().defaultIconWarning() != 0) {
-            resId = getStyle().popTipSettings().defaultIconWarning();
+        if (getStyle().popNotificationSettings() != null && getStyle().popNotificationSettings().defaultIconWarning() != 0) {
+            resId = getStyle().popNotificationSettings().defaultIconWarning();
         }
         setIconSize(dip2px(26));
         setIconResId(resId);
@@ -1224,8 +1224,8 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     public PopNotification iconError() {
         setTintIcon(false);
         int resId = R.mipmap.ico_dialogx_error;
-        if (getStyle().popTipSettings() != null && getStyle().popTipSettings().defaultIconError() != 0) {
-            resId = getStyle().popTipSettings().defaultIconError();
+        if (getStyle().popNotificationSettings() != null && getStyle().popNotificationSettings().defaultIconError() != 0) {
+            resId = getStyle().popNotificationSettings().defaultIconError();
         }
         setIconSize(dip2px(26));
         setIconResId(resId);
