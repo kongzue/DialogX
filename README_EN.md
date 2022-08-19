@@ -104,7 +104,7 @@ Theme design developers can also use the theme customization interface provided 
 
 You can also go deeper [Learn how to use the DialogX theme](https://github.com/kongzue/DialogX/wiki/%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96-DialogX%E4%B8%BB%E9%A2%98)
 
-You can also go deeper [Learn how to make a DialogX themes](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98)
+You can also go deeper [Learn how to make a DialogX theme](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98)
 
 # Demo
 
