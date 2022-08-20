@@ -188,7 +188,7 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 # ⭐观星者
 
-[![Stargazers over time](https://starchart.cc/kongzue/DialogX.svg)](https://github.com/kongzue/DialogX/stargazers)
+<a href="https://github.com/kongzue/DialogX/stargazers"><img src="https://starchart.cc/kongzue/DialogX.svg" alt="Stargazers over time" /></a>
 
 # 开源协议
 
