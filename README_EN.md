@@ -186,7 +186,7 @@ Please refer to the article [Migrating from DialogV3 to DialogX](https://github.
 
 # ⭐Stargazer
 
-[![Stargazers over time](https://starchart.cc/kongzue/DialogX.svg?b=2)](https://starchart.cc/kongzue/DialogX)
+[![Stargazers over time](https://starchart.cc/kongzue/DialogX.svg?b=2)](https://github.com/kongzue/DialogX/stargazers)
 
 
 # License
