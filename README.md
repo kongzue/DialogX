@@ -95,6 +95,12 @@ DialogX 包含以下对话框组件：
 
   根据定制化自由度的对话框组件，完全由用户自行实现布局内容。CustomDialog 提供了 ALIGN 选项可以轻松定制对话框弹出的方式，默认支持屏幕中央、屏幕底部、屏幕顶部、屏幕左侧、屏幕右侧多种弹出模式，也会提供相应的弹出动画效果，当然用户也可以自定义动画效果。
 
+- [引导对话框 GuideDialog](https://github.com/kongzue/DialogX/wiki/%E5%BC%95%E5%AF%BC%E5%AF%B9%E8%AF%9D%E6%A1%86-GuideDialog(Beta))
+  
+  ![引导对话框 GuideDialog](https://github.com/kongzue/DialogX/raw/master/readme/guidedialog.png)
+
+可以实现一个遮罩展示操作引导图，或者对按钮进行操作提示指引。GuideDialog 可以围绕一个界面上的组件显示，并实现舞台光的效果，舞台光可选圆形（外围、内侧）、方形（外围、内侧）和矩形模式，方形和矩形可设置圆角。
+
 # DialogX主题
 
 ![DialogX主题](https://github.com/kongzue/DialogX/raw/master/readme/allstyle.png)
