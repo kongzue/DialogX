@@ -151,6 +151,8 @@ public class FullScreenDialog extends BaseDialog {
                     isShow = true;
                     preShow = false;
                     
+                    onDialogShow();
+                    
                     getDialogLifecycleCallback().onShow(me);
                 }
                 
@@ -231,6 +233,8 @@ public class FullScreenDialog extends BaseDialog {
                     }
                 }
             });
+            
+            onDialogInit();
         }
         
         private void showEnterAnim(int customViewHeight) {
@@ -315,6 +319,8 @@ public class FullScreenDialog extends BaseDialog {
             }
             
             fullScreenDialogTouchEventInterceptor.refresh(me, this);
+            
+            onDialogRefreshUI();
         }
         
         @Override

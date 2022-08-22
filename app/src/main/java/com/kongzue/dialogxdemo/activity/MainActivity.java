@@ -48,6 +48,7 @@ import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.dialogs.BottomMenu;
 import com.kongzue.dialogx.dialogs.CustomDialog;
 import com.kongzue.dialogx.dialogs.FullScreenDialog;
+import com.kongzue.dialogx.dialogs.GuideDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.dialogs.PopMenu;
@@ -141,6 +142,9 @@ public class MainActivity extends BaseActivity {
     private MaterialButton btnFullScreenDialogFragment;
     private MaterialButton btnContextMenu;
     private TextView btnSelectMenu;
+    private MaterialButton btnShowGuide;
+    private MaterialButton btnShowGuideBaseView;
+    private MaterialButton btnShowGuideBaseViewRectangle;
     private MaterialButton btnShowBreak;
     private MaterialButton btnListDialog;
     private TextView txtVer;
@@ -200,6 +204,9 @@ public class MainActivity extends BaseActivity {
         btnFullScreenDialogFragment = findViewById(R.id.btn_fullScreenDialog_fragment);
         btnContextMenu = findViewById(R.id.btn_contextMenu);
         btnSelectMenu = findViewById(R.id.btn_selectMenu);
+        btnShowGuide = findViewById(R.id.btn_showGuide);
+        btnShowGuideBaseView = findViewById(R.id.btn_showGuideBaseView);
+        btnShowGuideBaseViewRectangle = findViewById(R.id.btn_showGuideBaseViewRectangle);
         btnShowBreak = findViewById(R.id.btn_showBreak);
         btnListDialog = findViewById(R.id.btn_listDialog);
         txtVer = findViewById(R.id.txt_ver);
@@ -322,7 +329,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-    
+        
         grpStyle.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
             @Override
             public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
@@ -749,13 +756,47 @@ public class MainActivity extends BaseActivity {
             }
         });
         
+        btnShowGuide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GuideDialog.show(R.mipmap.img_guide_tip);
+            }
+        });
+        
+        btnShowGuideBaseView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GuideDialog.show(btnFullScreenDialogLogin, R.mipmap.img_tip_login)
+                        .setBaseViewMarginTop(-dip2px(30));
+            }
+        });
+        
+        btnShowGuideBaseViewRectangle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GuideDialog.show(btnCustomDialogAlign,
+                                GuideDialog.STAGE_LIGHT_TYPE.RECTANGLE,
+                                R.mipmap.img_tip_login_clicktest)
+                        .setStageLightFilletRadius(dip2px(5))
+                        .setBaseViewMarginTop(-dip2px(30))
+                        .setOnStageLightPathClickListener(new OnDialogButtonClickListener<GuideDialog>() {
+                            @Override
+                            public boolean onClick(GuideDialog dialog, View v) {
+                                toast("点击了原按钮");
+                                btnCustomDialogAlign.callOnClick();
+                                return false;
+                            }
+                        });
+            }
+        });
+        
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 jump(MainActivity.class, new JumpParameter().put("showBreak", true).put("fromActivity", getInstanceKey()));
             }
         });
-    
+        
         btnListDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -911,7 +952,7 @@ public class MainActivity extends BaseActivity {
                         .setMaskColor(getResources().getColor(R.color.black30))
                         .setEnterAnimResId(R.anim.anim_custom_pop_enter)
                         .setExitAnimResId(R.anim.anim_custom_pop_exit)
-                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP|Gravity.CENTER_HORIZONTAL)
+                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP | Gravity.CENTER_HORIZONTAL)
                         .setBaseViewMarginBottom(-dip2px(45))
                         .show();
             }

@@ -342,6 +342,7 @@ public class MessageDialog extends BaseDialog {
                     });
                     bkgAlpha.start();
                     
+                    onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
                     
                     if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground()) {
@@ -474,6 +475,8 @@ public class MessageDialog extends BaseDialog {
                     }
                 }
             });
+            
+            onDialogInit();
         }
         
         public void refreshView() {
@@ -500,7 +503,6 @@ public class MessageDialog extends BaseDialog {
             boxRoot.setClickable(true);
             if (maskColor != -1) {
                 boxRoot.setBackgroundColor(maskColor);
-                boxRoot.setBkgAlpha(0f);
             }
             if (backgroundRadius > -1) {
                 GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
@@ -704,6 +706,7 @@ public class MessageDialog extends BaseDialog {
             } else {
                 boxCustom.setVisibility(View.GONE);
             }
+            onDialogRefreshUI();
         }
         
         public void doDismiss(View v) {

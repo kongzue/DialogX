@@ -276,6 +276,7 @@ public class PopMenu extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
+                    onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
                     refreshUI();
                 }
@@ -562,6 +563,7 @@ public class PopMenu extends BaseDialog {
                     }
                 }
             });
+            onDialogInit();
         }
         
         @Override
@@ -627,6 +629,7 @@ public class PopMenu extends BaseDialog {
                 boxBody.setMaxHeight(height);
                 boxBody.setMinimumHeight(height);
             }
+            onDialogRefreshUI();
         }
         
         @Override

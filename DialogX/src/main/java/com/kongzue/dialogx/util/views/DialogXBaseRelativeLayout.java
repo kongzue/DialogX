@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -302,9 +304,18 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         }
     }
     
+    float nowBkgAlphaValue;
+    
     public DialogXBaseRelativeLayout setBkgAlpha(float alpha) {
+        nowBkgAlphaValue = alpha;
         if (getBackground() != null) getBackground().mutate().setAlpha((int) (alpha * 255));
         return this;
+    }
+    
+    @Override
+    public void setBackground(Drawable background) {
+        background.setAlpha((int) (nowBkgAlphaValue * 255));
+        super.setBackground(background);
     }
     
     public boolean isBaseFocusable() {

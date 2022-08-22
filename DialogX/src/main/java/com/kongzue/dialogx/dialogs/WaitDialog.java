@@ -368,7 +368,7 @@ public class WaitDialog extends BaseDialog {
                                     .alpha(1f)
                                     .setInterpolator(new DecelerateInterpolator())
                                     .setListener(null);
-                            
+                            onDialogShow();
                             getDialogLifecycleCallback().onShow(me());
                         }
                     });
@@ -414,6 +414,7 @@ public class WaitDialog extends BaseDialog {
                     return false;
                 }
             });
+            onDialogInit();
         }
         
         private float oldProgress;
@@ -479,7 +480,6 @@ public class WaitDialog extends BaseDialog {
             
             if (maskColor != -1) {
                 boxRoot.setBackgroundColor(maskColor);
-                boxRoot.setBkgAlpha(0f);
             }
             
             if (onBindView != null && onBindView.getCustomView() != null) {
@@ -507,6 +507,7 @@ public class WaitDialog extends BaseDialog {
             } else {
                 boxRoot.setClickable(false);
             }
+            onDialogRefreshUI();
         }
         
         public void doDismiss(final View v) {

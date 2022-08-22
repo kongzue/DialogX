@@ -30,6 +30,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.ActivityRunnable;
@@ -835,4 +836,13 @@ public abstract class BaseDialog {
     }
     
     public abstract <D extends BaseDialog> D show();
+    
+    protected void onDialogShow() {
+    }
+    
+    protected void onDialogInit() {
+    }
+    
+    protected void onDialogRefreshUI() {
+    }
 }

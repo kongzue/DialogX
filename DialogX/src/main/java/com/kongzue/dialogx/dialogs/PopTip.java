@@ -462,7 +462,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     isShow = true;
                     preShow = false;
                     boxRoot.setAlpha(0f);
-                    
+                    onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
                 }
                 
@@ -546,6 +546,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     }
                 }
             });
+            onDialogInit();
         }
         
         @Override
@@ -618,6 +619,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             if (bodyMargin[2] != -1) rlp.rightMargin = bodyMargin[2];
             if (bodyMargin[3] != -1) rlp.bottomMargin = bodyMargin[3];
             boxBody.setLayoutParams(rlp);
+            onDialogRefreshUI();
         }
         
         @Override

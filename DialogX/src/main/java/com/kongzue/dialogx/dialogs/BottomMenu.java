@@ -476,12 +476,12 @@ public class BottomMenu extends BottomDialog {
     private long lastClickTime = 0;
     
     @Override
-    protected void onDialogInit(final DialogImpl dialog) {
-        if (dialog != null) {
-            dialog.boxList.setVisibility(View.VISIBLE);
+    protected void onDialogShow() {
+        if (getDialogImpl() != null) {
+            getDialogImpl().boxList.setVisibility(View.VISIBLE);
             
             if (!isAllowInterceptTouch()) {
-                dialog.bkg.setMaxHeight((int) bottomDialogMaxHeight);
+                getDialogImpl().bkg.setMaxHeight((int) bottomDialogMaxHeight);
                 if (bottomDialogMaxHeight != 0) {
                     dialogImpl.scrollView.lockScroll(true);
                 }
@@ -499,9 +499,9 @@ public class BottomMenu extends BottomDialog {
             
             
             if (!isLightTheme()) {
-                listView = new BottomDialogListView(dialog, getTopActivity(), R.style.DialogXCompatThemeDark);
+                listView = new BottomDialogListView(getDialogImpl(), getTopActivity(), R.style.DialogXCompatThemeDark);
             } else {
-                listView = new BottomDialogListView(dialog, getTopActivity());
+                listView = new BottomDialogListView(getDialogImpl(), getTopActivity());
             }
             listView.setOverScrollMode(OVER_SCROLL_NEVER);
             listView.setDivider(getResources().getDrawable(dividerDrawableResId));
@@ -510,7 +510,7 @@ public class BottomMenu extends BottomDialog {
             listView.setBottomMenuListViewTouchEvent(new BottomMenuListViewTouchEvent() {
                 @Override
                 public void down(MotionEvent event) {
-                    touchDownY = dialog.bkg.getY();
+                    touchDownY = getDialogImpl().bkg.getY();
                 }
             });
             
@@ -520,7 +520,7 @@ public class BottomMenu extends BottomDialog {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastClickTime > ITEM_CLICK_DELAY) {
                         lastClickTime = currentTime;
-                        float deltaY = Math.abs(touchDownY - dialog.bkg.getY());
+                        float deltaY = Math.abs(touchDownY - getDialogImpl().bkg.getY());
                         if (deltaY > dip2px(15)) {
                             return;
                         }
@@ -595,7 +595,7 @@ public class BottomMenu extends BottomDialog {
             }
             
             RelativeLayout.LayoutParams listViewLp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            dialog.boxList.addView(listView, listViewLp);
+            getDialogImpl().boxList.addView(listView, listViewLp);
             
             refreshUI();
             

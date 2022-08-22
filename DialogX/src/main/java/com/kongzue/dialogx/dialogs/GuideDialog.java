@@ -1,16 +1,33 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
 
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
+import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 /**
  * @author: Kongzue
@@ -21,22 +38,174 @@ import com.kongzue.dialogx.interfaces.OnBindView;
  */
 public class GuideDialog extends CustomDialog {
     
+    public enum STAGE_LIGHT_TYPE {
+        RECTANGLE,      //矩形
+        SQUARE_OUTSIDE, //方形（外围）
+        SQUARE_INSIDE,  //方形（内围）
+        CIRCLE_OUTSIDE, //圆形（外围）
+        CIRCLE_INSIDE,  //圆形（内围）
+    }
+    
+    protected STAGE_LIGHT_TYPE stageLightType = STAGE_LIGHT_TYPE.CIRCLE_OUTSIDE;
+    protected Drawable tipImage;
+    protected float stageLightFilletRadius;     //舞台灯光部分的圆角
+    protected int maskColor = -1;
+    protected OnDialogButtonClickListener<GuideDialog> onStageLightPathClickListener;
+    
     protected GuideDialog() {
         super();
+        enterAnimResId = R.anim.anim_dialogx_alpha_enter;
+        exitAnimResId = R.anim.anim_dialogx_default_exit;
+        this.alignViewGravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
     }
     
     public static GuideDialog build() {
         return new GuideDialog();
     }
     
-    public static GuideDialog build(OnBindView<CustomDialog> onBindView) {
-        return new GuideDialog(onBindView);
+    public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType) {
+        this();
+        this.baseView = baseView;
+        this.stageLightType = stageLightType;
+    }
+    
+    public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, OnBindView<CustomDialog> onBindView, int alignBaseViewGravity) {
+        this();
+        this.baseView = baseView;
+        this.stageLightType = stageLightType;
+        this.onBindView = onBindView;
+        this.alignViewGravity = alignBaseViewGravity;
+    }
+    
+    public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, int tipImageResId, int alignBaseViewGravity) {
+        this();
+        this.baseView = baseView;
+        this.tipImage = getResources().getDrawable(tipImageResId);
+        this.stageLightType = stageLightType;
+        this.alignViewGravity = alignBaseViewGravity;
+    }
+    
+    public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, Bitmap tipImage, int alignBaseViewGravity) {
+        this();
+        this.baseView = baseView;
+        this.tipImage = new BitmapDrawable(getResources(), tipImage);
+        this.stageLightType = stageLightType;
+        this.alignViewGravity = alignBaseViewGravity;
+    }
+    
+    public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, Drawable tipImage, int alignBaseViewGravity) {
+        this();
+        this.baseView = baseView;
+        this.tipImage = tipImage;
+        this.stageLightType = stageLightType;
+        this.alignViewGravity = alignBaseViewGravity;
+    }
+    
+    public GuideDialog(int tipImageResId) {
+        this();
+        this.tipImage = getResources().getDrawable(tipImageResId);
+    }
+    
+    public GuideDialog(Bitmap tipImage) {
+        this();
+        this.tipImage = new BitmapDrawable(getResources(), tipImage);
+    }
+    
+    public GuideDialog(Drawable tipImage) {
+        this();
+        this.tipImage = tipImage;
+    }
+    
+    public GuideDialog(int tipImageResId, ALIGN align) {
+        this();
+        this.tipImage = getResources().getDrawable(tipImageResId);
+        this.align = align;
+    }
+    
+    public GuideDialog(Bitmap tipImage, ALIGN align) {
+        this();
+        this.tipImage = new BitmapDrawable(getResources(), tipImage);
+        this.align = align;
+    }
+    
+    public GuideDialog(Drawable tipImage, ALIGN align) {
+        this();
+        this.tipImage = tipImage;
+        this.align = align;
     }
     
     public GuideDialog(OnBindView<CustomDialog> onBindView) {
+        this();
         this.onBindView = onBindView;
     }
     
+    public GuideDialog(OnBindView<CustomDialog> onBindView, ALIGN align) {
+        this();
+        this.onBindView = onBindView;
+        this.align = align;
+    }
+    
+    public GuideDialog(View baseView, int tipImageResId) {
+        this();
+        this.baseView = baseView;
+        this.tipImage = getResources().getDrawable(tipImageResId);
+    }
+    
+    public GuideDialog(View baseView, Bitmap tipImage) {
+        this();
+        this.baseView = baseView;
+        this.tipImage = new BitmapDrawable(getResources(), tipImage);
+    }
+    
+    public GuideDialog(View baseView, Drawable tipImage) {
+        this();
+        this.baseView = baseView;
+        this.tipImage = tipImage;
+    }
+    
+    public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, int tipImageResId) {
+        this();
+        this.baseView = baseView;
+        this.stageLightType = stageLightType;
+        this.tipImage = getResources().getDrawable(tipImageResId);
+    }
+    
+    public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, Bitmap tipImage) {
+        this();
+        this.baseView = baseView;
+        this.stageLightType = stageLightType;
+        this.tipImage = new BitmapDrawable(getResources(), tipImage);
+    }
+    
+    public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, Drawable tipImage) {
+        this();
+        this.baseView = baseView;
+        this.stageLightType = stageLightType;
+        this.tipImage = tipImage;
+    }
+    
+    public GuideDialog(View baseView, int tipImageResId, int alignBaseViewGravity) {
+        this();
+        this.baseView = baseView;
+        this.alignViewGravity = alignBaseViewGravity;
+        this.tipImage = getResources().getDrawable(tipImageResId);
+    }
+    
+    public GuideDialog(View baseView, Bitmap tipImage, int alignBaseViewGravity) {
+        this();
+        this.baseView = baseView;
+        this.alignViewGravity = alignBaseViewGravity;
+        this.tipImage = new BitmapDrawable(getResources(), tipImage);
+    }
+    
+    public GuideDialog(View baseView, Drawable tipImage, int alignBaseViewGravity) {
+        this();
+        this.baseView = baseView;
+        this.alignViewGravity = alignBaseViewGravity;
+        this.tipImage = tipImage;
+    }
+    
+    //静态方法
     public static GuideDialog show(OnBindView<CustomDialog> onBindView) {
         GuideDialog guideDialog = new GuideDialog(onBindView);
         guideDialog.show();
@@ -50,6 +219,91 @@ public class GuideDialog extends CustomDialog {
         return guideDialog;
     }
     
+    public static GuideDialog show(int tipImageResId) {
+        return new GuideDialog(tipImageResId).show();
+    }
+    
+    public static GuideDialog show(Bitmap tipImage) {
+        return new GuideDialog(tipImage).show();
+    }
+    
+    public static GuideDialog show(Drawable tipImage) {
+        return new GuideDialog(tipImage).show();
+    }
+    
+    public static GuideDialog show(int tipImageResId, ALIGN align) {
+        GuideDialog guideDialog = new GuideDialog(tipImageResId, align);
+        guideDialog.align = align;
+        return guideDialog.show();
+    }
+    
+    public static GuideDialog show(Bitmap tipImage, ALIGN align) {
+        GuideDialog guideDialog = new GuideDialog(tipImage, align);
+        guideDialog.align = align;
+        return guideDialog.show();
+    }
+    
+    public static GuideDialog show(Drawable tipImage, ALIGN align) {
+        return new GuideDialog(tipImage, align).show();
+    }
+    
+    public static GuideDialog show(View baseView, STAGE_LIGHT_TYPE stageLightType) {
+        return new GuideDialog(baseView, stageLightType).show();
+    }
+    
+    public static GuideDialog show(View baseView, STAGE_LIGHT_TYPE stageLightType, OnBindView<CustomDialog> onBindView, int alignBaseViewGravity) {
+        return new GuideDialog(baseView, stageLightType, onBindView, alignBaseViewGravity).show();
+    }
+    
+    public static GuideDialog show(View baseView, STAGE_LIGHT_TYPE stageLightType, int tipImageResId, int alignBaseViewGravity) {
+        return new GuideDialog(baseView, stageLightType, tipImageResId, alignBaseViewGravity).show();
+    }
+    
+    public static GuideDialog show(View baseView, STAGE_LIGHT_TYPE stageLightType, Bitmap tipImage, int alignBaseViewGravity) {
+        return new GuideDialog(baseView, stageLightType, tipImage, alignBaseViewGravity).show();
+    }
+    
+    public static GuideDialog show(View baseView, STAGE_LIGHT_TYPE stageLightType, Drawable tipImage, int alignBaseViewGravity) {
+        return new GuideDialog(baseView, stageLightType, tipImage, alignBaseViewGravity).show();
+    }
+    
+    public static GuideDialog show(View baseView, int tipImageResId) {
+        return new GuideDialog(baseView, tipImageResId).show();
+    }
+    
+    public static GuideDialog show(View baseView, Bitmap tipImage) {
+        return new GuideDialog(baseView, tipImage).show();
+    }
+    
+    public static GuideDialog show(View baseView, Drawable tipImage) {
+        return new GuideDialog(baseView, tipImage).show();
+    }
+    
+    public static GuideDialog show(View baseView, STAGE_LIGHT_TYPE stageLightType, int tipImageResId) {
+        return new GuideDialog(baseView, stageLightType, tipImageResId).show();
+    }
+    
+    public static GuideDialog show(View baseView, STAGE_LIGHT_TYPE stageLightType, Bitmap tipImage) {
+        return new GuideDialog(baseView, stageLightType, tipImage).show();
+    }
+    
+    public static GuideDialog show(View baseView, STAGE_LIGHT_TYPE stageLightType, Drawable tipImage) {
+        return new GuideDialog(baseView, stageLightType, tipImage).show();
+    }
+    
+    public static GuideDialog show(View baseView, int tipImageResId, int alignBaseViewGravity) {
+        return new GuideDialog(baseView, tipImageResId, alignBaseViewGravity).show();
+    }
+    
+    public static GuideDialog show(View baseView, Bitmap tipImage, int alignBaseViewGravity) {
+        return new GuideDialog(baseView, tipImage, alignBaseViewGravity).show();
+    }
+    
+    public static GuideDialog show(View baseView, Drawable tipImage, int alignBaseViewGravity) {
+        return new GuideDialog(baseView, tipImage, alignBaseViewGravity).show();
+    }
+    
+    //执行方法
     public GuideDialog show() {
         super.show();
         return this;
@@ -86,6 +340,7 @@ public class GuideDialog extends CustomDialog {
         this.theme = theme;
         return this;
     }
+    
     public GuideDialog setCancelable(boolean cancelable) {
         this.privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
         refreshUI();
@@ -101,15 +356,18 @@ public class GuideDialog extends CustomDialog {
         refreshUI();
         return this;
     }
+    
     public GuideDialog removeCustomView() {
         this.onBindView.clean();
         refreshUI();
         return this;
     }
+    
     public GuideDialog setEnterAnimResId(int enterAnimResId) {
         this.enterAnimResId = enterAnimResId;
         return this;
     }
+    
     public GuideDialog setExitAnimResId(int exitAnimResId) {
         this.exitAnimResId = exitAnimResId;
         return this;
@@ -120,6 +378,7 @@ public class GuideDialog extends CustomDialog {
         this.exitAnimResId = exitAnimResId;
         return this;
     }
+    
     public GuideDialog setAlign(ALIGN align) {
         this.align = align;
         return this;
@@ -152,14 +411,17 @@ public class GuideDialog extends CustomDialog {
         this.exitAnimDuration = exitAnimDuration;
         return this;
     }
+    
     public GuideDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
         return this;
     }
+    
     public GuideDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
         return this;
     }
+    
     public GuideDialog setAlignBaseViewGravity(View baseView, int alignGravity) {
         this.baseView = baseView;
         this.alignViewGravity = alignGravity;
@@ -170,7 +432,7 @@ public class GuideDialog extends CustomDialog {
     }
     
     public GuideDialog setAlignBaseViewGravity(View baseView, int alignGravity, int marginLeft,
-                                                int marginTop, int marginRight, int marginBottom) {
+                                               int marginTop, int marginRight, int marginBottom) {
         this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
         return setAlignBaseViewGravity(baseView, alignGravity);
     }
@@ -181,7 +443,7 @@ public class GuideDialog extends CustomDialog {
     }
     
     public GuideDialog setBaseViewMargin(int marginLeft, int marginTop,
-                                          int marginRight, int marginBottom) {
+                                         int marginRight, int marginBottom) {
         this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
         return this;
     }
@@ -217,6 +479,7 @@ public class GuideDialog extends CustomDialog {
         refreshUI();
         return this;
     }
+    
     /**
      * 设置对话框 UI 高度（单位：像素）
      *
@@ -229,9 +492,182 @@ public class GuideDialog extends CustomDialog {
         return this;
     }
     
-    
     public GuideDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<CustomDialog> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
+        return this;
+    }
+    
+    @Override
+    protected void onDialogShow() {
+        super.onDialogShow();
+        if (baseView == null) {
+            super.setMaskColor(maskColor == -1 ? getColor(R.color.black50) : maskColor);
+        }
+    }
+    
+    View stageLightPathStub;
+    
+    @Override
+    protected void onDialogRefreshUI() {
+        super.onDialogRefreshUI();
+        if (onBindView == null && tipImage != null) {
+            getDialogImpl().boxCustom.setFocusable(false);
+            getDialogImpl().boxCustom.setFocusableInTouchMode(false);
+            getDialogImpl().boxCustom.setOnClickListener(null);
+            getDialogImpl().boxCustom.setClickable(false);
+            
+            ImageView imageView = new ImageView(getContext());
+            imageView.setImageDrawable(tipImage);
+            imageView.setAdjustViewBounds(true);
+            imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            onBindView = new OnBindView<CustomDialog>(imageView) {
+                @Override
+                public void onBind(CustomDialog dialog, View v) {
+                
+                }
+            };
+            onBindView.bindParent(getDialogImpl().boxCustom, me);
+        }
+        if (getOnStageLightPathClickListener() != null && baseView != null) {
+            stageLightPathStub = new View(getContext());
+            stageLightPathStub.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!getOnStageLightPathClickListener().onClick(GuideDialog.this, v)) {
+                        dismiss();
+                    }
+                }
+            });
+            getDialogImpl().boxRoot.addView(stageLightPathStub);
+        } else {
+            if (stageLightPathStub != null && stageLightPathStub.getParent() instanceof ViewGroup) {
+                ((ViewGroup) stageLightPathStub.getParent()).removeView(stageLightPathStub);
+            }
+        }
+    }
+    
+    @Override
+    protected void onGetBaseViewLoc(int[] baseViewLoc) {
+        super.onGetBaseViewLoc(baseViewLoc);
+        if (getDialogImpl() == null) {
+            return;
+        }
+        Bitmap bkg = Bitmap.createBitmap(getDialogImpl().boxRoot.getWidth(), getDialogImpl().boxRoot.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bkg);
+        
+        int x = baseViewLoc[0];
+        int y = baseViewLoc[1];
+        int w = baseViewLoc[2];
+        int h = baseViewLoc[3];
+        int hW = w / 2;
+        int hH = h / 2;
+        
+        if (stageLightPathStub != null && (stageLightPathStub.getX() != x || stageLightPathStub.getY() != y)) {
+            RelativeLayout.LayoutParams rLp = (RelativeLayout.LayoutParams) stageLightPathStub.getLayoutParams();
+            if (rLp == null) {
+                rLp = new RelativeLayout.LayoutParams(w, h);
+            } else {
+                rLp.width = w;
+                rLp.height = h;
+            }
+            stageLightPathStub.setLayoutParams(rLp);
+            stageLightPathStub.setX(x);
+            stageLightPathStub.setY(y);
+        }
+        
+        switch (stageLightType) {
+            case CIRCLE_OUTSIDE: {
+                int r = (int) Math.sqrt(hW * hW + hH * hH);
+                canvas.drawCircle(x + hW, y + hH, r, getStageLightPaint());
+            }
+            break;
+            case CIRCLE_INSIDE: {
+                int r = Math.min(w, h) / 2;
+                canvas.drawCircle(x + hW, y + hH, r, getStageLightPaint());
+            }
+            break;
+            case RECTANGLE: {
+                canvas.drawRoundRect(new RectF(x, y, x + w, y + h), stageLightFilletRadius, stageLightFilletRadius, getStageLightPaint());
+            }
+            break;
+            case SQUARE_INSIDE: {
+                int r = Math.min(w, h);
+                canvas.drawRoundRect(new RectF(x + hW - r / 2, y + hH - r / 2, x + hW - r / 2 + r, y + hH - r / 2 + r), stageLightFilletRadius, stageLightFilletRadius, getStageLightPaint());
+            }
+            break;
+            case SQUARE_OUTSIDE: {
+                int r = Math.max(w, h);
+                canvas.drawRoundRect(new RectF(x + hW - r / 2, y + hH - r / 2, x + hW - r / 2 + r, y + hH - r / 2 + r), stageLightFilletRadius, stageLightFilletRadius, getStageLightPaint());
+            }
+            break;
+        }
+        stageLightPaint.setXfermode(null);
+        canvas.drawColor(maskColor == -1 ? getColor(R.color.black50) : maskColor, PorterDuff.Mode.SRC_OUT);
+        BitmapDrawable bkgDrawable = new BitmapDrawable(getResources(), bkg);
+        getDialogImpl().boxRoot.setBackground(bkgDrawable);
+    }
+    
+    Paint stageLightPaint;
+    
+    private Paint getStageLightPaint() {
+        if (stageLightPaint == null) {
+            stageLightPaint = new Paint();
+            stageLightPaint.setColor(Color.RED);
+            stageLightPaint.setStyle(Paint.Style.FILL);
+            stageLightPaint.setAntiAlias(true);
+        }
+        return stageLightPaint;
+    }
+    
+    public STAGE_LIGHT_TYPE getStageLightType() {
+        return stageLightType;
+    }
+    
+    public GuideDialog setStageLightType(STAGE_LIGHT_TYPE stageLightType) {
+        this.stageLightType = stageLightType;
+        refreshUI();
+        return this;
+    }
+    
+    public Drawable getTipImage() {
+        return tipImage;
+    }
+    
+    public GuideDialog setTipImage(int tipImageResId) {
+        this.tipImage = getResources().getDrawable(tipImageResId);
+        refreshUI();
+        return this;
+    }
+    
+    public GuideDialog setTipImage(Bitmap tipImage) {
+        this.tipImage = new BitmapDrawable(getResources(), tipImage);
+        refreshUI();
+        return this;
+    }
+    
+    public GuideDialog setTipImage(Drawable tipImage) {
+        this.tipImage = tipImage;
+        refreshUI();
+        return this;
+    }
+    
+    public float getStageLightFilletRadius() {
+        return stageLightFilletRadius;
+    }
+    
+    public GuideDialog setStageLightFilletRadius(float stageLightFilletRadius) {
+        this.stageLightFilletRadius = stageLightFilletRadius;
+        refreshUI();
+        return this;
+    }
+    
+    public OnDialogButtonClickListener<GuideDialog> getOnStageLightPathClickListener() {
+        return onStageLightPathClickListener;
+    }
+    
+    public GuideDialog setOnStageLightPathClickListener(OnDialogButtonClickListener<GuideDialog> onStageLightPathClickListener) {
+        this.onStageLightPathClickListener = onStageLightPathClickListener;
+        refreshUI();
         return this;
     }
 }

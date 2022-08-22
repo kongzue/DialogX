@@ -315,7 +315,7 @@ public class BottomDialog extends BaseDialog {
                     
                     getDialogLifecycleCallback().onShow(me);
                     
-                    onDialogInit(dialogImpl);
+                    onDialogShow();
                     
                     boxRoot.post(new Runnable() {
                         @Override
@@ -466,6 +466,8 @@ public class BottomDialog extends BaseDialog {
                     bkgAlpha.start();
                 }
             });
+            
+            onDialogInit();
         }
         
         @Override
@@ -493,7 +495,7 @@ public class BottomDialog extends BaseDialog {
             useTextInfo(btnCancel, cancelTextInfo);
             useTextInfo(btnSelectOther, otherTextInfo);
             useTextInfo(btnSelectPositive, okTextInfo);
-    
+            
             if (titleIcon != null) {
                 int size = (int) txtDialogTitle.getTextSize();
                 titleIcon.setBounds(0, 0, size, size);
@@ -541,7 +543,6 @@ public class BottomDialog extends BaseDialog {
             
             if (maskColor != -1) {
                 boxRoot.setBackgroundColor(maskColor);
-                boxRoot.setBkgAlpha(0f);
             }
             
             if (onBindView != null && onBindView.getCustomView() != null) {
@@ -591,6 +592,8 @@ public class BottomDialog extends BaseDialog {
             showText(btnSelectPositive, okText);
             showText(btnCancel, cancelText);
             showText(btnSelectOther, otherText);
+            
+            onDialogRefreshUI();
         }
         
         @Override
@@ -652,9 +655,6 @@ public class BottomDialog extends BaseDialog {
                 exitAnim.start();
             }
         }
-    }
-    
-    protected void onDialogInit(DialogImpl dialog) {
     }
     
     public void refreshUI() {

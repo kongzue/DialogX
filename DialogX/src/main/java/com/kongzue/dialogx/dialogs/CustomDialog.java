@@ -151,12 +151,19 @@ public class CustomDialog extends BaseDialog {
         
         @Override
         public void init() {
+            if (baseViewLoc == null && baseView != null) {
+                baseViewLoc = new int[4];
+                baseView.getLocationOnScreen(baseViewLoc);
+            }
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
                     isShow = true;
                     preShow = false;
+                    
+                    onDialogShow();
+                    
                     getDialogLifecycleCallback().onShow(me);
                     boxCustom.setVisibility(View.GONE);
                 }
@@ -267,6 +274,8 @@ public class CustomDialog extends BaseDialog {
                     bkgAlpha.start();
                 }
             });
+            
+            onDialogInit();
         }
         
         boolean initSetCustomViewLayoutListener = false;
@@ -313,9 +322,13 @@ public class CustomDialog extends BaseDialog {
                                 if (isAlignBaseViewGravity(Gravity.BOTTOM)) {
                                     calY = baseViewTop + baseView.getHeight() + marginRelativeBaseView[1];
                                 }
+                                baseViewLoc[2] = baseView.getWidth();
+                                baseViewLoc[3] = baseView.getHeight();
                                 
                                 if (calX != 0) boxCustom.setX(calX);
                                 if (calY != 0) boxCustom.setY(calY);
+                                
+                                onGetBaseViewLoc(baseViewLoc);
                             }
                         }
                     };
@@ -423,6 +436,8 @@ public class CustomDialog extends BaseDialog {
                 boxCustom.setMaxHeight(height);
                 boxCustom.setMinimumHeight(height);
             }
+            
+            onDialogRefreshUI();
         }
         
         @Override
@@ -493,6 +508,9 @@ public class CustomDialog extends BaseDialog {
                 });
             }
         }
+    }
+    
+    protected void onGetBaseViewLoc(int[] baseViewLoc) {
     }
     
     @Override
@@ -720,7 +738,7 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setAlignBaseViewGravity(View baseView, int alignGravity) {
         this.baseView = baseView;
         this.alignViewGravity = alignGravity;
-        baseViewLoc = new int[2];
+        baseViewLoc = new int[4];
         baseView.getLocationOnScreen(baseViewLoc);
         setFullScreen(true);
         return this;
