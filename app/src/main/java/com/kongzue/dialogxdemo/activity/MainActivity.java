@@ -767,6 +767,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 GuideDialog.show(btnFullScreenDialogLogin, R.mipmap.img_tip_login)
+                        .setStageLightType(GuideDialog.STAGE_LIGHT_TYPE.CIRCLE_INSIDE)
                         .setBaseViewMarginTop(-dip2px(30));
             }
         });
