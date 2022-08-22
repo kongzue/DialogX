@@ -76,6 +76,12 @@ DialogX 包含以下对话框组件：
   ![简单提示 PopTip](https://github.com/kongzue/DialogX/raw/master/readme/poptip.png)
 
   提供一个类似 Toast 的文本提示功能，但它拥有更强大的自定义属性。你可以设置文本提示、图标、以及一个控制按钮，并可以设置持续显示或定义自动消失的时长。PopTip 是非阻断式提示，也就是说，在 PopTip 显示时用户依然可以操作界面。
+  
+- [简单通知提示 PopNotification](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E9%80%9A%E7%9F%A5%E6%8F%90%E7%A4%BA-PopNotification)
+
+  ![简单通知提示 PopNotification](https://github.com/kongzue/DialogX/raw/master/readme/popnotification.png)
+
+  提供一个类似 Notification 的通知样式提示功能，请注意，此组件并不能取代 Notification，默认不支持不能跨界面显示（可使用悬浮窗权限设置允许），仅用于应用内通知提示，拥有更强大的自定义属性。你可以设置文本提示、图标、以及一个控制按钮，并可以设置持续显示或定义自动消失的时长。PopNotification 是非阻断式提示，也就是说，在 PopNotification 显示时用户依然可以操作界面。
 
 - [全屏对话框 FullScreenDialog](https://github.com/kongzue/DialogX/wiki/%E5%85%A8%E5%B1%8F%E5%AF%B9%E8%AF%9D%E6%A1%86-FullScreenDialog)
 
@@ -182,8 +188,7 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 # ⭐观星者
 
-[![Stargazers over time](https://starchart.cc/kongzue/DialogX.svg)](https://starchart.cc/kongzue/DialogX)
-
+[![Stargazers over time](https://starchart.cc/kongzue/DialogX.svg?a=1)]([https://starchart.cc/kongzue/DialogX](https://github.com/kongzue/DialogX/stargazers))
 
 # 开源协议
 
