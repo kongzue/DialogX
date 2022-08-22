@@ -98,6 +98,12 @@ DialogX contains the following dialog components：
 
   CustomDialog provides ALIGN option to easily customize the pop-up mode of the dialog box, which supports multiple pop-up modes of screen center, screen bottom, screen top, screen left and screen right by default, and also provides corresponding pop-up animation effect, of course, users can also customize the animation effect.
 
+- [GuideDialog](https://github.com/kongzue/DialogX/wiki/%E5%BC%95%E5%AF%BC%E5%AF%B9%E8%AF%9D%E6%A1%86-GuideDialog(Beta))
+  
+  ![引導對話框 GuideDialog](https://github.com/kongzue/DialogX/raw/master/readme/guidedialog.png)
+
+A mask can be implemented to show the operation guide diagram, or to guide the operation tips for buttons. GuideDialog can be displayed around a component on the interface and realize the effect of stage light. Stage light can be selected from round (outer, inner), square (outer, inner) and rectangle modes, and square and rectangle can be set with rounded corners.
+
 # Themes
 
 ![DialogX主题](https://github.com/kongzue/DialogX/raw/master/readme/allstyle.png)
