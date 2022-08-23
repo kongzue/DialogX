@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -316,6 +317,11 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public void setBackground(Drawable background) {
         background.setAlpha((int) (nowBkgAlphaValue * 255));
         super.setBackground(background);
+    }
+    
+    @Override
+    public void setBackgroundColor(int color) {
+        setBackground(new ColorDrawable(color));
     }
     
     public boolean isBaseFocusable() {

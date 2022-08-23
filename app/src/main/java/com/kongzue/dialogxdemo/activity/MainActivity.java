@@ -61,6 +61,7 @@ import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
+import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
@@ -767,7 +768,6 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 GuideDialog.show(btnFullScreenDialogLogin, R.mipmap.img_tip_login)
-                        .setStageLightType(GuideDialog.STAGE_LIGHT_TYPE.CIRCLE_INSIDE)
                         .setBaseViewMarginTop(-dip2px(30));
             }
         });
@@ -780,6 +780,13 @@ public class MainActivity extends BaseActivity {
                                 R.mipmap.img_tip_login_clicktest)
                         .setStageLightFilletRadius(dip2px(5))
                         .setBaseViewMarginTop(-dip2px(30))
+                        .setOnBackgroundMaskClickListener(new OnBackgroundMaskClickListener<CustomDialog>() {
+                            @Override
+                            public boolean onClick(CustomDialog dialog, View v) {
+                                toast("点击了外围遮罩");
+                                return false;
+                            }
+                        })
                         .setOnStageLightPathClickListener(new OnDialogButtonClickListener<GuideDialog>() {
                             @Override
                             public boolean onClick(GuideDialog dialog, View v) {

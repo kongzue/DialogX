@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Outline;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
@@ -542,7 +543,7 @@ public class BottomDialog extends BaseDialog {
             }
             
             if (maskColor != -1) {
-                boxRoot.setBackgroundColor(maskColor);
+                boxRoot.setBackground(new ColorDrawable(maskColor));
             }
             
             if (onBindView != null && onBindView.getCustomView() != null) {

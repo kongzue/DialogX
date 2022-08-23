@@ -744,6 +744,24 @@ public class CustomDialog extends BaseDialog {
         return this;
     }
     
+    public CustomDialog setAlignBaseView(View baseView) {
+        this.baseView = baseView;
+        baseViewLoc = new int[4];
+        baseView.getLocationOnScreen(baseViewLoc);
+        setFullScreen(true);
+        return this;
+    }
+    
+    public CustomDialog setAlignBaseViewGravity(int alignGravity) {
+        this.alignViewGravity = alignGravity;
+        if (baseView != null) {
+            baseViewLoc = new int[4];
+            baseView.getLocationOnScreen(baseViewLoc);
+        }
+        setFullScreen(true);
+        return this;
+    }
+    
     public CustomDialog setAlignBaseViewGravity(View baseView, int alignGravity, int marginLeft,
                                                 int marginTop, int marginRight, int marginBottom) {
         this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};

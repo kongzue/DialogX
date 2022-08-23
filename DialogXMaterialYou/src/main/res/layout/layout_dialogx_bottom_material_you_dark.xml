@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="15dp">
+                android:paddingTop="17dp">
 
                 <TextView
                     android:id="@+id/txt_dialog_title"
@@ -43,7 +43,7 @@
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"
                     android:paddingLeft="20dp"
-                    android:paddingTop="15dp"
+                    android:paddingTop="13dp"
                     android:paddingRight="20dp"
                     android:text="Title"
                     android:textColor="@color/white"
