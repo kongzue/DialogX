@@ -13,13 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activity.AppCompatActivityTest"
+            android:exported="false"
             android:theme="@style/AppCompatTheme"
             android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".activity.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection">
+            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,6 +37,8 @@
             android:exported="false"
             android:theme="@style/DialogXFloatingWindow"
             android:windowSoftInputMode="adjustResize" />
+
+        <service android:name=".service.TestBackgroundService" />
 
     </application>
 

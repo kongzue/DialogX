@@ -494,10 +494,17 @@ public class MessageDialog extends BaseDialog {
             }
             
             bkg.setMaxWidth(getMaxWidth());
+            View inputBoxView = boxRoot.findViewWithTag("dialogx_editbox");
             if (me instanceof InputDialog) {
+                if (inputBoxView != null) {
+                    inputBoxView.setVisibility(View.VISIBLE);
+                }
                 txtInput.setVisibility(View.VISIBLE);
                 boxRoot.bindFocusView(txtInput);
             } else {
+                if (inputBoxView != null) {
+                    inputBoxView.setVisibility(View.GONE);
+                }
                 txtInput.setVisibility(View.GONE);
             }
             boxRoot.setClickable(true);

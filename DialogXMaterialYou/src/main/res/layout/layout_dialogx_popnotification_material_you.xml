@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:theme="@style/DialogXCompatThemeLight"
     app:baseFocusable="false">
 
     <com.kongzue.dialogx.util.views.MaxLinearLayout

@@ -3,6 +3,7 @@
     android:id="@+id/box_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/DialogXCompatThemeNight"
     android:background="@color/black40"
     android:orientation="vertical">
 
@@ -111,7 +112,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:text="Other"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="15dp"
                         android:visibility="gone" />
 
@@ -133,7 +134,7 @@
                         android:paddingRight="15dp"
                         android:tag="cancel"
                         android:text="Cancel"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="15dp" />
 
                     <TextView
@@ -148,7 +149,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:text="OK"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="15dp" />
 
                 </LinearLayout>

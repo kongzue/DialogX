@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black20"
+    android:theme="@style/DialogXCompatThemeLight"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -17,6 +18,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="35dp"
             android:layout_marginRight="35dp"
+
             android:background="@drawable/rect_dialogx_material_you_bkg_light"
             android:elevation="27dp">
 
@@ -32,6 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_vertical"
+                    android:textAppearance="?attr/textAppearanceHeadline2"
                     android:paddingLeft="20dp"
                     android:paddingTop="18dp"
                     android:paddingRight="20dp"
@@ -68,23 +71,27 @@
                             android:layout_height="wrap_content"
                             android:visibility="gone" />
 
-                        <EditText
-                            android:id="@+id/txt_input"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="20dp"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:paddingTop="10dp"
-                            android:paddingBottom="10dp"
-                            android:scrollbars="vertical"
-                            android:text=""
-                            android:textColor="@color/black90"
-                            android:textSize="18dp"
-                            android:theme="@style/DialogXCompatThemeLight" />
+                            android:tag="dialogx_editbox">
+
+                            <EditText
+                                android:id="@+id/txt_input"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_gravity="center_horizontal"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:scrollbars="vertical"
+                                android:textColor="@color/black90"
+                                android:textSize="18dp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
 
@@ -113,7 +120,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:text="Other"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="15dp"
                         android:visibility="gone" />
 
@@ -133,7 +140,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:text="Cancel"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="15dp" />
 
                     <TextView
@@ -146,7 +153,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:text="OK"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="15dp" />
 
                 </LinearLayout>

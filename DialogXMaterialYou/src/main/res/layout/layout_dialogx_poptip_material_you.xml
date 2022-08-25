@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/box_root"
     android:layout_width="match_parent"
+    android:theme="@style/DialogXCompatThemeLight"
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:baseFocusable="false">
@@ -56,7 +57,7 @@
             android:id="@+id/txt_dialogx_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="-15dp"
+            android:layout_marginLeft="-10dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"

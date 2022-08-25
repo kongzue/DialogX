@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black20"
+    android:theme="@style/DialogXCompatThemeLight"
     android:orientation="vertical"
     app:autoSafeArea="false"
     app:baseFocusable="true">

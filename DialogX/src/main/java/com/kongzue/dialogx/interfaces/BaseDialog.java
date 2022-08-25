@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.interfaces;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -197,13 +199,16 @@ public abstract class BaseDialog {
                         dialogXFloatingWindowActivity.showDialogX(baseDialog.dialogKey());
                         return;
                     }
-                    Intent intent = new Intent(getTopActivity(), DialogXFloatingWindowActivity.class);
+                    Intent intent = new Intent(getContext(), DialogXFloatingWindowActivity.class);
+                    if (getTopActivity() == null) {
+                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    }
                     intent.putExtra("dialogXKey", baseDialog.dialogKey());
-                    intent.putExtra("fromActivityUiStatus", getTopActivity().getWindow().getDecorView().getSystemUiVisibility());
-                    intent.putExtra("from", getTopActivity().hashCode());
-                    getTopActivity().startActivity(intent);
+                    intent.putExtra("fromActivityUiStatus", getTopActivity() == null ? 0 : getTopActivity().getWindow().getDecorView().getSystemUiVisibility());
+                    intent.putExtra("from", getContext().hashCode());
+                    getContext().startActivity(intent);
                     int version = Integer.valueOf(Build.VERSION.SDK_INT);
-                    if (version > 5) {
+                    if (version > 5 && getTopActivity() != null) {
                         getTopActivity().overridePendingTransition(0, 0);
                     }
                     break;
@@ -596,6 +601,7 @@ public abstract class BaseDialog {
         preShow = true;
         dismissAnimFlag = false;
         if (getTopActivity() == null) {
+            //尝试重新获取 activity
             init(null);
             if (getTopActivity() == null) {
                 error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");

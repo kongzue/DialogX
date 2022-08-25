@@ -3,7 +3,7 @@
     android:shape="rectangle">
     <!--left to right-->
     <solid
-        android:color="@color/dialogxMaterialYouBkgLight"/>
+        android:color="?attr/colorSurface"/>
 
     <corners
         android:radius="99dp"/>

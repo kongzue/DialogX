@@ -19,8 +19,6 @@ import com.kongzue.dialogxmaterialyou.R;
 public class MaterialYouStyle extends DialogXStyle {
     
     public static MaterialYouStyle style() {
-        DialogX.titleTextInfo = new TextInfo().setBold(false);
-        DialogX.buttonTextInfo = new TextInfo().setBold(false);
         return new MaterialYouStyle();
     }
     
