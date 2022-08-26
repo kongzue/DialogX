@@ -35,6 +35,7 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
+import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.BottomDialogScrollView;
@@ -189,6 +190,21 @@ public class BottomDialog extends BaseDialog {
     }
     
     public BottomDialog show() {
+        if (isHide && getDialogView() != null && isShow) {
+            if (hideWithExitAnim && getDialogImpl()!=null) {
+                getDialogView().setVisibility(View.VISIBLE);
+                getDialogImpl().doShowAnim(new ObjectRunnable<ValueAnimator>() {
+                    @Override
+                    public void run(ValueAnimator valueAnimator) {
+                        float value = (float) valueAnimator.getAnimatedValue();
+                        getDialogImpl().boxRoot.setBkgAlpha(value);
+                    }
+                });
+            } else {
+                getDialogView().setVisibility(View.VISIBLE);
+            }
+            return this;
+        }
         super.beforeShow();
         if (getDialogView() == null) {
             int layoutId = isLightTheme() ? R.layout.layout_dialogx_bottom_material : R.layout.layout_dialogx_bottom_material_dark;
@@ -427,44 +443,16 @@ public class BottomDialog extends BaseDialog {
             boxBkg.post(new Runnable() {
                 @Override
                 public void run() {
-                    long enterAnimDurationTemp = 300;
-                    
-                    float customDialogTop = 0;
-                    if (bottomDialogMaxHeight > 0 && bottomDialogMaxHeight <= 1) {
-                        customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight * boxBkg.getHeight();
-                    } else if (bottomDialogMaxHeight > 1) {
-                        customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight;
-                    }
-                    
-                    //上移动画
-                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(),
-                            bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop
-                    );
-                    if (overrideEnterDuration >= 0) {
-                        enterAnimDurationTemp = overrideEnterDuration;
-                    }
-                    if (enterAnimDuration >= 0) {
-                        enterAnimDurationTemp = enterAnimDuration;
-                    }
-                    enterAnim.setDuration(enterAnimDurationTemp);
-                    enterAnim.setAutoCancel(true);
-                    enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                    enterAnim.start();
-                    
-                    //遮罩层动画
-                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-                    bkgAlpha.setDuration(enterAnimDurationTemp);
-                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    doShowAnim(new ObjectRunnable<ValueAnimator>() {
                         @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            float value = (float) animation.getAnimatedValue();
+                        public void run(ValueAnimator valueAnimator) {
+                            float value = (float) valueAnimator.getAnimatedValue();
                             boxRoot.setBkgAlpha(value);
                             if (value == 1f) {
                                 bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
                             }
                         }
                     });
-                    bkgAlpha.start();
                 }
             });
             
@@ -605,39 +593,86 @@ public class BottomDialog extends BaseDialog {
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
                 
-                long exitAnimDurationTemp = 300;
-                if (overrideExitDuration >= 0) {
-                    exitAnimDurationTemp = overrideExitDuration;
-                }
-                if (exitAnimDuration >= 0) {
-                    exitAnimDurationTemp = exitAnimDuration;
-                }
-                
-                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
-                exitAnim.setDuration(exitAnimDurationTemp);
-                exitAnim.start();
-                
-                ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-                bkgAlpha.setDuration(exitAnimDurationTemp);
-                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                doExitAnim(new ObjectRunnable<ValueAnimator>() {
                     @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
+                    public void run(ValueAnimator valueAnimator) {
                         if (boxRoot != null) {
-                            float value = (float) animation.getAnimatedValue();
+                            float value = (float) valueAnimator.getAnimatedValue();
                             boxRoot.setBkgAlpha(value);
                             if (value == 0) boxRoot.setVisibility(View.GONE);
                         }
                     }
                 });
-                bkgAlpha.start();
                 
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                runOnMainDelay(new Runnable() {
                     @Override
                     public void run() {
                         dismiss(dialogView);
                     }
                 }, exitAnimDurationTemp);
             }
+        }
+        
+        long exitAnimDurationTemp = 300;
+    
+        protected void doExitAnim(ObjectRunnable<ValueAnimator> objectRunnable) {
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration >= 0) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            
+            ObjectAnimator exitAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(), boxBkg.getHeight());
+            exitAnim.setDuration(exitAnimDurationTemp);
+            exitAnim.start();
+            
+            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+            bkgAlpha.setDuration(exitAnimDurationTemp);
+            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    objectRunnable.run(animation);
+                }
+            });
+            bkgAlpha.start();
+        }
+    
+        protected void doShowAnim(ObjectRunnable<ValueAnimator> objectRunnable){
+            long enterAnimDurationTemp = 300;
+    
+            float customDialogTop = 0;
+            if (bottomDialogMaxHeight > 0 && bottomDialogMaxHeight <= 1) {
+                customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight * boxBkg.getHeight();
+            } else if (bottomDialogMaxHeight > 1) {
+                customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight;
+            }
+    
+            //上移动画
+            ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(),
+                    bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop
+            );
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            enterAnim.setDuration(enterAnimDurationTemp);
+            enterAnim.setAutoCancel(true);
+            enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+            enterAnim.start();
+    
+            //遮罩层动画
+            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+            bkgAlpha.setDuration(enterAnimDurationTemp);
+            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    objectRunnable.run(animation);
+                }
+            });
+            bkgAlpha.start();
         }
         
         public void preDismiss() {
@@ -1000,9 +1035,32 @@ public class BottomDialog extends BaseDialog {
         show(dialogView);
     }
     
+    protected boolean isHide;
+    
     public void hide() {
+        isHide = true;
+        hideWithExitAnim = false;
         if (getDialogView() != null) {
             getDialogView().setVisibility(View.GONE);
+        }
+    }
+    
+    protected boolean hideWithExitAnim;
+    
+    public void hideWithExitAnim() {
+        hideWithExitAnim = true;
+        isHide = true;
+        if (getDialogImpl() != null) {
+            getDialogImpl().doExitAnim(new ObjectRunnable<ValueAnimator>() {
+                @Override
+                public void run(ValueAnimator valueAnimator) {
+                    float value = (float) valueAnimator.getAnimatedValue();
+                    getDialogImpl().boxRoot.setBkgAlpha(value);
+                    if (value == 0 && getDialogView() != null) {
+                        getDialogView().setVisibility(View.GONE);
+                    }
+                }
+            });
         }
     }
     

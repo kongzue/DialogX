@@ -28,6 +28,7 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.FullScreenDialogTouchEventInterceptor;
+import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -81,6 +82,15 @@ public class FullScreenDialog extends BaseDialog {
     }
     
     public FullScreenDialog show() {
+        if (isHide && getDialogView() != null && isShow) {
+            if (hideWithExitAnim && getDialogImpl()!=null) {
+                getDialogView().setVisibility(View.VISIBLE);
+                getDialogImpl().doShowAnim();
+            } else {
+                getDialogView().setVisibility(View.VISIBLE);
+            }
+            return this;
+        }
         super.beforeShow();
         if (getDialogView() == null) {
             dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
@@ -198,14 +208,7 @@ public class FullScreenDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    int customViewHeight = boxCustom.getHeight();
-                    if (customViewHeight == 0) {
-                        //实测在 Android 10 中，离屏情况下 View可能无法得到正确高度（恒 0），此时直接按照全屏高度处理
-                        //其他版本 Android 未发现此问题
-                        showEnterAnim((int) boxRoot.getSafeHeight());
-                    } else {
-                        showEnterAnim(customViewHeight);
-                    }
+                    doShowAnim();
                 }
             });
             
@@ -330,32 +333,17 @@ public class FullScreenDialog extends BaseDialog {
             
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
-                long exitAnimDurationTemp = 300;
-                if (overrideExitDuration >= 0) {
-                    exitAnimDurationTemp = overrideExitDuration;
-                }
-                if (exitAnimDuration >= 0) {
-                    exitAnimDurationTemp = exitAnimDuration;
-                }
-                
-                ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
-                exitAnim.setDuration(exitAnimDurationTemp);
-                exitAnim.start();
-                
-                ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-                bkgAlpha.setDuration(exitAnimDurationTemp);
-                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                doExitAnim(new ObjectRunnable<ValueAnimator>() {
                     @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
+                    public void run(ValueAnimator valueAnimator) {
                         if (boxRoot != null) {
-                            float value = (float) animation.getAnimatedValue();
+                            float value = (float) valueAnimator.getAnimatedValue();
                             boxRoot.setBkgAlpha(value);
                             if (value == 0) boxRoot.setVisibility(View.GONE);
                         }
                     }
                 });
-                bkgAlpha.start();
-                
+    
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -381,6 +369,43 @@ public class FullScreenDialog extends BaseDialog {
                 exitAnim.setDuration(exitAnimDurationTemp);
                 exitAnim.start();
             }
+        }
+        
+        protected void doShowAnim() {
+            int customViewHeight = boxCustom.getHeight();
+            if (customViewHeight == 0) {
+                //实测在 Android 10 中，离屏情况下 View可能无法得到正确高度（恒 0），此时直接按照全屏高度处理
+                //其他版本 Android 未发现此问题
+                showEnterAnim((int) boxRoot.getSafeHeight());
+            } else {
+                showEnterAnim(customViewHeight);
+            }
+        }
+        
+        long exitAnimDurationTemp;
+        
+        protected void doExitAnim(ObjectRunnable<ValueAnimator> objectRunnable) {
+            exitAnimDurationTemp = 300;
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration >= 0) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            
+            ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
+            exitAnim.setDuration(exitAnimDurationTemp);
+            exitAnim.start();
+            
+            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+            bkgAlpha.setDuration(exitAnimDurationTemp);
+            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    objectRunnable.run(animation);
+                }
+            });
+            bkgAlpha.start();
         }
     }
     
@@ -537,9 +562,32 @@ public class FullScreenDialog extends BaseDialog {
         show(dialogView);
     }
     
+    private boolean isHide;
+    
     public void hide() {
+        isHide = true;
+        hideWithExitAnim = false;
         if (getDialogView() != null) {
             getDialogView().setVisibility(View.GONE);
+        }
+    }
+    
+    protected boolean hideWithExitAnim;
+    
+    public void hideWithExitAnim() {
+        hideWithExitAnim = true;
+        isHide = true;
+        if (getDialogImpl() != null) {
+            getDialogImpl().doExitAnim(new ObjectRunnable<ValueAnimator>() {
+                @Override
+                public void run(ValueAnimator valueAnimator) {
+                    float value = (float) valueAnimator.getAnimatedValue();
+                    getDialogImpl().boxRoot.setBkgAlpha(value);
+                    if (value == 0 && getDialogView() != null) {
+                        getDialogView().setVisibility(View.GONE);
+                    }
+                }
+            });
         }
     }
     

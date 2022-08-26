@@ -267,6 +267,10 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     }
     
     public PopTip show() {
+        if (isHide && getDialogView() != null){
+            getDialogView().setVisibility(View.VISIBLE);
+            return this;
+        }
         super.beforeShow();
         if (getDialogView() == null) {
             if (DialogX.onlyOnePopTip) {
@@ -995,7 +999,10 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         show(dialogView);
     }
     
+    private boolean isHide;
+    
     public void hide() {
+        isHide = true;
         if (getDialogView() != null) {
             getDialogView().setVisibility(View.GONE);
         }

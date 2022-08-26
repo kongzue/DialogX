@@ -338,6 +338,10 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     }
     
     public PopNotification show() {
+        if (isHide && getDialogView() != null){
+            getDialogView().setVisibility(View.VISIBLE);
+            return this;
+        }
         super.beforeShow();
         if (getDialogView() == null) {
             if (DialogX.onlyOnePopNotification) {
@@ -1120,7 +1124,10 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         show(dialogView);
     }
     
+    private boolean isHide;
+    
     public void hide() {
+        isHide = true;
         if (getDialogView() != null) {
             getDialogView().setVisibility(View.GONE);
         }
