@@ -663,6 +663,7 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setAlign(ALIGN align) {
         this.align = align;
+        refreshUI();
         return this;
     }
     
@@ -768,6 +769,7 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
+        refreshUI();
         return this;
     }
     
@@ -815,6 +817,7 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setAlignBaseViewGravity(View baseView, int alignGravity, int marginLeft,
                                                 int marginTop, int marginRight, int marginBottom) {
         this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
+        refreshUI();
         return setAlignBaseViewGravity(baseView, alignGravity);
     }
     
@@ -824,32 +827,38 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setBaseViewMargin(int[] marginRelativeBaseView) {
         this.marginRelativeBaseView = marginRelativeBaseView;
+        refreshUI();
         return this;
     }
     
     public CustomDialog setBaseViewMargin(int marginLeft, int marginTop,
                                           int marginRight, int marginBottom) {
         this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
+        refreshUI();
         return this;
     }
     
     public CustomDialog setBaseViewMarginLeft(int marginLeft) {
         this.marginRelativeBaseView[0] = marginLeft;
+        refreshUI();
         return this;
     }
     
     public CustomDialog setBaseViewMarginTop(int marginTop) {
         this.marginRelativeBaseView[1] = marginTop;
+        refreshUI();
         return this;
     }
     
     public CustomDialog setBaseViewMarginRight(int marginRight) {
         this.marginRelativeBaseView[2] = marginRight;
+        refreshUI();
         return this;
     }
     
     public CustomDialog setBaseViewMarginBottom(int marginBottom) {
         this.marginRelativeBaseView[3] = marginBottom;
+        refreshUI();
         return this;
     }
     

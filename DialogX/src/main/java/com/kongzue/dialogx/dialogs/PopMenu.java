@@ -198,6 +198,10 @@ public class PopMenu extends BaseDialog {
     }
     
     public PopMenu show() {
+        if (isHide && getDialogView() != null) {
+            getDialogView().setVisibility(View.VISIBLE);
+            return this;
+        }
         super.beforeShow();
         if (getDialogView() == null) {
             int layoutId = isLightTheme() ? R.layout.layout_dialogx_popmenu_material : R.layout.layout_dialogx_popmenu_material_dark;
@@ -973,5 +977,14 @@ public class PopMenu extends BaseDialog {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    private boolean isHide;
+    
+    public void hide() {
+        isHide = true;
+        if (getDialogView() != null) {
+            getDialogView().setVisibility(View.GONE);
+        }
     }
 }
