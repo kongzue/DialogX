@@ -26,11 +26,13 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
+import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
@@ -58,6 +60,7 @@ public class WaitDialog extends BaseDialog {
     protected int customEnterAnimResId;
     protected int customExitAnimResId;
     protected float backgroundRadius = -1;
+    protected DialogXAnimInterface<WaitDialog> dialogXAnimImpl;
     
     public enum TYPE {
         /**
@@ -333,41 +336,14 @@ public class WaitDialog extends BaseDialog {
                         @Override
                         public void run() {
                             if (getTopActivity() == null) return;
-                            int enterAnimResId = R.anim.anim_dialogx_default_enter;
-                            if (overrideEnterAnimRes != 0) {
-                                enterAnimResId = overrideEnterAnimRes;
-                            }
-                            if (customEnterAnimResId != 0) {
-                                enterAnimResId = customEnterAnimResId;
-                            }
-                            Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
-                            long enterAnimDurationTemp = enterAnim.getDuration();
-                            enterAnim.setInterpolator(new DecelerateInterpolator());
-                            if (overrideEnterDuration >= 0) {
-                                enterAnimDurationTemp = overrideEnterDuration;
-                            }
-                            if (enterAnimDuration >= 0) {
-                                enterAnimDurationTemp = enterAnimDuration;
-                            }
-                            enterAnim.setDuration(enterAnimDurationTemp);
-                            bkg.startAnimation(enterAnim);
                             
-                            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-                            bkgAlpha.setDuration(enterAnimDurationTemp);
-                            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            getDialogXAnimImpl().doShowAnim(WaitDialog.this, new ObjectRunnable<Float>() {
                                 @Override
-                                public void onAnimationUpdate(ValueAnimator animation) {
-                                    float value = (float) animation.getAnimatedValue();
+                                public void run(Float value) {
                                     boxRoot.setBkgAlpha(value);
                                 }
                             });
-                            bkgAlpha.start();
                             
-                            boxRoot.animate()
-                                    .setDuration(enterAnimDurationTemp)
-                                    .alpha(1f)
-                                    .setInterpolator(new DecelerateInterpolator())
-                                    .setListener(null);
                             onDialogShow();
                             getDialogLifecycleCallback().onShow(me());
                         }
@@ -519,11 +495,72 @@ public class WaitDialog extends BaseDialog {
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (v != null) v.setEnabled(false);
+                        getDialogXAnimImpl().doExitAnim(WaitDialog.this, new ObjectRunnable<Float>() {
+                            @Override
+                            public void run(Float value) {
+                                if (boxRoot != null) {
+                                    boxRoot.setBkgAlpha(value);
+                                }
+                                if (value == 0f) {
+                                    if (boxRoot != null) {
+                                        boxRoot.setVisibility(View.GONE);
+                                    }
+                                    dismiss(getWaitDialogView());
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        
+        protected DialogXAnimInterface<WaitDialog> getDialogXAnimImpl() {
+            if (dialogXAnimImpl == null) {
+                dialogXAnimImpl = new DialogXAnimInterface<WaitDialog>() {
+                    @Override
+                    public void doShowAnim(WaitDialog dialog, ObjectRunnable<Float> animProgress) {
+                        int enterAnimResId = R.anim.anim_dialogx_default_enter;
+                        if (overrideEnterAnimRes != 0) {
+                            enterAnimResId = overrideEnterAnimRes;
+                        }
+                        if (customEnterAnimResId != 0) {
+                            enterAnimResId = customEnterAnimResId;
+                        }
+                        Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
+                        long enterAnimDurationTemp = enterAnim.getDuration();
+                        enterAnim.setInterpolator(new DecelerateInterpolator());
+                        if (overrideEnterDuration >= 0) {
+                            enterAnimDurationTemp = overrideEnterDuration;
+                        }
+                        if (enterAnimDuration >= 0) {
+                            enterAnimDurationTemp = enterAnimDuration;
+                        }
+                        enterAnim.setDuration(enterAnimDurationTemp);
+                        bkg.startAnimation(enterAnim);
+                        
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                        bkgAlpha.setDuration(enterAnimDurationTemp);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                animProgress.run((Float) animation.getAnimatedValue());
+                            }
+                        });
+                        bkgAlpha.start();
+                        
+                        boxRoot.animate()
+                                .setDuration(enterAnimDurationTemp)
+                                .alpha(1f)
+                                .setInterpolator(new DecelerateInterpolator())
+                                .setListener(null);
+                    }
+                    
+                    @Override
+                    public void doExitAnim(WaitDialog dialog, ObjectRunnable<Float> animProgress) {
                         Context context = getTopActivity();
                         if (context == null) context = boxRoot.getContext();
                         if (context == null) return;
-                        
-                        if (v != null) v.setEnabled(false);
                         
                         int exitAnimResId = R.anim.anim_dialogx_default_exit;
                         if (overrideExitAnimRes != 0) {
@@ -554,24 +591,14 @@ public class WaitDialog extends BaseDialog {
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                if (boxRoot != null) {
-                                    float value = (float) animation.getAnimatedValue();
-                                    boxRoot.setBkgAlpha(value);
-                                    if (value == 0) boxRoot.setVisibility(View.GONE);
-                                }
+                                animProgress.run((Float) animation.getAnimatedValue());
                             }
                         });
                         bkgAlpha.start();
-                        
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                dismiss(getWaitDialogView());
-                            }
-                        }, exitAnimDurationTemp);
                     }
-                });
+                };
             }
+            return dialogXAnimImpl;
         }
         
         public void showTip(final TYPE tip) {
@@ -1061,5 +1088,14 @@ public class WaitDialog extends BaseDialog {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    public DialogXAnimInterface<WaitDialog> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public WaitDialog setDialogXAnimImpl(DialogXAnimInterface<WaitDialog> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
     }
 }

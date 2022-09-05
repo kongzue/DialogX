@@ -27,12 +27,14 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
+import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
@@ -71,6 +73,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     protected OnDialogButtonClickListener<PopTip> onPopTipClickListener;
     protected BOOLEAN tintIcon;
     protected float backgroundRadius = -1;
+    protected DialogXAnimInterface<PopTip> dialogXAnimImpl;
     
     protected int iconResId;
     protected CharSequence message;
@@ -267,7 +270,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     }
     
     public PopTip show() {
-        if (isHide && getDialogView() != null){
+        if (isHide && getDialogView() != null) {
             getDialogView().setVisibility(View.VISIBLE);
             return this;
         }
@@ -522,19 +525,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_default_enter : enterAnimResId);
-                    enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                    if (enterAnimDuration != -1) {
-                        enterAnim.setDuration(enterAnimDuration);
-                    }
-                    enterAnim.setFillAfter(true);
-                    boxBody.startAnimation(enterAnim);
-                    
-                    boxRoot.animate()
-                            .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(null);
+                    getDialogXAnimImpl().doShowAnim(me, null);
                 }
             });
             
@@ -635,7 +626,34 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
+                        getDialogXAnimImpl().doExitAnim(me, null);
+                    }
+                });
+            }
+        }
+        
+        protected DialogXAnimInterface<PopTip> getDialogXAnimImpl() {
+            if (dialogXAnimImpl == null) {
+                dialogXAnimImpl = new DialogXAnimInterface<PopTip>() {
+                    @Override
+                    public void doShowAnim(PopTip dialog, ObjectRunnable<Float> animProgress) {
+                        Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_default_enter : enterAnimResId);
+                        enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                        if (enterAnimDuration != -1) {
+                            enterAnim.setDuration(enterAnimDuration);
+                        }
+                        enterAnim.setFillAfter(true);
+                        boxBody.startAnimation(enterAnim);
                         
+                        boxRoot.animate()
+                                .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
+                                .alpha(1f)
+                                .setInterpolator(new DecelerateInterpolator())
+                                .setListener(null);
+                    }
+                    
+                    @Override
+                    public void doExitAnim(PopTip dialog, ObjectRunnable<Float> animProgress) {
                         Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxRoot.getContext() : getTopActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
@@ -655,8 +673,9 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                             }
                         }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
                     }
-                });
+                };
             }
+            return dialogXAnimImpl;
         }
     }
     
@@ -1134,5 +1153,14 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    public DialogXAnimInterface<PopTip> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public PopTip setDialogXAnimImpl(DialogXAnimInterface<PopTip> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
     }
 }

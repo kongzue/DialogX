@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.app.Activity;
 
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 
 /**
@@ -190,5 +191,10 @@ public class TipDialog extends WaitDialog {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    public TipDialog setDialogXAnimImpl(DialogXAnimInterface<WaitDialog> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
     }
 }
