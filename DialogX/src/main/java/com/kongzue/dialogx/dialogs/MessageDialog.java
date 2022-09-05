@@ -34,6 +34,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.BaseOnDialogClickCallback;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -68,6 +69,7 @@ public class MessageDialog extends BaseDialog {
     protected BOOLEAN privateCancelable;
     protected int customEnterAnimResId;
     protected int customExitAnimResId;
+    protected DialogXAnimInterface<MessageDialog> dialogXAnimImpl;
     
     protected DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<MessageDialog> onBackgroundMaskClickListener;
@@ -220,10 +222,9 @@ public class MessageDialog extends BaseDialog {
         if (isHide && getDialogView() != null && isShow) {
             if (hideWithExitAnim && getDialogImpl() != null) {
                 getDialogView().setVisibility(View.VISIBLE);
-                getDialogImpl().doShowAnim(new ObjectRunnable<ValueAnimator>() {
+                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
                     @Override
-                    public void run(ValueAnimator valueAnimator) {
-                        float value = (float) valueAnimator.getAnimatedValue();
+                    public void run(Float value) {
                         getDialogImpl().boxRoot.setBkgAlpha(value);
                     }
                 });
@@ -329,10 +330,9 @@ public class MessageDialog extends BaseDialog {
                     isShow = true;
                     preShow = false;
                     
-                    doShowAnim(new ObjectRunnable<ValueAnimator>() {
+                    getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
                         @Override
-                        public void run(ValueAnimator valueAnimator) {
-                            float value = (float) valueAnimator.getAnimatedValue();
+                        public void run(Float value) {
                             boxRoot.setBkgAlpha(value);
                         }
                     });
@@ -718,88 +718,92 @@ public class MessageDialog extends BaseDialog {
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
                 
-                doExitAnim(new ObjectRunnable<ValueAnimator>() {
+                getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
                     @Override
-                    public void run(ValueAnimator valueAnimator) {
+                    public void run(Float value) {
                         if (boxRoot != null) {
-                            float value = (float) valueAnimator.getAnimatedValue();
                             boxRoot.setBkgAlpha(value);
-                            if (value == 0) boxRoot.setVisibility(View.GONE);
+                        }
+                        if (value == 0) {
+                            if (boxRoot != null) {
+                                boxRoot.setVisibility(View.GONE);
+                            }
+                            dismiss(dialogView);
                         }
                     }
                 });
-                
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            }
+        }
+        
+        protected DialogXAnimInterface<MessageDialog> getDialogXAnimImpl() {
+            if (dialogXAnimImpl == null) {
+                dialogXAnimImpl = new DialogXAnimInterface<MessageDialog>() {
                     @Override
-                    public void run() {
-                        dismiss(dialogView);
+                    public void doShowAnim(MessageDialog dialog, ObjectRunnable<Float> animProgress) {
+                        int enterAnimResId = style.enterAnimResId() == 0 ? R.anim.anim_dialogx_default_enter : style.enterAnimResId();
+                        if (overrideEnterAnimRes != 0) {
+                            enterAnimResId = overrideEnterAnimRes;
+                        }
+                        if (customEnterAnimResId != 0) {
+                            enterAnimResId = customEnterAnimResId;
+                        }
+                        Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
+                        long enterAnimDurationTemp = enterAnim.getDuration();
+                        if (overrideEnterDuration >= 0) {
+                            enterAnimDurationTemp = overrideEnterDuration;
+                        }
+                        if (enterAnimDuration >= 0) {
+                            enterAnimDurationTemp = enterAnimDuration;
+                        }
+                        enterAnim.setDuration(enterAnimDurationTemp);
+                        enterAnim.setInterpolator(new DecelerateInterpolator());
+                        bkg.startAnimation(enterAnim);
+                        
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                        bkgAlpha.setDuration(enterAnimDurationTemp);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                animProgress.run((Float) animation.getAnimatedValue());
+                            }
+                        });
+                        bkgAlpha.start();
                     }
-                }, exitAnimDurationTemp);
+                    
+                    @Override
+                    public void doExitAnim(MessageDialog dialog, ObjectRunnable<Float> animProgress) {
+                        int exitAnimResId = style.exitAnimResId() == 0 ? R.anim.anim_dialogx_default_exit : style.exitAnimResId();
+                        if (overrideExitAnimRes != 0) {
+                            exitAnimResId = overrideExitAnimRes;
+                        }
+                        if (customExitAnimResId != 0) {
+                            exitAnimResId = customExitAnimResId;
+                        }
+                        Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity(), exitAnimResId);
+                        long exitAnimDurationTemp = exitAnim.getDuration();
+                        exitAnim.setInterpolator(new AccelerateInterpolator());
+                        if (overrideExitDuration >= 0) {
+                            exitAnimDurationTemp = overrideExitDuration;
+                        }
+                        if (exitAnimDuration >= 0) {
+                            exitAnimDurationTemp = exitAnimDuration;
+                        }
+                        exitAnim.setDuration(exitAnimDurationTemp);
+                        bkg.startAnimation(exitAnim);
+                        
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                        bkgAlpha.setDuration(exitAnimDurationTemp);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                animProgress.run((Float) animation.getAnimatedValue());
+                            }
+                        });
+                        bkgAlpha.start();
+                    }
+                };
             }
-        }
-        
-        protected void doShowAnim(ObjectRunnable<ValueAnimator> objectRunnable) {
-            int enterAnimResId = style.enterAnimResId() == 0 ? R.anim.anim_dialogx_default_enter : style.enterAnimResId();
-            if (overrideEnterAnimRes != 0) {
-                enterAnimResId = overrideEnterAnimRes;
-            }
-            if (customEnterAnimResId != 0) {
-                enterAnimResId = customEnterAnimResId;
-            }
-            Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
-            long enterAnimDurationTemp = enterAnim.getDuration();
-            if (overrideEnterDuration >= 0) {
-                enterAnimDurationTemp = overrideEnterDuration;
-            }
-            if (enterAnimDuration >= 0) {
-                enterAnimDurationTemp = enterAnimDuration;
-            }
-            enterAnim.setDuration(enterAnimDurationTemp);
-            enterAnim.setInterpolator(new DecelerateInterpolator());
-            bkg.startAnimation(enterAnim);
-            
-            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-            bkgAlpha.setDuration(enterAnimDurationTemp);
-            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    objectRunnable.run(animation);
-                }
-            });
-            bkgAlpha.start();
-        }
-        
-        long exitAnimDurationTemp;
-        
-        protected void doExitAnim(ObjectRunnable<ValueAnimator> objectRunnable) {
-            int exitAnimResId = style.exitAnimResId() == 0 ? R.anim.anim_dialogx_default_exit : style.exitAnimResId();
-            if (overrideExitAnimRes != 0) {
-                exitAnimResId = overrideExitAnimRes;
-            }
-            if (customExitAnimResId != 0) {
-                exitAnimResId = customExitAnimResId;
-            }
-            Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity(), exitAnimResId);
-            exitAnimDurationTemp = exitAnim.getDuration();
-            exitAnim.setInterpolator(new AccelerateInterpolator());
-            if (overrideExitDuration >= 0) {
-                exitAnimDurationTemp = overrideExitDuration;
-            }
-            if (exitAnimDuration >= 0) {
-                exitAnimDurationTemp = exitAnimDuration;
-            }
-            exitAnim.setDuration(exitAnimDurationTemp);
-            bkg.startAnimation(exitAnim);
-            
-            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-            bkgAlpha.setDuration(exitAnimDurationTemp);
-            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    objectRunnable.run(animation);
-                }
-            });
-            bkgAlpha.start();
+            return dialogXAnimImpl;
         }
     }
     
@@ -1192,10 +1196,9 @@ public class MessageDialog extends BaseDialog {
         hideWithExitAnim = true;
         isHide = true;
         if (getDialogImpl() != null) {
-            getDialogImpl().doExitAnim(new ObjectRunnable<ValueAnimator>() {
+            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
                 @Override
-                public void run(ValueAnimator valueAnimator) {
-                    float value = (float) valueAnimator.getAnimatedValue();
+                public void run(Float value) {
                     getDialogImpl().boxRoot.setBkgAlpha(value);
                     if (value == 0 && getDialogView() != null) {
                         getDialogView().setVisibility(View.GONE);
@@ -1284,6 +1287,15 @@ public class MessageDialog extends BaseDialog {
     public MessageDialog setTitleIcon(Drawable titleIcon) {
         this.titleIcon = titleIcon;
         refreshUI();
+        return this;
+    }
+    
+    public DialogXAnimInterface<MessageDialog> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public MessageDialog setDialogXAnimImpl(DialogXAnimInterface<MessageDialog> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
 }

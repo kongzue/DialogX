@@ -1,5 +1,6 @@
 package com.kongzue.dialogxdemo.activity;
 
+import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -58,6 +62,7 @@ import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -72,6 +77,7 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
+import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
 import com.kongzue.dialogxdemo.BuildConfig;
@@ -373,7 +379,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public boolean onClick(PopMenu dialog, CharSequence text, int index) {
                                 if (index == 0) {
-                                    dialog.setMenuList(new String[]{"A", "B", "C"});
+                                    dialog.setMenuList(new String[]{"产品A", "产品B", "产品C"});
                                     return true;
                                 }
                                 return false;
@@ -933,7 +939,52 @@ public class MainActivity extends BaseActivity {
                                 });
                             }
                         })
-                        .setMaskColor(getResources().getColor(R.color.black30));
+                        .setMaskColor(getResources().getColor(R.color.black30))
+                        //实现完全自定义动画效果
+//                        .setDialogXAnimImpl(new DialogXAnimInterface<CustomDialog>() {
+//                            @Override
+//                            public void doShowAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+//                                Animation enterAnim;
+//
+//                                int enterAnimResId = com.kongzue.dialogx.R.anim.anim_dialogx_top_enter;
+//                                enterAnim = AnimationUtils.loadAnimation(me, enterAnimResId);
+//                                enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+//
+//                                long enterAnimDurationTemp = enterAnim.getDuration();
+//
+//                                enterAnim.setDuration(enterAnimDurationTemp);
+//                                customDialog.getDialogImpl().boxCustom.startAnimation(enterAnim);
+//
+//                                ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+//                                bkgAlpha.setDuration(enterAnimDurationTemp);
+//                                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                                    @Override
+//                                    public void onAnimationUpdate(ValueAnimator animation) {
+//                                        animProgress.run((Float) animation.getAnimatedValue());
+//                                    }
+//                                });
+//                                bkgAlpha.start();
+//                            }
+//
+//                            @Override
+//                            public void doExitAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+//                                int exitAnimResIdTemp = com.kongzue.dialogx.R.anim.anim_dialogx_default_exit;
+//
+//                                Animation exitAnim = AnimationUtils.loadAnimation(me, exitAnimResIdTemp);
+//                                customDialog.getDialogImpl().boxCustom.startAnimation(exitAnim);
+//
+//                                ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+//                                bkgAlpha.setDuration(exitAnim.getDuration());
+//                                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                                    @Override
+//                                    public void onAnimationUpdate(ValueAnimator animation) {
+//                                        animProgress.run((Float) animation.getAnimatedValue());
+//                                    }
+//                                });
+//                                bkgAlpha.start();
+//                            }
+//                        })
+                ;
             }
         });
         

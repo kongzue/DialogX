@@ -28,12 +28,14 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
+import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.PopMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
@@ -74,6 +76,7 @@ public class PopMenu extends BaseDialog {
     protected TextInfo menuTextInfo;
     protected boolean offScreen = false;                                    //超出屏幕
     protected float backgroundRadius = -1;
+    protected DialogXAnimInterface<PopMenu> dialogXAnimImpl;
     
     protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
     
@@ -198,10 +201,21 @@ public class PopMenu extends BaseDialog {
     }
     
     public PopMenu show() {
-        if (isHide && getDialogView() != null) {
-            getDialogView().setVisibility(View.VISIBLE);
+        if (isHide && getDialogView() != null && isShow) {
+            if (hideWithExitAnim && getDialogImpl() != null) {
+                getDialogView().setVisibility(View.VISIBLE);
+                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
+                    @Override
+                    public void run(Float value) {
+                        getDialogImpl().boxRoot.setBkgAlpha(value);
+                    }
+                });
+            } else {
+                getDialogView().setVisibility(View.VISIBLE);
+            }
             return this;
         }
+        
         super.beforeShow();
         if (getDialogView() == null) {
             int layoutId = isLightTheme() ? R.layout.layout_dialogx_popmenu_material : R.layout.layout_dialogx_popmenu_material_dark;
@@ -317,228 +331,14 @@ public class PopMenu extends BaseDialog {
             boxBody.setVisibility(View.INVISIBLE);
             boxBody.post(new Runnable() {
                 
-                int selectMenuIndex = -1;
-                
                 @Override
                 public void run() {
-                    long enterAnimDurationTemp = enterAnimDuration != -1 ? enterAnimDuration : (overrideEnterDuration == -1 ? 150 : overrideEnterDuration);
-                    
-                    if (baseView != null) {
-                        //有绑定按钮的情况下
-                        int targetHeight = getBodyRealHeight();
-                        boxBody.getLayoutParams().height = 1;
-                        
-                        if (overlayBaseView && !listMenu.isCanScroll()) {
-                            if (baseView instanceof TextView) {
-                                String baseText = ((TextView) baseView).getText().toString();
-                                for (CharSequence c : menuList) {
-                                    if (TextUtils.equals(c.toString(), baseText)) {
-                                        selectMenuIndex = menuList.indexOf(c);
-                                        break;
-                                    }
-                                }
-                            }
-                            //找到已选中的项目
-                            if (selectMenuIndex != -1) {
-                                int[] viewLoc = new int[2];
-                                if (listMenu.getChildAt(selectMenuIndex) != null) {
-                                    int itemHeight = listMenu.getChildAt(selectMenuIndex).getMeasuredHeight();
-                                    listMenu.getChildAt(selectMenuIndex).getLocationOnScreen(viewLoc);
-                                    boxBody.setY(baseViewLoc[1] + (baseView.getMeasuredHeight() / 2f) - (viewLoc[1] - boxBody.getY()) - (itemHeight / 2f));
-                                }
-                            }
+                    getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
+                        @Override
+                        public void run(Float value) {
+                            boxRoot.setBkgAlpha(value);
                         }
-                        
-                        //菜单位置计算逻辑
-                        int baseViewLeft = baseViewLoc[0];
-                        int baseViewTop = baseViewLoc[1];
-                        int calX = 0, calY = 0;
-                        if (alignGravity != -1) {
-                            if (isAlignGravity(Gravity.CENTER_VERTICAL)) {
-                                calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
-                            }
-                            if (isAlignGravity(Gravity.CENTER_HORIZONTAL)) {
-                                calX = (Math.max(0, baseViewLeft + (
-                                        getWidth() > 0 ? baseView.getMeasuredWidth() / 2 - getWidth() / 2 : 0
-                                )));
-                            }
-                            if (isAlignGravity(Gravity.CENTER)) {
-                                calX = (Math.max(0, baseViewLeft + (
-                                        getWidth() > 0 ? (baseView.getMeasuredWidth() / 2 - getWidth() / 2) : 0
-                                )));
-                                calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
-                            }
-                            if (overlayBaseView) {
-                                //菜单覆盖在 baseView 上时
-                                if (isAlignGravity(Gravity.TOP)) {
-                                    calY = (baseViewTop - boxBody.getHeight() + baseView.getHeight());
-                                }
-                                if (isAlignGravity(Gravity.LEFT)) {
-                                    calX = (baseViewLeft);
-                                }
-                                if (isAlignGravity(Gravity.RIGHT)) {
-                                    calX = (baseViewLeft + (getWidth() > 0 ? baseView.getMeasuredWidth() - width : 0));
-                                }
-                                if (isAlignGravity(Gravity.BOTTOM)) {
-                                    calY = (baseViewTop);
-                                }
-                            } else {
-                                if (isAlignGravity(Gravity.TOP)) {
-                                    calY = (Math.max(0, baseViewTop - boxBody.getHeight()));
-                                }
-                                if (isAlignGravity(Gravity.LEFT)) {
-                                    calX = (Math.max(0, baseViewLeft - boxBody.getWidth()));
-                                }
-                                if (isAlignGravity(Gravity.RIGHT)) {
-                                    calX = (Math.max(0, baseViewLeft + baseView.getWidth()));
-                                }
-                                if (isAlignGravity(Gravity.BOTTOM)) {
-                                    calY = (Math.max(0, baseViewTop + baseView.getHeight()));
-                                }
-                            }
-                            if (!offScreen) {
-                                if (calX < 0) {
-                                    calX = 0;
-                                }
-                                if ((calX + boxBody.getWidth()) > boxRoot.getWidth()) {
-                                    calX = boxRoot.getWidth() - boxBody.getWidth();
-                                }
-                                if (calY < 0) {
-                                    calY = 0;
-                                }
-                                if ((calY + boxBody.getHeight()) > boxRoot.getHeight()) {
-                                    calY = boxRoot.getHeight() - boxBody.getHeight();
-                                }
-                            }
-                            
-                            if (calX != 0) boxBody.setX(calX);
-                            if (calY != 0) boxBody.setY(calY);
-                        }
-                        
-                        //展开动画
-                        Animation enterAnim = new Animation() {
-                            @Override
-                            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                                int aimHeight = interpolatedTime == 1 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) (targetHeight * interpolatedTime);
-                                boxBody.getLayoutParams().height = aimHeight;
-                                boxBody.getLayoutParams().width = getWidth() == -1 ? baseView.getWidth() : getWidth();
-                                if ((boxBody.getY() + aimHeight) > boxRoot.getSafeHeight()) {
-                                    boxBody.setY(boxRoot.getSafeHeight() - aimHeight);
-                                }
-                                
-                                if (!offScreen) {
-                                    float calX = boxBody.getX();
-                                    float calY = boxBody.getY();
-                                    if (calX < 0) {
-                                        calX = 0;
-                                    }
-                                    if ((calX + boxBody.getWidth()) > boxRoot.getWidth()) {
-                                        calX = boxRoot.getWidth() - boxBody.getWidth();
-                                    }
-                                    if (calY < 0) {
-                                        calY = 0;
-                                    }
-                                    if ((calY + boxBody.getHeight()) > boxRoot.getHeight()) {
-                                        calY = boxRoot.getHeight() - boxBody.getHeight();
-                                    }
-                                    boxBody.setX(calX);
-                                    boxBody.setY(calY);
-                                }
-                                
-                                boxBody.requestLayout();
-                            }
-                            
-                            @Override
-                            public boolean willChangeBounds() {
-                                return true;
-                            }
-                        };
-                        enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                        enterAnim.setDuration(enterAnimDurationTemp);
-                        boxBody.startAnimation(enterAnim);
-                        boxBody.setVisibility(View.VISIBLE);
-                        
-                        //模糊背景
-                        if (getStyle().popMenuSettings() != null &&
-                                getStyle().popMenuSettings().blurBackgroundSettings() != null &&
-                                getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
-                        ) {
-                            int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
-                            blurView = new BlurView(boxBody.getContext(), null);
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), targetHeight);
-                            blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                            blurView.setTag("blurView");
-                            blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
-                            boxBody.addView(blurView, 0, params);
-                        }
-                        if (getStyle().popMenuSettings() != null &&
-                                getStyle().popMenuSettings().backgroundMaskColorRes() != 0) {
-                            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-                            bkgAlpha.setDuration(enterAnimDurationTemp);
-                            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                @Override
-                                public void onAnimationUpdate(ValueAnimator animation) {
-                                    float value = (float) animation.getAnimatedValue();
-                                    boxRoot.setBkgAlpha(value);
-                                }
-                            });
-                            bkgAlpha.start();
-                        }
-                    } else {
-                        //无绑定按钮的情况下
-                        RelativeLayout.LayoutParams rLp = (RelativeLayout.LayoutParams) boxBody.getLayoutParams();
-                        rLp.addRule(RelativeLayout.CENTER_IN_PARENT);
-                        rLp.width = getWidth() == -1 ? RelativeLayout.LayoutParams.MATCH_PARENT : getWidth();
-                        rLp.leftMargin = dip2px(50);
-                        rLp.rightMargin = dip2px(50);
-                        boxBody.setLayoutParams(rLp);
-                        boxBody.setAlpha(0f);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            boxBody.setElevation(dip2px(20));
-                        }
-                        boxBody.setVisibility(View.VISIBLE);
-                        boxBody.animate().alpha(1f).setDuration(enterAnimDurationTemp);
-                        boxBody.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                //模糊背景
-                                if (getStyle().popMenuSettings() != null &&
-                                        getStyle().popMenuSettings().blurBackgroundSettings() != null &&
-                                        getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
-                                ) {
-                                    int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
-                                    blurView = new BlurView(boxBody.getContext(), null);
-                                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
-                                    blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                    blurView.setTag("blurView");
-                                    blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
-                                    boxBody.addView(blurView, 0, params);
-                                    
-                                    ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-                                    bkgAlpha.setDuration(enterAnimDurationTemp);
-                                    bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                        @Override
-                                        public void onAnimationUpdate(ValueAnimator animation) {
-                                            float value = (float) animation.getAnimatedValue();
-                                            boxRoot.setBkgAlpha(value);
-                                        }
-                                    });
-                                    bkgAlpha.start();
-                                }
-                            }
-                        });
-                        
-                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-                        bkgAlpha.setDuration(enterAnimDurationTemp);
-                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animation) {
-                                float value = (float) animation.getAnimatedValue();
-                                boxRoot.setBkgAlpha(value);
-                            }
-                        });
-                        bkgAlpha.start();
-                    }
+                    });
                 }
             });
             
@@ -647,7 +447,227 @@ public class PopMenu extends BaseDialog {
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
+                        getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+                            @Override
+                            public void run(Float value) {
+                                if (boxRoot != null && baseView == null) {
+                                    boxRoot.setBkgAlpha(value);
+                                }
+                                if (value == 0f) {
+                                    dismiss(dialogView);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        
+        protected DialogXAnimInterface<PopMenu> getDialogXAnimImpl() {
+            if (dialogXAnimImpl == null) {
+                dialogXAnimImpl = new DialogXAnimInterface<PopMenu>() {
+                    
+                    int selectMenuIndex = -1;
+                    
+                    @Override
+                    public void doShowAnim(PopMenu dialog, ObjectRunnable<Float> animProgress) {
+                        long enterAnimDurationTemp = enterAnimDuration != -1 ? enterAnimDuration : (overrideEnterDuration == -1 ? 150 : overrideEnterDuration);
                         
+                        if (baseView != null) {
+                            //有绑定按钮的情况下
+                            int targetHeight = getBodyRealHeight();
+                            boxBody.getLayoutParams().height = 1;
+                            
+                            if (overlayBaseView && !listMenu.isCanScroll()) {
+                                if (baseView instanceof TextView) {
+                                    String baseText = ((TextView) baseView).getText().toString();
+                                    for (CharSequence c : menuList) {
+                                        if (TextUtils.equals(c.toString(), baseText)) {
+                                            selectMenuIndex = menuList.indexOf(c);
+                                            break;
+                                        }
+                                    }
+                                }
+                                //找到已选中的项目
+                                if (selectMenuIndex != -1) {
+                                    int[] viewLoc = new int[2];
+                                    if (listMenu.getChildAt(selectMenuIndex) != null) {
+                                        int itemHeight = listMenu.getChildAt(selectMenuIndex).getMeasuredHeight();
+                                        listMenu.getChildAt(selectMenuIndex).getLocationOnScreen(viewLoc);
+                                        boxBody.setY(baseViewLoc[1] + (baseView.getMeasuredHeight() / 2f) - (viewLoc[1] - boxBody.getY()) - (itemHeight / 2f));
+                                    }
+                                }
+                            }
+                            
+                            //菜单位置计算逻辑
+                            int baseViewLeft = baseViewLoc[0];
+                            int baseViewTop = baseViewLoc[1];
+                            int calX = 0, calY = 0;
+                            if (alignGravity != -1) {
+                                if (isAlignGravity(Gravity.CENTER_VERTICAL)) {
+                                    calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
+                                }
+                                if (isAlignGravity(Gravity.CENTER_HORIZONTAL)) {
+                                    calX = (Math.max(0, baseViewLeft + (
+                                            getWidth() > 0 ? baseView.getMeasuredWidth() / 2 - getWidth() / 2 : 0
+                                    )));
+                                }
+                                if (isAlignGravity(Gravity.CENTER)) {
+                                    calX = (Math.max(0, baseViewLeft + (
+                                            getWidth() > 0 ? (baseView.getMeasuredWidth() / 2 - getWidth() / 2) : 0
+                                    )));
+                                    calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
+                                }
+                                if (overlayBaseView) {
+                                    //菜单覆盖在 baseView 上时
+                                    if (isAlignGravity(Gravity.TOP)) {
+                                        calY = (baseViewTop - boxBody.getHeight() + baseView.getHeight());
+                                    }
+                                    if (isAlignGravity(Gravity.LEFT)) {
+                                        calX = (baseViewLeft);
+                                    }
+                                    if (isAlignGravity(Gravity.RIGHT)) {
+                                        calX = (baseViewLeft + (getWidth() > 0 ? baseView.getMeasuredWidth() - width : 0));
+                                    }
+                                    if (isAlignGravity(Gravity.BOTTOM)) {
+                                        calY = (baseViewTop);
+                                    }
+                                } else {
+                                    if (isAlignGravity(Gravity.TOP)) {
+                                        calY = (Math.max(0, baseViewTop - boxBody.getHeight()));
+                                    }
+                                    if (isAlignGravity(Gravity.LEFT)) {
+                                        calX = (Math.max(0, baseViewLeft - boxBody.getWidth()));
+                                    }
+                                    if (isAlignGravity(Gravity.RIGHT)) {
+                                        calX = (Math.max(0, baseViewLeft + baseView.getWidth()));
+                                    }
+                                    if (isAlignGravity(Gravity.BOTTOM)) {
+                                        calY = (Math.max(0, baseViewTop + baseView.getHeight()));
+                                    }
+                                }
+                                if (!offScreen) {
+                                    if (calX < 0) {
+                                        calX = 0;
+                                    }
+                                    if ((calX + boxBody.getWidth()) > boxRoot.getWidth()) {
+                                        calX = boxRoot.getWidth() - boxBody.getWidth();
+                                    }
+                                    if (calY < 0) {
+                                        calY = 0;
+                                    }
+                                    if ((calY + boxBody.getHeight()) > boxRoot.getHeight()) {
+                                        calY = boxRoot.getHeight() - boxBody.getHeight();
+                                    }
+                                }
+                                
+                                if (calX != 0) boxBody.setX(calX);
+                                if (calY != 0) boxBody.setY(calY);
+                            }
+                            
+                            //展开动画
+                            Animation enterAnim = new Animation() {
+                                @Override
+                                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                                    int aimHeight = interpolatedTime == 1 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) (targetHeight * interpolatedTime);
+                                    boxBody.getLayoutParams().height = aimHeight;
+                                    boxBody.getLayoutParams().width = getWidth() == -1 ? baseView.getWidth() : getWidth();
+                                    if ((boxBody.getY() + aimHeight) > boxRoot.getSafeHeight()) {
+                                        boxBody.setY(boxRoot.getSafeHeight() - aimHeight);
+                                    }
+                                    
+                                    if (!offScreen) {
+                                        float calX = boxBody.getX();
+                                        float calY = boxBody.getY();
+                                        if (calX < 0) {
+                                            calX = 0;
+                                        }
+                                        if ((calX + boxBody.getWidth()) > boxRoot.getWidth()) {
+                                            calX = boxRoot.getWidth() - boxBody.getWidth();
+                                        }
+                                        if (calY < 0) {
+                                            calY = 0;
+                                        }
+                                        if ((calY + boxBody.getHeight()) > boxRoot.getHeight()) {
+                                            calY = boxRoot.getHeight() - boxBody.getHeight();
+                                        }
+                                        boxBody.setX(calX);
+                                        boxBody.setY(calY);
+                                    }
+                                    
+                                    boxBody.requestLayout();
+                                }
+                                
+                                @Override
+                                public boolean willChangeBounds() {
+                                    return true;
+                                }
+                            };
+                            enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                            enterAnim.setDuration(enterAnimDurationTemp);
+                            boxBody.startAnimation(enterAnim);
+                            boxBody.setVisibility(View.VISIBLE);
+                            
+                            //模糊背景
+                            if (getStyle().popMenuSettings() != null &&
+                                    getStyle().popMenuSettings().blurBackgroundSettings() != null &&
+                                    getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
+                            ) {
+                                int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
+                                blurView = new BlurView(boxBody.getContext(), null);
+                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), targetHeight);
+                                blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
+                                blurView.setTag("blurView");
+                                blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
+                                boxBody.addView(blurView, 0, params);
+                            }
+                        } else {
+                            //无绑定按钮的情况下
+                            RelativeLayout.LayoutParams rLp = (RelativeLayout.LayoutParams) boxBody.getLayoutParams();
+                            rLp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                            rLp.width = getWidth() == -1 ? RelativeLayout.LayoutParams.MATCH_PARENT : getWidth();
+                            rLp.leftMargin = dip2px(50);
+                            rLp.rightMargin = dip2px(50);
+                            boxBody.setLayoutParams(rLp);
+                            boxBody.setAlpha(0f);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                boxBody.setElevation(dip2px(20));
+                            }
+                            boxBody.setVisibility(View.VISIBLE);
+                            boxBody.animate().alpha(1f).setDuration(enterAnimDurationTemp);
+                            boxBody.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //模糊背景
+                                    if (getStyle().popMenuSettings() != null &&
+                                            getStyle().popMenuSettings().blurBackgroundSettings() != null &&
+                                            getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
+                                    ) {
+                                        int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
+                                        blurView = new BlurView(boxBody.getContext(), null);
+                                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
+                                        blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
+                                        blurView.setTag("blurView");
+                                        blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
+                                        boxBody.addView(blurView, 0, params);
+                                    }
+                                }
+                            });
+                            
+                            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                            bkgAlpha.setDuration(enterAnimDurationTemp);
+                            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    animProgress.run((Float) animation.getAnimatedValue());
+                                }
+                            });
+                            bkgAlpha.start();
+                        }
+                    }
+                    
+                    @Override
+                    public void doExitAnim(PopMenu dialog, ObjectRunnable<Float> animProgress) {
                         if (overrideExitDuration != -1) {
                             exitAnimDuration = overrideExitDuration;
                         }
@@ -662,28 +682,19 @@ public class PopMenu extends BaseDialog {
                                 .setInterpolator(new AccelerateInterpolator())
                                 .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
                         
-                        if (baseView == null) {
-                            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1, 0f);
-                            bkgAlpha.setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-                            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                @Override
-                                public void onAnimationUpdate(ValueAnimator animation) {
-                                    float value = (float) animation.getAnimatedValue();
-                                    boxRoot.setBkgAlpha(value);
-                                }
-                            });
-                            bkgAlpha.start();
-                        }
-                        
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1, 0f);
+                        bkgAlpha.setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
-                            public void run() {
-                                dismiss(dialogView);
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                animProgress.run((Float) animation.getAnimatedValue());
                             }
-                        }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                        });
+                        bkgAlpha.start();
                     }
-                });
+                };
             }
+            return dialogXAnimImpl;
         }
     }
     
@@ -983,8 +994,36 @@ public class PopMenu extends BaseDialog {
     
     public void hide() {
         isHide = true;
+        hideWithExitAnim = false;
         if (getDialogView() != null) {
             getDialogView().setVisibility(View.GONE);
         }
+    }
+    
+    protected boolean hideWithExitAnim;
+    
+    public void hideWithExitAnim() {
+        hideWithExitAnim = true;
+        isHide = true;
+        if (getDialogImpl() != null) {
+            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+                @Override
+                public void run(Float value) {
+                    getDialogImpl().boxRoot.setBkgAlpha(value);
+                    if (value == 0 && getDialogView() != null) {
+                        getDialogView().setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+    }
+    
+    public DialogXAnimInterface<PopMenu> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public PopMenu setDialogXAnimImpl(DialogXAnimInterface<PopMenu> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
     }
 }

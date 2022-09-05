@@ -10,6 +10,7 @@ import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -628,6 +629,15 @@ public class InputDialog extends MessageDialog {
     public InputDialog setTitleIcon(Drawable titleIcon) {
         this.titleIcon = titleIcon;
         refreshUI();
+        return this;
+    }
+    
+    public DialogXAnimInterface<MessageDialog> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public InputDialog setDialogXAnimImpl(DialogXAnimInterface<MessageDialog> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
 }

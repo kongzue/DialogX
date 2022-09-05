@@ -22,6 +22,7 @@ import androidx.annotation.ColorInt;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -686,6 +687,15 @@ public class GuideDialog extends CustomDialog {
     public GuideDialog setOnStageLightPathClickListener(OnDialogButtonClickListener<GuideDialog> onStageLightPathClickListener) {
         this.onStageLightPathClickListener = onStageLightPathClickListener;
         refreshUI();
+        return this;
+    }
+    
+    public DialogXAnimInterface<CustomDialog> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public GuideDialog setDialogXAnimImpl(DialogXAnimInterface<CustomDialog> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
 }

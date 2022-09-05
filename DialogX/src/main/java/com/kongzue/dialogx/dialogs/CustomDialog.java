@@ -20,6 +20,7 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -57,6 +58,7 @@ public class CustomDialog extends BaseDialog {
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
     protected OnBackgroundMaskClickListener<CustomDialog> onBackgroundMaskClickListener;
+    protected DialogXAnimInterface<CustomDialog> dialogXAnimImpl;
     
     protected View baseView;
     protected int alignViewGravity = -1;                                    //指定菜单相对 baseView 的位置
@@ -116,15 +118,16 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog show() {
         if (isHide && getDialogView() != null && isShow) {
-            if (hideWithExitAnim && getDialogImpl()!=null) {
+            if (hideWithExitAnim && getDialogImpl() != null) {
                 getDialogView().setVisibility(View.VISIBLE);
-                getDialogImpl().doShowAnim(new ObjectRunnable<ValueAnimator>() {
+                getDialogImpl().getDialogXAnimImpl().doShowAnim(CustomDialog.this, new ObjectRunnable<Float>() {
                     @Override
-                    public void run(ValueAnimator valueAnimator) {
-                        float value = (float) valueAnimator.getAnimatedValue();
+                    public void run(Float animProgress) {
+                        float value = animProgress;
                         getDialogImpl().boxRoot.setBkgAlpha(value);
                     }
                 });
+                getDialogImpl().boxCustom.setVisibility(View.VISIBLE);
             } else {
                 getDialogView().setVisibility(View.VISIBLE);
             }
@@ -214,13 +217,14 @@ public class CustomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    doShowAnim(new ObjectRunnable<ValueAnimator>() {
+                    getDialogXAnimImpl().doShowAnim(CustomDialog.this, new ObjectRunnable<Float>() {
                         @Override
-                        public void run(ValueAnimator valueAnimator) {
-                            float value = (float) valueAnimator.getAnimatedValue();
+                        public void run(Float animProgress) {
+                            float value = animProgress;
                             boxRoot.setBkgAlpha(value);
                         }
                     });
+                    getDialogImpl().boxCustom.setVisibility(View.VISIBLE);
                 }
             });
             
@@ -386,8 +390,12 @@ public class CustomDialog extends BaseDialog {
                 boxCustom.setMinimumHeight(height);
             }
             
+            boxRoot.setBackgroundColor(getMaskColor());
+            
             onDialogRefreshUI();
         }
+        
+        long exitAnimDurationTemp = -1;
         
         @Override
         public void doDismiss(View v) {
@@ -397,143 +405,147 @@ public class CustomDialog extends BaseDialog {
                 boxCustom.post(new Runnable() {
                     @Override
                     public void run() {
-                        doExitAnim(new ObjectRunnable<ValueAnimator>() {
+                        getDialogXAnimImpl().doExitAnim(CustomDialog.this, new ObjectRunnable<Float>() {
+                            
                             @Override
-                            public void run(ValueAnimator valueAnimator) {
+                            public void run(Float animProgress) {
+                                float value = animProgress;
                                 if (boxRoot != null) {
-                                    float value = (float) valueAnimator.getAnimatedValue();
                                     boxRoot.setBkgAlpha(value);
-                                    if (value == 0) boxRoot.setVisibility(View.GONE);
+                                }
+                                if (value == 0) {
+                                    if (boxRoot != null) boxRoot.setVisibility(View.GONE);
+                                    dismiss(dialogView);
                                 }
                             }
                         });
-    
-                        runOnMainDelay(new Runnable() {
-                            @Override
-                            public void run() {
-                                dismiss(dialogView);
-                            }
-                        },exitAnimDurationTemp);
                     }
                 });
             }
         }
-    
-        long exitAnimDurationTemp;
-    
-        protected void doExitAnim(ObjectRunnable<ValueAnimator> objectRunnable) {
-            int exitAnimResIdTemp = R.anim.anim_dialogx_default_exit;
-            if (overrideExitAnimRes != 0) {
-                exitAnimResIdTemp = overrideExitAnimRes;
+        
+        protected DialogXAnimInterface<CustomDialog> getDialogXAnimImpl() {
+            if (dialogXAnimImpl == null) {
+                dialogXAnimImpl = new DialogXAnimInterface<CustomDialog>() {
+                    @Override
+                    public void doShowAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+                        Animation enterAnim;
+                        if (enterAnimResId == R.anim.anim_dialogx_default_enter &&
+                                exitAnimResId == R.anim.anim_dialogx_default_exit &&
+                                baseView == null) {
+                            switch (align) {
+                                case TOP:
+                                case TOP_CENTER:
+                                case TOP_LEFT:
+                                case TOP_RIGHT:
+                                    enterAnimResId = R.anim.anim_dialogx_top_enter;
+                                    exitAnimResId = R.anim.anim_dialogx_top_exit;
+                                    break;
+                                case BOTTOM:
+                                case BOTTOM_CENTER:
+                                case BOTTOM_LEFT:
+                                case BOTTOM_RIGHT:
+                                    enterAnimResId = R.anim.anim_dialogx_bottom_enter;
+                                    exitAnimResId = R.anim.anim_dialogx_bottom_exit;
+                                    break;
+                                case LEFT:
+                                case LEFT_CENTER:
+                                case LEFT_TOP:
+                                case LEFT_BOTTOM:
+                                    enterAnimResId = R.anim.anim_dialogx_left_enter;
+                                    exitAnimResId = R.anim.anim_dialogx_left_exit;
+                                    break;
+                                case RIGHT:
+                                case RIGHT_CENTER:
+                                case RIGHT_TOP:
+                                case RIGHT_BOTTOM:
+                                    enterAnimResId = R.anim.anim_dialogx_right_enter;
+                                    exitAnimResId = R.anim.anim_dialogx_right_exit;
+                                    break;
+                            }
+                            enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
+                            enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                        } else {
+                            int enterAnimResIdTemp = R.anim.anim_dialogx_default_enter;
+                            if (overrideEnterAnimRes != 0) {
+                                enterAnimResIdTemp = overrideEnterAnimRes;
+                            }
+                            if (enterAnimResId != 0) {
+                                enterAnimResIdTemp = enterAnimResId;
+                            }
+                            enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResIdTemp);
+                        }
+                        long enterAnimDurationTemp = enterAnim.getDuration();
+                        if (overrideEnterDuration >= 0) {
+                            enterAnimDurationTemp = overrideEnterDuration;
+                        }
+                        if (enterAnimDuration >= 0) {
+                            enterAnimDurationTemp = enterAnimDuration;
+                        }
+                        enterAnim.setDuration(enterAnimDurationTemp);
+                        boxCustom.setVisibility(View.VISIBLE);
+                        boxCustom.startAnimation(enterAnim);
+                        
+                        boxRoot.setBackgroundColor(maskColor);
+                        if (overrideMaskEnterAnimRes != 0) {
+                            Animation maskEnterAnim = AnimationUtils.loadAnimation(getTopActivity(), overrideMaskEnterAnimRes);
+                            maskEnterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                            maskEnterAnim.setDuration(enterAnimDurationTemp);
+                            boxRoot.startAnimation(maskEnterAnim);
+                        }
+                        
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                        bkgAlpha.setDuration(enterAnimDurationTemp);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                animProgress.run((Float) animation.getAnimatedValue());
+                            }
+                        });
+                        bkgAlpha.start();
+                    }
+                    
+                    @Override
+                    public void doExitAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+                        int exitAnimResIdTemp = R.anim.anim_dialogx_default_exit;
+                        if (overrideExitAnimRes != 0) {
+                            exitAnimResIdTemp = overrideExitAnimRes;
+                        }
+                        if (exitAnimResId != 0) {
+                            exitAnimResIdTemp = exitAnimResId;
+                        }
+                        
+                        Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxCustom.getContext() : getTopActivity(), exitAnimResIdTemp);
+                        exitAnimDurationTemp = exitAnim.getDuration();
+                        if (overrideExitDuration >= 0) {
+                            exitAnimDurationTemp = overrideExitDuration;
+                        }
+                        if (exitAnimDuration >= 0) {
+                            exitAnimDurationTemp = exitAnimDuration;
+                        }
+                        exitAnim.setDuration(exitAnimDurationTemp);
+                        boxCustom.startAnimation(exitAnim);
+                        
+                        if (overrideMaskExitAnimRes != 0) {
+                            Animation maskExitAnim = AnimationUtils.loadAnimation(getTopActivity(), overrideMaskExitAnimRes);
+                            maskExitAnim.setDuration(exitAnimDurationTemp);
+                            maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
+                            boxRoot.startAnimation(maskExitAnim);
+                        }
+                        
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
+                        bkgAlpha.setDuration(exitAnimDurationTemp);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                animProgress.run((Float) animation.getAnimatedValue());
+                            }
+                        });
+                        bkgAlpha.start();
+                    }
+                };
             }
-            if (exitAnimResId != 0) {
-                exitAnimResIdTemp = exitAnimResId;
-            }
-    
-            Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxCustom.getContext() : getTopActivity(), exitAnimResIdTemp);
-            exitAnimDurationTemp = exitAnim.getDuration();
-            if (overrideExitDuration >= 0) {
-                exitAnimDurationTemp = overrideExitDuration;
-            }
-            if (exitAnimDuration >= 0) {
-                exitAnimDurationTemp = exitAnimDuration;
-            }
-            exitAnim.setDuration(exitAnimDurationTemp);
-            boxCustom.startAnimation(exitAnim);
-    
-            if (overrideMaskExitAnimRes != 0) {
-                Animation maskExitAnim = AnimationUtils.loadAnimation(getTopActivity(), overrideMaskExitAnimRes);
-                maskExitAnim.setDuration(exitAnimDurationTemp);
-                maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
-                boxRoot.startAnimation(maskExitAnim);
-            }
-    
-            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
-            bkgAlpha.setDuration(exitAnimDurationTemp);
-            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    objectRunnable.run(animation);
-                }
-            });
-            bkgAlpha.start();
-        }
-    
-        protected void doShowAnim(ObjectRunnable<ValueAnimator> objectRunnable){
-            Animation enterAnim;
-            if (enterAnimResId == R.anim.anim_dialogx_default_enter &&
-                    exitAnimResId == R.anim.anim_dialogx_default_exit &&
-                    baseView == null) {
-                switch (align) {
-                    case TOP:
-                    case TOP_CENTER:
-                    case TOP_LEFT:
-                    case TOP_RIGHT:
-                        enterAnimResId = R.anim.anim_dialogx_top_enter;
-                        exitAnimResId = R.anim.anim_dialogx_top_exit;
-                        break;
-                    case BOTTOM:
-                    case BOTTOM_CENTER:
-                    case BOTTOM_LEFT:
-                    case BOTTOM_RIGHT:
-                        enterAnimResId = R.anim.anim_dialogx_bottom_enter;
-                        exitAnimResId = R.anim.anim_dialogx_bottom_exit;
-                        break;
-                    case LEFT:
-                    case LEFT_CENTER:
-                    case LEFT_TOP:
-                    case LEFT_BOTTOM:
-                        enterAnimResId = R.anim.anim_dialogx_left_enter;
-                        exitAnimResId = R.anim.anim_dialogx_left_exit;
-                        break;
-                    case RIGHT:
-                    case RIGHT_CENTER:
-                    case RIGHT_TOP:
-                    case RIGHT_BOTTOM:
-                        enterAnimResId = R.anim.anim_dialogx_right_enter;
-                        exitAnimResId = R.anim.anim_dialogx_right_exit;
-                        break;
-                }
-                enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
-                enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-            } else {
-                int enterAnimResIdTemp = R.anim.anim_dialogx_default_enter;
-                if (overrideEnterAnimRes != 0) {
-                    enterAnimResIdTemp = overrideEnterAnimRes;
-                }
-                if (enterAnimResId != 0) {
-                    enterAnimResIdTemp = enterAnimResId;
-                }
-                enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResIdTemp);
-            }
-            long enterAnimDurationTemp = enterAnim.getDuration();
-            if (overrideEnterDuration >= 0) {
-                enterAnimDurationTemp = overrideEnterDuration;
-            }
-            if (enterAnimDuration >= 0) {
-                enterAnimDurationTemp = enterAnimDuration;
-            }
-            enterAnim.setDuration(enterAnimDurationTemp);
-            boxCustom.setVisibility(View.VISIBLE);
-            boxCustom.startAnimation(enterAnim);
-    
-            boxRoot.setBackgroundColor(maskColor);
-            if (overrideMaskEnterAnimRes != 0) {
-                Animation maskEnterAnim = AnimationUtils.loadAnimation(getTopActivity(), overrideMaskEnterAnimRes);
-                maskEnterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                maskEnterAnim.setDuration(enterAnimDurationTemp);
-                boxRoot.startAnimation(maskEnterAnim);
-            }
-    
-            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-            bkgAlpha.setDuration(enterAnimDurationTemp);
-            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    objectRunnable.run(animation);
-                }
-            });
-            bkgAlpha.start();
+            return dialogXAnimImpl;
         }
     }
     
@@ -689,6 +701,10 @@ public class CustomDialog extends BaseDialog {
         return this;
     }
     
+    public int getMaskColor() {
+        return maskColor;
+    }
+    
     public long getEnterAnimDuration() {
         return enterAnimDuration;
     }
@@ -740,13 +756,17 @@ public class CustomDialog extends BaseDialog {
         hideWithExitAnim = true;
         isHide = true;
         if (getDialogImpl() != null) {
-            getDialogImpl().doExitAnim(new ObjectRunnable<ValueAnimator>() {
+            getDialogImpl().getDialogXAnimImpl().doExitAnim(CustomDialog.this, new ObjectRunnable<Float>() {
                 @Override
-                public void run(ValueAnimator valueAnimator) {
-                    float value = (float) valueAnimator.getAnimatedValue();
-                    getDialogImpl().boxRoot.setBkgAlpha(value);
+                public void run(Float animProgress) {
+                    float value = animProgress;
+                    if (getDialogImpl().boxRoot != null) {
+                        getDialogImpl().boxRoot.setBkgAlpha(value);
+                    }
                     if (value == 0 && getDialogView() != null) {
-                        getDialogView().setVisibility(View.GONE);
+                        if (getDialogView() != null) {
+                            getDialogView().setVisibility(View.GONE);
+                        }
                     }
                 }
             });
@@ -920,6 +940,15 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<CustomDialog> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
+        return this;
+    }
+    
+    public DialogXAnimInterface<CustomDialog> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public CustomDialog setDialogXAnimImpl(DialogXAnimInterface<CustomDialog> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
 }

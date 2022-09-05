@@ -29,12 +29,14 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
+import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.PopValueAnimator;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.BlurView;
@@ -77,6 +79,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     protected boolean autoTintIconInLightOrDarkMode = true;
     protected BOOLEAN tintIcon;
     protected float backgroundRadius = -1;
+    protected DialogXAnimInterface<PopNotification> dialogXAnimImpl;
     
     protected int iconResId;
     protected Bitmap iconBitmap;
@@ -338,7 +341,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     }
     
     public PopNotification show() {
-        if (isHide && getDialogView() != null){
+        if (isHide && getDialogView() != null) {
             getDialogView().setVisibility(View.VISIBLE);
             return this;
         }
@@ -588,19 +591,12 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_notification_enter : enterAnimResId);
-                    enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                    if (enterAnimDuration != -1) {
-                        enterAnim.setDuration(enterAnimDuration);
-                    }
-                    enterAnim.setFillAfter(true);
-                    boxBody.startAnimation(enterAnim);
-                    
-                    boxRoot.animate()
-                            .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
-                            .alpha(1f)
-                            .setInterpolator(new DecelerateInterpolator())
-                            .setListener(null);
+                    getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
+                        @Override
+                        public void run(Float aFloat) {
+        
+                        }
+                    });
                     
                     if (!DialogX.onlyOnePopNotification) {
                         if (popNotificationList != null) {
@@ -746,6 +742,41 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
+                        getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+                            @Override
+                            public void run(Float value) {
+                                if (value == 0f) {
+                                    waitForDismiss();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        
+        protected DialogXAnimInterface<PopNotification> getDialogXAnimImpl() {
+            if (dialogXAnimImpl == null) {
+                dialogXAnimImpl = new DialogXAnimInterface<PopNotification>() {
+                    @Override
+                    public void doShowAnim(PopNotification dialog, ObjectRunnable<Float> animProgress) {
+                        Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_notification_enter : enterAnimResId);
+                        enterAnim.setInterpolator(new DecelerateInterpolator(2f));
+                        if (enterAnimDuration != -1) {
+                            enterAnim.setDuration(enterAnimDuration);
+                        }
+                        enterAnim.setFillAfter(true);
+                        boxBody.startAnimation(enterAnim);
+    
+                        boxRoot.animate()
+                                .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
+                                .alpha(1f)
+                                .setInterpolator(new DecelerateInterpolator())
+                                .setListener(null);
+                    }
+                    
+                    @Override
+                    public void doExitAnim(PopNotification dialog, ObjectRunnable<Float> animProgress) {
                         Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxRoot.getContext() : getTopActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_notification_exit : exitAnimResId);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
@@ -758,15 +789,16 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                                 .setInterpolator(new AccelerateInterpolator())
                                 .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
                         
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        runOnMainDelay(new Runnable() {
                             @Override
                             public void run() {
-                                waitForDismiss();
+                                animProgress.run(0f);
                             }
                         }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
                     }
-                });
+                };
             }
+            return dialogXAnimImpl;
         }
     }
     
@@ -1287,5 +1319,14 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     
     public float getRadius() {
         return backgroundRadius;
+    }
+    
+    public DialogXAnimInterface<PopNotification> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public PopNotification setDialogXAnimImpl(DialogXAnimInterface<PopNotification> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
     }
 }

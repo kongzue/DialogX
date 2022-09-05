@@ -222,7 +222,6 @@ public class ProgressView extends View implements ProgressViewInterface {
     }
     
     private void drawDoneMark(int status, Canvas canvas) {
-        Log.e(">>>", "drawDoneMark.status: "+status );
         if (rotateAnimator.getInterpolator() != interpolator) {
             rotateAnimator.setInterpolator(interpolator);
         }
@@ -408,7 +407,6 @@ public class ProgressView extends View implements ProgressViewInterface {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 tickAnimatorValue = (float) animation.getAnimatedValue();
-                Log.e(">>>", "onAnimationUpdate: " + tickAnimatorValue);
                 invalidate();
             }
         });

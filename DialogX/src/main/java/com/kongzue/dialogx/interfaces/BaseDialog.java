@@ -674,6 +674,9 @@ public abstract class BaseDialog {
     }
     
     protected static void runOnMainDelay(Runnable runnable, long delay) {
+        if (delay < 0) {
+            return;
+        }
         if (!DialogX.autoRunOnUIThread) {
             runnable.run();
         }

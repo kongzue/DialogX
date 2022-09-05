@@ -17,6 +17,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BottomMenuListViewTouchEvent;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
+import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -1168,6 +1169,15 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setTitleIcon(Drawable titleIcon) {
         this.titleIcon = titleIcon;
         refreshUI();
+        return this;
+    }
+    
+    public DialogXAnimInterface<BottomDialog> getDialogXAnimImpl() {
+        return dialogXAnimImpl;
+    }
+    
+    public BottomMenu setDialogXAnimImpl(DialogXAnimInterface<BottomDialog> dialogXAnimImpl) {
+        this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
 }
