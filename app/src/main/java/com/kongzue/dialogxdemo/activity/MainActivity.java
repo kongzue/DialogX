@@ -297,6 +297,8 @@ public class MainActivity extends BaseActivity {
     private int[] selectMenuIndexArray;
     private String multiSelectMenuResultCache;
     
+    CustomDialog customDialog;
+    
     @Override
     public void setEvents() {
         grpMode.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
@@ -926,7 +928,11 @@ public class MainActivity extends BaseActivity {
         btnCustomDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
+                if (customDialog!=null){
+                    customDialog.show();
+                    return;
+                }
+                customDialog = CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
                             @Override
                             public void onBind(final CustomDialog dialog, View v) {
                                 ImageView btnOk;
@@ -934,7 +940,7 @@ public class MainActivity extends BaseActivity {
                                 btnOk.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        dialog.dismiss();
+                                        dialog.hideWithExitAnim();
                                     }
                                 });
                             }

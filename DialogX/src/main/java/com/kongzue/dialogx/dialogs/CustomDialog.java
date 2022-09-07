@@ -42,8 +42,6 @@ public class CustomDialog extends BaseDialog {
     public static int overrideExitDuration = -1;
     public static int overrideEnterAnimRes = 0;
     public static int overrideExitAnimRes = 0;
-    public static int overrideMaskEnterAnimRes = R.anim.anim_dialogx_default_alpha_enter;
-    public static int overrideMaskExitAnimRes = R.anim.anim_dialogx_default_exit;
     public static BOOLEAN overrideCancelable;
     protected OnBindView<CustomDialog> onBindView;
     protected DialogLifecycleCallback<CustomDialog> dialogLifecycleCallback;
@@ -487,12 +485,6 @@ public class CustomDialog extends BaseDialog {
                         boxCustom.startAnimation(enterAnim);
                         
                         boxRoot.setBackgroundColor(maskColor);
-                        if (overrideMaskEnterAnimRes != 0) {
-                            Animation maskEnterAnim = AnimationUtils.loadAnimation(getTopActivity(), overrideMaskEnterAnimRes);
-                            maskEnterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                            maskEnterAnim.setDuration(enterAnimDurationTemp);
-                            boxRoot.startAnimation(maskEnterAnim);
-                        }
                         
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
                         bkgAlpha.setDuration(enterAnimDurationTemp);
@@ -525,13 +517,6 @@ public class CustomDialog extends BaseDialog {
                         }
                         exitAnim.setDuration(exitAnimDurationTemp);
                         boxCustom.startAnimation(exitAnim);
-                        
-                        if (overrideMaskExitAnimRes != 0) {
-                            Animation maskExitAnim = AnimationUtils.loadAnimation(getTopActivity(), overrideMaskExitAnimRes);
-                            maskExitAnim.setDuration(exitAnimDurationTemp);
-                            maskExitAnim.setInterpolator(new DecelerateInterpolator(2f));
-                            boxRoot.startAnimation(maskExitAnim);
-                        }
                         
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
                         bkgAlpha.setDuration(exitAnimDurationTemp);
@@ -763,7 +748,7 @@ public class CustomDialog extends BaseDialog {
                     if (getDialogImpl().boxRoot != null) {
                         getDialogImpl().boxRoot.setBkgAlpha(value);
                     }
-                    if (value == 0 && getDialogView() != null) {
+                    if (value == 0) {
                         if (getDialogView() != null) {
                             getDialogView().setVisibility(View.GONE);
                         }
