@@ -334,4 +334,12 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         this.interceptBack = interceptBack;
         return this;
     }
+    
+    @Override
+    public void setVisibility(int visibility) {
+        if (visibility == GONE && getAlpha() == 0f) {
+            setAlpha(0.01f);
+        }
+        super.setVisibility(visibility);
+    }
 }
