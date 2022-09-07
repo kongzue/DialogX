@@ -643,10 +643,19 @@ public class BottomDialog extends BaseDialog {
                         long enterAnimDurationTemp = 300;
                         
                         float customDialogTop = 0;
-                        if (bottomDialogMaxHeight > 0 && bottomDialogMaxHeight <= 1) {
-                            customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight * boxBkg.getHeight();
-                        } else if (bottomDialogMaxHeight > 1) {
-                            customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight;
+                        if (dialog.isAllowInterceptTouch()) {
+                            if (bottomDialogMaxHeight > 0 && bottomDialogMaxHeight <= 1) {
+                                customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight * boxBkg.getHeight();
+                            } else if (bottomDialogMaxHeight > 1) {
+                                customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight;
+                            }
+                        } else {
+                            if (bottomDialogMaxHeight > 0 && bottomDialogMaxHeight <= 1) {
+                                customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight * boxBkg.getHeight();
+                            } else if (bottomDialogMaxHeight > 1) {
+                                customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight;
+                            }
+                            boxBkg.setPadding(0,0,0, (int) customDialogTop);
                         }
                         
                         //上移动画
