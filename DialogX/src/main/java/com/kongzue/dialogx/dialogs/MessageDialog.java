@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -330,15 +331,17 @@ public class MessageDialog extends BaseDialog {
                     isShow = true;
                     preShow = false;
                     
+                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    
+                    onDialogShow();
+                    getDialogLifecycleCallback().onShow(me);
+    
                     getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
                         @Override
                         public void run(Float value) {
                             boxRoot.setBkgAlpha(value);
                         }
                     });
-                    
-                    onDialogShow();
-                    getDialogLifecycleCallback().onShow(me);
                     
                     if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground()) {
                         bkg.post(new Runnable() {
@@ -352,6 +355,8 @@ public class MessageDialog extends BaseDialog {
                                 blurView.setTag("blurView");
                                 blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 bkg.addView(blurView, 0, params);
+    
+                                lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                             }
                         });
                     }
@@ -385,6 +390,8 @@ public class MessageDialog extends BaseDialog {
                     getDialogLifecycleCallback().onDismiss(me);
                     dialogView = null;
                     dialogLifecycleCallback = null;
+    
+                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -532,7 +533,10 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
+    
+                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     boxRoot.setAlpha(0f);
+                    
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
                 }
@@ -545,6 +549,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     dialogImpl = null;
+                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -621,6 +626,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                         blurBody.setContentView(boxBody);
                         blurBody.addView(blurView, 0, params);
                     }
+                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                 }
             });
             

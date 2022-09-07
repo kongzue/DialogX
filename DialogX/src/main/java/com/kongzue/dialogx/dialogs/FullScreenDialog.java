@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -162,7 +163,8 @@ public class FullScreenDialog extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
-                    
+    
+                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     onDialogShow();
                     
                     getDialogLifecycleCallback().onShow(me);
@@ -175,6 +177,7 @@ public class FullScreenDialog extends BaseDialog {
                     fullScreenDialogTouchEventInterceptor = null;
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
+                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -211,6 +214,7 @@ public class FullScreenDialog extends BaseDialog {
                 @Override
                 public void run() {
                     getDialogXAnimImpl().doShowAnim(me, null);
+                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                 }
             });
             

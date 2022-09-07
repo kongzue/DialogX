@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -58,7 +59,7 @@ import static com.kongzue.dialogx.DialogX.DEBUGMODE;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/9/22 14:10
  */
-public abstract class BaseDialog {
+public abstract class BaseDialog implements LifecycleOwner {
     
     private static Thread uiThread;
     private static WeakReference<FrameLayout> rootFrameLayout;
@@ -70,6 +71,7 @@ public abstract class BaseDialog {
     protected DialogX.IMPL_MODE dialogImplMode = DialogX.implIMPLMode;
     protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
     private WeakReference<DialogListBuilder> dialogListBuilder;
+    protected LifecycleRegistry lifecycle = new LifecycleRegistry(this);
     
     public static void init(Context context) {
         if (context == null) {
@@ -853,5 +855,11 @@ public abstract class BaseDialog {
     }
     
     protected void onDialogRefreshUI() {
+    }
+    
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return lifecycle;
     }
 }

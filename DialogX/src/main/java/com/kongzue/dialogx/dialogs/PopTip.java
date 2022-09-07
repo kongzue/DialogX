@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -468,6 +469,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
+                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     boxRoot.setAlpha(0f);
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
@@ -479,6 +481,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     dialogImpl = null;
+                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -526,6 +529,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 @Override
                 public void run() {
                     getDialogXAnimImpl().doShowAnim(me, null);
+                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                 }
             });
             

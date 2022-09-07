@@ -14,6 +14,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
+import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -179,10 +180,12 @@ public class CustomDialog extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
-                    
-                    onDialogShow();
+    
+                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     
                     getDialogLifecycleCallback().onShow(me);
+                    onDialogShow();
+                    
                     boxCustom.setVisibility(View.GONE);
                 }
                 
@@ -192,6 +195,7 @@ public class CustomDialog extends BaseDialog {
                     getDialogLifecycleCallback().onDismiss(me);
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
+                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -223,6 +227,8 @@ public class CustomDialog extends BaseDialog {
                         }
                     });
                     getDialogImpl().boxCustom.setVisibility(View.VISIBLE);
+    
+                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                 }
             });
             

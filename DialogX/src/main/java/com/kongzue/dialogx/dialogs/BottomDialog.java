@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -330,7 +332,8 @@ public class BottomDialog extends BaseDialog {
                     
                     isShow = true;
                     preShow = false;
-                    
+    
+                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     getDialogLifecycleCallback().onShow(me);
                     
                     onDialogShow();
@@ -354,6 +357,7 @@ public class BottomDialog extends BaseDialog {
                                 cancelBlurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 boxCancel.addView(cancelBlurView, 0, cancelButtonLp);
                             }
+                            lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                         }
                     });
                     
@@ -367,6 +371,7 @@ public class BottomDialog extends BaseDialog {
                     dialogImpl = null;
                     bottomDialogTouchEventInterceptor = null;
                     dialogLifecycleCallback = null;
+                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

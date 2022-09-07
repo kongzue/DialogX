@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -331,6 +332,7 @@ public class WaitDialog extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
+                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     boxRoot.setAlpha(0f);
                     bkg.post(new Runnable() {
                         @Override
@@ -346,6 +348,8 @@ public class WaitDialog extends BaseDialog {
                             
                             onDialogShow();
                             getDialogLifecycleCallback().onShow(me());
+    
+                            lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                         }
                     });
                 }
@@ -361,6 +365,7 @@ public class WaitDialog extends BaseDialog {
                     dialogLifecycleCallback = null;
                     if (me != null) me.clear();
                     me = null;
+                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

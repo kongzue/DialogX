@@ -23,6 +23,8 @@ import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.lifecycle.Lifecycle;
+
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
@@ -294,6 +296,7 @@ public class PopMenu extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
+                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
                     refreshUI();
@@ -307,6 +310,7 @@ public class PopMenu extends BaseDialog {
                     dialogImpl = null;
                     baseView = null;
                     dialogLifecycleCallback = null;
+                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -339,6 +343,7 @@ public class PopMenu extends BaseDialog {
                             boxRoot.setBkgAlpha(value);
                         }
                     });
+                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                 }
             });
             
