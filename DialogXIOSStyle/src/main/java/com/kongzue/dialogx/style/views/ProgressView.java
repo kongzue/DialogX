@@ -63,11 +63,6 @@ public class ProgressView extends View implements ProgressViewInterface {
         init(attrs);
     }
     
-    public ProgressView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(attrs);
-    }
-    
     public boolean isLightMode() {
         return isLightMode;
     }
@@ -208,7 +203,11 @@ public class ProgressView extends View implements ProgressViewInterface {
         Matrix matrix = new Matrix();
         matrix.setRotate(45 * ((int) currentRotateDegrees));
         Bitmap rotatedBitmap = Bitmap.createBitmap(origin, 0, 0, origin.getWidth(), origin.getHeight(), matrix, false);
-        return Bitmap.createBitmap(rotatedBitmap, rotatedBitmap.getWidth() / 2 - origin.getWidth() / 2, rotatedBitmap.getHeight() / 2 - origin.getHeight() / 2, origin.getWidth(), origin.getHeight(), null, false);
+        int x = rotatedBitmap.getWidth() / 2 - origin.getWidth() / 2;
+        int y = rotatedBitmap.getHeight() / 2 - origin.getHeight() / 2;
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        return Bitmap.createBitmap(rotatedBitmap, x, y, origin.getWidth(), origin.getHeight(), null, false);
     }
     
     private void drawDoneMark(int status, Canvas canvas) {
@@ -217,7 +216,7 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         if (tickShowRunnable != null) {
             tickShowRunnable.run();
-            if (DialogX.useHaptic)performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            if (DialogX.useHaptic) performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             tickShowRunnable = null;
         }
         switch (status) {

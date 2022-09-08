@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -1125,25 +1126,31 @@ public class MainActivity extends BaseActivity {
                         .setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_recycleview) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
-                                List<CustomRecycleViewAdapter.Data> fruitList = new ArrayList<>();
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 1"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 2"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 3"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 4"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 5"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 6"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 7"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 8"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 9"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 10"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 11"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 12"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 13"));
-                                fruitList.add(new CustomRecycleViewAdapter.Data("Item Text 14"));
+                                List<CustomRecycleViewAdapter.Data> dataArrayList = new ArrayList<>();
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 1"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 2"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 3"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 4"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 5"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 6"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 7"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 8"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 9"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 10"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 11"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 12"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 13"));
+                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 14"));
                                 RecyclerView recyclerView = (RecyclerView) v;
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(me);
                                 recyclerView.setLayoutManager(layoutManager);
-                                CustomRecycleViewAdapter adapter = new CustomRecycleViewAdapter(fruitList);
+                                CustomRecycleViewAdapter adapter = new CustomRecycleViewAdapter(dataArrayList);
+                                adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        PopTip.show("点击了第 " + position + " 个");
+                                    }
+                                });
                                 recyclerView.setAdapter(adapter);
                             }
                         })

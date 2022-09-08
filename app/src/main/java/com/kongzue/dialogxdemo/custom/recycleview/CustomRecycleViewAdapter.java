@@ -3,6 +3,7 @@ package com.kongzue.dialogxdemo.custom.recycleview;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,17 @@ import java.util.List;
  */
 public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycleViewAdapter.ViewHolder> {
     
+    AdapterView.OnItemClickListener onItemClickListener;
+    
+    public AdapterView.OnItemClickListener getOnItemClickListener() {
+        return onItemClickListener;
+    }
+    
+    public CustomRecycleViewAdapter setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        return this;
+    }
+    
     public CustomRecycleViewAdapter(List<Data> mDataList) {
         this.mDataList = mDataList;
     }
@@ -40,6 +52,12 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Data data = mDataList.get(position);
+        holder.getItemView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) onItemClickListener.onItemClick(null, v, holder.getAdapterPosition(),0);
+            }
+        });
         holder.getTxtItem().setText(data.getText());
     }
     
@@ -68,10 +86,16 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
     
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtItem;
+        View itemView;
         
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.itemView = itemView;
             txtItem = itemView.findViewById(R.id.txt_item);
+        }
+    
+        public View getItemView() {
+            return itemView;
         }
     
         public TextView getTxtItem() {
