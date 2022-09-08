@@ -586,7 +586,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 }
             });
             
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+            boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     return false;

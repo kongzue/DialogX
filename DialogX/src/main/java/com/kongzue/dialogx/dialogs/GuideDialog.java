@@ -326,7 +326,7 @@ public class GuideDialog extends CustomDialog {
         return this;
     }
     
-    public GuideDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public GuideDialog setOnBackPressedListener(OnBackPressedListener<CustomDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         refreshUI();
         return this;

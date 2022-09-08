@@ -49,6 +49,7 @@ public class FullScreenDialog extends BaseDialog {
     public static BOOLEAN overrideCancelable;
     
     protected OnBindView<FullScreenDialog> onBindView;
+    protected OnBackPressedListener<FullScreenDialog> onBackPressedListener;
     protected BOOLEAN privateCancelable;
     protected boolean hideZoomBackground;
     protected float backgroundRadius = -1;
@@ -182,19 +183,19 @@ public class FullScreenDialog extends BaseDialog {
                 }
             });
             
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+            boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()) {
+                        if (onBackPressedListener.onBackPressed(me)) {
                             dismiss();
                         }
-                        return false;
+                    }else{
+                        if (isCancelable()) {
+                            dismiss();
+                        }
                     }
-                    if (isCancelable()) {
-                        dismiss();
-                    }
-                    return false;
+                    return true;
                 }
             });
             
@@ -455,11 +456,11 @@ public class FullScreenDialog extends BaseDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
+    public OnBackPressedListener<FullScreenDialog> getOnBackPressedListener() {
+        return (OnBackPressedListener<FullScreenDialog>) onBackPressedListener;
     }
     
-    public FullScreenDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public FullScreenDialog setOnBackPressedListener(OnBackPressedListener<FullScreenDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         refreshUI();
         return this;

@@ -479,9 +479,9 @@ public class MainActivity extends BaseActivity {
         btnWaitDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener() {
+                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
                     @Override
-                    public boolean onBackPressed() {
+                    public boolean onBackPressed(WaitDialog dialog) {
                         PopTip.show("按下返回");
                         return false;
                     }
@@ -502,9 +502,9 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 closeFlag = false;
-                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener() {
+                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
                     @Override
-                    public boolean onBackPressed() {
+                    public boolean onBackPressed(WaitDialog dialog) {
                         PopTip.show("按下返回", "关闭").setButton(new OnDialogButtonClickListener<PopTip>() {
                             @Override
                             public boolean onClick(PopTip baseDialog, View v) {
@@ -551,9 +551,9 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 waitId = 0;
                 progress = 0;
-                WaitDialog.show("假装连接...").setOnBackPressedListener(new OnBackPressedListener() {
+                WaitDialog.show("假装连接...").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
                     @Override
-                    public boolean onBackPressed() {
+                    public boolean onBackPressed(WaitDialog dialog) {
                         MessageDialog.show("正在进行", "是否取消？", "是", "否").setOkButton(new OnDialogButtonClickListener() {
                             @Override
                             public boolean onClick(BaseDialog baseDialog, View v) {

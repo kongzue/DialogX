@@ -24,7 +24,6 @@ import androidx.core.view.ViewCompat;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
-import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
 import java.lang.ref.WeakReference;
@@ -45,7 +44,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private boolean interceptBack = true;
     
     private OnLifecycleCallBack onLifecycleCallBack;
-    private OnBackPressedListener onBackPressedListener;
+    private PrivateBackPressedListener onBackPressedListener;
     
     public DialogXBaseRelativeLayout(Context context) {
         super(context);
@@ -124,9 +123,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (isAttachedToWindow() && event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK && interceptBack) {
             if (onBackPressedListener != null) {
-                onBackPressedListener.onBackPressed();
+                return onBackPressedListener.onBackPressed();
             }
-            return true;
         }
         return super.dispatchKeyEvent(event);
     }
@@ -247,7 +245,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (isAutoUnsafePlacePadding()) setPadding(left, top, right, bottom);
     }
     
-    public DialogXBaseRelativeLayout setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public DialogXBaseRelativeLayout setOnBackPressedListener(PrivateBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         return this;
     }
@@ -342,4 +340,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         }
         super.setVisibility(visibility);
     }
+    
+    public interface PrivateBackPressedListener {
+        boolean onBackPressed();
+    }
+    
 }

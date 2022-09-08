@@ -69,6 +69,7 @@ public class BottomDialog extends BaseDialog {
     protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> otherButtonClickListener;
     protected OnBackgroundMaskClickListener<BottomDialog> onBackgroundMaskClickListener;
+    protected OnBackPressedListener<BottomDialog> onBackPressedListener;
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
     protected float backgroundRadius = -1;
@@ -430,19 +431,19 @@ public class BottomDialog extends BaseDialog {
                 }
             }
             
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+            boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()) {
+                        if (onBackPressedListener.onBackPressed(me)) {
                             dismiss();
                         }
-                        return false;
+                    }else{
+                        if (isCancelable()) {
+                            dismiss();
+                        }
                     }
-                    if (isCancelable()) {
-                        dismiss();
-                    }
-                    return false;
+                    return true;
                 }
             });
             
@@ -750,11 +751,11 @@ public class BottomDialog extends BaseDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
+    public OnBackPressedListener<BottomDialog> getOnBackPressedListener() {
+        return (OnBackPressedListener<BottomDialog>) onBackPressedListener;
     }
     
-    public BottomDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public BottomDialog setOnBackPressedListener(OnBackPressedListener<BottomDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         refreshUI();
         return this;

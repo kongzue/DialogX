@@ -467,11 +467,11 @@ public class InputDialog extends MessageDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
+    public OnBackPressedListener<MessageDialog> getOnBackPressedListener() {
+        return (OnBackPressedListener<MessageDialog>) onBackPressedListener;
     }
     
-    public InputDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public InputDialog setOnBackPressedListener(OnBackPressedListener<MessageDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         return this;
     }

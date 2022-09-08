@@ -300,8 +300,13 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 if (style.popTipSettings().layout(isLightTheme()) != 0) {
                     layoutResId = style.popTipSettings().layout(isLightTheme());
                 }
-                align = style.popTipSettings().align();
-                if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+                if (align == null) {
+                    if (style.popTipSettings().align() == null) {
+                        align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+                    } else {
+                        align = style.popTipSettings().align();
+                    }
+                }
                 int styleEnterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme());
                 int styleExitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme());
                 enterAnimResId = enterAnimResId == 0 ? (
@@ -351,8 +356,14 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 if (style.popTipSettings().layout(isLightTheme()) != 0) {
                     layoutResId = style.popTipSettings().layout(isLightTheme());
                 }
-                align = style.popTipSettings().align();
-                if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+    
+                if (align == null) {
+                    if (style.popTipSettings().align() == null) {
+                        align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+                    } else {
+                        align = style.popTipSettings().align();
+                    }
+                }
                 int styleEnterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme());
                 int styleExitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme());
                 enterAnimResId = enterAnimResId == 0 ? (
@@ -518,7 +529,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 }
             });
             
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+            boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     return false;
@@ -814,6 +825,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         return align;
     }
     
+    @Deprecated
     public PopTip setAlign(DialogXStyle.PopTipSettings.ALIGN align) {
         this.align = align;
         return this;
@@ -998,8 +1010,13 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             if (style.popTipSettings().layout(isLightTheme()) != 0) {
                 layoutResId = style.popTipSettings().layout(isLightTheme());
             }
-            align = style.popTipSettings().align();
-            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+            if (align == null) {
+                if (style.popTipSettings().align() == null) {
+                    align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+                } else {
+                    align = style.popTipSettings().align();
+                }
+            }
             int styleEnterAnimResId = style.popTipSettings().enterAnimResId(isLightTheme());
             int styleExitAnimResId = style.popTipSettings().exitAnimResId(isLightTheme());
             enterAnimResId = enterAnimResId == 0 ? (

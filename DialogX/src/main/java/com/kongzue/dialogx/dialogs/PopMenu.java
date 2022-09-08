@@ -79,6 +79,7 @@ public class PopMenu extends BaseDialog {
     protected boolean offScreen = false;                                    //超出屏幕
     protected float backgroundRadius = -1;
     protected DialogXAnimInterface<PopMenu> dialogXAnimImpl;
+    protected OnBackPressedListener<PopMenu> onBackPressedListener;
     
     protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
     
@@ -315,19 +316,19 @@ public class PopMenu extends BaseDialog {
                 }
             });
             
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+            boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()) {
+                        if (onBackPressedListener.onBackPressed(me)) {
                             dismiss();
                         }
-                        return false;
+                    }else{
+                        if (isCancelable()) {
+                            dismiss();
+                        }
                     }
-                    if (isCancelable()) {
-                        dismiss();
-                    }
-                    return false;
+                    return true;
                 }
             });
             listMenu.setMaxHeight(getRootFrameLayout() == null ? dip2px(500) : getRootFrameLayout().getMeasuredHeight() - dip2px(150));
@@ -1029,6 +1030,15 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setDialogXAnimImpl(DialogXAnimInterface<PopMenu> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
+    }
+    
+    public OnBackPressedListener<PopMenu> getOnBackPressedListener() {
+        return (OnBackPressedListener<PopMenu>) onBackPressedListener;
+    }
+    
+    public PopMenu setOnBackPressedListener(OnBackPressedListener<PopMenu> onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
         return this;
     }
 }

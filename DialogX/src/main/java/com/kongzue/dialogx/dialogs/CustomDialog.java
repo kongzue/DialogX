@@ -46,6 +46,7 @@ public class CustomDialog extends BaseDialog {
     public static BOOLEAN overrideCancelable;
     protected OnBindView<CustomDialog> onBindView;
     protected DialogLifecycleCallback<CustomDialog> dialogLifecycleCallback;
+    protected OnBackPressedListener<CustomDialog> onBackPressedListener;
     protected CustomDialog me = this;
     protected DialogImpl dialogImpl;
     protected int enterAnimResId = R.anim.anim_dialogx_default_enter;
@@ -200,19 +201,19 @@ public class CustomDialog extends BaseDialog {
                 }
             });
             
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+            boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()) {
+                        if (onBackPressedListener.onBackPressed(me)) {
                             dismiss();
                         }
-                        return false;
+                    }else{
+                        if (isCancelable()) {
+                            dismiss();
+                        }
                     }
-                    if (isCancelable()) {
-                        dismiss();
-                    }
-                    return false;
+                    return true;
                 }
             });
             
@@ -579,11 +580,11 @@ public class CustomDialog extends BaseDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
+    public OnBackPressedListener<CustomDialog> getOnBackPressedListener() {
+        return (OnBackPressedListener<CustomDialog>) onBackPressedListener;
     }
     
-    public CustomDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public CustomDialog setOnBackPressedListener(OnBackPressedListener<CustomDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         refreshUI();
         return this;

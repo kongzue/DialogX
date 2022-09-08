@@ -708,11 +708,11 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
+    public OnBackPressedListener<BottomDialog> getOnBackPressedListener() {
+        return (OnBackPressedListener<BottomDialog>) onBackPressedListener;
     }
     
-    public BottomMenu setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public BottomMenu setOnBackPressedListener(OnBackPressedListener<BottomDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         preRefreshUI();
         return this;

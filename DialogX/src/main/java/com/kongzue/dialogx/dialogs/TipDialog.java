@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 
 /**
@@ -195,6 +196,12 @@ public class TipDialog extends WaitDialog {
     
     public TipDialog setDialogXAnimImpl(DialogXAnimInterface<WaitDialog> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
+    }
+    
+    public TipDialog setOnBackPressedListener(OnBackPressedListener<WaitDialog> onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
+        refreshUI();
         return this;
     }
 }

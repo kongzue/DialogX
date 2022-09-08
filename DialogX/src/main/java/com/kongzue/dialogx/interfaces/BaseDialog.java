@@ -455,7 +455,6 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected abstract void shutdown();
     
     protected boolean cancelable = true;
-    protected OnBackPressedListener onBackPressedListener;
     protected boolean isShow;
     protected DialogXStyle style;
     protected DialogX.THEME theme;

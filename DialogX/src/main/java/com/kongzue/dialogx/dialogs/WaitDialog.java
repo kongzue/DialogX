@@ -62,6 +62,7 @@ public class WaitDialog extends BaseDialog {
     protected int customExitAnimResId;
     protected float backgroundRadius = -1;
     protected DialogXAnimInterface<WaitDialog> dialogXAnimImpl;
+    protected OnBackPressedListener<WaitDialog> onBackPressedListener;
     
     public enum TYPE {
         /**
@@ -380,19 +381,19 @@ public class WaitDialog extends BaseDialog {
                 }, 100);
             }
             
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+            boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()) {
+                        if (onBackPressedListener.onBackPressed(WaitDialog.this)) {
                             dismiss();
                         }
-                        return false;
+                    }else{
+                        if (isCancelable()) {
+                            dismiss();
+                        }
                     }
-                    if (isCancelable()) {
-                        dismiss();
-                    }
-                    return false;
+                    return true;
                 }
             });
             onDialogInit();
@@ -871,11 +872,11 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
+    public OnBackPressedListener<WaitDialog> getOnBackPressedListener() {
+        return (OnBackPressedListener<WaitDialog>) onBackPressedListener;
     }
     
-    public WaitDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public WaitDialog setOnBackPressedListener(OnBackPressedListener<WaitDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         refreshUI();
         return this;

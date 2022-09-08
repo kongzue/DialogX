@@ -71,6 +71,7 @@ public class MessageDialog extends BaseDialog {
     protected int customEnterAnimResId;
     protected int customExitAnimResId;
     protected DialogXAnimInterface<MessageDialog> dialogXAnimImpl;
+    protected OnBackPressedListener<MessageDialog> onBackPressedListener;
     
     protected DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<MessageDialog> onBackgroundMaskClickListener;
@@ -396,19 +397,19 @@ public class MessageDialog extends BaseDialog {
                 }
             });
             
-            boxRoot.setOnBackPressedListener(new OnBackPressedListener() {
+            boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     if (onBackPressedListener != null) {
-                        if (onBackPressedListener.onBackPressed()) {
+                        if (onBackPressedListener.onBackPressed(me)) {
                             dismiss();
                         }
-                        return false;
+                    }else{
+                        if (isCancelable()) {
+                            dismiss();
+                        }
                     }
-                    if (isCancelable()) {
-                        dismiss();
-                    }
-                    return false;
+                    return true;
                 }
             });
             btnSelectPositive.setOnClickListener(new View.OnClickListener() {
@@ -1090,11 +1091,11 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
     
-    public OnBackPressedListener getOnBackPressedListener() {
-        return onBackPressedListener;
+    public OnBackPressedListener<MessageDialog> getOnBackPressedListener() {
+        return (OnBackPressedListener<MessageDialog>) onBackPressedListener;
     }
     
-    public MessageDialog setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+    public MessageDialog setOnBackPressedListener(OnBackPressedListener<MessageDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         return this;
     }

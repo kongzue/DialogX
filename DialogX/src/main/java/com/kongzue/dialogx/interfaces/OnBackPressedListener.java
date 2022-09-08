@@ -7,6 +7,6 @@ package com.kongzue.dialogx.interfaces;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/9/25 15:48
  */
-public interface OnBackPressedListener {
-    boolean onBackPressed();
+public interface OnBackPressedListener<D extends BaseDialog> {
+    boolean onBackPressed(D dialog);
 }
