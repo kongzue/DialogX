@@ -205,9 +205,14 @@ public class ProgressView extends View implements ProgressViewInterface {
         Bitmap rotatedBitmap = Bitmap.createBitmap(origin, 0, 0, origin.getWidth(), origin.getHeight(), matrix, false);
         int x = rotatedBitmap.getWidth() / 2 - origin.getWidth() / 2;
         int y = rotatedBitmap.getHeight() / 2 - origin.getHeight() / 2;
+        int w = origin.getWidth();
+        int h = origin.getHeight();
         if (x < 0) x = 0;
         if (y < 0) y = 0;
-        return Bitmap.createBitmap(rotatedBitmap, x, y, origin.getWidth(), origin.getHeight(), null, false);
+        if (x + w > rotatedBitmap.getWidth()) w = rotatedBitmap.getWidth() - x;
+        if (y + h > rotatedBitmap.getHeight()) h = rotatedBitmap.getHeight() - y;
+        
+        return Bitmap.createBitmap(rotatedBitmap, x, y, w, h, null, false);
     }
     
     private void drawDoneMark(int status, Canvas canvas) {
