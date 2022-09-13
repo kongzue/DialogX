@@ -14,6 +14,9 @@ import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Field;
+import java.util.Random;
+
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -46,7 +49,7 @@ public abstract class OnBindView<D> {
                 @Override
                 public void run() {
                     super.run();
-                    synchronized (OnBindView.this){
+                    synchronized (OnBindView.this) {
                         customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
                         if (waitBindRunnable != null) {
                             waitBindRunnable.run();
@@ -66,11 +69,28 @@ public abstract class OnBindView<D> {
     
     private androidx.fragment.app.Fragment fragment;
     private android.app.Fragment supportFragment;
+    private int fragmentParentId = View.NO_ID;
+    
+    private int getFragmentParentId() {
+        if (fragmentParentId == View.NO_ID) {
+            fragmentParentId = createFragmentParentId();
+        }
+        return fragmentParentId;
+    }
+    
+    private int createFragmentParentId() {
+        fragmentParentId = new Random().nextInt();
+        View somebodyView = BaseDialog.getTopActivity().findViewById(fragmentParentId);
+        if (somebodyView != null) {
+            return createFragmentParentId();
+        }
+        return fragmentParentId;
+    }
     
     public OnBindView(androidx.fragment.app.Fragment fragment) {
         if (BaseDialog.getTopActivity() == null) return;
         this.customView = new FrameLayout(BaseDialog.getTopActivity());
-        this.customView.setId(R.id.id_frame_layout_custom);
+        this.customView.setId(getFragmentParentId());
         this.fragment = fragment;
         this.supportFragment = null;
     }
@@ -78,7 +98,7 @@ public abstract class OnBindView<D> {
     public OnBindView(android.app.Fragment supportFragment) {
         if (BaseDialog.getTopActivity() == null) return;
         this.customView = new FrameLayout(BaseDialog.getTopActivity());
-        this.customView.setId(R.id.id_frame_layout_custom);
+        this.customView.setId(getFragmentParentId());
         this.supportFragment = supportFragment;
         this.fragment = null;
     }
@@ -103,7 +123,6 @@ public abstract class OnBindView<D> {
     public View getCustomView() {
         if (customView == null) {
             customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
-            customView.setId(R.id.id_frame_layout_custom);
         }
         return customView;
     }
@@ -154,8 +173,8 @@ public abstract class OnBindView<D> {
         }
         parentView.addView(getCustomView(), lp);
         onBind((D) dialog, getCustomView());
-        if (fragment != null || supportFragment != null){
-            if (dialog.getDialogImplMode()!= DialogX.IMPL_MODE.VIEW){
+        if (fragment != null || supportFragment != null) {
+            if (dialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
                 BaseDialog.error(dialog.dialogKey() + "非 VIEW 实现模式不支持 fragment 作为子布局显示。\n" +
                         "其原因为 Window 中不存在 FragmentManager，无法对子布局中的 fragment 进行管理。");
                 return;
@@ -166,14 +185,14 @@ public abstract class OnBindView<D> {
                     if (fragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof AppCompatActivity) {
                         AppCompatActivity appCompatActivity = (AppCompatActivity) BaseDialog.getTopActivity();
                         androidx.fragment.app.FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
-                        transaction.add(R.id.id_frame_layout_custom, fragment);
+                        transaction.add(getFragmentParentId(), fragment);
                         transaction.commit();
                         onFragmentBind((D) dialog, getCustomView(), fragment, appCompatActivity.getSupportFragmentManager());
                     }
                     if (supportFragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof Activity) {
                         Activity activity = (Activity) BaseDialog.getTopActivity();
                         android.app.FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
-                        transaction.add(R.id.id_frame_layout_custom, supportFragment);
+                        transaction.add(getFragmentParentId(), supportFragment);
                         transaction.commit();
                         onFragmentBind((D) dialog, getCustomView(), supportFragment, activity.getFragmentManager());
                     }

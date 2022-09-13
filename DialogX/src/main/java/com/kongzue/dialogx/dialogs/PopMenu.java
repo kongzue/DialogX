@@ -1034,11 +1034,21 @@ public class PopMenu extends BaseDialog {
     }
     
     public OnBackPressedListener<PopMenu> getOnBackPressedListener() {
-        return (OnBackPressedListener<PopMenu>) onBackPressedListener;
+        return onBackPressedListener;
     }
     
     public PopMenu setOnBackPressedListener(OnBackPressedListener<PopMenu> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
+        return this;
+    }
+    
+    public View getBaseView() {
+        return baseView;
+    }
+    
+    public PopMenu setBaseView(View baseView) {
+        this.baseView = baseView;
+        refreshUI();
         return this;
     }
 }

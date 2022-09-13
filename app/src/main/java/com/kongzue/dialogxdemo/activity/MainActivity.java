@@ -423,7 +423,13 @@ public class MainActivity extends BaseActivity {
         btnFullScreenDialogFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomFragment customFragment = new CustomFragment();
+                CustomFragment customFragment = new CustomFragment()
+                        .setAddButtonClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                btnFullScreenDialogFragment.callOnClick();
+                            }
+                        });
                 FullScreenDialog.show(new OnBindView<FullScreenDialog>(customFragment) {
                     @Override
                     public void onBind(FullScreenDialog dialog, View v) {

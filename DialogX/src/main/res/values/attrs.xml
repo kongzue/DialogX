@@ -27,6 +27,4 @@
         <attr name="autoSafeArea" format="boolean"/>
         <attr name="interceptBack" format="boolean"/>
     </declare-styleable>
-
-    <item name="id_frame_layout_custom" type="id"/>
 </resources>
