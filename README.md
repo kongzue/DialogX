@@ -219,8 +219,8 @@ limitations under the License.
 # 贡献者
 感谢所有为 DialogX 做出贡献的人！
 
-如果 DialogX 帮助您更好的构建了您的软件，请为 DialogX 点一个小小的 Star，您的每一次点击对 DialogX 都是莫大的支持！
-
 <a href="https://github.com/kongzue/DialogX/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=kongzue/DialogX" />
 </a>
+
+如果 DialogX 帮助您更好的构建了您的软件，请为 DialogX 点一个小小的 Star，您的每一次点击对 DialogX 都是最大的支持！
