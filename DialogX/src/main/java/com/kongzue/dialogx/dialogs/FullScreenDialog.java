@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -9,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
@@ -164,7 +167,7 @@ public class FullScreenDialog extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
-    
+                    
                     lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     onDialogShow();
                     
@@ -190,7 +193,7 @@ public class FullScreenDialog extends BaseDialog {
                         if (onBackPressedListener.onBackPressed(me)) {
                             dismiss();
                         }
-                    }else{
+                    } else {
                         if (isCancelable()) {
                             dismiss();
                         }
@@ -381,13 +384,23 @@ public class FullScreenDialog extends BaseDialog {
                     @Override
                     public void doShowAnim(FullScreenDialog dialog, ObjectRunnable<Float> animProgress) {
                         int customViewHeight = boxCustom.getHeight();
-                        if (customViewHeight == 0) {
+                        if (customViewHeight == 0 || isMatchParentHeightCustomView()) {
                             //实测在 Android 10 中，离屏情况下 View可能无法得到正确高度（恒 0），此时直接按照全屏高度处理
                             //其他版本 Android 未发现此问题
                             showEnterAnim((int) boxRoot.getSafeHeight());
                         } else {
                             showEnterAnim(customViewHeight);
                         }
+                    }
+                    
+                    private boolean isMatchParentHeightCustomView() {
+                        if (onBindView != null && onBindView.getCustomView() != null) {
+                            ViewGroup.LayoutParams lp = onBindView.getCustomView().getLayoutParams();
+                            if (lp != null) {
+                                return lp.height == MATCH_PARENT;
+                            }
+                        }
+                        return false;
                     }
                     
                     @Override
