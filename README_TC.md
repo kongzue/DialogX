@@ -216,3 +216,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+
+
+如果 DialogX 幫助您更好的構建了您的軟體，請為 DialogX 點一個小小的 Star，您的每一次點擊對 DialogX 都是最大的支持！

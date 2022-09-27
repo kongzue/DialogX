@@ -151,7 +151,7 @@ allprojects {
 2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-def dialogx_version = "0.0.45.beta12"
+def dialogx_version = "0.0.46.beta15"
 implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 ```
 
@@ -222,3 +222,6 @@ limitations under the License.
 <a href="https://github.com/kongzue/DialogX/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=kongzue/DialogX" />
 </a>
+
+
+如果 DialogX 帮助您更好的构建了您的软件，请为 DialogX 点一个小小的 Star，您的每一次点击对 DialogX 都是最大的支持！
