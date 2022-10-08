@@ -151,7 +151,7 @@ allprojects {
 2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代碼塊，並在其中加入以下語句：
 
 ```
-def dialogx_version = "0.0.45.beta12"
+def dialogx_version = "0.0.45"
 implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 ```
 
