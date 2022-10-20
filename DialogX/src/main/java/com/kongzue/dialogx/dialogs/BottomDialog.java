@@ -333,7 +333,7 @@ public class BottomDialog extends BaseDialog {
                     
                     isShow = true;
                     preShow = false;
-    
+                    
                     lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     getDialogLifecycleCallback().onShow(me);
                     
@@ -438,7 +438,7 @@ public class BottomDialog extends BaseDialog {
                         if (onBackPressedListener.onBackPressed(me)) {
                             dismiss();
                         }
-                    }else{
+                    } else {
                         if (isCancelable()) {
                             dismiss();
                         }
@@ -470,6 +470,7 @@ public class BottomDialog extends BaseDialog {
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
+            boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(bkg, backgroundColor);
                 if (blurView != null && cancelBlurView != null) {
@@ -661,7 +662,7 @@ public class BottomDialog extends BaseDialog {
                             } else if (bottomDialogMaxHeight > 1) {
                                 customDialogTop = boxBkg.getHeight() - bottomDialogMaxHeight;
                             }
-                            boxBkg.setPadding(0,0,0, (int) customDialogTop);
+                            boxBkg.setPadding(0, 0, 0, (int) customDialogTop);
                         }
                         
                         //上移动画
@@ -1173,6 +1174,18 @@ public class BottomDialog extends BaseDialog {
     
     public BottomDialog setDialogXAnimImpl(DialogXAnimInterface<BottomDialog> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
+    }
+    
+    public BottomDialog setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public BottomDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
         return this;
     }
 }

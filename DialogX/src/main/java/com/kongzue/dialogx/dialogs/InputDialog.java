@@ -640,4 +640,16 @@ public class InputDialog extends MessageDialog {
         this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
+    
+    public InputDialog setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public InputDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
+        return this;
+    }
 }

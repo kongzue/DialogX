@@ -204,4 +204,16 @@ public class TipDialog extends WaitDialog {
         refreshUI();
         return this;
     }
+    
+    public TipDialog setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public TipDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
+        return this;
+    }
 }

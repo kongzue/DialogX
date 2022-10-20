@@ -463,6 +463,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected long enterAnimDuration = -1;
     protected long exitAnimDuration = -1;
     protected int maxWidth;
+    protected int[] screenPaddings = new int[4];
     
     public BaseDialog() {
         cancelable = DialogX.cancelable;

@@ -244,6 +244,7 @@ public class CustomDialog extends BaseDialog {
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
+            boxRoot.setRootPadding(screenPaddings[0],screenPaddings[1],screenPaddings[2],screenPaddings[3]);
             if (baseView != null) {
                 if (!initSetCustomViewLayoutListener) {
                     RelativeLayout.LayoutParams rlp;
@@ -941,6 +942,18 @@ public class CustomDialog extends BaseDialog {
     
     public CustomDialog setDialogXAnimImpl(DialogXAnimInterface<CustomDialog> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
+    }
+    
+    public CustomDialog setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public CustomDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
         return this;
     }
 }

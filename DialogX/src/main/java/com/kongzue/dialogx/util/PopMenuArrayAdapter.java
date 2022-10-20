@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
@@ -78,9 +79,10 @@ public class PopMenuArrayAdapter extends BaseAdapter {
             
             convertView = mInflater.inflate(resourceId, null);
             
+            viewHolder.boxItem = convertView.findViewById(R.id.box_item);
             viewHolder.imgDialogxMenuIcon = convertView.findViewById(R.id.img_dialogx_menu_icon);
             viewHolder.txtDialogxMenuText = convertView.findViewById(R.id.txt_dialogx_menu_text);
-            viewHolder.spaceRightPadding = convertView.findViewById(R.id.space_dialogx_right_padding);
+            viewHolder.spaceDialogxRightPadding = convertView.findViewById(R.id.space_dialogx_right_padding);
             
             convertView.setTag(viewHolder);
         } else {
@@ -89,6 +91,11 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         int customBackgroundRes = popMenu.getStyle().popMenuSettings() == null ? 0 : popMenu.getStyle().popMenuSettings().overrideMenuItemBackgroundRes(popMenu.isLightTheme(), position, getCount(), false);
         if (customBackgroundRes != 0) {
             convertView.setBackgroundResource(customBackgroundRes);
+        }
+        if (popMenu.getPressedIndex() == position) {
+            viewHolder.boxItem.setBackgroundResource(popMenu.isLightTheme() ? R.color.black5 : R.color.white5);
+        } else {
+            viewHolder.boxItem.setBackgroundResource(R.color.empty);
         }
         viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
         viewHolder.txtDialogxMenuText.setText(menuList.get(position));
@@ -117,8 +124,8 @@ public class PopMenuArrayAdapter extends BaseAdapter {
                 viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
                 viewHolder.imgDialogxMenuIcon.setImageResource(resId);
                 if (isHaveProperties(viewHolder.txtDialogxMenuText.getGravity(), Gravity.CENTER) || isHaveProperties(viewHolder.txtDialogxMenuText.getGravity(), Gravity.CENTER_HORIZONTAL)) {
-                    if (viewHolder.spaceRightPadding != null) {
-                        viewHolder.spaceRightPadding.setVisibility(View.VISIBLE);
+                    if (viewHolder.spaceDialogxRightPadding != null) {
+                        viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
                     }
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -128,14 +135,14 @@ public class PopMenuArrayAdapter extends BaseAdapter {
                 }
             } else {
                 viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
-                if (viewHolder.spaceRightPadding != null) {
-                    viewHolder.spaceRightPadding.setVisibility(View.GONE);
+                if (viewHolder.spaceDialogxRightPadding != null) {
+                    viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
                 }
             }
         } else {
             viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
-            if (viewHolder.spaceRightPadding != null) {
-                viewHolder.spaceRightPadding.setVisibility(View.GONE);
+            if (viewHolder.spaceDialogxRightPadding != null) {
+                viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
             }
         }
         return convertView;
@@ -146,8 +153,11 @@ public class PopMenuArrayAdapter extends BaseAdapter {
     }
     
     class ViewHolder {
+        LinearLayout boxItem;
         ImageView imgDialogxMenuIcon;
         TextView txtDialogxMenuText;
-        Space spaceRightPadding;
+        Space spaceDialogxRightPadding;
+        
+        
     }
 }

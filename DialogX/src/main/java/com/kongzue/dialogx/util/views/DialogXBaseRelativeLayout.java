@@ -238,11 +238,11 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
                 bkgView.setPadding(0, 0, 0, bottom);
                 bkgView.setNavBarHeight(bottom);
-                setPadding(left, top, right, 0);
+                setPadding(extraPadding[0]+left,extraPadding[1]+ top, extraPadding[2]+right, extraPadding[3]);
                 return;
             }
         }
-        if (isAutoUnsafePlacePadding()) setPadding(left, top, right, bottom);
+        if (isAutoUnsafePlacePadding()) setPadding(extraPadding[0]+left, extraPadding[1]+top, extraPadding[2]+right, extraPadding[3]+bottom);
     }
     
     public DialogXBaseRelativeLayout setOnBackPressedListener(PrivateBackPressedListener onBackPressedListener) {
@@ -270,7 +270,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public DialogXBaseRelativeLayout setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
         this.autoUnsafePlacePadding = autoUnsafePlacePadding;
         if (!autoUnsafePlacePadding) {
-            setPadding(0, 0, 0, 0);
+            setPadding(extraPadding[0], extraPadding[1], extraPadding[2], extraPadding[3]);
         }
         return this;
     }
@@ -345,4 +345,12 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         boolean onBackPressed();
     }
     
+    int[] extraPadding = new int[4];
+    
+    public void setRootPadding(int left, int top, int right, int bottom) {
+        extraPadding[0] = left;
+        extraPadding[1] = top;
+        extraPadding[2] = right;
+        extraPadding[3] = bottom;
+    }
 }

@@ -349,7 +349,7 @@ public class WaitDialog extends BaseDialog {
                             
                             onDialogShow();
                             getDialogLifecycleCallback().onShow(me());
-    
+                            
                             lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                         }
                     });
@@ -388,7 +388,7 @@ public class WaitDialog extends BaseDialog {
                         if (onBackPressedListener.onBackPressed(WaitDialog.this)) {
                             dismiss();
                         }
-                    }else{
+                    } else {
                         if (isCancelable()) {
                             dismiss();
                         }
@@ -405,6 +405,7 @@ public class WaitDialog extends BaseDialog {
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
+            boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             
             bkg.setMaxWidth(getMaxWidth());
             
@@ -1102,6 +1103,18 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setDialogXAnimImpl(DialogXAnimInterface<WaitDialog> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
+    }
+    
+    public WaitDialog setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public WaitDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
         return this;
     }
 }

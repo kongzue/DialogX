@@ -37,6 +37,7 @@ import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
+import com.kongzue.dialogx.util.BottomMenuArrayAdapter;
 import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.PopMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
@@ -80,6 +81,7 @@ public class PopMenu extends BaseDialog {
     protected float backgroundRadius = -1;
     protected DialogXAnimInterface<PopMenu> dialogXAnimImpl;
     protected OnBackPressedListener<PopMenu> onBackPressedListener;
+    protected int pressedIndex = -1;
     
     protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
     
@@ -270,11 +272,11 @@ public class PopMenu extends BaseDialog {
     
     public class DialogImpl implements DialogConvertViewInterface {
         
-        private DialogXBaseRelativeLayout boxRoot;
-        private MaxRelativeLayout boxBody;
-        private RelativeLayout boxCustom;
-        private PopMenuListView listMenu;
-        private BlurView blurView;
+        public DialogXBaseRelativeLayout boxRoot;
+        public MaxRelativeLayout boxBody;
+        public RelativeLayout boxCustom;
+        public PopMenuListView listMenu;
+        public BlurView blurView;
         
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);
@@ -381,6 +383,7 @@ public class PopMenu extends BaseDialog {
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
+            boxRoot.setRootPadding(screenPaddings[0],screenPaddings[1],screenPaddings[2],screenPaddings[3]);
             if (listMenu.getAdapter() == null) {
                 listMenu.setAdapter(menuListAdapter);
             } else {
@@ -439,6 +442,7 @@ public class PopMenu extends BaseDialog {
                 boxBody.setMaxHeight(height);
                 boxBody.setMinimumHeight(height);
             }
+            
             onDialogRefreshUI();
         }
         
@@ -1048,6 +1052,28 @@ public class PopMenu extends BaseDialog {
     
     public PopMenu setBaseView(View baseView) {
         this.baseView = baseView;
+        refreshUI();
+        return this;
+    }
+    
+    public PopMenu setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public PopMenu setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
+        return this;
+    }
+    
+    public int getPressedIndex() {
+        return pressedIndex;
+    }
+    
+    public PopMenu setPressedIndex(int pressedIndex) {
+        this.pressedIndex = pressedIndex;
         refreshUI();
         return this;
     }

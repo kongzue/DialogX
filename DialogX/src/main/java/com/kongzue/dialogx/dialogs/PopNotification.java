@@ -488,13 +488,13 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     
     public class DialogImpl implements DialogConvertViewInterface {
         
-        private DialogXBaseRelativeLayout boxRoot;
-        private ViewGroup boxBody;
-        private ImageView imgDialogxPopIcon;
-        private TextView txtDialogxPopTitle;
-        private TextView txtDialogxPopMessage;
-        private TextView txtDialogxButton;
-        private RelativeLayout boxCustom;
+        public DialogXBaseRelativeLayout boxRoot;
+        public ViewGroup boxBody;
+        public ImageView imgDialogxPopIcon;
+        public TextView txtDialogxPopTitle;
+        public TextView txtDialogxPopMessage;
+        public TextView txtDialogxButton;
+        public RelativeLayout boxCustom;
         
         public BlurView blurView;
         
@@ -650,6 +650,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
+            boxRoot.setRootPadding(screenPaddings[0],screenPaddings[1],screenPaddings[2],screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(boxBody, backgroundColor);
             }
@@ -1333,6 +1334,18 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     
     public PopNotification setDialogXAnimImpl(DialogXAnimInterface<PopNotification> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
+    }
+    
+    public PopNotification setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public PopNotification setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
         return this;
     }
 }

@@ -564,6 +564,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
+            boxRoot.setRootPadding(screenPaddings[0],screenPaddings[1],screenPaddings[2],screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(boxBody, backgroundColor);
             }
@@ -1182,6 +1183,18 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     
     public PopTip setDialogXAnimImpl(DialogXAnimInterface<PopTip> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
+        return this;
+    }
+    
+    public PopTip setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public PopTip setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
         return this;
     }
 }

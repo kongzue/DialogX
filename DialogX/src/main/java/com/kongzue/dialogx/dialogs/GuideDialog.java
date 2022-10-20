@@ -698,4 +698,16 @@ public class GuideDialog extends CustomDialog {
         this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
+    
+    public GuideDialog setRootPadding(int padding) {
+        this.screenPaddings = new int[]{padding, padding, padding, padding};
+        refreshUI();
+        return this;
+    }
+    
+    public GuideDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+        this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
+        refreshUI();
+        return this;
+    }
 }
