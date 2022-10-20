@@ -10,8 +10,8 @@
 <a href="https://github.com/kongzue/dialogX/">
 <img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
 </a> 
-<a href="https://bintray.com/myzchh/maven/dialogX/">
-<img src="https://img.shields.io/badge/jCenter-Beta-blue.svg" alt="Maven">
+<a href="https://github.com/kongzue/DialogX/releases">
+<img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="Maven">
 </a> 
 <a href="https://jitpack.io/#kongzue/DialogX">
 <img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
