@@ -127,11 +127,8 @@ DialogX 採用了主題分離結構，主框架僅包含 Material 設計風格�
 
 ### 📥引入
 
-<div>
 <b>最新版本：</b>
-<a href="https://jitpack.io/#kongzue/DialogX">
-<img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
-</a> 
+<a href="https://jitpack.io/#kongzue/DialogX"><img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io"></a> <a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/badge/%E6%9F%A5%E7%9C%8B%E6%9C%80%E6%96%B0%E7%B7%A8%E8%AD%AF%E7%89%88%E6%9C%AC-0.0.47.beta1-green.svg" alt="查看最新编译版本"></a>
 </div>
 
 1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代碼塊添加以下代碼：
@@ -151,7 +148,7 @@ allprojects {
 2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代碼塊，並在其中加入以下語句：
 
 ```
-def dialogx_version = "0.0.45"
+def dialogx_version = "0.0.46"
 implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 ```
 
