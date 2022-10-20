@@ -138,7 +138,7 @@ Because of dependencies, DialogX currently only supports AndroidX as the base fo
 </div>
 
 <b>Latest Version: </b>
-<a href="https://jitpack.io/#kongzue/DialogX"><img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io"></a> <a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/badge/Latest Version-0.0.47.beta1-green.svg" alt="Latest Version"></a>
+<a href="https://jitpack.io/#kongzue/DialogX"><img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io"></a> <a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="Latest Version"></a>
 </div>
 
 1) In the project's build.gradle file, find the `allprojects{}` block and add the following code.
