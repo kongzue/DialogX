@@ -156,6 +156,7 @@ public class ProgressView extends View implements ProgressViewInterface {
     private int successStep = 0;
     private float nowLoadingProgressValue;
     private float nowLoadingProgressEndAngle;
+    private float changeStatusAngle;
     
     @Override
     protected void onDraw(Canvas canvas) {
@@ -178,6 +179,7 @@ public class ProgressView extends View implements ProgressViewInterface {
                     nowLoadingProgressValue = 360 + nowLoadingProgressValue;
                 }
                 nowLoadingProgressEndAngle = sweepAngle;
+                changeStatusAngle = sweepAngle < 0 ? 360 - sweepAngle : sweepAngle;
                 canvas.drawArc(oval, currentRotateDegrees, -sweepAngle, false, mPaint);
                 break;
             case STATUS_SUCCESS:
@@ -187,7 +189,8 @@ public class ProgressView extends View implements ProgressViewInterface {
                     case 0:
                         nowLoadingProgressEndAngle = nowLoadingProgressEndAngle + 5;
                         canvas.drawArc(oval, nowLoadingProgressValue, nowLoadingProgressEndAngle, false, mPaint);
-                        if (nowLoadingProgressEndAngle - 360 >= nowLoadingProgressValue) {
+                        
+                        if (nowLoadingProgressEndAngle - (360 - changeStatusAngle) >= nowLoadingProgressValue) {
                             successStep = 1;
                             if (waitArticulationAnimationRunnable != null) {
                                 waitArticulationAnimationRunnable.run();

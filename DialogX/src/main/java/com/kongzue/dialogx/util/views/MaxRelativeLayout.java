@@ -117,23 +117,22 @@ public class MaxRelativeLayout extends RelativeLayout {
         }
         View blurView = findViewWithTag("blurView");
         View contentView = this.contentView == null ? findViewWithoutTag("blurView") : this.contentView;
-        if (contentView != null) {
+        if (contentView != null && blurView != null) {
             int widthTemp = contentView.getMeasuredWidth() == 0 ? getMeasuredWidth() : contentView.getMeasuredWidth();
             int heightTemp = contentView.getMeasuredHeight() == 0 ? getMeasuredHeight() : contentView.getMeasuredHeight();
             if (widthTemp < minWidth) widthTemp = minWidth;
             if (heightTemp < minHeight) heightTemp = minHeight;
-            if (blurView != null) {
-                if (heightMode == EXACTLY) {
-                    heightTemp = heightSize;
-                }
-                if (widthMode == EXACTLY) {
-                    widthTemp = widthSize;
-                }
-                LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
-                lp.width = widthTemp;
-                lp.height = heightTemp;
-                blurView.setLayoutParams(lp);
+            
+            if (heightMode == EXACTLY) {
+                heightTemp = heightSize;
             }
+            if (widthMode == EXACTLY) {
+                widthTemp = widthSize;
+            }
+            LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
+            lp.width = widthTemp > lp.width ? widthTemp : lp.width;
+            lp.height = heightTemp > lp.height ? heightTemp : lp.height;
+            blurView.setLayoutParams(lp);
         } else {
             if (blurView != null) {
                 LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
