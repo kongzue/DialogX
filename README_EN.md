@@ -218,5 +218,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
+# Contributors
+Thank you to all who have contributed to DialogX!
 
 If DialogX has helped you build your software better, please give DialogX a Star, every click you make is a great support for DialogX!
+
+[![Stargazers repo roster for @kongzue/DialogX](https://reporoster.com/stars/kongzue/DialogX)](https://github.com/kongzue/DialogX/stargazers)
+
+### Assist in development
+
+<a href="https://github.com/kongzue/DialogX/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=kongzue/DialogX" />
+</a>
