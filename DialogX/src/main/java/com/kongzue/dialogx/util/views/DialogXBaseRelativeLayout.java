@@ -353,4 +353,28 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         extraPadding[2] = right;
         extraPadding[3] = bottom;
     }
+    
+    public int getRootPaddingLeft(){
+        return extraPadding[0];
+    }
+    
+    public int getRootPaddingTop(){
+        return extraPadding[1];
+    }
+    
+    public int getRootPaddingRight(){
+        return extraPadding[2];
+    }
+    
+    public int getRootPaddingBottom(){
+        return extraPadding[3];
+    }
+    
+    public int getUseAreaWidth(){
+        return getWidth() - getRootPaddingRight();
+    }
+    
+    public int getUseAreaHeight(){
+        return getHeight() - getRootPaddingBottom();
+    }
 }

@@ -560,14 +560,14 @@ public class PopMenu extends BaseDialog {
                                     if (calX < 0) {
                                         calX = 0;
                                     }
-                                    if ((calX + boxBody.getWidth()) > boxRoot.getWidth()) {
-                                        calX = boxRoot.getWidth() - boxBody.getWidth();
+                                    if ((calX + boxBody.getWidth()) > boxRoot.getUseAreaWidth()) {
+                                        calX = boxRoot.getUseAreaWidth() - boxBody.getWidth();
                                     }
                                     if (calY < 0) {
                                         calY = 0;
                                     }
-                                    if ((calY + boxBody.getHeight()) > boxRoot.getHeight()) {
-                                        calY = boxRoot.getHeight() - boxBody.getHeight();
+                                    if ((calY + boxBody.getHeight()) > boxRoot.getUseAreaHeight()) {
+                                        calY = boxRoot.getUseAreaHeight() - boxBody.getHeight();
                                     }
                                 }
                                 
@@ -592,14 +592,14 @@ public class PopMenu extends BaseDialog {
                                         if (calX < 0) {
                                             calX = 0;
                                         }
-                                        if ((calX + boxBody.getWidth()) > boxRoot.getWidth()) {
-                                            calX = boxRoot.getWidth() - boxBody.getWidth();
+                                        if ((calX + boxBody.getWidth()) > boxRoot.getUseAreaWidth()) {
+                                            calX = boxRoot.getUseAreaWidth() - boxBody.getWidth();
                                         }
                                         if (calY < 0) {
                                             calY = 0;
                                         }
-                                        if ((calY + boxBody.getHeight()) > boxRoot.getHeight()) {
-                                            calY = boxRoot.getHeight() - boxBody.getHeight();
+                                        if ((calY + boxBody.getHeight()) > boxRoot.getUseAreaHeight()) {
+                                            calY = boxRoot.getUseAreaHeight() - boxBody.getHeight();
                                         }
                                         boxBody.setX(calX);
                                         boxBody.setY(calY);
