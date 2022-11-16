@@ -373,6 +373,8 @@ public class ProgressView extends View implements ProgressViewInterface {
         if (status != STATUS_PROGRESSING) {
             currentRotateDegrees = 0;
         }
+        noShowLoading = false;
+        status = STATUS_PROGRESSING;
         rotateAnimator = ValueAnimator.ofFloat(currentRotateDegrees, 365 * progress);
         rotateAnimator.setDuration(1000);
         rotateAnimator.setInterpolator(new DecelerateInterpolator(2));
@@ -385,7 +387,6 @@ public class ProgressView extends View implements ProgressViewInterface {
             }
         });
         rotateAnimator.start();
-        status = STATUS_PROGRESSING;
     }
     
     private Runnable tickShowRunnable;

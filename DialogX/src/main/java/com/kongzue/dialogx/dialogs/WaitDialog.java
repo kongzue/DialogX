@@ -66,15 +66,19 @@ public class WaitDialog extends BaseDialog {
     
     public enum TYPE {
         /**
-         * @deprecated 不建议使用，禁止使用此方法。
+         * @deprecated NONE 和 PROGRESSING 不建议使用，禁止使用此方法。
          * 此类型等同于直接使用 WaitDialog，因此请勿使用 TipDialog 并指定使用 TYPE.NONE，
          * 如有需要，请直接使用： WaitDialog.show(...)
+         *
+         * 要是用进度，请直接使用 WaitDialog.show(float)
          */
         @Deprecated
         NONE,
         SUCCESS,
         WARNING,
-        ERROR
+        ERROR,
+        @Deprecated
+        PROGRESSING
     }
     
     protected static WeakReference<WaitDialog> me;
@@ -132,7 +136,7 @@ public class WaitDialog extends BaseDialog {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(messageResId, TYPE.NONE);
+        instance.setTip(messageResId, TYPE.PROGRESSING);
         if (noInstance) showWithInstance(instance, activity);
         return instance;
     }
@@ -140,7 +144,7 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(CharSequence message, float progress) {
         boolean noInstance = noInstance();
         if (noInstance) instanceBuild();
-        me().setTip(message, TYPE.NONE);
+        me().setTip(message, TYPE.PROGRESSING);
         me().setProgress(progress);
         showWithInstance(noInstance);
         return me();
@@ -150,7 +154,7 @@ public class WaitDialog extends BaseDialog {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(message, TYPE.NONE);
+        instance.setTip(message, TYPE.PROGRESSING);
         instance.setProgress(progress);
         if (noInstance) showWithInstance(instance, activity);
         return instance;
@@ -159,7 +163,7 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(int messageResId, float progress) {
         boolean noInstance = noInstance();
         if (noInstance) instanceBuild();
-        me().setTip(messageResId, TYPE.NONE);
+        me().setTip(messageResId, TYPE.PROGRESSING);
         me().setProgress(progress);
         showWithInstance(noInstance);
         return me();
@@ -169,7 +173,7 @@ public class WaitDialog extends BaseDialog {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(messageResId, TYPE.NONE);
+        instance.setTip(messageResId, TYPE.PROGRESSING);
         instance.setProgress(progress);
         if (noInstance) showWithInstance(instance, activity);
         return instance;
@@ -179,7 +183,7 @@ public class WaitDialog extends BaseDialog {
         boolean noInstance = noInstance(activity);
         if (noInstance) instanceBuild();
         WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(TYPE.NONE);
+        instance.setTip(TYPE.PROGRESSING);
         instance.setProgress(progress);
         if (noInstance) showWithInstance(instance, activity);
         return instance;
@@ -188,7 +192,7 @@ public class WaitDialog extends BaseDialog {
     public static WaitDialog show(float progress) {
         boolean noInstance = noInstance();
         if (noInstance) instanceBuild();
-        me().setTip(TYPE.NONE);
+        me().setTip(TYPE.PROGRESSING);
         me().setProgress(progress);
         showWithInstance(noInstance);
         return me();

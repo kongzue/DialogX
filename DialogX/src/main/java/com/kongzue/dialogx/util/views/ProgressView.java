@@ -170,7 +170,6 @@ public class ProgressView extends View implements ProgressViewInterface {
             drawDoneMark(status, canvas);
             return;
         }
-        
         switch (status) {
             case STATUS_LOADING:
                 float sweepAngle = (float) (halfSweepA * Math.sin(Math.toRadians(followRotateDegrees))) + halfSweepA + halfSweepAMinValue / 2;
@@ -422,6 +421,8 @@ public class ProgressView extends View implements ProgressViewInterface {
         if (status != STATUS_PROGRESSING) {
             currentRotateDegrees = 0;
         }
+        noShowLoading = false;
+        status = STATUS_PROGRESSING;
         rotateAnimator = ValueAnimator.ofFloat(currentRotateDegrees, 365 * progress);
         rotateAnimator.setDuration(PROGRESSING_ANIMATOR_DURATION);
         rotateAnimator.setInterpolator(new DecelerateInterpolator(2));
@@ -434,7 +435,6 @@ public class ProgressView extends View implements ProgressViewInterface {
             }
         });
         rotateAnimator.start();
-        status = STATUS_PROGRESSING;
     }
     
     private Runnable tickShowRunnable;
