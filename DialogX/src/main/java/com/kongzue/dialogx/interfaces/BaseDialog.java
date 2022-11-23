@@ -463,6 +463,9 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected long enterAnimDuration = -1;
     protected long exitAnimDuration = -1;
     protected int maxWidth;
+    protected int maxHeight;
+    protected int minWidth;
+    protected int minHeight;
     protected int[] screenPaddings = new int[4];
     
     public BaseDialog() {
@@ -777,13 +780,6 @@ public abstract class BaseDialog implements LifecycleOwner {
         }
     }
     
-    public int getMaxWidth() {
-        if (maxWidth == 0) {
-            return DialogX.dialogMaxWidth;
-        }
-        return maxWidth;
-    }
-    
     public DialogX.IMPL_MODE getDialogImplMode() {
         return dialogImplMode;
     }
@@ -861,5 +857,33 @@ public abstract class BaseDialog implements LifecycleOwner {
     @Override
     public Lifecycle getLifecycle() {
         return lifecycle;
+    }
+    
+    public int getMaxWidth() {
+        if (maxWidth == 0) {
+            return DialogX.dialogMaxWidth;
+        }
+        return maxWidth;
+    }
+    
+    public int getMaxHeight() {
+        if (maxHeight == 0) {
+            return DialogX.dialogMaxHeight;
+        }
+        return maxHeight;
+    }
+    
+    public int getMinWidth() {
+        if (minWidth == 0) {
+            return DialogX.dialogMinWidth;
+        }
+        return minWidth;
+    }
+    
+    public int getMinHeight() {
+        if (minWidth == 0) {
+            return DialogX.dialogMinHeight;
+        }
+        return minHeight;
     }
 }

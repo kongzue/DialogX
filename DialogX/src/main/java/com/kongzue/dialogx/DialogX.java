@@ -42,6 +42,15 @@ public class DialogX {
     //对话框最大宽度（像素）
     public static int dialogMaxWidth;
     
+    //对话框最大高度（像素）
+    public static int dialogMaxHeight;
+    
+    //对话框最小宽度（像素）
+    public static int dialogMinWidth;
+    
+    //对话框最小高度（像素）
+    public static int dialogMinHeight;
+    
     //是否允许 InputDialog 自动弹出键盘
     public static boolean autoShowInputKeyboard = true;
     

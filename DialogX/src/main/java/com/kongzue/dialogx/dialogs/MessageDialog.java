@@ -496,8 +496,13 @@ public class MessageDialog extends BaseDialog {
                     tintColor(btnSelectPositive, backgroundColor);
                 }
             }
-            
+    
+    
             bkg.setMaxWidth(getMaxWidth());
+            bkg.setMaxHeight(getMaxHeight());
+            bkg.setMinimumWidth(getMinWidth());
+            bkg.setMinimumHeight(getMinHeight());
+            
             View inputBoxView = boxRoot.findViewWithTag("dialogx_editbox");
             if (me instanceof InputDialog) {
                 if (inputBoxView != null) {
@@ -1240,6 +1245,24 @@ public class MessageDialog extends BaseDialog {
     
     public MessageDialog setMaxWidth(int maxWidth) {
         this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setMinHeight(int minHeight) {
+        this.minHeight = minHeight;
+        refreshUI();
+        return this;
+    }
+    
+    public MessageDialog setMinWidth(int minWidth) {
+        this.minWidth = minWidth;
         refreshUI();
         return this;
     }

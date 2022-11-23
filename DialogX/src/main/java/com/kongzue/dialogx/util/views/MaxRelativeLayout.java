@@ -84,7 +84,7 @@ public class MaxRelativeLayout extends RelativeLayout {
     private ScrollView childScrollView;
     
     public MaxRelativeLayout setMaxHeight(int maxHeight) {
-        this.maxHeight = maxHeight;
+        if (maxHeight > 0) this.maxHeight = maxHeight;
         return this;
     }
     

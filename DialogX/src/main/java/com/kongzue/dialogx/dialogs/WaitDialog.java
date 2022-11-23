@@ -410,8 +410,11 @@ public class WaitDialog extends BaseDialog {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
-            
+    
             bkg.setMaxWidth(getMaxWidth());
+            bkg.setMaxHeight(getMaxHeight());
+            bkg.setMinimumWidth(getMinWidth());
+            bkg.setMinimumHeight(getMinHeight());
             
             if (style.overrideWaitTipRes() != null) {
                 int overrideBackgroundColorRes = style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme());
@@ -1023,6 +1026,24 @@ public class WaitDialog extends BaseDialog {
     
     public WaitDialog setMaxWidth(int maxWidth) {
         this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
+    }
+    
+    public WaitDialog setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
+        refreshUI();
+        return this;
+    }
+    
+    public WaitDialog setMinHeight(int minHeight) {
+        this.minHeight = minHeight;
+        refreshUI();
+        return this;
+    }
+    
+    public WaitDialog setMinWidth(int minWidth) {
+        this.minWidth = minWidth;
         refreshUI();
         return this;
     }

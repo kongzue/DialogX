@@ -283,6 +283,9 @@ public class FullScreenDialog extends BaseDialog {
             }
             
             bkg.setMaxWidth(getMaxWidth());
+            bkg.setMaxHeight(getMaxHeight());
+            bkg.setMinimumWidth(getMinWidth());
+            bkg.setMinimumHeight(getMinHeight());
             
             if (isCancelable()) {
                 boxRoot.setOnClickListener(new View.OnClickListener() {
@@ -622,6 +625,24 @@ public class FullScreenDialog extends BaseDialog {
     
     public FullScreenDialog setMaxWidth(int maxWidth) {
         this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
+    }
+    
+    public FullScreenDialog setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
+        refreshUI();
+        return this;
+    }
+    
+    public FullScreenDialog setMinHeight(int minHeight) {
+        this.minHeight = minHeight;
+        refreshUI();
+        return this;
+    }
+    
+    public FullScreenDialog setMinWidth(int minWidth) {
+        this.minWidth = minWidth;
         refreshUI();
         return this;
     }
