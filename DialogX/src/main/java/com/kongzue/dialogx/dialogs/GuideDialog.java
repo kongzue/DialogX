@@ -577,8 +577,8 @@ public class GuideDialog extends CustomDialog {
         
         int x = baseViewLoc[0] + baseViewLocationCoordinateCompensation[0];
         int y = baseViewLoc[1] + baseViewLocationCoordinateCompensation[1];
-        int w = baseViewLoc[2]+  baseViewLocationCoordinateCompensation[2];
-        int h = baseViewLoc[3]+  baseViewLocationCoordinateCompensation[3];
+        int w = baseViewLoc[2] + baseViewLocationCoordinateCompensation[2];
+        int h = baseViewLoc[3] + baseViewLocationCoordinateCompensation[3];
         int hW = w / 2;
         int hH = h / 2;
         

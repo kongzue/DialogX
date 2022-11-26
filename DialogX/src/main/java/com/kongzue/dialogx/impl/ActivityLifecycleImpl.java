@@ -10,6 +10,7 @@ import android.util.ArrayMap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
 
@@ -178,5 +179,15 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     
     public interface onActivityResumeCallBack {
         void getActivity(Activity activity);
+    }
+    
+    public static boolean isExemptActivities(Activity activity) {
+        if (activity == null) return true;
+        for (String packageName : DialogX.unsupportedActivitiesPackageNames) {
+            if (activity.getClass().getName().contains(packageName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

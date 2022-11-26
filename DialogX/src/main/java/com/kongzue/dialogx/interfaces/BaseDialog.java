@@ -89,6 +89,9 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
     
     private static void initActivityContext(Activity activity) {
+        if (ActivityLifecycleImpl.isExemptActivities(activity)){
+            return;
+        }
         try {
             uiThread = Looper.getMainLooper().getThread();
             activityWeakReference = new WeakReference<>(activity);
