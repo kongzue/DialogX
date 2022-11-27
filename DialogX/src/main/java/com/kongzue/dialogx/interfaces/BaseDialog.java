@@ -62,9 +62,9 @@ import static com.kongzue.dialogx.DialogX.DEBUGMODE;
 public abstract class BaseDialog implements LifecycleOwner {
     
     private static Thread uiThread;
-    private static WeakReference<FrameLayout> rootFrameLayout;
     private static WeakReference<Activity> activityWeakReference;
     protected WeakReference<Activity> ownActivity;
+    private WeakReference<FrameLayout> rootFrameLayout;
     private static List<BaseDialog> runningDialogList;
     private WeakReference<View> dialogView;
     protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
@@ -89,16 +89,12 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
     
     private static void initActivityContext(Activity activity) {
-        if (ActivityLifecycleImpl.isExemptActivities(activity)){
+        if (ActivityLifecycleImpl.isExemptActivities(activity)) {
             return;
         }
         try {
             uiThread = Looper.getMainLooper().getThread();
             activityWeakReference = new WeakReference<>(activity);
-            rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                publicWindowInsets(rootFrameLayout.get().getRootWindowInsets());
-            }
         } catch (Exception e) {
             e.printStackTrace();
             error("DialogX.init: 初始化异常，找不到Activity的根布局");
@@ -160,6 +156,10 @@ public abstract class BaseDialog implements LifecycleOwner {
             baseDialog.ownActivity = new WeakReference<>(getTopActivity());
             baseDialog.dialogView = new WeakReference<>(view);
             
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                publicWindowInsets( baseDialog.getRootFrameLayout().getRootWindowInsets());
+            }
+            
             log(baseDialog.dialogKey() + ".show");
             
             addDialogToRunningList(baseDialog);
@@ -187,7 +187,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                             runOnMain(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (view.getParent() == rootFrameLayout.get()) {
+                                    if (view.getParent() == baseDialog.getRootFrameLayout()) {
                                         error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                                         return;
                                     }
@@ -218,20 +218,20 @@ public abstract class BaseDialog implements LifecycleOwner {
                     }
                     break;
                 default:
-                    if (rootFrameLayout == null || rootFrameLayout.get() == null) {
+                    if (baseDialog.getRootFrameLayout() == null) {
                         return;
                     }
                     runOnMain(new Runnable() {
                         @Override
                         public void run() {
-                            if (view.getParent() == rootFrameLayout.get()) {
+                            if (view.getParent() == baseDialog.getRootFrameLayout()) {
                                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                                 return;
                             }
                             if (view.getParent() != null) {
                                 ((ViewGroup) view.getParent()).removeView(view);
                             }
-                            rootFrameLayout.get().addView(view);
+                            baseDialog.getRootFrameLayout().addView(view);
                         }
                     });
                     break;
@@ -271,6 +271,10 @@ public abstract class BaseDialog implements LifecycleOwner {
             }
             baseDialog.ownActivity = new WeakReference<>(activity);
             baseDialog.dialogView = new WeakReference<>(view);
+    
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                publicWindowInsets( baseDialog.getRootFrameLayout().getRootWindowInsets());
+            }
             
             log(baseDialog + ".show");
             addDialogToRunningList(baseDialog);
@@ -299,7 +303,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                             runOnMain(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (view.getParent() == rootFrameLayout.get()) {
+                                    if (view.getParent() == baseDialog.getRootFrameLayout()) {
                                         error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                                         return;
                                     }
@@ -334,7 +338,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                     runOnMain(new Runnable() {
                         @Override
                         public void run() {
-                            if (view.getParent() == rootFrameLayout.get()) {
+                            if (view.getParent() == baseDialog.getRootFrameLayout()) {
                                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                                 return;
                             }
@@ -384,10 +388,10 @@ public abstract class BaseDialog implements LifecycleOwner {
                     @Override
                     public void run() {
                         if (dialogView.getParent() == null || !(dialogView.getParent() instanceof ViewGroup)) {
-                            if (rootFrameLayout == null) {
+                            if (baseDialog.getRootFrameLayout() == null) {
                                 return;
                             }
-                            rootFrameLayout.get().removeView(dialogView);
+                            baseDialog.getRootFrameLayout().removeView(dialogView);
                         } else {
                             ((ViewGroup) dialogView.getParent()).removeView(dialogView);
                         }
@@ -430,7 +434,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (activity == null) {
             Context applicationContext = getApplicationContext();
             if (applicationContext == null) {
-                error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+                error("DialogX 未初始化(E2)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
                 return null;
             }
             return applicationContext;
@@ -484,7 +488,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     
     public View createView(int layoutId) {
         if (getApplicationContext() == null) {
-            error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+            error("DialogX 未初始化(E3)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return null;
         }
         return LayoutInflater.from(getApplicationContext()).inflate(layoutId, null);
@@ -582,11 +586,12 @@ public abstract class BaseDialog implements LifecycleOwner {
         return theme == DialogX.THEME.LIGHT;
     }
     
-    public static FrameLayout getRootFrameLayout() {
-        if (rootFrameLayout == null) {
-            error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
-            return null;
+    public FrameLayout getRootFrameLayout() {
+        Activity activity = getOwnActivity();
+        if (activity == null) {
+            activity = getTopActivity();
         }
+        rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
         return rootFrameLayout.get();
     }
     
@@ -612,7 +617,7 @@ public abstract class BaseDialog implements LifecycleOwner {
             //尝试重新获取 activity
             init(null);
             if (getTopActivity() == null) {
-                error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+                error("DialogX 未初始化(E5)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
                 return;
             }
         }
@@ -642,7 +647,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     
     protected String getString(int titleResId) {
         if (getApplicationContext() == null) {
-            error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+            error("DialogX 未初始化(E6)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return null;
         }
         return getResources().getString(titleResId);
@@ -650,7 +655,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     
     protected int getColor(int backgroundRes) {
         if (getApplicationContext() == null) {
-            error("DialogX 未初始化。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+            error("DialogX 未初始化(E7)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return Color.BLACK;
         }
         return getResources().getColor(backgroundRes);
@@ -804,7 +809,6 @@ public abstract class BaseDialog implements LifecycleOwner {
                 if (baseDialog.isShow && baseDialog.getDialogView() != null) {
                     View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
                     if (boxRoot instanceof DialogXBaseRelativeLayout) {
-                        log("publicWindowInsets");
                         ((DialogXBaseRelativeLayout) boxRoot).paddingView(windowInsets);
                     }
                 }

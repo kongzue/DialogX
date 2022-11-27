@@ -92,10 +92,12 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         if (customBackgroundRes != 0) {
             convertView.setBackgroundResource(customBackgroundRes);
         }
-        if (popMenu.getPressedIndex() == position) {
-            viewHolder.boxItem.setBackgroundResource(popMenu.isLightTheme() ? R.color.black5 : R.color.white5);
-        } else {
-            viewHolder.boxItem.setBackgroundResource(R.color.empty);
+        if (viewHolder.boxItem != null) {
+            if (popMenu.getPressedIndex() == position) {
+                viewHolder.boxItem.setBackgroundResource(popMenu.isLightTheme() ? R.color.black5 : R.color.white5);
+            } else {
+                viewHolder.boxItem.setBackgroundResource(R.color.empty);
+            }
         }
         viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
         viewHolder.txtDialogxMenuText.setText(menuList.get(position));

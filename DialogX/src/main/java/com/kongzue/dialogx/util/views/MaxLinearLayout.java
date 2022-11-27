@@ -80,34 +80,28 @@ public class MaxLinearLayout extends LinearLayout {
         if (preWidth == -1 && widthSize != 0) {
             preWidth = widthSize;
         }
-        if (maxHeight > 0) {
-            heightSize = Math.max(heightSize, maxHeight);
+        if (heightSize > maxHeight && maxHeight != 0) {
+            heightSize = maxHeight;
         }
-        if (maxWidth > 0) {
-            widthSize = Math.max(widthSize, maxWidth);
+        if (widthSize > maxWidth && maxWidth != 0) {
+            widthSize = maxWidth;
         }
         View blurView = findViewWithTag("blurView");
         View contentView = findViewWithoutTag("blurView");
-        if (contentView != null) {
+        if (contentView != null && blurView != null) {
             int widthTemp = contentView.getMeasuredWidth() == 0 ? getMeasuredWidth() : contentView.getMeasuredWidth();
             int heightTemp = contentView.getMeasuredHeight() == 0 ? getMeasuredHeight() : contentView.getMeasuredHeight();
             if (widthTemp < minWidth) widthTemp = minWidth;
             if (heightTemp < minHeight) heightTemp = minHeight;
-            if (blurView != null) {
-                if (heightMode == EXACTLY) {
-                    heightTemp = heightSize;
-                }
-                if (widthMode == EXACTLY) {
-                    widthTemp = widthSize;
-                }
-                ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) blurView.getLayoutParams();
-                lp.width = widthTemp;
-                lp.height = heightTemp;
-                blurView.setLayoutParams(lp);
-            }
+            
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) blurView.getLayoutParams();
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+            lp.width = widthTemp;
+            lp.height = heightTemp;
+            blurView.setLayoutParams(lp);
         } else {
             if (blurView != null) {
-                ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) blurView.getLayoutParams();
+                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) blurView.getLayoutParams();
                 lp.width = getMeasuredWidth();
                 lp.height = getMeasuredHeight();
                 blurView.setLayoutParams(lp);

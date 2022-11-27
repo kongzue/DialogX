@@ -618,7 +618,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                     ) {
                         MaxRelativeLayout blurBody = boxRoot.findViewWithTag("blurBody");
                         int blurFrontColor = getResources().getColor(getStyle().popNotificationSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
-                        blurView = new BlurView(blurBody.getContext(), null);
+                        blurView = new BlurView(getOwnActivity(), null);
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
                         blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                         blurView.setTag("blurView");

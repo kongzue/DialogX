@@ -508,7 +508,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 closeFlag = false;
-                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
+                WaitDialog.show("Please Wait!Please Wait!Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
                     @Override
                     public boolean onBackPressed(WaitDialog dialog) {
                         PopTip.show("按下返回", "关闭").setButton(new OnDialogButtonClickListener<PopTip>() {

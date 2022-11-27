@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,15 +124,10 @@ public class MaxRelativeLayout extends RelativeLayout {
             if (widthTemp < minWidth) widthTemp = minWidth;
             if (heightTemp < minHeight) heightTemp = minHeight;
             
-            if (heightMode == EXACTLY) {
-                heightTemp = heightSize;
-            }
-            if (widthMode == EXACTLY) {
-                widthTemp = widthSize;
-            }
             LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
-            lp.width = widthTemp > lp.width ? widthTemp : lp.width;
-            lp.height = heightTemp > lp.height ? heightTemp : lp.height;
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+            lp.width = widthTemp;
+            lp.height = heightTemp;
             blurView.setLayoutParams(lp);
         } else {
             if (blurView != null) {

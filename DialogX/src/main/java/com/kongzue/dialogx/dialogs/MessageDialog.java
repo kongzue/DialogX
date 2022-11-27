@@ -349,7 +349,7 @@ public class MessageDialog extends BaseDialog {
                             @Override
                             public void run() {
                                 int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
-                                blurView = new BlurView(bkg.getContext(), null);
+                                blurView = new BlurView(getOwnActivity(), null);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
                                 params.addRule(RelativeLayout.CENTER_IN_PARENT);
                                 blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);

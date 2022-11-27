@@ -624,7 +624,7 @@ public class PopMenu extends BaseDialog {
                                     getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
                             ) {
                                 int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
-                                blurView = new BlurView(boxBody.getContext(), null);
+                                blurView = new BlurView(getOwnActivity(), null);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), targetHeight);
                                 blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                                 blurView.setTag("blurView");
@@ -654,7 +654,7 @@ public class PopMenu extends BaseDialog {
                                             getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
                                     ) {
                                         int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
-                                        blurView = new BlurView(boxBody.getContext(), null);
+                                        blurView = new BlurView(getOwnActivity(), null);
                                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
                                         blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                                         blurView.setTag("blurView");

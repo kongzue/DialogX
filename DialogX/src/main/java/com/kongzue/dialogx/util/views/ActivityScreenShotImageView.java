@@ -127,8 +127,8 @@ public class ActivityScreenShotImageView extends ImageView {
     }
     
     private View getContentView() {
-        Activity screenshotActivity = ActivityLifecycleImpl.getTopActivity();
-        if (screenshotActivity == null) {
+        Activity topActivity = ActivityLifecycleImpl.getTopActivity();
+        if (topActivity == null) {
             return null;
         }
 //        for (int i = BaseDialog.getRunningDialogList().size() - 1; i >= 0; i--) {
@@ -140,15 +140,16 @@ public class ActivityScreenShotImageView extends ImageView {
 //                return baseDialog.getDialogView().dispatchTouchEvent(event);
 //            }
 //        }
-        if (screenshotActivity instanceof DialogXFloatingWindowActivity) {
-            if (((DialogXFloatingWindowActivity) screenshotActivity).isScreenshot()) {
-                return (FrameLayout) screenshotActivity.getWindow().getDecorView();
-            } else {
-                ((DialogXFloatingWindowActivity) screenshotActivity).setScreenshot(true);
-                return BaseDialog.getRootFrameLayout();
+        
+        if (getContext() instanceof Activity) {
+            return ((Activity) getContext()).getWindow().getDecorView();
+        }else{
+            if (topActivity instanceof DialogXFloatingWindowActivity) {
+                if (((DialogXFloatingWindowActivity) topActivity).isScreenshot()) {
+                    return topActivity.getWindow().getDecorView();
+                }
             }
-        } else {
-            return BaseDialog.getRootFrameLayout();
+            return topActivity.getWindow().getDecorView();
         }
     }
     

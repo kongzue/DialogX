@@ -349,14 +349,14 @@ public class BottomDialog extends BaseDialog {
                         public void run() {
                             if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground() && boxBody != null && boxCancel != null) {
                                 int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
-                                blurView = new BlurView(bkg.getContext(), null);
+                                blurView = new BlurView(getOwnActivity(), null);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
                                 blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                                 blurView.setTag("blurView");
                                 blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 boxBody.addView(blurView, 0, params);
                                 
-                                cancelBlurView = new BlurView(boxCancel.getContext(), null);
+                                cancelBlurView = new BlurView(getOwnActivity(), null);
                                 RelativeLayout.LayoutParams cancelButtonLp = new RelativeLayout.LayoutParams(boxCancel.getWidth(), boxCancel.getHeight());
                                 cancelBlurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
                                 cancelBlurView.setTag("blurView");

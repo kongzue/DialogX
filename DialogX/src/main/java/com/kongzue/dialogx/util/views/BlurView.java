@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.util.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -19,6 +20,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 
@@ -64,7 +66,6 @@ public class BlurView extends View {
     
     public BlurView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
         init(context, attrs);
     }
     
@@ -334,8 +335,16 @@ public class BlurView extends View {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (BaseDialog.getRootFrameLayout() != null && BaseDialog.getRootFrameLayout().getChildCount() >= 1) {
-            mDecorView = BaseDialog.getRootFrameLayout().getChildAt(0);
+        Activity activity;
+        log(getContext());
+        if (getContext() instanceof Activity) {
+            activity = (Activity) getContext();
+        } else {
+            activity = BaseDialog.getTopActivity();
+        }
+        ViewGroup decorView = ((ViewGroup) activity.getWindow().getDecorView());
+        if (decorView.getChildCount() >= 1) {
+            mDecorView = decorView.getChildAt(0);
         }
         if (mDecorView != null) {
             log("mDecorView is ok.");
@@ -514,7 +523,7 @@ public class BlurView extends View {
     }
     
     private static void log(Object o) {
-        if (isDebug()) Log.i(">>>", o.toString());
+        if (isDebug()) Log.i(">>>", "DialogX.BlurView: " + o.toString());
     }
     
     public static void error(Object o) {
