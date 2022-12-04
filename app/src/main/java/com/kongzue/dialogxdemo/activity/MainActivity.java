@@ -466,7 +466,7 @@ public class MainActivity extends BaseActivity {
                 messageDialog.show();
             }
         });
-        WaitDialog.show("");
+        
         btnInputDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
