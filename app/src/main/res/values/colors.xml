@@ -7,5 +7,5 @@
     <color name="colorNavbarBkg">#01000000</color>
     <color name="emptyNavBar">#01FFFFFF</color>
     <color name="background">#f4f5f6</color>
-<!--    <color name="background">#000000</color>-->
+    <!--    <color name="background">#000000</color>-->
 </resources>

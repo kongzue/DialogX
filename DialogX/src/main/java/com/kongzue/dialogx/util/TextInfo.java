@@ -2,6 +2,8 @@ package com.kongzue.dialogx.util;
 
 import android.util.TypedValue;
 
+import androidx.annotation.ColorInt;
+
 /**
  * Author: @Kongzue
  * Github: https://github.com/kongzue/
@@ -61,7 +63,7 @@ public class TextInfo {
         return fontColor;
     }
     
-    public TextInfo setFontColor(int fontColor) {
+    public TextInfo setFontColor(@ColorInt int fontColor) {
         this.fontColor = fontColor;
         return this;
     }

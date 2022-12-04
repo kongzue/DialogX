@@ -157,7 +157,7 @@ public abstract class BaseDialog implements LifecycleOwner {
             baseDialog.dialogView = new WeakReference<>(view);
             
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                publicWindowInsets( baseDialog.getRootFrameLayout().getRootWindowInsets());
+                publicWindowInsets(baseDialog.getRootFrameLayout().getRootWindowInsets());
             }
             
             log(baseDialog.dialogKey() + ".show");
@@ -256,6 +256,9 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (activity == null || view == null) {
             return;
         }
+        if (activityWeakReference == null || activityWeakReference.get() == null || ActivityLifecycleImpl.getApplicationContext() == null) {
+            init(activity.getApplicationContext());
+        }
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
         if (baseDialog != null) {
             if (baseDialog.getDialogView() != null) {
@@ -271,9 +274,9 @@ public abstract class BaseDialog implements LifecycleOwner {
             }
             baseDialog.ownActivity = new WeakReference<>(activity);
             baseDialog.dialogView = new WeakReference<>(view);
-    
+            
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                publicWindowInsets( baseDialog.getRootFrameLayout().getRootWindowInsets());
+                publicWindowInsets(baseDialog.getRootFrameLayout().getRootWindowInsets());
             }
             
             log(baseDialog + ".show");

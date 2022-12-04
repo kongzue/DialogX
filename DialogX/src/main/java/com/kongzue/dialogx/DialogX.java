@@ -147,7 +147,8 @@ public class DialogX {
     //部分插屏广告 SDK 可能出现背景黑屏的问题，在这里配置需要 DialogX 屏蔽的 Activity 的包名以屏蔽对该 activity 的支持：
     public static String[] unsupportedActivitiesPackageNames = new String[]{
             "com.bytedance.sdk.openadsdk.stub.activity",
-            "com.mobile.auth.gatewayauth"
+            "com.mobile.auth.gatewayauth",
+            "com.google.android.gms.ads"
     };
     
     public enum THEME {

@@ -78,6 +78,7 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
+import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
@@ -465,7 +466,7 @@ public class MainActivity extends BaseActivity {
                 messageDialog.show();
             }
         });
-        
+        WaitDialog.show("");
         btnInputDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -947,7 +948,7 @@ public class MainActivity extends BaseActivity {
                             }
                         })
                         .setMaskColor(getResources().getColor(R.color.black30))
-                        //实现完全自定义动画效果
+                //实现完全自定义动画效果
 //                        .setDialogXAnimImpl(new DialogXAnimInterface<CustomDialog>() {
 //                            @Override
 //                            public void doShowAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {

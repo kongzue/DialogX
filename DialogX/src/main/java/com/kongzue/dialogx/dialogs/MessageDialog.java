@@ -1,12 +1,18 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Outline;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.InputFilter;
@@ -49,6 +55,8 @@ import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.TextInfo;
+
+import java.lang.reflect.Field;
 
 /**
  * @author: Kongzue
@@ -336,7 +344,7 @@ public class MessageDialog extends BaseDialog {
                     
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
-    
+                    
                     getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
                         @Override
                         public void run(Float value) {
@@ -356,7 +364,7 @@ public class MessageDialog extends BaseDialog {
                                 blurView.setTag("blurView");
                                 blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 bkg.addView(blurView, 0, params);
-    
+                                
                                 lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                             }
                         });
@@ -391,7 +399,7 @@ public class MessageDialog extends BaseDialog {
                     getDialogLifecycleCallback().onDismiss(me);
                     dialogView = null;
                     dialogLifecycleCallback = null;
-    
+                    
                     lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
@@ -404,7 +412,7 @@ public class MessageDialog extends BaseDialog {
                         if (onBackPressedListener.onBackPressed(me)) {
                             dismiss();
                         }
-                    }else{
+                    } else {
                         if (isCancelable()) {
                             dismiss();
                         }
@@ -483,11 +491,62 @@ public class MessageDialog extends BaseDialog {
         }
         
         public void refreshView() {
-            log("#refreshView");
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
-            boxRoot.setRootPadding(screenPaddings[0],screenPaddings[1],screenPaddings[2],screenPaddings[3]);
+            
+            //修改下划线颜色
+            if (inputInfo != null && inputInfo.getBottomLineColor() != null) {
+                txtInput.getBackground().mutate().setColorFilter(inputInfo.getBottomLineColor(), PorterDuff.Mode.SRC_ATOP);
+            }
+            //修改光标颜色
+            if (inputInfo != null && inputInfo.getCursorColor() != null) {
+                int cursorColor = inputInfo.getCursorColor();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (txtInput.getTextCursorDrawable() != null) {
+                        txtInput.getTextCursorDrawable().mutate().setColorFilter((new PorterDuffColorFilter(cursorColor, PorterDuff.Mode.SRC_ATOP)));
+                    } else {
+                        try {
+                            @SuppressLint("SoonBlockedPrivateApi")
+                            Field field = TextView.class.getDeclaredField("mCursorDrawableRes");
+                            field.setAccessible(true);
+                            field.set(txtInput, R.drawable.rect_dialogx_defalut_edittxt_cursor);
+                            txtInput.getTextCursorDrawable().mutate().setColorFilter((new PorterDuffColorFilter(cursorColor, PorterDuff.Mode.SRC_ATOP)));
+                        } catch (Throwable throwable) {
+                            log("DialogX: 在对话框" + dialogKey() + "中设置光标颜色时发生错误！");
+                            if (DialogX.DEBUGMODE) {
+                                throwable.printStackTrace();
+                            }
+                        }
+                    }
+                } else {
+                    //Thanks for @Jared Rummler https://stackoverflow.com/questions/11554078/set-textcursordrawable-programmatically/57555148#57555148
+                    try {
+                        Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+                        fCursorDrawableRes.setAccessible(true);
+                        int mCursorDrawableRes = fCursorDrawableRes.getInt(txtInput);
+                        Field fEditor = TextView.class.getDeclaredField("mEditor");
+                        fEditor.setAccessible(true);
+                        Object editor = fEditor.get(txtInput);
+                        Class<?> clazz = editor.getClass();
+                        Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
+                        fCursorDrawable.setAccessible(true);
+                        Drawable[] drawables = new Drawable[2];
+                        drawables[0] = txtInput.getContext().getResources().getDrawable(mCursorDrawableRes);
+                        drawables[1] = txtInput.getContext().getResources().getDrawable(mCursorDrawableRes);
+                        drawables[0].setColorFilter(cursorColor, PorterDuff.Mode.SRC_IN);
+                        drawables[1].setColorFilter(cursorColor, PorterDuff.Mode.SRC_IN);
+                        fCursorDrawable.set(editor, drawables);
+                    } catch (Throwable throwable) {
+                        log("DialogX: 在对话框" + dialogKey() + "中设置光标颜色时发生错误！");
+                        if (DialogX.DEBUGMODE) {
+                            throwable.printStackTrace();
+                        }
+                    }
+                }
+            }
+            
+            boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(bkg, backgroundColor);
                 if (style instanceof MaterialStyle) {
@@ -496,8 +555,8 @@ public class MessageDialog extends BaseDialog {
                     tintColor(btnSelectPositive, backgroundColor);
                 }
             }
-    
-    
+            
+            
             bkg.setMaxWidth(getMaxWidth());
             bkg.setMaxHeight(getMaxHeight());
             bkg.setMinimumWidth(getMinWidth());
@@ -523,7 +582,7 @@ public class MessageDialog extends BaseDialog {
             if (backgroundRadius > -1) {
                 GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
                 if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     bkg.setOutlineProvider(new ViewOutlineProvider() {
                         @Override
                         public void getOutline(View view, Outline outline) {

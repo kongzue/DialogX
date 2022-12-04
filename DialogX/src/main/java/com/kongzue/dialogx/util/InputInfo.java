@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.util;
 
+import androidx.annotation.ColorInt;
+
 /**
  * Author: @Kongzue
  * Github: https://github.com/kongzue/
@@ -14,6 +16,9 @@ public class InputInfo {
     private TextInfo textInfo;      //默认字体样式
     private boolean multipleLines;  //支持多行
     private boolean selectAllText;  //默认选中所有文字（便于修改）
+    
+    private Integer cursorColor;    //输入框光标颜色
+    private Integer bottomLineColor;//输入框横线颜色
     
     public int getMAX_LENGTH() {
         return MAX_LENGTH;
@@ -57,6 +62,30 @@ public class InputInfo {
     
     public InputInfo setSelectAllText(boolean selectAllText) {
         this.selectAllText = selectAllText;
+        return this;
+    }
+    
+    public Integer getCursorColor() {
+        return cursorColor;
+    }
+    
+    public InputInfo setCursorColor(@ColorInt int cursorColor) {
+        this.cursorColor = cursorColor;
+        return this;
+    }
+    
+    public InputInfo setThemeColor(@ColorInt int themeColor) {
+        this.cursorColor = themeColor;
+        this.bottomLineColor = themeColor;
+        return this;
+    }
+    
+    public Integer getBottomLineColor() {
+        return bottomLineColor;
+    }
+    
+    public InputInfo setBottomLineColor(int bottomLineColor) {
+        this.bottomLineColor = bottomLineColor;
         return this;
     }
 }

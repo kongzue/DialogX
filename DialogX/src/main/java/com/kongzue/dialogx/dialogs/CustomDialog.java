@@ -295,6 +295,7 @@ public class CustomDialog extends BaseDialog {
                     boxCustom.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                         @Override
                         public void onGlobalLayout() {
+                            baseView.getLocationOnScreen(baseViewLoc);
                             onLayoutChangeRunnable.run();
                         }
                     });
