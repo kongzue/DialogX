@@ -10,6 +10,7 @@ import androidx.annotation.ColorRes;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -668,6 +669,12 @@ public class InputDialog extends MessageDialog {
     public InputDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
+        return this;
+    }
+    
+    public InputDialog setDialogLifecycleCallback(DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback) {
+        this.dialogLifecycleCallback = dialogLifecycleCallback;
+        if (isShow) dialogLifecycleCallback.onShow(me);
         return this;
     }
 }
