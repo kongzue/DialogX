@@ -167,21 +167,12 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                         return insets;
                     }
                 });
+                paddingWindowInsetsByDefault();
             }else{
                 decorView.getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            paddingView(getRootWindowInsets());
-                        } else {
-                            if (BaseDialog.getTopActivity() == null) return;
-                            DisplayMetrics displayMetrics = new DisplayMetrics();
-                            ((Activity) BaseDialog.getTopActivity()).getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
-                            Rect rect = new Rect();
-                            View decorView = (View) getParent();
-                            decorView.getWindowVisibleDisplayFrame(rect);
-                            paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
-                        }
+                        paddingWindowInsetsByDefault();
                     }
                 });
                 decorViewLayoutListener.onGlobalLayout();
@@ -191,6 +182,20 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 onLifecycleCallBack.onShow();
             }
             isLightMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
+        }
+    }
+    
+    private void paddingWindowInsetsByDefault() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            paddingView(getRootWindowInsets());
+        } else {
+            if (BaseDialog.getTopActivity() == null) return;
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((Activity) BaseDialog.getTopActivity()).getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
+            Rect rect = new Rect();
+            View decorView = (View) getParent();
+            decorView.getWindowVisibleDisplayFrame(rect);
+            paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
         }
     }
     
