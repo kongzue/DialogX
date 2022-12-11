@@ -28,6 +28,7 @@ import androidx.lifecycle.Lifecycle;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
@@ -632,6 +633,12 @@ public class BottomDialog extends BaseDialog {
         
         public void preDismiss() {
             if (isCancelable()) {
+                if (getDialogLifecycleCallback() instanceof BottomDialogSlideEventLifecycleCallback) {
+                    if (!((BottomDialogSlideEventLifecycleCallback) getDialogLifecycleCallback()).onSlideClose(me)) {
+                        doDismiss(boxRoot);
+                    }
+                    return;
+                }
                 doDismiss(boxRoot);
             } else {
                 long exitAnimDurationTemp = 300;

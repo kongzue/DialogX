@@ -56,6 +56,7 @@ public class BottomMenu extends BottomDialog {
     protected int selectionIndex = -1;
     protected SELECT_MODE selectMode = SELECT_MODE.NONE;
     protected ArrayList<Integer> selectionItems;
+    protected boolean showSelectedBackgroundTips = true;
     
     protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
     
@@ -601,24 +602,26 @@ public class BottomMenu extends BottomDialog {
             refreshUI();
             
             //部分主题下选中项默认按下效果
-            listView.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (menuListAdapter instanceof BottomMenuArrayAdapter) {
-                        BottomMenuArrayAdapter bottomMenuArrayAdapter = ((BottomMenuArrayAdapter) menuListAdapter);
-                        
-                        View selectItemView = listView.getChildAt(getSelection());
-                        if (selectItemView != null) {
-                            selectItemView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    selectItemView.setPressed(true);
-                                }
-                            });
+            if (showSelectedBackgroundTips) {
+                listView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (menuListAdapter instanceof BottomMenuArrayAdapter && showSelectedBackgroundTips) {
+                            BottomMenuArrayAdapter bottomMenuArrayAdapter = ((BottomMenuArrayAdapter) menuListAdapter);
+                
+                            View selectItemView = listView.getChildAt(getSelection());
+                            if (selectItemView != null) {
+                                selectItemView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        selectItemView.setPressed(true);
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
             
         }
     }
@@ -1208,6 +1211,15 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
+        return this;
+    }
+    
+    public boolean isShowSelectedBackgroundTips() {
+        return showSelectedBackgroundTips;
+    }
+    
+    public BottomMenu setShowSelectedBackgroundTips(boolean showSelectedBackgroundTips) {
+        this.showSelectedBackgroundTips = showSelectedBackgroundTips;
         return this;
     }
 }

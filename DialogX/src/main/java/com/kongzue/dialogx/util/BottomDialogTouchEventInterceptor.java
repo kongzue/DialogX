@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.ScrollController;
 
 /**
@@ -61,6 +62,11 @@ public class BottomDialogTouchEventInterceptor {
             impl.bkg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    if (me.getDialogLifecycleCallback() instanceof BottomDialogSlideEventLifecycleCallback) {
+                        if (((BottomDialogSlideEventLifecycleCallback) me.getDialogLifecycleCallback()).onSlideTouchEvent(me, v, event)) {
+                            return true;
+                        }
+                    }
                     //这里 return 什么实际上无关紧要，重点在于 MaxRelativeLayout.java(dispatchTouchEvent:184) 的事件分发会独立触发此处的额外滑动事件
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
@@ -106,7 +112,7 @@ public class BottomDialogTouchEventInterceptor {
                                     impl.preDismiss();
                                 } else if (impl.boxBkg.getY() != bkgOldY) {
                                     ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.boxBkg, "y", impl.boxBkg.getY(),
-                                             impl.bkgEnterAimY);
+                                            impl.bkgEnterAimY);
                                     enterAnim.setDuration(300);
                                     enterAnim.start();
                                 }

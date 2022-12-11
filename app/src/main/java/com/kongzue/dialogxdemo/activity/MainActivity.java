@@ -16,6 +16,7 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -64,6 +65,7 @@ import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
@@ -511,7 +513,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 closeFlag = false;
-                WaitDialog.show("Please Wait!Please Wait!Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
+                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
                     @Override
                     public boolean onBackPressed(WaitDialog dialog) {
                         PopTip.show("按下返回", "关闭").setButton(new OnDialogButtonClickListener<PopTip>() {
@@ -619,6 +621,19 @@ public class MainActivity extends BaseActivity {
                                         PopTip.show("Click Custom View");
                                     }
                                 });
+                            }
+                        })
+                        .setDialogLifecycleCallback(new BottomDialogSlideEventLifecycleCallback<BottomDialog>() {
+                            @Override
+                            public boolean onSlideClose(BottomDialog dialog) {
+                                log("#onSlideClose");
+                                return super.onSlideClose(dialog);
+                            }
+    
+                            @Override
+                            public boolean onSlideTouchEvent(BottomDialog dialog, View v, MotionEvent event) {
+                                log("#onSlideTouchEvent: action="+ event.getAction() + " y="+event.getY());
+                                return super.onSlideTouchEvent(dialog, v, event);
                             }
                         })
                         .show();
