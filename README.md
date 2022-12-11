@@ -175,7 +175,7 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 查看 [常见问题](https://github.com/kongzue/DialogX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
 
-技术支持和反馈建议可以加讨论群：590498789
+技术支持和反馈建议可以加讨论群：[590498789](https://jq.qq.com/?_wv=1027&k=GUZToduM)
 
 <div align=center><img src="https://github.com/kongzue/DialogX/raw/master/readme/feedback_qq_qrcode.png" alt="反馈 DialogX" width="250" height="250" /></div>
 
