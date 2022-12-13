@@ -951,11 +951,7 @@ public class MainActivity extends BaseActivity {
         btnCustomDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (c!=null){
-                    c.show();
-                    return;
-                }
-                c = CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
+                CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
                             @Override
                             public void onBind(final CustomDialog dialog, View v) {
                                 ImageView btnOk;
@@ -963,7 +959,7 @@ public class MainActivity extends BaseActivity {
                                 btnOk.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        dialog.hideWithExitAnim();
+                                        dialog.dismiss();
                                     }
                                 });
                             }
@@ -1361,7 +1357,7 @@ public class MainActivity extends BaseActivity {
         refreshUIMode();
         
     }
-    CustomDialog c;
+    
     /**
      * 刷新亮暗色模式界面变化
      */
