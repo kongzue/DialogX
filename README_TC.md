@@ -129,11 +129,11 @@ DialogX 採用了主題分離結構，主框架僅包含 Material 設計風格�
 
 請從以下兩個源二選一引入項目。
 
-#### MavenCenter 源
+#### MavenCentral 源
 
 <div>
 最新版本：
-<a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/badge/MavenCenter%20Release-0.0.47.beta13-green.svg" alt="DialogX Release"></a></div>
+<a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/badge/MavenCentral%20Release-0.0.47.beta13-green.svg" alt="DialogX Release"></a></div>
 
 1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代碼塊添加以下代碼：
 
