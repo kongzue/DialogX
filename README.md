@@ -152,7 +152,7 @@ allprojects {
 
 ```
 def dialogx_version = "0.0.47.beta13"
-implementation "com.kongzue.dialogx:DialogX::${dialogx_version}"
+implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
 ```
 
 #### Jitpack 源
