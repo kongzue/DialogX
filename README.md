@@ -127,6 +127,8 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 ### 📥引入
 
+请从以下两个源二选一引入项目。
+
 #### MavenCenter 源
 
 <div>

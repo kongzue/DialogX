@@ -127,6 +127,37 @@ DialogX 採用了主題分離結構，主框架僅包含 Material 設計風格�
 
 ### 📥引入
 
+請從以下兩個源二選一引入項目。
+
+#### MavenCenter 源
+
+<div>
+最新版本：
+<a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/badge/MavenCenter%20Release-0.0.47.beta13-green.svg" alt="DialogX Release"></a></div>
+
+1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代碼塊添加以下代碼：
+
+```
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()      //增加 mavenCentral 倉庫
+    }
+}
+```
+
+⚠️請注意，使用 Android Studio 北極狐版本（Arctic Fox）創建的項目，需要您前往 settings.gradle 添加上述 jitpack 倉庫配置。
+
+2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代碼塊，並在其中加入以下語句：
+
+```
+def dialogx_version = "0.0.47.beta13"
+implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
+```
+
+#### Jitpack 源
+
 <b>最新版本：</b>
 <a href="https://jitpack.io/#kongzue/DialogX"><img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io"></a> <a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="查看最新编译版本"></a>
 </div>

@@ -130,6 +130,37 @@ Because of dependencies, DialogX currently only supports AndroidX as the base fo
 
 ### 📥Introduce
 
+Please choose one of the following two sources to bring in your project.
+
+#### MavenCenter 
+
+<div>
+Latest version: 
+<a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/badge/MavenCenter%20Release-0.0.47.beta13-green.svg" alt="DialogX Release"></a></div>
+
+1) In the project's build.gradle file, find the `allprojects{}` block and add the following code.
+
+```
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()      //增加 mavenCentral 仓库
+    }
+}
+```
+
+⚠️ Please note that projects created with the Arctic Fox version of Android Studio will require you to go to settings.gradle and add the above jitpack repository configuration.
+
+2) Find the `dependencies{}` code block in the app's build.gradle file and add the following statement to it.
+
+```
+def dialogx_version = "0.0.47.beta13"
+implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
+```
+
+#### Jitpack
+
 <div>
 <b>Latest Version：</b>
 <a href="https://jitpack.io/#kongzue/DialogX">
