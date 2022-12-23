@@ -1,11 +1,39 @@
-apply plugin: 'java-library'
+//apply plugin: 'java-library'
+apply plugin: 'com.android.library'
 
+ext {
+    PUBLISH_GROUP_ID = "com.kongzue.dialogx.style"		//项目包名
+    PUBLISH_ARTIFACT_ID = 'DialogXInterface'			//项目名
+    PUBLISH_VERSION = DIALOGX_STYLE_VERSION					//版本号
+}
+apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
 
+android {
+    compileSdkVersion 30
 
-dependencies {
-    //implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly files('libs\\android.jar')
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 30
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+artifacts {
+    archives sourcesJar
+}
+dependencies {
+    //implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+//sourceCompatibility = "1.7"
+//targetCompatibility = "1.7"
