@@ -23,7 +23,7 @@ public class App extends BaseApp<App> {
         DialogX.globalStyle = new MaterialStyle();
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.onlyOnePopTip = false;
-    
+
         //以下代码用于测试后台 Service 启动对话框
 //        DialogX.implIMPLMode = DialogX.IMPL_MODE.FLOATING_ACTIVITY;
 //        Intent serviceStartIntent = new Intent(this, TestBackgroundService.class);
