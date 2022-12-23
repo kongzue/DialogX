@@ -1,15 +1,5 @@
 apply plugin: 'com.android.library'
 
-group = "com.kongzue.dialogx.style.kongzue"
-version = BUILD_VERSION
-
-ext {
-    PUBLISH_GROUP_ID = "com.kongzue.dialogx.style"		//项目包名
-    PUBLISH_ARTIFACT_ID = 'DialogXKongzueStyle'			//项目名
-    PUBLISH_VERSION = BUILD_VERSION					//版本号
-}
-apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
-
 android {
     compileSdkVersion 30
 
@@ -34,6 +24,7 @@ artifacts {
     archives sourcesJar
 }
 dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(path: ':DialogX')
     compileOnly project(path: ':DialogXInterface')
 }
