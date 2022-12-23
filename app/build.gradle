@@ -21,15 +21,11 @@ android {
         }
     }
 }
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation 'com.github.kongzue:BaseFramework:6.8.6'
+    implementation "com.kongzue.baseframework:BaseFramework:6.8.8"
+    implementation 'com.kongzue.stacklabel:StackLabel:1.2.0'
 
 //    implementation 'com.github.kongzue.DialogX:DialogXIOSStyle:0.0.39.debug4'
 //    implementation 'com.github.kongzue.DialogX:DialogXKongzueStyle:0.0.39.debug4'
@@ -39,10 +35,9 @@ dependencies {
     implementation project(path: ':DialogXIOSStyle')
     implementation project(path: ':DialogXKongzueStyle')
     implementation project(path: ':DialogXMIUIStyle')
+    implementation project(path: ':DialogXMaterialYou')
 
     //implementation 'com.github.kongzue:DialogXStyle-Snackbar:1.0.6'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.github.kongzue:StackLabel:1.1.8'
-    implementation project(path: ':DialogXMaterialYou')
 }

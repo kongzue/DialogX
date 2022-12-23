@@ -79,6 +79,7 @@ public class TipDialog extends WaitDialog {
     
     public static WaitDialog show(CharSequence message, TYPE tip) {
         boolean noInstance = noInstance();
+        log("noInstance:"+noInstance);
         if (noInstance) instanceBuild();
         me().setTip(message, tip);
         showWithInstance(noInstance);
