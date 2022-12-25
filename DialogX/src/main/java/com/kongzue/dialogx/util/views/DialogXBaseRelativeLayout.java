@@ -35,7 +35,9 @@ import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -118,7 +120,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     public void paddingView(WindowInsets insets) {
         if (!isAttachedToWindow()) {
-            dynamicWindowInsetsAnimationListenerList.remove(dynamicWindowInsetsAnimationListener);
+            getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
             return;
         }
         if (insets == null) {
@@ -165,7 +167,18 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (BaseDialog.getTopActivity() == null) return;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                initDynamicSafeAreaListener();
+                View decorView = (View) getParent();
+                if (decorView != null) {
+                    parentKey = Integer.toHexString(decorView.hashCode());
+                    getDynamicWindowInsetsAnimationListener(parentKey).add(dynamicWindowInsetsAnimationListener = new DynamicWindowInsetsAnimationListener() {
+                        @Override
+                        public void onChange(WindowInsets windowInsets) {
+                            paddingView(windowInsets);
+                        }
+                    });
+                    initDynamicSafeAreaListener();
+                }
+                paddingWindowInsetsByDefault();
             } else {
                 View decorView = (View) getParent();
                 decorView.getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -184,41 +197,42 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         }
     }
 
-    static WindowInsetsAnimationCompat.Callback dynamicWindowInsetsAnimationCallback;
-    static List<DynamicWindowInsetsAnimationListener> dynamicWindowInsetsAnimationListenerList;
+    static Map<String, List<DynamicWindowInsetsAnimationListener>> dynamicWindowInsetsAnimationListenerListMap = new HashMap<>();
     DynamicWindowInsetsAnimationListener dynamicWindowInsetsAnimationListener;
+    String parentKey;
+
+    public List<DynamicWindowInsetsAnimationListener> getDynamicWindowInsetsAnimationListener(String key) {
+        List<DynamicWindowInsetsAnimationListener> list = dynamicWindowInsetsAnimationListenerListMap.get(key);
+        if (list == null) {
+            list = new ArrayList<>();
+            dynamicWindowInsetsAnimationListenerListMap.put(key, list);
+        }
+        return list;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
-
     private void initDynamicSafeAreaListener() {
         View decorView = (View) getParent();
         if (decorView != null) {
-            if (dynamicWindowInsetsAnimationListenerList == null) {
-                dynamicWindowInsetsAnimationListenerList = new CopyOnWriteArrayList<>();
-            }
-            dynamicWindowInsetsAnimationListenerList.add(dynamicWindowInsetsAnimationListener = new DynamicWindowInsetsAnimationListener() {
-                @Override
-                public void onChange(WindowInsets windowInsets) {
-                    paddingView(windowInsets);
-                }
-            });
-            if (dynamicWindowInsetsAnimationCallback == null) {
-                ViewCompat.setWindowInsetsAnimationCallback(decorView, dynamicWindowInsetsAnimationCallback = new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
+            ViewCompat.setWindowInsetsAnimationCallback(decorView, new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
 
-                    @NonNull
-                    @Override
-                    public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
+                    View decorView = (View) getParent();
+                    if (decorView != null) {
+                        String key = Integer.toHexString(decorView.hashCode());
+                        List<DynamicWindowInsetsAnimationListener> dynamicWindowInsetsAnimationListenerList = getDynamicWindowInsetsAnimationListener(key);
                         if (dynamicWindowInsetsAnimationListenerList != null) {
                             for (DynamicWindowInsetsAnimationListener listener : dynamicWindowInsetsAnimationListenerList) {
                                 listener.onChange(insets.toWindowInsets());
                             }
                         }
-                        return insets;
                     }
-                });
-            }
+                    return insets;
+                }
+            });
         }
-        paddingWindowInsetsByDefault();
     }
 
     private void paddingWindowInsetsByDefault() {
@@ -244,9 +258,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onDismiss();
         }
-        if (dynamicWindowInsetsAnimationListenerList != null) {
-            dynamicWindowInsetsAnimationListenerList.remove(dynamicWindowInsetsAnimationListener);
-        }
+        getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
         onSafeInsetsChangeListener = null;
         super.onDetachedFromWindow();
     }
