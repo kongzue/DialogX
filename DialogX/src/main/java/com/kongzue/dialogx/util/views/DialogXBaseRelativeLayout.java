@@ -166,9 +166,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
             if (BaseDialog.getTopActivity() == null) return;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                View decorView = (View) getParent();
-                if (decorView != null) {
+            View decorView = (View) getParent();
+            if (decorView != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     parentKey = Integer.toHexString(decorView.hashCode());
                     getDynamicWindowInsetsAnimationListener(parentKey).add(dynamicWindowInsetsAnimationListener = new DynamicWindowInsetsAnimationListener() {
                         @Override
@@ -177,17 +177,16 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                         }
                     });
                     initDynamicSafeAreaListener();
+                    paddingWindowInsetsByDefault();
+                } else {
+                    decorView.getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            paddingWindowInsetsByDefault();
+                        }
+                    });
+                    decorViewLayoutListener.onGlobalLayout();
                 }
-                paddingWindowInsetsByDefault();
-            } else {
-                View decorView = (View) getParent();
-                decorView.getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        paddingWindowInsetsByDefault();
-                    }
-                });
-                decorViewLayoutListener.onGlobalLayout();
             }
 
             if (onLifecycleCallBack != null) {
@@ -292,6 +291,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            initDynamicSafeAreaListener();
+        }
         if (direction == View.FOCUS_DOWN && requestFocusView != null && requestFocusView.get() != null) {
             return requestFocusView.get().requestFocus();
         }
