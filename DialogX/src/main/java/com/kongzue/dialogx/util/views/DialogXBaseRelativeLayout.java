@@ -213,7 +213,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private void initDynamicSafeAreaListener() {
         View decorView = (View) getParent();
         if (decorView != null) {
-            ViewCompat.setWindowInsetsAnimationCallback(decorView, new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
+            ViewCompat.setWindowInsetsAnimationCallback(decorView, new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
 
                 @NonNull
                 @Override
