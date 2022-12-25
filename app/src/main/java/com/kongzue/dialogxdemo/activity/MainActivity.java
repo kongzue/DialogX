@@ -483,13 +483,6 @@ public class MainActivity extends BaseActivity {
                                 return false;
                             }
                         })
-                        .setCancelButton(new OnDialogButtonClickListener<MessageDialog>() {
-                            @Override
-                            public boolean onClick(MessageDialog dialog, View v) {
-                                PopTip.show("AA");
-                                return true;
-                            }
-                        })
                         .show();
             }
         });
