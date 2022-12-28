@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -102,7 +103,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     protected boolean fitSystemWindows(Rect insets) {
-        if (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
+        if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW)) {
             paddingView(insets.left, insets.top, insets.right, insets.bottom);
         }
         return super.fitSystemWindows(insets);
@@ -111,7 +112,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     @Override
     public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
+            if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW)) {
                 paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
             }
         }
@@ -176,8 +177,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                             paddingView(windowInsets);
                         }
                     });
-                    initDynamicSafeAreaListener();
                     paddingWindowInsetsByDefault();
+                    initDynamicSafeAreaListener();
                 } else {
                     decorView.getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
                         @Override
@@ -209,10 +210,13 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         return list;
     }
 
+    boolean useWindowInsetsAnimation = false;
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     private void initDynamicSafeAreaListener() {
         View decorView = (View) getParent();
         if (decorView != null) {
+            useWindowInsetsAnimation = true;
             ViewCompat.setWindowInsetsAnimationCallback(decorView, new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
 
                 @NonNull

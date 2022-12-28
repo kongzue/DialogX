@@ -80,6 +80,7 @@ public class WindowUtil {
                 FLAG_TRANSLUCENT_NAVIGATION |
                 FLAG_LAYOUT_IN_SCREEN
         ;
+        layoutParams.softInputMode = SOFT_INPUT_ADJUST_RESIZE;
         if (!touchEnable) {
             dialogView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
