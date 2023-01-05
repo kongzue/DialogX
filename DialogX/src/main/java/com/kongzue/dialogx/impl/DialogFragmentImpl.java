@@ -81,13 +81,16 @@ public class DialogFragmentImpl extends DialogFragment {
                 for (BaseDialog dialog : BaseDialog.getRunningDialogList()) {
                     if (dialog.getOwnActivity() == activity && dialog != baseDialog) {
                         if (!(dialog instanceof NoTouchInterface)) {
-                            Log.e(">>>", "onTouch: "+dialog );
                             dialog.getDialogView().dispatchTouchEvent(event);
                             return true;
                         }
                     }
                 }
-                return activity.dispatchTouchEvent(event);
+                if (baseDialog instanceof NoTouchInterface) {
+                    return activity.dispatchTouchEvent(event);
+                }else{
+                    return true;
+                }
             }
         });
         dialogWindow.setAttributes(lp);
