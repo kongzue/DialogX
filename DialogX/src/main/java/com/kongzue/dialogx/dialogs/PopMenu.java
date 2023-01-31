@@ -243,24 +243,28 @@ public class PopMenu extends BaseDialog {
             baseView.getViewTreeObserver().addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
                 @Override
                 public void onDraw() {
-                    if (getDialogImpl() != null) {
-                        baseViewLoc = new int[2];
-                        baseView.getLocationOnScreen(baseViewLoc);
+                    int[] baseViewLocCache = new int[2];
+                    baseView.getLocationOnScreen(baseViewLocCache);
+                    if (baseViewLoc == null || baseViewLocCache[0] != baseViewLoc[0] || baseViewLocCache[1] != baseViewLoc[1]) {
+                        if (getDialogImpl() != null) {
+                            baseViewLoc = baseViewLocCache;
+                            int width = PopMenu.this.width == 0 ? baseView.getWidth() : PopMenu.this.width;
+                            int height = PopMenu.this.height == 0 ? baseView.getHeight() : PopMenu.this.height;
 
-                        int width = baseView.getWidth();
-                        int height = baseView.getHeight();
+                            int left = baseViewLoc[0];
+                            int top = baseViewLoc[1] + (overlayBaseView ? 0 : height);
 
-                        int left = baseViewLoc[0];
-                        int top = baseViewLoc[1] + (overlayBaseView ? 0 : height);
+                            if (left != getDialogImpl().boxBody.getX()) {
+                                getDialogImpl().boxBody.setX(left);
+                            }
+                            if (top != getDialogImpl().boxBody.getY()) {
+                                getDialogImpl().boxBody.setY(top);
+                            }
 
-                        log("top: " + top);
-
-                        getDialogImpl().boxBody.setX(left);
-                        getDialogImpl().boxBody.setY(top);
-
-                        if (width != 0 && getDialogImpl().boxBody.getWidth() != width) {
-                            RelativeLayout.LayoutParams rLp = new RelativeLayout.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            getDialogImpl().boxBody.setLayoutParams(rLp);
+                            if (width != 0 && getDialogImpl().boxBody.getWidth() != width) {
+                                RelativeLayout.LayoutParams rLp = new RelativeLayout.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                getDialogImpl().boxBody.setLayoutParams(rLp);
+                            }
                         }
                     }
                 }

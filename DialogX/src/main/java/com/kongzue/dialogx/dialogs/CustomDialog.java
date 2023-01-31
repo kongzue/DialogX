@@ -288,8 +288,8 @@ public class CustomDialog extends BaseDialog {
                                 if (isAlignBaseViewGravity(Gravity.BOTTOM)) {
                                     calY = baseViewTop + baseView.getHeight() + marginRelativeBaseView[1];
                                 }
-                                baseViewLoc[2] = baseView.getWidth();
-                                baseViewLoc[3] = baseView.getHeight();
+                                baseViewLoc[2] = width == 0 ? baseView.getWidth() : width;
+                                baseViewLoc[3] = height == 0 ? baseView.getHeight() : height;
 
                                 if (calX != 0) boxCustom.setX(calX);
                                 if (calY != 0) boxCustom.setY(calY);
@@ -302,8 +302,14 @@ public class CustomDialog extends BaseDialog {
                     boxCustom.getViewTreeObserver().addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
                         @Override
                         public void onDraw() {
-                            baseView.getLocationOnScreen(baseViewLoc);
-                            onLayoutChangeRunnable.run();
+                            int[] baseViewLocCache = new int[2];
+                            baseView.getLocationOnScreen(baseViewLocCache);
+                            if (baseViewLoc == null || baseViewLocCache[0] != baseViewLoc[0] || baseViewLocCache[1] != baseViewLoc[1]) {
+                                baseViewLoc = baseViewLocCache;
+                                if (getDialogImpl() != null) {
+                                    onLayoutChangeRunnable.run();
+                                }
+                            }
                         }
                     });
                     initSetCustomViewLayoutListener = true;
