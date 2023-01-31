@@ -430,7 +430,6 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 view.animate().y(view.getY()-dip2px(100)).setDuration(5000);
                 PopMenu.show(view, new String[]{"选项1", "选项2", "选项3"})
-                        .setWidth(dip2px(250))
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
                             public boolean onClick(PopMenu dialog, CharSequence text, int index) {
