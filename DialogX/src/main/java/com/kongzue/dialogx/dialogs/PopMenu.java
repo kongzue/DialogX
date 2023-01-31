@@ -205,6 +205,7 @@ public class PopMenu extends BaseDialog {
         return popMenu;
     }
 
+    private ViewTreeObserver viewTreeObserver;
     private ViewTreeObserver.OnDrawListener baseViewDrawListener;
 
     public PopMenu show() {
@@ -240,19 +241,28 @@ public class PopMenu extends BaseDialog {
         }
         show(dialogView);
         if (baseView != null) {
-            baseView.getViewTreeObserver().addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
+            viewTreeObserver = baseView.getViewTreeObserver();
+            viewTreeObserver.addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
                 @Override
                 public void onDraw() {
                     int[] baseViewLocCache = new int[2];
-                    baseView.getLocationOnScreen(baseViewLocCache);
-                    if (baseViewLoc == null || baseViewLocCache[0] != baseViewLoc[0] || baseViewLocCache[1] != baseViewLoc[1]) {
-                        baseViewLoc = baseViewLocCache;
-                        if (getDialogImpl() != null) {
-                            if (getDialogImpl().boxBody.getX() < 0 && getDialogImpl().boxBody.getY() < 0) {
-                                setDefaultMenuBodyLoc();
-                            } else {
-                                refreshMenuBodyLoc();
+                    if (baseView != null) {
+                        baseView.getLocationOnScreen(baseViewLocCache);
+                        if (baseViewLoc == null || baseViewLocCache[0] != baseViewLoc[0] || baseViewLocCache[1] != baseViewLoc[1]) {
+                            baseViewLoc = baseViewLocCache;
+                            if (getDialogImpl() != null) {
+                                if (getDialogImpl().boxBody.getX() < 0 && getDialogImpl().boxBody.getY() < 0) {
+                                    setDefaultMenuBodyLoc();
+                                } else {
+                                    refreshMenuBodyLoc();
+                                }
                             }
+                        }
+                    } else {
+                        if (viewTreeObserver != null) {
+                            viewTreeObserver.removeOnDrawListener(this);
+                            viewTreeObserver = null;
+                            baseViewDrawListener = null;
                         }
                     }
                 }
@@ -262,6 +272,9 @@ public class PopMenu extends BaseDialog {
     }
 
     private void setDefaultMenuBodyLoc() {
+        if (getDialogImpl() == null || getDialogImpl().boxRoot == null) {
+            return;
+        }
         int width = PopMenu.this.width == 0 ? baseView.getWidth() : PopMenu.this.width;
         int height = PopMenu.this.height == 0 ? baseView.getHeight() : PopMenu.this.height;
 
@@ -282,6 +295,9 @@ public class PopMenu extends BaseDialog {
     }
 
     private void refreshMenuBodyLoc() {
+        if (getDialogImpl() == null || getDialogImpl().boxRoot == null) {
+            return;
+        }
         MaxRelativeLayout boxBody = getDialogImpl().boxBody;
         DialogXBaseRelativeLayout boxRoot = getDialogImpl().boxRoot;
         //菜单位置计算逻辑
@@ -348,7 +364,7 @@ public class PopMenu extends BaseDialog {
 
             if (calX != 0) boxBody.setX(calX);
             if (calY != 0) boxBody.setY(calY);
-        }else{
+        } else {
             setDefaultMenuBodyLoc();
         }
     }
@@ -553,8 +569,16 @@ public class PopMenu extends BaseDialog {
                                     boxRoot.setBkgAlpha(value);
                                 }
                                 if (value == 0f) {
-                                    if (baseView != null && baseViewDrawListener != null) {
-                                        baseView.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                                    if (baseViewDrawListener != null) {
+                                        if (viewTreeObserver != null) {
+                                            viewTreeObserver.removeOnDrawListener(baseViewDrawListener);
+                                        } else {
+                                            if (baseView != null) {
+                                                baseView.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                                            }
+                                        }
+                                        baseViewDrawListener = null;
+                                        viewTreeObserver = null;
                                     }
                                     dismiss(dialogView);
                                 }
@@ -616,7 +640,7 @@ public class PopMenu extends BaseDialog {
 
                                     if (!offScreen) {
                                         float calX = baseViewLoc[0];
-                                        float calY = baseViewLoc[1]+selectItemYDeviation;
+                                        float calY = baseViewLoc[1] + selectItemYDeviation;
 
                                         if (calX < 0) {
                                             calX = 0;
@@ -768,8 +792,15 @@ public class PopMenu extends BaseDialog {
     @Override
     public void restartDialog() {
         if (dialogView != null) {
-            if (baseView != null && baseViewDrawListener != null) {
-                baseView.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+            if (baseViewDrawListener != null) {
+                if (viewTreeObserver != null) {
+                    viewTreeObserver.removeOnDrawListener(baseViewDrawListener);
+                } else {
+                    if (baseView != null) {
+                        baseView.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                    }
+                }
+                baseViewDrawListener = null;
             }
             dismiss(dialogView);
             isShow = false;

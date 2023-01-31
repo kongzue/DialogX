@@ -428,7 +428,6 @@ public class MainActivity extends BaseActivity {
         btnSelectMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                view.animate().y(view.getY()-dip2px(100)).setDuration(5000);
                 PopMenu.show(view, new String[]{"选项1", "选项2", "选项3"})
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override

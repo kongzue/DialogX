@@ -155,6 +155,7 @@ public class CustomDialog extends BaseDialog {
         return this;
     }
 
+    private ViewTreeObserver viewTreeObserver;
     private ViewTreeObserver.OnDrawListener baseViewDrawListener;
 
     public class DialogImpl implements DialogConvertViewInterface {
@@ -299,15 +300,24 @@ public class CustomDialog extends BaseDialog {
                         }
                     };
 
-                    boxCustom.getViewTreeObserver().addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
+                    viewTreeObserver = boxCustom.getViewTreeObserver();
+                    viewTreeObserver.addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
                         @Override
                         public void onDraw() {
                             int[] baseViewLocCache = new int[2];
-                            baseView.getLocationOnScreen(baseViewLocCache);
-                            if (baseViewLoc == null || baseViewLocCache[0] != baseViewLoc[0] || baseViewLocCache[1] != baseViewLoc[1]) {
-                                baseViewLoc = baseViewLocCache;
-                                if (getDialogImpl() != null) {
-                                    onLayoutChangeRunnable.run();
+                            if (baseView != null) {
+                                baseView.getLocationOnScreen(baseViewLocCache);
+                                if (baseViewLoc == null || baseViewLocCache[0] != baseViewLoc[0] || baseViewLocCache[1] != baseViewLoc[1]) {
+                                    baseViewLoc = baseViewLocCache;
+                                    if (getDialogImpl() != null) {
+                                        onLayoutChangeRunnable.run();
+                                    }
+                                }
+                            } else {
+                                if (viewTreeObserver != null) {
+                                    viewTreeObserver.removeOnDrawListener(this);
+                                    viewTreeObserver = null;
+                                    baseViewDrawListener = null;
                                 }
                             }
                         }
@@ -439,8 +449,16 @@ public class CustomDialog extends BaseDialog {
                                 }
                                 if (value == 0) {
                                     if (boxRoot != null) boxRoot.setVisibility(View.GONE);
-                                    if (boxCustom != null && baseViewDrawListener != null) {
-                                        boxCustom.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                                    if (baseViewDrawListener != null) {
+                                        if (viewTreeObserver != null) {
+                                            viewTreeObserver.removeOnDrawListener(baseViewDrawListener);
+                                        } else {
+                                            if (boxCustom != null) {
+                                                boxCustom.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                                            }
+                                        }
+                                        baseViewDrawListener = null;
+                                        viewTreeObserver = null;
                                     }
                                     dismiss(dialogView);
                                 }
@@ -749,8 +767,18 @@ public class CustomDialog extends BaseDialog {
     @Override
     public void restartDialog() {
         if (dialogView != null) {
-            if (getDialogImpl() != null && getDialogImpl().boxCustom != null && baseViewDrawListener != null) {
-                getDialogImpl().boxCustom.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+            if (getDialogImpl() != null && getDialogImpl().boxCustom != null) {
+                if (baseViewDrawListener != null) {
+                    if (viewTreeObserver != null) {
+                        viewTreeObserver.removeOnDrawListener(baseViewDrawListener);
+                    } else {
+                        if (getDialogImpl().boxCustom != null) {
+                            getDialogImpl().boxCustom.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                        }
+                    }
+                    baseViewDrawListener = null;
+                    viewTreeObserver = null;
+                }
             }
             dismiss(dialogView);
             isShow = false;
