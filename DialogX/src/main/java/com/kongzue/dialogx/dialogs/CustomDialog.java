@@ -155,6 +155,8 @@ public class CustomDialog extends BaseDialog {
         return this;
     }
 
+    private ViewTreeObserver.OnDrawListener baseViewDrawListener;
+
     public class DialogImpl implements DialogConvertViewInterface {
 
         public DialogXBaseRelativeLayout boxRoot;
@@ -297,9 +299,9 @@ public class CustomDialog extends BaseDialog {
                         }
                     };
 
-                    boxCustom.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    boxCustom.getViewTreeObserver().addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
                         @Override
-                        public void onGlobalLayout() {
+                        public void onDraw() {
                             baseView.getLocationOnScreen(baseViewLoc);
                             onLayoutChangeRunnable.run();
                         }
@@ -390,11 +392,11 @@ public class CustomDialog extends BaseDialog {
                 boxRoot.setClickable(false);
             }
 
-            if (onBindView != null && onBindView.getCustomView() != null && boxCustom!=null) {
+            if (onBindView != null && onBindView.getCustomView() != null && boxCustom != null) {
                 onBindView.bindParent(boxCustom, me);
             }
 
-            if (boxCustom!=null) {
+            if (boxCustom != null) {
                 if (width != -1) {
                     boxCustom.setMaxWidth(width);
                     boxCustom.setMinimumWidth(width);
@@ -431,6 +433,9 @@ public class CustomDialog extends BaseDialog {
                                 }
                                 if (value == 0) {
                                     if (boxRoot != null) boxRoot.setVisibility(View.GONE);
+                                    if (boxCustom != null && baseViewDrawListener != null) {
+                                        boxCustom.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                                    }
                                     dismiss(dialogView);
                                 }
                             }
@@ -446,7 +451,7 @@ public class CustomDialog extends BaseDialog {
                     @Override
                     public void doShowAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
                         Animation enterAnim = getEnterAnimation();
-                        if (boxCustom!=null) {
+                        if (boxCustom != null) {
                             boxCustom.setVisibility(View.VISIBLE);
                             boxCustom.startAnimation(enterAnim);
                         }
@@ -474,7 +479,7 @@ public class CustomDialog extends BaseDialog {
                             exitAnimResIdTemp = exitAnimResId;
                         }
 
-                        if (boxCustom!=null) {
+                        if (boxCustom != null) {
                             Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxCustom.getContext() : getTopActivity(), exitAnimResIdTemp);
                             exitAnimDurationTemp = exitAnim.getDuration();
                             if (overrideExitDuration >= 0) {
@@ -738,10 +743,13 @@ public class CustomDialog extends BaseDialog {
     @Override
     public void restartDialog() {
         if (dialogView != null) {
+            if (getDialogImpl() != null && getDialogImpl().boxCustom != null && baseViewDrawListener != null) {
+                getDialogImpl().boxCustom.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+            }
             dismiss(dialogView);
             isShow = false;
         }
-        if (getDialogImpl()!=null &&getDialogImpl().boxCustom != null) {
+        if (getDialogImpl() != null && getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
 

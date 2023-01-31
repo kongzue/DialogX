@@ -235,7 +235,7 @@ public class MainActivity extends BaseActivity {
                 @Override
                 public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
                     boxTitle.setPadding(0, insets.getSystemWindowInsetTop(), 0, 0);
-                    boxBody.setPadding(dip2px(15), dip2px(15), dip2px(15), insets.getSystemWindowInsetBottom()+dip2px(250));
+                    boxBody.setPadding(dip2px(15), dip2px(15), dip2px(15), insets.getSystemWindowInsetBottom() + dip2px(250));
                     return insets;
                 }
             });
@@ -1200,7 +1200,15 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 notificationIndex++;
-                PopNotification.show("这是一条消息 " + notificationIndex).showLong();
+                PopNotification.show("这是一条消息 " + notificationIndex)
+                        .setOnPopNotificationClickListener(new OnDialogButtonClickListener<PopNotification>() {
+                            @Override
+                            public boolean onClick(PopNotification dialog, View v) {
+                                TipDialog.show("点击了通知");
+                                return false;
+                            }
+                        })
+                        .showLong();
             }
         });
 
