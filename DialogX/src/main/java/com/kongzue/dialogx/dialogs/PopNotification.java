@@ -781,7 +781,9 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                                     valueAnimator.setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration).setInterpolator(new DecelerateInterpolator(2f));
                                     valueAnimator.start();
 
-                                    boxBody.callOnClick();
+                                    if (Math.abs(boxBody.getY() - defaultTop) <= 1 && event.getY() <= touchY) {
+                                        boxBody.callOnClick();
+                                    }
                                 }
                                 break;
                         }

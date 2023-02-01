@@ -129,7 +129,7 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 请从以下两个源二选一引入项目。
 
-#### MavenCentral 源
+#### MavenCentral 源（稳定版本更新）
 
 <div>
 最新版本：
@@ -156,7 +156,7 @@ def dialogx_version = "0.0.47"
 implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
 ```
 
-#### Jitpack 源
+#### Jitpack 源（快速迭代测试版本更新）
 
 <div>
 最新版本：
