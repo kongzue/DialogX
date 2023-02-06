@@ -681,6 +681,7 @@ public class PopMenu extends BaseDialog {
                                 blurView = new BlurView(getOwnActivity(), null);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), targetHeight);
                                 blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
+                                blurView.setOverrideOverlayColor(backgroundColor!=-1);
                                 blurView.setTag("blurView");
                                 blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
                                 boxBody.addView(blurView, 0, params);
@@ -711,6 +712,7 @@ public class PopMenu extends BaseDialog {
                                         blurView = new BlurView(getOwnActivity(), null);
                                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
                                         blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
+                                        blurView.setOverrideOverlayColor(backgroundColor!=-1);
                                         blurView.setTag("blurView");
                                         blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
                                         boxBody.addView(blurView, 0, params);

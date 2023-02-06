@@ -423,6 +423,7 @@ public class WaitDialog extends BaseDialog {
                 }
                 if (blurView != null) {
                     blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(overrideBackgroundColorRes) : backgroundColor);
+                    blurView.setOverrideOverlayColor(backgroundColor != -1);
                     blurView.setUseBlur(style.overrideWaitTipRes().blurBackground());
                 }
                 int overrideTextColorRes = style.overrideWaitTipRes().overrideTextColorRes(isLightTheme());
@@ -433,13 +434,17 @@ public class WaitDialog extends BaseDialog {
                 progressView.setColor(getResources().getColor(overrideTextColorRes));
             } else {
                 if (isLightTheme()) {
-                    if (blurView != null)
+                    if (blurView != null) {
                         blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgDark) : backgroundColor);
+                        blurView.setOverrideOverlayColor(backgroundColor != -1);
+                    }
                     progressView.setColor(Color.WHITE);
                     txtInfo.setTextColor(Color.WHITE);
                 } else {
-                    if (blurView != null)
+                    if (blurView != null) {
                         blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgLight) : backgroundColor);
+                        blurView.setOverrideOverlayColor(backgroundColor != -1);
+                    }
                     progressView.setColor(Color.BLACK);
                     txtInfo.setTextColor(Color.BLACK);
                 }

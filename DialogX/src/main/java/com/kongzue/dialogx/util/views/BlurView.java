@@ -39,6 +39,7 @@ public class BlurView extends View {
     private float mDownsampleFactor = 4;
     private int mOverlayColor = Color.WHITE;
     private float mBlurRadius = 35;
+    private boolean overrideOverlayColor = false;
     
     private float mRadius = 0;
     private Path mBoundPath = null;
@@ -373,7 +374,7 @@ public class BlurView extends View {
         if (!useBlur || !supportRenderScript) {
             mRectF.right = getWidth();
             mRectF.bottom = getHeight();
-            overlayPaint.setColor((supportRenderScript && useBlur) ? mOverlayColor : removeAlphaColor(mOverlayColor));
+            overlayPaint.setColor(needRemoveAlphaColor() ?  removeAlphaColor(mOverlayColor): mOverlayColor);
             canvas.drawRoundRect(mRectF, mRadius, mRadius, overlayPaint);
         } else {
             if (!mIsRendering && RENDERING_COUNT <= 0) {
@@ -418,7 +419,7 @@ public class BlurView extends View {
             mRectDst.right = getWidth();
             mRectDst.bottom = getHeight();
             canvas.drawBitmap(blurredBitmap, mRectSrc, mRectDst, null);
-            canvas.drawColor((supportRenderScript && useBlur) ? mOverlayColor : removeAlphaColor(mOverlayColor));
+            canvas.drawColor(needRemoveAlphaColor() ?  removeAlphaColor(mOverlayColor): mOverlayColor);
         } else {
             Bitmap overlyBitmap = drawOverlyColor(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
             if (overlyBitmap != null) canvas.drawBitmap(overlyBitmap, 0, 0, null);
@@ -445,7 +446,7 @@ public class BlurView extends View {
             Rect originRect = new Rect();
             originRect.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
             canvas.drawBitmap(bitmap, originRect, originRect, overlayPaint);
-            canvas.drawColor((supportRenderScript && useBlur) ? mOverlayColor : removeAlphaColor(mOverlayColor));
+            canvas.drawColor(needRemoveAlphaColor() ?  removeAlphaColor(mOverlayColor): mOverlayColor);
             return output;
         } else {
             return null;
@@ -478,16 +479,24 @@ public class BlurView extends View {
         invalidate();
         return this;
     }
-    
-    private static int replaceAlphaColor(@ColorInt int color, int alpha) {
+
+    private boolean needRemoveAlphaColor(){
+        if (overrideOverlayColor){
+            return false;
+        }else{
+            return !(supportRenderScript && useBlur);
+        }
+    }
+
+    private static int removeAlphaColor(@ColorInt int color) {
+        int alpha = 255;
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
         return Color.argb(alpha, red, green, blue);
     }
-    
-    private static int removeAlphaColor(@ColorInt int color) {
-        int alpha = 255;
+
+    private static int replaceAlphaColor(@ColorInt int color, int alpha) {
         int red = Color.red(color);
         int green = Color.green(color);
         int blue = Color.blue(color);
@@ -528,5 +537,11 @@ public class BlurView extends View {
     
     public static void error(Object o) {
         if (isDebug()) Log.e(">>>", o.toString());
+    }
+
+    public BlurView setOverrideOverlayColor(boolean overrideOverlayColor) {
+        log("setOverrideOverlayColor: "+overrideOverlayColor);
+        this.overrideOverlayColor = overrideOverlayColor;
+        return this;
     }
 }

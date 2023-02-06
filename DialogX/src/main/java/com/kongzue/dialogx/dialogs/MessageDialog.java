@@ -361,6 +361,7 @@ public class MessageDialog extends BaseDialog {
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
                                 params.addRule(RelativeLayout.CENTER_IN_PARENT);
                                 blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
+                                blurView.setOverrideOverlayColor(backgroundColor!=-1);
                                 blurView.setTag("blurView");
                                 blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 bkg.addView(blurView, 0, params);
