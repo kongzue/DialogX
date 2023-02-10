@@ -33,16 +33,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
 
             <TextView
                 android:id="@+id/txt_dialogx_pop_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
                 android:gravity="left|center_vertical"
                 android:text="Notification!"
                 android:textColor="@color/white"
@@ -54,23 +54,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="-15dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                android:visibility="gone"
+                android:layout_marginBottom="2dp"
                 android:gravity="left|center_vertical"
                 android:text="Notification!"
                 android:textColor="@color/white70"
-                android:textSize="14dp"/>
+                android:textSize="14dp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/box_custom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txt_dialogx_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="-15dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
                 android:background="@drawable/button_dialogx_material_night"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="10dp"
@@ -82,14 +86,7 @@
                 android:textColor="@color/dialogxPopButtonBlueDark"
                 android:textSize="14dp"
                 android:visibility="gone" />
-
-            <RelativeLayout
-                android:id="@+id/box_custom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
         </LinearLayout>
-
 
     </com.kongzue.dialogx.util.views.MaxLinearLayout>
 

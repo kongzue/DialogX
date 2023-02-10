@@ -228,7 +228,9 @@ public class CustomDialog extends BaseDialog {
                         @Override
                         public void run(Float animProgress) {
                             float value = animProgress;
-                            boxRoot.setBkgAlpha(value);
+                            if (boxRoot != null) {
+                                boxRoot.setBkgAlpha(value);
+                            }
                         }
                     });
                     if (getDialogImpl().boxCustom != null) {
@@ -474,6 +476,9 @@ public class CustomDialog extends BaseDialog {
                 dialogXAnimImpl = new DialogXAnimInterface<CustomDialog>() {
                     @Override
                     public void doShowAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+                        if (getDialogImpl() == null || getDialogImpl().boxCustom == null) {
+                            return;
+                        }
                         Animation enterAnim = getEnterAnimation();
                         if (boxCustom != null) {
                             boxCustom.setVisibility(View.VISIBLE);
@@ -495,6 +500,9 @@ public class CustomDialog extends BaseDialog {
 
                     @Override
                     public void doExitAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+                        if (getDialogImpl() == null || getDialogImpl().boxCustom == null) {
+                            return;
+                        }
                         int exitAnimResIdTemp = R.anim.anim_dialogx_default_exit;
                         if (overrideExitAnimRes != 0) {
                             exitAnimResIdTemp = overrideExitAnimRes;

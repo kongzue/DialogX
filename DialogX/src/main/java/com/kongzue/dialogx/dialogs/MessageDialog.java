@@ -80,6 +80,7 @@ public class MessageDialog extends BaseDialog {
     protected int customExitAnimResId;
     protected DialogXAnimInterface<MessageDialog> dialogXAnimImpl;
     protected OnBackPressedListener<MessageDialog> onBackPressedListener;
+    protected BUTTON_SELECT_RESULT buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
     
     protected DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<MessageDialog> onBackgroundMaskClickListener;
@@ -310,12 +311,13 @@ public class MessageDialog extends BaseDialog {
             btnSelectNegative = convertView.findViewById(R.id.btn_selectNegative);
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
             init();
-            
+
             dialogImpl = this;
             refreshView();
         }
         
         public void init() {
+            buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
             if (okTextInfo == null) okTextInfo = DialogX.okButtonTextInfo;
@@ -424,6 +426,7 @@ public class MessageDialog extends BaseDialog {
             btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OK;
                     if (txtInput != null) {
                         imeShow(txtInput, false);
                     }
@@ -446,6 +449,7 @@ public class MessageDialog extends BaseDialog {
             btnSelectNegative.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_CANCEL;
                     if (txtInput != null) {
                         imeShow(txtInput, false);
                     }
@@ -468,6 +472,7 @@ public class MessageDialog extends BaseDialog {
             btnSelectOther.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OTHER;
                     if (txtInput != null) {
                         imeShow(txtInput, false);
                     }
@@ -1401,5 +1406,9 @@ public class MessageDialog extends BaseDialog {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
         return this;
+    }
+
+    public BUTTON_SELECT_RESULT getButtonSelectResult() {
+        return buttonSelectResult;
     }
 }

@@ -441,7 +441,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     }
 
     protected Timer autoDismissTimer;
-    protected long autoDismissDelay;
+    protected long autoDismissDelay = Long.MIN_VALUE;
 
     public PopNotification autoDismiss(long delay) {
         autoDismissDelay = delay;
@@ -463,8 +463,12 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         autoDismiss(autoDismissDelay);
     }
 
+    private boolean isNoSetCustomDelay(){
+        return autoDismissDelay == Long.MIN_VALUE;
+    }
+
     public PopNotification showShort() {
-        autoDismiss(2000);
+        if (isNoSetCustomDelay())autoDismiss(2000);
         if (!preShow && !isShow) {
             show();
         }
@@ -625,7 +629,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                         blurView = new BlurView(getOwnActivity(), null);
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
                         blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                        blurView.setOverrideOverlayColor(backgroundColor!=-1);
+                        blurView.setOverrideOverlayColor(backgroundColor != -1);
                         blurView.setTag("blurView");
                         blurView.setRadiusPx(getStyle().popNotificationSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
                         blurBody.setContentView(boxBody);

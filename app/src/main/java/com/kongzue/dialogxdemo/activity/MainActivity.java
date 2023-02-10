@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,6 +47,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.kongzue.baseframework.BaseActivity;
+import com.kongzue.baseframework.BaseApp;
 import com.kongzue.baseframework.interfaces.DarkNavigationBarTheme;
 import com.kongzue.baseframework.interfaces.DarkStatusBarTheme;
 import com.kongzue.baseframework.interfaces.Layout;
@@ -87,6 +89,7 @@ import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
+import com.kongzue.dialogxdemo.App;
 import com.kongzue.dialogxdemo.BuildConfig;
 import com.kongzue.dialogxdemo.R;
 import com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleViewAdapter;
@@ -289,6 +292,27 @@ public class MainActivity extends BaseActivity {
         }
 
         txtVer.setText("当前版本：" + BuildConfig.VERSION_NAME);
+
+//        //合并处理演示，在 onDismiss 中获取用户选择进行统一处理，以防止编写大量可能在不同选择下都要处理的重复代码
+//        MessageDialog.show("Title", "Ask Question", "OK", "NO", "OTHER").setDialogLifecycleCallback(new DialogLifecycleCallback<MessageDialog>() {
+//            @Override
+//            public void onDismiss(MessageDialog dialog) {
+//                /**
+//                 * dialog.getButtonSelectResult() 支持 MessageDialog 和 BottomDialog
+//                 * 两种具有选择功能的对话框。
+//                 * 包含四种状态：
+//                 * NONE,           //未做出选择
+//                 * BUTTON_OK,      //选择了确定按钮
+//                 * BUTTON_CANCEL,  //选择了取消按钮
+//                 * BUTTON_OTHER    //选择了其他按钮
+//                 */
+//                if (dialog.getButtonSelectResult() == BaseDialog.BUTTON_SELECT_RESULT.BUTTON_OK) {
+//                    MessageDialog.show("Title", "You Select OK Button!", "OK");
+//                } else {
+//                    TipDialog.show("Other Select!", WaitDialog.TYPE.WARNING);
+//                }
+//            }
+//        });
     }
 
     //用于模拟进度提示
@@ -506,12 +530,12 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 WaitDialog.show("Please Wait!")
                         .setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
-                    @Override
-                    public boolean onBackPressed(WaitDialog dialog) {
-                        PopTip.show("按下返回");
-                        return false;
-                    }
-                });
+                            @Override
+                            public boolean onBackPressed(WaitDialog dialog) {
+                                PopTip.show("按下返回");
+                                return false;
+                            }
+                        });
                 runDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1208,8 +1232,7 @@ public class MainActivity extends BaseActivity {
                                 TipDialog.show("点击了通知");
                                 return false;
                             }
-                        })
-                        .showLong();
+                        });
             }
         });
 

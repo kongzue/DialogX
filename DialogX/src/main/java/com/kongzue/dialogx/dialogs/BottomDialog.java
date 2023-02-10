@@ -76,6 +76,7 @@ public class BottomDialog extends BaseDialog {
     protected float backgroundRadius = -1;
     protected Drawable titleIcon;
     protected DialogXAnimInterface<BottomDialog> dialogXAnimImpl;
+    protected BUTTON_SELECT_RESULT buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
 
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -311,6 +312,8 @@ public class BottomDialog extends BaseDialog {
 
         @Override
         public void init() {
+            buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
+
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
             if (okTextInfo == null) okTextInfo = DialogX.okButtonTextInfo;
@@ -389,6 +392,7 @@ public class BottomDialog extends BaseDialog {
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_CANCEL;
                         if (cancelButtonClickListener != null) {
                             if (!cancelButtonClickListener.onClick(me, v)) {
                                 dismiss();
@@ -400,6 +404,7 @@ public class BottomDialog extends BaseDialog {
                 });
             }
             if (btnSelectOther != null) {
+                buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OTHER;
                 btnSelectOther.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -414,6 +419,7 @@ public class BottomDialog extends BaseDialog {
                 });
             }
             if (btnSelectPositive != null) {
+                buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OK;
                 btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1221,5 +1227,9 @@ public class BottomDialog extends BaseDialog {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
         return this;
+    }
+
+    public BUTTON_SELECT_RESULT getButtonSelectResult() {
+        return buttonSelectResult;
     }
 }

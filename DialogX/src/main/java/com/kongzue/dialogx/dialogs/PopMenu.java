@@ -6,8 +6,6 @@ import android.animation.ValueAnimator;
 import android.graphics.Outline;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -37,7 +35,7 @@ import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
-import com.kongzue.dialogx.util.BottomMenuArrayAdapter;
+import com.kongzue.dialogx.util.DialogXViewLoc;
 import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.PopMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
@@ -86,7 +84,7 @@ public class PopMenu extends BaseDialog {
     protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
 
     //记录 baseView 位置
-    protected int[] baseViewLoc = new int[2];
+    protected DialogXViewLoc baseViewLoc = new DialogXViewLoc();
 
     public PopMenu() {
         super();
@@ -207,6 +205,7 @@ public class PopMenu extends BaseDialog {
 
     private ViewTreeObserver viewTreeObserver;
     private ViewTreeObserver.OnDrawListener baseViewDrawListener;
+    private boolean isAnimRunning;
 
     public PopMenu show() {
         if (isHide && getDialogView() != null && isShow) {
@@ -248,14 +247,14 @@ public class PopMenu extends BaseDialog {
                     int[] baseViewLocCache = new int[2];
                     if (baseView != null) {
                         baseView.getLocationOnScreen(baseViewLocCache);
-                        if (baseViewLoc == null || baseViewLocCache[0] != baseViewLoc[0] || baseViewLocCache[1] != baseViewLoc[1]) {
-                            baseViewLoc = baseViewLocCache;
-                            if (getDialogImpl() != null) {
-                                if (getDialogImpl().boxBody.getX() < 0 && getDialogImpl().boxBody.getY() < 0) {
-                                    setDefaultMenuBodyLoc();
-                                } else {
-                                    refreshMenuBodyLoc();
-                                }
+                        if (!isAnimRunning && getDialogImpl() != null && !baseViewLoc.isSameLoc(baseViewLocCache)) {
+                            baseViewLoc.set(baseViewLocCache);
+                            if (getDialogImpl().boxBody.getX() < 0 && getDialogImpl().boxBody.getY() < 0) {
+                                //初始化时设置
+                                setInitMenuBodyLoc();
+                            } else {
+                                //根据条件调整位置
+                                refreshMenuBodyLoc();
                             }
                         }
                     } else {
@@ -271,28 +270,32 @@ public class PopMenu extends BaseDialog {
         return this;
     }
 
-    private void setDefaultMenuBodyLoc() {
+    private void setInitMenuBodyLoc() {
         if (getDialogImpl() == null || getDialogImpl().boxRoot == null) {
             return;
         }
-        int width = PopMenu.this.width == 0 ? baseView.getWidth() : PopMenu.this.width;
-        int height = PopMenu.this.height == 0 ? baseView.getHeight() : PopMenu.this.height;
+        int mWidth = PopMenu.this.width == -1 ? baseView.getWidth() : PopMenu.this.width;
+        int mHeight = PopMenu.this.height == -1 ? baseView.getHeight() : PopMenu.this.height;
 
-        int left = baseViewLoc[0];
-        int top = baseViewLoc[1] + (overlayBaseView ? 0 : height) + selectItemYDeviation;
+        int left = (int) baseViewLoc.getX();
+        int top = (int) (baseViewLoc.getY() + (overlayBaseView ? 0 : mHeight) + selectItemYDeviation);
 
         if (left != getDialogImpl().boxBody.getX()) {
+            menuLocX = left;
             getDialogImpl().boxBody.setX(left);
         }
         if (top != getDialogImpl().boxBody.getY()) {
+            menuLocY = top;
             getDialogImpl().boxBody.setY(top);
         }
 
-        if (width != 0 && getDialogImpl().boxBody.getWidth() != width) {
-            RelativeLayout.LayoutParams rLp = new RelativeLayout.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (mWidth != 0 && getDialogImpl().boxBody.getWidth() != mWidth) {
+            RelativeLayout.LayoutParams rLp = new RelativeLayout.LayoutParams(mWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
             getDialogImpl().boxBody.setLayoutParams(rLp);
         }
     }
+
+    private int menuLocX = -1, menuLocY = -1;
 
     private void refreshMenuBodyLoc() {
         if (getDialogImpl() == null || getDialogImpl().boxRoot == null) {
@@ -301,8 +304,8 @@ public class PopMenu extends BaseDialog {
         MaxRelativeLayout boxBody = getDialogImpl().boxBody;
         DialogXBaseRelativeLayout boxRoot = getDialogImpl().boxRoot;
         //菜单位置计算逻辑
-        int baseViewLeft = baseViewLoc[0];
-        int baseViewTop = baseViewLoc[1];
+        int baseViewLeft = (int) baseViewLoc.getX();
+        int baseViewTop = (int) baseViewLoc.getY();
         int calX = 0, calY = 0;
         if (alignGravity != -1) {
             if (isAlignGravity(Gravity.CENTER_VERTICAL)) {
@@ -322,23 +325,23 @@ public class PopMenu extends BaseDialog {
             if (overlayBaseView) {
                 //菜单覆盖在 baseView 上时
                 if (isAlignGravity(Gravity.TOP)) {
-                    calY = (baseViewTop - boxBody.getHeight() + baseView.getHeight());
+                    calY = (baseViewTop + baseView.getMeasuredHeight() - boxBody.getHeight());
                 }
                 if (isAlignGravity(Gravity.LEFT)) {
-                    calX = (baseViewLeft);
+                    calX = Math.max(0, (baseViewLeft + baseView.getMeasuredWidth() - boxBody.getWidth()));
                 }
                 if (isAlignGravity(Gravity.RIGHT)) {
-                    calX = (baseViewLeft + (getWidth() > 0 ? baseView.getMeasuredWidth() - width : 0));
+                    calX = baseViewLeft;
                 }
                 if (isAlignGravity(Gravity.BOTTOM)) {
-                    calY = (baseViewTop);
+                    calY = baseViewTop;
                 }
             } else {
                 if (isAlignGravity(Gravity.TOP)) {
                     calY = (Math.max(0, baseViewTop - boxBody.getHeight()));
                 }
                 if (isAlignGravity(Gravity.LEFT)) {
-                    calX = (Math.max(0, baseViewLeft - boxBody.getWidth()));
+                    calX = Math.max(0, (baseViewLeft - boxBody.getWidth()));
                 }
                 if (isAlignGravity(Gravity.RIGHT)) {
                     calX = (Math.max(0, baseViewLeft + baseView.getWidth()));
@@ -362,10 +365,20 @@ public class PopMenu extends BaseDialog {
                 }
             }
 
-            if (calX != 0) boxBody.setX(calX);
-            if (calY != 0) boxBody.setY(calY);
+            menuLocX = calX;
+            boxBody.setX(calX);
+
+            menuLocY = calY;
+            calY = calY + selectItemYDeviation;
+            boxBody.setY(calY);
+
+            int mWidth = PopMenu.this.width == -1 ? baseView.getWidth() : PopMenu.this.width;
+            if (mWidth != 0 && getDialogImpl().boxBody.getWidth() != mWidth) {
+                RelativeLayout.LayoutParams rLp = new RelativeLayout.LayoutParams(mWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+                getDialogImpl().boxBody.setLayoutParams(rLp);
+            }
         } else {
-            setDefaultMenuBodyLoc();
+            setInitMenuBodyLoc();
         }
     }
 
@@ -626,50 +639,45 @@ public class PopMenu extends BaseDialog {
                             }
 
                             refreshMenuBodyLoc();
+                            selectItemYDeviation = (int) (menuLocY - baseViewLoc.getY());
 
                             //展开动画
-                            Animation enterAnim = new Animation() {
+                            ValueAnimator enterAnim = ValueAnimator.ofFloat(0f, 1f);
+                            enterAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
-                                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    float interpolatedTime = (float) animation.getAnimatedValue();
                                     int aimHeight = interpolatedTime == 1 ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) (targetHeight * interpolatedTime);
                                     boxBody.getLayoutParams().height = aimHeight;
                                     boxBody.getLayoutParams().width = getWidth() == -1 ? baseView.getWidth() : getWidth();
                                     if ((boxBody.getY() + aimHeight) > boxRoot.getSafeHeight()) {
                                         boxBody.setY(boxRoot.getSafeHeight() - aimHeight);
                                     }
-
+                                    float calX = menuLocX != -1 ? menuLocX : baseViewLoc.getX();
+                                    float calY = baseViewLoc.getY() + selectItemYDeviation * interpolatedTime;
+                                    if ((calX + boxBody.getWidth()) > boxRoot.getUseAreaWidth()) {
+                                        calX = boxRoot.getUseAreaWidth() - boxBody.getWidth();
+                                    }
+                                    if ((calY + boxBody.getHeight()) > boxRoot.getUseAreaHeight()) {
+                                        calY = boxRoot.getUseAreaHeight() - boxBody.getHeight();
+                                    }
                                     if (!offScreen) {
-                                        float calX = baseViewLoc[0];
-                                        float calY = baseViewLoc[1] + selectItemYDeviation;
-
                                         if (calX < 0) {
                                             calX = 0;
-                                        }
-                                        if ((calX + boxBody.getWidth()) > boxRoot.getUseAreaWidth()) {
-                                            calX = boxRoot.getUseAreaWidth() - boxBody.getWidth();
                                         }
                                         if (calY < 0) {
                                             calY = 0;
                                         }
-                                        if ((calY + boxBody.getHeight()) > boxRoot.getUseAreaHeight()) {
-                                            calY = boxRoot.getUseAreaHeight() - boxBody.getHeight();
-                                        }
-                                        boxBody.setX(calX);
-                                        boxBody.setY(calY);
                                     }
+                                    boxBody.setX(calX);
+                                    boxBody.setY(calY);
 
                                     boxBody.requestLayout();
-                                    refreshMenuBodyLoc();
                                 }
-
-                                @Override
-                                public boolean willChangeBounds() {
-                                    return true;
-                                }
-                            };
+                            });
                             enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                             enterAnim.setDuration(enterAnimDurationTemp);
-                            boxBody.startAnimation(enterAnim);
+                            enterAnim.start();
                             boxBody.setVisibility(View.VISIBLE);
 
                             //模糊背景
@@ -681,7 +689,7 @@ public class PopMenu extends BaseDialog {
                                 blurView = new BlurView(getOwnActivity(), null);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), targetHeight);
                                 blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                blurView.setOverrideOverlayColor(backgroundColor!=-1);
+                                blurView.setOverrideOverlayColor(backgroundColor != -1);
                                 blurView.setTag("blurView");
                                 blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
                                 boxBody.addView(blurView, 0, params);
@@ -712,7 +720,7 @@ public class PopMenu extends BaseDialog {
                                         blurView = new BlurView(getOwnActivity(), null);
                                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
                                         blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                        blurView.setOverrideOverlayColor(backgroundColor!=-1);
+                                        blurView.setOverrideOverlayColor(backgroundColor != -1);
                                         blurView.setTag("blurView");
                                         blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
                                         boxBody.addView(blurView, 0, params);

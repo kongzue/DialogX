@@ -72,6 +72,13 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
     private WeakReference<DialogListBuilder> dialogListBuilder;
     protected LifecycleRegistry lifecycle = new LifecycleRegistry(this);
+
+    public enum BUTTON_SELECT_RESULT{
+        NONE,           //未做出选择
+        BUTTON_OK,      //选择了确定按钮
+        BUTTON_CANCEL,  //选择了取消按钮
+        BUTTON_OTHER    //选择了其他按钮
+    }
     
     public static void init(Context context) {
         if (context == null) {
