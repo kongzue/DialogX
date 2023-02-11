@@ -352,7 +352,8 @@ public class WaitDialog extends BaseDialog {
                             });
 
                             onDialogShow();
-                            getDialogLifecycleCallback().onShow(me());
+                            getDialogLifecycleCallback().onShow(WaitDialog.this);
+                            WaitDialog.this.onShow(WaitDialog.this);
 
                             lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                         }
@@ -362,7 +363,8 @@ public class WaitDialog extends BaseDialog {
                 @Override
                 public void onDismiss() {
                     isShow = false;
-                    getDialogLifecycleCallback().onDismiss(me());
+                    getDialogLifecycleCallback().onDismiss(WaitDialog.this);
+                    WaitDialog.this.onDismiss(WaitDialog.this);
                     if (dialogImpl != null) dialogImpl.clear();
                     dialogImpl = null;
                     if (dialogView != null) dialogView.clear();
@@ -1147,5 +1149,44 @@ public class WaitDialog extends BaseDialog {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
         return this;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new WaitDialog() {
+     *
+     * @param dialog self
+     * @Override public void onShow(WaitDialog dialog) {
+     * //...
+     * }
+     * }
+     */
+    public void onShow(WaitDialog dialog) {
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new WaitDialog() {
+     *
+     * @param dialog self
+     * @Override public boolean onDismiss(WaitDialog dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(WaitDialog dialog) {
+
     }
 }

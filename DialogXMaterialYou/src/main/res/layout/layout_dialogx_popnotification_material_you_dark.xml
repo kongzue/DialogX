@@ -4,8 +4,8 @@
     android:id="@+id/box_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/DialogXCompatThemeNight"
     android:orientation="vertical"
+    android:theme="@style/DialogXCompatThemeNight"
     app:baseFocusable="false">
 
     <com.kongzue.dialogx.util.views.MaxLinearLayout
@@ -13,22 +13,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
         android:background="@drawable/rect_dialogx_material_you_popnotification_bkg_night"
         android:clickable="true"
         android:elevation="10dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="18dp"
+        android:paddingBottom="13dp">
 
         <ImageView
             android:id="@+id/img_dialogx_pop_icon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
             android:layout_marginRight="-10dp"
-            android:layout_marginBottom="15dp"
             android:visibility="gone" />
 
         <LinearLayout
@@ -42,9 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="18dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="18dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:text="Notification!"
@@ -57,24 +56,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="-15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginBottom="20dp"
-                android:visibility="gone"
+                android:layout_marginBottom="7dp"
                 android:layout_weight="1"
                 android:gravity="left|center_vertical"
                 android:text="Notification!"
                 android:textColor="@color/white70"
-                android:textSize="14dp"/>
+                android:textSize="14dp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/box_custom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txt_dialogx_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="-20dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="10dp"
                 android:background="@drawable/button_dialogx_material_you_night"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="15dp"
@@ -85,12 +87,6 @@
                 android:text="Dismiss"
                 android:textColor="@color/dialogxPopButtonBlueDark"
                 android:textSize="14dp"
-                android:visibility="gone" />
-
-            <RelativeLayout
-                android:id="@+id/box_custom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:visibility="gone" />
         </LinearLayout>
 

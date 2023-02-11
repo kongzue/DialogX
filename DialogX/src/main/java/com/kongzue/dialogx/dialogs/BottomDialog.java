@@ -345,6 +345,7 @@ public class BottomDialog extends BaseDialog {
 
                     lifecycle.setCurrentState(Lifecycle.State.CREATED);
                     getDialogLifecycleCallback().onShow(me);
+                    BottomDialog.this.onShow(me);
 
                     onDialogShow();
 
@@ -380,6 +381,7 @@ public class BottomDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    BottomDialog.this.onDismiss(me);
                     dialogImpl = null;
                     bottomDialogTouchEventInterceptor = null;
                     dialogLifecycleCallback = null;
@@ -404,10 +406,10 @@ public class BottomDialog extends BaseDialog {
                 });
             }
             if (btnSelectOther != null) {
-                buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OTHER;
                 btnSelectOther.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OTHER;
                         if (otherButtonClickListener != null) {
                             if (!otherButtonClickListener.onClick(me, v)) {
                                 dismiss();
@@ -419,10 +421,10 @@ public class BottomDialog extends BaseDialog {
                 });
             }
             if (btnSelectPositive != null) {
-                buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OK;
                 btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OK;
                         if (okButtonClickListener != null) {
                             if (!okButtonClickListener.onClick(me, v)) {
                                 dismiss();
@@ -1231,5 +1233,45 @@ public class BottomDialog extends BaseDialog {
 
     public BUTTON_SELECT_RESULT getButtonSelectResult() {
         return buttonSelectResult;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new BottomDialog() {
+     *     @Override
+     *     public void onShow(BottomDialog dialog) {
+     *         //...
+     *     }
+     * }
+     *
+     * @param dialog self
+     */
+    public void onShow(BottomDialog dialog){
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new BottomDialog() {
+     *     @Override
+     *     public boolean onDismiss(BottomDialog dialog) {
+     *         WaitDialog.show("Please Wait...");
+     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     *             //点击了OK的情况
+     *             //...
+     *         } else {
+     *             //其他按钮点击、对话框dismiss的情况
+     *             //...
+     *         }
+     *         return false;
+     *     }
+     * }
+     * @param dialog self
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(BottomDialog dialog){
+
     }
 }

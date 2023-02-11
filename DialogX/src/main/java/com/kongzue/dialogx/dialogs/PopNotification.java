@@ -547,6 +547,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
+                    PopNotification.this.onShow(me);
                 }
 
                 @Override
@@ -556,6 +557,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                     }
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    PopNotification.this.onDismiss(me);
                     dialogImpl = null;
                     lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
@@ -1425,5 +1427,45 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         this.slideToClose = slideToClose;
         refreshUI();
         return this;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new PopNotification() {
+     *     @Override
+     *     public void onShow(PopNotification dialog) {
+     *         //...
+     *     }
+     * }
+     *
+     * @param dialog self
+     */
+    public void onShow(PopNotification dialog){
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new PopNotification() {
+     *     @Override
+     *     public boolean onDismiss(PopNotification dialog) {
+     *         WaitDialog.show("Please Wait...");
+     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     *             //点击了OK的情况
+     *             //...
+     *         } else {
+     *             //其他按钮点击、对话框dismiss的情况
+     *             //...
+     *         }
+     *         return false;
+     *     }
+     * }
+     * @param dialog self
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(PopNotification dialog){
+
     }
 }

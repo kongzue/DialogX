@@ -189,6 +189,7 @@ public class CustomDialog extends BaseDialog {
                     lifecycle.setCurrentState(Lifecycle.State.CREATED);
 
                     getDialogLifecycleCallback().onShow(me);
+                    CustomDialog.this.onShow(me);
                     onDialogShow();
 
                     boxCustom.setVisibility(View.GONE);
@@ -198,6 +199,7 @@ public class CustomDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    CustomDialog.this.onDismiss(me);
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
                     lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
@@ -1024,5 +1026,45 @@ public class CustomDialog extends BaseDialog {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
         return this;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new CustomDialog() {
+     *     @Override
+     *     public void onShow(CustomDialog dialog) {
+     *         //...
+     *     }
+     * }
+     *
+     * @param dialog self
+     */
+    public void onShow(CustomDialog dialog){
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new CustomDialog() {
+     *     @Override
+     *     public boolean onDismiss(CustomDialog dialog) {
+     *         WaitDialog.show("Please Wait...");
+     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     *             //点击了OK的情况
+     *             //...
+     *         } else {
+     *             //其他按钮点击、对话框dismiss的情况
+     *             //...
+     *         }
+     *         return false;
+     *     }
+     * }
+     * @param dialog self
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(CustomDialog dialog){
+
     }
 }

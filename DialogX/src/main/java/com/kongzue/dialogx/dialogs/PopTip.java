@@ -53,15 +53,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @createTime: 2020/10/20 11:59
  */
 public class PopTip extends BaseDialog implements NoTouchInterface {
-    
+
     public static final int TIME_NO_AUTO_DISMISS_DELAY = -1;
     protected static List<PopTip> popTipList;
-    
+
     public static long overrideEnterDuration = -1;
     public static long overrideExitDuration = -1;
     public static int overrideEnterAnimRes = 0;
     public static int overrideExitAnimRes = 0;
-    
+
     protected OnBindView<PopTip> onBindView;
     protected DialogLifecycleCallback<PopTip> dialogLifecycleCallback;
     protected PopTip me = this;
@@ -75,201 +75,225 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     protected BOOLEAN tintIcon;
     protected float backgroundRadius = -1;
     protected DialogXAnimInterface<PopTip> dialogXAnimImpl;
-    
+
     protected int iconResId;
     protected CharSequence message;
     protected CharSequence buttonText;
-    
+
     protected TextInfo messageTextInfo;
     protected TextInfo buttonTextInfo = new TextInfo().setBold(true);
     protected int[] bodyMargin = new int[]{-1, -1, -1, -1};
-    
+
     protected PopTip() {
         super();
     }
-    
+
     @Override
     public boolean isCancelable() {
         return false;
     }
-    
+
     public static PopTip build() {
         return new PopTip();
     }
-    
+
     public static PopTip build(DialogXStyle style) {
         return new PopTip().setStyle(style);
     }
-    
+
     public static PopTip build(OnBindView<PopTip> onBindView) {
         return new PopTip().setCustomView(onBindView);
     }
-    
+
     public PopTip(OnBindView<PopTip> onBindView) {
         this.onBindView = onBindView;
     }
-    
+
     public PopTip(CharSequence message) {
         this.message = message;
     }
-    
+
     public PopTip(int messageResId) {
         this.message = getString(messageResId);
     }
-    
+
+    public static PopTip tip(String message) {
+        return PopTip.show(message);
+    }
+
+    public static PopTip tip(int messageResId) {
+        return PopTip.show(messageResId);
+    }
+
+    public static PopTip tip(String message, String buttonText) {
+        return PopTip.show(message, buttonText);
+    }
+
+    public static PopTip tip(int messageResId, int buttonTextResId) {
+        return PopTip.show(messageResId, buttonTextResId);
+    }
+
+    public static PopTip tip(int iconResId, String message) {
+        return PopTip.show(iconResId, message);
+    }
+
+    public static PopTip tip(int iconResId, String message, String buttonText) {
+        return PopTip.show(iconResId, message, buttonText);
+    }
+
     public PopTip(int iconResId, CharSequence message) {
         this.iconResId = iconResId;
         this.message = message;
     }
-    
+
     public PopTip(int iconResId, CharSequence message, CharSequence buttonText) {
         this.iconResId = iconResId;
         this.message = message;
         this.buttonText = buttonText;
     }
-    
+
     public PopTip(int iconResId, int messageResId, int buttonTextResId) {
         this.iconResId = iconResId;
         this.message = getString(messageResId);
         this.buttonText = getString(buttonTextResId);
     }
-    
+
     public PopTip(CharSequence message, CharSequence buttonText) {
         this.message = message;
         this.buttonText = buttonText;
     }
-    
+
     public PopTip(int messageResId, int buttonTextResId) {
         this.message = getString(messageResId);
         this.buttonText = getString(buttonTextResId);
     }
-    
+
     public PopTip(CharSequence message, OnBindView<PopTip> onBindView) {
         this.message = message;
         this.onBindView = onBindView;
     }
-    
+
     public PopTip(int messageResId, OnBindView<PopTip> onBindView) {
         this.message = getString(messageResId);
         this.onBindView = onBindView;
     }
-    
+
     public PopTip(int iconResId, CharSequence message, OnBindView<PopTip> onBindView) {
         this.iconResId = iconResId;
         this.message = message;
         this.onBindView = onBindView;
     }
-    
+
     public PopTip(int iconResId, CharSequence message, CharSequence buttonText, OnBindView<PopTip> onBindView) {
         this.iconResId = iconResId;
         this.message = message;
         this.buttonText = buttonText;
         this.onBindView = onBindView;
     }
-    
+
     public PopTip(int iconResId, int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
         this.iconResId = iconResId;
         this.message = getString(messageResId);
         this.buttonText = getString(buttonTextResId);
         this.onBindView = onBindView;
     }
-    
+
     public PopTip(CharSequence message, CharSequence buttonText, OnBindView<PopTip> onBindView) {
         this.message = message;
         this.buttonText = buttonText;
         this.onBindView = onBindView;
     }
-    
+
     public PopTip(int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
         this.message = getString(messageResId);
         this.buttonText = getString(buttonTextResId);
         this.onBindView = onBindView;
     }
-    
+
     public static PopTip show(OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(onBindView);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(CharSequence message) {
         PopTip popTip = new PopTip(message);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int messageResId) {
         PopTip popTip = new PopTip(messageResId);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(CharSequence message, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(message, onBindView);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int messageResId, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(messageResId, onBindView);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(CharSequence message, CharSequence buttonText) {
         PopTip popTip = new PopTip(message, buttonText);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int messageResId, int buttonTextResId) {
         PopTip popTip = new PopTip(messageResId, buttonTextResId);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int iconResId, CharSequence message, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(iconResId, message, onBindView);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int iconResId, CharSequence message) {
         PopTip popTip = new PopTip(iconResId, message);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int iconResId, CharSequence message, CharSequence buttonText) {
         PopTip popTip = new PopTip(iconResId, message, buttonText);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int iconResId, CharSequence message, CharSequence buttonText, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(iconResId, message, buttonText, onBindView);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int iconResId, int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(iconResId, messageResId, buttonTextResId, onBindView);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(CharSequence message, CharSequence buttonText, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(message, buttonText, onBindView);
         popTip.show();
         return popTip;
     }
-    
+
     public static PopTip show(int messageResId, int buttonTextResId, OnBindView<PopTip> onBindView) {
         PopTip popTip = new PopTip(messageResId, buttonTextResId, onBindView);
         popTip.show();
         return popTip;
     }
-    
+
     public PopTip show() {
         if (isHide && getDialogView() != null) {
             getDialogView().setVisibility(View.VISIBLE);
@@ -329,7 +353,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         show(dialogView);
         return this;
     }
-    
+
     public PopTip show(Activity activity) {
         super.beforeShow();
         if (dialogView != null) {
@@ -356,7 +380,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 if (style.popTipSettings().layout(isLightTheme()) != 0) {
                     layoutResId = style.popTipSettings().layout(isLightTheme());
                 }
-    
+
                 if (align == null) {
                     if (style.popTipSettings().align() == null) {
                         align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
@@ -386,15 +410,15 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         show(activity, dialogView);
         return this;
     }
-    
+
     @Override
     public String dialogKey() {
         return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
     }
-    
+
     protected Timer autoDismissTimer;
     protected long autoDismissDelay;
-    
+
     public PopTip autoDismiss(long delay) {
         autoDismissDelay = delay;
         if (autoDismissTimer != null) {
@@ -410,11 +434,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         }, delay);
         return this;
     }
-    
+
     public void resetAutoDismissTimer() {
         autoDismiss(autoDismissDelay);
     }
-    
+
     public PopTip showShort() {
         autoDismiss(2000);
         if (!preShow && !isShow) {
@@ -422,7 +446,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         }
         return this;
     }
-    
+
     public PopTip showLong() {
         autoDismiss(3500);
         if (!preShow && !isShow) {
@@ -430,25 +454,25 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         }
         return this;
     }
-    
+
     public PopTip showAlways() {
         return noAutoDismiss();
     }
-    
+
     public PopTip noAutoDismiss() {
         autoDismiss(TIME_NO_AUTO_DISMISS_DELAY);
         return this;
     }
-    
+
     public class DialogImpl implements DialogConvertViewInterface {
-        
+
         public DialogXBaseRelativeLayout boxRoot;
         public LinearLayout boxBody;
         public ImageView imgDialogxPopIcon;
         public TextView txtDialogxPopText;
         public RelativeLayout boxCustom;
         public TextView txtDialogxButton;
-        
+
         public DialogImpl(View convertView) {
             if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
@@ -457,22 +481,22 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             txtDialogxPopText = convertView.findViewById(R.id.txt_dialogx_pop_text);
             boxCustom = convertView.findViewById(R.id.box_custom);
             txtDialogxButton = convertView.findViewById(R.id.txt_dialogx_button);
-            
+
             init();
             dialogImpl = this;
             refreshView();
         }
-        
+
         @Override
         public void init() {
             if (messageTextInfo == null) messageTextInfo = DialogX.popTextInfo;
             if (buttonTextInfo == null) buttonTextInfo = DialogX.buttonTextInfo;
             if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
-            
+
             if (autoDismissTimer == null) {
                 showShort();
             }
-            
+
             boxRoot.setParentDialog(me);
             boxRoot.setAutoUnsafePlacePadding(false);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
@@ -484,19 +508,21 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     boxRoot.setAlpha(0f);
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
+                    PopTip.this.onShow(me);
                 }
-                
+
                 @Override
                 public void onDismiss() {
                     if (popTipList != null) popTipList.remove(PopTip.this);
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    PopTip.this.onDismiss(me);
                     dialogImpl = null;
                     lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
-            
+
             RelativeLayout.LayoutParams rlp;
             rlp = ((RelativeLayout.LayoutParams) boxBody.getLayoutParams());
             if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
@@ -517,7 +543,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     break;
             }
             boxBody.setLayoutParams(rlp);
-            
+
             boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {
                 @Override
                 public void onChange(Rect unsafeRect) {
@@ -528,14 +554,14 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     }
                 }
             });
-            
+
             boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
                     return false;
                 }
             });
-            
+
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
@@ -543,7 +569,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     lifecycle.setCurrentState(Lifecycle.State.RESUMED);
                 }
             });
-            
+
             txtDialogxButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -558,30 +584,30 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             });
             onDialogInit();
         }
-        
+
         @Override
         public void refreshView() {
             if (boxRoot == null || getTopActivity() == null) {
                 return;
             }
-            boxRoot.setRootPadding(screenPaddings[0],screenPaddings[1],screenPaddings[2],screenPaddings[3]);
+            boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(boxBody, backgroundColor);
             }
-            
+
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
                 boxCustom.setVisibility(View.VISIBLE);
             } else {
                 boxCustom.setVisibility(View.GONE);
             }
-            
+
             showText(txtDialogxPopText, message);
             showText(txtDialogxButton, buttonText);
-            
+
             useTextInfo(txtDialogxPopText, messageTextInfo);
             useTextInfo(txtDialogxButton, buttonTextInfo);
-            
+
             if (iconResId != 0) {
                 imgDialogxPopIcon.setVisibility(View.VISIBLE);
                 imgDialogxPopIcon.setImageResource(iconResId);
@@ -595,7 +621,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             } else {
                 imgDialogxPopIcon.setVisibility(View.GONE);
             }
-            
+
             if (backgroundRadius > -1) {
                 GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
                 if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
@@ -609,7 +635,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     boxBody.setClipToOutline(true);
                 }
             }
-            
+
             if (onPopTipClickListener != null) {
                 boxBody.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -623,7 +649,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 boxBody.setOnClickListener(null);
                 boxBody.setClickable(false);
             }
-            
+
             RelativeLayout.LayoutParams rlp = ((RelativeLayout.LayoutParams) boxBody.getLayoutParams());
             if (bodyMargin[0] != -1) rlp.leftMargin = bodyMargin[0];
             if (bodyMargin[1] != -1) rlp.topMargin = bodyMargin[1];
@@ -632,11 +658,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             boxBody.setLayoutParams(rlp);
             onDialogRefreshUI();
         }
-        
+
         @Override
         public void doDismiss(final View v) {
             if (v != null) v.setEnabled(false);
-            
+
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
                 boxRoot.post(new Runnable() {
@@ -647,7 +673,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 });
             }
         }
-        
+
         protected DialogXAnimInterface<PopTip> getDialogXAnimImpl() {
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<PopTip>() {
@@ -660,14 +686,14 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                         }
                         enterAnim.setFillAfter(true);
                         boxBody.startAnimation(enterAnim);
-                        
+
                         boxRoot.animate()
                                 .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
                                 .alpha(1f)
                                 .setInterpolator(new DecelerateInterpolator())
                                 .setListener(null);
                     }
-                    
+
                     @Override
                     public void doExitAnim(PopTip dialog, ObjectRunnable<Float> animProgress) {
                         Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxRoot.getContext() : getTopActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
@@ -676,12 +702,12 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                         }
                         exitAnim.setFillAfter(true);
                         boxBody.startAnimation(exitAnim);
-                        
+
                         boxRoot.animate()
                                 .alpha(0f)
                                 .setInterpolator(new AccelerateInterpolator())
                                 .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-                        
+
                         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -694,9 +720,9 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             return dialogXAnimImpl;
         }
     }
-    
+
     protected boolean preRecycle = false;
-    
+
     /**
      * 之所以这样处理，在较为频繁的启停 PopTip 时可能存在 PopTip 关闭动画位置错误无法计算的问题
      * 使用 preRecycle 标记记录是否需要回收，而不是立即销毁
@@ -715,7 +741,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             }
         }
     }
-    
+
     private void moveUp() {
         if (getDialogImpl() != null && getDialogImpl().boxBody != null) {
             View bodyView = getDialogImpl().boxBody;
@@ -759,7 +785,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             valueAnimator.start();
         }
     }
-    
+
     public void refreshUI() {
         if (getDialogImpl() == null) return;
         runOnMain(new Runnable() {
@@ -769,7 +795,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             }
         });
     }
-    
+
     public void dismiss() {
         runOnMain(new Runnable() {
             @Override
@@ -779,204 +805,204 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             }
         });
     }
-    
+
     public DialogLifecycleCallback<PopTip> getDialogLifecycleCallback() {
         return dialogLifecycleCallback == null ? new DialogLifecycleCallback<PopTip>() {
         } : dialogLifecycleCallback;
     }
-    
+
     public PopTip setDialogLifecycleCallback(DialogLifecycleCallback<PopTip> dialogLifecycleCallback) {
         this.dialogLifecycleCallback = dialogLifecycleCallback;
         if (isShow) dialogLifecycleCallback.onShow(me);
         return this;
     }
-    
+
     public PopTip setStyle(DialogXStyle style) {
         this.style = style;
         return this;
     }
-    
+
     public PopTip setTheme(DialogX.THEME theme) {
         this.theme = theme;
         return this;
     }
-    
+
     public PopTip.DialogImpl getDialogImpl() {
         return dialogImpl;
     }
-    
+
     public PopTip setCustomView(OnBindView<PopTip> onBindView) {
         this.onBindView = onBindView;
         refreshUI();
         return this;
     }
-    
+
     public View getCustomView() {
         if (onBindView == null) return null;
         return onBindView.getCustomView();
     }
-    
+
     public PopTip removeCustomView() {
         this.onBindView.clean();
         refreshUI();
         return this;
     }
-    
+
     public DialogXStyle.PopTipSettings.ALIGN getAlign() {
         return align;
     }
-    
+
     @Deprecated
     public PopTip setAlign(DialogXStyle.PopTipSettings.ALIGN align) {
         this.align = align;
         return this;
     }
-    
+
     public int getIconResId() {
         return iconResId;
     }
-    
+
     public PopTip setIconResId(int iconResId) {
         this.iconResId = iconResId;
         refreshUI();
         return this;
     }
-    
+
     public CharSequence getMessage() {
         return message;
     }
-    
+
     public PopTip setMessage(CharSequence message) {
         this.message = message;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setMessage(int messageResId) {
         this.message = getString(messageResId);
         refreshUI();
         return this;
     }
-    
+
     public CharSequence getButtonText() {
         return buttonText;
     }
-    
+
     public PopTip setButton(CharSequence buttonText) {
         this.buttonText = buttonText;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setButton(int buttonTextResId) {
         this.buttonText = getString(buttonTextResId);
         refreshUI();
         return this;
     }
-    
+
     public PopTip setButton(CharSequence buttonText, OnDialogButtonClickListener<PopTip> onButtonClickListener) {
         this.buttonText = buttonText;
         this.onButtonClickListener = onButtonClickListener;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setButton(int buttonTextResId, OnDialogButtonClickListener<PopTip> onButtonClickListener) {
         this.buttonText = getString(buttonTextResId);
         this.onButtonClickListener = onButtonClickListener;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setButton(OnDialogButtonClickListener<PopTip> onButtonClickListener) {
         this.onButtonClickListener = onButtonClickListener;
         return this;
     }
-    
+
     public TextInfo getMessageTextInfo() {
         return messageTextInfo;
     }
-    
+
     public PopTip setMessageTextInfo(TextInfo messageTextInfo) {
         this.messageTextInfo = messageTextInfo;
         refreshUI();
         return this;
     }
-    
+
     public TextInfo getButtonTextInfo() {
         return buttonTextInfo;
     }
-    
+
     public PopTip setButtonTextInfo(TextInfo buttonTextInfo) {
         this.buttonTextInfo = buttonTextInfo;
         refreshUI();
         return this;
     }
-    
+
     public OnDialogButtonClickListener<PopTip> getOnButtonClickListener() {
         return onButtonClickListener;
     }
-    
+
     public PopTip setOnButtonClickListener(OnDialogButtonClickListener<PopTip> onButtonClickListener) {
         this.onButtonClickListener = onButtonClickListener;
         return this;
     }
-    
+
     @Deprecated
     public boolean isAutoTintIconInLightOrDarkMode() {
         return isTintIcon();
     }
-    
+
     @Deprecated
     public PopTip setAutoTintIconInLightOrDarkMode(boolean autoTintIconInLightOrDarkMode) {
         setTintIcon(autoTintIconInLightOrDarkMode);
         return this;
     }
-    
+
     public OnDialogButtonClickListener<PopTip> getOnPopTipClickListener() {
         return onPopTipClickListener;
     }
-    
+
     public PopTip setOnPopTipClickListener(OnDialogButtonClickListener<PopTip> onPopTipClickListener) {
         this.onPopTipClickListener = onPopTipClickListener;
         refreshUI();
         return this;
     }
-    
+
     public int getBackgroundColor() {
         return backgroundColor;
     }
-    
+
     public PopTip setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setBackgroundColorRes(@ColorRes int backgroundColorResId) {
         this.backgroundColor = getColor(backgroundColorResId);
         refreshUI();
         return this;
     }
-    
+
     public long getEnterAnimDuration() {
         return enterAnimDuration;
     }
-    
+
     public PopTip setEnterAnimDuration(long enterAnimDuration) {
         this.enterAnimDuration = enterAnimDuration;
         return this;
     }
-    
+
     public long getExitAnimDuration() {
         return exitAnimDuration;
     }
-    
+
     public PopTip setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
     }
-    
+
     @Override
     public void restartDialog() {
         if (dialogView != null) {
@@ -986,7 +1012,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         if (getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
-        
+
         if (DialogX.onlyOnePopTip) {
             PopTip oldInstance = null;
             if (popTipList != null && !popTipList.isEmpty()) {
@@ -1005,7 +1031,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         }
         if (popTipList == null) popTipList = new ArrayList<>();
         popTipList.add(PopTip.this);
-        
+
         int layoutResId = isLightTheme() ? R.layout.layout_dialogx_poptip_material : R.layout.layout_dialogx_poptip_material_dark;
         if (style.popTipSettings() != null) {
             if (style.popTipSettings().layout(isLightTheme()) != 0) {
@@ -1039,42 +1065,42 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
-    
+
     private boolean isHide;
-    
+
     public void hide() {
         isHide = true;
         if (getDialogView() != null) {
             getDialogView().setVisibility(View.GONE);
         }
     }
-    
+
     public PopTip setAnimResId(int enterResId, int exitResId) {
         this.enterAnimResId = enterResId;
         this.exitAnimResId = exitResId;
         return this;
     }
-    
+
     public PopTip setEnterAnimResId(int enterResId) {
         this.enterAnimResId = enterResId;
         return this;
     }
-    
+
     public PopTip setExitAnimResId(int exitResId) {
         this.exitAnimResId = exitResId;
         return this;
     }
-    
+
     @Override
     protected void shutdown() {
         dismiss();
     }
-    
+
     public PopTip setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
         return this;
     }
-    
+
     public PopTip setMargin(int left, int top, int right, int bottom) {
         bodyMargin[0] = left;
         bodyMargin[1] = top;
@@ -1083,47 +1109,47 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         refreshUI();
         return this;
     }
-    
+
     public PopTip setMarginLeft(int left) {
         bodyMargin[0] = left;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setMarginTop(int top) {
         bodyMargin[1] = top;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setMarginRight(int right) {
         bodyMargin[2] = right;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setMarginBottom(int bottom) {
         bodyMargin[3] = bottom;
         refreshUI();
         return this;
     }
-    
+
     public int getMarginLeft() {
         return bodyMargin[0];
     }
-    
+
     public int getMarginTop() {
         return bodyMargin[1];
     }
-    
+
     public int getMarginRight() {
         return bodyMargin[2];
     }
-    
+
     public int getMarginBottom() {
         return bodyMargin[3];
     }
-    
+
     public PopTip iconSuccess() {
         setTintIcon(false);
         int resId = R.mipmap.ico_dialogx_success;
@@ -1133,7 +1159,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         setIconResId(resId);
         return this;
     }
-    
+
     public PopTip iconWarning() {
         setTintIcon(false);
         int resId = R.mipmap.ico_dialogx_warning;
@@ -1143,7 +1169,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         setIconResId(resId);
         return this;
     }
-    
+
     public PopTip iconError() {
         setTintIcon(false);
         int resId = R.mipmap.ico_dialogx_error;
@@ -1153,48 +1179,88 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         setIconResId(resId);
         return this;
     }
-    
+
     public boolean isTintIcon() {
         if (tintIcon == null && getStyle().popTipSettings() != null) {
             return getStyle().popTipSettings().tintIcon();
         }
         return tintIcon == BOOLEAN.TRUE;
     }
-    
+
     public PopTip setTintIcon(boolean tintIcon) {
         this.tintIcon = tintIcon ? BOOLEAN.TRUE : BOOLEAN.FALSE;
         refreshUI();
         return this;
     }
-    
+
     public PopTip setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
-    
+
     public float getRadius() {
         return backgroundRadius;
     }
-    
+
     public DialogXAnimInterface<PopTip> getDialogXAnimImpl() {
         return dialogXAnimImpl;
     }
-    
+
     public PopTip setDialogXAnimImpl(DialogXAnimInterface<PopTip> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
-    
+
     public PopTip setRootPadding(int padding) {
         this.screenPaddings = new int[]{padding, padding, padding, padding};
         refreshUI();
         return this;
     }
-    
+
     public PopTip setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
         return this;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new PopTip() {
+     *     @Override
+     *     public void onShow(PopTip dialog) {
+     *         //...
+     *     }
+     * }
+     *
+     * @param dialog self
+     */
+    public void onShow(PopTip dialog){
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new PopTip() {
+     *     @Override
+     *     public boolean onDismiss(PopTip dialog) {
+     *         WaitDialog.show("Please Wait...");
+     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     *             //点击了OK的情况
+     *             //...
+     *         } else {
+     *             //其他按钮点击、对话框dismiss的情况
+     *             //...
+     *         }
+     *         return false;
+     *     }
+     * }
+     * @param dialog self
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(PopTip dialog){
+
     }
 }

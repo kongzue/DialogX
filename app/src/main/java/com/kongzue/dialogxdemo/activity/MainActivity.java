@@ -1,5 +1,7 @@
 package com.kongzue.dialogxdemo.activity;
 
+import static com.kongzue.dialogx.dialogs.PopTip.tip;
+
 import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -313,6 +315,33 @@ public class MainActivity extends BaseActivity {
 //                }
 //            }
 //        });
+
+//        //复写事件演示
+//        new MessageDialog() {
+//            @Override
+//            public void onShow(MessageDialog dialog) {
+//                //...
+//                tip("onShow");
+//            }
+//
+//            @Override
+//            public void onDismiss(MessageDialog dialog) {
+//                WaitDialog.show("Please Wait...");
+//                if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+//                    //点击了OK的情况
+//                    //...
+//                } else {
+//                    //其他按钮点击、对话框dismiss的情况
+//                    //...
+//                }
+//                tip("onDismiss");
+//            }
+//        }
+//                .setTitle("Title")
+//                .setMessage("message")
+//                .setOkButton("OK")
+//                .setCancelButton("Cancel")
+//                .show();
     }
 
     //用于模拟进度提示
@@ -452,6 +481,8 @@ public class MainActivity extends BaseActivity {
         btnSelectMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                PopMenu.overrideEnterDuration = 500;
+                view.animate().x(0).setDuration(1000);
                 PopMenu.show(view, new String[]{"选项1", "选项2", "选项3"})
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
@@ -758,25 +789,26 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 BottomDialog.show(new OnBindView<BottomDialog>(rdoDark.isChecked() ? R.layout.layout_custom_reply_dark : R.layout.layout_custom_reply) {
-                    @Override
-                    public void onBind(final BottomDialog dialog, View v) {
-                        btnReplyCommit = v.findViewById(R.id.btn_reply_commit);
-                        editReplyCommit = v.findViewById(R.id.edit_reply_commit);
-                        btnReplyCommit.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                                PopTip.show("提交内容：\n" + editReplyCommit.getText().toString());
+                            public void onBind(final BottomDialog dialog, View v) {
+                                btnReplyCommit = v.findViewById(R.id.btn_reply_commit);
+                                editReplyCommit = v.findViewById(R.id.edit_reply_commit);
+                                btnReplyCommit.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                        PopTip.show("提交内容：\n" + editReplyCommit.getText().toString());
+                                    }
+                                });
+                                editReplyCommit.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        showIME(editReplyCommit);
+                                    }
+                                }, 300);
                             }
-                        });
-                        editReplyCommit.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                showIME(editReplyCommit);
-                            }
-                        }, 300);
-                    }
-                }).setAllowInterceptTouch(false);
+                        })
+                        .setAllowInterceptTouch(false);
             }
         });
 

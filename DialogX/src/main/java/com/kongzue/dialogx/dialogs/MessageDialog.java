@@ -346,6 +346,7 @@ public class MessageDialog extends BaseDialog {
                     
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
+                    MessageDialog.this.onShow(me);
                     
                     getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
                         @Override
@@ -400,6 +401,7 @@ public class MessageDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    MessageDialog.this.onDismiss(me);
                     dialogView = null;
                     dialogLifecycleCallback = null;
                     
@@ -1410,5 +1412,45 @@ public class MessageDialog extends BaseDialog {
 
     public BUTTON_SELECT_RESULT getButtonSelectResult() {
         return buttonSelectResult;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new MessageDialog() {
+     *     @Override
+     *     public void onShow(MessageDialog dialog) {
+     *         //...
+     *     }
+     * }
+     *
+     * @param dialog self
+     */
+    public void onShow(MessageDialog dialog){
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new MessageDialog() {
+     *     @Override
+     *     public boolean onDismiss(MessageDialog dialog) {
+     *         WaitDialog.show("Please Wait...");
+     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     *             //点击了OK的情况
+     *             //...
+     *         } else {
+     *             //其他按钮点击、对话框dismiss的情况
+     *             //...
+     *         }
+     *         return false;
+     *     }
+     * }
+     * @param dialog self
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(MessageDialog dialog){
+
     }
 }
