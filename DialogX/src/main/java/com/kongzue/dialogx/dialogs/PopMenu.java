@@ -87,6 +87,7 @@ public class PopMenu extends BaseDialog {
 
     //记录 baseView 位置
     protected DialogXViewLoc baseViewLoc = new DialogXViewLoc();
+    private int selectIndex;
 
     public PopMenu() {
         super();
@@ -207,7 +208,6 @@ public class PopMenu extends BaseDialog {
 
     private ViewTreeObserver viewTreeObserver;
     private ViewTreeObserver.OnDrawListener baseViewDrawListener;
-    private boolean isAnimRunning;
 
     public PopMenu show() {
         if (isHide && getDialogView() != null && isShow) {
@@ -251,9 +251,7 @@ public class PopMenu extends BaseDialog {
                         baseView.getLocationOnScreen(baseViewLocCache);
                         if (getDialogImpl() != null && !baseViewLoc.isSameLoc(baseViewLocCache)) {
                             baseViewLoc.set(baseViewLocCache);
-                            if (!isAnimRunning) {
-                                refreshMenuLoc();
-                            }
+                            refreshMenuLoc();
                         }
                     } else {
                         if (viewTreeObserver != null) {
@@ -268,16 +266,18 @@ public class PopMenu extends BaseDialog {
         return this;
     }
 
-    private void refreshMenuLoc(){
+    private void refreshMenuLoc() {
         if (getDialogImpl() == null || getDialogImpl().boxRoot == null) {
             return;
         }
+        getDialogImpl().boxBody.setTag(null);
         DialogXViewLoc loc = getMenuLoc();
+        getDialogImpl().boxBody.setTag(loc);
         if (loc.getX() != getDialogImpl().boxBody.getX()) {
             getDialogImpl().boxBody.setX(loc.getX());
         }
         if (loc.getY() != getDialogImpl().boxBody.getY()) {
-            getDialogImpl().boxBody.setY(loc.getY() );
+            getDialogImpl().boxBody.setY(loc.getY());
         }
         if (getDialogImpl().boxBody.getWidth() != loc.getW()) {
             RelativeLayout.LayoutParams rLp = new RelativeLayout.LayoutParams((int) loc.getW(), ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -286,6 +286,9 @@ public class PopMenu extends BaseDialog {
     }
 
     protected DialogXViewLoc getMenuLoc() {
+        if (getDialogImpl().boxBody.getTag() instanceof DialogXViewLoc) {
+            return (DialogXViewLoc) getDialogImpl().boxBody.getTag();
+        }
         DialogXViewLoc result = new DialogXViewLoc();
 
         MaxRelativeLayout boxBody = getDialogImpl().boxBody;
@@ -313,28 +316,60 @@ public class PopMenu extends BaseDialog {
                 //菜单覆盖在 baseView 上时
                 if (isAlignGravity(Gravity.TOP)) {
                     calY = (baseViewTop + baseView.getMeasuredHeight() - boxBody.getHeight());
+                    if (calX == 0) {
+                        calX = (Math.max(0, baseViewLeft + (
+                                getWidth() > 0 ? baseView.getMeasuredWidth() / 2 - getWidth() / 2 : 0
+                        )));
+                    }
                 }
                 if (isAlignGravity(Gravity.LEFT)) {
                     calX = Math.max(0, (baseViewLeft + baseView.getMeasuredWidth() - boxBody.getWidth()));
+                    if (calY == 0) {
+                        calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
+                    }
                 }
                 if (isAlignGravity(Gravity.RIGHT)) {
                     calX = baseViewLeft;
+                    if (calY == 0) {
+                        calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
+                    }
                 }
                 if (isAlignGravity(Gravity.BOTTOM)) {
                     calY = baseViewTop;
+                    if (calX == 0) {
+                        calX = (Math.max(0, baseViewLeft + (
+                                getWidth() > 0 ? baseView.getMeasuredWidth() / 2 - getWidth() / 2 : 0
+                        )));
+                    }
                 }
             } else {
                 if (isAlignGravity(Gravity.TOP)) {
                     calY = (Math.max(0, baseViewTop - boxBody.getHeight()));
+                    if (calX == 0) {
+                        calX = (Math.max(0, baseViewLeft + (
+                                getWidth() > 0 ? baseView.getMeasuredWidth() / 2 - getWidth() / 2 : 0
+                        )));
+                    }
                 }
                 if (isAlignGravity(Gravity.LEFT)) {
                     calX = Math.max(0, (baseViewLeft - boxBody.getWidth()));
+                    if (calY == 0) {
+                        calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
+                    }
                 }
                 if (isAlignGravity(Gravity.RIGHT)) {
                     calX = (Math.max(0, baseViewLeft + baseView.getWidth()));
+                    if (calY == 0) {
+                        calY = (Math.max(0, baseViewTop + baseView.getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
+                    }
                 }
                 if (isAlignGravity(Gravity.BOTTOM)) {
                     calY = (Math.max(0, baseViewTop + baseView.getHeight()));
+                    if (calX == 0) {
+                        calX = (Math.max(0, baseViewLeft + (
+                                getWidth() > 0 ? baseView.getMeasuredWidth() / 2 - getWidth() / 2 : 0
+                        )));
+                    }
                 }
             }
             if (!offScreen) {
@@ -487,6 +522,7 @@ public class PopMenu extends BaseDialog {
             listMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    selectIndex = position;
                     if (!closing) {
                         if (!getOnMenuItemClickListener().onClick(me, menuList.get(position), position)) {
                             dismiss();
@@ -648,8 +684,6 @@ public class PopMenu extends BaseDialog {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
                                     float animatedValue = (float) animation.getAnimatedValue();
-                                    isAnimRunning = animatedValue != 1f;
-
                                     DialogXViewLoc loc = getMenuLoc();
 
                                     int aimHeight = animatedValue == 1f ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) (targetHeight * animatedValue);
@@ -1155,25 +1189,34 @@ public class PopMenu extends BaseDialog {
         return pressedIndex;
     }
 
+    //设置已选择的菜单项（菜单背景会有选中状态的显示）
     public PopMenu setPressedIndex(int pressedIndex) {
         this.pressedIndex = pressedIndex;
         refreshUI();
         return this;
     }
 
+    public int getSelectIndex() {
+        return selectIndex;
+    }
+
+    public CharSequence getSelectMenuText() {
+        if (menuList == null) return "";
+        return menuList.get(selectIndex);
+    }
+
     /**
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new PopMenu() {
-     *     @Override
-     *     public void onShow(PopMenu dialog) {
-     *         //...
-     *     }
-     * }
      *
      * @param dialog self
+     * @Override public void onShow(PopMenu dialog) {
+     * //...
+     * }
+     * }
      */
-    public void onShow(PopMenu dialog){
+    public void onShow(PopMenu dialog) {
 
     }
 
@@ -1181,23 +1224,23 @@ public class PopMenu extends BaseDialog {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new PopMenu() {
-     *     @Override
-     *     public boolean onDismiss(PopMenu dialog) {
-     *         WaitDialog.show("Please Wait...");
-     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
-     *             //点击了OK的情况
-     *             //...
-     *         } else {
-     *             //其他按钮点击、对话框dismiss的情况
-     *             //...
-     *         }
-     *         return false;
-     *     }
-     * }
+     *
      * @param dialog self
+     * @Override public boolean onDismiss(PopMenu dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(PopMenu dialog){
+    public void onDismiss(PopMenu dialog) {
 
     }
 }

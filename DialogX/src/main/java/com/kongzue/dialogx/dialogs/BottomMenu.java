@@ -476,6 +476,8 @@ public class BottomMenu extends BottomDialog {
     
     public static final int ITEM_CLICK_DELAY = 100;
     private long lastClickTime = 0;
+    private int[] resultArray;
+    private CharSequence[] selectTextArray;
     
     @Override
     protected void onDialogShow() {
@@ -526,6 +528,7 @@ public class BottomMenu extends BottomDialog {
                         if (deltaY > dip2px(15)) {
                             return;
                         }
+                        selectionIndex = position;
                         switch (selectMode) {
                             case NONE:
                                 if (onMenuItemClickListener != null) {
@@ -542,7 +545,6 @@ public class BottomMenu extends BottomDialog {
                                     if (!onMenuItemSelectListener.onClick(me, menuList.get(position), position)) {
                                         dismiss();
                                     } else {
-                                        selectionIndex = position;
                                         menuListAdapter.notifyDataSetInvalidated();
                                         onMenuItemSelectListener.onOneItemSelect(me, menuList.get(position), position, true);
                                     }
@@ -568,8 +570,8 @@ public class BottomMenu extends BottomDialog {
                                             selectionItems.add(position);
                                         }
                                         menuListAdapter.notifyDataSetInvalidated();
-                                        int[] resultArray = new int[selectionItems.size()];
-                                        CharSequence[] selectTextArray = new CharSequence[selectionItems.size()];
+                                        resultArray               = new int[selectionItems.size()];
+                                        selectTextArray = new CharSequence[selectionItems.size()];
                                         for (int i = 0; i < selectionItems.size(); i++) {
                                             resultArray[i] = selectionItems.get(i);
                                             selectTextArray[i] = menuList.get(resultArray[i]);
@@ -1221,5 +1223,20 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setShowSelectedBackgroundTips(boolean showSelectedBackgroundTips) {
         this.showSelectedBackgroundTips = showSelectedBackgroundTips;
         return this;
+    }
+
+    //返回点击的菜单索引
+    public int getSelectionIndex() {
+        return selectionIndex;
+    }
+
+    //返回多选时，选择的菜单索引集合
+    public int[] getSelectionIndexArray() {
+        return resultArray;
+    }
+
+    //返回多选时，选择的菜单文本集合
+    public CharSequence[] getSelectTextArray() {
+        return selectTextArray;
     }
 }
