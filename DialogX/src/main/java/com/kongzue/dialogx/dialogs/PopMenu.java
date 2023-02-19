@@ -255,7 +255,7 @@ public class PopMenu extends BaseDialog {
                         }
                     } else {
                         if (viewTreeObserver != null) {
-                            viewTreeObserver.removeOnDrawListener(this);
+                            removeDrawListener(viewTreeObserver, this);
                             viewTreeObserver = null;
                             baseViewDrawListener = null;
                         }
@@ -621,10 +621,10 @@ public class PopMenu extends BaseDialog {
                                 if (value == 0f) {
                                     if (baseViewDrawListener != null) {
                                         if (viewTreeObserver != null) {
-                                            viewTreeObserver.removeOnDrawListener(baseViewDrawListener);
+                                            removeDrawListener(viewTreeObserver, baseViewDrawListener);
                                         } else {
                                             if (baseView != null) {
-                                                baseView.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                                                removeDrawListener(baseView.getViewTreeObserver(), baseViewDrawListener);
                                             }
                                         }
                                         baseViewDrawListener = null;
@@ -814,6 +814,16 @@ public class PopMenu extends BaseDialog {
         }
     }
 
+    private void removeDrawListener(ViewTreeObserver viewTreeObserver, ViewTreeObserver.OnDrawListener listener) {
+        if (viewTreeObserver == null || listener == null || !viewTreeObserver.isAlive()) {
+            return;
+        }
+        try {
+            viewTreeObserver.removeOnDrawListener(listener);
+        } catch (Exception e) {
+        }
+    }
+
     private int getBodyRealHeight() {
         if (getDialogImpl() == null) {
             return 0;
@@ -846,10 +856,10 @@ public class PopMenu extends BaseDialog {
         if (dialogView != null) {
             if (baseViewDrawListener != null) {
                 if (viewTreeObserver != null) {
-                    viewTreeObserver.removeOnDrawListener(baseViewDrawListener);
+                    removeDrawListener(viewTreeObserver, baseViewDrawListener);
                 } else {
                     if (baseView != null) {
-                        baseView.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                        removeDrawListener(baseView.getViewTreeObserver(), baseViewDrawListener);
                     }
                 }
                 baseViewDrawListener = null;

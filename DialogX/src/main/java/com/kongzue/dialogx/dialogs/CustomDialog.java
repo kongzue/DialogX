@@ -455,10 +455,10 @@ public class CustomDialog extends BaseDialog {
                                     if (boxRoot != null) boxRoot.setVisibility(View.GONE);
                                     if (baseViewDrawListener != null) {
                                         if (viewTreeObserver != null) {
-                                            viewTreeObserver.removeOnDrawListener(baseViewDrawListener);
+                                            removeDrawListener(viewTreeObserver, baseViewDrawListener);
                                         } else {
                                             if (boxCustom != null) {
-                                                boxCustom.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                                                removeDrawListener(boxCustom.getViewTreeObserver(), baseViewDrawListener);
                                             }
                                         }
                                         baseViewDrawListener = null;
@@ -539,6 +539,16 @@ public class CustomDialog extends BaseDialog {
                 };
             }
             return dialogXAnimImpl;
+        }
+    }
+
+    private void removeDrawListener(ViewTreeObserver viewTreeObserver, ViewTreeObserver.OnDrawListener listener) {
+        if (viewTreeObserver == null || listener == null || !viewTreeObserver.isAlive()) {
+            return;
+        }
+        try {
+            viewTreeObserver.removeOnDrawListener(listener);
+        } catch (Exception e) {
         }
     }
 
@@ -780,10 +790,10 @@ public class CustomDialog extends BaseDialog {
             if (getDialogImpl() != null && getDialogImpl().boxCustom != null) {
                 if (baseViewDrawListener != null) {
                     if (viewTreeObserver != null) {
-                        viewTreeObserver.removeOnDrawListener(baseViewDrawListener);
+                        removeDrawListener(viewTreeObserver, baseViewDrawListener);
                     } else {
                         if (getDialogImpl().boxCustom != null) {
-                            getDialogImpl().boxCustom.getViewTreeObserver().removeOnDrawListener(baseViewDrawListener);
+                            removeDrawListener(getDialogImpl().boxCustom.getViewTreeObserver(), baseViewDrawListener);
                         }
                     }
                     baseViewDrawListener = null;
@@ -1032,15 +1042,14 @@ public class CustomDialog extends BaseDialog {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new CustomDialog() {
-     *     @Override
-     *     public void onShow(CustomDialog dialog) {
-     *         //...
-     *     }
-     * }
      *
      * @param dialog self
+     * @Override public void onShow(CustomDialog dialog) {
+     * //...
+     * }
+     * }
      */
-    public void onShow(CustomDialog dialog){
+    public void onShow(CustomDialog dialog) {
 
     }
 
@@ -1048,23 +1057,23 @@ public class CustomDialog extends BaseDialog {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new CustomDialog() {
-     *     @Override
-     *     public boolean onDismiss(CustomDialog dialog) {
-     *         WaitDialog.show("Please Wait...");
-     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
-     *             //点击了OK的情况
-     *             //...
-     *         } else {
-     *             //其他按钮点击、对话框dismiss的情况
-     *             //...
-     *         }
-     *         return false;
-     *     }
-     * }
+     *
      * @param dialog self
+     * @Override public boolean onDismiss(CustomDialog dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(CustomDialog dialog){
+    public void onDismiss(CustomDialog dialog) {
 
     }
 }
