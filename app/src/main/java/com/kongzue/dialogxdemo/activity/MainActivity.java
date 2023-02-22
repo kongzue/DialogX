@@ -867,7 +867,6 @@ public class MainActivity extends BaseActivity {
         btnShowGuideBaseView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnFullScreenDialogLogin.animate().x(0).setDuration(3000);
                 GuideDialog.show(btnFullScreenDialogLogin, R.mipmap.img_tip_login)
                         .setBaseViewMarginTop(-dip2px(30));
             }
