@@ -19,6 +19,7 @@ import com.kongzue.dialogx.interfaces.BottomMenuListViewTouchEvent;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
+import com.kongzue.dialogx.interfaces.MenuItemLayoutRefreshCallback;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -57,6 +58,7 @@ public class BottomMenu extends BottomDialog {
     protected SELECT_MODE selectMode = SELECT_MODE.NONE;
     protected ArrayList<Integer> selectionItems;
     protected boolean showSelectedBackgroundTips = true;
+    protected MenuItemLayoutRefreshCallback<BottomMenu> menuMenuItemLayoutRefreshCallback;
     
     protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
     
@@ -1238,5 +1240,14 @@ public class BottomMenu extends BottomDialog {
     //返回多选时，选择的菜单文本集合
     public CharSequence[] getSelectTextArray() {
         return selectTextArray;
+    }
+    
+    public MenuItemLayoutRefreshCallback<BottomMenu> getMenuMenuItemLayoutRefreshCallback() {
+        return menuMenuItemLayoutRefreshCallback;
+    }
+    
+    public BottomMenu setMenuMenuItemLayoutRefreshCallback(MenuItemLayoutRefreshCallback<BottomMenu> menuMenuItemLayoutRefreshCallback) {
+        this.menuMenuItemLayoutRefreshCallback = menuMenuItemLayoutRefreshCallback;
+        return this;
     }
 }

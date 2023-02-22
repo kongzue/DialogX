@@ -147,6 +147,11 @@ public class PopMenuArrayAdapter extends BaseAdapter {
                 viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
             }
         }
+        
+        if (popMenu.getMenuMenuItemLayoutRefreshCallback() != null) {
+            popMenu.getMenuMenuItemLayoutRefreshCallback().getView(popMenu, position, convertView, parent);
+        }
+        
         return convertView;
     }
     
@@ -159,7 +164,5 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         ImageView imgDialogxMenuIcon;
         TextView txtDialogxMenuText;
         Space spaceDialogxRightPadding;
-        
-        
     }
 }

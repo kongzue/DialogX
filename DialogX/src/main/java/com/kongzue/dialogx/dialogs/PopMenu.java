@@ -32,6 +32,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
+import com.kongzue.dialogx.interfaces.MenuItemLayoutRefreshCallback;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
@@ -81,6 +82,7 @@ public class PopMenu extends BaseDialog {
     protected float backgroundRadius = -1;
     protected DialogXAnimInterface<PopMenu> dialogXAnimImpl;
     protected OnBackPressedListener<PopMenu> onBackPressedListener;
+    protected MenuItemLayoutRefreshCallback<PopMenu> menuMenuItemLayoutRefreshCallback;
     protected int pressedIndex = -1;
 
     protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
@@ -1252,5 +1254,14 @@ public class PopMenu extends BaseDialog {
     //用于使用 new 构建实例时，override 的生命周期事件
     public void onDismiss(PopMenu dialog) {
 
+    }
+    
+    public MenuItemLayoutRefreshCallback<PopMenu> getMenuMenuItemLayoutRefreshCallback() {
+        return menuMenuItemLayoutRefreshCallback;
+    }
+    
+    public PopMenu setMenuMenuItemLayoutRefreshCallback(MenuItemLayoutRefreshCallback<PopMenu> menuMenuItemLayoutRefreshCallback) {
+        this.menuMenuItemLayoutRefreshCallback = menuMenuItemLayoutRefreshCallback;
+        return this;
     }
 }

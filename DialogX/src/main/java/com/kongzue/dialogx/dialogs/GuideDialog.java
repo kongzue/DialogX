@@ -575,7 +575,6 @@ public class GuideDialog extends CustomDialog {
         if (Arrays.equals(baseViewLoc, baseViewLocCache)) {
             return;
         }
-        log("a:" + baseViewLoc[0]);
         if (getDialogImpl() == null) {
             return;
         }
