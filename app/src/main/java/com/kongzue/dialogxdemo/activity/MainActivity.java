@@ -107,7 +107,7 @@ import java.util.Random;
 @DarkNavigationBarTheme(true)
 @NavigationBarBackgroundColorRes(R.color.emptyNavBar)
 public class MainActivity extends BaseActivity {
-
+    
     private ConstraintLayout boxTitle;
     private TextView txtTitle;
     private ImageView btnShare;
@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity {
     private MaterialButton btnShowBreak;
     private MaterialButton btnListDialog;
     private TextView txtVer;
-
+    
     @Override
     public void initViews() {
         boxTitle = findViewById(R.id.box_title);
@@ -230,11 +230,11 @@ public class MainActivity extends BaseActivity {
         btnListDialog = findViewById(R.id.btn_listDialog);
         txtVer = findViewById(R.id.txt_ver);
     }
-
+    
     @Override
     public void initDatas(JumpParameter parameter) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
             getWindow().getDecorView().setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
                 @Override
@@ -247,7 +247,7 @@ public class MainActivity extends BaseActivity {
         } else {
             getRootView().setFitsSystemWindows(true);
         }
-
+        
         refreshUIMode();
         boolean showBreak = parameter.getBoolean("showBreak");
         if (showBreak) {
@@ -277,7 +277,7 @@ public class MainActivity extends BaseActivity {
                     })
                     .setCancelable(false);
         }
-
+        
         switch (DialogX.implIMPLMode) {
             case VIEW:
                 rdoModeView.setChecked(true);
@@ -292,7 +292,7 @@ public class MainActivity extends BaseActivity {
                 rdoModeFloatingActivity.setChecked(true);
                 break;
         }
-
+        
         txtVer.setText("当前版本：" + BuildConfig.VERSION_NAME);
 
 //        //合并处理演示，在 onDismiss 中获取用户选择进行统一处理，以防止编写大量可能在不同选择下都要处理的重复代码
@@ -343,15 +343,15 @@ public class MainActivity extends BaseActivity {
 //                .setCancelButton("Cancel")
 //                .show();
     }
-
+    
     //用于模拟进度提示
     private CycleRunner cycleRunner;
     private float progress = 0;
     private int waitId;
-
+    
     private TextView btnReplyCommit;
     private EditText editReplyCommit;
-
+    
     private TextView btnCancel;
     private TextView btnSubmit;
     private RelativeLayout boxUserName;
@@ -359,17 +359,17 @@ public class MainActivity extends BaseActivity {
     private RelativeLayout boxPassword;
     private EditText editPassword;
     private TextView btnLicense;
-
+    
     private TextView btnClose;
     private WebView webView;
-
+    
     private String[] singleSelectMenuText = new String[]{"拒绝", "询问", "始终允许", "仅在使用中允许"};
     private int selectMenuIndex;
-
+    
     private String[] multiSelectMenuText = new String[]{"上海", "北京", "广州", "深圳"};
     private int[] selectMenuIndexArray;
     private String multiSelectMenuResultCache;
-
+    
     @Override
     public void setEvents() {
         grpMode.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
@@ -392,7 +392,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
+        
         grpTheme.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
             @Override
             public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
@@ -409,7 +409,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
+        
         grpStyle.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
             @Override
             public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
@@ -436,14 +436,14 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
+        
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openUrl("https://github.com/kongzue/DialogX");
             }
         });
-
+        
         btnContextMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -477,7 +477,7 @@ public class MainActivity extends BaseActivity {
                         });
             }
         });
-
+        
         btnSelectMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -491,7 +491,7 @@ public class MainActivity extends BaseActivity {
                         });
             }
         });
-
+        
         btnFullScreenDialogFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -505,12 +505,12 @@ public class MainActivity extends BaseActivity {
                 FullScreenDialog.show(new OnBindView<FullScreenDialog>(customFragment) {
                     @Override
                     public void onBind(FullScreenDialog dialog, View v) {
-
+                    
                     }
                 });
             }
         });
-
+        
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -525,7 +525,7 @@ public class MainActivity extends BaseActivity {
                         });
             }
         });
-
+        
         btnSelectDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -537,7 +537,7 @@ public class MainActivity extends BaseActivity {
                 messageDialog.show();
             }
         });
-
+        
         btnInputDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -553,7 +553,7 @@ public class MainActivity extends BaseActivity {
                         .show();
             }
         });
-
+        
         btnWaitDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -573,11 +573,11 @@ public class MainActivity extends BaseActivity {
                 }, 1500);
             }
         });
-
+        
         btnWaitAndTipDialog.setOnClickListener(new View.OnClickListener() {
-
+            
             boolean closeFlag = false;
-
+            
             @Override
             public void onClick(View v) {
                 closeFlag = false;
@@ -603,28 +603,28 @@ public class MainActivity extends BaseActivity {
                 }, 1500 + new Random().nextInt(1000));
             }
         });
-
+        
         btnTipSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TipDialog.show("Success!", WaitDialog.TYPE.SUCCESS);
             }
         });
-
+        
         btnTipWarning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TipDialog.show("Warning!", WaitDialog.TYPE.WARNING);
             }
         });
-
+        
         btnTipError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TipDialog.show("Error!", WaitDialog.TYPE.ERROR);
             }
         });
-
+        
         btnTipProgress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -670,7 +670,7 @@ public class MainActivity extends BaseActivity {
                 }, 3000);
             }
         });
-
+        
         btnBottomDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -697,7 +697,7 @@ public class MainActivity extends BaseActivity {
                                 log("#onSlideClose");
                                 return super.onSlideClose(dialog);
                             }
-
+                            
                             @Override
                             public boolean onSlideTouchEvent(BottomDialog dialog, View v, MotionEvent event) {
                                 log("#onSlideTouchEvent: action=" + event.getAction() + " y=" + event.getY());
@@ -707,7 +707,7 @@ public class MainActivity extends BaseActivity {
                         .show();
             }
         });
-
+        
         btnBottomMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -782,7 +782,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
+        
         btnBottomReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -809,7 +809,7 @@ public class MainActivity extends BaseActivity {
                         .setAllowInterceptTouch(false);
             }
         });
-
+        
         btnCustomMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -817,12 +817,12 @@ public class MainActivity extends BaseActivity {
                         .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(MessageDialog dialog, View v) {
-
+                            
                             }
                         });
             }
         });
-
+        
         btnCustomInputDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -830,12 +830,12 @@ public class MainActivity extends BaseActivity {
                         .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(MessageDialog dialog, View v) {
-
+                            
                             }
                         });
             }
         });
-
+        
         btnCustomBottomMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -851,27 +851,28 @@ public class MainActivity extends BaseActivity {
                         .setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
-
+                            
                             }
                         });
             }
         });
-
+        
         btnShowGuide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GuideDialog.show(R.mipmap.img_guide_tip);
             }
         });
-
+        
         btnShowGuideBaseView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnFullScreenDialogLogin.animate().x(0).setDuration(3000);
                 GuideDialog.show(btnFullScreenDialogLogin, R.mipmap.img_tip_login)
                         .setBaseViewMarginTop(-dip2px(30));
             }
         });
-
+        
         btnShowGuideBaseViewRectangle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -897,14 +898,14 @@ public class MainActivity extends BaseActivity {
                         });
             }
         });
-
+        
         btnShowBreak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 jump(MainActivity.class, new JumpParameter().put("showBreak", true).put("fromActivity", getInstanceKey()));
             }
         });
-
+        
         btnListDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -937,15 +938,15 @@ public class MainActivity extends BaseActivity {
                 );
             }
         });
-
+        
         btnFullScreenDialogLogin.setOnClickListener(new View.OnClickListener() {
-
+            
             /**
              * 采用异步加载布局防止卡顿测试
              */
-
+            
             OnBindView<FullScreenDialog> onBindView;
-
+            
             @Override
             public void onClick(View v) {
                 onBindView = new OnBindView<FullScreenDialog>(R.layout.layout_full_login, true) {
@@ -958,14 +959,14 @@ public class MainActivity extends BaseActivity {
                         boxPassword = v.findViewById(R.id.box_password);
                         editPassword = v.findViewById(R.id.edit_password);
                         btnLicense = v.findViewById(R.id.btn_license);
-
+                        
                         initFullScreenLoginDemo(dialog);
                     }
                 };
                 FullScreenDialog.show(onBindView);
             }
         });
-
+        
         btnFullScreenDialogWebPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -974,14 +975,14 @@ public class MainActivity extends BaseActivity {
                             public void onBind(final FullScreenDialog dialog, View v) {
                                 btnClose = v.findViewById(R.id.btn_close);
                                 webView = v.findViewById(R.id.webView);
-
+                                
                                 btnClose.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         dialog.dismiss();
                                     }
                                 });
-
+                                
                                 WebSettings webSettings = webView.getSettings();
                                 webSettings.setJavaScriptEnabled(true);
                                 webSettings.setLoadWithOverviewMode(true);
@@ -991,7 +992,7 @@ public class MainActivity extends BaseActivity {
                                 webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
                                 webSettings.setLoadsImagesAutomatically(true);
                                 webSettings.setDefaultTextEncodingName("utf-8");
-
+                                
                                 webView.setWebViewClient(new WebViewClient() {
                                     @Override
                                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -1003,20 +1004,20 @@ public class MainActivity extends BaseActivity {
                                         }
                                         return true;
                                     }
-
+                                    
                                     @Override
                                     public void onPageFinished(WebView view, String url) {
                                         super.onPageFinished(view, url);
                                     }
                                 });
-
+                                
                                 webView.loadUrl("https://github.com/kongzue/DialogX");
                             }
                         })
                         .show();
             }
         });
-
+        
         btnCustomDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1081,14 +1082,14 @@ public class MainActivity extends BaseActivity {
                 ;
             }
         });
-
+        
         btnCustomDialogAlign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog_align) {
-
+                            
                             private TextView btnSelectPositive;
-
+                            
                             @Override
                             public void onBind(final CustomDialog dialog, View v) {
                                 btnSelectPositive = v.findViewById(R.id.btn_selectPositive);
@@ -1110,14 +1111,14 @@ public class MainActivity extends BaseActivity {
                         .show();
             }
         });
-
+        
         btnPoptip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopTip.show("这是一个提示");
             }
         });
-
+        
         btnPoptipBigMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1135,14 +1136,14 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-
+        
         btnPoptipSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopTip.show("操作已完成").iconSuccess();
             }
         });
-
+        
         btnPoptipWarning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1154,14 +1155,14 @@ public class MainActivity extends BaseActivity {
                 }).iconWarning();
             }
         });
-
+        
         btnPoptipError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopTip.show("无法连接网络").iconError();
             }
         });
-
+        
         btnBottomSelectMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1184,7 +1185,7 @@ public class MainActivity extends BaseActivity {
                         .setSelection(selectMenuIndex);
             }
         });
-
+        
         btnBottomMultiSelectMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1211,7 +1212,7 @@ public class MainActivity extends BaseActivity {
                         .setSelection(selectMenuIndexArray);
             }
         });
-
+        
         btnBottomCustomRecycleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1250,7 +1251,7 @@ public class MainActivity extends BaseActivity {
                         .show();
             }
         });
-
+        
         btnPopnotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1265,7 +1266,7 @@ public class MainActivity extends BaseActivity {
                         });
             }
         });
-
+        
         btnPopnotificationBigMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1283,7 +1284,7 @@ public class MainActivity extends BaseActivity {
                         .showLong();
             }
         });
-
+        
         btnPopnotificationOverlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1298,17 +1299,17 @@ public class MainActivity extends BaseActivity {
                         return;
                     }
                 }
-
+                
                 Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.img_demo_avatar);
                 notificationIndex++;
                 Toast.makeText(me, "会在1秒后显示悬浮窗！", Toast.LENGTH_LONG).show();
-
+                
                 //跳转到桌面
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-
+                
                 //等待一秒后显示
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
@@ -1332,9 +1333,9 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
+    
     int notificationIndex;
-
+    
     private void initFullScreenLoginDemo(final FullScreenDialog fullScreenDialog) {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1342,17 +1343,17 @@ public class MainActivity extends BaseActivity {
                 fullScreenDialog.dismiss();
             }
         });
-
+        
         btnCancel.setText("取消");
         btnSubmit.setText("下一步");
-
+        
         btnLicense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopTip.show("点击用户服务条款");
             }
         });
-
+        
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1361,29 +1362,29 @@ public class MainActivity extends BaseActivity {
                     TipDialog.show("请输入账号", TipDialog.TYPE.WARNING);
                     return;
                 }
-
+                
                 boxUserName.animate().x(-getDisplayWidth()).setDuration(300);
                 boxPassword.setX(getDisplayWidth());
                 boxPassword.setVisibility(View.VISIBLE);
                 boxPassword.animate().x(0).setDuration(300);
-
+                
                 editPassword.setFocusable(true);
                 editPassword.requestFocus();
-
+                
                 btnCancel.setText("上一步");
                 btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         boxUserName.animate().x(0).setDuration(300);
                         boxPassword.animate().x(getDisplayWidth()).setDuration(300);
-
+                        
                         editUserName.setFocusable(true);
                         editUserName.requestFocus();
-
+                        
                         initFullScreenLoginDemo(fullScreenDialog);
                     }
                 });
-
+                
                 btnSubmit.setText("登录");
                 btnSubmit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1410,13 +1411,13 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
-
+    
     @Override
     public void onBackPressed() {
         log("#MainActivity.onBackPressed");
         super.onBackPressed();
     }
-
+    
     public void showIME(EditText editText) {
         if (editText == null) {
             return;
@@ -1426,14 +1427,14 @@ public class MainActivity extends BaseActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editText, InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
-
+    
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         refreshUIMode();
-
+        
     }
-
+    
     /**
      * 刷新亮暗色模式界面变化
      */
