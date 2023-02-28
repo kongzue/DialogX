@@ -379,7 +379,7 @@ public class WaitDialog extends BaseDialog {
                 }
             });
             
-            if (readyTipType != null) {
+            if (readyTipType != null && readyTipType != TYPE.NONE) {
                 progressView.noLoading();
                 ((View) progressView).postDelayed(new Runnable() {
                     @Override

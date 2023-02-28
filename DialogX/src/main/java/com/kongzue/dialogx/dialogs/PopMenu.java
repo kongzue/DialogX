@@ -214,7 +214,9 @@ public class PopMenu extends BaseDialog {
     public PopMenu show() {
         if (isHide && getDialogView() != null && isShow) {
             if (hideWithExitAnim && getDialogImpl() != null) {
+                getDialogImpl().boxBody.clearAnimation();
                 getDialogView().setVisibility(View.VISIBLE);
+                getDialogImpl().boxRoot.animate().alpha(1f);
                 getDialogImpl().getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
                     @Override
                     public void run(Float value) {
@@ -685,6 +687,8 @@ public class PopMenu extends BaseDialog {
                             enterAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
+                                    if (!isShow || getDialogImpl() == null || getDialogImpl().boxBody == null)
+                                        return;
                                     float animatedValue = (float) animation.getAnimatedValue();
                                     DialogXViewLoc loc = getMenuLoc();
 
@@ -1106,6 +1110,7 @@ public class PopMenu extends BaseDialog {
 
     public PopMenu setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<PopMenu> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
+        refreshUI();
         return this;
     }
 
@@ -1148,7 +1153,6 @@ public class PopMenu extends BaseDialog {
             getDialogImpl().getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
                 @Override
                 public void run(Float value) {
-                    getDialogImpl().boxRoot.setBkgAlpha(value);
                     if (value == 0 && getDialogView() != null) {
                         getDialogView().setVisibility(View.GONE);
                     }
