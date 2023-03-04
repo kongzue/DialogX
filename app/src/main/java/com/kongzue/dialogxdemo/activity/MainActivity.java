@@ -521,7 +521,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public boolean onClick(MessageDialog baseDialog, View v) {
                                 PopTip.show("点击确定按钮");
-                                return false;
+                                return true;
                             }
                         });
             }
@@ -1034,6 +1034,7 @@ public class MainActivity extends BaseActivity {
                                 });
                             }
                         })
+                        //.setAnimResId(R.anim.anim_right_in, R.anim.anim_right_out)
                         .setMaskColor(getResources().getColor(R.color.black30))
                 //实现完全自定义动画效果
 //                        .setDialogXAnimImpl(new DialogXAnimInterface<CustomDialog>() {

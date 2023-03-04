@@ -1,7 +1,5 @@
 package com.kongzue.dialogx.util.views;
 
-import static android.view.WindowInsetsAnimation.Callback.DISPATCH_MODE_STOP;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -98,6 +96,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (parentDialog != null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
                 setFitsSystemWindows(true);
             }
+            setClipChildren(false);
+            setClipToPadding(false);
         }
     }
 

@@ -498,7 +498,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             }
 
             boxRoot.setParentDialog(me);
-            boxRoot.setAutoUnsafePlacePadding(false);
+            boxRoot.setAutoUnsafePlacePadding(true);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -534,7 +534,6 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 case BOTTOM:
                     rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
                     rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    boxRoot.setAutoUnsafePlacePadding(true);
                     break;
                 case CENTER:
                     rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -547,9 +546,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {
                 @Override
                 public void onChange(Rect unsafeRect) {
-                    if (align == DialogXStyle.PopTipSettings.ALIGN.TOP) {
-                        boxBody.setY(unsafeRect.top + bodyMargin[1]);
-                    } else if (align == DialogXStyle.PopTipSettings.ALIGN.TOP_INSIDE) {
+                    if (align == DialogXStyle.PopTipSettings.ALIGN.TOP_INSIDE) {
                         boxBody.setPadding(0, unsafeRect.top, 0, 0);
                     }
                 }
@@ -1228,15 +1225,14 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new PopTip() {
-     *     @Override
-     *     public void onShow(PopTip dialog) {
-     *         //...
-     *     }
-     * }
      *
      * @param dialog self
+     * @Override public void onShow(PopTip dialog) {
+     * //...
+     * }
+     * }
      */
-    public void onShow(PopTip dialog){
+    public void onShow(PopTip dialog) {
 
     }
 
@@ -1244,23 +1240,23 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new PopTip() {
-     *     @Override
-     *     public boolean onDismiss(PopTip dialog) {
-     *         WaitDialog.show("Please Wait...");
-     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
-     *             //点击了OK的情况
-     *             //...
-     *         } else {
-     *             //其他按钮点击、对话框dismiss的情况
-     *             //...
-     *         }
-     *         return false;
-     *     }
-     * }
+     *
      * @param dialog self
+     * @Override public boolean onDismiss(PopTip dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(PopTip dialog){
+    public void onDismiss(PopTip dialog) {
 
     }
 }
