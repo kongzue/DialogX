@@ -253,7 +253,7 @@ public class CustomDialog extends BaseDialog {
         
         @Override
         public void refreshView() {
-            if (boxRoot == null || getTopActivity() == null) {
+            if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
@@ -515,7 +515,7 @@ public class CustomDialog extends BaseDialog {
                         }
                         
                         if (boxCustom != null) {
-                            Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxCustom.getContext() : getTopActivity(), exitAnimResIdTemp);
+                            Animation exitAnim = AnimationUtils.loadAnimation(getOwnActivity() == null ? boxCustom.getContext() : getOwnActivity(), exitAnimResIdTemp);
                             exitAnimDurationTemp = exitAnim.getDuration();
                             if (overrideExitDuration >= 0) {
                                 exitAnimDurationTemp = overrideExitDuration;
@@ -588,7 +588,7 @@ public class CustomDialog extends BaseDialog {
                     exitAnimResId = R.anim.anim_dialogx_right_exit;
                     break;
             }
-            enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
+            enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResId);
             enterAnim.setInterpolator(new DecelerateInterpolator(2f));
         } else {
             int enterAnimResIdTemp = R.anim.anim_dialogx_default_enter;
@@ -598,7 +598,7 @@ public class CustomDialog extends BaseDialog {
             if (enterAnimResId != 0) {
                 enterAnimResIdTemp = enterAnimResId;
             }
-            enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResIdTemp);
+            enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResIdTemp);
         }
         long enterAnimDurationTemp = enterAnim.getDuration();
         if (overrideEnterDuration >= 0) {

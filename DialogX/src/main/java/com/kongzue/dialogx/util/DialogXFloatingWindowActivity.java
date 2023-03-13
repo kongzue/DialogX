@@ -24,24 +24,24 @@ import java.util.List;
  * @createTime: 2021/12/20 14:58
  */
 public class DialogXFloatingWindowActivity extends AppCompatActivity {
-    
+
     static WeakReference<DialogXFloatingWindowActivity> dialogXFloatingWindowActivity;
     int fromActivityHashCode;
     List<String> shownDialogXList = new ArrayList<>();
-    
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         dialogXFloatingWindowActivity = new WeakReference<>(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_dialogx_empty);
-        
+
         int fromActivityUiStatus = getIntent().getIntExtra("fromActivityUiStatus", 0);
         if (fromActivityUiStatus == 0) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         } else {
             getWindow().getDecorView().setSystemUiVisibility(fromActivityUiStatus | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         }
-        
+
         setFromActivityHashCode(getIntent().getIntExtra("from", 0));
         String dialogXKey;
         ActivityRunnable activityRunnable = BaseDialog.getActivityRunnable(dialogXKey = getIntent().getStringExtra("dialogXKey"));
@@ -51,24 +51,24 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
             shownDialogXList.add(dialogXKey);
             activityRunnable.run(this);
         }
-        
+
         getWindow().getDecorView().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() != MotionEvent.ACTION_CANCEL) {
-                    if (BaseDialog.getTopActivity() != null && !(BaseDialog.getTopActivity() instanceof DialogXFloatingWindowActivity)) {
-                        return ((Activity) BaseDialog.getTopActivity()).dispatchTouchEvent(event);
+                if (event.getAction() != MotionEvent.ACTION_CANCEL && getFromActivity() != null) {
+                    if (getFromActivity() != null && !(getFromActivity() instanceof DialogXFloatingWindowActivity)) {
+                        return getFromActivity().dispatchTouchEvent(event);
                     }
                 }
                 return false;
             }
         });
     }
-    
+
     public boolean isSameFrom(int fromActivityHashCode) {
         return fromActivityHashCode == this.fromActivityHashCode;
     }
-    
+
     public void showDialogX(String dialogXKey) {
         ActivityRunnable activityRunnable = BaseDialog.getActivityRunnable(dialogXKey);
         if (activityRunnable != null) {
@@ -76,21 +76,21 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
             activityRunnable.run(this);
         }
     }
-    
+
     public int getFromActivityHashCode() {
         return fromActivityHashCode;
     }
-    
+
     public DialogXFloatingWindowActivity setFromActivityHashCode(int fromActivityHashCode) {
         this.fromActivityHashCode = fromActivityHashCode;
         return this;
     }
-    
+
     public static DialogXFloatingWindowActivity getDialogXFloatingWindowActivity() {
         if (dialogXFloatingWindowActivity == null) return null;
         return dialogXFloatingWindowActivity.get();
     }
-    
+
     public void finish(String dialogXKey) {
         shownDialogXList.remove(dialogXKey);
         if (shownDialogXList.isEmpty()) {
@@ -105,7 +105,7 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
             }
         }
     }
-    
+
     public void finish() {
         if (dialogXFloatingWindowActivity != null) {
             dialogXFloatingWindowActivity.clear();
@@ -117,15 +117,29 @@ public class DialogXFloatingWindowActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
         }
     }
-    
+
     boolean isScreenshot;
-    
+
     public boolean isScreenshot() {
         return isScreenshot;
     }
-    
+
     public DialogXFloatingWindowActivity setScreenshot(boolean screenshot) {
         isScreenshot = screenshot;
+        return this;
+    }
+
+    /**
+     * 原始用户操作界面
+     */
+    WeakReference<Activity> fromActivity;
+
+    public Activity getFromActivity() {
+        return fromActivity == null ? null : fromActivity.get();
+    }
+
+    public DialogXFloatingWindowActivity setFromActivity(Activity fromActivity) {
+        this.fromActivity = new WeakReference<>(fromActivity);
         return this;
     }
 }

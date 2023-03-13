@@ -521,7 +521,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public boolean onClick(MessageDialog baseDialog, View v) {
                                 PopTip.show("点击确定按钮");
-                                return true;
+                                return false;
                             }
                         });
             }
@@ -973,6 +973,7 @@ public class MainActivity extends BaseActivity {
                 FullScreenDialog.build(new OnBindView<FullScreenDialog>(R.layout.layout_full_webview) {
                             @Override
                             public void onBind(final FullScreenDialog dialog, View v) {
+
                                 btnClose = v.findViewById(R.id.btn_close);
                                 webView = v.findViewById(R.id.webView);
 
@@ -1445,5 +1446,11 @@ public class MainActivity extends BaseActivity {
         } else {
             setDarkStatusBarTheme(false);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        log("MainActivity#onDestroy");
     }
 }

@@ -290,9 +290,9 @@ public class WaitDialog extends BaseDialog {
             bkg = dialogView.findViewById(R.id.bkg);
             blurView = dialogView.findViewById(R.id.blurView);
             boxProgress = dialogView.findViewById(R.id.box_progress);
-            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getTopActivity(), isLightTheme());
+            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getOwnActivity(), isLightTheme());
             if (progressViewCache == null) {
-                progressViewCache = new ProgressView(getTopActivity());
+                progressViewCache = new ProgressView(getOwnActivity());
             }
             progressView = (ProgressViewInterface) progressViewCache;
             boxProgress.addView(progressViewCache, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -309,9 +309,9 @@ public class WaitDialog extends BaseDialog {
             bkg = convertView.findViewById(R.id.bkg);
             blurView = convertView.findViewById(R.id.blurView);
             boxProgress = convertView.findViewById(R.id.box_progress);
-            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getTopActivity(), isLightTheme());
+            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getOwnActivity(), isLightTheme());
             if (progressViewCache == null) {
-                progressViewCache = new ProgressView(getTopActivity());
+                progressViewCache = new ProgressView(getOwnActivity());
             }
             progressView = (ProgressViewInterface) progressViewCache;
             boxProgress.addView(progressViewCache, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -344,7 +344,7 @@ public class WaitDialog extends BaseDialog {
                     bkg.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (getTopActivity() == null) return;
+                            if (getOwnActivity() == null) return;
                             
                             getDialogXAnimImpl().doShowAnim(WaitDialog.this, new ObjectRunnable<Float>() {
                                 @Override
@@ -410,7 +410,7 @@ public class WaitDialog extends BaseDialog {
         private float oldProgress;
         
         public void refreshView() {
-            if (boxRoot == null || getTopActivity() == null) {
+            if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
@@ -511,7 +511,7 @@ public class WaitDialog extends BaseDialog {
         
         public void doDismiss(final View v) {
             if (boxRoot == null) return;
-            if (getTopActivity() == null) return;
+            if (getOwnActivity() == null) return;
             
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
@@ -550,7 +550,7 @@ public class WaitDialog extends BaseDialog {
                         if (customEnterAnimResId != 0) {
                             enterAnimResId = customEnterAnimResId;
                         }
-                        Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
+                        Animation enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResId);
                         long enterAnimDurationTemp = enterAnim.getDuration();
                         enterAnim.setInterpolator(new DecelerateInterpolator());
                         if (overrideEnterDuration >= 0) {
@@ -581,7 +581,7 @@ public class WaitDialog extends BaseDialog {
                     
                     @Override
                     public void doExitAnim(WaitDialog dialog, ObjectRunnable<Float> animProgress) {
-                        Context context = getTopActivity();
+                        Context context = getOwnActivity();
                         if (context == null) context = boxRoot.getContext();
                         if (context == null) return;
                         

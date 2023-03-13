@@ -584,7 +584,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
         @Override
         public void refreshView() {
-            if (boxRoot == null || getTopActivity() == null) {
+            if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
@@ -676,7 +676,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 dialogXAnimImpl = new DialogXAnimInterface<PopTip>() {
                     @Override
                     public void doShowAnim(PopTip dialog, ObjectRunnable<Float> animProgress) {
-                        Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_default_enter : enterAnimResId);
+                        Animation enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_default_enter : enterAnimResId);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                         if (enterAnimDuration != -1) {
                             enterAnim.setDuration(enterAnimDuration);
@@ -693,7 +693,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
                     @Override
                     public void doExitAnim(PopTip dialog, ObjectRunnable<Float> animProgress) {
-                        Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxRoot.getContext() : getTopActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
+                        Animation exitAnim = AnimationUtils.loadAnimation(getOwnActivity() == null ? boxRoot.getContext() : getOwnActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
                         }

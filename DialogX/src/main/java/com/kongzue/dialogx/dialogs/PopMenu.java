@@ -446,7 +446,7 @@ public class PopMenu extends BaseDialog {
         public void init() {
             closing = false;
             if (menuListAdapter == null) {
-                menuListAdapter = new PopMenuArrayAdapter(me, getTopActivity(), menuList);
+                menuListAdapter = new PopMenuArrayAdapter(me, getOwnActivity(), menuList);
             }
 
             boxRoot.setParentDialog(me);
@@ -539,7 +539,7 @@ public class PopMenu extends BaseDialog {
 
         @Override
         public void refreshView() {
-            if (boxRoot == null || getTopActivity() == null) {
+            if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
@@ -547,7 +547,7 @@ public class PopMenu extends BaseDialog {
                 listMenu.setAdapter(menuListAdapter);
             } else {
                 if (menuListAdapter.getMenuList() != menuList) {
-                    menuListAdapter = new PopMenuArrayAdapter(me, getTopActivity(), menuList);
+                    menuListAdapter = new PopMenuArrayAdapter(me, getOwnActivity(), menuList);
                     listMenu.setAdapter(menuListAdapter);
                 } else {
                     menuListAdapter.notifyDataSetChanged();
@@ -793,7 +793,7 @@ public class PopMenu extends BaseDialog {
                         if (overrideExitDuration != -1) {
                             exitAnimDuration = overrideExitDuration;
                         }
-                        Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxRoot.getContext() : getTopActivity(), R.anim.anim_dialogx_default_exit);
+                        Animation exitAnim = AnimationUtils.loadAnimation(getOwnActivity() == null ? boxRoot.getContext() : getOwnActivity(), R.anim.anim_dialogx_default_exit);
                         if (exitAnimDuration != -1) {
                             exitAnim.setDuration(exitAnimDuration);
                         }

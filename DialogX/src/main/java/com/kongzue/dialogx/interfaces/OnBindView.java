@@ -182,15 +182,15 @@ public abstract class OnBindView<D> {
             getCustomView().post(new Runnable() {
                 @Override
                 public void run() {
-                    if (fragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof AppCompatActivity) {
-                        AppCompatActivity appCompatActivity = (AppCompatActivity) BaseDialog.getTopActivity();
+                    if (fragment != null && getCustomView() instanceof FrameLayout && dialog.getOwnActivity() instanceof AppCompatActivity) {
+                        AppCompatActivity appCompatActivity = (AppCompatActivity) dialog.getOwnActivity();
                         androidx.fragment.app.FragmentTransaction transaction = appCompatActivity.getSupportFragmentManager().beginTransaction();
                         transaction.add(getFragmentParentId(), fragment);
                         transaction.commit();
                         onFragmentBind((D) dialog, getCustomView(), fragment, appCompatActivity.getSupportFragmentManager());
                     }
-                    if (supportFragment != null && getCustomView() instanceof FrameLayout && BaseDialog.getTopActivity() instanceof Activity) {
-                        Activity activity = (Activity) BaseDialog.getTopActivity();
+                    if (supportFragment != null && getCustomView() instanceof FrameLayout && dialog.getOwnActivity() instanceof Activity) {
+                        Activity activity = dialog.getOwnActivity();
                         android.app.FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
                         transaction.add(getFragmentParentId(), supportFragment);
                         transaction.commit();

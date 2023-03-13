@@ -145,9 +145,7 @@ public class ActivityScreenShotImageView extends ImageView {
             return ((Activity) getContext()).getWindow().getDecorView();
         }else{
             if (topActivity instanceof DialogXFloatingWindowActivity) {
-                if (((DialogXFloatingWindowActivity) topActivity).isScreenshot()) {
-                    return topActivity.getWindow().getDecorView();
-                }
+                return ((DialogXFloatingWindowActivity) topActivity).getFromActivity().getWindow().getDecorView();
             }
             return topActivity.getWindow().getDecorView();
         }

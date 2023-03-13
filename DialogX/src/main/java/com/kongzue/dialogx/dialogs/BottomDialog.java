@@ -483,7 +483,7 @@ public class BottomDialog extends BaseDialog {
 
         @Override
         public void refreshView() {
-            if (boxRoot == null || getTopActivity() == null) {
+            if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
@@ -613,7 +613,7 @@ public class BottomDialog extends BaseDialog {
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
-            if (getTopActivity() == null) return;
+            if (getOwnActivity() == null) return;
 
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;

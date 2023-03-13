@@ -132,6 +132,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (insets.getSystemWindowInsetLeft() == 0 && insets.getSystemWindowInsetTop() == 0 && insets.getSystemWindowInsetRight() == 0 && insets.getSystemWindowInsetBottom() == 0) {
+                getWindowInsetsByDisplayMetrics();
+                return;
+            }
             paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
         }
     }
@@ -165,7 +169,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
             ViewCompat.requestApplyInsets(this);
 
-            if (BaseDialog.getTopActivity() == null) return;
+            if (parentDialog.getOwnActivity() == null) return;
 
             View decorView = (View) getParent();
             if (decorView != null) {
@@ -242,14 +246,18 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             paddingView(getRootWindowInsets());
         } else {
-            if (BaseDialog.getTopActivity() == null) return;
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            ((Activity) BaseDialog.getTopActivity()).getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
-            Rect rect = new Rect();
-            View decorView = (View) getParent();
-            decorView.getWindowVisibleDisplayFrame(rect);
-            paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
+            getWindowInsetsByDisplayMetrics();
         }
+    }
+
+    private void getWindowInsetsByDisplayMetrics() {
+        if (parentDialog.getOwnActivity() == null) return;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        parentDialog.getOwnActivity().getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
+        Rect rect = new Rect();
+        View decorView = (View) getParent();
+        decorView.getWindowVisibleDisplayFrame(rect);
+        paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
     }
 
     @Override
