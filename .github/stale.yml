@@ -1,0 +1,20 @@
+# Number of days of inactivity before an issue becomes stale
+daysUntilStale: 15
+# Number of days of inactivity before a stale issue is closed
+daysUntilClose: 7
+# Issues with these labels will never be considered stale
+exemptLabels:
+  - pinned
+  - security
+  - bug
+  - 待处理
+  - 已处理
+  - 等待反馈
+  - 问题重复
+# Label to use when marking an issue as stale
+staleLabel: 等待反馈
+# Comment to post when marking an issue as stale. Set to `false` to disable
+markComment: >
+  长时间未收到回复暂时关闭了此问题，若有疑问请继续回复。此消息来自于自动化 Issues 处理 Bot，若问题严重或紧急你也可以通过反馈群联系到我：590498789
+# Comment to post when closing a stale issue. Set to `false` to disable
+closeComment: false
