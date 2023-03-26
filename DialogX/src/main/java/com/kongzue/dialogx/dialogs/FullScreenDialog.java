@@ -173,7 +173,7 @@ public class FullScreenDialog extends BaseDialog {
                     isShow = true;
                     preShow = false;
 
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
                     onDialogShow();
 
                     getDialogLifecycleCallback().onShow(me);
@@ -188,7 +188,7 @@ public class FullScreenDialog extends BaseDialog {
                     fullScreenDialogTouchEventInterceptor = null;
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -225,7 +225,7 @@ public class FullScreenDialog extends BaseDialog {
                 @Override
                 public void run() {
                     getDialogXAnimImpl().doShowAnim(me, null);
-                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                    setLifecycleState(Lifecycle.State.RESUMED);
                 }
             });
             boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {

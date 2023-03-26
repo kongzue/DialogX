@@ -277,7 +277,6 @@ public abstract class BaseDialog implements LifecycleOwner {
                 error(((BaseDialog) view.getTag()).dialogKey() + ".show ERROR: activity is Destroyed.");
                 return;
             }
-            baseDialog.ownActivity = new WeakReference<>(activity);
             baseDialog.dialogView = new WeakReference<>(view);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -360,6 +359,10 @@ public abstract class BaseDialog implements LifecycleOwner {
                     break;
             }
         }
+    }
+
+    private void setOwnActivity(Activity activity) {
+        ownActivity = new WeakReference<>(activity);
     }
 
     protected static void dismiss(final View dialogView) {
@@ -598,7 +601,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     public FrameLayout getRootFrameLayout() {
         Activity activity = getOwnActivity();
         if (activity == null) {
-            activity = getOwnActivity();
+            activity = getTopActivity();
         }
         rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
         return rootFrameLayout.get();
@@ -622,7 +625,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected void beforeShow() {
         preShow = true;
         dismissAnimFlag = false;
-        ownActivity = new WeakReference<>(getTopActivity());
+        setOwnActivity(getTopActivity());
         if (getOwnActivity() == null) {
             //尝试重新获取 activity
             init(null);
@@ -714,7 +717,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     public Activity getOwnActivity() {
-        return ownActivity == null ? null : ownActivity.get();
+        return ownActivity == null ? getTopActivity() : ownActivity.get();
     }
 
     protected void cleanActivityContext() {
@@ -902,5 +905,13 @@ public abstract class BaseDialog implements LifecycleOwner {
             return DialogX.dialogMinHeight;
         }
         return minHeight;
+    }
+
+    protected void setLifecycleState(Lifecycle.State s) {
+        if (lifecycle == null || s == null) return;
+        try {
+            lifecycle.setCurrentState(s);
+        } catch (Exception e) {
+        }
     }
 }

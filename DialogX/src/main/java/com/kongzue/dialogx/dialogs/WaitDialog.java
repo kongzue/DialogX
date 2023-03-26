@@ -339,7 +339,7 @@ public class WaitDialog extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
                     boxRoot.setAlpha(0f);
                     bkg.post(new Runnable() {
                         @Override
@@ -357,7 +357,7 @@ public class WaitDialog extends BaseDialog {
                             getDialogLifecycleCallback().onShow(WaitDialog.this);
                             WaitDialog.this.onShow(WaitDialog.this);
                             
-                            lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                            setLifecycleState(Lifecycle.State.RESUMED);
                         }
                     });
                 }
@@ -374,7 +374,7 @@ public class WaitDialog extends BaseDialog {
                     dialogLifecycleCallback = null;
                     if (me != null) me.clear();
                     me = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -682,7 +682,7 @@ public class WaitDialog extends BaseDialog {
             });
         }
     }
-    
+
     private void setDialogImpl(DialogImpl d) {
         if (dialogImpl != null && dialogImpl.get() != d) dialogImpl = new WeakReference<>(d);
     }

@@ -188,7 +188,7 @@ public class CustomDialog extends BaseDialog {
                     isShow = true;
                     preShow = false;
                     
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
                     
                     getDialogLifecycleCallback().onShow(me);
                     CustomDialog.this.onShow(me);
@@ -204,7 +204,7 @@ public class CustomDialog extends BaseDialog {
                     CustomDialog.this.onDismiss(me);
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -241,7 +241,7 @@ public class CustomDialog extends BaseDialog {
                         getDialogImpl().boxCustom.setVisibility(View.VISIBLE);
                     }
                     
-                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                    setLifecycleState(Lifecycle.State.RESUMED);
                 }
             });
             

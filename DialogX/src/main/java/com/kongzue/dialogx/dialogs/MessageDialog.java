@@ -342,7 +342,7 @@ public class MessageDialog extends BaseDialog {
                     isShow = true;
                     preShow = false;
                     
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
                     
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
@@ -369,7 +369,7 @@ public class MessageDialog extends BaseDialog {
                                 blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 bkg.addView(blurView, 0, params);
                                 
-                                lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                                setLifecycleState(Lifecycle.State.RESUMED);
                             }
                         });
                     }
@@ -405,7 +405,7 @@ public class MessageDialog extends BaseDialog {
                     dialogView = null;
                     dialogLifecycleCallback = null;
                     
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

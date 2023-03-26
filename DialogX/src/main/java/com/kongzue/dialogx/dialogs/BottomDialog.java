@@ -343,7 +343,7 @@ public class BottomDialog extends BaseDialog {
                     isShow = true;
                     preShow = false;
 
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
                     getDialogLifecycleCallback().onShow(me);
                     BottomDialog.this.onShow(me);
 
@@ -370,7 +370,7 @@ public class BottomDialog extends BaseDialog {
                                 cancelBlurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 boxCancel.addView(cancelBlurView, 0, cancelButtonLp);
                             }
-                            lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                            setLifecycleState(Lifecycle.State.RESUMED);
                         }
                     });
 
@@ -385,7 +385,7 @@ public class BottomDialog extends BaseDialog {
                     dialogImpl = null;
                     bottomDialogTouchEventInterceptor = null;
                     dialogLifecycleCallback = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

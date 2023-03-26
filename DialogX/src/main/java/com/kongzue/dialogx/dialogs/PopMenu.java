@@ -455,7 +455,7 @@ public class PopMenu extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
                     onDialogShow();
                     getDialogLifecycleCallback().onShow(me);
                     PopMenu.this.onShow(me);
@@ -471,7 +471,7 @@ public class PopMenu extends BaseDialog {
                     dialogImpl = null;
                     baseView = null;
                     dialogLifecycleCallback = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -504,7 +504,7 @@ public class PopMenu extends BaseDialog {
                             boxRoot.setBkgAlpha(value);
                         }
                     });
-                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                    setLifecycleState(Lifecycle.State.RESUMED);
                 }
             });
 

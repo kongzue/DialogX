@@ -542,7 +542,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                     isShow = true;
                     preShow = false;
 
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
                     boxRoot.setAlpha(0f);
 
                     onDialogShow();
@@ -559,7 +559,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                     getDialogLifecycleCallback().onDismiss(me);
                     PopNotification.this.onDismiss(me);
                     dialogImpl = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -637,7 +637,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                         blurBody.setContentView(boxBody);
                         blurBody.addView(blurView, 0, params);
                     }
-                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                    setLifecycleState(Lifecycle.State.RESUMED);
                 }
             });
 
