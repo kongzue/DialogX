@@ -641,6 +641,19 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 }
             });
 
+            boxBody.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onPopNotificationClickListener != null) {
+                        if (!onPopNotificationClickListener.onClick(me, v)) {
+                            dismiss();
+                        }
+                    } else {
+                        dismiss();
+                    }
+                }
+            });
+
             txtDialogxButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -729,19 +742,6 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 imgDialogxPopIcon.setLayoutParams(iLp);
             }
 
-            boxBody.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onPopNotificationClickListener != null) {
-                        if (!onPopNotificationClickListener.onClick(me, v)) {
-                            dismiss();
-                        }
-                    } else {
-                        dismiss();
-                    }
-                }
-            });
-
             if (slideToClose) {
                 boxBody.setOnTouchListener(new View.OnTouchListener() {
 
@@ -794,7 +794,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                                 }
                                 break;
                         }
-                        return true;
+                        return false;
                     }
                 });
             } else {

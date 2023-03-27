@@ -1152,6 +1152,7 @@ public class MainActivity extends BaseActivity {
                 PopTip.show("存储空间不足").setButton("立即清理", new OnDialogButtonClickListener<PopTip>() {
                     @Override
                     public boolean onClick(PopTip baseDialog, View v) {
+                        toast("点击了立即清理");
                         return false;
                     }
                 }).iconWarning();
@@ -1279,7 +1280,7 @@ public class MainActivity extends BaseActivity {
                         .setButton("回复", new OnDialogButtonClickListener<PopNotification>() {
                             @Override
                             public boolean onClick(PopNotification baseDialog, View v) {
-                                PopTip.show("点击回复按钮");
+                                toast("点击回复按钮");
                                 return false;
                             }
                         })
