@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.util.views;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,7 +29,8 @@ import java.util.Objects;
  * @mail: myzcxhh@live.cn
  * @createTime: 2019/11/17 23:53
  */
-public class ActivityScreenShotImageView extends androidx.appcompat.widget.AppCompatImageView {
+@SuppressLint("AppCompatCustomView")
+public class ActivityScreenShotImageView extends ImageView {
 
     float width, height, mRadius;
 
