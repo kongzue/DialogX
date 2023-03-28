@@ -9,18 +9,17 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-
-import androidx.appcompat.widget.AppCompatImageView;
 
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 
 /**
  * @author: Kongzue
@@ -29,43 +28,43 @@ import java.lang.ref.WeakReference;
  * @mail: myzcxhh@live.cn
  * @createTime: 2019/11/17 23:53
  */
-public class ActivityScreenShotImageView extends ImageView {
-    
+public class ActivityScreenShotImageView extends androidx.appcompat.widget.AppCompatImageView {
+
     float width, height, mRadius;
-    
+
     public ActivityScreenShotImageView(Context context) {
         super(context);
         init(null);
     }
-    
+
     public ActivityScreenShotImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
-    
+
     public ActivityScreenShotImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
-    
+
     private void init(AttributeSet attrs) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             setLayerType(LAYER_TYPE_HARDWARE, null);
         }
     }
-    
+
     public void setRadius(float mRadius) {
         this.mRadius = mRadius;
         invalidate();
     }
-    
+
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         width = getWidth();
         height = getHeight();
     }
-    
+
     @Override
     protected void onDraw(Canvas canvas) {
         if (width >= mRadius && height > mRadius) {
@@ -82,7 +81,7 @@ public class ActivityScreenShotImageView extends ImageView {
             path.quadTo(0, height, 0, height - mRadius);
             path.lineTo(0, mRadius);
             path.quadTo(0, 0, mRadius, 0);
-            
+
             canvas.clipPath(path);
         }
         try {
@@ -91,16 +90,15 @@ public class ActivityScreenShotImageView extends ImageView {
         } catch (Exception e) {
         }
     }
-    
-    
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (isAttachedToWindow() && !isScreenshotSuccess) refreshImage();
     }
-    
+
     private int screenWidth, screenHeight;
-    
+
     private void refreshImage() {
         if (screenWidth != getMeasuredWidth() || screenHeight != getMeasuredHeight()) {
             screenWidth = getMeasuredWidth();
@@ -108,12 +106,17 @@ public class ActivityScreenShotImageView extends ImageView {
             doScreenshotActivityAndZoom();
         }
     }
-    
+
     private void doScreenshotActivityAndZoom() {
-        View contentView = getContentView();
-        if (contentView == null) {
-            return;
-        }
+        ViewGroup decorView = getDecorView();
+        if (decorView == null) return;
+//        View lastChildView = decorView.getChildAt(decorView.getChildCount() - 1);
+//        Log.e(">>>", "lastChildView: \t"+lastChildView );
+//        Log.e(">>>", "dialog.getDialogView: \t"+dialog.getDialogView() );
+//        if (lastChildView == dialog.getDialogView()) {
+//            decorView = (ViewGroup) decorView.getChildAt(0);
+//        }
+        View contentView = decorView;
         //先执行一次绘制，防止出现闪屏问题
         if (!inited) drawViewImage(contentView);
         contentView.post(new Runnable() {
@@ -125,39 +128,30 @@ public class ActivityScreenShotImageView extends ImageView {
             }
         });
     }
-    
-    private View getContentView() {
+
+    private ViewGroup getDecorView() {
+        if (dialog != null) {
+            Activity ownActivity = dialog.getOwnActivity();
+            return (ViewGroup) ownActivity.getWindow().getDecorView();
+        }
         Activity topActivity = ActivityLifecycleImpl.getTopActivity();
-        if (topActivity == null) {
-            return null;
-        }
-//        for (int i = BaseDialog.getRunningDialogList().size() - 1; i >= 0; i--) {
-//            BaseDialog baseDialog = BaseDialog.getRunningDialogList().get(i);
-//            if (!(baseDialog instanceof PopTip) && baseDialog.getActivity() == activity) {
-//                if (baseDialog.getDialogView() == null) {
-//                    return false;
-//                }
-//                return baseDialog.getDialogView().dispatchTouchEvent(event);
-//            }
-//        }
-        
-        if (getContext() instanceof Activity) {
-            return ((Activity) getContext()).getWindow().getDecorView();
-        }else{
+        if (topActivity != null) {
             if (topActivity instanceof DialogXFloatingWindowActivity) {
-                return ((DialogXFloatingWindowActivity) topActivity).getFromActivity().getWindow().getDecorView();
+                return (ViewGroup) ((DialogXFloatingWindowActivity) topActivity).getFromActivity().getWindow().getDecorView();
             }
-            return topActivity.getWindow().getDecorView();
+            return (ViewGroup) topActivity.getWindow().getDecorView();
         }
+        return null;
     }
-    
+
     private boolean inited = false;
     private boolean isScreenshotSuccess;
     private WeakReference<View> contentView;
     public static boolean hideContentView = false;
-    
+
     private void drawViewImage(View view) {
         if (view.getWidth() == 0 || view.getHeight() == 0) return;
+        dialog.getDialogView().setVisibility(GONE);
         view.buildDrawingCache();
         Rect rect = new Rect();
         view.getWindowVisibleDisplayFrame(rect);
@@ -168,13 +162,14 @@ public class ActivityScreenShotImageView extends ImageView {
             if (contentView != null && contentView.get() != null) {
                 contentView.get().setVisibility(VISIBLE);
             }
-            View childView = ((ViewGroup) view).getChildAt(0);
-            childView.setVisibility(GONE);
-            contentView = new WeakReference<>(childView);
+            view.setVisibility(GONE);
+            contentView = new WeakReference<>(view);
         }
         isScreenshotSuccess = true;
+        dialog.getDialogView().setVisibility(VISIBLE);
+        dialog.getDialogView().requestFocus();
     }
-    
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -182,5 +177,11 @@ public class ActivityScreenShotImageView extends ImageView {
             contentView.get().setVisibility(VISIBLE);
             contentView.clear();
         }
+    }
+
+    BaseDialog dialog;
+
+    public void bindDialog(BaseDialog dialog) {
+        this.dialog = dialog;
     }
 }

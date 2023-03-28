@@ -185,7 +185,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                         public void run(Activity activity) {
                             baseDialog.floatingWindowActivity = new WeakReference<>((DialogXFloatingWindowActivity) activity);
                             baseDialog.floatingWindowActivity.get().setFromActivity(baseDialog.getOwnActivity());
-                            final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
+                            final FrameLayout activityRootView = getDecorView(activity);
                             if (activityRootView == null) {
                                 return;
                             }
@@ -214,7 +214,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                     }
                     intent.putExtra("dialogXKey", baseDialog.dialogKey());
-                    intent.putExtra("fromActivityUiStatus", baseDialog.getOwnActivity() == null ? 0 : baseDialog.getOwnActivity().getWindow().getDecorView().getSystemUiVisibility());
+                    intent.putExtra("fromActivityUiStatus", baseDialog.getOwnActivity() == null ? 0 : (getDecorView(baseDialog.getOwnActivity()) == null ? 0 : getDecorView(baseDialog.getOwnActivity()).getSystemUiVisibility()));
                     intent.putExtra("from", getContext().hashCode());
                     getContext().startActivity(intent);
                     int version = Integer.valueOf(Build.VERSION.SDK_INT);
@@ -304,7 +304,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                         public void run(Activity activity) {
                             baseDialog.floatingWindowActivity = new WeakReference<>((DialogXFloatingWindowActivity) activity);
                             baseDialog.floatingWindowActivity.get().setFromActivity(baseDialog.getOwnActivity());
-                            final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
+                            final FrameLayout activityRootView = getDecorView(activity);
                             if (activityRootView == null) {
                                 return;
                             }
@@ -331,7 +331,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                     Intent intent = new Intent(activity, DialogXFloatingWindowActivity.class);
                     intent.putExtra("dialogXKey", baseDialog.dialogKey());
                     intent.putExtra("from", activity.hashCode());
-                    intent.putExtra("fromActivityUiStatus", activity.getWindow().getDecorView().getSystemUiVisibility());
+                    intent.putExtra("fromActivityUiStatus", getDecorView(activity) == null ? 0 : getDecorView(activity).getSystemUiVisibility());
                     activity.startActivity(intent);
                     int version = Integer.valueOf(Build.VERSION.SDK_INT);
                     if (version > 5) {
@@ -339,7 +339,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                     }
                     break;
                 default:
-                    final FrameLayout activityRootView = (FrameLayout) activity.getWindow().getDecorView();
+                    final FrameLayout activityRootView = getDecorView(activity);
                     if (activityRootView == null) {
                         return;
                     }
@@ -387,7 +387,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                 break;
             case FLOATING_ACTIVITY:
                 if (baseDialog.floatingWindowActivity != null && baseDialog.floatingWindowActivity.get() != null) {
-                    FrameLayout rootView = ((FrameLayout) baseDialog.floatingWindowActivity.get().getWindow().getDecorView());
+                    FrameLayout rootView = getDecorView(baseDialog.floatingWindowActivity.get());
                     if (rootView != null) {
                         rootView.removeView(dialogView);
                     }
@@ -603,7 +603,11 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (activity == null) {
             activity = getTopActivity();
         }
-        rootFrameLayout = new WeakReference<>((FrameLayout) activity.getWindow().getDecorView());
+        FrameLayout decorView = getDecorView(activity);
+        if (decorView == null) {
+            return null;
+        }
+        rootFrameLayout = new WeakReference<>(decorView);
         return rootFrameLayout.get();
     }
 
@@ -717,7 +721,10 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     public Activity getOwnActivity() {
-        return ownActivity == null ? getTopActivity() : ownActivity.get();
+        if (ownActivity == null || ownActivity.get() == null) {
+            setOwnActivity(getTopActivity());
+        }
+        return ownActivity.get();
     }
 
     protected void cleanActivityContext() {
@@ -913,5 +920,11 @@ public abstract class BaseDialog implements LifecycleOwner {
             lifecycle.setCurrentState(s);
         } catch (Exception e) {
         }
+    }
+
+    protected static FrameLayout getDecorView(Activity activity) {
+        if (activity == null || activity.getWindow() == null || !(activity.getWindow().getDecorView() instanceof FrameLayout))
+            return null;
+        return (FrameLayout) activity.getWindow().getDecorView();
     }
 }

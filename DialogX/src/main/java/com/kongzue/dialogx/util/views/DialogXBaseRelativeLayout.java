@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.util.views;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -10,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -257,6 +255,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         Rect rect = new Rect();
         View decorView = (View) getParent();
         decorView.getWindowVisibleDisplayFrame(rect);
+        if (rect.left==0 && rect.top==0 && rect.right==0 && rect.bottom==0) return;
         paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
     }
 

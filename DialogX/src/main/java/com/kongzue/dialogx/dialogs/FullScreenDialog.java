@@ -144,6 +144,8 @@ public class FullScreenDialog extends BaseDialog {
             bkg = convertView.findViewById(R.id.bkg);
             boxCustom = convertView.findViewById(R.id.box_custom);
 
+            imgZoomActivity.bindDialog(FullScreenDialog.this);
+
             if (hideZoomBackground) {
                 dialogView.setBackgroundResource(R.color.black20);
                 imgZoomActivity.setVisibility(View.GONE);
@@ -231,6 +233,7 @@ public class FullScreenDialog extends BaseDialog {
             boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {
                 @Override
                 public void onChange(Rect unsafeRect) {
+                    makeEnterY();
                     bkg.setY(getEnterY());
                 }
             });
@@ -253,12 +256,19 @@ public class FullScreenDialog extends BaseDialog {
             onDialogInit();
         }
 
-        private void showEnterAnim(int customViewHeight) {
-            if (getMaxHeight() != 0) {
-                customViewHeight = Math.min(getMaxHeight() - boxRoot.getUnsafePlace().bottom, customViewHeight);
+        private boolean isMatchParentHeightCustomView() {
+            if (onBindView != null && onBindView.getCustomView() != null) {
+                ViewGroup.LayoutParams lp = onBindView.getCustomView().getLayoutParams();
+                if (lp != null) {
+                    return lp.height == MATCH_PARENT;
+                }
             }
-            enterY = customViewHeight;
-            bkgEnterAimY = boxRoot.getSafeHeight() - customViewHeight;
+            return false;
+        }
+
+        private void showEnterAnim() {
+            makeEnterY();
+            bkgEnterAimY = boxRoot.getSafeHeight() - enterY;
             if (bkgEnterAimY < 0) bkgEnterAimY = 0;
             ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
             enterAnim.setDuration(enterAnimDurationTemp);
@@ -276,6 +286,19 @@ public class FullScreenDialog extends BaseDialog {
                 }
             });
             bkgAlpha.start();
+        }
+
+        private void makeEnterY() {
+            int customViewHeight = boxCustom.getHeight();
+
+            if (customViewHeight == 0 || isMatchParentHeightCustomView()) {
+                customViewHeight = ((int) boxRoot.getSafeHeight());
+            }
+            if (getMaxHeight() != 0) {
+                enterY = Math.min(getMaxHeight() - boxRoot.getUnsafePlace().bottom, customViewHeight);
+            } else {
+                enterY = customViewHeight;
+            }
         }
 
         @Override
@@ -393,24 +416,7 @@ public class FullScreenDialog extends BaseDialog {
                 dialogXAnimImpl = new DialogXAnimInterface<FullScreenDialog>() {
                     @Override
                     public void doShowAnim(FullScreenDialog dialog, ObjectRunnable<Float> animProgress) {
-                        int customViewHeight = boxCustom.getHeight();
-                        if (customViewHeight == 0 || isMatchParentHeightCustomView()) {
-                            //实测在 Android 10 中，离屏情况下 View可能无法得到正确高度（恒 0），此时直接按照全屏高度处理
-                            //其他版本 Android 未发现此问题
-                            showEnterAnim((int) boxRoot.getSafeHeight());
-                        } else {
-                            showEnterAnim(customViewHeight);
-                        }
-                    }
-
-                    private boolean isMatchParentHeightCustomView() {
-                        if (onBindView != null && onBindView.getCustomView() != null) {
-                            ViewGroup.LayoutParams lp = onBindView.getCustomView().getLayoutParams();
-                            if (lp != null) {
-                                return lp.height == MATCH_PARENT;
-                            }
-                        }
-                        return false;
+                        showEnterAnim();
                     }
 
                     @Override
