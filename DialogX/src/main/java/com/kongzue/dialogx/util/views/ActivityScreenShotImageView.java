@@ -154,29 +154,40 @@ public class ActivityScreenShotImageView extends ImageView {
     private void drawViewImage(View view) {
         if (view.getWidth() == 0 || view.getHeight() == 0) return;
         dialog.getDialogView().setVisibility(GONE);
+        setContentViewVisibility(true);
         view.buildDrawingCache();
         Rect rect = new Rect();
         view.getWindowVisibleDisplayFrame(rect);
         view.setDrawingCacheEnabled(true);
         setImageBitmap(Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getWidth(), view.getHeight()));
         view.destroyDrawingCache();
-        if (hideContentView) {
-            if (contentView != null && contentView.get() != null) {
-                contentView.get().setVisibility(VISIBLE);
-            }
-            view.setVisibility(GONE);
-            contentView = new WeakReference<>(view);
-        }
+        setContentViewVisibility(false);
         isScreenshotSuccess = true;
         dialog.getDialogView().setVisibility(VISIBLE);
         dialog.getDialogView().requestFocus();
     }
 
+    protected void setContentViewVisibility(boolean show) {
+        if (hideContentView) {
+            if (show) {
+                if (contentView != null && contentView.get() != null) {
+                    contentView.get().setVisibility(VISIBLE);
+                }
+            } else {
+                View userContentView = Objects.requireNonNull(getDecorView()).getChildAt(0);
+                if (userContentView != null) {
+                    userContentView.setVisibility(GONE);
+                    contentView = new WeakReference<>(userContentView);
+                }
+            }
+        }
+    }
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (contentView != null && contentView.get() != null && hideContentView) {
-            contentView.get().setVisibility(VISIBLE);
+        setContentViewVisibility(true);
+        if (contentView != null) {
             contentView.clear();
         }
     }
