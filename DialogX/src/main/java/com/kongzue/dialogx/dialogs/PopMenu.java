@@ -277,11 +277,13 @@ public class PopMenu extends BaseDialog {
         getDialogImpl().boxBody.setTag(null);
         DialogXViewLoc loc = getMenuLoc();
         getDialogImpl().boxBody.setTag(loc);
-        if (loc.getX() != getDialogImpl().boxBody.getX()) {
-            getDialogImpl().boxBody.setX(loc.getX());
-        }
-        if (loc.getY() != getDialogImpl().boxBody.getY()) {
-            getDialogImpl().boxBody.setY(loc.getY());
+        if (!isEnterAnimRunning) {
+            if (loc.getX() != getDialogImpl().boxBody.getX()) {
+                getDialogImpl().boxBody.setX(loc.getX());
+            }
+            if (loc.getY() != getDialogImpl().boxBody.getY()) {
+                getDialogImpl().boxBody.setY(loc.getY());
+            }
         }
         if (getDialogImpl().boxBody.getWidth() != loc.getW()) {
             RelativeLayout.LayoutParams rLp = new RelativeLayout.LayoutParams((int) loc.getW(), ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -421,6 +423,7 @@ public class PopMenu extends BaseDialog {
 
     protected PopMenuArrayAdapter menuListAdapter;
     protected int selectItemYDeviation; //如果找到了选中菜单，这里记录的是其位置的 Y 偏差值
+    protected boolean isEnterAnimRunning;
 
     public class DialogImpl implements DialogConvertViewInterface {
 
@@ -690,6 +693,7 @@ public class PopMenu extends BaseDialog {
                                     if (!isShow || getDialogImpl() == null || getDialogImpl().boxBody == null)
                                         return;
                                     float animatedValue = (float) animation.getAnimatedValue();
+                                    isEnterAnimRunning = !(animatedValue == 1f);
                                     DialogXViewLoc loc = getMenuLoc();
 
                                     int aimHeight = animatedValue == 1f ? ViewGroup.LayoutParams.WRAP_CONTENT : (int) (targetHeight * animatedValue);
@@ -1259,11 +1263,11 @@ public class PopMenu extends BaseDialog {
     public void onDismiss(PopMenu dialog) {
 
     }
-    
+
     public MenuItemLayoutRefreshCallback<PopMenu> getMenuMenuItemLayoutRefreshCallback() {
         return menuMenuItemLayoutRefreshCallback;
     }
-    
+
     public PopMenu setMenuMenuItemLayoutRefreshCallback(MenuItemLayoutRefreshCallback<PopMenu> menuMenuItemLayoutRefreshCallback) {
         this.menuMenuItemLayoutRefreshCallback = menuMenuItemLayoutRefreshCallback;
         return this;

@@ -112,23 +112,9 @@ public class ActivityScreenShotImageView extends ImageView {
     private void doScreenshotActivityAndZoom() {
         ViewGroup decorView = getDecorView();
         if (decorView == null) return;
-//        View lastChildView = decorView.getChildAt(decorView.getChildCount() - 1);
-//        Log.e(">>>", "lastChildView: \t"+lastChildView );
-//        Log.e(">>>", "dialog.getDialogView: \t"+dialog.getDialogView() );
-//        if (lastChildView == dialog.getDialogView()) {
-//            decorView = (ViewGroup) decorView.getChildAt(0);
-//        }
-        View contentView = decorView;
-        //先执行一次绘制，防止出现闪屏问题
-        if (!inited) drawViewImage(contentView);
-        contentView.post(new Runnable() {
-            @Override
-            public void run() {
-                //当view渲染完成后再次通知刷新一下界面（当旋转屏幕执行时，很可能出现渲染延迟的问题）
-                drawViewImage(contentView);
-                inited = true;
-            }
-        });
+        drawViewImage(decorView);
+        setVisibility(VISIBLE);
+        inited = true;
     }
 
     private ViewGroup getDecorView() {
