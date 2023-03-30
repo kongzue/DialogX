@@ -834,9 +834,10 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     public static void publicWindowInsets(WindowInsets windowInsets) {
-        if (windowInsets != null) {
-            BaseDialog.windowInsets = windowInsets;
+        if (windowInsets == null) {
+            return;
         }
+        BaseDialog.windowInsets = windowInsets;
         if (runningDialogList != null) {
             CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
             for (int i = copyOnWriteList.size() - 1; i >= 0; i--) {

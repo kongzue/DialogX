@@ -245,9 +245,7 @@ public class FullScreenDialog extends BaseDialog {
                     float zoomScale = 1 - (boxRoot.getHeight() - realY) * 0.00002f;
                     if (zoomScale > 1) zoomScale = 1;
                     if (!hideZoomBackground) {
-                        imgZoomActivity.setScaleX(zoomScale);
-                        imgZoomActivity.setScaleY(zoomScale);
-
+                        imgZoomActivity.setScale(zoomScale);
                         imgZoomActivity.setRadius(dip2px(15) * ((boxRoot.getHeight() - realY) / boxRoot.getHeight()));
                     }
                 }

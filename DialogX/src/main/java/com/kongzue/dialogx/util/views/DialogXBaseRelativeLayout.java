@@ -3,12 +3,14 @@ package com.kongzue.dialogx.util.views;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Insets;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -115,6 +118,13 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
         }
         return super.dispatchApplyWindowInsets(insets);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public void paddingView(Insets insets) {
+        if (insets!=null){
+            paddingView(insets.left, insets.top, insets.right, insets.bottom);
+        }
     }
 
     public void paddingView(WindowInsets insets) {
@@ -249,13 +259,13 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     private void getWindowInsetsByDisplayMetrics() {
-        if (parentDialog.getOwnActivity() == null) return;
+        if (parentDialog == null || parentDialog.getOwnActivity() == null) return;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         parentDialog.getOwnActivity().getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
         Rect rect = new Rect();
         View decorView = (View) getParent();
         decorView.getWindowVisibleDisplayFrame(rect);
-        if (rect.left==0 && rect.top==0 && rect.right==0 && rect.bottom==0) return;
+        if (rect.left == 0 && rect.top == 0 && rect.right == 0 && rect.bottom == 0) return;
         paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
     }
 
@@ -303,6 +313,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     @Override
     public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getRootWindowInsets()!=null && getRootWindowInsets().getStableInsets()!=null) {
+               paddingView(getRootWindowInsets().getStableInsets());
+            }
             initDynamicSafeAreaListener();
         }
         if (direction == View.FOCUS_DOWN && requestFocusView != null && requestFocusView.get() != null) {

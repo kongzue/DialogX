@@ -67,8 +67,13 @@ public class ActivityScreenShotImageView extends ImageView {
         height = getHeight();
     }
 
+    boolean readyDraw = false;
+
     @Override
     protected void onDraw(Canvas canvas) {
+        if (!readyDraw) {
+            super.onDraw(canvas);
+        }
         if (width >= mRadius && height > mRadius) {
             if (isScreenshotSuccess) {
                 canvas.drawColor(Color.BLACK);
@@ -176,6 +181,12 @@ public class ActivityScreenShotImageView extends ImageView {
         if (contentView != null) {
             contentView.clear();
         }
+    }
+
+    public void setScale(float scale) {
+        setScaleX(scale);
+        setScaleY(scale);
+        readyDraw = true;
     }
 
     BaseDialog dialog;
