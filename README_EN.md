@@ -26,7 +26,7 @@ After three generations, the new Kongzue DialogX has arrived, not only retaining
 <img src="https://img.shields.io/badge/Homepage-Kongzue.com-brightgreen.svg" alt="Homepage">
 </a>
 
-![DialogX](https://repository-images.githubusercontent.com/298764877/37386d80-8986-11eb-8ff2-1206da84cd8d)
+![DialogX](https://user-images.githubusercontent.com/10115359/229279713-79c43a63-1a0a-4f70-851f-0a0783b94b45.jpg)
 
 # Advantages of DialogX
 
