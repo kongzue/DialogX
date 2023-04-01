@@ -5,23 +5,25 @@
     <center><h1>Kongzue DialogX</h1></center> 
 </div>
 
-经过三代的更迭，全新的 Kongzue DialogX 已经到来，不仅仅保留了以往的优势，更带来了更灵活的扩展性和全新的流畅体验。
+一款简单易用的对话框组件，相比原生对话框使用体验更佳，可自定义程度更高，扩展性更强，轻松实现各种对话框、菜单和提示效果，更有iOS、MIUI、Material You等主题扩展可选。
 
-<a href="https://github.com/kongzue/dialogX/">
-<img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
-</a> 
-<a href="https://github.com/kongzue/DialogX/releases">
-<img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="Maven">
-</a> 
-<a href="https://jitpack.io/#kongzue/DialogX">
-<img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
-</a> 
-<a href="http://www.apache.org/licenses/LICENSE-2.0">
-<img src="https://img.shields.io/badge/License-Apache%202.0-red.svg" alt="License">
-</a> 
-<a href="http://www.kongzue.com">
-<img src="https://img.shields.io/badge/Homepage-Kongzue.com-brightgreen.svg" alt="Homepage">
-</a>
+<div align=center>    
+  <a href="https://github.com/kongzue/dialogX/">
+    <img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
+  </a> 
+  <a href="https://github.com/kongzue/DialogX/releases">
+    <img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="Maven">
+  </a> 
+  <a href="https://jitpack.io/#kongzue/DialogX">
+    <img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
+  </a> 
+  <a href="http://www.apache.org/licenses/LICENSE-2.0">
+    <img src="https://img.shields.io/badge/License-Apache%202.0-red.svg" alt="License">
+  </a> 
+  <a href="http://www.kongzue.com">
+    <img src="https://img.shields.io/badge/Homepage-Kongzue.com-brightgreen.svg" alt="Homepage">
+  </a>
+</div>
 
 ![DialogX](https://user-images.githubusercontent.com/10115359/229279713-79c43a63-1a0a-4f70-851f-0a0783b94b45.jpg)
 
