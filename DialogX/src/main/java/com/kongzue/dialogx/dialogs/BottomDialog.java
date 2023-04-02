@@ -32,6 +32,7 @@ import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -53,7 +54,7 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/10/6 15:17
  */
-public class BottomDialog extends BaseDialog {
+public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog {
 
     public static int overrideEnterDuration = -1;
     public static int overrideExitDuration = -1;
@@ -65,6 +66,7 @@ public class BottomDialog extends BaseDialog {
     protected CharSequence okText;
     protected CharSequence otherText;
     protected boolean allowInterceptTouch = true;
+    protected boolean bottomNonSafetyAreaBySelf = false;
     protected int maskColor = -1;
     protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
@@ -690,9 +692,7 @@ public class BottomDialog extends BaseDialog {
                         }
 
                         //上移动画
-                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(),
-                                bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop
-                        );
+                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", getRootFrameLayout().getMeasuredHeight(), bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop);
                         if (overrideEnterDuration >= 0) {
                             enterAnimDurationTemp = overrideEnterDuration;
                         }
@@ -1239,15 +1239,14 @@ public class BottomDialog extends BaseDialog {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new BottomDialog() {
-     *     @Override
-     *     public void onShow(BottomDialog dialog) {
-     *         //...
-     *     }
-     * }
      *
      * @param dialog self
+     * @Override public void onShow(BottomDialog dialog) {
+     * //...
+     * }
+     * }
      */
-    public void onShow(BottomDialog dialog){
+    public void onShow(BottomDialog dialog) {
 
     }
 
@@ -1255,23 +1254,32 @@ public class BottomDialog extends BaseDialog {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new BottomDialog() {
-     *     @Override
-     *     public boolean onDismiss(BottomDialog dialog) {
-     *         WaitDialog.show("Please Wait...");
-     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
-     *             //点击了OK的情况
-     *             //...
-     *         } else {
-     *             //其他按钮点击、对话框dismiss的情况
-     *             //...
-     *         }
-     *         return false;
-     *     }
-     * }
+     *
      * @param dialog self
+     * @Override public boolean onDismiss(BottomDialog dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(BottomDialog dialog){
+    public void onDismiss(BottomDialog dialog) {
 
+    }
+
+    public boolean isBottomNonSafetyAreaBySelf() {
+        return bottomNonSafetyAreaBySelf;
+    }
+
+    public BottomDialog setBottomNonSafetyAreaBySelf(boolean bottomNonSafetyAreaBySelf) {
+        this.bottomNonSafetyAreaBySelf = bottomNonSafetyAreaBySelf;
+        return this;
     }
 }

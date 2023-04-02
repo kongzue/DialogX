@@ -109,7 +109,7 @@ public class BlurView extends View {
             overlayPaint = new Paint();
             overlayPaint.setAntiAlias(true);
             
-            mRadius = a.getDimension(R.styleable.RealtimeBlurView_radius, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, context.getResources().getDisplayMetrics()));
+            mRadius = a.getDimension(R.styleable.RealtimeBlurView_realtimeRadius, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, context.getResources().getDisplayMetrics()));
             a.recycle();
             
             isInit = true;

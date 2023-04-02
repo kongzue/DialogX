@@ -687,6 +687,7 @@ public class PopMenu extends BaseDialog {
 
                             //展开动画
                             ValueAnimator enterAnim = ValueAnimator.ofFloat(0f, 1f);
+                            enterAnim.setInterpolator(new DecelerateInterpolator());
                             enterAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {

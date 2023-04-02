@@ -28,7 +28,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
 import com.kongzue.dialogx.interfaces.DynamicWindowInsetsAnimationListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
@@ -122,7 +125,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public void paddingView(Insets insets) {
-        if (insets!=null){
+        if (insets != null) {
             paddingView(insets.left, insets.top, insets.right, insets.bottom);
         }
     }
@@ -313,8 +316,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     @Override
     public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getRootWindowInsets()!=null && getRootWindowInsets().getStableInsets()!=null) {
-               paddingView(getRootWindowInsets().getStableInsets());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getRootWindowInsets() != null && getRootWindowInsets().getStableInsets() != null) {
+                paddingView(getRootWindowInsets().getStableInsets());
             }
             initDynamicSafeAreaListener();
         }
@@ -340,9 +343,15 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
             LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
             if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
-                bkgView.setPadding(0, 0, 0, bottom);
                 bkgView.setNavBarHeight(bottom);
                 setPadding(extraPadding[0] + left, extraPadding[1] + top, extraPadding[2] + right, extraPadding[3]);
+                if (getParentDialog() instanceof DialogXBaseBottomDialog){
+                    if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()){
+                        bkgView.setPadding(0, 0, 0, 0);
+                        return;
+                    }
+                }
+                bkgView.setPadding(0, 0, 0, bottom);
                 return;
             }
         }

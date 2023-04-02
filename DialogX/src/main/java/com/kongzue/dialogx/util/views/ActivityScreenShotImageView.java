@@ -63,6 +63,9 @@ public class ActivityScreenShotImageView extends ImageView {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+        if (width != getWidth() || height != getHeight()) {
+            refreshImage();
+        }
         width = getWidth();
         height = getHeight();
     }
@@ -101,12 +104,15 @@ public class ActivityScreenShotImageView extends ImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (isAttachedToWindow() && !isScreenshotSuccess) refreshImage();
+        if (!isScreenshotSuccess) refreshImage();
     }
 
     private int screenWidth, screenHeight;
 
     private void refreshImage() {
+        if (!isAttachedToWindow()) {
+            return;
+        }
         if (screenWidth != getMeasuredWidth() || screenHeight != getMeasuredHeight()) {
             screenWidth = getMeasuredWidth();
             screenHeight = getMeasuredHeight();

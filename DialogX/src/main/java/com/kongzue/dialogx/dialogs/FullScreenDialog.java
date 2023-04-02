@@ -26,6 +26,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -45,7 +46,7 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/10/6 15:17
  */
-public class FullScreenDialog extends BaseDialog {
+public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDialog {
 
     public static int overrideEnterDuration = -1;
     public static int overrideExitDuration = -1;
@@ -58,6 +59,7 @@ public class FullScreenDialog extends BaseDialog {
     protected float backgroundRadius = -1;
     protected boolean allowInterceptTouch = true;
     protected DialogXAnimInterface<FullScreenDialog> dialogXAnimImpl;
+    protected boolean bottomNonSafetyAreaBySelf = false;
 
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener;
@@ -234,7 +236,9 @@ public class FullScreenDialog extends BaseDialog {
                 @Override
                 public void onChange(Rect unsafeRect) {
                     makeEnterY();
-                    bkg.setY(getEnterY());
+                    if (!enterAnimRunning) {
+                        bkg.setY(getEnterY());
+                    }
                 }
             });
 
@@ -264,6 +268,8 @@ public class FullScreenDialog extends BaseDialog {
             return false;
         }
 
+        private boolean enterAnimRunning = true;
+
         private void showEnterAnim() {
             makeEnterY();
             bkgEnterAimY = boxRoot.getSafeHeight() - enterY;
@@ -281,6 +287,7 @@ public class FullScreenDialog extends BaseDialog {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     float value = (float) animation.getAnimatedValue();
                     boxRoot.setBkgAlpha(value);
+                    enterAnimRunning = !(value == 1f);
                 }
             });
             bkgAlpha.start();
@@ -436,7 +443,9 @@ public class FullScreenDialog extends BaseDialog {
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                float value = (float) animation.getAnimatedValue();
+                                animProgress.run(value);
+                                enterAnimRunning = !(value == 1f);
                             }
                         });
                         bkgAlpha.start();
@@ -749,5 +758,14 @@ public class FullScreenDialog extends BaseDialog {
     //用于使用 new 构建实例时，override 的生命周期事件
     public void onDismiss(FullScreenDialog dialog) {
 
+    }
+
+    public boolean isBottomNonSafetyAreaBySelf() {
+        return bottomNonSafetyAreaBySelf;
+    }
+
+    public FullScreenDialog setBottomNonSafetyAreaBySelf(boolean bottomNonSafetyAreaBySelf) {
+        this.bottomNonSafetyAreaBySelf = bottomNonSafetyAreaBySelf;
+        return this;
     }
 }
