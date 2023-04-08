@@ -538,7 +538,7 @@ public class GuideDialog extends CustomDialog {
             getDialogImpl().boxCustom.setOnClickListener(null);
             getDialogImpl().boxCustom.setClickable(false);
             
-            ImageView imageView = new ImageView(getContext());
+            ImageView imageView = new ImageView(getOwnActivity());
             imageView.setImageDrawable(tipImage);
             imageView.setAdjustViewBounds(true);
             imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -551,7 +551,7 @@ public class GuideDialog extends CustomDialog {
             onBindView.bindParent(getDialogImpl().boxCustom, me);
         }
         if (getOnStageLightPathClickListener() != null && baseView != null) {
-            stageLightPathStub = new View(getContext());
+            stageLightPathStub = new View(getOwnActivity());
             stageLightPathStub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

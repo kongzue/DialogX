@@ -28,6 +28,7 @@ import androidx.lifecycle.Lifecycle;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
@@ -46,6 +47,9 @@ import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: Kongzue
@@ -252,7 +256,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         public DialogXBaseRelativeLayout boxRoot;
         public RelativeLayout boxBkg;
         public MaxRelativeLayout bkg;
-        public ViewGroup boxBody;
         public ImageView imgTab;
         public TextView txtDialogTitle;
         public ScrollController scrollView;
@@ -261,20 +264,22 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         public View imgSplit;
         public RelativeLayout boxList;
         public RelativeLayout boxCustom;
-        public BlurView blurView;
         public ViewGroup boxCancel;
-        public TextView btnCancel;
-        public BlurView cancelBlurView;
+        public ImageView splitSelectPositive;
+        public ImageView splitSelectOther;
 
-        public TextView btnSelectOther;
-        public TextView btnSelectPositive;
+        private LinearLayout boxButton;
+        private TextView btnSelectNegative;
+        private TextView btnSelectOther;
+        private TextView btnSelectPositive;
+
+        private List<View> blurViews;
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
-            boxBody = convertView.findViewWithTag("blurBody");
             imgTab = convertView.findViewById(R.id.img_tab);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
             scrollView = convertView.findViewById(R.id.scrollView);
@@ -283,12 +288,15 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             imgSplit = convertView.findViewWithTag("split");
             boxList = convertView.findViewById(R.id.box_list);
             boxCustom = convertView.findViewById(R.id.box_custom);
-            blurView = convertView.findViewById(R.id.blurView);
-            boxCancel = convertView.findViewWithTag("cancelBox");
-            btnCancel = convertView.findViewWithTag("cancel");
 
+            boxCancel = convertView.findViewWithTag("cancelBox");
+
+            boxButton = convertView.findViewById(R.id.box_button);
+            btnSelectNegative = convertView.findViewById(R.id.btn_selectNegative);
             btnSelectOther = convertView.findViewById(R.id.btn_selectOther);
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
+            splitSelectPositive = convertView.findViewWithTag("imgPositiveButtonSplit");
+            splitSelectOther = convertView.findViewWithTag("imgOtherButtonSplit");
 
             init();
             dialogImpl = this;
@@ -326,7 +334,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (cancelText == null) cancelText = DialogX.cancelButtonText;
 
             txtDialogTitle.getPaint().setFakeBoldText(true);
-            if (btnCancel != null) btnCancel.getPaint().setFakeBoldText(true);
+            if (btnSelectNegative != null) btnSelectNegative.getPaint().setFakeBoldText(true);
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
 
@@ -351,31 +359,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
                     onDialogShow();
 
-                    boxRoot.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground() && boxBody != null && boxCancel != null) {
-                                int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
-                                blurView = new BlurView(getOwnActivity(), null);
-                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
-                                blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                blurView.setOverrideOverlayColor(backgroundColor != -1);
-                                blurView.setTag("blurView");
-                                blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
-                                boxBody.addView(blurView, 0, params);
-
-                                cancelBlurView = new BlurView(getOwnActivity(), null);
-                                RelativeLayout.LayoutParams cancelButtonLp = new RelativeLayout.LayoutParams(boxCancel.getWidth(), boxCancel.getHeight());
-                                cancelBlurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                cancelBlurView.setOverrideOverlayColor(backgroundColor != -1);
-                                cancelBlurView.setTag("blurView");
-                                cancelBlurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
-                                boxCancel.addView(cancelBlurView, 0, cancelButtonLp);
-                            }
-                            setLifecycleState(Lifecycle.State.RESUMED);
-                        }
-                    });
-
                     refreshUI();
                 }
 
@@ -392,8 +375,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 }
             });
 
-            if (btnCancel != null) {
-                btnCancel.setOnClickListener(new View.OnClickListener() {
+            if (btnSelectNegative != null) {
+                btnSelectNegative.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_CANCEL;
@@ -483,6 +466,18 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             onDialogInit();
         }
 
+        private void findAllBlurView(View v) {
+            if (v instanceof BlurViewType) {
+                blurViews.add(v);
+            }
+            if (v instanceof ViewGroup) {
+                ViewGroup group = (ViewGroup) v;
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    findAllBlurView(group.getChildAt(i));
+                }
+            }
+        }
+
         @Override
         public void refreshView() {
             if (boxRoot == null || getOwnActivity() == null) {
@@ -491,16 +486,22 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(bkg, backgroundColor);
-                if (blurView != null && cancelBlurView != null) {
-                    blurView.setOverlayColor(backgroundColor);
-                    blurView.setOverrideOverlayColor(true);
-                    cancelBlurView.setOverlayColor(backgroundColor);
-                    cancelBlurView.setOverrideOverlayColor(true);
-                }
-
                 tintColor(btnSelectOther, backgroundColor);
-                tintColor(btnCancel, backgroundColor);
+                tintColor(btnSelectNegative, backgroundColor);
                 tintColor(btnSelectPositive, backgroundColor);
+
+                if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground()) {
+                    if (blurViews == null) {
+                        blurViews = new ArrayList<>();
+                        findAllBlurView(dialogView);
+                    }
+
+                    if (blurViews != null) {
+                        for (View blurView : blurViews) {
+                            ((BlurViewType) blurView).setOverlayColor(backgroundColor);
+                        }
+                    }
+                }
             }
 
             showText(txtDialogTitle, title);
@@ -508,7 +509,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
             useTextInfo(txtDialogTitle, titleTextInfo);
             useTextInfo(txtDialogTip, messageTextInfo);
-            useTextInfo(btnCancel, cancelTextInfo);
+            useTextInfo(btnSelectNegative, cancelTextInfo);
             useTextInfo(btnSelectOther, otherTextInfo);
             useTextInfo(btnSelectPositive, okTextInfo);
 
@@ -606,8 +607,14 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             }
 
             showText(btnSelectPositive, okText);
-            showText(btnCancel, cancelText);
+            showText(btnSelectNegative, cancelText);
             showText(btnSelectOther, otherText);
+            if (splitSelectPositive != null) {
+                splitSelectPositive.setVisibility(btnSelectPositive.getVisibility());
+            }
+            if (splitSelectOther != null) {
+                splitSelectOther.setVisibility(btnSelectOther.getVisibility());
+            }
 
             onDialogRefreshUI();
         }

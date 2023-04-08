@@ -209,14 +209,14 @@ public abstract class BaseDialog implements LifecycleOwner {
                         dialogXFloatingWindowActivity.showDialogX(baseDialog.dialogKey());
                         return;
                     }
-                    Intent intent = new Intent(getContext(), DialogXFloatingWindowActivity.class);
+                    Intent intent = new Intent(getPrivateContext(), DialogXFloatingWindowActivity.class);
                     if (baseDialog.getOwnActivity() == null) {
                         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                     }
                     intent.putExtra("dialogXKey", baseDialog.dialogKey());
                     intent.putExtra("fromActivityUiStatus", baseDialog.getOwnActivity() == null ? 0 : (getDecorView(baseDialog.getOwnActivity()) == null ? 0 : getDecorView(baseDialog.getOwnActivity()).getSystemUiVisibility()));
-                    intent.putExtra("from", getContext().hashCode());
-                    getContext().startActivity(intent);
+                    intent.putExtra("from", getPrivateContext().hashCode());
+                    getPrivateContext().startActivity(intent);
                     int version = Integer.valueOf(Build.VERSION.SDK_INT);
                     if (version > 5 && baseDialog.getOwnActivity() != null) {
                         baseDialog.getOwnActivity().overridePendingTransition(0, 0);
@@ -441,7 +441,17 @@ public abstract class BaseDialog implements LifecycleOwner {
         return activityWeakReference.get();
     }
 
+    /**
+     * @Deprecated 已废弃，将在未来版本删除此方法，建议使用 {@link #getOwnActivity()} 替代此方法
+     *
+     * @return  获取上下文
+     */
+    @Deprecated
     public static Context getContext() {
+        return getPrivateContext();
+    }
+
+    private static Context getPrivateContext() {
         Activity activity = getTopActivity();
         if (activity == null) {
             Context applicationContext = getApplicationContext();

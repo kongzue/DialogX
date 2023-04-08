@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -83,6 +84,7 @@ import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
+import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -972,52 +974,50 @@ public class MainActivity extends BaseActivity {
         btnFullScreenDialogWebPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FullScreenDialog.build(new OnBindView<FullScreenDialog>(R.layout.layout_full_webview) {
+                FullScreenDialog.show(new OnBindView<FullScreenDialog>(R.layout.layout_full_webview) {
+                    @Override
+                    public void onBind(final FullScreenDialog dialog, View v) {
+                        btnClose = v.findViewById(R.id.btn_close);
+                        webView = v.findViewById(R.id.webView);
+
+                        btnClose.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onBind(final FullScreenDialog dialog, View v) {
-
-                                btnClose = v.findViewById(R.id.btn_close);
-                                webView = v.findViewById(R.id.webView);
-
-                                btnClose.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
-
-                                WebSettings webSettings = webView.getSettings();
-                                webSettings.setJavaScriptEnabled(true);
-                                webSettings.setLoadWithOverviewMode(true);
-                                webSettings.setUseWideViewPort(true);
-                                webSettings.setSupportZoom(false);
-                                webSettings.setAllowFileAccess(true);
-                                webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-                                webSettings.setLoadsImagesAutomatically(true);
-                                webSettings.setDefaultTextEncodingName("utf-8");
-
-                                webView.setWebViewClient(new WebViewClient() {
-                                    @Override
-                                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                                        try {
-                                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                                            startActivity(intent);
-                                        } catch (ActivityNotFoundException e) {
-                                            e.printStackTrace();
-                                        }
-                                        return true;
-                                    }
-
-                                    @Override
-                                    public void onPageFinished(WebView view, String url) {
-                                        super.onPageFinished(view, url);
-                                    }
-                                });
-
-                                webView.loadUrl("https://github.com/kongzue/DialogX");
+                            public void onClick(View v) {
+                                dialog.dismiss();
                             }
-                        })
-                        .show();
+                        });
+
+                        WebSettings webSettings = webView.getSettings();
+                        webSettings.setJavaScriptEnabled(true);
+                        webSettings.setLoadWithOverviewMode(true);
+                        webSettings.setUseWideViewPort(true);
+                        webSettings.setSupportZoom(false);
+                        webSettings.setAllowFileAccess(true);
+                        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+                        webSettings.setLoadsImagesAutomatically(true);
+                        webSettings.setDefaultTextEncodingName("utf-8");
+
+                        webView.setWebViewClient(new WebViewClient() {
+                            @Override
+                            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                    startActivity(intent);
+                                } catch (ActivityNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                return true;
+                            }
+
+                            @Override
+                            public void onPageFinished(WebView view, String url) {
+                                super.onPageFinished(view, url);
+                            }
+                        });
+
+                        webView.loadUrl("https://github.com/kongzue/DialogX");
+                    }
+                }).setBottomNonSafetyAreaBySelf(true);
             }
         });
 
