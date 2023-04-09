@@ -71,6 +71,7 @@ public class BlurLinearLayout extends LinearLayout implements BlurViewType {
     }
 
     private boolean isInit = false;
+    private boolean darkMode = false;
 
     Paint cutPaint;
     Paint overlayPaint;
@@ -78,9 +79,10 @@ public class BlurLinearLayout extends LinearLayout implements BlurViewType {
     private void init(Context context, AttributeSet attrs) {
         if (!isInit) {
             TypedArray a = context.obtainStyledAttributes(attrs, com.kongzue.dialogx.R.styleable.RealtimeBlurView);
+            darkMode = a.getBoolean(com.kongzue.dialogx.R.styleable.RealtimeBlurView_dialogxDarkMode, false);
             mBlurRadius = a.getDimension(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeBlurRadius, dip2px(35));
             mDownSampleFactor = a.getFloat(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeDownsampleFactor, 4);
-            mOverlayColor = a.getColor(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeOverlayColor, getResources().getColor(R.color.dialogxIOSBkgLight));
+            mOverlayColor = a.getColor(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeOverlayColor, getResources().getColor(darkMode ? R.color.dialogxIOSBkgDark : R.color.dialogxIOSBkgLight));
             mRadius = a.getDimension(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeRadius, dip2px(15));
             a.recycle();
 
@@ -88,7 +90,7 @@ public class BlurLinearLayout extends LinearLayout implements BlurViewType {
                 setOutlineProvider(new ViewOutlineProvider() {
                     @Override
                     public void getOutline(View view, Outline outline) {
-                        outline.setRoundRect(0, 0, view.getWidth(),view.getHeight(), mRadius);
+                        outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), mRadius);
                     }
                 });
                 setClipToOutline(true);
@@ -547,6 +549,7 @@ public class BlurLinearLayout extends LinearLayout implements BlurViewType {
         this.overrideOverlayColor = overrideOverlayColor;
         return this;
     }
+
     private int dip2px(float dpValue) {
         final float scale = getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);

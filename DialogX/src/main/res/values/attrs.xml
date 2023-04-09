@@ -15,6 +15,7 @@
         <attr name="realtimeDownsampleFactor" format="float"/>
         <attr name="realtimeOverlayColor" format="color"/>
         <attr name="realtimeRadius" format="dimension"/>
+        <attr name="dialogxDarkMode" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="ProgressView">

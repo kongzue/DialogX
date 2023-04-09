@@ -1172,6 +1172,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 BottomMenu.show(singleSelectMenuText)
+                        .setShowSelectedBackgroundTips(rdoMiui.isChecked())
                         .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
                         .setTitle("获得权限标题")
                         .setOnMenuItemClickListener(new OnMenuItemSelectListener<BottomMenu>() {

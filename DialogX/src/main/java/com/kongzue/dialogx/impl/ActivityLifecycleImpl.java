@@ -158,14 +158,22 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
             BaseDialog.init(activity);
         }
     }
-    
+
     @Override
-    public void onActivityResumed(@NonNull Activity activity) {
+    public void onActivityPreResumed(@NonNull Activity activity) {
+        Application.ActivityLifecycleCallbacks.super.onActivityPreResumed(activity);
         if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
             return;
         }
         if (onActivityResumeCallBack != null) {
             onActivityResumeCallBack.getActivity(activity);
+        }
+    }
+
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+        if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
+            return;
         }
         BaseDialog.onActivityResume(activity);
     }
