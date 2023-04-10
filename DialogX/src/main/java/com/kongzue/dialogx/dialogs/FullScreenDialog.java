@@ -13,11 +13,13 @@ import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
+import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
@@ -94,7 +96,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         if (isHide && getDialogView() != null && isShow) {
             if (hideWithExitAnim && getDialogImpl() != null) {
                 getDialogView().setVisibility(View.VISIBLE);
-                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, null);
+                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, getDialogImpl().bkg);
             } else {
                 getDialogView().setVisibility(View.VISIBLE);
             }
@@ -161,7 +163,6 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         }
 
         public float bkgEnterAimY = -1;
-        private long enterAnimDurationTemp = 300;
         protected int enterY;
 
         public float getEnterY() {
@@ -214,21 +215,13 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             });
 
             fullScreenDialogTouchEventInterceptor = new FullScreenDialogTouchEventInterceptor(me, dialogImpl);
-
-            enterAnimDurationTemp = 300;
-            if (overrideEnterDuration >= 0) {
-                enterAnimDurationTemp = overrideEnterDuration;
-            }
-            if (enterAnimDuration >= 0) {
-                enterAnimDurationTemp = enterAnimDuration;
-            }
             boxRoot.setBkgAlpha(0f);
 
             bkg.setY(boxRoot.getHeight());
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    getDialogXAnimImpl().doShowAnim(me, null);
+                    getDialogXAnimImpl().doShowAnim(me, bkg);
                     setLifecycleState(Lifecycle.State.RESUMED);
                 }
             });
@@ -266,31 +259,6 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 }
             }
             return false;
-        }
-
-        private boolean enterAnimRunning = true;
-
-        private void showEnterAnim() {
-            makeEnterY();
-            bkgEnterAimY = boxRoot.getSafeHeight() - enterY;
-            if (bkgEnterAimY < 0) bkgEnterAimY = 0;
-            ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
-            enterAnim.setDuration(enterAnimDurationTemp);
-            enterAnim.setInterpolator(new DecelerateInterpolator());
-            enterAnim.start();
-            bkg.setVisibility(View.VISIBLE);
-
-            ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-            bkgAlpha.setDuration(enterAnimDurationTemp);
-            bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    float value = (float) animation.getAnimatedValue();
-                    boxRoot.setBkgAlpha(value);
-                    enterAnimRunning = !(value == 1f);
-                }
-            });
-            bkgAlpha.start();
         }
 
         private void makeEnterY() {
@@ -381,20 +349,17 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
-                getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+                getDialogXAnimImpl().doExitAnim(me, bkg);
+
+                runOnMainDelay(new Runnable() {
                     @Override
-                    public void run(Float value) {
+                    public void run() {
                         if (boxRoot != null) {
-                            boxRoot.setBkgAlpha(value);
+                            boxRoot.setVisibility(View.GONE);
                         }
-                        if (value == 0) {
-                            if (boxRoot != null) {
-                                boxRoot.setVisibility(View.GONE);
-                            }
-                            dismiss(dialogView);
-                        }
+                        dismiss(dialogView);
                     }
-                });
+                }, getExitAnimationDuration());
             }
         }
 
@@ -416,23 +381,39 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             }
         }
 
+        private boolean enterAnimRunning = true;
+
         protected DialogXAnimInterface<FullScreenDialog> getDialogXAnimImpl() {
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<FullScreenDialog>() {
                     @Override
-                    public void doShowAnim(FullScreenDialog dialog, ObjectRunnable<Float> animProgress) {
-                        showEnterAnim();
+                    public void doShowAnim(FullScreenDialog dialog, ViewGroup dialogBodyView) {
+                        long enterAnimDurationTemp = getEnterAnimationDuration();
+                        makeEnterY();
+                        bkgEnterAimY = boxRoot.getSafeHeight() - enterY;
+                        if (bkgEnterAimY < 0) bkgEnterAimY = 0;
+                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
+                        enterAnim.setDuration(enterAnimDurationTemp);
+                        enterAnim.setInterpolator(new DecelerateInterpolator());
+                        enterAnim.start();
+                        bkg.setVisibility(View.VISIBLE);
+
+                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                        bkgAlpha.setDuration(enterAnimDurationTemp);
+                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                float value = (float) animation.getAnimatedValue();
+                                boxRoot.setBkgAlpha(value);
+                                enterAnimRunning = !(value == 1f);
+                            }
+                        });
+                        bkgAlpha.start();
                     }
 
                     @Override
-                    public void doExitAnim(FullScreenDialog dialog, ObjectRunnable<Float> animProgress) {
-                        long exitAnimDurationTemp = 300;
-                        if (overrideExitDuration >= 0) {
-                            exitAnimDurationTemp = overrideExitDuration;
-                        }
-                        if (exitAnimDuration >= 0) {
-                            exitAnimDurationTemp = exitAnimDuration;
-                        }
+                    public void doExitAnim(FullScreenDialog dialog, ViewGroup dialogBodyView) {
+                        long exitAnimDurationTemp = getExitAnimationDuration();
 
                         ObjectAnimator exitAnim = ObjectAnimator.ofFloat(bkg, "y", bkg.getY(), boxBkg.getHeight());
                         exitAnim.setDuration(exitAnimDurationTemp);
@@ -444,7 +425,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
                                 float value = (float) animation.getAnimatedValue();
-                                animProgress.run(value);
+                                boxRoot.setBkgAlpha(value);
                                 enterAnimRunning = !(value == 1f);
                             }
                         });
@@ -453,6 +434,28 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 };
             }
             return dialogXAnimImpl;
+        }
+
+        public long getExitAnimationDuration() {
+            long exitAnimDurationTemp = 300;
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration != -1) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            return exitAnimDurationTemp;
+        }
+
+        public long getEnterAnimationDuration() {
+            long enterAnimDurationTemp = 300;
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            return enterAnimDurationTemp;
         }
     }
 
@@ -625,15 +628,15 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         hideWithExitAnim = true;
         isHide = true;
         if (getDialogImpl() != null) {
-            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, getDialogImpl().bkg);
+            runOnMainDelay(new Runnable() {
                 @Override
-                public void run(Float value) {
-                    getDialogImpl().boxRoot.setBkgAlpha(value);
-                    if (value == 0 && getDialogView() != null) {
+                public void run() {
+                    if (getDialogView() != null) {
                         getDialogView().setVisibility(View.GONE);
                     }
                 }
-            });
+            }, getDialogImpl().getExitAnimationDuration());
         }
     }
 

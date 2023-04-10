@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
@@ -463,12 +464,12 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         autoDismiss(autoDismissDelay);
     }
 
-    private boolean isNoSetCustomDelay(){
+    private boolean isNoSetCustomDelay() {
         return autoDismissDelay == Long.MIN_VALUE;
     }
 
     public PopNotification showShort() {
-        if (isNoSetCustomDelay())autoDismiss(2000);
+        if (isNoSetCustomDelay()) autoDismiss(2000);
         if (!preShow && !isShow) {
             show();
         }
@@ -606,12 +607,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
-                        @Override
-                        public void run(Float aFloat) {
-
-                        }
-                    });
+                    getDialogXAnimImpl().doShowAnim(me, boxBody);
 
                     if (!DialogX.onlyOnePopNotification) {
                         if (popNotificationList != null) {
@@ -819,14 +815,14 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
-                        getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+                        getDialogXAnimImpl().doExitAnim(me, boxBody);
+
+                        runOnMainDelay(new Runnable() {
                             @Override
-                            public void run(Float value) {
-                                if (value == 0f) {
-                                    waitForDismiss();
-                                }
+                            public void run() {
+                                waitForDismiss();
                             }
-                        });
+                        }, getExitAnimationDuration(null));
                     }
                 });
             }
@@ -836,46 +832,65 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<PopNotification>() {
                     @Override
-                    public void doShowAnim(PopNotification dialog, ObjectRunnable<Float> animProgress) {
+                    public void doShowAnim(PopNotification dialog, ViewGroup dialogBodyView) {
                         Animation enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_notification_enter : enterAnimResId);
+                        long enterAnimDuration = getEnterAnimationDuration(enterAnim);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                        if (enterAnimDuration != -1) {
-                            enterAnim.setDuration(enterAnimDuration);
-                        }
+                        enterAnim.setDuration(enterAnimDuration);
                         enterAnim.setFillAfter(true);
                         boxBody.startAnimation(enterAnim);
 
                         boxRoot.animate()
-                                .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
+                                .setDuration(enterAnimDuration)
                                 .alpha(1f)
                                 .setInterpolator(new DecelerateInterpolator())
                                 .setListener(null);
                     }
 
                     @Override
-                    public void doExitAnim(PopNotification dialog, ObjectRunnable<Float> animProgress) {
+                    public void doExitAnim(PopNotification dialog, ViewGroup dialogBodyView) {
                         Animation exitAnim = AnimationUtils.loadAnimation(getOwnActivity() == null ? boxRoot.getContext() : getOwnActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_notification_exit : exitAnimResId);
-                        if (exitAnimDuration != -1) {
-                            exitAnim.setDuration(exitAnimDuration);
-                        }
+                        long exitAnimDuration = getExitAnimationDuration(exitAnim);
+                        exitAnim.setDuration(exitAnimDuration);
                         exitAnim.setFillAfter(true);
                         boxBody.startAnimation(exitAnim);
 
                         boxRoot.animate()
                                 .alpha(0f)
                                 .setInterpolator(new AccelerateInterpolator())
-                                .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-
-                        runOnMainDelay(new Runnable() {
-                            @Override
-                            public void run() {
-                                animProgress.run(0f);
-                            }
-                        }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                                .setDuration(exitAnimDuration);
                     }
                 };
             }
             return dialogXAnimImpl;
+        }
+
+        public long getExitAnimationDuration(@Nullable Animation defaultExitAnim) {
+            if (defaultExitAnim == null && boxBody.getAnimation() != null) {
+                defaultExitAnim = boxBody.getAnimation();
+            }
+            long exitAnimDurationTemp = (defaultExitAnim == null || defaultExitAnim.getDuration() == 0) ? 300 : defaultExitAnim.getDuration();
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration != -1) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            return exitAnimDurationTemp;
+        }
+
+        public long getEnterAnimationDuration(@Nullable Animation defaultEnterAnim) {
+            if (defaultEnterAnim == null && boxBody.getAnimation() != null) {
+                defaultEnterAnim = boxBody.getAnimation();
+            }
+            long enterAnimDurationTemp = (defaultEnterAnim == null || defaultEnterAnim.getDuration() == 0) ? 300 : defaultEnterAnim.getDuration();
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            return enterAnimDurationTemp;
         }
     }
 
@@ -1433,15 +1448,14 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new PopNotification() {
-     *     @Override
-     *     public void onShow(PopNotification dialog) {
-     *         //...
-     *     }
-     * }
      *
      * @param dialog self
+     * @Override public void onShow(PopNotification dialog) {
+     * //...
+     * }
+     * }
      */
-    public void onShow(PopNotification dialog){
+    public void onShow(PopNotification dialog) {
 
     }
 
@@ -1449,23 +1463,23 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
      * 用于使用 new 构建实例时，override 的生命周期事件
      * 例如：
      * new PopNotification() {
-     *     @Override
-     *     public boolean onDismiss(PopNotification dialog) {
-     *         WaitDialog.show("Please Wait...");
-     *         if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
-     *             //点击了OK的情况
-     *             //...
-     *         } else {
-     *             //其他按钮点击、对话框dismiss的情况
-     *             //...
-     *         }
-     *         return false;
-     *     }
-     * }
+     *
      * @param dialog self
+     * @Override public boolean onDismiss(PopNotification dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(PopNotification dialog){
+    public void onDismiss(PopNotification dialog) {
 
     }
 }

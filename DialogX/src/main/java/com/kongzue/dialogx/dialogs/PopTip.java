@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
@@ -562,7 +564,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    getDialogXAnimImpl().doShowAnim(me, null);
+                    getDialogXAnimImpl().doShowAnim(me, boxBody);
                     setLifecycleState(Lifecycle.State.RESUMED);
                 }
             });
@@ -665,7 +667,14 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
-                        getDialogXAnimImpl().doExitAnim(me, null);
+                        getDialogXAnimImpl().doExitAnim(me, boxBody);
+
+                        runOnMainDelay(new Runnable() {
+                            @Override
+                            public void run() {
+                                waitForDismiss();
+                            }
+                        }, getExitAnimationDuration(null));
                     }
                 });
             }
@@ -675,46 +684,65 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<PopTip>() {
                     @Override
-                    public void doShowAnim(PopTip dialog, ObjectRunnable<Float> animProgress) {
+                    public void doShowAnim(PopTip dialog, ViewGroup dialogBodyView) {
                         Animation enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_default_enter : enterAnimResId);
+                        long enterAnimDuration = getEnterAnimationDuration(enterAnim);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
-                        if (enterAnimDuration != -1) {
-                            enterAnim.setDuration(enterAnimDuration);
-                        }
+                        enterAnim.setDuration(enterAnimDuration);
                         enterAnim.setFillAfter(true);
                         boxBody.startAnimation(enterAnim);
 
                         boxRoot.animate()
-                                .setDuration(enterAnimDuration == -1 ? enterAnim.getDuration() : enterAnimDuration)
+                                .setDuration(enterAnimDuration)
                                 .alpha(1f)
                                 .setInterpolator(new DecelerateInterpolator())
                                 .setListener(null);
                     }
 
                     @Override
-                    public void doExitAnim(PopTip dialog, ObjectRunnable<Float> animProgress) {
+                    public void doExitAnim(PopTip dialog, ViewGroup dialogBodyView) {
                         Animation exitAnim = AnimationUtils.loadAnimation(getOwnActivity() == null ? boxRoot.getContext() : getOwnActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_default_exit : exitAnimResId);
-                        if (exitAnimDuration != -1) {
-                            exitAnim.setDuration(exitAnimDuration);
-                        }
+                        long exitAnimDuration = getExitAnimationDuration(exitAnim);
+                        exitAnim.setDuration(exitAnimDuration);
                         exitAnim.setFillAfter(true);
                         boxBody.startAnimation(exitAnim);
 
                         boxRoot.animate()
                                 .alpha(0f)
                                 .setInterpolator(new AccelerateInterpolator())
-                                .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
-
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                waitForDismiss();
-                            }
-                        }, exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                                .setDuration(exitAnimDuration);
                     }
                 };
             }
             return dialogXAnimImpl;
+        }
+
+        public long getExitAnimationDuration(@Nullable Animation defaultExitAnim) {
+            if (defaultExitAnim == null && boxBody.getAnimation() != null) {
+                defaultExitAnim = boxBody.getAnimation();
+            }
+            long exitAnimDurationTemp = (defaultExitAnim == null || defaultExitAnim.getDuration() == 0) ? 300 : defaultExitAnim.getDuration();
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration != -1) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            return exitAnimDurationTemp;
+        }
+
+        public long getEnterAnimationDuration(@Nullable Animation defaultEnterAnim) {
+            if (defaultEnterAnim == null && boxBody.getAnimation() != null) {
+                defaultEnterAnim = boxBody.getAnimation();
+            }
+            long enterAnimDurationTemp = (defaultEnterAnim == null || defaultEnterAnim.getDuration() == 0) ? 300 : defaultEnterAnim.getDuration();
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            return enterAnimDurationTemp;
         }
     }
 

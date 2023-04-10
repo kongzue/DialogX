@@ -206,12 +206,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         if (isHide && getDialogView() != null && isShow) {
             if (hideWithExitAnim && getDialogImpl() != null) {
                 getDialogView().setVisibility(View.VISIBLE);
-                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
-                    @Override
-                    public void run(Float value) {
-                        getDialogImpl().boxRoot.setBkgAlpha(value);
-                    }
-                });
+                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, getDialogImpl().bkg);
             } else {
                 getDialogView().setVisibility(View.VISIBLE);
             }
@@ -451,17 +446,16 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             boxBkg.post(new Runnable() {
                 @Override
                 public void run() {
-                    getDialogXAnimImpl().doShowAnim(BottomDialog.this, new ObjectRunnable<Float>() {
-                        @Override
-                        public void run(Float value) {
-                            boxRoot.setBkgAlpha(value);
-                            if (value == 1f) {
-                                bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
-                            }
-                        }
-                    });
+                    getDialogXAnimImpl().doShowAnim(BottomDialog.this, bkg);
                 }
             });
+
+            runOnMainDelay(new Runnable() {
+                @Override
+                public void run() {
+                    bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
+                }
+            }, getEnterAnimationDuration());
 
             onDialogInit();
         }
@@ -627,30 +621,19 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
 
-                getDialogXAnimImpl().doExitAnim(BottomDialog.this, new ObjectRunnable<Float>() {
-                    @Override
-                    public void run(Float animatedValue) {
-                        if (boxRoot != null) {
-                            boxRoot.setBkgAlpha(animatedValue);
-                        }
-                        if (animatedValue == 0) {
-                            if (boxRoot != null) {
-                                boxRoot.setVisibility(View.GONE);
-                            }
-                            dismiss(dialogView);
-                        }
-                    }
-                });
+                getDialogXAnimImpl().doExitAnim(BottomDialog.this, bkg);
 
                 runOnMainDelay(new Runnable() {
                     @Override
                     public void run() {
+                        if (boxRoot != null) {
+                            boxRoot.setVisibility(View.GONE);
+                        }
+                        dismiss(dialogView);
                     }
-                }, exitAnimDurationTemp);
+                }, getExitAnimationDuration());
             }
         }
-
-        long exitAnimDurationTemp = 300;
 
         public void preDismiss() {
             if (isCancelable()) {
@@ -679,8 +662,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<BottomDialog>() {
                     @Override
-                    public void doShowAnim(BottomDialog dialog, ObjectRunnable<Float> animProgress) {
-                        long enterAnimDurationTemp = 300;
+                    public void doShowAnim(BottomDialog dialog, ViewGroup dialogBodyView) {
+                        long enterAnimDurationTemp = getEnterAnimationDuration();
 
                         float customDialogTop = 0;
                         if (dialog.isAllowInterceptTouch()) {
@@ -700,12 +683,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
                         //上移动画
                         ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", getRootFrameLayout().getMeasuredHeight(), bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop);
-                        if (overrideEnterDuration >= 0) {
-                            enterAnimDurationTemp = overrideEnterDuration;
-                        }
-                        if (enterAnimDuration >= 0) {
-                            enterAnimDurationTemp = enterAnimDuration;
-                        }
                         enterAnim.setDuration(enterAnimDurationTemp);
                         enterAnim.setAutoCancel(true);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
@@ -717,20 +694,15 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
                             }
                         });
                         bkgAlpha.start();
                     }
 
                     @Override
-                    public void doExitAnim(BottomDialog dialog, ObjectRunnable<Float> animProgress) {
-                        if (overrideExitDuration >= 0) {
-                            exitAnimDurationTemp = overrideExitDuration;
-                        }
-                        if (exitAnimDuration >= 0) {
-                            exitAnimDurationTemp = exitAnimDuration;
-                        }
+                    public void doExitAnim(BottomDialog dialog, ViewGroup dialogBodyView) {
+                        long exitAnimDurationTemp = getExitAnimationDuration();
 
                         ObjectAnimator exitAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(), boxBkg.getHeight());
                         exitAnim.setDuration(exitAnimDurationTemp);
@@ -741,7 +713,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
                             }
                         });
                         bkgAlpha.start();
@@ -749,6 +721,28 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 };
             }
             return dialogXAnimImpl;
+        }
+
+        public long getExitAnimationDuration() {
+            long exitAnimDurationTemp = 300;
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration != -1) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            return exitAnimDurationTemp;
+        }
+
+        public long getEnterAnimationDuration() {
+            long enterAnimDurationTemp = 300;
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            return enterAnimDurationTemp;
         }
     }
 
@@ -1110,17 +1104,16 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         hideWithExitAnim = true;
         isHide = true;
         if (getDialogImpl() != null) {
-            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, getDialogImpl().bkg);
+
+            runOnMainDelay(new Runnable() {
                 @Override
-                public void run(Float value) {
-                    if (getDialogImpl().boxRoot != null) {
-                        getDialogImpl().boxRoot.setBkgAlpha(value);
-                    }
-                    if (value == 0 && getDialogView() != null) {
+                public void run() {
+                    if (getDialogView() != null) {
                         getDialogView().setVisibility(View.GONE);
                     }
                 }
-            });
+            }, getDialogImpl().getExitAnimationDuration());
         }
     }
 

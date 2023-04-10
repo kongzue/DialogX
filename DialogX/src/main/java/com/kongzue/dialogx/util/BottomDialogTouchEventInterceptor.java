@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util;
 
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -18,7 +19,7 @@ import com.kongzue.dialogx.interfaces.ScrollController;
  * @createTime: 2020/10/7 4:01
  */
 public class BottomDialogTouchEventInterceptor {
-    
+
     /**
      * 下边三个值用于判断触控过程，
      * isBkgTouched：标记是否已按下
@@ -36,11 +37,11 @@ public class BottomDialogTouchEventInterceptor {
      * 需要对bkgTouchDownY、scrolledY的值进行刷新，否则触控连续过程会出现闪跳。
      */
     private int oldMode;
-    
+
     public BottomDialogTouchEventInterceptor(BottomDialog me, BottomDialog.DialogImpl impl) {
         refresh(me, impl);
     }
-    
+
     public void refresh(final BottomDialog me, final BottomDialog.DialogImpl impl) {
         if (me == null || impl == null || impl.bkg == null || impl.scrollView == null) {
             return;
@@ -62,6 +63,7 @@ public class BottomDialogTouchEventInterceptor {
             impl.bkg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    Log.e(">>>", "onTouch: ");
                     if (me.getDialogLifecycleCallback() instanceof BottomDialogSlideEventLifecycleCallback) {
                         if (((BottomDialogSlideEventLifecycleCallback) me.getDialogLifecycleCallback()).onSlideTouchEvent(me, v, event)) {
                             return true;
@@ -137,7 +139,7 @@ public class BottomDialogTouchEventInterceptor {
             impl.bkg.setOnTouchListener(null);
         }
     }
-    
+
     private int dip2px(float dpValue) {
         final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);

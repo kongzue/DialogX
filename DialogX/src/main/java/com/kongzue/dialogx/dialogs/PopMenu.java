@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
@@ -217,12 +218,7 @@ public class PopMenu extends BaseDialog {
                 getDialogImpl().boxBody.clearAnimation();
                 getDialogView().setVisibility(View.VISIBLE);
                 getDialogImpl().boxRoot.animate().alpha(1f);
-                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
-                    @Override
-                    public void run(Float value) {
-                        getDialogImpl().boxRoot.setBkgAlpha(value);
-                    }
-                });
+                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, getDialogImpl().boxBody);
             } else {
                 getDialogView().setVisibility(View.VISIBLE);
             }
@@ -501,12 +497,7 @@ public class PopMenu extends BaseDialog {
 
                 @Override
                 public void run() {
-                    getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
-                        @Override
-                        public void run(Float value) {
-                            boxRoot.setBkgAlpha(value);
-                        }
-                    });
+                    getDialogXAnimImpl().doShowAnim(me, boxBody);
                     setLifecycleState(Lifecycle.State.RESUMED);
                 }
             });
@@ -619,28 +610,25 @@ public class PopMenu extends BaseDialog {
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {
-                        getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+                        getDialogXAnimImpl().doExitAnim(me, boxBody);
+
+                        runOnMainDelay(new Runnable() {
                             @Override
-                            public void run(Float value) {
-                                if (boxRoot != null && baseView == null) {
-                                    boxRoot.setBkgAlpha(value);
-                                }
-                                if (value == 0f) {
-                                    if (baseViewDrawListener != null) {
-                                        if (viewTreeObserver != null) {
-                                            removeDrawListener(viewTreeObserver, baseViewDrawListener);
-                                        } else {
-                                            if (baseView != null) {
-                                                removeDrawListener(baseView.getViewTreeObserver(), baseViewDrawListener);
-                                            }
+                            public void run() {
+                                if (baseViewDrawListener != null) {
+                                    if (viewTreeObserver != null) {
+                                        removeDrawListener(viewTreeObserver, baseViewDrawListener);
+                                    } else {
+                                        if (baseView != null) {
+                                            removeDrawListener(baseView.getViewTreeObserver(), baseViewDrawListener);
                                         }
-                                        baseViewDrawListener = null;
-                                        viewTreeObserver = null;
                                     }
-                                    dismiss(dialogView);
+                                    baseViewDrawListener = null;
+                                    viewTreeObserver = null;
                                 }
+                                dismiss(dialogView);
                             }
-                        });
+                        }, getExitAnimationDuration(null));
                     }
                 });
             }
@@ -653,8 +641,8 @@ public class PopMenu extends BaseDialog {
                     int selectMenuIndex = -1;
 
                     @Override
-                    public void doShowAnim(PopMenu dialog, ObjectRunnable<Float> animProgress) {
-                        long enterAnimDurationTemp = enterAnimDuration != -1 ? enterAnimDuration : (overrideEnterDuration == -1 ? 150 : overrideEnterDuration);
+                    public void doShowAnim(PopMenu dialog, ViewGroup dialogBodyView) {
+                        long enterAnimDurationTemp = getEnterAnimationDuration(null);
 
                         if (baseView != null) {
                             //有绑定按钮的情况下
@@ -786,7 +774,8 @@ public class PopMenu extends BaseDialog {
                             bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
-                                    animProgress.run((Float) animation.getAnimatedValue());
+                                    boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
+                                    ;
                                 }
                             });
                             bkgAlpha.start();
@@ -794,27 +783,25 @@ public class PopMenu extends BaseDialog {
                     }
 
                     @Override
-                    public void doExitAnim(PopMenu dialog, ObjectRunnable<Float> animProgress) {
-                        if (overrideExitDuration != -1) {
-                            exitAnimDuration = overrideExitDuration;
-                        }
+                    public void doExitAnim(PopMenu dialog, ViewGroup dialogBodyView) {
                         Animation exitAnim = AnimationUtils.loadAnimation(getOwnActivity() == null ? boxRoot.getContext() : getOwnActivity(), R.anim.anim_dialogx_default_exit);
-                        if (exitAnimDuration != -1) {
-                            exitAnim.setDuration(exitAnimDuration);
-                        }
+                        long exitAnimDuration = getExitAnimationDuration(exitAnim);
+                        exitAnim.setDuration(exitAnimDuration);
                         boxBody.startAnimation(exitAnim);
 
                         boxRoot.animate()
                                 .alpha(0f)
                                 .setInterpolator(new AccelerateInterpolator())
-                                .setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                                .setDuration(exitAnimDuration);
 
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1, 0f);
-                        bkgAlpha.setDuration(exitAnimDuration == -1 ? exitAnim.getDuration() : exitAnimDuration);
+                        bkgAlpha.setDuration(exitAnimDuration);
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                if (boxRoot != null && baseView == null) {
+                                    boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
+                                }
                             }
                         });
                         bkgAlpha.start();
@@ -822,6 +809,34 @@ public class PopMenu extends BaseDialog {
                 };
             }
             return dialogXAnimImpl;
+        }
+
+        public long getExitAnimationDuration(@Nullable Animation defaultExitAnim) {
+            if (defaultExitAnim == null && boxBody.getAnimation() != null) {
+                defaultExitAnim = boxBody.getAnimation();
+            }
+            long exitAnimDurationTemp = (defaultExitAnim == null || defaultExitAnim.getDuration() == 0) ? 150 : defaultExitAnim.getDuration();
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration != -1) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            return exitAnimDurationTemp;
+        }
+
+        public long getEnterAnimationDuration(@Nullable Animation defaultEnterAnim) {
+            if (defaultEnterAnim == null && boxBody.getAnimation() != null) {
+                defaultEnterAnim = boxBody.getAnimation();
+            }
+            long enterAnimDurationTemp = (defaultEnterAnim == null || defaultEnterAnim.getDuration() == 0) ? 150 : defaultEnterAnim.getDuration();
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            return enterAnimDurationTemp;
         }
     }
 
@@ -1155,14 +1170,15 @@ public class PopMenu extends BaseDialog {
         hideWithExitAnim = true;
         isHide = true;
         if (getDialogImpl() != null) {
-            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, getDialogImpl().boxBody);
+            runOnMainDelay(new Runnable() {
                 @Override
-                public void run(Float value) {
-                    if (value == 0 && getDialogView() != null) {
+                public void run() {
+                    if (getDialogView() != null) {
                         getDialogView().setVisibility(View.GONE);
                     }
                 }
-            });
+            }, getDialogImpl().getExitAnimationDuration(null));
         }
     }
 
