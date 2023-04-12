@@ -334,7 +334,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             return requestFocusView.get().requestFocus();
         }
         View findFocusView = findFocus();
-        if (findFocusView != null) {
+        if (findFocusView != null && findFocusView != this) {
             findFocusView.requestFocus();
             return true;
         }

@@ -791,19 +791,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-//        new Thread() {
-//            View fV;
-//            @Override
-//            public void run() {
-//                super.run();
-//                while (true) {
-//                    View view = getWindow().getDecorView().findFocus();
-//                    if (fV!=view)log("focusView=" + view);
-//                    fV = view;
-//                }
-//            }
-//        }.start();
-
         btnBottomReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
