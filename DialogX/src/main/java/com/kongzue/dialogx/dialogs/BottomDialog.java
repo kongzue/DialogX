@@ -263,10 +263,10 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         public ImageView splitSelectPositive;
         public ImageView splitSelectOther;
 
-        private LinearLayout boxButton;
-        private TextView btnSelectNegative;
-        private TextView btnSelectOther;
-        private TextView btnSelectPositive;
+        public LinearLayout boxButton;
+        public TextView btnSelectNegative;
+        public TextView btnSelectOther;
+        public TextView btnSelectPositive;
 
         private List<View> blurViews;
 

@@ -34,6 +34,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -43,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -92,6 +94,7 @@ import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
+import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogxdemo.BuildConfig;
 import com.kongzue.dialogxdemo.R;
 import com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleViewAdapter;
@@ -788,6 +791,19 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+//        new Thread() {
+//            View fV;
+//            @Override
+//            public void run() {
+//                super.run();
+//                while (true) {
+//                    View view = getWindow().getDecorView().findFocus();
+//                    if (fV!=view)log("focusView=" + view);
+//                    fV = view;
+//                }
+//            }
+//        }.start();
+
         btnBottomReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1042,7 +1058,7 @@ public class MainActivity extends BaseActivity {
                 //实现完全自定义动画效果
 //                        .setDialogXAnimImpl(new DialogXAnimInterface<CustomDialog>() {
 //                            @Override
-//                            public void doShowAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+//                            public void doShowAnim(CustomDialog customDialog, ViewGroup dialogBodyView) {
 //                                Animation enterAnim;
 //
 //                                int enterAnimResId = com.kongzue.dialogx.R.anim.anim_dialogx_top_enter;
@@ -1059,14 +1075,17 @@ public class MainActivity extends BaseActivity {
 //                                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 //                                    @Override
 //                                    public void onAnimationUpdate(ValueAnimator animation) {
-//                                        animProgress.run((Float) animation.getAnimatedValue());
+//                                        if (customDialog.getDialogImpl() == null || customDialog.getDialogImpl().boxRoot == null) {
+//                                            return;
+//                                        }
+//                                        customDialog.getDialogImpl().boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
 //                                    }
 //                                });
 //                                bkgAlpha.start();
 //                            }
 //
 //                            @Override
-//                            public void doExitAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+//                            public void doExitAnim(CustomDialog customDialog, ViewGroup dialogBodyView) {
 //                                int exitAnimResIdTemp = com.kongzue.dialogx.R.anim.anim_dialogx_default_exit;
 //
 //                                Animation exitAnim = AnimationUtils.loadAnimation(me, exitAnimResIdTemp);
@@ -1077,7 +1096,10 @@ public class MainActivity extends BaseActivity {
 //                                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 //                                    @Override
 //                                    public void onAnimationUpdate(ValueAnimator animation) {
-//                                        animProgress.run((Float) animation.getAnimatedValue());
+//                                        if (customDialog.getDialogImpl() == null || customDialog.getDialogImpl().boxRoot == null) {
+//                                            return;
+//                                        }
+//                                        customDialog.getDialogImpl().boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
 //                                    }
 //                                });
 //                                bkgAlpha.start();

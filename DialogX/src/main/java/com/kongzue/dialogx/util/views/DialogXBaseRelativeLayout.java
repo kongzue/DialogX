@@ -28,11 +28,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-import com.kongzue.dialogx.dialogs.BottomDialog;
-import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
 import com.kongzue.dialogx.interfaces.DynamicWindowInsetsAnimationListener;
+import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
 import java.lang.ref.WeakReference;
@@ -51,6 +50,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @createTime: 2020/9/22 13:53
  */
 public class DialogXBaseRelativeLayout extends RelativeLayout {
+
+    private boolean debugMode = false;
 
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
     private BaseDialog parentDialog;
@@ -108,6 +109,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     @Override
     protected boolean fitSystemWindows(Rect insets) {
         if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW)) {
+            log("#fitSystemWindows paddingView: b=" + insets.bottom);
             paddingView(insets.left, insets.top, insets.right, insets.bottom);
         }
         return super.fitSystemWindows(insets);
@@ -118,6 +120,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW)) {
                 paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+                log("#dispatchApplyWindowInsets paddingView: b=" + insets.getSystemWindowInsetBottom());
             }
         }
         return super.dispatchApplyWindowInsets(insets);
@@ -127,6 +130,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public void paddingView(Insets insets) {
         if (insets != null) {
             paddingView(insets.left, insets.top, insets.right, insets.bottom);
+            log("#paddingView(insets) paddingView: b=" + insets.bottom);
         }
     }
 
@@ -148,6 +152,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 return;
             }
             paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            log("#paddingView(WindowInsets) paddingView: b=" + insets.getSystemWindowInsetBottom());
         }
     }
 
@@ -163,6 +168,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (parentDialog instanceof NoTouchInterface){
+            return super.onTouchEvent(event);
+        }
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         return super.onTouchEvent(event);
@@ -180,7 +188,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
             ViewCompat.requestApplyInsets(this);
 
-            if (parentDialog.getOwnActivity() == null) return;
+            if (parentDialog == null || parentDialog.getOwnActivity() == null) return;
 
             View decorView = (View) getParent();
             if (decorView != null) {
@@ -270,6 +278,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         decorView.getWindowVisibleDisplayFrame(rect);
         if (rect.left == 0 && rect.top == 0 && rect.right == 0 && rect.bottom == 0) return;
         paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
+        log("#getWindowInsetsByDisplayMetrics paddingView: b=" + (displayMetrics.heightPixels - rect.bottom));
     }
 
     @Override
@@ -315,16 +324,37 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
+        if (parentDialog != null && parentDialog instanceof NoTouchInterface) {
+            return false;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getRootWindowInsets() != null && getRootWindowInsets().getStableInsets() != null) {
-                paddingView(getRootWindowInsets().getStableInsets());
-            }
             initDynamicSafeAreaListener();
         }
         if (direction == View.FOCUS_DOWN && requestFocusView != null && requestFocusView.get() != null) {
             return requestFocusView.get().requestFocus();
         }
+        View findFocusView = findFocus();
+        if (findFocusView != null) {
+            findFocusView.requestFocus();
+            return true;
+        }
         return super.requestFocus(direction, previouslyFocusedRect);
+    }
+
+    public void requestFocusOnResume() {
+        log("#requestFocusOnResume");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getRootWindowInsets() != null && getRootWindowInsets().getStableInsets() != null) {
+            paddingView(getRootWindowInsets().getStableInsets());
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            initDynamicSafeAreaListener();
+        }
+        View findFocusView = findFocus();
+        if (findFocusView != null && findFocusView != this) {
+            findFocusView.requestFocus();
+            return;
+        }
+        requestFocus();
     }
 
     public abstract static class OnLifecycleCallBack {
@@ -345,8 +375,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
                 bkgView.setNavBarHeight(bottom);
                 setPadding(extraPadding[0] + left, extraPadding[1] + top, extraPadding[2] + right, extraPadding[3]);
-                if (getParentDialog() instanceof DialogXBaseBottomDialog){
-                    if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()){
+                if (getParentDialog() instanceof DialogXBaseBottomDialog) {
+                    if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()) {
                         bkgView.setPadding(0, 0, 0, 0);
                         return;
                     }
@@ -490,5 +520,11 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     public int getUseAreaHeight() {
         return getHeight() - getRootPaddingBottom();
+    }
+
+    protected void log(String s) {
+        if (debugMode) {
+            Log.e(">>>", s);
+        }
     }
 }

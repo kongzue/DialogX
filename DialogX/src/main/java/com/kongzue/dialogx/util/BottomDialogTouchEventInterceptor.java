@@ -63,7 +63,6 @@ public class BottomDialogTouchEventInterceptor {
             impl.bkg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    Log.e(">>>", "onTouch: ");
                     if (me.getDialogLifecycleCallback() instanceof BottomDialogSlideEventLifecycleCallback) {
                         if (((BottomDialogSlideEventLifecycleCallback) me.getDialogLifecycleCallback()).onSlideTouchEvent(me, v, event)) {
                             return true;

@@ -129,7 +129,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                     View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
                     if (boxRoot instanceof DialogXBaseRelativeLayout) {
                         if (((DialogXBaseRelativeLayout) boxRoot).isBaseFocusable()) {
-                            boxRoot.requestFocus();
+                            ((DialogXBaseRelativeLayout) boxRoot).requestFocusOnResume();
                             return;
                         }
                     }
@@ -139,7 +139,21 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     private static void requestDialogFocus() {
-        onActivityResume(getTopActivity());
+        if (runningDialogList != null) {
+            CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
+            for (int i = copyOnWriteList.size() - 1; i >= 0; i--) {
+                BaseDialog baseDialog = copyOnWriteList.get(i);
+                if (baseDialog.getOwnActivity() == getTopActivity() && baseDialog.isShow && baseDialog.getDialogView() != null) {
+                    View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
+                    if (boxRoot instanceof DialogXBaseRelativeLayout) {
+                        if (((DialogXBaseRelativeLayout) boxRoot).isBaseFocusable()) {
+                            boxRoot.requestFocus();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public abstract void restartDialog();
@@ -148,43 +162,43 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (view == null) {
             return;
         }
-        final BaseDialog baseDialog = (BaseDialog) view.getTag();
-        if (baseDialog != null) {
-            if (baseDialog.isShow) {
-                if (baseDialog.getDialogView() != null) {
-                    baseDialog.getDialogView().setVisibility(View.VISIBLE);
+        final BaseDialog dialog = (BaseDialog) view.getTag();
+        if (dialog != null) {
+            if (dialog.isShow) {
+                if (dialog.getDialogView() != null) {
+                    dialog.getDialogView().setVisibility(View.VISIBLE);
                     return;
                 }
                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                 return;
             }
-            baseDialog.dialogView = new WeakReference<>(view);
+            dialog.dialogView = new WeakReference<>(view);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                publicWindowInsets(baseDialog.getRootFrameLayout().getRootWindowInsets());
+                publicWindowInsets(dialog.getRootFrameLayout().getRootWindowInsets());
             }
 
-            log(baseDialog.dialogKey() + ".show");
+            log(dialog.dialogKey() + ".show");
 
-            addDialogToRunningList(baseDialog);
-            switch (baseDialog.dialogImplMode) {
+            addDialogToRunningList(dialog);
+            switch (dialog.dialogImplMode) {
                 case WINDOW:
-                    WindowUtil.show(baseDialog.getOwnActivity(), view, !(baseDialog instanceof NoTouchInterface));
+                    WindowUtil.show(dialog.getOwnActivity(), view, !(dialog instanceof NoTouchInterface));
                     break;
                 case DIALOG_FRAGMENT:
-                    DialogFragmentImpl dialogFragment = new DialogFragmentImpl(baseDialog, view);
-                    dialogFragment.show(getSupportFragmentManager(baseDialog.getOwnActivity()), "DialogX");
-                    baseDialog.ownDialogFragmentImpl = new WeakReference<>(dialogFragment);
+                    DialogFragmentImpl dialogFragment = new DialogFragmentImpl(dialog, view);
+                    dialogFragment.show(getSupportFragmentManager(dialog.getOwnActivity()), "DialogX");
+                    dialog.ownDialogFragmentImpl = new WeakReference<>(dialogFragment);
                     break;
                 case FLOATING_ACTIVITY:
                     if (waitRunDialogX == null) {
                         waitRunDialogX = new HashMap<>();
                     }
-                    waitRunDialogX.put(baseDialog.dialogKey(), new ActivityRunnable() {
+                    waitRunDialogX.put(dialog.dialogKey(), new ActivityRunnable() {
                         @Override
                         public void run(Activity activity) {
-                            baseDialog.floatingWindowActivity = new WeakReference<>((DialogXFloatingWindowActivity) activity);
-                            baseDialog.floatingWindowActivity.get().setFromActivity(baseDialog.getOwnActivity());
+                            dialog.floatingWindowActivity = new WeakReference<>((DialogXFloatingWindowActivity) activity);
+                            dialog.floatingWindowActivity.get().setFromActivity(dialog.getOwnActivity());
                             final FrameLayout activityRootView = getDecorView(activity);
                             if (activityRootView == null) {
                                 return;
@@ -192,7 +206,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                             runOnMain(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (view.getParent() == baseDialog.getRootFrameLayout()) {
+                                    if (view.getParent() == dialog.getRootFrameLayout()) {
                                         error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                                         return;
                                     }
@@ -205,38 +219,38 @@ public abstract class BaseDialog implements LifecycleOwner {
                         }
                     });
                     DialogXFloatingWindowActivity dialogXFloatingWindowActivity = DialogXFloatingWindowActivity.getDialogXFloatingWindowActivity();
-                    if (dialogXFloatingWindowActivity != null && dialogXFloatingWindowActivity.isSameFrom(baseDialog.getOwnActivity().hashCode())) {
-                        dialogXFloatingWindowActivity.showDialogX(baseDialog.dialogKey());
+                    if (dialogXFloatingWindowActivity != null && dialogXFloatingWindowActivity.isSameFrom(dialog.getOwnActivity().hashCode())) {
+                        dialogXFloatingWindowActivity.showDialogX(dialog.dialogKey());
                         return;
                     }
                     Intent intent = new Intent(getPrivateContext(), DialogXFloatingWindowActivity.class);
-                    if (baseDialog.getOwnActivity() == null) {
+                    if (dialog.getOwnActivity() == null) {
                         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                     }
-                    intent.putExtra("dialogXKey", baseDialog.dialogKey());
-                    intent.putExtra("fromActivityUiStatus", baseDialog.getOwnActivity() == null ? 0 : (getDecorView(baseDialog.getOwnActivity()) == null ? 0 : getDecorView(baseDialog.getOwnActivity()).getSystemUiVisibility()));
+                    intent.putExtra("dialogXKey", dialog.dialogKey());
+                    intent.putExtra("fromActivityUiStatus", dialog.getOwnActivity() == null ? 0 : (getDecorView(dialog.getOwnActivity()) == null ? 0 : getDecorView(dialog.getOwnActivity()).getSystemUiVisibility()));
                     intent.putExtra("from", getPrivateContext().hashCode());
                     getPrivateContext().startActivity(intent);
                     int version = Integer.valueOf(Build.VERSION.SDK_INT);
-                    if (version > 5 && baseDialog.getOwnActivity() != null) {
-                        baseDialog.getOwnActivity().overridePendingTransition(0, 0);
+                    if (version > 5 && dialog.getOwnActivity() != null) {
+                        dialog.getOwnActivity().overridePendingTransition(0, 0);
                     }
                     break;
                 default:
-                    if (baseDialog.getRootFrameLayout() == null) {
+                    if (dialog.getRootFrameLayout() == null) {
                         return;
                     }
                     runOnMain(new Runnable() {
                         @Override
                         public void run() {
-                            if (view.getParent() == baseDialog.getRootFrameLayout()) {
+                            if (view.getParent() == dialog.getRootFrameLayout()) {
                                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                                 return;
                             }
                             if (view.getParent() != null) {
                                 ((ViewGroup) view.getParent()).removeView(view);
                             }
-                            baseDialog.getRootFrameLayout().addView(view);
+                            dialog.getRootFrameLayout().addView(view);
                         }
                     });
                     break;
@@ -680,10 +694,12 @@ public abstract class BaseDialog implements LifecycleOwner {
         }
 
         //Hide IME
-        View view = getOwnActivity().getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getOwnActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if (!(this instanceof NoTouchInterface)) {
+            View view = getOwnActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getOwnActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
         }
     }
 
