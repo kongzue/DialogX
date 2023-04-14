@@ -515,8 +515,14 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
                 @Override
                 public void onDismiss() {
-                    if (popTipList != null) popTipList.remove(PopTip.this);
+                    if (popTipList != null) {
+                        popTipList.remove(PopTip.this);
+                        if (popTipList.isEmpty()) {
+                            popTipList = null;
+                        }
+                    }
                     isShow = false;
+
                     if (autoDismissTimer != null) {
                         autoDismissTimer.cancel();
                     }
