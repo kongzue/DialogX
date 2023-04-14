@@ -1271,14 +1271,23 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 notificationIndex++;
-                PopNotification.show("这是一条消息 " + notificationIndex)
+                PopNotification.build()
+                        .setMessage("这是一条消息 " + notificationIndex)
                         .setOnPopNotificationClickListener(new OnDialogButtonClickListener<PopNotification>() {
                             @Override
                             public boolean onClick(PopNotification dialog, View v) {
                                 TipDialog.show("点击了通知");
                                 return false;
                             }
-                        });
+                        })
+                        .showLong();
+
+                runDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                },500);
             }
         });
 

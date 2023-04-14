@@ -98,7 +98,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 requestFocus();
             }
             setBkgAlpha(0f);
-            if (parentDialog != null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
+            if (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
                 setFitsSystemWindows(true);
             }
             setClipChildren(false);
@@ -108,7 +108,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     protected boolean fitSystemWindows(Rect insets) {
-        if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW)) {
+        if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW))) {
             log("#fitSystemWindows paddingView: b=" + insets.bottom);
             paddingView(insets.left, insets.top, insets.right, insets.bottom);
         }
@@ -118,7 +118,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     @Override
     public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW)) {
+            if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW))) {
                 paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
                 log("#dispatchApplyWindowInsets paddingView: b=" + insets.getSystemWindowInsetBottom());
             }
@@ -168,7 +168,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (parentDialog instanceof NoTouchInterface){
+        if (getParentDialog() instanceof NoTouchInterface) {
             return super.onTouchEvent(event);
         }
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -188,7 +188,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
             ViewCompat.requestApplyInsets(this);
 
-            if (parentDialog == null || parentDialog.getOwnActivity() == null) return;
+            if (getParentDialog() == null || getParentDialog().getOwnActivity() == null) return;
 
             View decorView = (View) getParent();
             if (decorView != null) {
@@ -270,9 +270,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     private void getWindowInsetsByDisplayMetrics() {
-        if (parentDialog == null || parentDialog.getOwnActivity() == null) return;
+        if (getParentDialog() == null || getParentDialog().getOwnActivity() == null) return;
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        parentDialog.getOwnActivity().getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
+        getParentDialog().getOwnActivity().getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
         Rect rect = new Rect();
         View decorView = (View) getParent();
         decorView.getWindowVisibleDisplayFrame(rect);
@@ -292,6 +292,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         }
         getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
         onSafeInsetsChangeListener = null;
+        parentDialog = null;
         super.onDetachedFromWindow();
     }
 
@@ -324,7 +325,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
-        if (parentDialog != null && parentDialog instanceof NoTouchInterface) {
+        if (getParentDialog() == null || getParentDialog() instanceof NoTouchInterface) {
             return false;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
@@ -425,7 +426,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     public DialogXBaseRelativeLayout setParentDialog(BaseDialog parentDialog) {
         this.parentDialog = parentDialog;
-        if (parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
+        if (parentDialog!=null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
             setFitsSystemWindows(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 paddingView(getRootWindowInsets());
@@ -440,7 +441,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         boolean newLightStatus = ((newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO);
-        if (isLightMode != newLightStatus && DialogX.globalTheme == DialogX.THEME.AUTO) {
+        if (isLightMode != newLightStatus && DialogX.globalTheme == DialogX.THEME.AUTO && getParentDialog()!=null) {
             getParentDialog().restartDialog();
         }
     }
@@ -524,7 +525,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     protected void log(String s) {
         if (debugMode) {
-            Log.e(">>>", s);
+            Log.e(">>>" , s);
         }
     }
 }

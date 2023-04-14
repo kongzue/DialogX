@@ -556,6 +556,9 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                     if (popNotificationList != null) {
                         popNotificationList.remove(PopNotification.this);
                     }
+                    if (autoDismissTimer != null) {
+                        autoDismissTimer.cancel();
+                    }
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     PopNotification.this.onDismiss(me);
