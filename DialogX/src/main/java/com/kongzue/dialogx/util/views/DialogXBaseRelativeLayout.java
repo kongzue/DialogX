@@ -51,7 +51,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class DialogXBaseRelativeLayout extends RelativeLayout {
 
-    private boolean debugMode = false;
+    public static boolean debugMode = false;
 
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
     private BaseDialog parentDialog;
@@ -158,6 +158,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        log("#dispatchKeyEvent: KeyCode=" + event.getKeyCode());
         if (isAttachedToWindow() && event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK && interceptBack) {
             if (onBackPressedListener != null) {
                 return onBackPressedListener.onBackPressed();
@@ -325,7 +326,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
-        if (getParentDialog() == null || getParentDialog() instanceof NoTouchInterface) {
+        if (getParentDialog() != null && getParentDialog() instanceof NoTouchInterface) {
             return false;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
