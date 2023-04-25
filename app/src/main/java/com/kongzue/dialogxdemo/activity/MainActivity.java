@@ -844,6 +844,48 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        //仅使用渐变动画的实现示例
+        DialogXAnimInterface<BottomDialog> alphaDialogAnimation = new DialogXAnimInterface<BottomDialog>() {
+
+            @Override
+            //入场动画
+            public void doShowAnim(BottomDialog dialog, ViewGroup dialogBodyView) {
+                //设置好位置，将默认预设会在屏幕底外部恢复为屏幕内
+                dialog.getDialogImpl().boxBkg.setY(dialog.getDialogImpl().boxRoot.getUnsafePlace().top);
+                //创建 0f~1f 的数值动画
+                ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        float value = (float) animation.getAnimatedValue();
+                        //修改背景遮罩透明度
+                        dialog.getDialogImpl().boxRoot.setBkgAlpha(value);
+                        //修改内容透明度
+                        dialog.getDialogImpl().bkg.setAlpha(value);
+                    }
+                });
+                //使用真正的动画时长
+                animator.setDuration(dialog.getDialogImpl().getEnterAnimationDuration());
+                animator.start();
+            }
+
+            @Override
+            //出场动画
+            public void doExitAnim(BottomDialog dialog, ViewGroup dialogBodyView) {
+                ValueAnimator animator = ValueAnimator.ofFloat(1f, 0f);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        float value = (float) animation.getAnimatedValue();
+                        //这里可以直接修改整体透明度淡出
+                        dialog.getDialogImpl().boxRoot.setAlpha(value);
+                    }
+                });
+                animator.setDuration(dialog.getDialogImpl().getExitAnimationDuration());
+                animator.start();
+            }
+        };
+
         btnCustomBottomMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -856,6 +898,7 @@ public class MainActivity extends BaseActivity {
                                 return false;
                             }
                         })
+                        //.setDialogXAnimImpl(alphaDialogAnimation)
                         .setCustomView(new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(BottomDialog dialog, View v) {
@@ -1287,7 +1330,7 @@ public class MainActivity extends BaseActivity {
                     public void run() {
                         finish();
                     }
-                },500);
+                }, 500);
             }
         });
 
