@@ -447,6 +447,19 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 @Override
                 public void run() {
                     getDialogXAnimImpl().doShowAnim(BottomDialog.this, bkg);
+
+                    int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
+
+                    if (blurViews == null) {
+                        blurViews = findAllBlurView(dialogView);
+                    }
+
+                    if (blurViews != null) {
+                        for (View blurView : blurViews) {
+                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            ((BlurViewType) blurView).setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
+                        }
+                    }
                 }
             });
 
@@ -458,18 +471,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             }, getEnterAnimationDuration());
 
             onDialogInit();
-        }
-
-        private void findAllBlurView(View v) {
-            if (v instanceof BlurViewType) {
-                blurViews.add(v);
-            }
-            if (v instanceof ViewGroup) {
-                ViewGroup group = (ViewGroup) v;
-                for (int i = 0; i < group.getChildCount(); i++) {
-                    findAllBlurView(group.getChildAt(i));
-                }
-            }
         }
 
         @Override
@@ -485,11 +486,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 tintColor(btnSelectPositive, backgroundColor);
 
                 if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground()) {
-                    if (blurViews == null) {
-                        blurViews = new ArrayList<>();
-                        findAllBlurView(dialogView);
-                    }
-
                     if (blurViews != null) {
                         for (View blurView : blurViews) {
                             ((BlurViewType) blurView).setOverlayColor(backgroundColor);

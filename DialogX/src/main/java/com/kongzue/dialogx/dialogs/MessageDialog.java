@@ -40,6 +40,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.BaseOnDialogClickCallback;
+import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
@@ -58,6 +59,8 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.TextInfo;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author: Kongzue
@@ -277,7 +280,8 @@ public class MessageDialog extends BaseDialog {
     }
 
     public class DialogImpl implements DialogConvertViewInterface {
-        BlurView blurView;
+
+        private List<View> blurViews;
 
         public DialogXBaseRelativeLayout boxRoot;
         public MaxRelativeLayout bkg;
@@ -351,14 +355,17 @@ public class MessageDialog extends BaseDialog {
                             @Override
                             public void run() {
                                 int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
-                                blurView = new BlurView(getOwnActivity(), null);
-                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
-                                params.addRule(RelativeLayout.CENTER_IN_PARENT);
-                                blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                blurView.setOverrideOverlayColor(backgroundColor != -1);
-                                blurView.setTag("blurView");
-                                blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
-                                bkg.addView(blurView, 0, params);
+
+                                if (blurViews == null) {
+                                    blurViews = findAllBlurView(dialogView);
+                                }
+
+                                if (blurViews != null) {
+                                    for (View blurView : blurViews) {
+                                        ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                                        ((BlurViewType) blurView).setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
+                                    }
+                                }
 
                                 setLifecycleState(Lifecycle.State.RESUMED);
                             }
@@ -553,8 +560,15 @@ public class MessageDialog extends BaseDialog {
                     tintColor(btnSelectNegative, backgroundColor);
                     tintColor(btnSelectPositive, backgroundColor);
                 }
-            }
 
+                if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground()) {
+                   if (blurViews != null) {
+                        for (View blurView : blurViews) {
+                            ((BlurViewType) blurView).setOverlayColor(backgroundColor);
+                        }
+                    }
+                }
+            }
 
             bkg.setMaxWidth(getMaxWidth());
             bkg.setMaxHeight(getMaxHeight());

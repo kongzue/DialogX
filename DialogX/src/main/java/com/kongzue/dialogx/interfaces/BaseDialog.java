@@ -969,4 +969,18 @@ public abstract class BaseDialog implements LifecycleOwner {
             return null;
         return (FrameLayout) activity.getWindow().getDecorView();
     }
+
+    protected List<View> findAllBlurView(View v) {
+        List<View> result = new ArrayList<>();
+        if (v instanceof BlurViewType) {
+            result.add(v);
+        }
+        if (v instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) v;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                result.addAll(findAllBlurView(group.getChildAt(i)));
+            }
+        }
+        return result;
+    }
 }

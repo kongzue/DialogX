@@ -115,7 +115,8 @@
                     android:layout_marginBottom="10dp"
                     android:divider="@color/dialogxIOSSplitLight"
                     android:orientation="vertical"
-                    android:showDividers="middle">
+                    android:showDividers="middle"
+                    app:dialogxOverlayColorNoAlpha="true">
 
                     <TextView
                         android:id="@+id/btn_selectPositive"

@@ -117,6 +117,7 @@
                     android:divider="@drawable/rect_dialogx_ios_menu_split_divider"
                     android:orientation="vertical"
                     android:showDividers="middle"
+                    app:dialogxOverlayColorNoAlpha="true"
                     app:dialogxDarkMode="true">
 
                     <TextView

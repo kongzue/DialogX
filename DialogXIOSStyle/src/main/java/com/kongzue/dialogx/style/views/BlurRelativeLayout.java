@@ -36,6 +36,7 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
     private float mDownSampleFactor = 4;
     private int mOverlayColor = Color.WHITE;
     private float mBlurRadius = 35;
+    private boolean noAlpha = false;
     private boolean overrideOverlayColor = false;
 
     private float mRadius = 0;
@@ -77,24 +78,15 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
     Paint overlayPaint;
 
     private void init(Context context, AttributeSet attrs) {
-        if (!isInit) {
+        if (!isInit && context != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, com.kongzue.dialogx.R.styleable.RealtimeBlurView);
             darkMode = a.getBoolean(com.kongzue.dialogx.R.styleable.RealtimeBlurView_dialogxDarkMode, false);
-            mBlurRadius = a.getDimension(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeBlurRadius, dip2px(35));
+            mBlurRadius = a.getDimension(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeBlurRadius, dip2px(context, 35));
             mDownSampleFactor = a.getFloat(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeDownsampleFactor, 4);
             mOverlayColor = a.getColor(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeOverlayColor, getResources().getColor(darkMode ? R.color.dialogxIOSBkgDark : R.color.dialogxIOSBkgLight));
-            mRadius = a.getDimension(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeRadius, dip2px(15));
+            mRadius = a.getDimension(com.kongzue.dialogx.R.styleable.RealtimeBlurView_realtimeRadius, dip2px(context, 15));
+            noAlpha = a.getBoolean(com.kongzue.dialogx.R.styleable.RealtimeBlurView_dialogxOverlayColorNoAlpha, false);
             a.recycle();
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                setOutlineProvider(new ViewOutlineProvider() {
-                    @Override
-                    public void getOutline(View view, Outline outline) {
-                        outline.setRoundRect(0, 0, view.getWidth(),view.getHeight(), mRadius);
-                    }
-                });
-                setClipToOutline(true);
-            }
 
             mPaint = new Paint();
             mPaint.setAntiAlias(true);
@@ -102,7 +94,7 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
 
             cutPaint = new Paint();
             cutPaint.setAntiAlias(true);
-            cutPaint.setColor(mOverlayColor);
+            cutPaint.setColor(getOverlayColor());
 
             overlayPaint = new Paint();
             overlayPaint.setAntiAlias(true);
@@ -129,6 +121,15 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
             mBlurRadius = radius;
             mDirty = true;
             invalidate();
+            if (!isCompatMode()) {
+                setOutlineProvider(new ViewOutlineProvider() {
+                    @Override
+                    public void getOutline(View view, Outline outline) {
+                        outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), mRadius);
+                    }
+                });
+                setClipToOutline(true);
+            }
         }
     }
 
@@ -296,7 +297,7 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
                 y += locations[1];
 
                 // just erase transparent
-                mBitmapToBlur.eraseColor(mOverlayColor & 0xffffff);
+                mBitmapToBlur.eraseColor(getOverlayColor() & 0xffffff);
 
                 int rc = mBlurringCanvas.save();
                 mIsRendering = true;
@@ -378,7 +379,7 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
         if (!useBlur || !supportRenderScript) {
             mRectF.right = getWidth();
             mRectF.bottom = getHeight();
-            overlayPaint.setColor(needRemoveAlphaColor() ? removeAlphaColor(mOverlayColor) : mOverlayColor);
+            overlayPaint.setColor(getOverlayColor());
             canvas.drawRoundRect(mRectF, mRadius, mRadius, overlayPaint);
         } else {
             if (!mIsRendering && RENDERING_COUNT <= 0) {
@@ -424,7 +425,7 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
             mRectDst.right = getWidth();
             mRectDst.bottom = getHeight();
             canvas.drawBitmap(blurredBitmap, mRectSrc, mRectDst, null);
-            canvas.drawColor(mOverlayColor);
+            canvas.drawColor(getOverlayColor());
         } else {
             Bitmap overlyBitmap = drawOverlyColor(Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888));
             if (overlyBitmap != null) canvas.drawBitmap(overlyBitmap, 0, 0, null);
@@ -451,7 +452,7 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
             Rect originRect = new Rect();
             originRect.set(0, 0, bitmap.getWidth(), bitmap.getHeight());
             canvas.drawBitmap(bitmap, originRect, originRect, overlayPaint);
-            canvas.drawColor(needRemoveAlphaColor() ? removeAlphaColor(mOverlayColor) : mOverlayColor);
+            canvas.drawColor(getOverlayColor());
             return output;
         } else {
             return null;
@@ -489,7 +490,7 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
         if (overrideOverlayColor) {
             return false;
         } else {
-            return !(supportRenderScript && useBlur);
+            return noAlpha || !(supportRenderScript && useBlur);
         }
     }
 
@@ -549,8 +550,13 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
         this.overrideOverlayColor = overrideOverlayColor;
         return this;
     }
-    private int dip2px(float dpValue) {
-        final float scale = getResources().getDisplayMetrics().density;
+
+    private int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    private int getOverlayColor(){
+        return needRemoveAlphaColor() ? removeAlphaColor(mOverlayColor) : mOverlayColor;
     }
 }

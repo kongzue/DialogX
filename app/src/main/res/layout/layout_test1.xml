@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/edit_userName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ios_edit_box_bkg"
+        android:gravity="center"
+        android:hint="请输入账号"
+        android:inputType="textEmailAddress" />
+
+    <com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleView
+        android:id="@+id/recycleView"
+        android:tag="ScrollController"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>
