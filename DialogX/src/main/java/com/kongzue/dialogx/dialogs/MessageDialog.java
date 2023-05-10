@@ -354,7 +354,10 @@ public class MessageDialog extends BaseDialog {
                         bkg.post(new Runnable() {
                             @Override
                             public void run() {
-                                int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
+                                Integer blurFrontColor = null;
+                                if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()) != 0) {
+                                    blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
+                                }
 
                                 if (blurViews == null) {
                                     blurViews = findAllBlurView(dialogView);
@@ -362,7 +365,9 @@ public class MessageDialog extends BaseDialog {
 
                                 if (blurViews != null) {
                                     for (View blurView : blurViews) {
-                                        ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                                        if (blurFrontColor != null) {
+                                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                                        }
                                         ((BlurViewType) blurView).setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                     }
                                 }

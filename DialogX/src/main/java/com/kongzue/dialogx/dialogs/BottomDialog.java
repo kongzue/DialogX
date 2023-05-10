@@ -448,7 +448,10 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 public void run() {
                     getDialogXAnimImpl().doShowAnim(BottomDialog.this, bkg);
 
-                    int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
+                    Integer blurFrontColor = null;
+                    if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()) != 0) {
+                        blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
+                    }
 
                     if (blurViews == null) {
                         blurViews = findAllBlurView(dialogView);
@@ -456,7 +459,9 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
                     if (blurViews != null) {
                         for (View blurView : blurViews) {
-                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            if (blurFrontColor != null) {
+                                ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            }
                             ((BlurViewType) blurView).setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                         }
                     }
