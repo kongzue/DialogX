@@ -208,12 +208,12 @@ public class MIUIStyle extends DialogXStyle {
 
         @Override
         public int enterAnimResId(boolean light) {
-            return R.anim.anim_dialogx_notification_enter;
+            return com.kongzue.dialogx.R.anim.anim_dialogx_notification_enter;
         }
 
         @Override
         public int exitAnimResId(boolean light) {
-            return R.anim.anim_dialogx_notification_exit;
+            return com.kongzue.dialogx.R.anim.anim_dialogx_notification_exit;
         }
 
         @Override

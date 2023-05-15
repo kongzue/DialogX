@@ -2,10 +2,8 @@ package com.kongzue.dialogxmaterialyou.style;
 
 import android.content.Context;
 
-import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
-import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.ProgressView;
 import com.kongzue.dialogxmaterialyou.R;
 
@@ -29,12 +27,12 @@ public class MaterialYouStyle extends DialogXStyle {
     
     @Override
     public int enterAnimResId() {
-        return R.anim.anim_dialogx_default_enter;
+        return com.kongzue.dialogx.R.anim.anim_dialogx_default_enter;
     }
     
     @Override
     public int exitAnimResId() {
-        return R.anim.anim_dialogx_default_exit;
+        return com.kongzue.dialogx.R.anim.anim_dialogx_default_exit;
     }
     
     @Override
@@ -114,7 +112,7 @@ public class MaterialYouStyle extends DialogXStyle {
     public class DefaultWaitTipRes extends WaitTipRes{
         @Override
         public int overrideWaitLayout(boolean light) {
-            return R.layout.layout_dialogx_wait;
+            return com.kongzue.dialogx.R.layout.layout_dialogx_wait;
         }
 
         @Override
@@ -134,7 +132,7 @@ public class MaterialYouStyle extends DialogXStyle {
 
         @Override
         public int overrideTextColorRes(boolean light) {
-            return light ? R.color.white : R.color.black;
+            return light ? com.kongzue.dialogx.R.color.white : com.kongzue.dialogx.R.color.black;
         }
 
         @Override
@@ -161,7 +159,7 @@ public class MaterialYouStyle extends DialogXStyle {
 
         @Override
         public int overrideMenuDividerDrawableRes(boolean light) {
-            return light ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
+            return light ? com.kongzue.dialogx.R.drawable.rect_dialogx_material_menu_split_divider : com.kongzue.dialogx.R.drawable.rect_dialogx_material_menu_split_divider_night;
         }
 
         @Override
@@ -171,7 +169,7 @@ public class MaterialYouStyle extends DialogXStyle {
 
         @Override
         public int overrideMenuTextColor(boolean light) {
-            return light ? R.color.black90 : R.color.white90;
+            return light ? com.kongzue.dialogx.R.color.black90 : com.kongzue.dialogx.R.color.white90;
         }
 
         @Override
@@ -196,12 +194,12 @@ public class MaterialYouStyle extends DialogXStyle {
 
         @Override
         public int overrideSelectionImage(boolean light, boolean isSelected) {
-            return isSelected ? R.mipmap.img_dialogx_bottom_menu_material_item_selection : R.mipmap.img_dialogx_bottom_menu_material_item_non_select;
+            return isSelected ? com.kongzue.dialogx.R.mipmap.img_dialogx_bottom_menu_material_item_selection : com.kongzue.dialogx.R.mipmap.img_dialogx_bottom_menu_material_item_non_select;
         }
 
         @Override
         public int overrideMultiSelectionImage(boolean light, boolean isSelected) {
-            return isSelected ? R.mipmap.img_dialogx_bottom_menu_material_item_multi_selection : R.mipmap.img_dialogx_bottom_menu_material_item_non_multi_select;
+            return isSelected ? com.kongzue.dialogx.R.mipmap.img_dialogx_bottom_menu_material_item_multi_selection : com.kongzue.dialogx.R.mipmap.img_dialogx_bottom_menu_material_item_non_multi_select;
         }
     }
     
@@ -223,12 +221,12 @@ public class MaterialYouStyle extends DialogXStyle {
 
         @Override
         public int enterAnimResId(boolean light) {
-            return R.anim.anim_dialogx_default_enter;
+            return com.kongzue.dialogx.R.anim.anim_dialogx_default_enter;
         }
 
         @Override
         public int exitAnimResId(boolean light) {
-            return R.anim.anim_dialogx_default_exit;
+            return com.kongzue.dialogx.R.anim.anim_dialogx_default_exit;
         }
 
         @Override
@@ -317,12 +315,12 @@ public class MaterialYouStyle extends DialogXStyle {
 
         @Override
         public int enterAnimResId(boolean light) {
-            return R.anim.anim_dialogx_notification_enter;
+            return com.kongzue.dialogx.R.anim.anim_dialogx_notification_enter;
         }
 
         @Override
         public int exitAnimResId(boolean light) {
-            return R.anim.anim_dialogx_notification_exit;
+            return com.kongzue.dialogx.R.anim.anim_dialogx_notification_exit;
         }
 
         @Override
