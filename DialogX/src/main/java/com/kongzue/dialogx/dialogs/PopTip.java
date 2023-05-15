@@ -778,45 +778,50 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
     private void moveUp() {
         if (getDialogImpl() != null && getDialogImpl().boxBody != null) {
-            View bodyView = getDialogImpl().boxBody;
-            if (getDialogImpl() == null || bodyView == null) return;
-            if (style.popTipSettings() != null)
-                align = style.popTipSettings().align();
-            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.TOP;
-            float moveAimTop = 0;
-            switch (align) {
-                case TOP:
-                    moveAimTop = bodyView.getY() + bodyView.getHeight() * 1.3f;
-                    break;
-                case TOP_INSIDE:
-                    moveAimTop = bodyView.getY() + bodyView.getHeight() - bodyView.getPaddingTop();
-                    break;
-                case CENTER:
-                case BOTTOM:
-                case BOTTOM_INSIDE:
-                    moveAimTop = bodyView.getY() - bodyView.getHeight() * 1.3f;
-                    break;
-            }
-            if (bodyView.getTag() instanceof ValueAnimator) {
-                ((ValueAnimator) bodyView.getTag()).end();
-            }
-            ValueAnimator valueAnimator = ValueAnimator.ofFloat(bodyView.getY(), moveAimTop);
-            bodyView.setTag(valueAnimator);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            runOnMain(new Runnable() {
                 @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    if (getDialogImpl() == null || !isShow) {
-                        animation.cancel();
-                        return;
-                    }
+                public void run() {
                     View bodyView = getDialogImpl().boxBody;
-                    if (bodyView != null && bodyView.isAttachedToWindow()) {
-                        bodyView.setY((Float) animation.getAnimatedValue());
+                    if (getDialogImpl() == null || bodyView == null) return;
+                    if (style.popTipSettings() != null)
+                        align = style.popTipSettings().align();
+                    if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.TOP;
+                    float moveAimTop = 0;
+                    switch (align) {
+                        case TOP:
+                            moveAimTop = bodyView.getY() + bodyView.getHeight() * 1.3f;
+                            break;
+                        case TOP_INSIDE:
+                            moveAimTop = bodyView.getY() + bodyView.getHeight() - bodyView.getPaddingTop();
+                            break;
+                        case CENTER:
+                        case BOTTOM:
+                        case BOTTOM_INSIDE:
+                            moveAimTop = bodyView.getY() - bodyView.getHeight() * 1.3f;
+                            break;
                     }
+                    if (bodyView.getTag() instanceof ValueAnimator) {
+                        ((ValueAnimator) bodyView.getTag()).end();
+                    }
+                    ValueAnimator valueAnimator = ValueAnimator.ofFloat(bodyView.getY(), moveAimTop);
+                    bodyView.setTag(valueAnimator);
+                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            if (getDialogImpl() == null || !isShow) {
+                                animation.cancel();
+                                return;
+                            }
+                            View bodyView = getDialogImpl().boxBody;
+                            if (bodyView != null && bodyView.isAttachedToWindow()) {
+                                bodyView.setY((Float) animation.getAnimatedValue());
+                            }
+                        }
+                    });
+                    valueAnimator.setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration).setInterpolator(new DecelerateInterpolator(2f));
+                    valueAnimator.start();
                 }
             });
-            valueAnimator.setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration).setInterpolator(new DecelerateInterpolator(2f));
-            valueAnimator.start();
         }
     }
 
