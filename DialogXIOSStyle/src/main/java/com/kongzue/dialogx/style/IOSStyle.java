@@ -140,7 +140,7 @@ public class IOSStyle extends DialogXStyle {
     public class DefaultWaitTipRes extends WaitTipRes {
         @Override
         public int overrideWaitLayout(boolean light) {
-            return 0;
+            return R.layout.layout_dialogx_wait_ios;
         }
 
         @Override

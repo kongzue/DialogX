@@ -531,10 +531,6 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 new InputDialog("标题", "正文内容", "确定", "取消", "正在输入的文字")
                         .setInputText("Hello World")
-                        .setInputInfo(new InputInfo()
-                                .setCursorColor(getResources().getColor(R.color.colorAccent))       //修改输入框光标颜色
-                                .setBottomLineColor(DialogX.globalStyle instanceof MaterialStyle ? getResources().getColor(R.color.colorAccent) : 0)   //修改输入框下提示线颜色
-                        )
                         .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
                             @Override
                             public boolean onClick(InputDialog baseDialog, View v, String inputStr) {
@@ -1308,13 +1304,6 @@ public class MainActivity extends BaseActivity {
                             }
                         })
                         .showLong();
-
-                runDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 500);
             }
         });
 

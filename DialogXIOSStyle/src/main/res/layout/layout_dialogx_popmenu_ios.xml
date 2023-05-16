@@ -9,7 +9,7 @@
     app:autoSafeArea="false"
     app:baseFocusable="true">
 
-    <com.kongzue.dialogx.util.views.MaxRelativeLayout
+    <com.kongzue.dialogx.style.views.BlurRelativeLayout
         android:id="@+id/box_body"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -20,16 +20,16 @@
         <RelativeLayout
             android:id="@+id/box_custom"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <com.kongzue.dialogx.util.views.PopMenuListView
             android:id="@+id/listMenu"
-            android:listSelector="@color/empty"
-            android:layout_below="@+id/box_custom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/box_custom"
+            android:listSelector="@color/empty" />
 
-    </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+    </com.kongzue.dialogx.style.views.BlurRelativeLayout>
 
 </com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout>

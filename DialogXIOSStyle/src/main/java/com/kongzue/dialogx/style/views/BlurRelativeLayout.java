@@ -30,8 +30,9 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.iostheme.R;
+import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
-public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
+public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewType {
 
     private float mDownSampleFactor = 4;
     private int mOverlayColor = Color.WHITE;
@@ -141,6 +142,13 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
         }
     }
 
+    @Override
+    public void setRadiusPx(Float r) {
+        if (r != null) {
+            setRadiusPx((float) r);
+        }
+    }
+
     public void setDownsampleFactor(float factor) {
         if (factor <= 0) {
             throw new IllegalArgumentException("Downsample factor must be greater than 0.");
@@ -158,6 +166,13 @@ public class BlurRelativeLayout extends RelativeLayout implements BlurViewType {
         if (mOverlayColor != color) {
             mOverlayColor = color;
             invalidate();
+        }
+    }
+
+    @Override
+    public void setOverlayColor(Integer color) {
+        if (color != null) {
+            setOverlayColor((int) color);
         }
     }
 

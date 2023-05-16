@@ -41,9 +41,7 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -293,6 +291,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             splitSelectPositive = convertView.findViewWithTag("imgPositiveButtonSplit");
             splitSelectOther = convertView.findViewWithTag("imgOtherButtonSplit");
 
+            blurViews = findAllBlurView(dialogView);
+
             init();
             dialogImpl = this;
             refreshView();
@@ -449,20 +449,16 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                     getDialogXAnimImpl().doShowAnim(BottomDialog.this, bkg);
 
                     Integer blurFrontColor = null;
-                    if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()) != 0) {
-                        blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
-                    }
-
-                    if (blurViews == null) {
-                        blurViews = findAllBlurView(dialogView);
+                    Float dialogXRadius = null;
+                    if (style.messageDialogBlurSettings() != null) {
+                        blurFrontColor = getColorNullable(getIntStyleAttr(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme())));
+                        dialogXRadius = getFloatStyleAttr((float) style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                     }
 
                     if (blurViews != null) {
                         for (View blurView : blurViews) {
-                            if (blurFrontColor != null) {
-                                ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
-                            }
-                            ((BlurViewType) blurView).setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
+                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
                         }
                     }
                 }
@@ -490,11 +486,9 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 tintColor(btnSelectNegative, backgroundColor);
                 tintColor(btnSelectPositive, backgroundColor);
 
-                if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground()) {
-                    if (blurViews != null) {
-                        for (View blurView : blurViews) {
-                            ((BlurViewType) blurView).setOverlayColor(backgroundColor);
-                        }
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setOverlayColor(backgroundColor);
                     }
                 }
             }
@@ -550,6 +544,12 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                         }
                     });
                     bkg.setClipToOutline(true);
+                }
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setRadiusPx(backgroundRadius);
+                    }
                 }
             }
 

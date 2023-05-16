@@ -1,6 +1,8 @@
 package com.kongzue.dialogx.interfaces;
 
+import androidx.annotation.Nullable;
+
 public interface BlurViewType {
-    void setOverlayColor(int color);
-    void setRadiusPx(float r);
+    void setOverlayColor(@Nullable Integer color);
+    void setRadiusPx(@Nullable Float r);
 }

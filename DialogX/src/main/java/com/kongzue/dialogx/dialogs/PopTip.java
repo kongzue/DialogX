@@ -28,6 +28,7 @@ import androidx.lifecycle.Lifecycle;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
@@ -475,6 +476,8 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         public RelativeLayout boxCustom;
         public TextView txtDialogxButton;
 
+        private List<View> blurViews;
+
         public DialogImpl(View convertView) {
             if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
@@ -483,6 +486,8 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             txtDialogxPopText = convertView.findViewById(R.id.txt_dialogx_pop_text);
             boxCustom = convertView.findViewById(R.id.box_custom);
             txtDialogxButton = convertView.findViewById(R.id.txt_dialogx_button);
+
+            blurViews = findAllBlurView(dialogView);
 
             init();
             dialogImpl = this;
@@ -601,6 +606,12 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(boxBody, backgroundColor);
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setOverlayColor(backgroundColor);
+                    }
+                }
             }
 
             if (onBindView != null && onBindView.getCustomView() != null) {
@@ -641,6 +652,12 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                         }
                     });
                     boxBody.setClipToOutline(true);
+                }
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setRadiusPx(backgroundRadius);
+                    }
                 }
             }
 

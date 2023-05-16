@@ -12,22 +12,23 @@
         android:id="@+id/bkg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:minWidth="125dp"
-        android:minHeight="125dp">
+        android:layout_centerInParent="true">
 
-        <LinearLayout
+        <com.kongzue.dialogx.style.views.BlurLinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
+            android:gravity="center"
+            android:minWidth="125dp"
+            android:minHeight="125dp"
+            android:orientation="vertical"
             android:paddingTop="1.5dp"
-            android:orientation="vertical">
+            app:realtimeRadius="15dp">
 
             <RelativeLayout
                 android:id="@+id/box_progress"
                 android:layout_width="65dp"
-                android:layout_height="65dp"/>
+                android:layout_height="65dp" />
 
             <RelativeLayout
                 android:id="@+id/box_customView"
@@ -46,9 +47,9 @@
                 android:maxLines="3"
                 android:text="Please Wait"
                 android:textColor="@color/white"
-                android:textSize="14dp"/>
+                android:textSize="14dp" />
 
-        </LinearLayout>
+        </com.kongzue.dialogx.style.views.BlurLinearLayout>
 
     </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 

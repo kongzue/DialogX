@@ -456,9 +456,8 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     /**
+     * @return 获取上下文
      * @Deprecated 已废弃，将在未来版本删除此方法，建议使用 {@link #getOwnActivity()} 替代此方法
-     *
-     * @return  获取上下文
      */
     @Deprecated
     public static Context getContext() {
@@ -717,6 +716,14 @@ public abstract class BaseDialog implements LifecycleOwner {
             return Color.BLACK;
         }
         return getResources().getColor(backgroundRes);
+    }
+
+    protected Integer getColorNullable(Integer res){
+        return res == null ?null:getColor(res);
+    }
+
+    protected Integer getColorNullable(Integer res,Integer defaultResId){
+        return res == null ?defaultResId:getColor(res);
     }
 
     public enum BOOLEAN {
@@ -978,9 +985,29 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (v instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) v;
             for (int i = 0; i < group.getChildCount(); i++) {
-                result.addAll(findAllBlurView(group.getChildAt(i)));
+                List<View> child = findAllBlurView(group.getChildAt(i));
+                if (child != null) result.addAll(child);
             }
         }
-        return result;
+        if (!result.isEmpty()) {
+            return result;
+        }
+        return null;
+    }
+
+    protected Integer getIntStyleAttr(Integer styleValue) {
+        return styleValue <= 0 ? null : styleValue;
+    }
+
+    protected Integer getIntStyleAttr(Integer styleValue, Integer defaultValue) {
+        return styleValue <= 0 ? defaultValue : styleValue;
+    }
+
+    protected Float getFloatStyleAttr(Float styleValue) {
+        return styleValue <= 0 ? null : styleValue;
+    }
+
+    protected Float getFloatStyleAttr(Float styleValue,Float defaultValue) {
+        return styleValue <= 0 ? defaultValue : styleValue;
     }
 }

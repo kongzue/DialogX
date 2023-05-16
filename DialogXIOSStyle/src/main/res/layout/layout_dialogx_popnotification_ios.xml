@@ -18,14 +18,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:clickable="true"
-        android:tag="blurBody">
+        android:clickable="true">
 
-        <RelativeLayout
+        <com.kongzue.dialogx.style.views.BlurRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            app:realtimeRadius="25dp">
 
             <ImageView
                 android:id="@+id/img_dialogx_pop_icon"
@@ -97,7 +97,7 @@
                 android:textColor="@color/dialogxColorBlue"
                 android:textSize="14dp"
                 android:visibility="gone" />
-        </RelativeLayout>
+        </com.kongzue.dialogx.style.views.BlurRelativeLayout>
 
     </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 

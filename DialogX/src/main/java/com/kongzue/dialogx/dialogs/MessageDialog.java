@@ -51,8 +51,6 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.style.MaterialStyle;
-import com.kongzue.dialogx.util.ObjectRunnable;
-import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -310,6 +308,9 @@ public class MessageDialog extends BaseDialog {
             splitHorizontal = convertView.findViewWithTag("split");
             btnSelectNegative = convertView.findViewById(R.id.btn_selectNegative);
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
+
+            blurViews = findAllBlurView(dialogView);
+
             init();
 
             dialogImpl = this;
@@ -355,20 +356,16 @@ public class MessageDialog extends BaseDialog {
                             @Override
                             public void run() {
                                 Integer blurFrontColor = null;
-                                if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()) != 0) {
-                                    blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
-                                }
-
-                                if (blurViews == null) {
-                                    blurViews = findAllBlurView(dialogView);
+                                Float dialogXRadius = null;
+                                if (style.messageDialogBlurSettings() != null) {
+                                    blurFrontColor = getColorNullable(getIntStyleAttr(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme())));
+                                    dialogXRadius = getFloatStyleAttr((float) style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
                                 }
 
                                 if (blurViews != null) {
                                     for (View blurView : blurViews) {
-                                        if (blurFrontColor != null) {
-                                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
-                                        }
-                                        ((BlurViewType) blurView).setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
+                                        ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                                        ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
                                     }
                                 }
 
@@ -566,11 +563,9 @@ public class MessageDialog extends BaseDialog {
                     tintColor(btnSelectPositive, backgroundColor);
                 }
 
-                if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground()) {
-                   if (blurViews != null) {
-                        for (View blurView : blurViews) {
-                            ((BlurViewType) blurView).setOverlayColor(backgroundColor);
-                        }
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setOverlayColor(backgroundColor);
                     }
                 }
             }
@@ -598,8 +593,8 @@ public class MessageDialog extends BaseDialog {
                 boxRoot.setBackgroundColor(maskColor);
             }
             if (backgroundRadius > -1) {
-                GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
-                if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                //GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
+                //if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     bkg.setOutlineProvider(new ViewOutlineProvider() {
                         @Override
@@ -608,6 +603,12 @@ public class MessageDialog extends BaseDialog {
                         }
                     });
                     bkg.setClipToOutline(true);
+                }
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setRadiusPx(backgroundRadius);
+                    }
                 }
             }
 

@@ -29,6 +29,7 @@ import androidx.lifecycle.Lifecycle;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
@@ -40,10 +41,8 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.DialogXViewLoc;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.PopMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.views.PopMenuListView;
@@ -423,11 +422,12 @@ public class PopMenu extends BaseDialog {
 
     public class DialogImpl implements DialogConvertViewInterface {
 
+        private List<View> blurViews;
+
         public DialogXBaseRelativeLayout boxRoot;
         public MaxRelativeLayout boxBody;
         public RelativeLayout boxCustom;
         public PopMenuListView listMenu;
-        public BlurView blurView;
 
         public DialogImpl(View convertView) {
             boxRoot = convertView.findViewById(R.id.box_root);
@@ -435,6 +435,9 @@ public class PopMenu extends BaseDialog {
             boxCustom = convertView.findViewById(R.id.box_custom);
             listMenu = convertView.findViewById(R.id.listMenu);
             boxBody.setVisibility(View.INVISIBLE);
+
+            blurViews = findAllBlurView(dialogView);
+
             //先设置为 -1 表示未初始化位置
             boxBody.setX(-1);
             boxBody.setY(-1);
@@ -499,6 +502,20 @@ public class PopMenu extends BaseDialog {
                 public void run() {
                     getDialogXAnimImpl().doShowAnim(me, boxBody);
                     setLifecycleState(Lifecycle.State.RESUMED);
+
+                    Integer blurFrontColor = null;
+                    Float dialogXRadius = null;
+                    if (style.popMenuSettings() != null && style.popMenuSettings().blurBackgroundSettings() != null) {
+                        blurFrontColor = getColorNullable(getIntStyleAttr(style.popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme())));
+                        dialogXRadius = getFloatStyleAttr((float) style.popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
+                    }
+
+                    if (blurViews != null) {
+                        for (View blurView : blurViews) {
+                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
+                        }
+                    }
                 }
             });
 
@@ -577,6 +594,12 @@ public class PopMenu extends BaseDialog {
                     });
                     boxBody.setClipToOutline(true);
                 }
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setRadiusPx(backgroundRadius);
+                    }
+                }
             }
 
             if (onBindView != null && onBindView.getCustomView() != null) {
@@ -594,6 +617,16 @@ public class PopMenu extends BaseDialog {
             if (height != -1) {
                 boxBody.setMaxHeight(height);
                 boxBody.setMinimumHeight(height);
+            }
+
+            if (backgroundColor != -1) {
+                tintColor(boxBody, backgroundColor);
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setOverlayColor(backgroundColor);
+                    }
+                }
             }
 
             onDialogRefreshUI();
@@ -715,26 +748,15 @@ public class PopMenu extends BaseDialog {
                                     if (boxBody.getVisibility() != VISIBLE) {
                                         boxBody.setVisibility(View.VISIBLE);
                                     }
+
+                                    if (isUseBlurBackground()) {
+                                        boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
+                                    }
                                 }
                             });
                             enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                             enterAnim.setDuration(enterAnimDurationTemp);
                             enterAnim.start();
-
-                            //模糊背景
-                            if (getStyle().popMenuSettings() != null &&
-                                    getStyle().popMenuSettings().blurBackgroundSettings() != null &&
-                                    getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
-                            ) {
-                                int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
-                                blurView = new BlurView(getOwnActivity(), null);
-                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), targetHeight);
-                                blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                blurView.setOverrideOverlayColor(backgroundColor != -1);
-                                blurView.setTag("blurView");
-                                blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
-                                boxBody.addView(blurView, 0, params);
-                            }
                         } else {
                             //无绑定按钮的情况下
                             RelativeLayout.LayoutParams rLp = (RelativeLayout.LayoutParams) boxBody.getLayoutParams();
@@ -744,30 +766,11 @@ public class PopMenu extends BaseDialog {
                             rLp.rightMargin = dip2px(50);
                             boxBody.setLayoutParams(rLp);
                             boxBody.setAlpha(0f);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !isUseBlurBackground()) {
                                 boxBody.setElevation(dip2px(20));
                             }
                             boxBody.setVisibility(View.VISIBLE);
                             boxBody.animate().alpha(1f).setDuration(enterAnimDurationTemp);
-                            boxBody.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //模糊背景
-                                    if (getStyle().popMenuSettings() != null &&
-                                            getStyle().popMenuSettings().blurBackgroundSettings() != null &&
-                                            getStyle().popMenuSettings().blurBackgroundSettings().blurBackground()
-                                    ) {
-                                        int blurFrontColor = getResources().getColor(getStyle().popMenuSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
-                                        blurView = new BlurView(getOwnActivity(), null);
-                                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
-                                        blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                        blurView.setOverrideOverlayColor(backgroundColor != -1);
-                                        blurView.setTag("blurView");
-                                        blurView.setRadiusPx(getStyle().popMenuSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
-                                        boxBody.addView(blurView, 0, params);
-                                    }
-                                }
-                            });
 
                             ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
                             bkgAlpha.setDuration(enterAnimDurationTemp);
@@ -775,7 +778,6 @@ public class PopMenu extends BaseDialog {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator animation) {
                                     boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
-                                    ;
                                 }
                             });
                             bkgAlpha.start();
@@ -809,6 +811,10 @@ public class PopMenu extends BaseDialog {
                 };
             }
             return dialogXAnimImpl;
+        }
+
+        private boolean isUseBlurBackground() {
+            return style.popMenuSettings() != null && style.popMenuSettings().blurBackgroundSettings() != null && style.popMenuSettings().blurBackgroundSettings().blurBackground();
         }
 
         public long getExitAnimationDuration(@Nullable Animation defaultExitAnim) {

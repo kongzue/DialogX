@@ -93,7 +93,16 @@ public class MaxRelativeLayout extends RelativeLayout {
         if (maxWidth > 0) this.maxWidth = maxWidth;
         return this;
     }
-    
+
+    public void setMinHeight(int minHeight) {
+        if (minHeight > 0) this.minHeight = minHeight;
+
+    }
+
+    public void setMinWidth(int minWidth) {
+        if (minWidth > 0) this.minWidth = minWidth;
+    }
+
     private int preWidth = -1;
     
     @Override

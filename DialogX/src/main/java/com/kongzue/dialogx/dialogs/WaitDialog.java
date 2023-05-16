@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import androidx.lifecycle.Lifecycle;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
@@ -34,14 +36,13 @@ import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.views.ProgressView;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -269,9 +270,11 @@ public class WaitDialog extends BaseDialog {
     protected WeakReference<DialogImpl> dialogImpl;
 
     public class DialogImpl implements DialogConvertViewInterface {
+
+        private List<View> blurViews;
+
         public DialogXBaseRelativeLayout boxRoot;
         public MaxRelativeLayout bkg;
-        public BlurView blurView;
         public RelativeLayout boxProgress;
         public ProgressViewInterface progressView;
         public RelativeLayout boxCustomView;
@@ -289,7 +292,6 @@ public class WaitDialog extends BaseDialog {
             setWaitDialogView(dialogView);
             boxRoot = dialogView.findViewById(R.id.box_root);
             bkg = dialogView.findViewById(R.id.bkg);
-            blurView = dialogView.findViewById(R.id.blurView);
             boxProgress = dialogView.findViewById(R.id.box_progress);
             View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getOwnActivity(), isLightTheme());
             if (progressViewCache == null) {
@@ -299,6 +301,9 @@ public class WaitDialog extends BaseDialog {
             boxProgress.addView(progressViewCache, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             boxCustomView = dialogView.findViewById(R.id.box_customView);
             txtInfo = dialogView.findViewById(R.id.txt_info);
+
+            blurViews = findAllBlurView(dialogView);
+
             init();
             setDialogImpl(this);
             refreshView();
@@ -308,7 +313,6 @@ public class WaitDialog extends BaseDialog {
             if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             bkg = convertView.findViewById(R.id.bkg);
-            blurView = convertView.findViewById(R.id.blurView);
             boxProgress = convertView.findViewById(R.id.box_progress);
             View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getOwnActivity(), isLightTheme());
             if (progressViewCache == null) {
@@ -327,10 +331,29 @@ public class WaitDialog extends BaseDialog {
             if (messageTextInfo == null) messageTextInfo = DialogX.tipTextInfo;
             if (backgroundColor == -1) backgroundColor = DialogX.tipBackgroundColor;
 
-            if (style.overrideWaitTipRes() == null) {
-                blurView.setRadiusPx(dip2px(15));
+            blurViews = findAllBlurView(dialogView.get());
+            if (blurViews != null) {
+                for (View b : blurViews) {
+                    log(b);
+                }
+            }
+
+            Integer blurFrontColor = getColor(isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight);
+            Float dialogXRadius = (float) dip2px(15);
+            if (style.overrideWaitTipRes() != null) {
+                dialogXRadius = getFloatStyleAttr((float) style.overrideWaitTipRes().overrideRadiusPx(), dialogXRadius);
+                blurFrontColor = getColorNullable(getIntStyleAttr(style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme()), isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight), blurFrontColor);
+            }
+            if (blurViews != null) {
+                for (View blurView : blurViews) {
+                    ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                    ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
+                }
             } else {
-                blurView.setRadiusPx(style.overrideWaitTipRes().overrideRadiusPx() < 0 ? dip2px(15) : style.overrideWaitTipRes().overrideRadiusPx());
+                GradientDrawable gradientDrawable = (GradientDrawable) getResources().getDrawable(R.drawable.rect_dialogx_material_wait_bkg);
+                gradientDrawable.setColor(blurFrontColor);
+                gradientDrawable.setGradientRadius(dialogXRadius);
+                bkg.setBackground(gradientDrawable);
             }
             boxRoot.setClickable(true);
 
@@ -413,41 +436,24 @@ public class WaitDialog extends BaseDialog {
 
             bkg.setMaxWidth(getMaxWidth());
             bkg.setMaxHeight(getMaxHeight());
-            bkg.setMinimumWidth(getMinWidth());
-            bkg.setMinimumHeight(getMinHeight());
+            bkg.setMinWidth(getMinWidth());
+            bkg.setMinHeight(getMinHeight());
 
+            if (backgroundColor != -1) {
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setOverlayColor(getResources().getColor(backgroundColor));
+                    }
+                }
+            }
             if (style.overrideWaitTipRes() != null) {
-                int overrideBackgroundColorRes = style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme());
-                if (overrideBackgroundColorRes == 0) {
-                    overrideBackgroundColorRes = isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight;
-                }
-                if (blurView != null) {
-                    blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(overrideBackgroundColorRes) : backgroundColor);
-                    blurView.setOverrideOverlayColor(backgroundColor != -1);
-                    blurView.setUseBlur(style.overrideWaitTipRes().blurBackground());
-                }
-                int overrideTextColorRes = style.overrideWaitTipRes().overrideTextColorRes(isLightTheme());
-                if (overrideTextColorRes == 0) {
-                    overrideTextColorRes = isLightTheme() ? R.color.white : R.color.black;
-                }
+                int overrideTextColorRes = getIntStyleAttr(style.overrideWaitTipRes().overrideTextColorRes(isLightTheme()), isLightTheme() ? R.color.white : R.color.black);
                 txtInfo.setTextColor(getResources().getColor(overrideTextColorRes));
                 progressView.setColor(getResources().getColor(overrideTextColorRes));
             } else {
-                if (isLightTheme()) {
-                    if (blurView != null) {
-                        blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgDark) : backgroundColor);
-                        blurView.setOverrideOverlayColor(backgroundColor != -1);
-                    }
-                    progressView.setColor(Color.WHITE);
-                    txtInfo.setTextColor(Color.WHITE);
-                } else {
-                    if (blurView != null) {
-                        blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgLight) : backgroundColor);
-                        blurView.setOverrideOverlayColor(backgroundColor != -1);
-                    }
-                    progressView.setColor(Color.BLACK);
-                    txtInfo.setTextColor(Color.BLACK);
-                }
+                int overrideTextColorRes = isLightTheme() ? R.color.white : R.color.black;
+                txtInfo.setTextColor(getResources().getColor(overrideTextColorRes));
+                progressView.setColor(getResources().getColor(overrideTextColorRes));
             }
             if (DialogX.tipProgressColor != -1) progressView.setColor(DialogX.tipProgressColor);
 
@@ -456,9 +462,6 @@ public class WaitDialog extends BaseDialog {
                 oldProgress = waitProgress;
             }
             if (backgroundRadius > -1) {
-                if (blurView != null) {
-                    blurView.setRadiusPx(backgroundRadius);
-                }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     bkg.setOutlineProvider(new ViewOutlineProvider() {
                         @Override
@@ -467,6 +470,11 @@ public class WaitDialog extends BaseDialog {
                         }
                     });
                     bkg.setClipToOutline(true);
+                }
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setRadiusPx(backgroundRadius);
+                    }
                 }
             }
 

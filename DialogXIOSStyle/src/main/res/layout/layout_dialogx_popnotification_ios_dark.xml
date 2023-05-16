@@ -7,20 +7,26 @@
     android:orientation="vertical"
     app:baseFocusable="false">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rect_dialogx_ios_popnotification_bkg" />
+
     <com.kongzue.dialogx.util.views.MaxRelativeLayout
         android:id="@+id/box_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:clickable="true"
-        android:tag="blurBody">
+        android:clickable="true">
 
-        <RelativeLayout
+        <com.kongzue.dialogx.style.views.BlurRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
-            android:paddingBottom="15dp">
+            android:paddingBottom="15dp"
+            app:dialogxDarkMode="true"
+            app:realtimeRadius="25dp">
 
             <ImageView
                 android:id="@+id/img_dialogx_pop_icon"
@@ -92,7 +98,7 @@
                 android:textColor="@color/dialogxPopButtonBlueDark"
                 android:textSize="14dp"
                 android:visibility="gone" />
-        </RelativeLayout>
+        </com.kongzue.dialogx.style.views.BlurRelativeLayout>
 
     </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 

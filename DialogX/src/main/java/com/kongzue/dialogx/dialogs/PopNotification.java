@@ -30,21 +30,18 @@ import androidx.lifecycle.Lifecycle;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
-import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.PopValueAnimator;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
-import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -505,7 +502,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         public TextView txtDialogxButton;
         public RelativeLayout boxCustom;
 
-        public BlurView blurView;
+        private List<View> blurViews;
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
@@ -516,6 +513,8 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             txtDialogxPopMessage = convertView.findViewById(R.id.txt_dialogx_pop_message);
             txtDialogxButton = convertView.findViewById(R.id.txt_dialogx_button);
             boxCustom = convertView.findViewById(R.id.box_custom);
+
+            blurViews = findAllBlurView(dialogView);
 
             init();
             dialogImpl = this;
@@ -624,20 +623,21 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                         }
                     }
 
-                    if (getStyle().popNotificationSettings() != null &&
-                            getStyle().popNotificationSettings().blurBackgroundSettings() != null &&
-                            getStyle().popNotificationSettings().blurBackgroundSettings().blurBackground()
-                    ) {
-                        MaxRelativeLayout blurBody = boxRoot.findViewWithTag("blurBody");
-                        int blurFrontColor = getResources().getColor(getStyle().popNotificationSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()));
-                        blurView = new BlurView(getOwnActivity(), null);
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(boxBody.getWidth(), boxBody.getHeight());
-                        blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                        blurView.setOverrideOverlayColor(backgroundColor != -1);
-                        blurView.setTag("blurView");
-                        blurView.setRadiusPx(getStyle().popNotificationSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
-                        blurBody.setContentView(boxBody);
-                        blurBody.addView(blurView, 0, params);
+                    Integer blurFrontColor = null;
+                    Float popNotificationRadius = null;
+                    if (getStyle().popNotificationSettings() != null && getStyle().popNotificationSettings().blurBackgroundSettings() != null &&
+                            getStyle().popNotificationSettings().blurBackgroundSettings().blurBackground()) {
+                        blurFrontColor = backgroundColor == -1 ?
+                                getColorNullable(getIntStyleAttr(getStyle().popNotificationSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()))) :
+                                backgroundColor;
+                        popNotificationRadius = getFloatStyleAttr((float) getStyle().popNotificationSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
+                    }
+
+                    if (blurViews != null) {
+                        for (View blurView : blurViews) {
+                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            ((BlurViewType) blurView).setRadiusPx(popNotificationRadius);
+                        }
                     }
                     setLifecycleState(Lifecycle.State.RESUMED);
                 }
@@ -679,6 +679,12 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(boxBody, backgroundColor);
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setOverlayColor(backgroundColor);
+                    }
+                }
             }
 
             if (onBindView != null && onBindView.getCustomView() != null) {
@@ -699,6 +705,12 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                         }
                     });
                     boxBody.setClipToOutline(true);
+                }
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setRadiusPx(backgroundRadius);
+                    }
                 }
             }
 
