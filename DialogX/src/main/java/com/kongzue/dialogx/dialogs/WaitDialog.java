@@ -332,11 +332,6 @@ public class WaitDialog extends BaseDialog {
             if (backgroundColor == -1) backgroundColor = DialogX.tipBackgroundColor;
 
             blurViews = findAllBlurView(dialogView.get());
-            if (blurViews != null) {
-                for (View b : blurViews) {
-                    log(b);
-                }
-            }
 
             Integer blurFrontColor = getColor(isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight);
             Float dialogXRadius = (float) dip2px(15);
