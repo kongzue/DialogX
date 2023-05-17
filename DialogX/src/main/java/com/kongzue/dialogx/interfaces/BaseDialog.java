@@ -718,12 +718,12 @@ public abstract class BaseDialog implements LifecycleOwner {
         return getResources().getColor(backgroundRes);
     }
 
-    protected Integer getColorNullable(Integer res){
-        return res == null ?null:getColor(res);
+    protected Integer getColorNullable(Integer res) {
+        return res == null ? null : getColor(res);
     }
 
-    protected Integer getColorNullable(Integer res,Integer defaultResId){
-        return res == null ?defaultResId:getColor(res);
+    protected Integer getColorNullable(Integer res, Integer defaultResId) {
+        return res == null ? getColor(defaultResId) : getColor(res);
     }
 
     public enum BOOLEAN {
@@ -1007,7 +1007,13 @@ public abstract class BaseDialog implements LifecycleOwner {
         return styleValue <= 0 ? null : styleValue;
     }
 
-    protected Float getFloatStyleAttr(Float styleValue,Float defaultValue) {
-        return styleValue <= 0 ? defaultValue : styleValue;
+    protected Float getFloatStyleAttr(Float styleValue, Float defaultValue) {
+        if (styleValue <= 0) {
+            log("styleValue=" + styleValue + "<=0 ");
+            log("return defaultValue=" + defaultValue);
+            return defaultValue;
+        }
+        log("return styleValue=" + styleValue);
+        return styleValue;
     }
 }

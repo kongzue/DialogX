@@ -1,6 +1,7 @@
 package com.kongzue.dialogxmaterialyou.style;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
@@ -117,7 +118,7 @@ public class MaterialYouStyle extends DialogXStyle {
 
         @Override
         public int overrideRadiusPx() {
-            return -1;
+            return dip2px(50);
         }
 
         @Override
@@ -139,6 +140,11 @@ public class MaterialYouStyle extends DialogXStyle {
         public ProgressViewInterface overrideWaitView(Context context, boolean light) {
             return new ProgressView(context);
         }
+    }
+
+    private int dip2px(float dpValue) {
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
     }
     
     @Override

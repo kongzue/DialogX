@@ -342,7 +342,9 @@ public class WaitDialog extends BaseDialog {
             Float dialogXRadius = (float) dip2px(15);
             if (style.overrideWaitTipRes() != null) {
                 dialogXRadius = getFloatStyleAttr((float) style.overrideWaitTipRes().overrideRadiusPx(), dialogXRadius);
-                blurFrontColor = getColorNullable(getIntStyleAttr(style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme()), isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight), blurFrontColor);
+                blurFrontColor = getColorNullable(
+                        getIntStyleAttr(style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme()), isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight),
+                        blurFrontColor);
             }
             if (blurViews != null) {
                 for (View blurView : blurViews) {
@@ -352,7 +354,7 @@ public class WaitDialog extends BaseDialog {
             } else {
                 GradientDrawable gradientDrawable = (GradientDrawable) getResources().getDrawable(R.drawable.rect_dialogx_material_wait_bkg);
                 gradientDrawable.setColor(blurFrontColor);
-                gradientDrawable.setGradientRadius(dialogXRadius);
+                gradientDrawable.setCornerRadius(dialogXRadius);
                 bkg.setBackground(gradientDrawable);
             }
             boxRoot.setClickable(true);
