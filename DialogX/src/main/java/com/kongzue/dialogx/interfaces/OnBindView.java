@@ -9,8 +9,10 @@ import android.widget.RelativeLayout;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.util.views.ExtendChildLayoutParamsFrameLayout;
 
 import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
+import static com.kongzue.dialogx.interfaces.BaseDialog.log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,10 +27,10 @@ import java.util.Random;
  * @createTime: 2020/10/8 17:00
  */
 public abstract class OnBindView<D> {
-    
+
     int layoutResId;
     View customView;
-    
+
     public OnBindView(int layoutResId) {
         if (BaseDialog.getTopActivity() == null) {
             DialogX.error(ERROR_INIT_TIPS);
@@ -37,7 +39,7 @@ public abstract class OnBindView<D> {
         this.layoutResId = layoutResId;
         customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
     }
-    
+
     public OnBindView(int layoutResId, boolean async) {
         if (BaseDialog.getTopActivity() == null) {
             DialogX.error(ERROR_INIT_TIPS);
@@ -62,22 +64,22 @@ public abstract class OnBindView<D> {
             customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
         }
     }
-    
+
     public OnBindView(View customView) {
         this.customView = customView;
     }
-    
+
     private androidx.fragment.app.Fragment fragment;
     private android.app.Fragment supportFragment;
     private int fragmentParentId = View.NO_ID;
-    
+
     private int getFragmentParentId() {
         if (fragmentParentId == View.NO_ID) {
             fragmentParentId = createFragmentParentId();
         }
         return fragmentParentId;
     }
-    
+
     private int createFragmentParentId() {
         fragmentParentId = new Random().nextInt();
         View somebodyView = BaseDialog.getTopActivity().findViewById(fragmentParentId);
@@ -86,57 +88,57 @@ public abstract class OnBindView<D> {
         }
         return fragmentParentId;
     }
-    
+
     public OnBindView(androidx.fragment.app.Fragment fragment) {
         if (BaseDialog.getTopActivity() == null) return;
-        this.customView = new FrameLayout(BaseDialog.getTopActivity());
+        this.customView = new ExtendChildLayoutParamsFrameLayout(BaseDialog.getTopActivity());
         this.customView.setId(getFragmentParentId());
         this.fragment = fragment;
         this.supportFragment = null;
     }
-    
+
     public OnBindView(android.app.Fragment supportFragment) {
         if (BaseDialog.getTopActivity() == null) return;
-        this.customView = new FrameLayout(BaseDialog.getTopActivity());
+        this.customView = new ExtendChildLayoutParamsFrameLayout(BaseDialog.getTopActivity());
         this.customView.setId(getFragmentParentId());
         this.supportFragment = supportFragment;
         this.fragment = null;
     }
-    
+
     public abstract void onBind(D dialog, View v);
-    
+
     public void onFragmentBind(D dialog, View frameLayout, androidx.fragment.app.Fragment fragment, androidx.fragment.app.FragmentManager fragmentManager) {
     }
-    
+
     public void onFragmentBind(D dialog, View frameLayout, android.app.Fragment fragment, android.app.FragmentManager fragmentManager) {
     }
-    
+
     public int getLayoutResId() {
         return layoutResId;
     }
-    
+
     public OnBindView<D> setLayoutResId(int layoutResId) {
         this.layoutResId = layoutResId;
         return this;
     }
-    
+
     public View getCustomView() {
         if (customView == null) {
             customView = LayoutInflater.from(BaseDialog.getTopActivity()).inflate(layoutResId, new RelativeLayout(BaseDialog.getTopActivity()), false);
         }
         return customView;
     }
-    
+
     public OnBindView<D> setCustomView(View customView) {
         this.customView = customView;
         return this;
     }
-    
+
     public void clean() {
         layoutResId = 0;
         customView = null;
     }
-    
+
     @Deprecated
     public void bindParent(ViewGroup parentView) {
         if (getCustomView() == null) {
@@ -155,7 +157,7 @@ public abstract class OnBindView<D> {
         }
         parentView.addView(getCustomView(), lp);
     }
-    
+
     public void bindParent(ViewGroup parentView, BaseDialog dialog) {
         if (getCustomView() == null) {
             waitBind(parentView, null);
@@ -200,9 +202,9 @@ public abstract class OnBindView<D> {
             });
         }
     }
-    
+
     private Runnable waitBindRunnable;
-    
+
     private void waitBind(ViewGroup parentView, BaseDialog dialog) {
         waitBindRunnable = new Runnable() {
             @Override
