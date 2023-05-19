@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
@@ -14,6 +13,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
@@ -26,7 +26,6 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
@@ -120,13 +119,7 @@ public class CustomDialog extends BaseDialog {
         if (isHide && getDialogView() != null && isShow) {
             if (hideWithExitAnim && getDialogImpl() != null && getDialogImpl().boxCustom != null) {
                 getDialogView().setVisibility(View.VISIBLE);
-                getDialogImpl().getDialogXAnimImpl().doShowAnim(CustomDialog.this, new ObjectRunnable<Float>() {
-                    @Override
-                    public void run(Float animProgress) {
-                        float value = animProgress;
-                        getDialogImpl().boxRoot.setBkgAlpha(value);
-                    }
-                });
+                getDialogImpl().getDialogXAnimImpl().doShowAnim(CustomDialog.this, getDialogImpl().boxCustom);
                 getDialogImpl().boxCustom.setVisibility(View.VISIBLE);
                 getDialogImpl().boxCustom.startAnimation(getEnterAnimation());
             } else {
@@ -155,6 +148,9 @@ public class CustomDialog extends BaseDialog {
         return this;
     }
 
+    private ViewTreeObserver viewTreeObserver;
+    private ViewTreeObserver.OnDrawListener baseViewDrawListener;
+
     public class DialogImpl implements DialogConvertViewInterface {
 
         public DialogXBaseRelativeLayout boxRoot;
@@ -175,6 +171,8 @@ public class CustomDialog extends BaseDialog {
             if (baseViewLoc == null && baseView != null) {
                 baseViewLoc = new int[4];
                 baseView.getLocationOnScreen(baseViewLoc);
+                baseViewLoc[2] = baseView.getWidth();
+                baseViewLoc[3] = baseView.getHeight();
             }
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
@@ -183,9 +181,10 @@ public class CustomDialog extends BaseDialog {
                     isShow = true;
                     preShow = false;
 
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
 
                     getDialogLifecycleCallback().onShow(me);
+                    CustomDialog.this.onShow(me);
                     onDialogShow();
 
                     boxCustom.setVisibility(View.GONE);
@@ -195,9 +194,10 @@ public class CustomDialog extends BaseDialog {
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    CustomDialog.this.onDismiss(me);
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
@@ -221,18 +221,12 @@ public class CustomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    getDialogXAnimImpl().doShowAnim(CustomDialog.this, new ObjectRunnable<Float>() {
-                        @Override
-                        public void run(Float animProgress) {
-                            float value = animProgress;
-                            boxRoot.setBkgAlpha(value);
-                        }
-                    });
+                    getDialogXAnimImpl().doShowAnim(CustomDialog.this, boxCustom);
                     if (getDialogImpl().boxCustom != null) {
                         getDialogImpl().boxCustom.setVisibility(View.VISIBLE);
                     }
 
-                    lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                    setLifecycleState(Lifecycle.State.RESUMED);
                 }
             });
 
@@ -244,7 +238,7 @@ public class CustomDialog extends BaseDialog {
 
         @Override
         public void refreshView() {
-            if (boxRoot == null || getTopActivity() == null) {
+            if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
@@ -286,22 +280,36 @@ public class CustomDialog extends BaseDialog {
                                 if (isAlignBaseViewGravity(Gravity.BOTTOM)) {
                                     calY = baseViewTop + baseView.getHeight() + marginRelativeBaseView[1];
                                 }
-                                baseViewLoc[2] = baseView.getWidth();
-                                baseViewLoc[3] = baseView.getHeight();
+                                int widthCache = width == 0 ? baseView.getWidth() : width;
+                                int heightCache = height == 0 ? baseView.getHeight() : height;
+                                baseViewLoc[2] = widthCache > 0 ? widthCache : baseViewLoc[2];
+                                baseViewLoc[3] = heightCache > 0 ? heightCache : baseViewLoc[3];
 
-                                if (calX != 0) boxCustom.setX(calX);
-                                if (calY != 0) boxCustom.setY(calY);
+                                if (calX != 0 && calX != boxCustom.getX()) boxCustom.setX(calX);
+                                if (calY != 0 && calY != boxCustom.getY()) boxCustom.setY(calY);
 
                                 onGetBaseViewLoc(baseViewLoc);
                             }
                         }
                     };
 
-                    boxCustom.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    viewTreeObserver = boxCustom.getViewTreeObserver();
+                    viewTreeObserver.addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
                         @Override
-                        public void onGlobalLayout() {
-                            baseView.getLocationOnScreen(baseViewLoc);
-                            onLayoutChangeRunnable.run();
+                        public void onDraw() {
+                            int[] baseViewLocCache = new int[2];
+                            if (baseView != null) {
+                                baseView.getLocationOnScreen(baseViewLocCache);
+                                if (getDialogImpl() != null && isShow) {
+                                    baseViewLoc[0] = baseViewLocCache[0];
+                                    baseViewLoc[1] = baseViewLocCache[1];
+                                    onLayoutChangeRunnable.run();
+                                }
+                            } else {
+                                removeDrawListener(viewTreeObserver, this);
+                                viewTreeObserver = null;
+                                baseViewDrawListener = null;
+                            }
                         }
                     });
                     initSetCustomViewLayoutListener = true;
@@ -390,11 +398,11 @@ public class CustomDialog extends BaseDialog {
                 boxRoot.setClickable(false);
             }
 
-            if (onBindView != null && onBindView.getCustomView() != null && boxCustom!=null) {
+            if (onBindView != null && onBindView.getCustomView() != null && boxCustom != null) {
                 onBindView.bindParent(boxCustom, me);
             }
 
-            if (boxCustom!=null) {
+            if (boxCustom != null) {
                 if (width != -1) {
                     boxCustom.setMaxWidth(width);
                     boxCustom.setMinimumWidth(width);
@@ -411,8 +419,6 @@ public class CustomDialog extends BaseDialog {
             onDialogRefreshUI();
         }
 
-        long exitAnimDurationTemp = -1;
-
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
@@ -421,20 +427,25 @@ public class CustomDialog extends BaseDialog {
                 boxCustom.post(new Runnable() {
                     @Override
                     public void run() {
-                        getDialogXAnimImpl().doExitAnim(CustomDialog.this, new ObjectRunnable<Float>() {
-
+                        getDialogXAnimImpl().doExitAnim(CustomDialog.this, boxCustom);
+                        runOnMainDelay(new Runnable() {
                             @Override
-                            public void run(Float animProgress) {
-                                float value = animProgress;
-                                if (boxRoot != null) {
-                                    boxRoot.setBkgAlpha(value);
+                            public void run() {
+                                if (boxRoot != null) boxRoot.setVisibility(View.GONE);
+                                if (baseViewDrawListener != null) {
+                                    if (viewTreeObserver != null) {
+                                        removeDrawListener(viewTreeObserver, baseViewDrawListener);
+                                    } else {
+                                        if (boxCustom != null) {
+                                            removeDrawListener(boxCustom.getViewTreeObserver(), baseViewDrawListener);
+                                        }
+                                    }
+                                    baseViewDrawListener = null;
+                                    viewTreeObserver = null;
                                 }
-                                if (value == 0) {
-                                    if (boxRoot != null) boxRoot.setVisibility(View.GONE);
-                                    dismiss(dialogView);
-                                }
+                                dismiss(dialogView);
                             }
-                        });
+                        }, getExitAnimationDuration(null));
                     }
                 });
             }
@@ -444,28 +455,36 @@ public class CustomDialog extends BaseDialog {
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<CustomDialog>() {
                     @Override
-                    public void doShowAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+                    public void doShowAnim(CustomDialog customDialog, ViewGroup dialogBodyView) {
+                        if (getDialogImpl() == null || getDialogImpl().boxCustom == null) {
+                            return;
+                        }
                         Animation enterAnim = getEnterAnimation();
-                        if (boxCustom!=null) {
+                        long enterAnimationDuration = getEnterAnimationDuration(enterAnim);
+                        enterAnim.setDuration(enterAnimationDuration);
+                        if (boxCustom != null) {
                             boxCustom.setVisibility(View.VISIBLE);
                             boxCustom.startAnimation(enterAnim);
                         }
 
-                        boxRoot.setBackgroundColor(maskColor);
+                        if (maskColor != Color.TRANSPARENT) boxRoot.setBackgroundColor(maskColor);
 
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-                        bkgAlpha.setDuration(enterAnim.getDuration());
+                        bkgAlpha.setDuration(enterAnimationDuration);
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
                             }
                         });
                         bkgAlpha.start();
                     }
 
                     @Override
-                    public void doExitAnim(CustomDialog customDialog, ObjectRunnable<Float> animProgress) {
+                    public void doExitAnim(CustomDialog customDialog, ViewGroup dialogBodyView) {
+                        if (getDialogImpl() == null || getDialogImpl().boxCustom == null) {
+                            return;
+                        }
                         int exitAnimResIdTemp = R.anim.anim_dialogx_default_exit;
                         if (overrideExitAnimRes != 0) {
                             exitAnimResIdTemp = overrideExitAnimRes;
@@ -474,17 +493,14 @@ public class CustomDialog extends BaseDialog {
                             exitAnimResIdTemp = exitAnimResId;
                         }
 
-                        if (boxCustom!=null) {
-                            Animation exitAnim = AnimationUtils.loadAnimation(getTopActivity() == null ? boxCustom.getContext() : getTopActivity(), exitAnimResIdTemp);
-                            exitAnimDurationTemp = exitAnim.getDuration();
-                            if (overrideExitDuration >= 0) {
-                                exitAnimDurationTemp = overrideExitDuration;
-                            }
-                            if (exitAnimDuration >= 0) {
-                                exitAnimDurationTemp = exitAnimDuration;
-                            }
+                        long exitAnimDurationTemp;
+                        if (boxCustom != null) {
+                            Animation exitAnim = AnimationUtils.loadAnimation(getOwnActivity() == null ? boxCustom.getContext() : getOwnActivity(), exitAnimResIdTemp);
+                            exitAnimDurationTemp = getExitAnimationDuration(exitAnim);
                             exitAnim.setDuration(exitAnimDurationTemp);
                             boxCustom.startAnimation(exitAnim);
+                        } else {
+                            exitAnimDurationTemp = getExitAnimationDuration(null);
                         }
 
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
@@ -492,7 +508,7 @@ public class CustomDialog extends BaseDialog {
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
                             }
                         });
                         bkgAlpha.start();
@@ -500,6 +516,44 @@ public class CustomDialog extends BaseDialog {
                 };
             }
             return dialogXAnimImpl;
+        }
+
+        public long getExitAnimationDuration(@Nullable Animation defaultExitAnim) {
+            if (defaultExitAnim == null && boxCustom.getAnimation() != null) {
+                defaultExitAnim = boxCustom.getAnimation();
+            }
+            long exitAnimDurationTemp = (defaultExitAnim == null || defaultExitAnim.getDuration() == 0) ? 300 : defaultExitAnim.getDuration();
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration != -1) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            return exitAnimDurationTemp;
+        }
+
+        public long getEnterAnimationDuration(@Nullable Animation defaultEnterAnim) {
+            if (defaultEnterAnim == null && boxCustom.getAnimation() != null) {
+                defaultEnterAnim = boxCustom.getAnimation();
+            }
+            long enterAnimDurationTemp = (defaultEnterAnim == null || defaultEnterAnim.getDuration() == 0) ? 300 : defaultEnterAnim.getDuration();
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            return enterAnimDurationTemp;
+        }
+    }
+
+    private void removeDrawListener(ViewTreeObserver viewTreeObserver, ViewTreeObserver.OnDrawListener listener) {
+        if (viewTreeObserver == null || listener == null || !viewTreeObserver.isAlive()) {
+            return;
+        }
+        try {
+            viewTreeObserver.removeOnDrawListener(listener);
+        } catch (Exception e) {
         }
     }
 
@@ -538,7 +592,7 @@ public class CustomDialog extends BaseDialog {
                     exitAnimResId = R.anim.anim_dialogx_right_exit;
                     break;
             }
-            enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
+            enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResId);
             enterAnim.setInterpolator(new DecelerateInterpolator(2f));
         } else {
             int enterAnimResIdTemp = R.anim.anim_dialogx_default_enter;
@@ -548,7 +602,7 @@ public class CustomDialog extends BaseDialog {
             if (enterAnimResId != 0) {
                 enterAnimResIdTemp = enterAnimResId;
             }
-            enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResIdTemp);
+            enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResIdTemp);
         }
         long enterAnimDurationTemp = enterAnim.getDuration();
         if (overrideEnterDuration >= 0) {
@@ -636,7 +690,7 @@ public class CustomDialog extends BaseDialog {
         return this;
     }
 
-    public CustomDialog.DialogImpl getDialogImpl() {
+    public DialogImpl getDialogImpl() {
         return dialogImpl;
     }
 
@@ -738,10 +792,23 @@ public class CustomDialog extends BaseDialog {
     @Override
     public void restartDialog() {
         if (dialogView != null) {
+            if (getDialogImpl() != null && getDialogImpl().boxCustom != null) {
+                if (baseViewDrawListener != null) {
+                    if (viewTreeObserver != null) {
+                        removeDrawListener(viewTreeObserver, baseViewDrawListener);
+                    } else {
+                        if (getDialogImpl().boxCustom != null) {
+                            removeDrawListener(getDialogImpl().boxCustom.getViewTreeObserver(), baseViewDrawListener);
+                        }
+                    }
+                    baseViewDrawListener = null;
+                    viewTreeObserver = null;
+                }
+            }
             dismiss(dialogView);
             isShow = false;
         }
-        if (getDialogImpl()!=null &&getDialogImpl().boxCustom != null) {
+        if (getDialogImpl() != null && getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
 
@@ -768,20 +835,16 @@ public class CustomDialog extends BaseDialog {
         hideWithExitAnim = true;
         isHide = true;
         if (getDialogImpl() != null) {
-            getDialogImpl().getDialogXAnimImpl().doExitAnim(CustomDialog.this, new ObjectRunnable<Float>() {
+            getDialogImpl().getDialogXAnimImpl().doExitAnim(CustomDialog.this, getDialogImpl().boxCustom);
+
+            runOnMainDelay(new Runnable() {
                 @Override
-                public void run(Float animProgress) {
-                    float value = animProgress;
-                    if (getDialogImpl().boxRoot != null) {
-                        getDialogImpl().boxRoot.setBkgAlpha(value);
-                    }
-                    if (value == 0) {
-                        if (getDialogView() != null) {
-                            getDialogView().setVisibility(View.GONE);
-                        }
+                public void run() {
+                    if (getDialogView() != null) {
+                        getDialogView().setVisibility(View.GONE);
                     }
                 }
-            });
+            }, getDialogImpl().getExitAnimationDuration(null));
         }
     }
 
@@ -974,5 +1037,44 @@ public class CustomDialog extends BaseDialog {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
         return this;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new CustomDialog() {
+     *
+     * @param dialog self
+     * @Override public void onShow(CustomDialog dialog) {
+     * //...
+     * }
+     * }
+     */
+    public void onShow(CustomDialog dialog) {
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new CustomDialog() {
+     *
+     * @param dialog self
+     * @Override public boolean onDismiss(CustomDialog dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(CustomDialog dialog) {
+
     }
 }

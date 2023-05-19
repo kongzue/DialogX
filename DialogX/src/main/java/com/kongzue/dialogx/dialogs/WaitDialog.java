@@ -3,11 +3,8 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -20,11 +17,13 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
@@ -33,14 +32,15 @@ import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.views.ProgressView;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author: Kongzue
@@ -266,9 +266,11 @@ public class WaitDialog extends BaseDialog {
     protected WeakReference<DialogImpl> dialogImpl;
 
     public class DialogImpl implements DialogConvertViewInterface {
+
+        private List<View> blurViews;
+
         public DialogXBaseRelativeLayout boxRoot;
         public MaxRelativeLayout bkg;
-        public BlurView blurView;
         public RelativeLayout boxProgress;
         public ProgressViewInterface progressView;
         public RelativeLayout boxCustomView;
@@ -286,16 +288,18 @@ public class WaitDialog extends BaseDialog {
             setWaitDialogView(dialogView);
             boxRoot = dialogView.findViewById(R.id.box_root);
             bkg = dialogView.findViewById(R.id.bkg);
-            blurView = dialogView.findViewById(R.id.blurView);
             boxProgress = dialogView.findViewById(R.id.box_progress);
-            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getTopActivity(), isLightTheme());
+            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getOwnActivity(), isLightTheme());
             if (progressViewCache == null) {
-                progressViewCache = new ProgressView(getTopActivity());
+                progressViewCache = new ProgressView(getOwnActivity());
             }
             progressView = (ProgressViewInterface) progressViewCache;
             boxProgress.addView(progressViewCache, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             boxCustomView = dialogView.findViewById(R.id.box_customView);
             txtInfo = dialogView.findViewById(R.id.txt_info);
+
+            blurViews = findAllBlurView(dialogView);
+
             init();
             setDialogImpl(this);
             refreshView();
@@ -305,11 +309,10 @@ public class WaitDialog extends BaseDialog {
             if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             bkg = convertView.findViewById(R.id.bkg);
-            blurView = convertView.findViewById(R.id.blurView);
             boxProgress = convertView.findViewById(R.id.box_progress);
-            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getTopActivity(), isLightTheme());
+            View progressViewCache = (View) style.overrideWaitTipRes().overrideWaitView(getOwnActivity(), isLightTheme());
             if (progressViewCache == null) {
-                progressViewCache = new ProgressView(getTopActivity());
+                progressViewCache = new ProgressView(getOwnActivity());
             }
             progressView = (ProgressViewInterface) progressViewCache;
             boxProgress.addView(progressViewCache, new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -324,10 +327,26 @@ public class WaitDialog extends BaseDialog {
             if (messageTextInfo == null) messageTextInfo = DialogX.tipTextInfo;
             if (backgroundColor == -1) backgroundColor = DialogX.tipBackgroundColor;
 
-            if (style.overrideWaitTipRes() == null) {
-                blurView.setRadiusPx(dip2px(15));
+            blurViews = findAllBlurView(dialogView.get());
+
+            Integer blurFrontColor = getColor(isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight);
+            Float dialogXRadius = (float) dip2px(15);
+            if (style.overrideWaitTipRes() != null) {
+                dialogXRadius = getFloatStyleAttr((float) style.overrideWaitTipRes().overrideRadiusPx(), dialogXRadius);
+                blurFrontColor = getColorNullable(
+                        getIntStyleAttr(style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme()), isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight),
+                        blurFrontColor);
+            }
+            if (blurViews != null) {
+                for (View blurView : blurViews) {
+                    ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                    ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
+                }
             } else {
-                blurView.setRadiusPx(style.overrideWaitTipRes().overrideRadiusPx() < 0 ? dip2px(15) : style.overrideWaitTipRes().overrideRadiusPx());
+                GradientDrawable gradientDrawable = (GradientDrawable) getResources().getDrawable(R.drawable.rect_dialogx_material_wait_bkg);
+                gradientDrawable.setColor(blurFrontColor);
+                gradientDrawable.setCornerRadius(dialogXRadius);
+                bkg.setBackground(gradientDrawable);
             }
             boxRoot.setClickable(true);
 
@@ -337,24 +356,20 @@ public class WaitDialog extends BaseDialog {
                 public void onShow() {
                     isShow = true;
                     preShow = false;
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+                    setLifecycleState(Lifecycle.State.CREATED);
                     boxRoot.setAlpha(0f);
                     bkg.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (getTopActivity() == null) return;
+                            if (getOwnActivity() == null) return;
 
-                            getDialogXAnimImpl().doShowAnim(WaitDialog.this, new ObjectRunnable<Float>() {
-                                @Override
-                                public void run(Float value) {
-                                    boxRoot.setBkgAlpha(value);
-                                }
-                            });
+                            getDialogXAnimImpl().doShowAnim(WaitDialog.this, bkg);
 
                             onDialogShow();
-                            getDialogLifecycleCallback().onShow(me());
+                            getDialogLifecycleCallback().onShow(WaitDialog.this);
+                            WaitDialog.this.onShow(WaitDialog.this);
 
-                            lifecycle.setCurrentState(Lifecycle.State.RESUMED);
+                            setLifecycleState(Lifecycle.State.RESUMED);
                         }
                     });
                 }
@@ -362,7 +377,8 @@ public class WaitDialog extends BaseDialog {
                 @Override
                 public void onDismiss() {
                     isShow = false;
-                    getDialogLifecycleCallback().onDismiss(me());
+                    getDialogLifecycleCallback().onDismiss(WaitDialog.this);
+                    WaitDialog.this.onDismiss(WaitDialog.this);
                     if (dialogImpl != null) dialogImpl.clear();
                     dialogImpl = null;
                     if (dialogView != null) dialogView.clear();
@@ -370,12 +386,12 @@ public class WaitDialog extends BaseDialog {
                     dialogLifecycleCallback = null;
                     if (me != null) me.clear();
                     me = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
 
-            if (readyTipType != null) {
+            if (readyTipType != null && readyTipType != TYPE.NONE) {
                 progressView.noLoading();
                 ((View) progressView).postDelayed(new Runnable() {
                     @Override
@@ -406,43 +422,31 @@ public class WaitDialog extends BaseDialog {
         private float oldProgress;
 
         public void refreshView() {
-            if (boxRoot == null || getTopActivity() == null) {
+            if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
 
             bkg.setMaxWidth(getMaxWidth());
             bkg.setMaxHeight(getMaxHeight());
-            bkg.setMinimumWidth(getMinWidth());
-            bkg.setMinimumHeight(getMinHeight());
+            bkg.setMinWidth(getMinWidth());
+            bkg.setMinHeight(getMinHeight());
 
+            if (backgroundColor != -1) {
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setOverlayColor(getResources().getColor(backgroundColor));
+                    }
+                }
+            }
             if (style.overrideWaitTipRes() != null) {
-                int overrideBackgroundColorRes = style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme());
-                if (overrideBackgroundColorRes == 0) {
-                    overrideBackgroundColorRes = isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight;
-                }
-                if (blurView != null) {
-                    blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(overrideBackgroundColorRes) : backgroundColor);
-                    blurView.setUseBlur(style.overrideWaitTipRes().blurBackground());
-                }
-                int overrideTextColorRes = style.overrideWaitTipRes().overrideTextColorRes(isLightTheme());
-                if (overrideTextColorRes == 0) {
-                    overrideTextColorRes = isLightTheme() ? R.color.white : R.color.black;
-                }
+                int overrideTextColorRes = getIntStyleAttr(style.overrideWaitTipRes().overrideTextColorRes(isLightTheme()), isLightTheme() ? R.color.white : R.color.black);
                 txtInfo.setTextColor(getResources().getColor(overrideTextColorRes));
                 progressView.setColor(getResources().getColor(overrideTextColorRes));
             } else {
-                if (isLightTheme()) {
-                    if (blurView != null)
-                        blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgDark) : backgroundColor);
-                    progressView.setColor(Color.WHITE);
-                    txtInfo.setTextColor(Color.WHITE);
-                } else {
-                    if (blurView != null)
-                        blurView.setOverlayColor(backgroundColor == -1 ? getResources().getColor(R.color.dialogxWaitBkgLight) : backgroundColor);
-                    progressView.setColor(Color.BLACK);
-                    txtInfo.setTextColor(Color.BLACK);
-                }
+                int overrideTextColorRes = isLightTheme() ? R.color.white : R.color.black;
+                txtInfo.setTextColor(getResources().getColor(overrideTextColorRes));
+                progressView.setColor(getResources().getColor(overrideTextColorRes));
             }
             if (DialogX.tipProgressColor != -1) progressView.setColor(DialogX.tipProgressColor);
 
@@ -451,9 +455,6 @@ public class WaitDialog extends BaseDialog {
                 oldProgress = waitProgress;
             }
             if (backgroundRadius > -1) {
-                if (blurView != null) {
-                    blurView.setRadiusPx(backgroundRadius);
-                }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     bkg.setOutlineProvider(new ViewOutlineProvider() {
                         @Override
@@ -462,6 +463,11 @@ public class WaitDialog extends BaseDialog {
                         }
                     });
                     bkg.setClipToOutline(true);
+                }
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setRadiusPx(backgroundRadius);
+                    }
                 }
             }
 
@@ -502,7 +508,7 @@ public class WaitDialog extends BaseDialog {
 
         public void doDismiss(final View v) {
             if (boxRoot == null) return;
-            if (getTopActivity() == null) return;
+            if (getOwnActivity() == null) return;
 
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
@@ -510,20 +516,17 @@ public class WaitDialog extends BaseDialog {
                     @Override
                     public void run() {
                         if (v != null) v.setEnabled(false);
-                        getDialogXAnimImpl().doExitAnim(WaitDialog.this, new ObjectRunnable<Float>() {
+                        getDialogXAnimImpl().doExitAnim(WaitDialog.this, bkg);
+
+                        runOnMainDelay(new Runnable() {
                             @Override
-                            public void run(Float value) {
+                            public void run() {
                                 if (boxRoot != null) {
-                                    boxRoot.setBkgAlpha(value);
+                                    boxRoot.setVisibility(View.GONE);
                                 }
-                                if (value == 0f) {
-                                    if (boxRoot != null) {
-                                        boxRoot.setVisibility(View.GONE);
-                                    }
-                                    dismiss(getWaitDialogView());
-                                }
+                                dismiss(getWaitDialogView());
                             }
-                        });
+                        }, getExitAnimationDuration(null));
                     }
                 });
             }
@@ -533,7 +536,7 @@ public class WaitDialog extends BaseDialog {
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<WaitDialog>() {
                     @Override
-                    public void doShowAnim(WaitDialog dialog, ObjectRunnable<Float> animProgress) {
+                    public void doShowAnim(WaitDialog dialog, ViewGroup dialogBodyView) {
                         int enterAnimResId = R.anim.anim_dialogx_default_enter;
                         if (overrideEnterAnimRes != 0) {
                             enterAnimResId = overrideEnterAnimRes;
@@ -541,15 +544,9 @@ public class WaitDialog extends BaseDialog {
                         if (customEnterAnimResId != 0) {
                             enterAnimResId = customEnterAnimResId;
                         }
-                        Animation enterAnim = AnimationUtils.loadAnimation(getTopActivity(), enterAnimResId);
-                        long enterAnimDurationTemp = enterAnim.getDuration();
+                        Animation enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResId);
+                        long enterAnimDurationTemp = getEnterAnimationDuration(enterAnim);
                         enterAnim.setInterpolator(new DecelerateInterpolator());
-                        if (overrideEnterDuration >= 0) {
-                            enterAnimDurationTemp = overrideEnterDuration;
-                        }
-                        if (enterAnimDuration >= 0) {
-                            enterAnimDurationTemp = enterAnimDuration;
-                        }
                         enterAnim.setDuration(enterAnimDurationTemp);
                         bkg.startAnimation(enterAnim);
 
@@ -558,7 +555,7 @@ public class WaitDialog extends BaseDialog {
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
                             }
                         });
                         bkgAlpha.start();
@@ -571,8 +568,8 @@ public class WaitDialog extends BaseDialog {
                     }
 
                     @Override
-                    public void doExitAnim(WaitDialog dialog, ObjectRunnable<Float> animProgress) {
-                        Context context = getTopActivity();
+                    public void doExitAnim(WaitDialog dialog, ViewGroup dialogBodyView) {
+                        Context context = getOwnActivity();
                         if (context == null) context = boxRoot.getContext();
                         if (context == null) return;
 
@@ -584,13 +581,7 @@ public class WaitDialog extends BaseDialog {
                             exitAnimResId = customExitAnimResId;
                         }
                         Animation exitAnim = AnimationUtils.loadAnimation(context, exitAnimResId);
-                        long exitAnimDurationTemp = exitAnim.getDuration();
-                        if (overrideExitDuration >= 0) {
-                            exitAnimDurationTemp = overrideExitDuration;
-                        }
-                        if (exitAnimDuration != -1) {
-                            exitAnimDurationTemp = exitAnimDuration;
-                        }
+                        long exitAnimDurationTemp = getExitAnimationDuration(exitAnim);
                         exitAnim.setDuration(exitAnimDurationTemp);
                         exitAnim.setInterpolator(new AccelerateInterpolator());
                         bkg.startAnimation(exitAnim);
@@ -605,7 +596,9 @@ public class WaitDialog extends BaseDialog {
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                if (boxRoot != null) {
+                                    boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
+                                }
                             }
                         });
                         bkgAlpha.start();
@@ -613,6 +606,34 @@ public class WaitDialog extends BaseDialog {
                 };
             }
             return dialogXAnimImpl;
+        }
+
+        public long getExitAnimationDuration(@Nullable Animation defaultExitAnim) {
+            if (defaultExitAnim == null && bkg.getAnimation() != null) {
+                defaultExitAnim = bkg.getAnimation();
+            }
+            long exitAnimDurationTemp = (defaultExitAnim == null || defaultExitAnim.getDuration() == 0) ? 300 : defaultExitAnim.getDuration();
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration != -1) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            return exitAnimDurationTemp;
+        }
+
+        public long getEnterAnimationDuration(@Nullable Animation defaultEnterAnim) {
+            if (defaultEnterAnim == null && bkg.getAnimation() != null) {
+                defaultEnterAnim = bkg.getAnimation();
+            }
+            long enterAnimDurationTemp = (defaultEnterAnim == null || defaultEnterAnim.getDuration() == 0) ? 300 : defaultEnterAnim.getDuration();
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            return enterAnimDurationTemp;
         }
 
         public void showTip(final TYPE tip) {
@@ -721,6 +742,21 @@ public class WaitDialog extends BaseDialog {
     public static void dismiss(Activity activity) {
         WaitDialog instance = getInstance(activity);
         if (instance != null) instance.doDismiss();
+    }
+
+    protected static Timer delayDismissTimer;
+
+    public static void dismiss(long delayTime) {
+        if (delayDismissTimer != null) {
+            delayDismissTimer.cancel();
+        }
+        delayDismissTimer = new Timer();
+        delayDismissTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        }, delayTime);
     }
 
     protected static WaitDialog me() {
@@ -1005,6 +1041,9 @@ public class WaitDialog extends BaseDialog {
     }
 
     protected static void showWithInstance(boolean noInstance) {
+        if (delayDismissTimer != null) {
+            delayDismissTimer.cancel();
+        }
         if (noInstance) {
             me().show();
         } else {
@@ -1013,6 +1052,9 @@ public class WaitDialog extends BaseDialog {
     }
 
     protected static void showWithInstance(WaitDialog instance, Activity activity) {
+        if (delayDismissTimer != null) {
+            delayDismissTimer.cancel();
+        }
         if (activity == null) {
             instance.show();
         } else {
@@ -1142,5 +1184,44 @@ public class WaitDialog extends BaseDialog {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
         return this;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new WaitDialog() {
+     *
+     * @param dialog self
+     * @Override public void onShow(WaitDialog dialog) {
+     * //...
+     * }
+     * }
+     */
+    public void onShow(WaitDialog dialog) {
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new WaitDialog() {
+     *
+     * @param dialog self
+     * @Override public boolean onDismiss(WaitDialog dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(WaitDialog dialog) {
+
     }
 }

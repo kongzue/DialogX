@@ -14,7 +14,9 @@
         <attr name="realtimeBlurRadius" format="dimension"/>
         <attr name="realtimeDownsampleFactor" format="float"/>
         <attr name="realtimeOverlayColor" format="color"/>
-        <attr name="radius" format="dimension"/>
+        <attr name="realtimeRadius" format="dimension"/>
+        <attr name="dialogxDarkMode" format="boolean"/>
+        <attr name="dialogxOverlayColorNoAlpha" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="ProgressView">

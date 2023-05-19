@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/box_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,12 +15,6 @@
         android:layout_centerInParent="true"
         android:minWidth="125dp"
         android:minHeight="125dp">
-
-        <com.kongzue.dialogx.util.views.BlurView
-            android:id="@+id/blurView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:tag="blurView" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -51,7 +46,7 @@
                 android:maxLines="3"
                 android:text="Please Wait"
                 android:textColor="@color/white"
-                android:textSize="14dp" />
+                android:textSize="14dp"/>
 
         </LinearLayout>
 

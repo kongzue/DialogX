@@ -14,7 +14,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -95,9 +94,9 @@ public class ProgressView extends View implements ProgressViewInterface {
             }
             isInited = true;
             if (attrs != null) {
-                TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ProgressView);
-                width = a.getDimensionPixelSize(R.styleable.ProgressView_progressStrokeWidth, dip2px(2));
-                color = a.getDimensionPixelSize(R.styleable.ProgressView_progressStrokeColor, color);
+                TypedArray a = getContext().obtainStyledAttributes(attrs, com.kongzue.dialogx.R.styleable.ProgressView);
+                width = a.getDimensionPixelSize(com.kongzue.dialogx.R.styleable.ProgressView_progressStrokeWidth, dip2px(2));
+                color = a.getDimensionPixelSize(com.kongzue.dialogx.R.styleable.ProgressView_progressStrokeColor, color);
                 
                 a.recycle();
             }
@@ -199,7 +198,7 @@ public class ProgressView extends View implements ProgressViewInterface {
     }
     
     private Bitmap getLoadingBitmap() {
-        Bitmap origin = BitmapFactory.decodeResource(getResources(), isLightMode ? R.mipmap.img_progress_ios_light : R.mipmap.img_progress_ios_dark);
+        Bitmap origin = BitmapFactory.decodeResource(getResources(), isLightMode ? R.mipmap.img_progress_ios_dark : R.mipmap.img_progress_ios_light);
         Matrix matrix = new Matrix();
         matrix.setRotate(45 * ((int) currentRotateDegrees));
         Bitmap rotatedBitmap = Bitmap.createBitmap(origin, 0, 0, origin.getWidth(), origin.getHeight(), matrix, false);

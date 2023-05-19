@@ -1,8 +1,6 @@
 package com.kongzue.dialogx.interfaces;
 
-import android.animation.ValueAnimator;
-
-import com.kongzue.dialogx.util.ObjectRunnable;
+import android.view.ViewGroup;
 
 /**
  * @author: Kongzue
@@ -12,10 +10,10 @@ import com.kongzue.dialogx.util.ObjectRunnable;
  * @createTime: 2022/9/5 9:21
  */
 public abstract class DialogXAnimInterface<D> {
-    
-    public void doShowAnim(D dialog, ObjectRunnable<Float> animProgress) {
+
+    public void doShowAnim(D dialog, ViewGroup dialogBodyView) {
     }
-    
-    public void doExitAnim(D dialog, ObjectRunnable<Float> animProgress) {
+
+    public void doExitAnim(D dialog, ViewGroup dialogBodyView) {
     }
 }

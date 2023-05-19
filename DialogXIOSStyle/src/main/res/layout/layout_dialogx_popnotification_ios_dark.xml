@@ -7,92 +7,98 @@
     android:orientation="vertical"
     app:baseFocusable="false">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rect_dialogx_ios_popnotification_bkg" />
+
     <com.kongzue.dialogx.util.views.MaxRelativeLayout
         android:id="@+id/box_body"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:clickable="true"
-        android:tag="blurBody">
+        android:clickable="true">
 
-        <ImageView
-            android:id="@+id/img_dialogx_pop_icon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone" />
-
-        <LinearLayout
+        <com.kongzue.dialogx.style.views.BlurRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toLeftOf="@+id/txt_dialogx_button"
-            android:layout_toRightOf="@+id/img_dialogx_pop_icon"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            app:dialogxDarkMode="true"
+            app:realtimeRadius="25dp">
 
-            <TextView
-                android:id="@+id/txt_dialogx_pop_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_weight="1"
-                android:gravity="left|center_vertical"
-                android:text="Notification!"
-                android:textColor="@color/white"
-                android:textSize="14dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txt_dialogx_pop_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="-15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:gravity="left|center_vertical"
-                android:text="Notification!"
-                android:textColor="@color/white70"
-                android:textSize="14dp"/>
-
-            <RelativeLayout
-                android:id="@+id/box_custom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/img_dialogx_pop_icon"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:visibility="gone" />
-        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_dialogx_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/button_dialogx_ios_circle_night"
-            android:gravity="left|center_vertical"
-            android:paddingLeft="15dp"
-            android:paddingTop="7dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="7dp"
-            android:singleLine="true"
-            android:text="Dismiss"
-            android:textColor="@color/dialogxPopButtonBlueDark"
-            android:textSize="14dp"
-            android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/txt_dialogx_button"
+                android:layout_toRightOf="@+id/img_dialogx_pop_icon"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_dialogx_pop_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:text="Notification!"
+                    android:textColor="@color/white"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_dialogx_pop_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:text="Notification!"
+                    android:textColor="@color/white70"
+                    android:textSize="14dp"
+                    android:visibility="gone" />
+
+                <RelativeLayout
+                    android:id="@+id/box_custom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_dialogx_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/button_dialogx_ios_circle_night"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingTop="7dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="7dp"
+                android:singleLine="true"
+                android:text="Dismiss"
+                android:textColor="@color/dialogxPopButtonBlueDark"
+                android:textSize="14dp"
+                android:visibility="gone" />
+        </com.kongzue.dialogx.style.views.BlurRelativeLayout>
 
     </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 

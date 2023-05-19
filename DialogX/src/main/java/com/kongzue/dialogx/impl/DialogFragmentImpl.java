@@ -1,12 +1,15 @@
 package com.kongzue.dialogx.impl;
 
+import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+import static com.kongzue.dialogx.DialogX.error;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,15 +23,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 
 import java.lang.ref.WeakReference;
-
-import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-import static com.kongzue.dialogx.DialogX.error;
 
 /**
  * @author: Kongzue
@@ -45,6 +43,7 @@ public class DialogFragmentImpl extends DialogFragment {
     public DialogFragmentImpl(BaseDialog baseDialog, View dialogView) {
         this.dialogView = dialogView;
         this.baseDialog = baseDialog;
+        activityWeakReference = new WeakReference<>(baseDialog.getOwnActivity());
     }
     
     @Override
@@ -57,10 +56,6 @@ public class DialogFragmentImpl extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (BaseDialog.getTopActivity() != null && BaseDialog.getTopActivity() instanceof Activity) {
-            activityWeakReference = new WeakReference<>(((Activity) BaseDialog.getTopActivity()));
-        }
-        if (activityWeakReference == null || activityWeakReference.get() == null) return;
         final Activity activity = activityWeakReference.get();
         
         if (getDialog() == null) return;
@@ -109,7 +104,10 @@ public class DialogFragmentImpl extends DialogFragment {
                 }
             }
             dialogWindow.getDecorView().setSystemUiVisibility(visibility);
-            dialogWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            dialogWindow.addFlags(
+                    WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+            );
             dialogWindow.setStatusBarColor(Color.TRANSPARENT);
             dialogWindow.setNavigationBarColor(Color.TRANSPARENT);
         } else {

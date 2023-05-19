@@ -23,24 +23,24 @@ import java.util.List;
  * @createTime: 2021/8/5 9:32
  */
 public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycleViewAdapter.ViewHolder> {
-    
+
     AdapterView.OnItemClickListener onItemClickListener;
-    
+
     public AdapterView.OnItemClickListener getOnItemClickListener() {
         return onItemClickListener;
     }
-    
+
     public CustomRecycleViewAdapter setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
         return this;
     }
-    
+
     public CustomRecycleViewAdapter(List<Data> mDataList) {
         this.mDataList = mDataList;
     }
-    
+
     private List<Data> mDataList;
-    
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,7 +48,7 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
-    
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Data data = mDataList.get(position);
@@ -60,44 +60,44 @@ public class CustomRecycleViewAdapter extends RecyclerView.Adapter<CustomRecycle
         });
         holder.getTxtItem().setText(data.getText());
     }
-    
+
     @Override
     public int getItemCount() {
         return mDataList.size();
     }
-    
+
     public static class Data {
-        
+
         private String text;
-        
+
         public Data(String text) {
             this.text = text;
         }
-        
+
         public String getText() {
             return text;
         }
-        
+
         public Data setText(String text) {
             this.text = text;
             return this;
         }
     }
-    
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtItem;
         View itemView;
-        
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.itemView = itemView;
             txtItem = itemView.findViewById(R.id.txt_item);
         }
-    
+
         public View getItemView() {
             return itemView;
         }
-    
+
         public TextView getTxtItem() {
             return txtItem;
         }

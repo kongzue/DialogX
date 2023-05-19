@@ -9,8 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -22,16 +20,17 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -39,12 +38,12 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.BlurView;
 import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
+
+import java.util.List;
 
 /**
  * @author: Kongzue
@@ -53,8 +52,8 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/10/6 15:17
  */
-public class BottomDialog extends BaseDialog {
-    
+public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog {
+
     public static int overrideEnterDuration = -1;
     public static int overrideExitDuration = -1;
     public static BOOLEAN overrideCancelable;
@@ -65,6 +64,7 @@ public class BottomDialog extends BaseDialog {
     protected CharSequence okText;
     protected CharSequence otherText;
     protected boolean allowInterceptTouch = true;
+    protected boolean bottomNonSafetyAreaBySelf = false;
     protected int maskColor = -1;
     protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
     protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
@@ -76,135 +76,131 @@ public class BottomDialog extends BaseDialog {
     protected float backgroundRadius = -1;
     protected Drawable titleIcon;
     protected DialogXAnimInterface<BottomDialog> dialogXAnimImpl;
-    
+    protected BUTTON_SELECT_RESULT buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
+
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
     protected TextInfo menuTextInfo;
     protected TextInfo cancelTextInfo = new TextInfo().setBold(true);
     protected TextInfo okTextInfo = new TextInfo().setBold(true);
     protected TextInfo otherTextInfo = new TextInfo().setBold(true);
-    
+
     /**
      * 此值用于，当禁用滑动时（style.overrideBottomDialogRes.touchSlide = false时）的最大显示高度。
      * 0：不限制，最大显示到屏幕可用高度。
      */
     protected float bottomDialogMaxHeight = 0f;
-    
+
     protected DialogLifecycleCallback<BottomDialog> dialogLifecycleCallback;
-    
+
     protected BottomDialog me = this;
-    
+
     protected BottomDialog() {
         super();
     }
-    
+
     @Override
     public String dialogKey() {
         return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
     }
-    
+
     private View dialogView;
-    
+
     public static BottomDialog build() {
         return new BottomDialog();
     }
-    
+
     public static BottomDialog build(DialogXStyle style) {
         return new BottomDialog().setStyle(style);
     }
-    
+
     public static BottomDialog build(OnBindView<BottomDialog> onBindView) {
         return new BottomDialog().setCustomView(onBindView);
     }
-    
+
     public BottomDialog(CharSequence title, CharSequence message) {
         this.title = title;
         this.message = message;
     }
-    
+
     public BottomDialog(int titleResId, int messageResId) {
         this.title = getString(titleResId);
         this.message = getString(messageResId);
     }
-    
+
     public static BottomDialog show(CharSequence title, CharSequence message) {
         BottomDialog bottomDialog = new BottomDialog(title, message);
         bottomDialog.show();
         return bottomDialog;
     }
-    
+
     public static BottomDialog show(int titleResId, int messageResId) {
         BottomDialog bottomDialog = new BottomDialog(titleResId, messageResId);
         bottomDialog.show();
         return bottomDialog;
     }
-    
+
     public BottomDialog(CharSequence title, CharSequence message, OnBindView<BottomDialog> onBindView) {
         this.title = title;
         this.message = message;
         this.onBindView = onBindView;
     }
-    
+
     public BottomDialog(int titleResId, int messageResId, OnBindView<BottomDialog> onBindView) {
         this.title = getString(titleResId);
         this.message = getString(messageResId);
         this.onBindView = onBindView;
     }
-    
+
     public static BottomDialog show(CharSequence title, CharSequence message, OnBindView<BottomDialog> onBindView) {
         BottomDialog bottomDialog = new BottomDialog(title, message, onBindView);
         bottomDialog.show();
         return bottomDialog;
     }
-    
+
     public static BottomDialog show(int titleResId, int messageResId, OnBindView<BottomDialog> onBindView) {
         BottomDialog bottomDialog = new BottomDialog(titleResId, messageResId, onBindView);
         bottomDialog.show();
         return bottomDialog;
     }
-    
+
     public BottomDialog(CharSequence title, OnBindView<BottomDialog> onBindView) {
         this.title = title;
         this.onBindView = onBindView;
     }
-    
+
     public BottomDialog(int titleResId, OnBindView<BottomDialog> onBindView) {
         this.title = getString(titleResId);
         this.onBindView = onBindView;
     }
-    
+
     public static BottomDialog show(CharSequence title, OnBindView<BottomDialog> onBindView) {
         BottomDialog bottomDialog = new BottomDialog(title, onBindView);
         bottomDialog.show();
         return bottomDialog;
     }
-    
+
     public static BottomDialog show(int titleResId, OnBindView<BottomDialog> onBindView) {
         BottomDialog bottomDialog = new BottomDialog(titleResId, onBindView);
         bottomDialog.show();
         return bottomDialog;
     }
-    
+
     public BottomDialog(OnBindView<BottomDialog> onBindView) {
         this.onBindView = onBindView;
     }
-    
+
     public static BottomDialog show(OnBindView<BottomDialog> onBindView) {
         BottomDialog bottomDialog = new BottomDialog(onBindView);
         bottomDialog.show();
         return bottomDialog;
     }
-    
+
     public BottomDialog show() {
         if (isHide && getDialogView() != null && isShow) {
             if (hideWithExitAnim && getDialogImpl() != null) {
                 getDialogView().setVisibility(View.VISIBLE);
-                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, new ObjectRunnable<Float>() {
-                    @Override
-                    public void run(Float value) {
-                        getDialogImpl().boxRoot.setBkgAlpha(value);
-                    }
-                });
+                getDialogImpl().getDialogXAnimImpl().doShowAnim(me, getDialogImpl().bkg);
             } else {
                 getDialogView().setVisibility(View.VISIBLE);
             }
@@ -216,7 +212,7 @@ public class BottomDialog extends BaseDialog {
             if (style.overrideBottomDialogRes() != null) {
                 layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
             }
-            
+
             dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
@@ -224,7 +220,7 @@ public class BottomDialog extends BaseDialog {
         show(dialogView);
         return this;
     }
-    
+
     public void show(Activity activity) {
         super.beforeShow();
         if (getDialogView() == null) {
@@ -232,24 +228,23 @@ public class BottomDialog extends BaseDialog {
             if (style.overrideBottomDialogRes() != null) {
                 layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
             }
-            
+
             dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
         }
         show(activity, dialogView);
     }
-    
+
     protected DialogImpl dialogImpl;
-    
+
     public class DialogImpl implements DialogConvertViewInterface {
-        
+
         private BottomDialogTouchEventInterceptor bottomDialogTouchEventInterceptor;
-        
+
         public DialogXBaseRelativeLayout boxRoot;
         public RelativeLayout boxBkg;
         public MaxRelativeLayout bkg;
-        public ViewGroup boxBody;
         public ImageView imgTab;
         public TextView txtDialogTitle;
         public ScrollController scrollView;
@@ -258,20 +253,22 @@ public class BottomDialog extends BaseDialog {
         public View imgSplit;
         public RelativeLayout boxList;
         public RelativeLayout boxCustom;
-        public BlurView blurView;
         public ViewGroup boxCancel;
-        public TextView btnCancel;
-        public BlurView cancelBlurView;
-        
+        public ImageView splitSelectPositive;
+        public ImageView splitSelectOther;
+
+        public LinearLayout boxButton;
+        public TextView btnSelectNegative;
         public TextView btnSelectOther;
         public TextView btnSelectPositive;
-        
+
+        private List<View> blurViews;
+
         public DialogImpl(View convertView) {
             if (convertView == null) return;
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
-            boxBody = convertView.findViewWithTag("blurBody");
             imgTab = convertView.findViewById(R.id.img_tab);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
             scrollView = convertView.findViewById(R.id.scrollView);
@@ -280,24 +277,29 @@ public class BottomDialog extends BaseDialog {
             imgSplit = convertView.findViewWithTag("split");
             boxList = convertView.findViewById(R.id.box_list);
             boxCustom = convertView.findViewById(R.id.box_custom);
-            blurView = convertView.findViewById(R.id.blurView);
+
             boxCancel = convertView.findViewWithTag("cancelBox");
-            btnCancel = convertView.findViewWithTag("cancel");
-            
+
+            boxButton = convertView.findViewById(R.id.box_button);
+            btnSelectNegative = convertView.findViewById(R.id.btn_selectNegative);
             btnSelectOther = convertView.findViewById(R.id.btn_selectOther);
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
-            
+            splitSelectPositive = convertView.findViewWithTag("imgPositiveButtonSplit");
+            splitSelectOther = convertView.findViewWithTag("imgOtherButtonSplit");
+
+            blurViews = findAllBlurView(dialogView);
+
             init();
             dialogImpl = this;
             refreshView();
         }
-        
+
         public void reBuild() {
             init();
             dialogImpl = this;
             refreshView();
         }
-        
+
         /**
          * 此值记录了BottomDialog启动后的位置
          * ·当内容高度大于屏幕安全区高度时，BottomDialog会以全屏方式启动，但一开始只会展开到 0.8×屏幕高度，
@@ -308,9 +310,11 @@ public class BottomDialog extends BaseDialog {
          * 并阻止当内容高度已经完全显示时的继续向上滑动操作。
          */
         public float bkgEnterAimY = -1;
-        
+
         @Override
         public void init() {
+            buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
+
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
             if (okTextInfo == null) okTextInfo = DialogX.okButtonTextInfo;
@@ -319,74 +323,54 @@ public class BottomDialog extends BaseDialog {
             if (otherTextInfo == null) otherTextInfo = DialogX.buttonTextInfo;
             if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
             if (cancelText == null) cancelText = DialogX.cancelButtonText;
-            
+
             txtDialogTitle.getPaint().setFakeBoldText(true);
-            if (btnCancel != null) btnCancel.getPaint().setFakeBoldText(true);
+            if (btnSelectNegative != null) btnSelectNegative.getPaint().setFakeBoldText(true);
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
-            
+
             boxBkg.setY(getRootFrameLayout().getMeasuredHeight());
-            
+
             bkg.setMaxWidth(getMaxWidth());
             bkg.setMaxHeight(getMaxHeight());
             bkg.setMinimumWidth(getMinWidth());
             bkg.setMinimumHeight(getMinHeight());
-            
+
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
-                    
+
                     isShow = true;
                     preShow = false;
-                    
-                    lifecycle.setCurrentState(Lifecycle.State.CREATED);
+
+                    setLifecycleState(Lifecycle.State.CREATED);
                     getDialogLifecycleCallback().onShow(me);
-                    
+                    BottomDialog.this.onShow(me);
+
                     onDialogShow();
-                    
-                    boxRoot.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (style.messageDialogBlurSettings() != null && style.messageDialogBlurSettings().blurBackground() && boxBody != null && boxCancel != null) {
-                                int blurFrontColor = getResources().getColor(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme()));
-                                blurView = new BlurView(getOwnActivity(), null);
-                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(bkg.getWidth(), bkg.getHeight());
-                                blurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                blurView.setTag("blurView");
-                                blurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
-                                boxBody.addView(blurView, 0, params);
-                                
-                                cancelBlurView = new BlurView(getOwnActivity(), null);
-                                RelativeLayout.LayoutParams cancelButtonLp = new RelativeLayout.LayoutParams(boxCancel.getWidth(), boxCancel.getHeight());
-                                cancelBlurView.setOverlayColor(backgroundColor == -1 ? blurFrontColor : backgroundColor);
-                                cancelBlurView.setTag("blurView");
-                                cancelBlurView.setRadiusPx(style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
-                                boxCancel.addView(cancelBlurView, 0, cancelButtonLp);
-                            }
-                            lifecycle.setCurrentState(Lifecycle.State.RESUMED);
-                        }
-                    });
-                    
+
                     refreshUI();
                 }
-                
+
                 @Override
                 public void onDismiss() {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
+                    BottomDialog.this.onDismiss(me);
                     dialogImpl = null;
                     bottomDialogTouchEventInterceptor = null;
                     dialogLifecycleCallback = null;
-                    lifecycle.setCurrentState(Lifecycle.State.DESTROYED);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
-            
-            if (btnCancel != null) {
-                btnCancel.setOnClickListener(new View.OnClickListener() {
+
+            if (btnSelectNegative != null) {
+                btnSelectNegative.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_CANCEL;
                         if (cancelButtonClickListener != null) {
                             if (!cancelButtonClickListener.onClick(me, v)) {
                                 dismiss();
@@ -401,6 +385,7 @@ public class BottomDialog extends BaseDialog {
                 btnSelectOther.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OTHER;
                         if (otherButtonClickListener != null) {
                             if (!otherButtonClickListener.onClick(me, v)) {
                                 dismiss();
@@ -415,6 +400,7 @@ public class BottomDialog extends BaseDialog {
                 btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OK;
                         if (okButtonClickListener != null) {
                             if (!okButtonClickListener.onClick(me, v)) {
                                 dismiss();
@@ -425,7 +411,7 @@ public class BottomDialog extends BaseDialog {
                     }
                 });
             }
-            
+
             if (imgSplit != null) {
                 int dividerRes = style.overrideBottomDialogRes().overrideMenuDividerDrawableRes(isLightTheme());
                 int dividerHeight = style.overrideBottomDialogRes().overrideMenuDividerHeight(isLightTheme());
@@ -436,7 +422,7 @@ public class BottomDialog extends BaseDialog {
                     imgSplit.setLayoutParams(lp);
                 }
             }
-            
+
             boxRoot.setOnBackPressedListener(new DialogXBaseRelativeLayout.PrivateBackPressedListener() {
                 @Override
                 public boolean onBackPressed() {
@@ -452,59 +438,73 @@ public class BottomDialog extends BaseDialog {
                     return true;
                 }
             });
-            
+
             boxBkg.post(new Runnable() {
                 @Override
                 public void run() {
-                    getDialogXAnimImpl().doShowAnim(BottomDialog.this, new ObjectRunnable<Float>() {
-                        @Override
-                        public void run(Float value) {
-                            boxRoot.setBkgAlpha(value);
-                            if (value == 1f) {
-                                bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
-                            }
+                    getDialogXAnimImpl().doShowAnim(BottomDialog.this, bkg);
+
+                    Integer blurFrontColor = null;
+                    Float dialogXRadius = null;
+                    if (style.messageDialogBlurSettings() != null) {
+                        blurFrontColor = getColorNullable(getIntStyleAttr(style.messageDialogBlurSettings().blurForwardColorRes(isLightTheme())));
+                        dialogXRadius = getFloatStyleAttr((float) style.messageDialogBlurSettings().blurBackgroundRoundRadiusPx());
+                    }
+
+                    if (blurViews != null) {
+                        for (View blurView : blurViews) {
+                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
                         }
-                    });
+                    }
                 }
             });
-            
+
+            runOnMainDelay(new Runnable() {
+                @Override
+                public void run() {
+                    bottomDialogTouchEventInterceptor = new BottomDialogTouchEventInterceptor(me, dialogImpl);
+                }
+            }, getEnterAnimationDuration());
+
             onDialogInit();
         }
-        
+
         @Override
         public void refreshView() {
-            if (boxRoot == null || getTopActivity() == null) {
+            if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != -1) {
                 tintColor(bkg, backgroundColor);
-                if (blurView != null && cancelBlurView != null) {
-                    blurView.setOverlayColor(backgroundColor);
-                    cancelBlurView.setOverlayColor(backgroundColor);
-                }
-                
                 tintColor(btnSelectOther, backgroundColor);
-                tintColor(btnCancel, backgroundColor);
+                tintColor(btnSelectNegative, backgroundColor);
                 tintColor(btnSelectPositive, backgroundColor);
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setOverlayColor(backgroundColor);
+                    }
+                }
             }
-            
+
             showText(txtDialogTitle, title);
             showText(txtDialogTip, message);
-            
+
             useTextInfo(txtDialogTitle, titleTextInfo);
             useTextInfo(txtDialogTip, messageTextInfo);
-            useTextInfo(btnCancel, cancelTextInfo);
+            useTextInfo(btnSelectNegative, cancelTextInfo);
             useTextInfo(btnSelectOther, otherTextInfo);
             useTextInfo(btnSelectPositive, okTextInfo);
-            
+
             if (titleIcon != null) {
                 int size = (int) txtDialogTitle.getTextSize();
                 titleIcon.setBounds(0, 0, size, size);
                 txtDialogTitle.setCompoundDrawablePadding(dip2px(10));
                 txtDialogTitle.setCompoundDrawables(titleIcon, null, null, null);
             }
-            
+
             if (bkgInterceptTouch) {
                 if (isCancelable()) {
                     boxRoot.setOnClickListener(new View.OnClickListener() {
@@ -541,12 +541,18 @@ public class BottomDialog extends BaseDialog {
                     });
                     bkg.setClipToOutline(true);
                 }
+
+                if (blurViews != null) {
+                    for (View blurView : blurViews) {
+                        ((BlurViewType) blurView).setRadiusPx(backgroundRadius);
+                    }
+                }
             }
-            
+
             if (maskColor != -1) {
                 boxRoot.setBackground(new ColorDrawable(maskColor));
             }
-            
+
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
                 if (onBindView.getCustomView() instanceof ScrollController) {
@@ -564,17 +570,17 @@ public class BottomDialog extends BaseDialog {
                     }
                 }
             }
-            
+
             if (isAllowInterceptTouch() && isCancelable()) {
                 if (imgTab != null) imgTab.setVisibility(View.VISIBLE);
             } else {
                 if (imgTab != null) imgTab.setVisibility(View.GONE);
             }
-            
+
             if (bottomDialogTouchEventInterceptor != null) {
                 bottomDialogTouchEventInterceptor.refresh(me, this);
             }
-            
+
             if (imgSplit != null) {
                 if (txtDialogTitle.getVisibility() == View.VISIBLE || txtDialogTip.getVisibility() == View.VISIBLE) {
                     imgSplit.setVisibility(View.VISIBLE);
@@ -582,7 +588,7 @@ public class BottomDialog extends BaseDialog {
                     imgSplit.setVisibility(View.GONE);
                 }
             }
-            
+
             if (boxCancel != null) {
                 if (isNull(cancelText)) {
                     boxCancel.setVisibility(View.GONE);
@@ -590,47 +596,42 @@ public class BottomDialog extends BaseDialog {
                     boxCancel.setVisibility(View.VISIBLE);
                 }
             }
-            
+
             showText(btnSelectPositive, okText);
-            showText(btnCancel, cancelText);
+            showText(btnSelectNegative, cancelText);
             showText(btnSelectOther, otherText);
-            
+            if (splitSelectPositive != null) {
+                splitSelectPositive.setVisibility(btnSelectPositive.getVisibility());
+            }
+            if (splitSelectOther != null) {
+                splitSelectOther.setVisibility(btnSelectOther.getVisibility());
+            }
+
             onDialogRefreshUI();
         }
-        
+
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
-            if (getTopActivity() == null) return;
-            
+            if (getOwnActivity() == null) return;
+
             if (!dismissAnimFlag) {
                 dismissAnimFlag = true;
-                
-                getDialogXAnimImpl().doExitAnim(BottomDialog.this, new ObjectRunnable<Float>() {
-                    @Override
-                    public void run(Float animatedValue) {
-                        if (boxRoot != null) {
-                            boxRoot.setBkgAlpha(animatedValue);
-                        }
-                        if (animatedValue == 0) {
-                            if (boxRoot != null) {
-                                boxRoot.setVisibility(View.GONE);
-                            }
-                            dismiss(dialogView);
-                        }
-                    }
-                });
-                
+
+                getDialogXAnimImpl().doExitAnim(BottomDialog.this, bkg);
+
                 runOnMainDelay(new Runnable() {
                     @Override
                     public void run() {
+                        if (boxRoot != null) {
+                            boxRoot.setVisibility(View.GONE);
+                        }
+                        dismiss(dialogView);
                     }
-                }, exitAnimDurationTemp);
+                }, getExitAnimationDuration());
             }
         }
-        
-        long exitAnimDurationTemp = 300;
-        
+
         public void preDismiss() {
             if (isCancelable()) {
                 if (getDialogLifecycleCallback() instanceof BottomDialogSlideEventLifecycleCallback) {
@@ -653,14 +654,14 @@ public class BottomDialog extends BaseDialog {
                 exitAnim.start();
             }
         }
-        
+
         protected DialogXAnimInterface<BottomDialog> getDialogXAnimImpl() {
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<BottomDialog>() {
                     @Override
-                    public void doShowAnim(BottomDialog dialog, ObjectRunnable<Float> animProgress) {
-                        long enterAnimDurationTemp = 300;
-                        
+                    public void doShowAnim(BottomDialog dialog, ViewGroup dialogBodyView) {
+                        long enterAnimDurationTemp = getEnterAnimationDuration();
+
                         float customDialogTop = 0;
                         if (dialog.isAllowInterceptTouch()) {
                             if (bottomDialogMaxHeight > 0 && bottomDialogMaxHeight <= 1) {
@@ -676,53 +677,40 @@ public class BottomDialog extends BaseDialog {
                             }
                             boxBkg.setPadding(0, 0, 0, (int) customDialogTop);
                         }
-                        
+
                         //上移动画
-                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(),
-                                bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop
-                        );
-                        if (overrideEnterDuration >= 0) {
-                            enterAnimDurationTemp = overrideEnterDuration;
-                        }
-                        if (enterAnimDuration >= 0) {
-                            enterAnimDurationTemp = enterAnimDuration;
-                        }
+                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", getRootFrameLayout().getMeasuredHeight(), bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop);
                         enterAnim.setDuration(enterAnimDurationTemp);
                         enterAnim.setAutoCancel(true);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                         enterAnim.start();
-                        
+
                         //遮罩层动画
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
                         bkgAlpha.setDuration(enterAnimDurationTemp);
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
                             }
                         });
                         bkgAlpha.start();
                     }
-                    
+
                     @Override
-                    public void doExitAnim(BottomDialog dialog, ObjectRunnable<Float> animProgress) {
-                        if (overrideExitDuration >= 0) {
-                            exitAnimDurationTemp = overrideExitDuration;
-                        }
-                        if (exitAnimDuration >= 0) {
-                            exitAnimDurationTemp = exitAnimDuration;
-                        }
-                        
+                    public void doExitAnim(BottomDialog dialog, ViewGroup dialogBodyView) {
+                        long exitAnimDurationTemp = getExitAnimationDuration();
+
                         ObjectAnimator exitAnim = ObjectAnimator.ofFloat(boxBkg, "y", boxBkg.getY(), boxBkg.getHeight());
                         exitAnim.setDuration(exitAnimDurationTemp);
                         exitAnim.start();
-                        
+
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
                         bkgAlpha.setDuration(exitAnimDurationTemp);
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(ValueAnimator animation) {
-                                animProgress.run((Float) animation.getAnimatedValue());
+                                boxRoot.setBkgAlpha((Float) animation.getAnimatedValue());
                             }
                         });
                         bkgAlpha.start();
@@ -731,8 +719,30 @@ public class BottomDialog extends BaseDialog {
             }
             return dialogXAnimImpl;
         }
+
+        public long getExitAnimationDuration() {
+            long exitAnimDurationTemp = 300;
+            if (overrideExitDuration >= 0) {
+                exitAnimDurationTemp = overrideExitDuration;
+            }
+            if (exitAnimDuration != -1) {
+                exitAnimDurationTemp = exitAnimDuration;
+            }
+            return exitAnimDurationTemp;
+        }
+
+        public long getEnterAnimationDuration() {
+            long enterAnimDurationTemp = 300;
+            if (overrideEnterDuration >= 0) {
+                enterAnimDurationTemp = overrideEnterDuration;
+            }
+            if (enterAnimDuration >= 0) {
+                enterAnimDurationTemp = enterAnimDuration;
+            }
+            return enterAnimDurationTemp;
+        }
     }
-    
+
     public void refreshUI() {
         if (getDialogImpl() == null) return;
         runOnMain(new Runnable() {
@@ -742,7 +752,7 @@ public class BottomDialog extends BaseDialog {
             }
         });
     }
-    
+
     public void dismiss() {
         runOnMain(new Runnable() {
             @Override
@@ -752,38 +762,38 @@ public class BottomDialog extends BaseDialog {
             }
         });
     }
-    
+
     public DialogLifecycleCallback<BottomDialog> getDialogLifecycleCallback() {
         return dialogLifecycleCallback == null ? new DialogLifecycleCallback<BottomDialog>() {
         } : dialogLifecycleCallback;
     }
-    
+
     public BottomDialog setDialogLifecycleCallback(DialogLifecycleCallback<BottomDialog> dialogLifecycleCallback) {
         this.dialogLifecycleCallback = dialogLifecycleCallback;
         if (isShow) dialogLifecycleCallback.onShow(me);
         return this;
     }
-    
+
     public OnBackPressedListener<BottomDialog> getOnBackPressedListener() {
         return (OnBackPressedListener<BottomDialog>) onBackPressedListener;
     }
-    
+
     public BottomDialog setOnBackPressedListener(OnBackPressedListener<BottomDialog> onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setStyle(DialogXStyle style) {
         this.style = style;
         return this;
     }
-    
+
     public BottomDialog setTheme(DialogX.THEME theme) {
         this.theme = theme;
         return this;
     }
-    
+
     public boolean isCancelable() {
         if (privateCancelable != null) {
             return privateCancelable == BOOLEAN.TRUE;
@@ -793,101 +803,101 @@ public class BottomDialog extends BaseDialog {
         }
         return cancelable;
     }
-    
+
     public BottomDialog setCancelable(boolean cancelable) {
         this.privateCancelable = cancelable ? BOOLEAN.TRUE : BOOLEAN.FALSE;
         refreshUI();
         return this;
     }
-    
+
     public DialogImpl getDialogImpl() {
         return dialogImpl;
     }
-    
+
     public CharSequence getTitle() {
         return title;
     }
-    
+
     public BottomDialog setTitle(CharSequence title) {
         this.title = title;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setTitle(int titleResId) {
         this.title = getString(titleResId);
         refreshUI();
         return this;
     }
-    
+
     public CharSequence getMessage() {
         return message;
     }
-    
+
     public BottomDialog setMessage(CharSequence message) {
         this.message = message;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setMessage(int messageResId) {
         this.message = getString(messageResId);
         refreshUI();
         return this;
     }
-    
+
     public CharSequence getCancelButton() {
         return cancelText;
     }
-    
+
     public BottomDialog setCancelButton(CharSequence cancelText) {
         this.cancelText = cancelText;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setCancelButton(int cancelTextResId) {
         this.cancelText = getString(cancelTextResId);
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setCancelButton(OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
-    
+
     public BottomDialog setCancelButton(CharSequence cancelText, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setCancelButton(int cancelTextResId, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelText = getString(cancelTextResId);
         this.cancelButtonClickListener = cancelButtonClickListener;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setCustomView(OnBindView<BottomDialog> onBindView) {
         this.onBindView = onBindView;
         refreshUI();
         return this;
     }
-    
+
     public View getCustomView() {
         if (onBindView == null) return null;
         return onBindView.getCustomView();
     }
-    
+
     public BottomDialog removeCustomView() {
         this.onBindView.clean();
         refreshUI();
         return this;
     }
-    
+
     public boolean isAllowInterceptTouch() {
         if (style.overrideBottomDialogRes() == null) {
             return false;
@@ -895,162 +905,162 @@ public class BottomDialog extends BaseDialog {
             return allowInterceptTouch && style.overrideBottomDialogRes().touchSlide();
         }
     }
-    
+
     public BottomDialog setAllowInterceptTouch(boolean allowInterceptTouch) {
         this.allowInterceptTouch = allowInterceptTouch;
         refreshUI();
         return this;
     }
-    
+
     public OnDialogButtonClickListener<BottomDialog> getCancelButtonClickListener() {
         return cancelButtonClickListener;
     }
-    
+
     public BottomDialog setCancelButtonClickListener(OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
-    
+
     public TextInfo getTitleTextInfo() {
         return titleTextInfo;
     }
-    
+
     public BottomDialog setTitleTextInfo(TextInfo titleTextInfo) {
         this.titleTextInfo = titleTextInfo;
         refreshUI();
         return this;
     }
-    
+
     public TextInfo getMessageTextInfo() {
         return messageTextInfo;
     }
-    
+
     public BottomDialog setMessageTextInfo(TextInfo messageTextInfo) {
         this.messageTextInfo = messageTextInfo;
         refreshUI();
         return this;
     }
-    
+
     public TextInfo getCancelTextInfo() {
         return cancelTextInfo;
     }
-    
+
     public BottomDialog setCancelTextInfo(TextInfo cancelTextInfo) {
         this.cancelTextInfo = cancelTextInfo;
         refreshUI();
         return this;
     }
-    
+
     public int getBackgroundColor() {
         return backgroundColor;
     }
-    
+
     public BottomDialog setBackgroundColor(@ColorInt int backgroundColor) {
         this.backgroundColor = backgroundColor;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setBackgroundColorRes(@ColorRes int backgroundRes) {
         this.backgroundColor = getColor(backgroundRes);
         refreshUI();
         return this;
     }
-    
+
     public CharSequence getOkButton() {
         return okText;
     }
-    
+
     public BottomDialog setOkButton(CharSequence okText) {
         this.okText = okText;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setOkButton(int OkTextResId) {
         this.okText = getString(OkTextResId);
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setOkButton(OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
         this.okButtonClickListener = OkButtonClickListener;
         return this;
     }
-    
+
     public BottomDialog setOkButton(CharSequence OkText, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
         this.okText = OkText;
         this.okButtonClickListener = OkButtonClickListener;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setOkButton(int OkTextResId, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
         this.okText = getString(OkTextResId);
         this.okButtonClickListener = OkButtonClickListener;
         refreshUI();
         return this;
     }
-    
+
     public CharSequence getOtherButton() {
         return otherText;
     }
-    
+
     public BottomDialog setOtherButton(CharSequence otherText) {
         this.otherText = otherText;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setOtherButton(int OtherTextResId) {
         this.otherText = getString(OtherTextResId);
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setOtherButton(OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
         this.otherButtonClickListener = OtherButtonClickListener;
         return this;
     }
-    
+
     public BottomDialog setOtherButton(CharSequence OtherText, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
         this.otherText = OtherText;
         this.otherButtonClickListener = OtherButtonClickListener;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setOtherButton(int OtherTextResId, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
         this.otherText = getString(OtherTextResId);
         this.otherButtonClickListener = OtherButtonClickListener;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setMaskColor(@ColorInt int maskColor) {
         this.maskColor = maskColor;
         refreshUI();
         return this;
     }
-    
+
     public long getEnterAnimDuration() {
         return enterAnimDuration;
     }
-    
+
     public BottomDialog setEnterAnimDuration(long enterAnimDuration) {
         this.enterAnimDuration = enterAnimDuration;
         return this;
     }
-    
+
     public long getExitAnimDuration() {
         return exitAnimDuration;
     }
-    
+
     public BottomDialog setExitAnimDuration(long exitAnimDuration) {
         this.exitAnimDuration = exitAnimDuration;
         return this;
     }
-    
+
     @Override
     public void restartDialog() {
         if (dialogView != null) {
@@ -1067,16 +1077,16 @@ public class BottomDialog extends BaseDialog {
         if (style.overrideBottomDialogRes() != null) {
             layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
         }
-        
+
         enterAnimDuration = 0;
         dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
     }
-    
+
     protected boolean isHide;
-    
+
     public void hide() {
         isHide = true;
         hideWithExitAnim = false;
@@ -1084,138 +1094,189 @@ public class BottomDialog extends BaseDialog {
             getDialogView().setVisibility(View.GONE);
         }
     }
-    
+
     protected boolean hideWithExitAnim;
-    
+
     public void hideWithExitAnim() {
         hideWithExitAnim = true;
         isHide = true;
         if (getDialogImpl() != null) {
-            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, new ObjectRunnable<Float>() {
+            getDialogImpl().getDialogXAnimImpl().doExitAnim(me, getDialogImpl().bkg);
+
+            runOnMainDelay(new Runnable() {
                 @Override
-                public void run(Float value) {
-                    if (getDialogImpl().boxRoot != null) {
-                        getDialogImpl().boxRoot.setBkgAlpha(value);
-                    }
-                    if (value == 0 && getDialogView() != null) {
+                public void run() {
+                    if (getDialogView() != null) {
                         getDialogView().setVisibility(View.GONE);
                     }
                 }
-            });
+            }, getDialogImpl().getExitAnimationDuration());
         }
     }
-    
+
     @Override
     protected void shutdown() {
         dismiss();
     }
-    
+
     public float getBottomDialogMaxHeight() {
         return bottomDialogMaxHeight;
     }
-    
+
     public BottomDialog setBottomDialogMaxHeight(float bottomDialogMaxHeight) {
         this.bottomDialogMaxHeight = bottomDialogMaxHeight;
         return this;
     }
-    
+
     public BottomDialog setMaxWidth(int maxWidth) {
         this.maxWidth = maxWidth;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setMaxHeight(int maxHeight) {
         this.maxHeight = maxHeight;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setMinHeight(int minHeight) {
         this.minHeight = minHeight;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setMinWidth(int minWidth) {
         this.minWidth = minWidth;
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
         this.dialogImplMode = dialogImplMode;
         return this;
     }
-    
+
     public boolean isBkgInterceptTouch() {
         return bkgInterceptTouch;
     }
-    
+
     public BottomDialog setBkgInterceptTouch(boolean bkgInterceptTouch) {
         this.bkgInterceptTouch = bkgInterceptTouch;
         return this;
     }
-    
+
     public OnBackgroundMaskClickListener<BottomDialog> getOnBackgroundMaskClickListener() {
         return (OnBackgroundMaskClickListener<BottomDialog>) onBackgroundMaskClickListener;
     }
-    
+
     public BottomDialog setOnBackgroundMaskClickListener(OnBackgroundMaskClickListener<BottomDialog> onBackgroundMaskClickListener) {
         this.onBackgroundMaskClickListener = onBackgroundMaskClickListener;
         return this;
     }
-    
+
     public BottomDialog setRadius(float radiusPx) {
         backgroundRadius = radiusPx;
         refreshUI();
         return this;
     }
-    
+
     public float getRadius() {
         return backgroundRadius;
     }
-    
+
     public Drawable getTitleIcon() {
         return titleIcon;
     }
-    
+
     public BottomDialog setTitleIcon(Bitmap titleIcon) {
         this.titleIcon = new BitmapDrawable(getResources(), titleIcon);
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setTitleIcon(int titleIconResId) {
         this.titleIcon = getResources().getDrawable(titleIconResId);
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setTitleIcon(Drawable titleIcon) {
         this.titleIcon = titleIcon;
         refreshUI();
         return this;
     }
-    
+
     public DialogXAnimInterface<BottomDialog> getDialogXAnimImpl() {
         return dialogXAnimImpl;
     }
-    
+
     public BottomDialog setDialogXAnimImpl(DialogXAnimInterface<BottomDialog> dialogXAnimImpl) {
         this.dialogXAnimImpl = dialogXAnimImpl;
         return this;
     }
-    
+
     public BottomDialog setRootPadding(int padding) {
         this.screenPaddings = new int[]{padding, padding, padding, padding};
         refreshUI();
         return this;
     }
-    
+
     public BottomDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
+        return this;
+    }
+
+    public BUTTON_SELECT_RESULT getButtonSelectResult() {
+        return buttonSelectResult;
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new BottomDialog() {
+     *
+     * @param dialog self
+     * @Override public void onShow(BottomDialog dialog) {
+     * //...
+     * }
+     * }
+     */
+    public void onShow(BottomDialog dialog) {
+
+    }
+
+    /**
+     * 用于使用 new 构建实例时，override 的生命周期事件
+     * 例如：
+     * new BottomDialog() {
+     *
+     * @param dialog self
+     * @Override public boolean onDismiss(BottomDialog dialog) {
+     * WaitDialog.show("Please Wait...");
+     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
+     * //点击了OK的情况
+     * //...
+     * } else {
+     * //其他按钮点击、对话框dismiss的情况
+     * //...
+     * }
+     * return false;
+     * }
+     * }
+     */
+    //用于使用 new 构建实例时，override 的生命周期事件
+    public void onDismiss(BottomDialog dialog) {
+
+    }
+
+    public boolean isBottomNonSafetyAreaBySelf() {
+        return bottomNonSafetyAreaBySelf;
+    }
+
+    public BottomDialog setBottomNonSafetyAreaBySelf(boolean bottomNonSafetyAreaBySelf) {
+        this.bottomNonSafetyAreaBySelf = bottomNonSafetyAreaBySelf;
         return this;
     }
 }

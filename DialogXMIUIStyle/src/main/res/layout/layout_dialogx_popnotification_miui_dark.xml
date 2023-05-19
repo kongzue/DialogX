@@ -9,16 +9,18 @@
 
     <com.kongzue.dialogx.util.views.MaxLinearLayout
         android:id="@+id/box_body"
-        android:alpha="0.98"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
+        android:alpha="0.98"
         android:background="@drawable/rect_dialogx_miui_popnotification_bkg_night"
         android:clickable="true"
         android:elevation="20dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp">
 
         <ImageView
             android:id="@+id/img_dialogx_pop_icon"
@@ -26,8 +28,7 @@
             android:layout_height="23dp"
             android:layout_gravity="top"
             android:layout_marginLeft="18dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginTop="3dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,9 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginBottom="18dp"
                 android:gravity="left|center_vertical"
                 android:text="Notification!"
                 android:textColor="@color/white"
@@ -54,22 +53,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="-15dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="left|center_vertical"
                 android:text="Notification!"
                 android:textColor="@color/white60"
-                android:textSize="13dp"/>
+                android:textSize="13dp" />
+
+            <RelativeLayout
+                android:id="@+id/box_custom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/txt_dialogx_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="-10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="14dp"
                 android:background="@drawable/button_dialogx_miui_night"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="15dp"
@@ -80,11 +83,6 @@
                 android:text="Dismiss"
                 android:textColor="@color/dialogxColorMIUINotificationButtonNight"
                 android:textSize="12dp" />
-
-            <RelativeLayout
-                android:id="@+id/box_custom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </com.kongzue.dialogx.util.views.MaxLinearLayout>

@@ -3,7 +3,9 @@ package com.kongzue.dialogxdemo;
 import android.content.Intent;
 
 import com.kongzue.baseframework.BaseApp;
+import com.kongzue.baseframework.BaseFrameworkSettings;
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogxdemo.service.TestBackgroundService;
 
@@ -17,13 +19,30 @@ import com.kongzue.dialogxdemo.service.TestBackgroundService;
 public class App extends BaseApp<App> {
     @Override
     public void init() {
+        BaseFrameworkSettings.DEBUGMODE = BuildConfig.DEBUG;
+
         DialogX.init(this);
         DialogX.implIMPLMode = DialogX.IMPL_MODE.VIEW;
         DialogX.useHaptic = true;
-        DialogX.globalStyle = new MaterialStyle();
+
+        //演示仅覆写一个设置，不覆写其他设置：
+        DialogX.globalStyle = new MaterialStyle(){
+            @Override
+            public PopTipSettings popTipSettings() {
+                //DefaultPopTipSettings 是主题中默认的 PopTip 设置，以下演示仅覆写其中的 align 设置
+                return new DefaultPopTipSettings(){
+                    @Override
+                    public PopTipSettings.ALIGN align() {
+                        return PopTipSettings.ALIGN.BOTTOM;
+                    }
+                };
+            }
+        };
+
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.onlyOnePopTip = false;
-    
+        DialogX.DEBUGMODE = BuildConfig.DEBUG;
+
         //以下代码用于测试后台 Service 启动对话框
 //        DialogX.implIMPLMode = DialogX.IMPL_MODE.FLOATING_ACTIVITY;
 //        Intent serviceStartIntent = new Intent(this, TestBackgroundService.class);

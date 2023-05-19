@@ -26,6 +26,7 @@
             android:text="Kongzue DialogX"
             android:textColor="#dc000000"
             android:textSize="16dp"
+            android:fontFamily="sans-serif-black"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

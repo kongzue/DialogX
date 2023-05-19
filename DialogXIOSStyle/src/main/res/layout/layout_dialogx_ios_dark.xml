@@ -20,9 +20,10 @@
             android:layout_marginRight="35dp"
             app:maxLayoutWidth="270dp">
 
-            <LinearLayout
+            <com.kongzue.dialogx.style.views.BlurLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:dialogxDarkMode="true"
                 android:clickable="true"
                 android:orientation="vertical">
 
@@ -164,7 +165,7 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </com.kongzue.dialogx.style.views.BlurLinearLayout>
 
         </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 

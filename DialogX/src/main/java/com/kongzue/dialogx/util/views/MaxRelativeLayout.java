@@ -7,17 +7,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-
-import static android.view.View.MeasureSpec.EXACTLY;
 
 /**
  * @author: Kongzue
@@ -93,7 +89,16 @@ public class MaxRelativeLayout extends RelativeLayout {
         if (maxWidth > 0) this.maxWidth = maxWidth;
         return this;
     }
-    
+
+    public void setMinHeight(int minHeight) {
+        if (minHeight > 0) this.minHeight = minHeight;
+
+    }
+
+    public void setMinWidth(int minWidth) {
+        if (minWidth > 0) this.minWidth = minWidth;
+    }
+
     private int preWidth = -1;
     
     @Override

@@ -2,8 +2,6 @@ package com.kongzue.dialogx.interfaces;
 
 import android.view.View;
 
-import com.kongzue.dialogx.dialogs.MessageDialog;
-
 /**
  * Author: @Kongzue
  * Github: https://github.com/kongzue/

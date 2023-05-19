@@ -19,18 +19,18 @@ import com.kongzue.dialogxdemo.R;
  * @createTime: 2021/8/17 13:50
  */
 public class CustomFragment extends Fragment {
-    
+
     private static int index = 0;
     private View.OnClickListener addButtonClickListener;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-    
+
     private TextView txtInfo;
     private MaterialButton btnAddDialog;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_custom, null);
@@ -40,16 +40,16 @@ public class CustomFragment extends Fragment {
         btnAddDialog.setOnClickListener(addButtonClickListener);
         return view;
     }
-    
+
     @Override
     public void onPause() {
         super.onPause();
     }
-    
+
     public View.OnClickListener getAddButtonClickListener() {
         return addButtonClickListener;
     }
-    
+
     public CustomFragment setAddButtonClickListener(View.OnClickListener addButtonClickListener) {
         this.addButtonClickListener = addButtonClickListener;
         return this;

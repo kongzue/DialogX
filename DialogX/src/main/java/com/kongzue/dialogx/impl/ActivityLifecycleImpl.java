@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.impl;
 
+import static com.kongzue.dialogx.DialogX.error;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -15,10 +17,9 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.kongzue.dialogx.DialogX.error;
 
 /**
  * @author: Kongzue
@@ -67,6 +68,14 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         } catch (Exception e) {
         }
         try {
+            Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object activityThread = activityThreadClass.getDeclaredMethod("currentActivityThread").invoke(null);
+            Method getApplicationMethod = activityThreadClass.getDeclaredMethod("getApplication");
+            Application application = (Application) getApplicationMethod.invoke(activityThread);
+            return application;
+        } catch (Exception e) {
+        }
+        try {
             Application application = (Application) Class.forName("android.app.AppGlobals").getMethod("getInitialApplication").invoke(null, (Object[]) null);
             return application;
         } catch (Exception e) {
@@ -81,6 +90,14 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         }
         try {
             Application application = (Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null);
+            return application;
+        } catch (Exception e) {
+        }
+        try {
+            Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object activityThread = activityThreadClass.getDeclaredMethod("currentActivityThread").invoke(null);
+            Method getApplicationMethod = activityThreadClass.getDeclaredMethod("getApplication");
+            Application application = (Application) getApplicationMethod.invoke(activityThread);
             return application;
         } catch (Exception e) {
         }
@@ -140,14 +157,22 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
             BaseDialog.init(activity);
         }
     }
-    
+
     @Override
-    public void onActivityResumed(@NonNull Activity activity) {
+    public void onActivityPreResumed(@NonNull Activity activity) {
+        Application.ActivityLifecycleCallbacks.super.onActivityPreResumed(activity);
         if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
             return;
         }
         if (onActivityResumeCallBack != null) {
             onActivityResumeCallBack.getActivity(activity);
+        }
+    }
+
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+        if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
+            return;
         }
         BaseDialog.onActivityResume(activity);
     }

@@ -55,7 +55,7 @@ public class FullScreenDialogTouchEventInterceptor {
                             if (isBkgTouched) {
                                 float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
                                 if (impl.scrollView != null && impl.scrollView.isCanScroll()) {
-                                    if (aimY > 0) {
+                                    if (aimY > me.getDialogImpl().getEnterY()) {
                                         if (impl.scrollView.getScrollDistance() == 0) {
                                             if (impl.scrollView instanceof ScrollController) {
                                                 ((ScrollController) impl.scrollView).lockScroll(true);
@@ -68,11 +68,11 @@ public class FullScreenDialogTouchEventInterceptor {
                                         if (impl.scrollView instanceof ScrollController) {
                                             ((ScrollController) impl.scrollView).lockScroll(false);
                                         }
-                                        impl.bkg.setY(0);
+                                        impl.bkg.setY(me.getDialogImpl().getEnterY());
                                     }
                                 } else {
-                                    if (aimY < 0) {
-                                        aimY = 0;
+                                    if (aimY < me.getDialogImpl().getEnterY()) {
+                                        aimY = me.getDialogImpl().getEnterY();
                                     }
                                     impl.bkg.setY(aimY);
                                 }
@@ -81,27 +81,27 @@ public class FullScreenDialogTouchEventInterceptor {
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
                             isBkgTouched = false;
-                            if (bkgOldY == 0) {
+                            if (bkgOldY == me.getDialogImpl().getEnterY()) {
                                 if (impl.bkg.getY() < DialogX.touchSlideTriggerThreshold) {
-                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), 0);
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), me.getDialogImpl().getEnterY());
                                     enterAnim.setDuration(300);
                                     enterAnim.start();
-                                } else if (impl.bkg.getY() > impl.bkgEnterAimY + DialogX.touchSlideTriggerThreshold) {
+                                } else if (impl.bkg.getY() > impl.getEnterY() + DialogX.touchSlideTriggerThreshold) {
                                     impl.preDismiss();
                                 } else {
-                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.getEnterY());
                                     enterAnim.setDuration(300);
                                     enterAnim.start();
                                 }
                             } else {
                                 if (impl.bkg.getY() < bkgOldY - DialogX.touchSlideTriggerThreshold) {
-                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), 0);
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), me.getDialogImpl().getEnterY());
                                     enterAnim.setDuration(300);
                                     enterAnim.start();
                                 } else if (impl.bkg.getY() > bkgOldY + DialogX.touchSlideTriggerThreshold) {
                                     impl.preDismiss();
                                 } else {
-                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.bkgEnterAimY);
+                                    ObjectAnimator enterAnim = ObjectAnimator.ofFloat(impl.bkg, "y", impl.bkg.getY(), impl.getEnterY());
                                     enterAnim.setDuration(300);
                                     enterAnim.start();
                                 }

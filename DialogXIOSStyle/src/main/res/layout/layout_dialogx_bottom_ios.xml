@@ -33,10 +33,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:minHeight="40dp"
-                    android:tag="blurBody">
+                    android:minHeight="40dp">
 
-                    <LinearLayout
+                    <com.kongzue.dialogx.style.views.BlurLinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
@@ -105,32 +104,76 @@
 
                         </com.kongzue.dialogx.util.views.BottomDialogScrollView>
 
-                    </LinearLayout>
+                    </com.kongzue.dialogx.style.views.BlurLinearLayout>
 
                 </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 
-                <com.kongzue.dialogx.util.views.MaxRelativeLayout
+                <com.kongzue.dialogx.style.views.BlurLinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="53dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
                     android:layout_marginBottom="10dp"
-                    android:tag="cancelBox">
+                    android:divider="@color/dialogxIOSSplitLight"
+                    android:orientation="vertical"
+                    android:showDividers="middle"
+                    app:dialogxOverlayColorNoAlpha="true">
 
                     <TextView
+                        android:id="@+id/btn_selectPositive"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/button_dialogx_ios_light"
+                        android:layout_height="53dp"
+                        android:background="@drawable/button_dialogx_ios_center_light"
                         android:clickable="true"
                         android:gravity="center"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:singleLine="true"
-                        android:tag="cancel"
+                        android:text="确定"
+                        android:textColor="@color/dialogxIOSBlue"
+                        android:textSize="19dp" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:tag="imgPositiveButtonSplit"
+                        android:background="@color/dialogxIOSSplitLight"/>
+
+                    <TextView
+                        android:id="@+id/btn_selectOther"
+                        android:layout_width="match_parent"
+                        android:layout_height="53dp"
+                        android:background="@drawable/button_dialogx_ios_center_light"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:singleLine="true"
+                        android:text="其他"
+                        android:textColor="@color/dialogxIOSBlue"
+                        android:textSize="19dp" />
+
+                    <ImageView
+                        android:id="@+id/split_selectOther"
+                        android:layout_width="match_parent"
+                        android:tag="imgOtherButtonSplit"
+                        android:layout_height="1px"
+                        android:background="@color/dialogxIOSSplitLight"/>
+
+                    <TextView
+                        android:id="@+id/btn_selectNegative"
+                        android:layout_width="match_parent"
+                        android:layout_height="53dp"
+                        android:background="@drawable/button_dialogx_ios_center_light"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:singleLine="true"
                         android:text="取消"
                         android:textColor="@color/dialogxIOSBlue"
                         android:textSize="19dp" />
 
-                </com.kongzue.dialogx.util.views.MaxRelativeLayout>
+                </com.kongzue.dialogx.style.views.BlurLinearLayout>
 
             </LinearLayout>
 

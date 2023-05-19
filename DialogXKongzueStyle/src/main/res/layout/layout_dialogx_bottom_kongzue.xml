@@ -92,24 +92,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:showDividers="middle"
+                    android:divider="@color/dialogxKongzueButtonSplitLineColor"
                     android:tag="cancelBox">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@color/dialogxKongzueButtonSplitLineColor" />
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="8dp"
                         android:background="@color/dialogxKongzueButtonSplitSpaceColor" />
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:background="@color/dialogxKongzueButtonSplitLineColor" />
-
                     <TextView
+                        android:id="@+id/btn_selectPositive"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:background="@drawable/button_dialogx_kongzue_menu_light"
@@ -117,7 +110,32 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:singleLine="true"
-                        android:tag="cancel"
+                        android:text="确定"
+                        android:textColor="@color/black90"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/btn_selectOther"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/button_dialogx_kongzue_menu_light"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:singleLine="true"
+                        android:text="其他"
+                        android:textColor="@color/black90"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/btn_selectNegative"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/button_dialogx_kongzue_menu_light"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:singleLine="true"
                         android:text="取消"
                         android:textColor="@color/black90"
                         android:textSize="16dp" />

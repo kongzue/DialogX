@@ -221,7 +221,9 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                 }
             }
         }
-        
+        if (bottomMenu.getMenuMenuItemLayoutRefreshCallback() != null) {
+            bottomMenu.getMenuMenuItemLayoutRefreshCallback().getView(bottomMenu, position, convertView, parent);
+        }
         return convertView;
     }
     
