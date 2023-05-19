@@ -445,10 +445,14 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     public static Activity getTopActivity() {
-        if (activityWeakReference == null) {
+        if (activityWeakReference == null || activityWeakReference.get() == null) {
+            //尝试反射初始化
             init(null);
-            if (activityWeakReference == null) {
-                return ActivityLifecycleImpl.getTopActivity();
+            if (activityWeakReference == null || activityWeakReference.get() == null) {
+                //若还为空，无奈，尝试直接反射拿顶层 activity
+                Activity topActivity = ActivityLifecycleImpl.getTopActivity();
+                init(topActivity);
+                return topActivity;
             }
             return activityWeakReference.get();
         }
