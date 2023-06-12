@@ -427,7 +427,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     public DialogXBaseRelativeLayout setParentDialog(BaseDialog parentDialog) {
         this.parentDialog = parentDialog;
-        if (parentDialog!=null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
+        if (parentDialog != null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
             setFitsSystemWindows(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 paddingView(getRootWindowInsets());
@@ -442,7 +442,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         boolean newLightStatus = ((newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO);
-        if (isLightMode != newLightStatus && DialogX.globalTheme == DialogX.THEME.AUTO && getParentDialog()!=null) {
+        if (isLightMode != newLightStatus && DialogX.globalTheme == DialogX.THEME.AUTO && getParentDialog() != null) {
             getParentDialog().restartDialog();
         }
     }
@@ -526,7 +526,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     protected void log(String s) {
         if (debugMode) {
-            Log.e(">>>" , s);
+            Log.e(">>>", s);
         }
     }
 }

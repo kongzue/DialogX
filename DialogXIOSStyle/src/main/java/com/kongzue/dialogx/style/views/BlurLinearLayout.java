@@ -415,6 +415,7 @@ public class BlurLinearLayout extends MaxLinearLayout implements BlurViewType {
     }
 
     private void drawBlurredBitmapCompat(Canvas canvas) {
+        if (getWidth() <= 0 || getHeight() <= 0) return;
         if (mBlurredBitmap != null) {
             mRectDst.right = getWidth();
             mRectDst.bottom = getHeight();
@@ -434,6 +435,7 @@ public class BlurLinearLayout extends MaxLinearLayout implements BlurViewType {
     }
 
     protected void drawBlurredBitmap(Canvas canvas, Bitmap blurredBitmap) {
+        if (getWidth() <= 0 || getHeight() <= 0) return;
         if (blurredBitmap != null) {
             mRectSrc.right = blurredBitmap.getWidth();
             mRectSrc.bottom = blurredBitmap.getHeight();

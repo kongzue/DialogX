@@ -415,6 +415,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
     }
 
     private void drawBlurredBitmapCompat(Canvas canvas) {
+        if (getWidth() <= 0 || getHeight() <= 0) return;
         if (mBlurredBitmap != null) {
             mRectDst.right = getWidth();
             mRectDst.bottom = getHeight();
@@ -434,6 +435,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
     }
 
     protected void drawBlurredBitmap(Canvas canvas, Bitmap blurredBitmap) {
+        if (getWidth() <= 0 || getHeight() <= 0) return;
         if (blurredBitmap != null) {
             mRectSrc.right = blurredBitmap.getWidth();
             mRectSrc.bottom = blurredBitmap.getHeight();
@@ -571,7 +573,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
         return (int) (dpValue * scale + 0.5f);
     }
 
-    private int getOverlayColor(){
+    private int getOverlayColor() {
         return needRemoveAlphaColor() ? removeAlphaColor(mOverlayColor) : mOverlayColor;
     }
 }

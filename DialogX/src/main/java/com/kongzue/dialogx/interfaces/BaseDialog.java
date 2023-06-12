@@ -178,7 +178,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                 publicWindowInsets(dialog.getRootFrameLayout().getRootWindowInsets());
             }
 
-            log(dialog.dialogKey() + ".show");
+            log(dialog.dialogKey() + ".show on " + dialog.getOwnActivity());
 
             addDialogToRunningList(dialog);
             switch (dialog.dialogImplMode) {
@@ -297,7 +297,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                 publicWindowInsets(baseDialog.getRootFrameLayout().getRootWindowInsets());
             }
 
-            log(baseDialog + ".show");
+            log(baseDialog + ".show on " + activity);
             addDialogToRunningList(baseDialog);
 
             switch (baseDialog.dialogImplMode) {
@@ -526,11 +526,11 @@ public abstract class BaseDialog implements LifecycleOwner {
     public abstract boolean isCancelable();
 
     public View createView(int layoutId) {
-        if (getApplicationContext() == null) {
+        if (getOwnActivity() == null) {
             error("DialogX 未初始化(E3)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return null;
         }
-        return LayoutInflater.from(getApplicationContext()).inflate(layoutId, null);
+        return LayoutInflater.from(getOwnActivity()).inflate(layoutId, null);
     }
 
     public boolean isShow() {

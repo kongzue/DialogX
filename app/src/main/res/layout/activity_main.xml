@@ -22,11 +22,11 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="Kongzue DialogX"
             android:textColor="#dc000000"
             android:textSize="16dp"
-            android:fontFamily="sans-serif-black"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -90,6 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fadingEdge="horizontal"
+                android:overScrollMode="never"
                 android:requiresFadingEdge="horizontal"
                 android:scrollbars="none">
 
@@ -202,6 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fadingEdge="horizontal"
+                android:overScrollMode="never"
                 android:requiresFadingEdge="horizontal"
                 android:scrollbars="none">
 
@@ -270,13 +272,13 @@
                     android:layout_marginTop="15dp"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
-                    app:icon="@mipmap/img_button_messagedialog"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:text="消息对话框"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_messagedialog" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_selectDialog"
@@ -288,12 +290,12 @@
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
-                    app:icon="@mipmap/img_button_selectdialog"
                     android:text="选择对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_selectdialog" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_inputDialog"
@@ -302,7 +304,6 @@
                     android:layout_margin="5dp"
                     android:layout_marginTop="15dp"
                     android:paddingLeft="15dp"
-                    app:icon="@mipmap/img_button_inputdialog"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
@@ -310,7 +311,8 @@
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_inputdialog" />
 
             </com.kongzue.stacklabelview.StackLayout>
 
@@ -336,20 +338,19 @@
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
-                    app:icon="@mipmap/img_button_waiting"
                     android:paddingBottom="10dp"
                     android:text="等待对话框"
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_waiting" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_waitAndTipDialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    app:icon="@mipmap/img_button_alert"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -358,7 +359,8 @@
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_alert" />
 
             </com.kongzue.stacklabelview.StackLayout>
 
@@ -376,19 +378,18 @@
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
-                    app:icon="@mipmap/img_button_right"
                     android:text="完成"
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_right" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_tipWarning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    app:icon="@mipmap/img_button_warning"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -397,13 +398,13 @@
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_warning" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_tipError"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:icon="@mipmap/img_button_error"
                     android:layout_margin="5dp"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
@@ -413,7 +414,8 @@
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_error" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_tipProgress"
@@ -424,12 +426,12 @@
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
-                    app:icon="@mipmap/img_button_progressing"
                     android:text="模拟进度"
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_progressing" />
 
             </com.kongzue.stacklabelview.StackLayout>
 
@@ -457,18 +459,17 @@
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:text="轻量消息提示"
-                    app:icon="@mipmap/img_button_simple_poptip"
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_simple_poptip" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_poptip_bigMessage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    app:icon="@mipmap/img_button_big_poptip"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -477,7 +478,8 @@
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_big_poptip" />
 
             </com.kongzue.stacklabelview.StackLayout>
 
@@ -495,19 +497,18 @@
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
-                    app:icon="@mipmap/img_button_right"
                     android:text="完成"
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_right" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_poptip_warning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    app:icon="@mipmap/img_button_warning"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -516,14 +517,14 @@
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_warning" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_poptip_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    app:icon="@mipmap/img_button_error"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
@@ -532,7 +533,8 @@
                     android:textColor="@color/white"
                     android:textSize="13dp"
                     android:textStyle="bold"
-                    app:cornerRadius="99dp" />
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_error" />
 
             </com.kongzue.stacklabelview.StackLayout>
 

@@ -18,7 +18,6 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="35dp"
             android:layout_marginRight="35dp"
-
             android:background="@drawable/rect_dialogx_material_you_bkg_light"
             android:elevation="27dp">
 
