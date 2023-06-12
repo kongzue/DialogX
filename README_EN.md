@@ -135,7 +135,7 @@ Please choose one of the following two sources to bring in your project.
 
 <div>
 Latest version: 
-<a href="https://central.sonatype.dev/artifact/com.kongzue.dialogx/DialogX/0.0.47.beta15"><img src="https://img.shields.io/maven-central/v/com.kongzue.dialogx/DialogX" alt="DialogX Release"></a></div>
+<a href="https://central.sonatype.dev/artifact/com.kongzue.dialogx/DialogX/0.0.48"><img src="https://img.shields.io/maven-central/v/com.kongzue.dialogx/DialogX" alt="DialogX Release"></a></div>
 
 1) In the project's build.gradle file, find the `allprojects{}` block and add the following code.
 
@@ -154,7 +154,7 @@ allprojects {
 2) Find the `dependencies{}` code block in the app's build.gradle file and add the following statement to it.
 
 ```
-def dialogx_version = "0.0.47"
+def dialogx_version = "0.0.48"
 implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
 ```
 
@@ -188,7 +188,7 @@ allprojects {
 2) Find the `dependencies{}` block in the app's build.gradle file, and add the following statement to it：
 
 ```
-def dialogx_version = "0.0.46"
+def dialogx_version = "0.0.48"
 implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 ```
 
