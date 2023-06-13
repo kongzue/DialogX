@@ -2,6 +2,7 @@ package com.kongzue.dialogx.style.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -212,7 +213,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
     }
 
     protected boolean prepare() {
-        if (mBlurRadius == 0) {
+        if (mBlurRadius == 0 || !isAlive()) {
             release();
             return false;
         }
@@ -231,6 +232,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
                         if (isDebug()) {
                             e.printStackTrace();
                         }
+                        return false;
                     }
                 }
 
@@ -288,6 +290,20 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
         return true;
     }
 
+    private boolean isAlive() {
+        Context context = getContext();
+        if (context instanceof Activity) {
+            return isAttachedToWindow() && !(((Activity) context).isDestroyed());
+        }
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return isAttachedToWindow() && !(((Activity) context).isDestroyed());
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return isAttachedToWindow() && getContext() != null;
+    }
+
     protected void blur(Bitmap bitmapToBlur, Bitmap blurredBitmap) {
         mBlurInput.copyFrom(bitmapToBlur);
         mBlurScript.setInput(mBlurInput);
@@ -298,6 +314,10 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
     private final ViewTreeObserver.OnPreDrawListener preDrawListener = new ViewTreeObserver.OnPreDrawListener() {
         @Override
         public boolean onPreDraw() {
+            if (!isAlive()) {
+                destroy();
+                return false;
+            }
             final int[] locations = new int[2];
             Bitmap oldBmp = mBlurredBitmap;
             View decor = mDecorView;
@@ -371,11 +391,15 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
 
     @Override
     protected void onDetachedFromWindow() {
+        destroy();
+        super.onDetachedFromWindow();
+    }
+
+    private void destroy() {
         if (mDecorView != null) {
             mDecorView.getViewTreeObserver().removeOnPreDrawListener(preDrawListener);
         }
         release();
-        super.onDetachedFromWindow();
     }
 
     @Override
