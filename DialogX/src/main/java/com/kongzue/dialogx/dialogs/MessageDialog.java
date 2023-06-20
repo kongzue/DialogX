@@ -807,7 +807,7 @@ public class MessageDialog extends BaseDialog {
             if (v != null) v.setEnabled(false);
             if (getOwnActivity() == null) return;
 
-            if (!dismissAnimFlag) {
+            if (!dismissAnimFlag && getDialogXAnimImpl() != null) {
                 dismissAnimFlag = true;
                 getDialogXAnimImpl().doExitAnim(MessageDialog.this, bkg);
                 runOnMainDelay(new Runnable() {

@@ -514,7 +514,7 @@ public class WaitDialog extends BaseDialog {
             if (boxRoot == null) return;
             if (getOwnActivity() == null) return;
 
-            if (!dismissAnimFlag) {
+            if (!dismissAnimFlag && boxRoot != null) {
                 dismissAnimFlag = true;
                 boxRoot.post(new Runnable() {
                     @Override

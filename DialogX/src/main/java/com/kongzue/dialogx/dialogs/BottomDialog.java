@@ -619,7 +619,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (v != null) v.setEnabled(false);
             if (getOwnActivity() == null) return;
 
-            if (!dismissAnimFlag) {
+            if (!dismissAnimFlag && getDialogXAnimImpl() != null) {
                 dismissAnimFlag = true;
 
                 getDialogXAnimImpl().doExitAnim(BottomDialog.this, bkg);

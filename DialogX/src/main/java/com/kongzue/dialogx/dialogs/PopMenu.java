@@ -638,7 +638,7 @@ public class PopMenu extends BaseDialog {
                 v.setEnabled(false);
             }
 
-            if (!dismissAnimFlag) {
+            if (!dismissAnimFlag && boxRoot != null) {
                 dismissAnimFlag = true;
                 boxRoot.post(new Runnable() {
                     @Override

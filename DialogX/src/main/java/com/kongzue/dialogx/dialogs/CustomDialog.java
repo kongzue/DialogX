@@ -424,7 +424,7 @@ public class CustomDialog extends BaseDialog {
         @Override
         public void doDismiss(View v) {
             if (v != null) v.setEnabled(false);
-            if (!dismissAnimFlag) {
+            if (!dismissAnimFlag && boxCustom != null) {
                 dismissAnimFlag = true;
                 boxCustom.post(new Runnable() {
                     @Override

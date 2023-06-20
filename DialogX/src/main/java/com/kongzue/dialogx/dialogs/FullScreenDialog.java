@@ -347,7 +347,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             if (v != null) v.setEnabled(false);
             if (getOwnActivity() == null) return;
 
-            if (!dismissAnimFlag) {
+            if (!dismissAnimFlag && getDialogXAnimImpl() != null) {
                 dismissAnimFlag = true;
                 getDialogXAnimImpl().doExitAnim(me, bkg);
 

@@ -688,7 +688,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         public void doDismiss(final View v) {
             if (v != null) v.setEnabled(false);
 
-            if (!dismissAnimFlag) {
+            if (!dismissAnimFlag && boxRoot != null) {
                 dismissAnimFlag = true;
                 boxRoot.post(new Runnable() {
                     @Override
