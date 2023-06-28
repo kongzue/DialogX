@@ -6,10 +6,7 @@ daysUntilClose: 7
 exemptLabels:
   - pinned
   - security
-  - bug
   - 待处理
-  - 已处理
-  - 等待反馈
   - 问题重复
 # Label to use when marking an issue as stale
 staleLabel: 等待反馈
