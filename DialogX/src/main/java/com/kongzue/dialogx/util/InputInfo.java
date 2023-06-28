@@ -1,6 +1,10 @@
 package com.kongzue.dialogx.util;
 
+import android.text.InputFilter;
+
 import androidx.annotation.ColorInt;
+
+import java.util.Arrays;
 
 /**
  * Author: @Kongzue
@@ -10,82 +14,115 @@ import androidx.annotation.ColorInt;
  * CreateTime: 2018/11/8 21:41
  */
 public class InputInfo {
-    
+
     private int MAX_LENGTH = -1;    //最大长度,-1不生效
     private int inputType;          //类型详见 android.text.InputType
     private TextInfo textInfo;      //默认字体样式
     private boolean multipleLines;  //支持多行
     private boolean selectAllText;  //默认选中所有文字（便于修改）
-    
+
     private Integer cursorColor;    //输入框光标颜色
     private Integer bottomLineColor;//输入框横线颜色
-    
+
+    private InputFilter[] inputFilters; //输入过滤器
+
     public int getMAX_LENGTH() {
         return MAX_LENGTH;
     }
-    
+
     public InputInfo setMAX_LENGTH(int MAX_LENGTH) {
         this.MAX_LENGTH = MAX_LENGTH;
         return this;
     }
-    
+
     public int getInputType() {
         return inputType;
     }
-    
+
     public InputInfo setInputType(int inputType) {
         this.inputType = inputType;
         return this;
     }
-    
+
     public TextInfo getTextInfo() {
         return textInfo;
     }
-    
+
     public InputInfo setTextInfo(TextInfo textInfo) {
         this.textInfo = textInfo;
         return this;
     }
-    
+
     public boolean isMultipleLines() {
         return multipleLines;
     }
-    
+
     public InputInfo setMultipleLines(boolean multipleLines) {
         this.multipleLines = multipleLines;
         return this;
     }
-    
+
     public boolean isSelectAllText() {
         return selectAllText;
     }
-    
+
     public InputInfo setSelectAllText(boolean selectAllText) {
         this.selectAllText = selectAllText;
         return this;
     }
-    
+
     public Integer getCursorColor() {
         return cursorColor;
     }
-    
+
     public InputInfo setCursorColor(@ColorInt int cursorColor) {
         this.cursorColor = cursorColor;
         return this;
     }
-    
+
     public InputInfo setThemeColor(@ColorInt int themeColor) {
         this.cursorColor = themeColor;
         this.bottomLineColor = themeColor;
         return this;
     }
-    
+
     public Integer getBottomLineColor() {
         return bottomLineColor;
     }
-    
+
     public InputInfo setBottomLineColor(int bottomLineColor) {
         this.bottomLineColor = bottomLineColor;
+        return this;
+    }
+
+    public InputFilter[] getInputFilters() {
+        return inputFilters;
+    }
+
+    public InputInfo setInputFilters(InputFilter[] inputFilters) {
+        this.inputFilters = inputFilters;
+        return this;
+    }
+
+    public InputInfo addInputFilter(InputFilter inputFilter) {
+        if (this.inputFilters == null) {
+            this.inputFilters = new InputFilter[]{inputFilter};
+        } else {
+            this.inputFilters = Arrays.copyOf(this.inputFilters, this.inputFilters.length + 1);
+            this.inputFilters[this.inputFilters.length - 1] = inputFilter;
+        }
+        return this;
+    }
+
+    public InputInfo removeInputFilter(InputFilter inputFilter) {
+        if (this.inputFilters!= null) {
+            for (int i = 0; i < this.inputFilters.length; i++) {
+                if (this.inputFilters[i] == inputFilter) {
+                    this.inputFilters = Arrays.copyOf(this.inputFilters, this.inputFilters.length - 1);
+                    return this;
+                }
+            }
+        }
         return this;
     }
 }

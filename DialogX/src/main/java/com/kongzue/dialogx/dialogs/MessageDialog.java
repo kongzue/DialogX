@@ -652,6 +652,9 @@ public class MessageDialog extends BaseDialog {
                 if (inputInfo.getTextInfo() != null) {
                     useTextInfo(txtInput, inputInfo.getTextInfo());
                 }
+                if (inputInfo.getInputFilters() != null && inputInfo.getInputFilters().length > 0) {
+                    txtInput.setFilters(inputInfo.getInputFilters());
+                }
             }
 
             int visibleButtonCount = 0;
