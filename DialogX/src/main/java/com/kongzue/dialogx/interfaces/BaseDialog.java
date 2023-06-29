@@ -34,6 +34,7 @@ import androidx.lifecycle.LifecycleRegistry;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.ActivityRunnable;
@@ -807,6 +808,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                     for (BaseDialog baseDialog : copyOnWriteList) {
                         if (baseDialog.getOwnActivity() == activity && baseDialog.dialogView != null) {
                             WindowUtil.dismiss(baseDialog.dialogView.get());
+                            runningDialogList.remove(baseDialog);
                         }
                     }
                 }
@@ -817,6 +819,10 @@ public abstract class BaseDialog implements LifecycleOwner {
                     for (BaseDialog baseDialog : copyOnWriteList) {
                         if (baseDialog.getOwnActivity() == activity && baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
                             baseDialog.ownDialogFragmentImpl.get().dismiss();
+                            if (baseDialog instanceof WaitDialog){
+                                ((WaitDialog) baseDialog).cleanInstance();
+                            }
+                            runningDialogList.remove(baseDialog);
                         }
                     }
                 }

@@ -380,18 +380,7 @@ public class WaitDialog extends BaseDialog {
 
                 @Override
                 public void onDismiss() {
-                    isShow = false;
-                    getDialogLifecycleCallback().onDismiss(WaitDialog.this);
-                    WaitDialog.this.onDismiss(WaitDialog.this);
-                    if (dialogImpl != null) dialogImpl.clear();
-                    dialogImpl = null;
-                    if (dialogView != null) dialogView.clear();
-                    dialogView = null;
-                    dialogLifecycleCallback = null;
-                    if (me != null) me.clear();
-                    me = null;
-                    setLifecycleState(Lifecycle.State.DESTROYED);
-                    System.gc();
+                    cleanInstance();
                 }
             });
 
@@ -697,6 +686,21 @@ public class WaitDialog extends BaseDialog {
                 }
             });
         }
+    }
+
+    public void cleanInstance() {
+        isShow = false;
+        getDialogLifecycleCallback().onDismiss(WaitDialog.this);
+        WaitDialog.this.onDismiss(WaitDialog.this);
+        if (dialogImpl != null) dialogImpl.clear();
+        dialogImpl = null;
+        if (dialogView != null) dialogView.clear();
+        dialogView = null;
+        dialogLifecycleCallback = null;
+        if (me != null) me.clear();
+        me = null;
+        setLifecycleState(Lifecycle.State.DESTROYED);
+        System.gc();
     }
 
     private void setDialogImpl(DialogImpl d) {
