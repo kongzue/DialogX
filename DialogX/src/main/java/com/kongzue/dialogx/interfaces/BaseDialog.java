@@ -808,6 +808,9 @@ public abstract class BaseDialog implements LifecycleOwner {
                     for (BaseDialog baseDialog : copyOnWriteList) {
                         if (baseDialog.getOwnActivity() == activity && baseDialog.dialogView != null) {
                             WindowUtil.dismiss(baseDialog.dialogView.get());
+                            if (baseDialog instanceof WaitDialog){
+                                ((WaitDialog) baseDialog).cleanInstance();
+                            }
                             runningDialogList.remove(baseDialog);
                         }
                     }
@@ -837,6 +840,9 @@ public abstract class BaseDialog implements LifecycleOwner {
                         if (baseDialog.getOwnActivity() == activity) {
                             baseDialog.cleanActivityContext();
                             runningDialogList.remove(baseDialog);
+                            if (baseDialog instanceof WaitDialog){
+                                ((WaitDialog) baseDialog).cleanInstance();
+                            }
                         }
                     }
                 }

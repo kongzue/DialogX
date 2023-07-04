@@ -152,14 +152,21 @@ public class ActivityScreenShotImageView extends ImageView {
         if (view.getWidth() == 0 || view.getHeight() == 0) return;
         dialog.getDialogView().setVisibility(GONE);
         setContentViewVisibility(true);
-        view.buildDrawingCache();
-        Rect rect = new Rect();
-        view.getWindowVisibleDisplayFrame(rect);
-        view.setDrawingCacheEnabled(true);
-        setImageBitmap(Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getWidth(), view.getHeight()));
-        view.destroyDrawingCache();
+        try {
+            view.buildDrawingCache();
+        }catch (Exception ignored){
+        }
+        try {
+            Rect rect = new Rect();
+            view.getWindowVisibleDisplayFrame(rect);
+            view.setDrawingCacheEnabled(true);
+            setImageBitmap(Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getWidth(), view.getHeight()));
+            view.destroyDrawingCache();
+            isScreenshotSuccess = true;
+        }catch (Exception e){
+            isScreenshotSuccess = false;
+        }
         setContentViewVisibility(false);
-        isScreenshotSuccess = true;
         dialog.getDialogView().setVisibility(VISIBLE);
         dialog.getDialogView().requestFocus();
     }

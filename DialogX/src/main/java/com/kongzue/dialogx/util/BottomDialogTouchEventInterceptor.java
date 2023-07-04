@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util;
 
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -78,20 +79,16 @@ public class BottomDialogTouchEventInterceptor {
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
                                 float aimY = impl.boxBkg.getY() + event.getY() - bkgTouchDownY;
-                                if (impl.scrollView.isCanScroll()) {
+                                if (impl.scrollView.isCanScroll() && touchInScrollView(impl.bkg, impl.scrollView, event)) {
                                     if (aimY > impl.boxRoot.getUnsafePlace().top) {
                                         if (impl.scrollView.getScrollDistance() == 0) {
-                                            if (impl.scrollView instanceof ScrollController) {
-                                                ((ScrollController) impl.scrollView).lockScroll(true);
-                                            }
+                                            impl.scrollView.lockScroll(true);
                                             impl.boxBkg.setY(aimY);
                                         } else {
                                             bkgTouchDownY = event.getY();
                                         }
                                     } else {
-                                        if (impl.scrollView instanceof ScrollController) {
-                                            ((ScrollController) impl.scrollView).lockScroll(false);
-                                        }
+                                        impl.scrollView.lockScroll(false);
                                         impl.boxBkg.setY(impl.boxRoot.getUnsafePlace().top);
                                     }
                                 } else {
@@ -137,6 +134,31 @@ public class BottomDialogTouchEventInterceptor {
             }
             impl.bkg.setOnTouchListener(null);
         }
+    }
+
+    /**
+     * 检查 MotionEvent 触摸点是否在 scrollView 相对于对话框移动布局 slideView 范围内
+     *
+     * @param slideView  对话框移动布局
+     * @param scrollView 内部滚动布局
+     * @param event      触摸事件
+     * @return 是否在范围内
+     */
+    private boolean touchInScrollView(View slideView, ScrollController scrollView, MotionEvent event) {
+        View scrollViewImpl = (View) scrollView;
+        RectF scrollViewLocation = new RectF();
+        int[] scrollViewScreenLoc = new int[2];
+        int[] rootViewScreenLoc = new int[2];
+        scrollViewImpl.getLocationOnScreen(scrollViewScreenLoc);
+        slideView.getLocationOnScreen(rootViewScreenLoc);
+
+        scrollViewLocation.left = scrollViewScreenLoc[0] - rootViewScreenLoc[0];
+        scrollViewLocation.top = scrollViewScreenLoc[1] - rootViewScreenLoc[1];
+        scrollViewLocation.right = scrollViewLocation.left + scrollViewImpl.getWidth();
+        scrollViewLocation.bottom = scrollViewLocation.top + scrollViewImpl.getHeight();
+
+        return event.getX() >= scrollViewLocation.left && event.getX() <= scrollViewLocation.right &&
+                event.getY() >= scrollViewLocation.top && event.getY() <= scrollViewLocation.bottom;
     }
 
     private int dip2px(float dpValue) {
