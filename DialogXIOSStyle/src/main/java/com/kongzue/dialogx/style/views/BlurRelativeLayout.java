@@ -352,7 +352,11 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
                     mBlurringCanvas.restoreToCount(rc);
                 }
 
-                blur(mBitmapToBlur, mBlurredBitmap);
+                try {
+                    blur(mBitmapToBlur, mBlurredBitmap);
+                } catch (Exception e) {
+                    if (isDebug()) e.printStackTrace();
+                }
 
                 if (redrawBitmap || mDifferentRoot) {
                     invalidate();
