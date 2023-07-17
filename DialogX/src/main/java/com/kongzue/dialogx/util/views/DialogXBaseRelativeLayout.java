@@ -240,25 +240,28 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private void initDynamicSafeAreaListener() {
         View decorView = (View) getParent();
         if (decorView != null) {
-            useWindowInsetsAnimation = true;
-            ViewCompat.setWindowInsetsAnimationCallback(decorView, new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
+            try {
+                ViewCompat.setWindowInsetsAnimationCallback(decorView, new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
 
-                @NonNull
-                @Override
-                public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
-                    View decorView = (View) getParent();
-                    if (decorView != null) {
-                        String key = Integer.toHexString(decorView.hashCode());
-                        List<DynamicWindowInsetsAnimationListener> dynamicWindowInsetsAnimationListenerList = getDynamicWindowInsetsAnimationListener(key);
-                        if (dynamicWindowInsetsAnimationListenerList != null) {
-                            for (DynamicWindowInsetsAnimationListener listener : dynamicWindowInsetsAnimationListenerList) {
-                                listener.onChange(insets.toWindowInsets());
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
+                        View decorView = (View) getParent();
+                        if (decorView != null) {
+                            String key = Integer.toHexString(decorView.hashCode());
+                            List<DynamicWindowInsetsAnimationListener> dynamicWindowInsetsAnimationListenerList = getDynamicWindowInsetsAnimationListener(key);
+                            if (dynamicWindowInsetsAnimationListenerList != null) {
+                                for (DynamicWindowInsetsAnimationListener listener : dynamicWindowInsetsAnimationListenerList) {
+                                    listener.onChange(insets.toWindowInsets());
+                                }
                             }
                         }
+                        return insets;
                     }
-                    return insets;
-                }
-            });
+                });
+                useWindowInsetsAnimation = true;
+            }catch (Exception e){
+            }
         }
     }
 
