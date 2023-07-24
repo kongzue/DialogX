@@ -30,6 +30,7 @@ public abstract class OnBindView<D> {
 
     int layoutResId;
     View customView;
+    private final int PARENT_FLAG = -109;
 
     public OnBindView(int layoutResId) {
         if (BaseDialog.getTopActivity() == null) {
@@ -163,10 +164,10 @@ public abstract class OnBindView<D> {
             waitBind(parentView, null);
             return;
         }
+        if (getCustomView().getParent() == parentView || parentView.getTag(PARENT_FLAG) == getCustomView().toString()) {
+            return;
+        }
         if (getCustomView().getParent() != null) {
-            if (getCustomView().getParent() == parentView) {
-                return;
-            }
             ((ViewGroup) getCustomView().getParent()).removeView(getCustomView());
         }
         ViewGroup.LayoutParams lp = getCustomView().getLayoutParams();

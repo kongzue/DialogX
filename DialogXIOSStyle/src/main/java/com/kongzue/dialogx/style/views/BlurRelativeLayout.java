@@ -198,11 +198,15 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
 
     private void releaseScript() {
         if (mRenderScript != null) {
-            mRenderScript.destroy();
+            try {
+                mRenderScript.destroy();
+            }catch (Exception e){}
             mRenderScript = null;
         }
         if (mBlurScript != null) {
-            mBlurScript.destroy();
+            try {
+                mBlurScript.destroy();
+            }catch (Exception e){}
             mBlurScript = null;
         }
     }

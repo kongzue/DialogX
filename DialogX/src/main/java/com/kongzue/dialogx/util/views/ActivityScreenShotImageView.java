@@ -152,20 +152,17 @@ public class ActivityScreenShotImageView extends ImageView {
         if (view.getWidth() == 0 || view.getHeight() == 0) return;
         dialog.getDialogView().setVisibility(GONE);
         setContentViewVisibility(true);
-        try {
-            view.buildDrawingCache();
-        }catch (Exception ignored){
+        if (view.getWidth() + view.getHeight() == 0) {
+            view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         }
-        try {
-            Rect rect = new Rect();
-            view.getWindowVisibleDisplayFrame(rect);
-            view.setDrawingCacheEnabled(true);
-            setImageBitmap(Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getWidth(), view.getHeight()));
-            view.destroyDrawingCache();
-            isScreenshotSuccess = true;
-        }catch (Exception e){
-            isScreenshotSuccess = false;
-        }
+        int viewWidth = view.getWidth();
+        int viewHeight = view.getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, view.getWidth(), view.getHeight()));
+        isScreenshotSuccess = true;
         setContentViewVisibility(false);
         dialog.getDialogView().setVisibility(VISIBLE);
         dialog.getDialogView().requestFocus();
