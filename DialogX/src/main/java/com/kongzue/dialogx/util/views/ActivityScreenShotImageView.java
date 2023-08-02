@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
@@ -33,6 +34,7 @@ import java.util.Objects;
 public class ActivityScreenShotImageView extends ImageView {
 
     float width, height, mRadius;
+    public static boolean useHardwareRenderingMode = false;
 
     public ActivityScreenShotImageView(Context context) {
         super(context);
@@ -50,9 +52,7 @@ public class ActivityScreenShotImageView extends ImageView {
     }
 
     private void init(AttributeSet attrs) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            setLayerType(LAYER_TYPE_HARDWARE, null);
-        }
+        setLayerType(useHardwareRenderingMode ? LAYER_TYPE_HARDWARE : LAYER_TYPE_SOFTWARE, null);
     }
 
     public void setRadius(float mRadius) {
@@ -160,7 +160,11 @@ public class ActivityScreenShotImageView extends ImageView {
         int viewHeight = view.getHeight();
         Bitmap bitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
+        try {
+            view.draw(canvas);
+        } catch (Exception e) {
+            if (DialogX.DEBUGMODE) e.printStackTrace();
+        }
         setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, view.getWidth(), view.getHeight()));
         isScreenshotSuccess = true;
         setContentViewVisibility(false);

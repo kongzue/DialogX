@@ -605,6 +605,9 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     public Resources getResources() {
+        if (getOwnActivity() != null) {
+            return getOwnActivity().getResources();
+        }
         if (getApplicationContext() == null) {
             return Resources.getSystem();
         }
@@ -808,7 +811,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                     for (BaseDialog baseDialog : copyOnWriteList) {
                         if (baseDialog.getOwnActivity() == activity && baseDialog.dialogView != null) {
                             WindowUtil.dismiss(baseDialog.dialogView.get());
-                            if (baseDialog instanceof WaitDialog){
+                            if (baseDialog instanceof WaitDialog) {
                                 ((WaitDialog) baseDialog).cleanInstance();
                             }
                             runningDialogList.remove(baseDialog);
@@ -822,7 +825,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                     for (BaseDialog baseDialog : copyOnWriteList) {
                         if (baseDialog.getOwnActivity() == activity && baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
                             baseDialog.ownDialogFragmentImpl.get().dismiss();
-                            if (baseDialog instanceof WaitDialog){
+                            if (baseDialog instanceof WaitDialog) {
                                 ((WaitDialog) baseDialog).cleanInstance();
                             }
                             runningDialogList.remove(baseDialog);
@@ -840,7 +843,7 @@ public abstract class BaseDialog implements LifecycleOwner {
                         if (baseDialog.getOwnActivity() == activity) {
                             baseDialog.cleanActivityContext();
                             runningDialogList.remove(baseDialog);
-                            if (baseDialog instanceof WaitDialog){
+                            if (baseDialog instanceof WaitDialog) {
                                 ((WaitDialog) baseDialog).cleanInstance();
                             }
                         }
