@@ -28,6 +28,7 @@ import androidx.lifecycle.Lifecycle;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
+import com.kongzue.dialogx.interfaces.BaseOnDialogClickCallback;
 import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
@@ -38,6 +39,7 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnBottomMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
@@ -70,9 +72,9 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
     protected boolean allowInterceptTouch = true;
     protected boolean bottomNonSafetyAreaBySelf = false;
     protected int maskColor = -1;
-    protected OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener;
-    protected OnDialogButtonClickListener<BottomDialog> okButtonClickListener;
-    protected OnDialogButtonClickListener<BottomDialog> otherButtonClickListener;
+    protected BaseOnDialogClickCallback cancelButtonClickListener;
+    protected BaseOnDialogClickCallback okButtonClickListener;
+    protected BaseOnDialogClickCallback otherButtonClickListener;
     protected OnBackgroundMaskClickListener<BottomDialog> onBackgroundMaskClickListener;
     protected OnBackPressedListener<BottomDialog> onBackPressedListener;
     protected BOOLEAN privateCancelable;
@@ -376,8 +378,14 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                     public void onClick(View v) {
                         buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_CANCEL;
                         if (cancelButtonClickListener != null) {
-                            if (!cancelButtonClickListener.onClick(me, v)) {
-                                dismiss();
+                            if (cancelButtonClickListener instanceof OnDialogButtonClickListener) {
+                                if (!((OnDialogButtonClickListener) cancelButtonClickListener).onClick(me, v)) {
+                                    dismiss();
+                                }
+                            } else if (cancelButtonClickListener instanceof OnBottomMenuButtonClickListener) {
+                                if (!((OnBottomMenuButtonClickListener) cancelButtonClickListener).onClick(me, v)) {
+                                    dismiss();
+                                }
                             }
                         } else {
                             dismiss();
@@ -391,8 +399,14 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                     public void onClick(View v) {
                         buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OTHER;
                         if (otherButtonClickListener != null) {
-                            if (!otherButtonClickListener.onClick(me, v)) {
-                                dismiss();
+                            if (otherButtonClickListener instanceof OnDialogButtonClickListener) {
+                                if (!((OnDialogButtonClickListener) otherButtonClickListener).onClick(me, v)) {
+                                    dismiss();
+                                }
+                            } else if (otherButtonClickListener instanceof OnBottomMenuButtonClickListener) {
+                                if (!((OnBottomMenuButtonClickListener) otherButtonClickListener).onClick(me, v)) {
+                                    dismiss();
+                                }
                             }
                         } else {
                             dismiss();
@@ -406,8 +420,14 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                     public void onClick(View v) {
                         buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OK;
                         if (okButtonClickListener != null) {
-                            if (!okButtonClickListener.onClick(me, v)) {
-                                dismiss();
+                            if (okButtonClickListener instanceof OnDialogButtonClickListener) {
+                                if (!((OnDialogButtonClickListener) okButtonClickListener).onClick(me, v)) {
+                                    dismiss();
+                                }
+                            } else if (okButtonClickListener instanceof OnBottomMenuButtonClickListener) {
+                                if (!((OnBottomMenuButtonClickListener) okButtonClickListener).onClick(me, v)) {
+                                    dismiss();
+                                }
                             }
                         } else {
                             dismiss();
@@ -917,7 +937,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
     }
 
     public OnDialogButtonClickListener<BottomDialog> getCancelButtonClickListener() {
-        return cancelButtonClickListener;
+        return (OnDialogButtonClickListener<BottomDialog>) cancelButtonClickListener;
     }
 
     public BottomDialog setCancelButtonClickListener(OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {

@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.interfaces;
 
+import android.view.View;
+
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -8,4 +10,5 @@ package com.kongzue.dialogx.interfaces;
  * @createTime: 2020/10/22 15:07
  */
 public interface BaseOnDialogClickCallback {
+
 }

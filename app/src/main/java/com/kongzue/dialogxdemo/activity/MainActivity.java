@@ -69,6 +69,7 @@ import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnBottomMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -1214,9 +1215,9 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndex = index;
                             }
                         })
-                        .setCancelButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+                        .setCancelButton("确定",new OnBottomMenuButtonClickListener<BottomMenu>() {
                             @Override
-                            public boolean onClick(BottomDialog baseDialog, View v) {
+                            public boolean onClick(BottomMenu baseDialog, View v) {
                                 PopTip.show("已选择：" + singleSelectMenuText[selectMenuIndex]);
                                 return false;
                             }
@@ -1229,8 +1230,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 BottomMenu.show(multiSelectMenuText)
-                        .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
-                        .setTitle("获得权限标题")
+                        .setMessage("这里是选择城市的模拟范例，这是一个演示菜单")
+                        .setTitle("请选择城市")
                         .setOnMenuItemClickListener(new OnMenuItemSelectListener<BottomMenu>() {
                             @Override
                             public void onMultiItemSelect(BottomMenu dialog, CharSequence[] text, int[] index) {
@@ -1241,13 +1242,20 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndexArray = index;
                             }
                         })
-                        .setCancelButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+                        .setOkButton("确定",new OnBottomMenuButtonClickListener<BottomMenu>() {
                             @Override
-                            public boolean onClick(BottomDialog baseDialog, View v) {
+                            public boolean onClick(BottomMenu dialog, View v) {
                                 PopTip.show("已选择：" + multiSelectMenuResultCache);
                                 return false;
                             }
                         })
+//                        .setCancelButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+//                            @Override
+//                            public boolean onClick(BottomDialog baseDialog, View v) {
+//                                PopTip.show("已选择：" + multiSelectMenuResultCache);
+//                                return false;
+//                            }
+//                        })
                         .setSelection(selectMenuIndexArray);
             }
         });

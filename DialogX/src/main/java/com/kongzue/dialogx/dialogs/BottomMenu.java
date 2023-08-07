@@ -24,6 +24,7 @@ import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnBottomMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
@@ -808,19 +809,50 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu setCancelButton(OnDialogButtonClickListener cancelButtonClickListener) {
+    public BottomMenu setCancelButton(OnBottomMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
 
-    public BottomMenu setCancelButton(CharSequence cancelText, OnDialogButtonClickListener cancelButtonClickListener) {
+    public BottomMenu setCancelButton(CharSequence cancelText, OnBottomMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
         preRefreshUI();
         return this;
     }
 
-    public BottomMenu setCancelButton(int cancelTextResId, OnDialogButtonClickListener cancelButtonClickListener) {
+    public BottomMenu setCancelButton(int cancelTextResId, OnBottomMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
+        this.cancelText = getString(cancelTextResId);
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        preRefreshUI();
+        return this;
+    }
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setCancelButton(OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        return this;
+    }
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(CharSequence cancelText, OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setCancelButton(CharSequence cancelText, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
+        this.cancelText = cancelText;
+        this.cancelButtonClickListener = cancelButtonClickListener;
+        preRefreshUI();
+        return this;
+    }
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(int cancelTextResId, OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setCancelButton(int cancelTextResId, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
         this.cancelText = getString(cancelTextResId);
         this.cancelButtonClickListener = cancelButtonClickListener;
         preRefreshUI();
@@ -881,11 +913,11 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public OnDialogButtonClickListener getCancelButtonClickListener() {
-        return cancelButtonClickListener;
+    public OnBottomMenuButtonClickListener<BottomMenu> getBottomMenuCancelButtonClickListener() {
+        return (OnBottomMenuButtonClickListener<BottomMenu>) cancelButtonClickListener;
     }
 
-    public BottomMenu setCancelButtonClickListener(OnDialogButtonClickListener cancelButtonClickListener) {
+    public BottomMenu setCancelButtonClickListener(OnBottomMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
@@ -1019,20 +1051,50 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu setOkButton(OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
-        this.okButtonClickListener = OkButtonClickListener;
+    public BottomMenu setOkButton(OnBottomMenuButtonClickListener<BottomMenu> okButtonClickListener) {
+        this.okButtonClickListener = okButtonClickListener;
         return this;
     }
 
-    public BottomMenu setOkButton(CharSequence OkText, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
-        this.okText = OkText;
-        this.okButtonClickListener = OkButtonClickListener;
+    public BottomMenu setOkButton(CharSequence okText, OnBottomMenuButtonClickListener<BottomMenu> okButtonClickListener) {
+        this.okText = okText;
+        this.okButtonClickListener = okButtonClickListener;
         return this;
     }
 
-    public BottomMenu setOkButton(int OkTextResId, OnDialogButtonClickListener<BottomDialog> OkButtonClickListener) {
-        this.okText = getString(OkTextResId);
-        this.okButtonClickListener = OkButtonClickListener;
+    public BottomMenu setOkButton(int okTextResId, OnBottomMenuButtonClickListener<BottomMenu> okButtonClickListener) {
+        this.okText = getString(okTextResId);
+        this.okButtonClickListener = okButtonClickListener;
+        return this;
+    }
+
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setOkButton(OnDialogButtonClickListener<BottomDialog> okButtonClickListener) {
+        this.okButtonClickListener = okButtonClickListener;
+        return this;
+    }
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(CharSequence okText, OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setOkButton(CharSequence okText, OnDialogButtonClickListener<BottomDialog> okButtonClickListener) {
+        this.okText = okText;
+        this.okButtonClickListener = okButtonClickListener;
+        return this;
+    }
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(int okTextResId, OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setOkButton(int okTextResId, OnDialogButtonClickListener<BottomDialog> okButtonClickListener) {
+        this.okText = getString(okTextResId);
+        this.okButtonClickListener = okButtonClickListener;
         return this;
     }
 
@@ -1052,20 +1114,49 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu setOtherButton(OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
-        this.otherButtonClickListener = OtherButtonClickListener;
+    public BottomMenu setOtherButton(OnBottomMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
+        this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
 
-    public BottomMenu setOtherButton(CharSequence OtherText, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
-        this.otherText = OtherText;
-        this.otherButtonClickListener = OtherButtonClickListener;
+    public BottomMenu setOtherButton(CharSequence otherText, OnBottomMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
+        this.otherText = otherText;
+        this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
 
-    public BottomMenu setOtherButton(int OtherTextResId, OnDialogButtonClickListener<BottomDialog> OtherButtonClickListener) {
-        this.otherText = getString(OtherTextResId);
-        this.otherButtonClickListener = OtherButtonClickListener;
+    public BottomMenu setOtherButton(int otherTextResId, OnBottomMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
+        this.otherText = getString(otherTextResId);
+        this.otherButtonClickListener = otherButtonClickListener;
+        return this;
+    }
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setOtherButton(OnDialogButtonClickListener<BottomDialog> otherButtonClickListener) {
+        this.otherButtonClickListener = otherButtonClickListener;
+        return this;
+    }
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(CharSequence otherText, OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setOtherButton(CharSequence otherText, OnDialogButtonClickListener<BottomDialog> otherButtonClickListener) {
+        this.otherText = otherText;
+        this.otherButtonClickListener = otherButtonClickListener;
+        return this;
+    }
+
+    /**
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(int otherTextResId, OnBottomMenuButtonClickListener<BottomMenu>)}
+     */
+    @Deprecated
+    public BottomMenu setOtherButton(int otherTextResId, OnDialogButtonClickListener<BottomDialog> otherButtonClickListener) {
+        this.otherText = getString(otherTextResId);
+        this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
 
