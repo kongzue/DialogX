@@ -56,4 +56,4 @@ body:
     attributes:
       label: 错误日志
       description: 如果有出现崩溃，请提供详细的错误日志，错误日志需要至少包含“com.kongzue.dialogx”的包名以便于定位问题。
-      render: shell
+      render: java
