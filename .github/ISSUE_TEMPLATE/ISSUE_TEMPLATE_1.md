@@ -7,18 +7,6 @@ assignees: ''
 
 ---
 
----
-
-body:
-- type: textarea
-  id: prevalence
-  attributes:
-    label: 问题描述
-    description: "请在此详细描述问题。"
-    placeholder: "请在此详细描述问题。"
-  validations:
-    required: true
----
 
 ## ⚠️ 重要阅读
 
