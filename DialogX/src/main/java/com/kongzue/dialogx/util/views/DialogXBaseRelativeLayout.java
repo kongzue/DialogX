@@ -95,7 +95,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (focusable) {
                 setFocusable(true);
                 setFocusableInTouchMode(true);
-                requestFocus();
             }
             setBkgAlpha(0f);
             if (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
@@ -218,6 +217,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 onLifecycleCallBack.onShow();
             }
             isLightMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
+            if (focusable) {
+                requestFocus();
+            }
         }
     }
 
@@ -260,7 +262,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                     }
                 });
                 useWindowInsetsAnimation = true;
-            }catch (Exception e){
+            } catch (Exception e) {
             }
         }
     }
@@ -324,7 +326,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private WeakReference<View> requestFocusView;
 
     public void bindFocusView(View view) {
-        requestFocusView = new WeakReference<>(view);
+        if (view != this) {
+            requestFocusView = new WeakReference<>(view);
+        }
     }
 
     @Override
@@ -335,7 +339,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
             initDynamicSafeAreaListener();
         }
-        if (direction == View.FOCUS_DOWN && requestFocusView != null && requestFocusView.get() != null) {
+        if (direction == View.FOCUS_DOWN && requestFocusView != null && requestFocusView.get() != null && requestFocusView.get() != this) {
             return requestFocusView.get().requestFocus();
         }
         View findFocusView = findFocus();

@@ -66,7 +66,6 @@ public class BottomDialogScrollView extends ScrollView implements ScrollControll
         return super.onTouchEvent(ev);
     }
     
-    
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         return super.dispatchTouchEvent(ev);

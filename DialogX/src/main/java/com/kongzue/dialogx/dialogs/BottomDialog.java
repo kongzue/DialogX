@@ -975,6 +975,24 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         return this;
     }
 
+    public TextInfo getOkTextInfo() {
+        return okTextInfo;
+    }
+
+    public BottomDialog setOkTextInfo(TextInfo okTextInfo) {
+        this.okTextInfo = okTextInfo;
+        return this;
+    }
+
+    public TextInfo getOtherTextInfo() {
+        return otherTextInfo;
+    }
+
+    public BottomDialog setOtherTextInfo(TextInfo otherTextInfo) {
+        this.otherTextInfo = otherTextInfo;
+        return this;
+    }
+
     public int getBackgroundColor() {
         return backgroundColor;
     }

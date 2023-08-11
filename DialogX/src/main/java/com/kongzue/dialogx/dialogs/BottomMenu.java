@@ -1341,4 +1341,22 @@ public class BottomMenu extends BottomDialog {
         this.menuMenuItemLayoutRefreshCallback = menuMenuItemLayoutRefreshCallback;
         return this;
     }
+
+    public TextInfo getOkTextInfo() {
+        return okTextInfo;
+    }
+
+    public BottomMenu setOkTextInfo(TextInfo okTextInfo) {
+        this.okTextInfo = okTextInfo;
+        return this;
+    }
+
+    public TextInfo getOtherTextInfo() {
+        return otherTextInfo;
+    }
+
+    public BottomMenu setOtherTextInfo(TextInfo otherTextInfo) {
+        this.otherTextInfo = otherTextInfo;
+        return this;
+    }
 }
