@@ -48,7 +48,7 @@ body:
       label: 问题截图/视频
       description: 请在此插入佐证问题的截图和视频。
       placeholder: 请在此插入佐证问题的截图和视频。
-      value: ""
+      value: "截屏/视频"
     validations:
       required: false
   - type: textarea
