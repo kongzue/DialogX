@@ -1,62 +1,59 @@
-name: Bug Report
-description: File a bug report
-title: "[Bug]: "
-labels: ["bug", "triage"]
-assignees:
-  - octocat
+name: BUG 反馈
+description: 如果你有遇到 BUG 请选择此项进行反馈
+title: "【BUG反馈】 "
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
-  - type: input
-    id: contact
+        ## ⚠️ 重要阅读
+        > 为保证您的 issues 能迅速有效的得到解决，并获得最新的修复版本更新。
+        > 
+        > 1. 请确保你已升级至最新的测试版本，在这里可以找到 [最新发布的测试版本](https://github.com/kongzue/DialogX/releases)，若最新的测试版本依然能够复现此问题请继续提交 issues，针对已经处理的问题不再进行回复。
+        > 
+        > 2. 请先确认您已阅读[《常见问题》](https://github.com/kongzue/DialogX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+        > 
+        > 3. 如有条件建议尝试拉取整个项目，尝试运行 Demo app，并模拟在 Demo 环境中运行可能存在问题的代码，如果可以复现请提交 issues 并附上复现代码。
+  - type: textarea
+    id: 问题描述
     attributes:
-      label: Contact Details
-      description: How can we get in touch with you if we need more info?
-      placeholder: ex. email@example.com
+      label: 问题描述
+      description: 请在此详细描述问题。
+      placeholder: 请在此详细描述问题。
+      value: ""
+    validations:
+      required: true
+  - type: input
+    id: 设备信息
+    attributes:
+      label: 设备信息
+      description: 请在此说明您使用的设备型号、Android 版本等信息以协助我们排查问题
+      placeholder: 例如：Google Pixel5 Android 14 beta4
+    validations:
+      required: false
+  - type: dropdown
+    id: 是否在 Demo 中能复现此问题？
+    attributes:
+      label: 是否在 Demo 中能复现此问题？
+      description: 是否尝试拉取 Git，并尝试在 Demo 中复现您的问题？
+      options:
+        - 否
+        - 是
+        - 未尝试
+    validations:
+      required: true
+  - type: textarea
+    id: 问题截图/视频
+    attributes:
+      label: 问题截图/视频
+      description: 请在此插入佐证问题的截图和视频。
+      placeholder: 请在此插入佐证问题的截图和视频。
+      value: ""
     validations:
       required: false
   - type: textarea
-    id: what-happened
+    id: 错误日志
     attributes:
-      label: What happened?
-      description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you see!
-      value: "A bug happened!"
-    validations:
-      required: true
-  - type: dropdown
-    id: version
-    attributes:
-      label: Version
-      description: What version of our software are you running?
-      options:
-        - 1.0.2 (Default)
-        - 1.0.3 (Edge)
-    validations:
-      required: true
-  - type: dropdown
-    id: browsers
-    attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
-  - type: textarea
-    id: logs
-    attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      label: 错误日志
+      description: 如果有出现崩溃，请提供详细的错误日志，错误日志需要至少包含“com.kongzue.dialogx”的包名以便于定位问题。
       render: shell
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
