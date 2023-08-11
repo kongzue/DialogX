@@ -30,7 +30,7 @@ body:
       description: 请在此说明您使用的设备型号、Android 版本等信息以协助我们排查问题
       placeholder: 例如：Google Pixel5 Android 14 beta4
     validations:
-      required: false
+      required: true
   - type: dropdown
     id: be-reproduced
     attributes:
