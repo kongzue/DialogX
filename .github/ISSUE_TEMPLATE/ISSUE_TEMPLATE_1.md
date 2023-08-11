@@ -5,6 +5,8 @@ title: 【BUG反馈】请填写标题
 labels: bug
 assignees: ''
 
+---
+
 body:
 - type: textarea
   id: prevalence
@@ -14,7 +16,6 @@ body:
     placeholder: "请在此详细描述问题。"
   validations:
     required: true
----
 
 ## ⚠️ 重要阅读
 
