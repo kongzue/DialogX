@@ -15,16 +15,16 @@ body:
         > 
         > 3. 如有条件建议尝试拉取整个项目，尝试运行 Demo app，并模拟在 Demo 环境中运行可能存在问题的代码，如果可以复现请提交 issues 并附上复现代码。
   - type: textarea
-    id: 问题描述
+    id: problem-description
     attributes:
       label: 问题描述
       description: 请在此详细描述问题。
       placeholder: 请在此详细描述问题。
-      value: ""
+      value: "我遇到了..."
     validations:
       required: true
   - type: input
-    id: 设备信息
+    id: device-information
     attributes:
       label: 设备信息
       description: 请在此说明您使用的设备型号、Android 版本等信息以协助我们排查问题
@@ -32,7 +32,7 @@ body:
     validations:
       required: false
   - type: dropdown
-    id: 是否在 Demo 中能复现此问题？
+    id: be-reproduced
     attributes:
       label: 是否在 Demo 中能复现此问题？
       description: 是否尝试拉取 Git，并尝试在 Demo 中复现您的问题？
@@ -43,7 +43,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: 问题截图/视频
+    id: issues-screenshot
     attributes:
       label: 问题截图/视频
       description: 请在此插入佐证问题的截图和视频。
@@ -52,7 +52,7 @@ body:
     validations:
       required: false
   - type: textarea
-    id: 错误日志
+    id: logs
     attributes:
       label: 错误日志
       description: 如果有出现崩溃，请提供详细的错误日志，错误日志需要至少包含“com.kongzue.dialogx”的包名以便于定位问题。
