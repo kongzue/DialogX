@@ -548,6 +548,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 WaitDialog.show("Please Wait!")
+                        .setBackgroundColor(Color.GRAY)
                         .setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
                             @Override
                             public boolean onBackPressed(WaitDialog dialog) {

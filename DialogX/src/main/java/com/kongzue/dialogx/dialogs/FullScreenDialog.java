@@ -280,7 +280,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
-            if (backgroundColor != -1) {
+            if (backgroundColor != null) {
                 tintColor(bkg, backgroundColor);
             }
 

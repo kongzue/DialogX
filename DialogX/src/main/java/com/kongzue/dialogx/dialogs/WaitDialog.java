@@ -91,7 +91,7 @@ public class WaitDialog extends BaseDialog {
     protected float waitProgress = -1;
     protected int showType = -1;        //-1:WaitDialog 状态标示符，其余为 TipDialog 状态标示
     protected TextInfo messageTextInfo;
-    protected int maskColor = -1;
+    protected Integer maskColor = null;
     protected BOOLEAN privateCancelable;
 
     protected DialogLifecycleCallback<WaitDialog> dialogLifecycleCallback;
@@ -329,7 +329,7 @@ public class WaitDialog extends BaseDialog {
 
         public void init() {
             if (messageTextInfo == null) messageTextInfo = DialogX.tipTextInfo;
-            if (backgroundColor == -1) backgroundColor = DialogX.tipBackgroundColor;
+            if (backgroundColor == null) backgroundColor = DialogX.tipBackgroundColor;
 
             blurViews = findAllBlurView(dialogView.get());
 
@@ -425,11 +425,16 @@ public class WaitDialog extends BaseDialog {
             bkg.setMinWidth(getMinWidth());
             bkg.setMinHeight(getMinHeight());
 
-            if (backgroundColor != -1) {
+            if (backgroundColor != null) {
                 if (blurViews != null) {
                     for (View blurView : blurViews) {
-                        ((BlurViewType) blurView).setOverlayColor(getResources().getColor(backgroundColor));
+                        ((BlurViewType) blurView).setOverlayColor(backgroundColor);
                     }
+                } else {
+                    GradientDrawable gradientDrawable = (GradientDrawable) getResources().getDrawable(R.drawable.rect_dialogx_material_wait_bkg);
+                    gradientDrawable.setColor(getBackgroundColor());
+                    gradientDrawable.setCornerRadius(getRadius());
+                    bkg.setBackground(gradientDrawable);
                 }
             }
             if (style.overrideWaitTipRes() != null) {
@@ -441,7 +446,7 @@ public class WaitDialog extends BaseDialog {
                 txtInfo.setTextColor(getResources().getColor(overrideTextColorRes));
                 progressView.setColor(getResources().getColor(overrideTextColorRes));
             }
-            if (DialogX.tipProgressColor != -1) progressView.setColor(DialogX.tipProgressColor);
+            if (DialogX.tipProgressColor != null) progressView.setColor(DialogX.tipProgressColor);
 
             if (waitProgress >= 0 && waitProgress <= 1 && oldProgress != waitProgress) {
                 progressView.progress(waitProgress);
@@ -467,7 +472,7 @@ public class WaitDialog extends BaseDialog {
             showText(txtInfo, message);
             useTextInfo(txtInfo, messageTextInfo);
 
-            if (maskColor != -1) {
+            if (maskColor != null) {
                 boxRoot.setBackgroundColor(maskColor);
             }
 
@@ -1170,7 +1175,7 @@ public class WaitDialog extends BaseDialog {
     }
 
     public float getRadius() {
-        return backgroundRadius;
+        return backgroundRadius < 0 ? dip2px(15) : backgroundRadius;
     }
 
     public DialogXAnimInterface<WaitDialog> getDialogXAnimImpl() {

@@ -619,7 +619,7 @@ public class PopMenu extends BaseDialog {
                 boxBody.setMinimumHeight(height);
             }
 
-            if (backgroundColor != -1) {
+            if (backgroundColor != null) {
                 tintColor(boxBody, backgroundColor);
 
                 if (blurViews != null) {

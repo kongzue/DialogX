@@ -498,7 +498,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         public void init() {
             if (messageTextInfo == null) messageTextInfo = DialogX.popTextInfo;
             if (buttonTextInfo == null) buttonTextInfo = DialogX.buttonTextInfo;
-            if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
+            if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
 
             if (autoDismissTimer == null) {
                 showShort();
@@ -604,7 +604,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
-            if (backgroundColor != -1) {
+            if (backgroundColor != null) {
                 tintColor(boxBody, backgroundColor);
 
                 if (blurViews != null) {

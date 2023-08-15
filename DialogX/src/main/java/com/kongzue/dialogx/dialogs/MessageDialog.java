@@ -100,7 +100,7 @@ public class MessageDialog extends BaseDialog {
     protected CharSequence otherText;
     protected String inputText;
     protected String inputHintText;
-    protected int maskColor = -1;
+    protected Integer maskColor = null;
     protected float backgroundRadius = -1;
     protected Drawable titleIcon;
 
@@ -326,7 +326,7 @@ public class MessageDialog extends BaseDialog {
             if (cancelTextInfo == null) cancelTextInfo = DialogX.buttonTextInfo;
             if (otherTextInfo == null) otherTextInfo = DialogX.buttonTextInfo;
             if (inputInfo == null) inputInfo = DialogX.inputInfo;
-            if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
+            if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
 
             txtDialogTitle.getPaint().setFakeBoldText(true);
             btnSelectNegative.getPaint().setFakeBoldText(true);
@@ -555,7 +555,7 @@ public class MessageDialog extends BaseDialog {
             }
 
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
-            if (backgroundColor != -1) {
+            if (backgroundColor != null) {
                 tintColor(bkg, backgroundColor);
                 if (style instanceof MaterialStyle) {
                     tintColor(btnSelectOther, backgroundColor);
@@ -589,7 +589,7 @@ public class MessageDialog extends BaseDialog {
                 txtInput.setVisibility(View.GONE);
             }
             boxRoot.setClickable(true);
-            if (maskColor != -1) {
+            if (maskColor != null) {
                 boxRoot.setBackgroundColor(maskColor);
             }
             if (backgroundRadius > -1) {

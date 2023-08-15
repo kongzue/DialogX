@@ -52,7 +52,7 @@ public class GuideDialog extends CustomDialog {
     protected STAGE_LIGHT_TYPE stageLightType = STAGE_LIGHT_TYPE.CIRCLE_OUTSIDE;
     protected Drawable tipImage;
     protected float stageLightFilletRadius;     //舞台灯光部分的圆角
-    protected int maskColor = -1;
+    protected Integer maskColor = null;
     protected OnDialogButtonClickListener<GuideDialog> onStageLightPathClickListener;
     protected int[] baseViewLocationCoordinateCompensation = new int[4];
     
@@ -523,7 +523,7 @@ public class GuideDialog extends CustomDialog {
     protected void onDialogShow() {
         super.onDialogShow();
         if (baseView == null) {
-            super.setMaskColor(maskColor == -1 ? getColor(R.color.black50) : maskColor);
+            super.setMaskColor(maskColor == null ? getColor(R.color.black50) : maskColor);
         }
     }
     
@@ -628,7 +628,7 @@ public class GuideDialog extends CustomDialog {
             break;
         }
         stageLightPaint.setXfermode(null);
-        canvas.drawColor(maskColor == -1 ? getColor(R.color.black50) : maskColor, PorterDuff.Mode.SRC_OUT);
+        canvas.drawColor(maskColor == null ? getColor(R.color.black50) : maskColor, PorterDuff.Mode.SRC_OUT);
         
         BitmapDrawable bkgDrawable = new BitmapDrawable(getResources(), bkg);
         getDialogImpl().boxRoot.setBackground(bkgDrawable);

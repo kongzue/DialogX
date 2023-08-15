@@ -506,7 +506,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected DialogXStyle style;
     protected DialogX.THEME theme;
     protected boolean autoShowInputKeyboard;
-    protected int backgroundColor = -1;
+    protected Integer backgroundColor = null;
     protected long enterAnimDuration = -1;
     protected long exitAnimDuration = -1;
     protected int maxWidth;

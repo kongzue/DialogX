@@ -71,7 +71,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
     protected CharSequence otherText;
     protected boolean allowInterceptTouch = true;
     protected boolean bottomNonSafetyAreaBySelf = false;
-    protected int maskColor = -1;
+    protected Integer maskColor = null;
     protected BaseOnDialogClickCallback cancelButtonClickListener;
     protected BaseOnDialogClickCallback okButtonClickListener;
     protected BaseOnDialogClickCallback otherButtonClickListener;
@@ -327,7 +327,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (okTextInfo == null) okTextInfo = DialogX.buttonTextInfo;
             if (cancelTextInfo == null) cancelTextInfo = DialogX.buttonTextInfo;
             if (otherTextInfo == null) otherTextInfo = DialogX.buttonTextInfo;
-            if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
+            if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
             if (cancelText == null) cancelText = DialogX.cancelButtonText;
 
             txtDialogTitle.getPaint().setFakeBoldText(true);
@@ -500,7 +500,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
-            if (backgroundColor != -1) {
+            if (backgroundColor != null) {
                 tintColor(bkg, backgroundColor);
                 tintColor(btnSelectOther, backgroundColor);
                 tintColor(btnSelectNegative, backgroundColor);
@@ -573,7 +573,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 }
             }
 
-            if (maskColor != -1) {
+            if (maskColor != null) {
                 boxRoot.setBackground(new ColorDrawable(maskColor));
             }
 

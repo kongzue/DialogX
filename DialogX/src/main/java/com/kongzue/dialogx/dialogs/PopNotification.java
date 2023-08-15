@@ -526,7 +526,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
             if (buttonTextInfo == null) buttonTextInfo = DialogX.buttonTextInfo;
-            if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
+            if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
 
             if (autoDismissTimer == null) {
                 showShort();
@@ -627,7 +627,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                     Float popNotificationRadius = null;
                     if (getStyle().popNotificationSettings() != null && getStyle().popNotificationSettings().blurBackgroundSettings() != null &&
                             getStyle().popNotificationSettings().blurBackgroundSettings().blurBackground()) {
-                        blurFrontColor = backgroundColor == -1 ?
+                        blurFrontColor = backgroundColor == null ?
                                 getColorNullable(getIntStyleAttr(getStyle().popNotificationSettings().blurBackgroundSettings().blurForwardColorRes(isLightTheme()))) :
                                 backgroundColor;
                         popNotificationRadius = getFloatStyleAttr((float) getStyle().popNotificationSettings().blurBackgroundSettings().blurBackgroundRoundRadiusPx());
@@ -677,7 +677,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
-            if (backgroundColor != -1) {
+            if (backgroundColor != null) {
                 tintColor(boxBody, backgroundColor);
 
                 if (blurViews != null) {
