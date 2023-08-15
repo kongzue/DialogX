@@ -1322,4 +1322,10 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     public void onDismiss(PopTip dialog) {
 
     }
+
+    @Override
+    protected void cleanActivityContext() {
+        super.cleanActivityContext();
+        dismiss(getDialogView());
+    }
 }
