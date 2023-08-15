@@ -69,13 +69,13 @@ public class GuideDialog extends CustomDialog {
     
     public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.stageLightType = stageLightType;
     }
     
     public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, OnBindView<CustomDialog> onBindView, int alignBaseViewGravity) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.stageLightType = stageLightType;
         this.onBindView = onBindView;
         this.alignViewGravity = alignBaseViewGravity;
@@ -83,7 +83,7 @@ public class GuideDialog extends CustomDialog {
     
     public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, int tipImageResId, int alignBaseViewGravity) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.tipImage = getResources().getDrawable(tipImageResId);
         this.stageLightType = stageLightType;
         this.alignViewGravity = alignBaseViewGravity;
@@ -91,7 +91,7 @@ public class GuideDialog extends CustomDialog {
     
     public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, Bitmap tipImage, int alignBaseViewGravity) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.tipImage = new BitmapDrawable(getResources(), tipImage);
         this.stageLightType = stageLightType;
         this.alignViewGravity = alignBaseViewGravity;
@@ -99,7 +99,7 @@ public class GuideDialog extends CustomDialog {
     
     public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, Drawable tipImage, int alignBaseViewGravity) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.tipImage = tipImage;
         this.stageLightType = stageLightType;
         this.alignViewGravity = alignBaseViewGravity;
@@ -151,60 +151,60 @@ public class GuideDialog extends CustomDialog {
     
     public GuideDialog(View baseView, int tipImageResId) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.tipImage = getResources().getDrawable(tipImageResId);
     }
     
     public GuideDialog(View baseView, Bitmap tipImage) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.tipImage = new BitmapDrawable(getResources(), tipImage);
     }
     
     public GuideDialog(View baseView, Drawable tipImage) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.tipImage = tipImage;
     }
     
     public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, int tipImageResId) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.stageLightType = stageLightType;
         this.tipImage = getResources().getDrawable(tipImageResId);
     }
     
     public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, Bitmap tipImage) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.stageLightType = stageLightType;
         this.tipImage = new BitmapDrawable(getResources(), tipImage);
     }
     
     public GuideDialog(View baseView, STAGE_LIGHT_TYPE stageLightType, Drawable tipImage) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.stageLightType = stageLightType;
         this.tipImage = tipImage;
     }
     
     public GuideDialog(View baseView, int tipImageResId, int alignBaseViewGravity) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.alignViewGravity = alignBaseViewGravity;
         this.tipImage = getResources().getDrawable(tipImageResId);
     }
     
     public GuideDialog(View baseView, Bitmap tipImage, int alignBaseViewGravity) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.alignViewGravity = alignBaseViewGravity;
         this.tipImage = new BitmapDrawable(getResources(), tipImage);
     }
     
     public GuideDialog(View baseView, Drawable tipImage, int alignBaseViewGravity) {
         this();
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.alignViewGravity = alignBaseViewGravity;
         this.tipImage = tipImage;
     }
@@ -427,7 +427,7 @@ public class GuideDialog extends CustomDialog {
     }
     
     public GuideDialog setAlignBaseViewGravity(View baseView, int alignGravity) {
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.alignViewGravity = alignGravity;
         baseViewLoc = new int[4];
         baseView.getLocationOnScreen(baseViewLoc);
@@ -436,7 +436,7 @@ public class GuideDialog extends CustomDialog {
     }
     
     public GuideDialog setAlignBaseViewGravity(View baseView) {
-        this.baseView = baseView;
+        this.baseView(baseView);
         baseViewLoc = new int[4];
         baseView.getLocationOnScreen(baseViewLoc);
         setFullScreen(true);
@@ -445,9 +445,9 @@ public class GuideDialog extends CustomDialog {
     
     public GuideDialog setAlignBaseViewGravity(int alignGravity) {
         this.alignViewGravity = alignGravity;
-        if (baseView != null) {
+        if (baseView() != null) {
             baseViewLoc = new int[4];
-            baseView.getLocationOnScreen(baseViewLoc);
+            baseView().getLocationOnScreen(baseViewLoc);
         }
         setFullScreen(true);
         return this;
@@ -522,7 +522,7 @@ public class GuideDialog extends CustomDialog {
     @Override
     protected void onDialogShow() {
         super.onDialogShow();
-        if (baseView == null) {
+        if (baseView() == null) {
             super.setMaskColor(maskColor == null ? getColor(R.color.black50) : maskColor);
         }
     }
@@ -550,7 +550,7 @@ public class GuideDialog extends CustomDialog {
             };
             onBindView.bindParent(getDialogImpl().boxCustom, me);
         }
-        if (getOnStageLightPathClickListener() != null && baseView != null) {
+        if (getOnStageLightPathClickListener() != null && baseView() != null) {
             stageLightPathStub = new View(getOwnActivity());
             stageLightPathStub.setOnClickListener(new View.OnClickListener() {
                 @Override
