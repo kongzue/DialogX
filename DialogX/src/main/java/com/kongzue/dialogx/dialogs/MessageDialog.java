@@ -91,8 +91,6 @@ public class MessageDialog extends BaseDialog {
         super();
     }
 
-    protected View dialogView;
-
     protected CharSequence title;
     protected CharSequence message;
     protected CharSequence okText;
@@ -246,11 +244,13 @@ public class MessageDialog extends BaseDialog {
             int layoutId = style.layout(isLightTheme());
             layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
-            dialogView = createView(layoutId);
+            View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(dialogView);
+        }else{
+            show(getDialogView());
         }
-        show(dialogView);
         return this;
     }
 
@@ -260,11 +260,13 @@ public class MessageDialog extends BaseDialog {
             int layoutId = style.layout(isLightTheme());
             layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
-            dialogView = createView(layoutId);
+            View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(activity, dialogView);
+        }else{
+            show(activity, getDialogView());
         }
-        show(activity, dialogView);
     }
 
     public void refreshUI() {
@@ -296,6 +298,7 @@ public class MessageDialog extends BaseDialog {
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
+            setDialogView(convertView);
             boxRoot = convertView.findViewById(R.id.box_root);
             bkg = convertView.findViewById(R.id.bkg);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
@@ -309,7 +312,7 @@ public class MessageDialog extends BaseDialog {
             btnSelectNegative = convertView.findViewById(R.id.btn_selectNegative);
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
 
-            blurViews = findAllBlurView(dialogView);
+            blurViews = findAllBlurView(convertView);
 
             init();
 
@@ -402,7 +405,6 @@ public class MessageDialog extends BaseDialog {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     MessageDialog.this.onDismiss(me);
-                    dialogView = null;
                     dialogLifecycleCallback = null;
 
                     setLifecycleState(Lifecycle.State.DESTROYED);
@@ -819,7 +821,7 @@ public class MessageDialog extends BaseDialog {
                         if (boxRoot != null) {
                             boxRoot.setVisibility(View.GONE);
                         }
-                        dismiss(dialogView);
+                        dismiss(getDialogView());
                     }
                 }, getExitAnimationDuration(null));
             }
@@ -1269,8 +1271,8 @@ public class MessageDialog extends BaseDialog {
 
     @Override
     public void restartDialog() {
-        if (dialogView != null) {
-            dismiss(dialogView);
+        if (getDialogView() != null) {
+            dismiss(getDialogView());
             isShow = false;
         }
         if (getDialogImpl().boxCustom != null) {
@@ -1280,7 +1282,7 @@ public class MessageDialog extends BaseDialog {
         layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
         enterAnimDuration = 0;
-        dialogView = createView(layoutId);
+        View dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);

@@ -62,6 +62,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     protected boolean allowInterceptTouch = true;
     protected DialogXAnimInterface<FullScreenDialog> dialogXAnimImpl;
     protected boolean bottomNonSafetyAreaBySelf = false;
+    protected boolean hideActivityContentView;
 
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener;
@@ -71,8 +72,6 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     protected FullScreenDialog() {
         super();
     }
-
-    private View dialogView;
 
     public static FullScreenDialog build() {
         return new FullScreenDialog();
@@ -104,22 +103,26 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         }
         super.beforeShow();
         if (getDialogView() == null) {
-            dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+            View dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(dialogView);
+        } else {
+            show(getDialogView());
         }
-        show(dialogView);
         return this;
     }
 
     public void show(Activity activity) {
         super.beforeShow();
         if (getDialogView() == null) {
-            dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+            View dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(activity, dialogView);
+        } else {
+            show(activity, getDialogView());
         }
-        show(activity, dialogView);
     }
 
     protected DialogImpl dialogImpl;
@@ -142,19 +145,21 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
+            setDialogView(convertView);
             imgZoomActivity = convertView.findViewById(R.id.img_zoom_activity);
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
             boxCustom = convertView.findViewById(R.id.box_custom);
+            imgZoomActivity.hideActivityContentView = hideActivityContentView;
 
             imgZoomActivity.bindDialog(FullScreenDialog.this);
 
             if (hideZoomBackground) {
-                dialogView.setBackgroundResource(R.color.black20);
+                convertView.setBackgroundResource(R.color.black20);
                 imgZoomActivity.setVisibility(View.GONE);
             } else {
-                dialogView.setBackgroundResource(R.color.black);
+                convertView.setBackgroundResource(R.color.black);
                 imgZoomActivity.setVisibility(View.VISIBLE);
             }
             init();
@@ -330,10 +335,10 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             }
 
             if (hideZoomBackground) {
-                dialogView.setBackgroundResource(R.color.black20);
+                getDialogView().setBackgroundResource(R.color.black20);
                 imgZoomActivity.setVisibility(View.GONE);
             } else {
-                dialogView.setBackgroundResource(R.color.black);
+                getDialogView().setBackgroundResource(R.color.black);
                 imgZoomActivity.setVisibility(View.VISIBLE);
             }
 
@@ -357,7 +362,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                         if (boxRoot != null) {
                             boxRoot.setVisibility(View.GONE);
                         }
-                        dismiss(dialogView);
+                        dismiss(getDialogView());
                     }
                 }, getExitAnimationDuration());
             }
@@ -598,15 +603,15 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
     @Override
     public void restartDialog() {
-        if (dialogView != null) {
-            dismiss(dialogView);
+        if (getDialogView() != null) {
+            dismiss(getDialogView());
             isShow = false;
         }
         if (getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
         enterAnimDuration = 0;
-        dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+        View dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
@@ -769,6 +774,19 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
     public FullScreenDialog setBottomNonSafetyAreaBySelf(boolean bottomNonSafetyAreaBySelf) {
         this.bottomNonSafetyAreaBySelf = bottomNonSafetyAreaBySelf;
+        return this;
+    }
+
+    /**
+     * 是否在显示 FullScreenDialog 时不对 activity 的界面内容进行渲染，这将提升一定的性能
+     * 只可以在使用 build 方法构建且在执行show方法之前使用
+     * 但这将引发一些问题，例如输入法弹出时 FullScreenDialog 无法上浮等
+     *
+     * @param hideActivityContentView 是否显示 activity 的界面内容
+     * @return this
+     */
+    public FullScreenDialog hideActivityContentView(boolean hideActivityContentView) {
+        this.hideActivityContentView = hideActivityContentView;
         return this;
     }
 }

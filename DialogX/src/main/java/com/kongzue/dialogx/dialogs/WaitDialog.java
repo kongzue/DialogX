@@ -311,6 +311,7 @@ public class WaitDialog extends BaseDialog {
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
+            setDialogView(convertView);
             boxRoot = convertView.findViewById(R.id.box_root);
             bkg = convertView.findViewById(R.id.bkg);
             boxProgress = convertView.findViewById(R.id.box_progress);

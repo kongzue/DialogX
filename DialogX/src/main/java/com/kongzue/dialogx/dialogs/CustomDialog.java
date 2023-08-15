@@ -31,6 +31,8 @@ import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
+import java.lang.ref.WeakReference;
+
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -54,14 +56,13 @@ public class CustomDialog extends BaseDialog {
     protected int exitAnimResId = R.anim.anim_dialogx_default_exit;
     protected ALIGN align = ALIGN.CENTER;
     protected boolean autoUnsafePlacePadding = true;
-    private View dialogView;
     protected int maskColor = Color.TRANSPARENT;
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
     protected OnBackgroundMaskClickListener<CustomDialog> onBackgroundMaskClickListener;
     protected DialogXAnimInterface<CustomDialog> dialogXAnimImpl;
 
-    protected View baseView;
+    protected WeakReference<View> baseViewWeakReference;
     protected int alignViewGravity = -1;                                    //指定菜单相对 baseView 的位置
     protected int width = -1;                                               //指定菜单宽度
     protected int height = -1;                                              //指定菜单高度
@@ -131,22 +132,26 @@ public class CustomDialog extends BaseDialog {
         }
         super.beforeShow();
         if (getDialogView() == null) {
-            dialogView = createView(R.layout.layout_dialogx_custom);
+            View dialogView = createView(R.layout.layout_dialogx_custom);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(dialogView);
+        } else {
+            show(getDialogView());
         }
-        show(dialogView);
         return this;
     }
 
     public CustomDialog show(Activity activity) {
         super.beforeShow();
         if (getDialogView() == null) {
-            dialogView = createView(R.layout.layout_dialogx_custom);
+            View dialogView = createView(R.layout.layout_dialogx_custom);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(activity, dialogView);
+        } else {
+            show(activity, getDialogView());
         }
-        show(activity, dialogView);
         return this;
     }
 
@@ -160,6 +165,7 @@ public class CustomDialog extends BaseDialog {
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
+            setDialogView(convertView);
             boxRoot = convertView.findViewById(R.id.box_root);
             boxCustom = convertView.findViewById(R.id.box_custom);
 
@@ -170,11 +176,11 @@ public class CustomDialog extends BaseDialog {
 
         @Override
         public void init() {
-            if (baseViewLoc == null && baseView != null) {
+            if (baseViewLoc == null && baseView() != null) {
                 baseViewLoc = new int[4];
-                baseView.getLocationOnScreen(baseViewLoc);
-                baseViewLoc[2] = baseView.getWidth();
-                baseViewLoc[3] = baseView.getHeight();
+                baseView().getLocationOnScreen(baseViewLoc);
+                baseViewLoc[2] = baseView().getWidth();
+                baseViewLoc[3] = baseView().getHeight();
             }
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
@@ -244,7 +250,7 @@ public class CustomDialog extends BaseDialog {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
-            if (baseView != null) {
+            if (baseView() != null) {
                 if (!initSetCustomViewLayoutListener) {
                     if (boxCustom != null) {
                         RelativeLayout.LayoutParams rlp;
@@ -260,14 +266,14 @@ public class CustomDialog extends BaseDialog {
                             int calX = 0, calY = 0;
                             if (alignViewGravity != -1) {
                                 if (isAlignBaseViewGravity(Gravity.CENTER_VERTICAL)) {
-                                    calY = (baseViewTop + baseView.getMeasuredHeight() / 2 - boxCustom.getHeight() / 2);
+                                    calY = (baseViewTop + baseView().getMeasuredHeight() / 2 - boxCustom.getHeight() / 2);
                                 }
                                 if (isAlignBaseViewGravity(Gravity.CENTER_HORIZONTAL)) {
-                                    calX = (baseViewLeft + baseView.getMeasuredWidth() / 2 - boxCustom.getWidth() / 2);
+                                    calX = (baseViewLeft + baseView().getMeasuredWidth() / 2 - boxCustom.getWidth() / 2);
                                 }
                                 if (isAlignBaseViewGravity(Gravity.CENTER)) {
-                                    calX = (baseViewLeft + baseView.getMeasuredWidth() / 2 - boxCustom.getWidth() / 2);
-                                    calY = (baseViewTop + baseView.getMeasuredHeight() / 2 - boxCustom.getHeight() / 2);
+                                    calX = (baseViewLeft + baseView().getMeasuredWidth() / 2 - boxCustom.getWidth() / 2);
+                                    calY = (baseViewTop + baseView().getMeasuredHeight() / 2 - boxCustom.getHeight() / 2);
                                 }
 
                                 if (isAlignBaseViewGravity(Gravity.TOP)) {
@@ -277,13 +283,13 @@ public class CustomDialog extends BaseDialog {
                                     calX = baseViewLeft - boxCustom.getWidth() - marginRelativeBaseView[2];
                                 }
                                 if (isAlignBaseViewGravity(Gravity.RIGHT)) {
-                                    calX = baseViewLeft + baseView.getWidth() + marginRelativeBaseView[0];
+                                    calX = baseViewLeft + baseView().getWidth() + marginRelativeBaseView[0];
                                 }
                                 if (isAlignBaseViewGravity(Gravity.BOTTOM)) {
-                                    calY = baseViewTop + baseView.getHeight() + marginRelativeBaseView[1];
+                                    calY = baseViewTop + baseView().getHeight() + marginRelativeBaseView[1];
                                 }
-                                int widthCache = width == 0 ? baseView.getWidth() : width;
-                                int heightCache = height == 0 ? baseView.getHeight() : height;
+                                int widthCache = width == 0 ? baseView().getWidth() : width;
+                                int heightCache = height == 0 ? baseView().getHeight() : height;
                                 baseViewLoc[2] = widthCache > 0 ? widthCache : baseViewLoc[2];
                                 baseViewLoc[3] = heightCache > 0 ? heightCache : baseViewLoc[3];
 
@@ -300,8 +306,8 @@ public class CustomDialog extends BaseDialog {
                         @Override
                         public void onDraw() {
                             int[] baseViewLocCache = new int[2];
-                            if (baseView != null) {
-                                baseView.getLocationOnScreen(baseViewLocCache);
+                            if (baseView() != null) {
+                                baseView().getLocationOnScreen(baseViewLocCache);
                                 if (getDialogImpl() != null && isShow) {
                                     baseViewLoc[0] = baseViewLocCache[0];
                                     baseViewLoc[1] = baseViewLocCache[1];
@@ -445,7 +451,7 @@ public class CustomDialog extends BaseDialog {
                                     baseViewDrawListener = null;
                                     viewTreeObserver = null;
                                 }
-                                dismiss(dialogView);
+                                dismiss(getDialogView());
                             }
                         }, getExitAnimationDuration(null));
                     }
@@ -563,7 +569,7 @@ public class CustomDialog extends BaseDialog {
         Animation enterAnim;
         if (enterAnimResId == R.anim.anim_dialogx_default_enter &&
                 exitAnimResId == R.anim.anim_dialogx_default_exit &&
-                baseView == null) {
+                baseView() == null) {
             switch (align) {
                 case TOP:
                 case TOP_CENTER:
@@ -793,7 +799,7 @@ public class CustomDialog extends BaseDialog {
 
     @Override
     public void restartDialog() {
-        if (dialogView != null) {
+        if (getDialogView() != null) {
             if (getDialogImpl() != null && getDialogImpl().boxCustom != null) {
                 if (baseViewDrawListener != null) {
                     if (viewTreeObserver != null) {
@@ -807,7 +813,7 @@ public class CustomDialog extends BaseDialog {
                     viewTreeObserver = null;
                 }
             }
-            dismiss(dialogView);
+            dismiss(getDialogView());
             isShow = false;
         }
         if (getDialogImpl() != null && getDialogImpl().boxCustom != null) {
@@ -815,7 +821,7 @@ public class CustomDialog extends BaseDialog {
         }
 
         enterAnimDuration = 0;
-        dialogView = createView(R.layout.layout_dialogx_custom);
+        View dialogView = createView(R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
@@ -885,7 +891,7 @@ public class CustomDialog extends BaseDialog {
     }
 
     public CustomDialog setAlignBaseViewGravity(View baseView, int alignGravity) {
-        this.baseView = baseView;
+        this.baseView(baseView);
         this.alignViewGravity = alignGravity;
         baseViewLoc = new int[4];
         baseView.getLocationOnScreen(baseViewLoc);
@@ -894,7 +900,7 @@ public class CustomDialog extends BaseDialog {
     }
 
     public CustomDialog setAlignBaseView(View baseView) {
-        this.baseView = baseView;
+        this.baseView(baseView);
         baseViewLoc = new int[4];
         baseView.getLocationOnScreen(baseViewLoc);
         setFullScreen(true);
@@ -903,9 +909,9 @@ public class CustomDialog extends BaseDialog {
 
     public CustomDialog setAlignBaseViewGravity(int alignGravity) {
         this.alignViewGravity = alignGravity;
-        if (baseView != null) {
+        if (baseView() != null) {
             baseViewLoc = new int[4];
-            baseView.getLocationOnScreen(baseViewLoc);
+            baseView().getLocationOnScreen(baseViewLoc);
         }
         setFullScreen(true);
         return this;
@@ -976,7 +982,7 @@ public class CustomDialog extends BaseDialog {
     }
 
     public View getBaseView() {
-        return baseView;
+        return baseView();
     }
 
     public int getWidth() {
@@ -1078,5 +1084,19 @@ public class CustomDialog extends BaseDialog {
     //用于使用 new 构建实例时，override 的生命周期事件
     public void onDismiss(CustomDialog dialog) {
 
+    }
+
+    protected CustomDialog baseView(View view) {
+        if (view == null && baseViewWeakReference != null) {
+            baseViewWeakReference.clear();
+            baseViewWeakReference = null;
+        } else {
+            baseViewWeakReference = new WeakReference<>(view);
+        }
+        return this;
+    }
+
+    protected View baseView() {
+        return baseViewWeakReference == null ? null : baseViewWeakReference.get();
     }
 }

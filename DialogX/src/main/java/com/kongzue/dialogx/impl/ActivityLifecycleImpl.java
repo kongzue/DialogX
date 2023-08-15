@@ -30,15 +30,15 @@ import static com.kongzue.dialogx.DialogX.error;
  * @createTime: 2020/9/22 11:31
  */
 public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallbacks {
-    
+
     private onActivityResumeCallBack onActivityResumeCallBack;
     private static ActivityLifecycleImpl activityLifecycle;
     private static Application application;
-    
+
     public ActivityLifecycleImpl(ActivityLifecycleImpl.onActivityResumeCallBack onActivityResumeCallBack) {
         this.onActivityResumeCallBack = onActivityResumeCallBack;
     }
-    
+
     public static void init(Context context, ActivityLifecycleImpl.onActivityResumeCallBack onActivityResumeCallBack) {
         if (context != null) {
             Application application = getApplicationContext(context);
@@ -46,7 +46,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
                 error("DialogX 未初始化(E1)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
                 return;
             }
-            
+
             ActivityLifecycleImpl.application = application;
             if (activityLifecycle != null) {
                 application.unregisterActivityLifecycleCallbacks(activityLifecycle);
@@ -58,7 +58,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
             }
         }
     }
-    
+
     public static Application getApplicationContext(Context context) {
         if (context != null) {
             return (Application) context.getApplicationContext();
@@ -84,7 +84,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         error("DialogX.init: 初始化异常，请确保init方法内传入的Context是有效的。");
         return null;
     }
-    
+
     public static Application getApplicationContext() {
         if (application != null) {
             return application;
@@ -109,7 +109,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         }
         return null;
     }
-    
+
     public static Activity getTopActivity() {
         try {
             Class activityThreadClass = Class.forName("android.app.ActivityThread");
@@ -141,7 +141,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         }
         return null;
     }
-    
+
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
         if (onActivityResumeCallBack != null) {
@@ -151,7 +151,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
             onActivityResumeCallBack.getActivity(activity);
         }
     }
-    
+
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
         if (application == null) {
@@ -162,6 +162,23 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     @Override
     public void onActivityPreResumed(@NonNull Activity activity) {
         Application.ActivityLifecycleCallbacks.super.onActivityPreResumed(activity);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            callOnResume(activity);
+        }
+    }
+
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+        if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
+            return;
+        }
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            callOnResume(activity);
+        }
+        BaseDialog.onActivityResume(activity);
+    }
+
+    private void callOnResume(Activity activity) {
         if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
             return;
         }
@@ -171,42 +188,39 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
     }
 
     @Override
-    public void onActivityResumed(@NonNull Activity activity) {
-        if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
-            return;
-        }
-        BaseDialog.onActivityResume(activity);
-    }
-    
-    @Override
     public void onActivityPaused(@NonNull Activity activity) {
     }
-    
+
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
     }
-    
+
     @Override
     public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
-    
+
     }
-    
+
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
         if (BaseDialog.getTopActivity() == activity) {
             BaseDialog.cleanContext();
         }
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            BaseDialog.recycleDialog(activity);
+        }
     }
-    
+
     @Override
     public void onActivityPreDestroyed(@NonNull final Activity activity) {
-        BaseDialog.recycleDialog(activity);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            BaseDialog.recycleDialog(activity);
+        }
     }
-    
+
     public interface onActivityResumeCallBack {
         void getActivity(Activity activity);
     }
-    
+
     public static boolean isExemptActivities(Activity activity) {
         if (activity == null) return true;
         for (String packageName : DialogX.unsupportedActivitiesPackageNames) {

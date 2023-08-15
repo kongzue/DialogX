@@ -110,8 +110,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
     }
 
-    private View dialogView;
-
     public static BottomDialog build() {
         return new BottomDialog();
     }
@@ -219,11 +217,13 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
             }
 
-            dialogView = createView(layoutId);
+            View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(dialogView);
+        } else {
+            show(getDialogView());
         }
-        show(dialogView);
         return this;
     }
 
@@ -235,11 +235,13 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
             }
 
-            dialogView = createView(layoutId);
+            View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(activity, dialogView);
+        } else {
+            show(activity, getDialogView());
         }
-        show(activity, dialogView);
     }
 
     protected DialogImpl dialogImpl;
@@ -272,6 +274,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
+            setDialogView(convertView);
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
@@ -293,7 +296,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             splitSelectPositive = convertView.findViewWithTag("imgPositiveButtonSplit");
             splitSelectOther = convertView.findViewWithTag("imgOtherButtonSplit");
 
-            blurViews = findAllBlurView(dialogView);
+            blurViews = findAllBlurView(convertView);
 
             init();
             dialogImpl = this;
@@ -650,7 +653,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                         if (boxRoot != null) {
                             boxRoot.setVisibility(View.GONE);
                         }
-                        dismiss(dialogView);
+                        dismiss(getDialogView());
                     }
                 }, getExitAnimationDuration());
             }
@@ -1105,8 +1108,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
     @Override
     public void restartDialog() {
-        if (dialogView != null) {
-            dismiss(dialogView);
+        if (getDialogView() != null) {
+            dismiss(getDialogView());
             isShow = false;
         }
         if (getDialogImpl().boxCustom != null) {
@@ -1121,7 +1124,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         }
 
         enterAnimDuration = 0;
-        dialogView = createView(layoutId);
+        View dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);

@@ -81,6 +81,7 @@ import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
 import com.kongzue.dialogxdemo.BuildConfig;
 import com.kongzue.dialogxdemo.R;
 import com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleViewAdapter;
@@ -492,12 +493,14 @@ public class MainActivity extends BaseActivity {
                                 btnFullScreenDialogFragment.callOnClick();
                             }
                         });
-                FullScreenDialog.show(new OnBindView<FullScreenDialog>(customFragment) {
-                    @Override
-                    public void onBind(FullScreenDialog dialog, View v) {
+                FullScreenDialog.build(new OnBindView<FullScreenDialog>(customFragment) {
+                            @Override
+                            public void onBind(FullScreenDialog dialog, View v) {
 
-                    }
-                });
+                            }
+                        })
+                        .hideActivityContentView(true)
+                        .show();
             }
         });
 
@@ -548,7 +551,6 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 WaitDialog.show("Please Wait!")
-                        .setBackgroundColor(Color.GRAY)
                         .setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
                             @Override
                             public boolean onBackPressed(WaitDialog dialog) {
@@ -1216,7 +1218,7 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndex = index;
                             }
                         })
-                        .setCancelButton("确定",new OnBottomMenuButtonClickListener<BottomMenu>() {
+                        .setCancelButton("确定", new OnBottomMenuButtonClickListener<BottomMenu>() {
                             @Override
                             public boolean onClick(BottomMenu baseDialog, View v) {
                                 PopTip.show("已选择：" + singleSelectMenuText[selectMenuIndex]);
@@ -1243,7 +1245,7 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndexArray = index;
                             }
                         })
-                        .setOkButton("确定",new OnBottomMenuButtonClickListener<BottomMenu>() {
+                        .setOkButton("确定", new OnBottomMenuButtonClickListener<BottomMenu>() {
                             @Override
                             public boolean onClick(BottomMenu dialog, View v) {
                                 PopTip.show("已选择：" + multiSelectMenuResultCache);

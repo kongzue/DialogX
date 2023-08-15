@@ -72,7 +72,6 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     protected DialogImpl dialogImpl;
     protected int enterAnimResId = 0;
     protected int exitAnimResId = 0;
-    private View dialogView;
     protected DialogXStyle.PopNotificationSettings.ALIGN align;
     protected OnDialogButtonClickListener<PopNotification> onButtonClickListener;
     protected OnDialogButtonClickListener<PopNotification> onPopNotificationClickListener;
@@ -381,17 +380,19 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                         overrideExitDuration
                 ) : exitAnimDuration;
             }
-            dialogView = createView(layoutResId);
+            View dialogView = createView(layoutResId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(dialogView);
+        } else {
+            show(getDialogView());
         }
-        show(dialogView);
         return this;
     }
 
     public PopNotification show(Activity activity) {
         super.beforeShow();
-        if (dialogView != null) {
+        if (getDialogView() != null) {
             if (DialogX.onlyOnePopNotification) {
                 PopNotification oldInstance = null;
                 if (popNotificationList != null && !popNotificationList.isEmpty()) {
@@ -425,11 +426,13 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                         overrideExitDuration
                 ) : exitAnimDuration;
             }
-            dialogView = createView(layoutResId);
+            View dialogView = createView(layoutResId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(activity, dialogView);
+        } else {
+            show(activity, getDialogView());
         }
-        show(activity, dialogView);
         return this;
     }
 
@@ -506,6 +509,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
+            setDialogView(convertView);
             boxRoot = convertView.findViewById(R.id.box_root);
             boxBody = convertView.findViewById(R.id.box_body);
             imgDialogxPopIcon = convertView.findViewById(R.id.img_dialogx_pop_icon);
@@ -514,7 +518,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             txtDialogxButton = convertView.findViewById(R.id.txt_dialogx_button);
             boxCustom = convertView.findViewById(R.id.box_custom);
 
-            blurViews = findAllBlurView(dialogView);
+            blurViews = findAllBlurView(convertView);
 
             init();
             dialogImpl = this;
@@ -928,7 +932,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 }
             }
             for (PopNotification popNotification : new CopyOnWriteArrayList<>(popNotificationList)) {
-                dismiss(popNotification.dialogView);
+                dismiss(popNotification.getDialogView());
             }
         }
     }
@@ -1217,8 +1221,8 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
     @Override
     public void restartDialog() {
-        if (dialogView != null) {
-            dismiss(dialogView);
+        if (getDialogView() != null) {
+            dismiss(getDialogView());
             isShow = false;
         }
         if (getDialogImpl().boxCustom != null) {
@@ -1260,7 +1264,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             ) : exitAnimDuration;
         }
         enterAnimDuration = 0;
-        dialogView = createView(layoutResId);
+        View dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);

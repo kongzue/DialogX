@@ -545,8 +545,8 @@ public class InputDialog extends MessageDialog {
     
     @Override
     public void restartDialog() {
-        if (dialogView != null) {
-            dismiss(dialogView);
+        if (getDialogView() != null) {
+            dismiss(getDialogView());
             isShow = false;
         }
         if (getDialogImpl().boxCustom != null) {
@@ -557,7 +557,7 @@ public class InputDialog extends MessageDialog {
         
         String inputText = getInputText();
         enterAnimDuration = 0;
-        dialogView = createView(layoutId);
+        View dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);

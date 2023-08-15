@@ -33,8 +33,9 @@ import java.util.Objects;
 @SuppressLint("AppCompatCustomView")
 public class ActivityScreenShotImageView extends ImageView {
 
+    public boolean hideActivityContentView;
     float width, height, mRadius;
-    public static boolean useHardwareRenderingMode = false;
+    public static boolean useHardwareRenderingMode = true;
 
     public ActivityScreenShotImageView(Context context) {
         super(context);
@@ -52,6 +53,10 @@ public class ActivityScreenShotImageView extends ImageView {
     }
 
     private void init(AttributeSet attrs) {
+        requestLayoutType();
+    }
+
+    private void requestLayoutType() {
         setLayerType(useHardwareRenderingMode ? LAYER_TYPE_HARDWARE : LAYER_TYPE_SOFTWARE, null);
     }
 
@@ -94,11 +99,8 @@ public class ActivityScreenShotImageView extends ImageView {
 
             canvas.clipPath(path);
         }
-        try {
-            canvas.drawColor(Color.WHITE);
-            super.onDraw(canvas);
-        } catch (Exception e) {
-        }
+        canvas.drawColor(Color.WHITE);
+        super.onDraw(canvas);
     }
 
     @Override
@@ -164,6 +166,11 @@ public class ActivityScreenShotImageView extends ImageView {
             view.draw(canvas);
         } catch (Exception e) {
             if (DialogX.DEBUGMODE) e.printStackTrace();
+            if (useHardwareRenderingMode) {
+                useHardwareRenderingMode = false;
+                requestLayoutType();
+                drawViewImage(view);
+            }
         }
         setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, view.getWidth(), view.getHeight()));
         isScreenshotSuccess = true;
@@ -173,7 +180,7 @@ public class ActivityScreenShotImageView extends ImageView {
     }
 
     protected void setContentViewVisibility(boolean show) {
-        if (hideContentView) {
+        if (hideContentView || hideActivityContentView) {
             if (show) {
                 if (contentView != null && contentView.get() != null) {
                     contentView.get().setVisibility(VISIBLE);
