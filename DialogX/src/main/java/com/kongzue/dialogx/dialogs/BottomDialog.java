@@ -259,7 +259,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         public LinearLayout boxContent;
         public TextView txtDialogTip;
         public View imgSplit;
-        public RelativeLayout boxList;
+        public ViewGroup boxList;
         public RelativeLayout boxCustom;
         public ViewGroup boxCancel;
         public ImageView splitSelectPositive;

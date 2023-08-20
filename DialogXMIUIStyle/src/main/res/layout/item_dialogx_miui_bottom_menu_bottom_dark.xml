@@ -1,57 +1,52 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/button_dialogx_miui_bottom_night">
+    android:layout_height="55dp"
+    android:paddingLeft="25dp"
+    android:paddingRight="25dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/button_dialogx_miui_bottom_night"
+    android:orientation="horizontal">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/img_dialogx_menu_icon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-5dp"
+        android:layout_marginRight="10dp"
+        android:padding="5dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/txt_dialogx_menu_text"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_centerInParent="true"
+        android:layout_weight="1"
+        android:singleLine="true"
+        android:text="MenuText"
+        android:textColor="@color/dialogxMIUITextDark"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/img_dialogx_menu_icon"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="-5dp"
-            android:layout_marginRight="10dp"
-            android:padding="5dp"
-            android:visibility="gone" />
+    <ImageView
+        android:id="@+id/img_dialogx_menu_selection"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="-5dp"
+        android:padding="5dp"
+        android:src="@mipmap/img_dialogx_bottom_menu_miui_item_selection"
+        android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/txt_dialogx_menu_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:text="MenuText"
-            android:textColor="@color/dialogxMIUITextDark"
-            android:textSize="16dp"
-            android:textStyle="bold" />
+    <Space
+        android:id="@+id/space_dialogx_right_padding"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginRight="-5dp"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/img_dialogx_menu_selection"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="-5dp"
-            android:padding="5dp"
-            android:src="@mipmap/img_dialogx_bottom_menu_miui_item_selection"
-            android:visibility="gone" />
-
-        <Space
-            android:id="@+id/space_dialogx_right_padding"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="-5dp"
-            android:layout_marginLeft="10dp"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

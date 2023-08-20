@@ -601,7 +601,7 @@ public class BottomMenu extends BottomDialog {
                 }
             }
 
-            RelativeLayout.LayoutParams listViewLp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            ViewGroup.LayoutParams listViewLp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             getDialogImpl().boxList.addView(listView, listViewLp);
 
             refreshUI();
