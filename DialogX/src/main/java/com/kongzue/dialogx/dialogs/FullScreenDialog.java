@@ -8,18 +8,14 @@ import android.app.Activity;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
-import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
@@ -36,7 +32,6 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.FullScreenDialogTouchEventInterceptor;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
@@ -63,6 +58,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     protected DialogXAnimInterface<FullScreenDialog> dialogXAnimImpl;
     protected boolean bottomNonSafetyAreaBySelf = false;
     protected boolean hideActivityContentView;
+    protected boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas = false;
 
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener;
@@ -787,6 +783,15 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
      */
     public FullScreenDialog hideActivityContentView(boolean hideActivityContentView) {
         this.hideActivityContentView = hideActivityContentView;
+        return this;
+    }
+
+    public boolean isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas() {
+        return onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+    }
+
+    public FullScreenDialog setOnlyRestrictingSlideTouchEventsToScrollLayoutAreas(boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas) {
+        this.onlyRestrictingSlideTouchEventsToScrollLayoutAreas = onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
         return this;
     }
 }

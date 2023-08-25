@@ -9,8 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -22,7 +20,6 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 
 import com.kongzue.dialogx.DialogX;
@@ -48,7 +45,6 @@ import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,6 +79,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
     protected Drawable titleIcon;
     protected DialogXAnimInterface<BottomDialog> dialogXAnimImpl;
     protected BUTTON_SELECT_RESULT buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
+    protected boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas = false;
 
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -1322,6 +1319,15 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
     public BottomDialog setBottomNonSafetyAreaBySelf(boolean bottomNonSafetyAreaBySelf) {
         this.bottomNonSafetyAreaBySelf = bottomNonSafetyAreaBySelf;
+        return this;
+    }
+
+    public boolean isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas() {
+        return onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+    }
+
+    public BottomDialog setOnlyRestrictingSlideTouchEventsToScrollLayoutAreas(boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas) {
+        this.onlyRestrictingSlideTouchEventsToScrollLayoutAreas = onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
         return this;
     }
 }

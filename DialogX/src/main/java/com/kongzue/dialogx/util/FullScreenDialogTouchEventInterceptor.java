@@ -2,7 +2,6 @@ package com.kongzue.dialogx.util;
 
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +42,9 @@ public class FullScreenDialogTouchEventInterceptor {
             View touchView = impl.boxCustom;
             if (impl.scrollView != null) {
                 touchView = impl.bkg;
+                if (me.isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas()){
+                    touchView = (View) impl.scrollView;
+                }
             }
             touchView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -133,7 +135,7 @@ public class FullScreenDialogTouchEventInterceptor {
      * @param event      触摸事件
      * @return 是否在范围内
      */
-    private boolean touchInScrollView(View slideView, ScrollController scrollView, MotionEvent event) {
+    private boolean touchInScrollView( View slideView, ScrollController scrollView, MotionEvent event) {
         View scrollViewImpl = (View) scrollView;
         RectF scrollViewLocation = new RectF();
         int[] scrollViewScreenLoc = new int[2];

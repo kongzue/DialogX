@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -1357,6 +1356,11 @@ public class BottomMenu extends BottomDialog {
 
     public BottomMenu setOtherTextInfo(TextInfo otherTextInfo) {
         this.otherTextInfo = otherTextInfo;
+        return this;
+    }
+
+    public BottomMenu setOnlyRestrictingSlideTouchEventsToScrollLayoutAreas(boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas) {
+        this.onlyRestrictingSlideTouchEventsToScrollLayoutAreas = onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
         return this;
     }
 }

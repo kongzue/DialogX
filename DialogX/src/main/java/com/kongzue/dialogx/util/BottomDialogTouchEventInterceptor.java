@@ -3,7 +3,6 @@ package com.kongzue.dialogx.util;
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -60,8 +59,13 @@ public class BottomDialogTouchEventInterceptor {
          *     super.onMeasure(widthMeasureSpec, expandSpec);
          * }
          */
+        View interceptTouchView = impl.bkg;
+        if (me.isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas()){
+            interceptTouchView = (View) impl.scrollView;
+        }
         if (me.isAllowInterceptTouch()) {
-            impl.bkg.setOnTouchListener(new View.OnTouchListener() {
+            View finalInterceptTouchView = interceptTouchView;
+            interceptTouchView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (me.getDialogLifecycleCallback() instanceof BottomDialogSlideEventLifecycleCallback) {
@@ -79,7 +83,7 @@ public class BottomDialogTouchEventInterceptor {
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
                                 float aimY = impl.boxBkg.getY() + event.getY() - bkgTouchDownY;
-                                if (impl.scrollView.isCanScroll() && touchInScrollView(impl.bkg, impl.scrollView, event)) {
+                                if (impl.scrollView.isCanScroll() && touchInScrollView(finalInterceptTouchView, impl.scrollView, event)) {
                                     if (aimY > impl.boxRoot.getUnsafePlace().top) {
                                         if (impl.scrollView.getScrollDistance() == 0) {
                                             impl.scrollView.lockScroll(true);
@@ -132,7 +136,7 @@ public class BottomDialogTouchEventInterceptor {
             if (impl.scrollView instanceof ScrollController) {
                 ((ScrollController) impl.scrollView).lockScroll(false);
             }
-            impl.bkg.setOnTouchListener(null);
+            interceptTouchView.setOnTouchListener(null);
         }
     }
 
