@@ -229,8 +229,10 @@ public class CustomDialog extends BaseDialog {
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
-                    getDialogXAnimImpl().doShowAnim(CustomDialog.this, boxCustom);
-                    if (getDialogImpl().boxCustom != null) {
+                    if (getDialogXAnimImpl() != null) {
+                        getDialogXAnimImpl().doShowAnim(CustomDialog.this, boxCustom);
+                    }
+                    if (getDialogImpl() != null && getDialogImpl().boxCustom != null) {
                         getDialogImpl().boxCustom.setVisibility(View.VISIBLE);
                     }
 

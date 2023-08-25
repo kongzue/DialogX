@@ -31,6 +31,7 @@ import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -372,8 +373,9 @@ public class WaitDialog extends BaseDialog {
 
                             onDialogShow();
                             getDialogLifecycleCallback().onShow(WaitDialog.this);
-                            WaitDialog.this.onShow(WaitDialog.this);
-
+                            if (onShowRunnable != null) {
+                                onShowRunnable.run(WaitDialog.this);
+                            }
                             setLifecycleState(Lifecycle.State.RESUMED);
                         }
                     });
@@ -697,7 +699,9 @@ public class WaitDialog extends BaseDialog {
     public void cleanInstance() {
         isShow = false;
         getDialogLifecycleCallback().onDismiss(WaitDialog.this);
-        WaitDialog.this.onDismiss(WaitDialog.this);
+        if (onDismissRunnable != null) {
+            onDismissRunnable.run(WaitDialog.this);
+        }
         if (dialogImpl != null) dialogImpl.clear();
         dialogImpl = null;
         if (dialogView != null) dialogView.clear();
@@ -1200,42 +1204,16 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
 
-    /**
-     * 用于使用 new 构建实例时，override 的生命周期事件
-     * 例如：
-     * new WaitDialog() {
-     *
-     * @param dialog self
-     * @Override public void onShow(WaitDialog dialog) {
-     * //...
-     * }
-     * }
-     */
-    public void onShow(WaitDialog dialog) {
+    DialogXRunnable<WaitDialog> onShowRunnable;
+    DialogXRunnable<WaitDialog> onDismissRunnable;
 
+    public WaitDialog onShow(DialogXRunnable<WaitDialog> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        return this;
     }
 
-    /**
-     * 用于使用 new 构建实例时，override 的生命周期事件
-     * 例如：
-     * new WaitDialog() {
-     *
-     * @param dialog self
-     * @Override public boolean onDismiss(WaitDialog dialog) {
-     * WaitDialog.show("Please Wait...");
-     * if (dialog.getButtonSelectResult() == BUTTON_SELECT_RESULT.BUTTON_OK) {
-     * //点击了OK的情况
-     * //...
-     * } else {
-     * //其他按钮点击、对话框dismiss的情况
-     * //...
-     * }
-     * return false;
-     * }
-     * }
-     */
-    //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(WaitDialog dialog) {
-
+    public WaitDialog onDismiss(DialogXRunnable<WaitDialog> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
+        return this;
     }
 }

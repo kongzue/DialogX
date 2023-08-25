@@ -348,11 +348,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                         overrideExitDuration
                 ) : exitAnimDuration;
             }
-           View dialogView = createView(layoutResId);
+            View dialogView = createView(layoutResId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
             show(dialogView);
-        }else{
+        } else {
             show(getDialogView());
         }
         return this;
@@ -407,11 +407,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                         overrideExitDuration
                 ) : exitAnimDuration;
             }
-           View dialogView = createView(layoutResId);
+            View dialogView = createView(layoutResId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
             show(activity, dialogView);
-        }else{
+        } else {
             show(activity, getDialogView());
         }
         return this;
@@ -786,12 +786,13 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     private void waitForDismiss() {
         preRecycle = true;
         if (popTipList != null) {
-            for (PopTip popTip : popTipList) {
+            CopyOnWriteArrayList<PopTip> copyPopTipList = new CopyOnWriteArrayList<>(popTipList);
+            for (PopTip popTip : copyPopTipList) {
                 if (!popTip.preRecycle) {
                     return;
                 }
             }
-            for (PopTip popTip : new CopyOnWriteArrayList<>(popTipList)) {
+            for (PopTip popTip : copyPopTipList) {
                 dismiss(popTip.getDialogView());
             }
         }
