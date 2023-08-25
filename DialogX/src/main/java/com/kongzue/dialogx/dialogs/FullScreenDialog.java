@@ -58,7 +58,6 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     protected DialogXAnimInterface<FullScreenDialog> dialogXAnimImpl;
     protected boolean bottomNonSafetyAreaBySelf = false;
     protected boolean hideActivityContentView;
-    protected boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas = false;
 
     protected DialogLifecycleCallback<FullScreenDialog> dialogLifecycleCallback;
     protected OnBackgroundMaskClickListener<FullScreenDialog> onBackgroundMaskClickListener;
@@ -783,15 +782,6 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
      */
     public FullScreenDialog hideActivityContentView(boolean hideActivityContentView) {
         this.hideActivityContentView = hideActivityContentView;
-        return this;
-    }
-
-    public boolean isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas() {
-        return onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
-    }
-
-    public FullScreenDialog setOnlyRestrictingSlideTouchEventsToScrollLayoutAreas(boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas) {
-        this.onlyRestrictingSlideTouchEventsToScrollLayoutAreas = onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
         return this;
     }
 }

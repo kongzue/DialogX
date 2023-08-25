@@ -108,6 +108,8 @@ public abstract class OnBindView<D> {
 
     public abstract void onBind(D dialog, View v);
 
+    public void setEvent(D dialog, View v){}
+
     public void onFragmentBind(D dialog, View frameLayout, androidx.fragment.app.Fragment fragment, androidx.fragment.app.FragmentManager fragmentManager) {
     }
 
@@ -175,7 +177,8 @@ public abstract class OnBindView<D> {
             lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         parentView.addView(getCustomView(), lp);
-        callOnBind((D) dialog, parentView);
+        onBind((D) dialog, parentView);
+        callSetEvent((D) dialog, parentView);
         if (fragment != null || supportFragment != null) {
             if (dialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
                 BaseDialog.error(dialog.dialogKey() + "非 VIEW 实现模式不支持 fragment 作为子布局显示。\n" +
@@ -206,11 +209,11 @@ public abstract class OnBindView<D> {
 
     private int dialogHash, parentViewHash;
 
-    private void callOnBind(D dialog, ViewGroup parentView) {
+    private void callSetEvent(D dialog, ViewGroup parentView) {
         if (dialog.hashCode() != dialogHash || parentView.hashCode() != parentViewHash) {
             dialogHash = dialog.hashCode();
             parentViewHash = parentView.hashCode();
-            onBind(dialog, getCustomView());
+            setEvent(dialog, getCustomView());
         }
     }
 

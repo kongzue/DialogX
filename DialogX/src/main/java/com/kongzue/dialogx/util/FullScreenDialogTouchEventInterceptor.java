@@ -42,9 +42,6 @@ public class FullScreenDialogTouchEventInterceptor {
             View touchView = impl.boxCustom;
             if (impl.scrollView != null) {
                 touchView = impl.bkg;
-                if (me.isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas()){
-                    touchView = (View) impl.scrollView;
-                }
             }
             touchView.setOnTouchListener(new View.OnTouchListener() {
                 @Override

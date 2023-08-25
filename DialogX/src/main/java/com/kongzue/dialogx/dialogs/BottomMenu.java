@@ -1359,8 +1359,8 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu setOnlyRestrictingSlideTouchEventsToScrollLayoutAreas(boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas) {
-        this.onlyRestrictingSlideTouchEventsToScrollLayoutAreas = onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+    public BottomMenu setScrollableWhenContentLargeThanVisibleRange(boolean scrollableWhenContentLargeThanVisibleRange) {
+        this.scrollableWhenContentLargeThanVisibleRange = scrollableWhenContentLargeThanVisibleRange;
         return this;
     }
 }

@@ -79,7 +79,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
     protected Drawable titleIcon;
     protected DialogXAnimInterface<BottomDialog> dialogXAnimImpl;
     protected BUTTON_SELECT_RESULT buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
-    protected boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas = false;
+    protected boolean scrollableWhenContentLargeThanVisibleRange = true;
 
     protected TextInfo titleTextInfo;
     protected TextInfo messageTextInfo;
@@ -283,6 +283,12 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             imgSplit = convertView.findViewWithTag("split");
             boxList = convertView.findViewById(R.id.box_list);
             boxCustom = convertView.findViewById(R.id.box_custom);
+
+            if (!scrollableWhenContentLargeThanVisibleRange) {
+                ViewGroup bodyContent = (ViewGroup) txtDialogTitle.getParent();
+                ((ViewGroup) boxContent.getParent()).removeView(boxContent);
+                bodyContent.addView(boxContent, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
 
             boxCancel = convertView.findViewWithTag("cancelBox");
 
@@ -764,6 +770,10 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 enterAnimDurationTemp = enterAnimDuration;
             }
             return enterAnimDurationTemp;
+        }
+
+        public BottomDialogTouchEventInterceptor getBottomDialogTouchEventInterceptor() {
+            return bottomDialogTouchEventInterceptor;
         }
     }
 
@@ -1322,12 +1332,12 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         return this;
     }
 
-    public boolean isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas() {
-        return onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+    public boolean isScrollableWhenContentLargeThanVisibleRange() {
+        return scrollableWhenContentLargeThanVisibleRange;
     }
 
-    public BottomDialog setOnlyRestrictingSlideTouchEventsToScrollLayoutAreas(boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas) {
-        this.onlyRestrictingSlideTouchEventsToScrollLayoutAreas = onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+    public BottomDialog setScrollableWhenContentLargeThanVisibleRange(boolean scrollableWhenContentLargeThanVisibleRange) {
+        this.scrollableWhenContentLargeThanVisibleRange = scrollableWhenContentLargeThanVisibleRange;
         return this;
     }
 }

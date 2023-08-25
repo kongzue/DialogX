@@ -31,6 +31,7 @@ public class BottomDialogTouchEventInterceptor {
     private float bkgTouchDownY;
     private float scrolledY;
     private float bkgOldY;
+    private boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas = false;
     /**
      * 0：bkg接收触控事件，-1：scrollView进行滚动
      * 此标记的意义在于，当从 [scrollView滚动] 与 [bkg接收触控事件] 状态切换时，
@@ -60,10 +61,10 @@ public class BottomDialogTouchEventInterceptor {
          * }
          */
         View interceptTouchView = impl.bkg;
-        if (me.isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas()){
-            interceptTouchView = (View) impl.scrollView;
-        }
         if (me.isAllowInterceptTouch()) {
+            if (isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas()){
+                interceptTouchView = (View) impl.scrollView;
+            }
             View finalInterceptTouchView = interceptTouchView;
             interceptTouchView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -168,5 +169,14 @@ public class BottomDialogTouchEventInterceptor {
     private int dip2px(float dpValue) {
         final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    public boolean isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas() {
+        return onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+    }
+
+    public BottomDialogTouchEventInterceptor setOnlyRestrictingSlideTouchEventsToScrollLayoutAreas(boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas) {
+        this.onlyRestrictingSlideTouchEventsToScrollLayoutAreas = onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+        return this;
     }
 }
