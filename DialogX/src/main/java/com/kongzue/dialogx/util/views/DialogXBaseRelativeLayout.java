@@ -117,6 +117,43 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 unsafePlace.top = top;
                 unsafePlace.right = end;
                 unsafePlace.bottom = bottom;
+
+                //做下判断，如果是底部对话框，则把paddingBottom设为0，改为推起子控件
+                MaxRelativeLayout bkgView = findViewById(R.id.bkg);
+                if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
+                    LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
+                    if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
+                        unsafePlace.bottom = 0;
+                        bkgView.setNavBarHeight(bottom);
+                        setPadding(extraPadding[0] + unsafePlace.left,
+                                extraPadding[1] + unsafePlace.top,
+                                extraPadding[2] + unsafePlace.right,
+                                extraPadding[3]
+                        );
+                        if (getParentDialog() instanceof DialogXBaseBottomDialog) {
+                            if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()) {
+                                bkgView.setPadding(0, 0, 0, 0);
+                                return;
+                            }
+                        }
+                        bkgView.setPadding(0, 0, 0, bottom);
+                    }
+                }
+            }
+
+            @Override
+            public int initialPadding(FitSystemBarUtils.Orientation orientation) {
+                switch (orientation) {
+                    case Start:
+                        return extraPadding[0];
+                    case Top:
+                        return extraPadding[1];
+                    case End:
+                        return extraPadding[2];
+                    case Bottom:
+                        return extraPadding[3];
+                }
+                return 0;
             }
         });
     }
@@ -153,26 +190,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     public void paddingView(WindowInsets insets) {
-    }
-
-    /**
-     * 新增的，使用 WindowInsets 设置padding属性
-     * @param insets
-     */
-    public void paddingView(WindowInsetsCompat insets) {
-        if (!isAttachedToWindow()) {
-            getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
-            return;
-        }
-        if (insets == null) {
-            return;
-        }
-        paddingView(
-                insets.getSystemWindowInsetLeft(),
-                insets.getSystemWindowInsetTop(),
-                insets.getSystemWindowInsetRight(),
-                insets.getSystemWindowInsetBottom()
-        );
     }
 
     public void paddingViewOld(WindowInsets insets) {
@@ -577,8 +594,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     public int getUseAreaHeight() {
-//        return getHeight() - getRootPaddingBottom();
-        return getHeight() - getPaddingBottom() - getPaddingTop();
+        return getHeight() - getRootPaddingBottom();
     }
 
     protected void log(String s) {

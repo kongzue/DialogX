@@ -51,6 +51,11 @@ public class FitSystemBarUtils {
             public void unsafeRect(int start, int top, int end, int bottom) {
 
             }
+
+            @Override
+            public int initialPadding(Orientation orientation) {
+                return 0;
+            }
         });
     }
 
@@ -100,6 +105,11 @@ public class FitSystemBarUtils {
             @Override
             public void unsafeRect(int start, int top, int end, int bottom) {
 
+            }
+
+            @Override
+            public int initialPadding(Orientation orientation) {
+                return 0;
             }
         });
     }
@@ -242,6 +252,13 @@ public class FitSystemBarUtils {
                 initialPadding.end += Math.max(systemWindowInsetRight, cutoutPaddingRight);
             }
         }
+        //加上用户自定义的
+        initialPadding.start += callBack.initialPadding(Orientation.Start);
+        initialPadding.top += callBack.initialPadding(Orientation.Top);
+        initialPadding.end += callBack.initialPadding(Orientation.End);
+        initialPadding.bottom += callBack.initialPadding(Orientation.Bottom);
+
+        initialPadding.applyToView(contentView);
         //四边 非安全区 传递回去
         callBack.unsafeRect(
                 initialPadding.start,
@@ -249,13 +266,19 @@ public class FitSystemBarUtils {
                 initialPadding.end,
                 initialPadding.bottom
         );
-        initialPadding.applyToView(contentView);
+
     }
 
     public interface CallBack {
-        public boolean isEnable(Orientation orientation);
 
-        public void unsafeRect(int start, int top, int end, int bottom);
+        //是否启用指定边的insets
+        boolean isEnable(Orientation orientation);
+
+        //非安全区
+        void unsafeRect(int start, int top, int end, int bottom);
+
+        //用户自定义的padding
+        int initialPadding(Orientation orientation);
     }
 
     public static class RelativePadding {

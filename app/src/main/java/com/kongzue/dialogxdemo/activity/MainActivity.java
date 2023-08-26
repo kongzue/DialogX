@@ -797,9 +797,6 @@ public class MainActivity extends BaseActivity {
                             }
                         })
                         .setAllowInterceptTouch(false);
-                v.postDelayed(() -> {
-                    startActivity(new Intent(MainActivity.this, MainActivity.class));
-                }, 500);
             }
         });
 
