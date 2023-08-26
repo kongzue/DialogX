@@ -39,8 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author: Kongzue
@@ -103,30 +101,44 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             setClipChildren(false);
             setClipToPadding(false);
         }
+        //新增的 设置监听 OnApplyWindowInsetsListener
+        ViewCompat.setOnApplyWindowInsetsListener(
+                this,
+                new androidx.core.view.OnApplyWindowInsetsListener() {
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                        paddingView(insets);
+                        return insets;
+                    }
+                }
+        );
     }
 
-    @Override
-    protected boolean fitSystemWindows(Rect insets) {
-        if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW))) {
-            log("#fitSystemWindows paddingView: b=" + insets.bottom);
-            paddingView(insets.left, insets.top, insets.right, insets.bottom);
-        }
-        return super.fitSystemWindows(insets);
-    }
+//    @Override
+//    protected boolean fitSystemWindows(Rect insets) {
+//        if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW))) {
+//            log("#fitSystemWindows paddingView: b=" + insets.bottom);
+//            paddingView(insets.left, insets.top, insets.right, insets.bottom);
+//        }
+//        return super.fitSystemWindows(insets);
+//    }
 
-    @Override
-    public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW))) {
-                paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
-                log("#dispatchApplyWindowInsets paddingView: b=" + insets.getSystemWindowInsetBottom());
-            }
-        }
-        return super.dispatchApplyWindowInsets(insets);
+//    @Override
+//    public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW))) {
+//                paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+//                log("#dispatchApplyWindowInsets paddingView: b=" + insets.getSystemWindowInsetBottom());
+//            }
+//        }
+//        return super.dispatchApplyWindowInsets(insets);
+//    }
+
+    public void paddingView(Insets insets) {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void paddingView(Insets insets) {
+    public void paddingViewOld(Insets insets) {
         if (insets != null) {
             paddingView(insets.left, insets.top, insets.right, insets.bottom);
             log("#paddingView(insets) paddingView: b=" + insets.bottom);
@@ -134,6 +146,29 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     public void paddingView(WindowInsets insets) {
+    }
+
+    /**
+     * 新增的，使用 WindowInsets 设置padding属性
+     * @param insets
+     */
+    public void paddingView(WindowInsetsCompat insets) {
+        if (!isAttachedToWindow()) {
+            getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
+            return;
+        }
+        if (insets == null) {
+            return;
+        }
+        paddingView(
+                insets.getSystemWindowInsetLeft(),
+                insets.getSystemWindowInsetTop(),
+                insets.getSystemWindowInsetRight(),
+                insets.getSystemWindowInsetBottom()
+        );
+    }
+
+    public void paddingViewOld(WindowInsets insets) {
         if (!isAttachedToWindow()) {
             getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
             return;
