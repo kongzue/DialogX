@@ -102,16 +102,23 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             setClipToPadding(false);
         }
         //新增的 设置监听 OnApplyWindowInsetsListener
-        ViewCompat.setOnApplyWindowInsetsListener(
-                this,
-                new androidx.core.view.OnApplyWindowInsetsListener() {
-                    @Override
-                    public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
-                        paddingView(insets);
-                        return insets;
-                    }
+        FitSystemBarUtils.attachView(this, new FitSystemBarUtils.CallBack() {
+            @Override
+            public boolean isEnable(FitSystemBarUtils.Orientation orientation) {
+                return true;
+            }
+
+            @Override
+            public void unsafeRect(int start, int top, int end, int bottom) {
+                if (unsafePlace == null) {
+                    unsafePlace = new Rect();
                 }
-        );
+                unsafePlace.left = start;
+                unsafePlace.top = top;
+                unsafePlace.right = end;
+                unsafePlace.bottom = bottom;
+            }
+        });
     }
 
 //    @Override
@@ -217,36 +224,36 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (!isInEditMode()) {
-            final ViewParent parent = getParent();
-            if (parent instanceof View) {
-                ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
-            }
-            ViewCompat.requestApplyInsets(this);
+//            final ViewParent parent = getParent();
+//            if (parent instanceof View) {
+//                ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
+//            }
+//            ViewCompat.requestApplyInsets(this);
 
             if (getParentDialog() == null || getParentDialog().getOwnActivity() == null) return;
 
-            View decorView = (View) getParent();
-            if (decorView != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    parentKey = Integer.toHexString(decorView.hashCode());
-                    getDynamicWindowInsetsAnimationListener(parentKey).add(dynamicWindowInsetsAnimationListener = new DynamicWindowInsetsAnimationListener() {
-                        @Override
-                        public void onChange(WindowInsets windowInsets) {
-                            paddingView(windowInsets);
-                        }
-                    });
-                    paddingWindowInsetsByDefault();
-                    initDynamicSafeAreaListener();
-                } else {
-                    decorView.getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            paddingWindowInsetsByDefault();
-                        }
-                    });
-                    decorViewLayoutListener.onGlobalLayout();
-                }
-            }
+//            View decorView = (View) getParent();
+//            if (decorView != null) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    parentKey = Integer.toHexString(decorView.hashCode());
+//                    getDynamicWindowInsetsAnimationListener(parentKey).add(dynamicWindowInsetsAnimationListener = new DynamicWindowInsetsAnimationListener() {
+//                        @Override
+//                        public void onChange(WindowInsets windowInsets) {
+//                            paddingView(windowInsets);
+//                        }
+//                    });
+//                    paddingWindowInsetsByDefault();
+//                    initDynamicSafeAreaListener();
+//                } else {
+//                    decorView.getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+//                        @Override
+//                        public void onGlobalLayout() {
+//                            paddingWindowInsetsByDefault();
+//                        }
+//                    });
+//                    decorViewLayoutListener.onGlobalLayout();
+//                }
+//            }
 
             if (onLifecycleCallBack != null) {
                 onLifecycleCallBack.onShow();
@@ -273,8 +280,11 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     boolean useWindowInsetsAnimation = false;
 
+
+    private void initDynamicSafeAreaListener() {}
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
-    private void initDynamicSafeAreaListener() {
+    private void initDynamicSafeAreaListenerOld() {
         View decorView = (View) getParent();
         if (decorView != null) {
             try {
@@ -304,13 +314,15 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     private void paddingWindowInsetsByDefault() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            paddingView(getRootWindowInsets());
+//            paddingView(getRootWindowInsets());
         } else {
-            getWindowInsetsByDisplayMetrics();
+//            getWindowInsetsByDisplayMetrics();
         }
     }
 
-    private void getWindowInsetsByDisplayMetrics() {
+    private void getWindowInsetsByDisplayMetrics() {}
+
+    private void getWindowInsetsByDisplayMetricsOld() {
         if (getParentDialog() == null || getParentDialog().getOwnActivity() == null) return;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getParentDialog().getOwnActivity().getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
@@ -388,10 +400,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public void requestFocusOnResume() {
         log("#requestFocusOnResume");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getRootWindowInsets() != null && getRootWindowInsets().getStableInsets() != null) {
-            paddingView(getRootWindowInsets().getStableInsets());
+//            paddingView(getRootWindowInsets().getStableInsets());
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            initDynamicSafeAreaListener();
+//            initDynamicSafeAreaListener();
         }
         View findFocusView = findFocus();
         if (findFocusView != null && findFocusView != this) {
@@ -410,7 +422,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     protected Rect unsafePlace = new Rect();
 
-    private void paddingView(int left, int top, int right, int bottom) {
+    private void paddingView(int left, int top, int right, int bottom) {}
+
+    private void paddingViewOld(int left, int top, int right, int bottom) {
         unsafePlace = new Rect(left, top, right, bottom);
         if (onSafeInsetsChangeListener != null) onSafeInsetsChangeListener.onChange(unsafePlace);
         MaxRelativeLayout bkgView = findViewById(R.id.bkg);
@@ -458,7 +472,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public DialogXBaseRelativeLayout setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
         this.autoUnsafePlacePadding = autoUnsafePlacePadding;
         if (!autoUnsafePlacePadding) {
-            setPadding(extraPadding[0], extraPadding[1], extraPadding[2], extraPadding[3]);
+//            setPadding(extraPadding[0], extraPadding[1], extraPadding[2], extraPadding[3]);
         }
         return this;
     }
@@ -563,7 +577,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     public int getUseAreaHeight() {
-        return getHeight() - getRootPaddingBottom();
+//        return getHeight() - getRootPaddingBottom();
+        return getHeight() - getPaddingBottom() - getPaddingTop();
     }
 
     protected void log(String s) {
