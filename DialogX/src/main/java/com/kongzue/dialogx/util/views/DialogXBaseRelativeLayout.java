@@ -123,19 +123,19 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
                     LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
                     if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
-                        unsafePlace.bottom = 0;
-                        bkgView.setNavBarHeight(bottom);
                         setPadding(extraPadding[0] + unsafePlace.left,
                                 extraPadding[1] + unsafePlace.top,
                                 extraPadding[2] + unsafePlace.right,
                                 extraPadding[3]
                         );
+                        bkgView.setNavBarHeight(bottom);
                         if (getParentDialog() instanceof DialogXBaseBottomDialog) {
                             if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()) {
                                 bkgView.setPadding(0, 0, 0, 0);
                                 return;
                             }
                         }
+                        unsafePlace.bottom = 0;
                         bkgView.setPadding(0, 0, 0, bottom);
                     }
                 }
