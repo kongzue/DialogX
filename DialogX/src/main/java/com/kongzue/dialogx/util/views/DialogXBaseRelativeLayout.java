@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
@@ -118,9 +117,14 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 unsafePlace.right = end;
                 unsafePlace.bottom = bottom;
 
+                if (onSafeInsetsChangeListener != null) {
+                    onSafeInsetsChangeListener.onChange(unsafePlace);
+                }
+
                 //做下判断，如果是底部对话框，则把paddingBottom设为0，改为推起子控件
                 MaxRelativeLayout bkgView = findViewById(R.id.bkg);
                 if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
+                    View boxCustom = bkgView.findViewById(R.id.box_custom);
                     LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
                     if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
                         setPadding(extraPadding[0] + unsafePlace.left,
@@ -128,6 +132,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                                 extraPadding[2] + unsafePlace.right,
                                 extraPadding[3]
                         );
+                        if (boxCustom != null) {
+                            boxCustom.setPadding(0, 0, 0, bottom);
+                            return;
+                        }
                         bkgView.setNavBarHeight(bottom);
                         if (getParentDialog() instanceof DialogXBaseBottomDialog) {
                             if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()) {
@@ -298,7 +306,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     boolean useWindowInsetsAnimation = false;
 
 
-    private void initDynamicSafeAreaListener() {}
+    private void initDynamicSafeAreaListener() {
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     private void initDynamicSafeAreaListenerOld() {
@@ -337,7 +346,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         }
     }
 
-    private void getWindowInsetsByDisplayMetrics() {}
+    private void getWindowInsetsByDisplayMetrics() {
+    }
 
     private void getWindowInsetsByDisplayMetricsOld() {
         if (getParentDialog() == null || getParentDialog().getOwnActivity() == null) return;
@@ -439,7 +449,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     protected Rect unsafePlace = new Rect();
 
-    private void paddingView(int left, int top, int right, int bottom) {}
+    private void paddingView(int left, int top, int right, int bottom) {
+    }
 
     private void paddingViewOld(int left, int top, int right, int bottom) {
         unsafePlace = new Rect(left, top, right, bottom);
