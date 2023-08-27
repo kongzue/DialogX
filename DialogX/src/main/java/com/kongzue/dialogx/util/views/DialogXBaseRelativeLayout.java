@@ -124,7 +124,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 //做下判断，如果是底部对话框，则把paddingBottom设为0，改为推起子控件
                 MaxRelativeLayout bkgView = findViewById(R.id.bkg);
                 if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
-                    View boxCustom = bkgView.findViewById(R.id.box_custom);
                     LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
                     if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
                         setPadding(extraPadding[0] + unsafePlace.left,
@@ -132,10 +131,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                                 extraPadding[2] + unsafePlace.right,
                                 extraPadding[3]
                         );
-                        if (boxCustom != null) {
-                            boxCustom.setPadding(0, 0, 0, bottom);
-                            return;
-                        }
                         bkgView.setNavBarHeight(bottom);
                         if (getParentDialog() instanceof DialogXBaseBottomDialog) {
                             if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()) {
