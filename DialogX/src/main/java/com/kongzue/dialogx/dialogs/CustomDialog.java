@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -178,7 +179,7 @@ public class CustomDialog extends BaseDialog {
         public void init() {
             if (baseViewLoc == null && baseView() != null) {
                 baseViewLoc = new int[4];
-                baseView().getLocationOnScreen(baseViewLoc);
+                baseView().getLocationInWindow(baseViewLoc);
                 baseViewLoc[2] = baseView().getWidth();
                 baseViewLoc[3] = baseView().getHeight();
             }
@@ -263,8 +264,8 @@ public class CustomDialog extends BaseDialog {
                     Runnable onLayoutChangeRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            int baseViewLeft = baseViewLoc[0];
-                            int baseViewTop = baseViewLoc[1];
+                            int baseViewLeft = baseViewLoc[0] - (int)boxRoot.getX();
+                            int baseViewTop = baseViewLoc[1] - (int)boxRoot.getY();
                             int calX = 0, calY = 0;
                             if (alignViewGravity != -1) {
                                 if (isAlignBaseViewGravity(Gravity.CENTER_VERTICAL)) {
@@ -300,6 +301,11 @@ public class CustomDialog extends BaseDialog {
 
                                 onGetBaseViewLoc(baseViewLoc);
                             }
+                            Log.d("TAG", "设置" +
+                                    "" +
+                                    " X-> " + calX + "  Y-> " + calY + ",  "+
+                                    " baseViewLeft-> " + baseViewLeft + "  baseViewTop-> " + baseViewTop + ",  "
+                            );
                         }
                     };
 
@@ -309,7 +315,7 @@ public class CustomDialog extends BaseDialog {
                         public void onDraw() {
                             int[] baseViewLocCache = new int[2];
                             if (baseView() != null) {
-                                baseView().getLocationOnScreen(baseViewLocCache);
+                                baseView().getLocationInWindow(baseViewLocCache);
                                 if (getDialogImpl() != null && isShow) {
                                     baseViewLoc[0] = baseViewLocCache[0];
                                     baseViewLoc[1] = baseViewLocCache[1];
@@ -896,7 +902,7 @@ public class CustomDialog extends BaseDialog {
         this.baseView(baseView);
         this.alignViewGravity = alignGravity;
         baseViewLoc = new int[4];
-        baseView.getLocationOnScreen(baseViewLoc);
+        baseView.getLocationInWindow(baseViewLoc);
         setFullScreen(true);
         return this;
     }
@@ -904,7 +910,7 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setAlignBaseView(View baseView) {
         this.baseView(baseView);
         baseViewLoc = new int[4];
-        baseView.getLocationOnScreen(baseViewLoc);
+        baseView.getLocationInWindow(baseViewLoc);
         setFullScreen(true);
         return this;
     }
@@ -913,7 +919,7 @@ public class CustomDialog extends BaseDialog {
         this.alignViewGravity = alignGravity;
         if (baseView() != null) {
             baseViewLoc = new int[4];
-            baseView().getLocationOnScreen(baseViewLoc);
+            baseView().getLocationInWindow(baseViewLoc);
         }
         setFullScreen(true);
         return this;
