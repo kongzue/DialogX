@@ -287,7 +287,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (!scrollableWhenContentLargeThanVisibleRange) {
                 ViewGroup bodyContent = (ViewGroup) txtDialogTitle.getParent();
                 ((ViewGroup) boxContent.getParent()).removeView(boxContent);
-                bodyContent.addView(boxContent, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                bodyContent.addView(boxContent, 1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
 
             boxCancel = convertView.findViewWithTag("cancelBox");
