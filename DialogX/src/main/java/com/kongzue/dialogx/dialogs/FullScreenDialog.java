@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -125,7 +124,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
     public class DialogImpl implements DialogConvertViewInterface {
 
-        private FullScreenDialogTouchEventInterceptor FullScreenDialog2TouchEventInterceptor;
+        private FullScreenDialogTouchEventInterceptor fullScreenDialogTouchEventInterceptor;
 
         public ActivityScreenShotImageView imgZoomActivity;
         public DialogXBaseRelativeLayout boxRoot;
@@ -193,7 +192,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     FullScreenDialog.this.onDismiss(me);
-                    FullScreenDialog2TouchEventInterceptor = null;
+                    fullScreenDialogTouchEventInterceptor = null;
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
                     setLifecycleState(Lifecycle.State.DESTROYED);
@@ -217,7 +216,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 }
             });
 
-            FullScreenDialog2TouchEventInterceptor = new FullScreenDialogTouchEventInterceptor(me, dialogImpl);
+            fullScreenDialogTouchEventInterceptor = new FullScreenDialogTouchEventInterceptor(me, dialogImpl);
             boxRoot.setBkgAlpha(0f);
 
             bkg.setY(boxRoot.getHeight());
@@ -371,7 +370,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 imgZoomActivity.setVisibility(View.VISIBLE);
             }
 
-            FullScreenDialog2TouchEventInterceptor.refresh(me, this);
+            fullScreenDialogTouchEventInterceptor.refresh(me, this);
 
             onDialogRefreshUI();
         }
