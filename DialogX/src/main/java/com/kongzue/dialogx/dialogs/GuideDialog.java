@@ -430,7 +430,7 @@ public class GuideDialog extends CustomDialog {
         this.baseView(baseView);
         this.alignViewGravity = alignGravity;
         baseViewLoc = new int[4];
-        baseView.getLocationOnScreen(baseViewLoc);
+        baseView.getLocationInWindow(baseViewLoc);
         setFullScreen(true);
         return this;
     }
@@ -438,7 +438,7 @@ public class GuideDialog extends CustomDialog {
     public GuideDialog setAlignBaseViewGravity(View baseView) {
         this.baseView(baseView);
         baseViewLoc = new int[4];
-        baseView.getLocationOnScreen(baseViewLoc);
+        baseView.getLocationInWindow(baseViewLoc);
         setFullScreen(true);
         return this;
     }
@@ -447,7 +447,7 @@ public class GuideDialog extends CustomDialog {
         this.alignViewGravity = alignGravity;
         if (baseView() != null) {
             baseViewLoc = new int[4];
-            baseView().getLocationOnScreen(baseViewLoc);
+            baseView().getLocationInWindow(baseViewLoc);
         }
         setFullScreen(true);
         return this;
