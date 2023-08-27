@@ -155,8 +155,8 @@ public class BottomDialogTouchEventInterceptor {
         RectF scrollViewLocation = new RectF();
         int[] scrollViewScreenLoc = new int[2];
         int[] rootViewScreenLoc = new int[2];
-        scrollViewImpl.getLocationOnScreen(scrollViewScreenLoc);
-        slideView.getLocationOnScreen(rootViewScreenLoc);
+        scrollViewImpl.getLocationInWindow(scrollViewScreenLoc);
+        slideView.getLocationInWindow(rootViewScreenLoc);
 
         scrollViewLocation.left = scrollViewScreenLoc[0] - rootViewScreenLoc[0];
         scrollViewLocation.top = scrollViewScreenLoc[1] - rootViewScreenLoc[1];

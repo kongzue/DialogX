@@ -327,11 +327,11 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
             View decor = mDecorView;
             if (decor != null && isShown() && prepare()) {
                 boolean redrawBitmap = mBlurredBitmap != oldBmp;
-                decor.getLocationOnScreen(locations);
+                decor.getLocationInWindow(locations);
                 int x = -locations[0];
                 int y = -locations[1];
 
-                getLocationOnScreen(locations);
+                getLocationInWindow(locations);
                 x += locations[0];
                 y += locations[1];
 
