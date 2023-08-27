@@ -249,7 +249,7 @@ public class PopMenu extends BaseDialog {
                 public void onDraw() {
                     int[] baseViewLocCache = new int[2];
                     if (baseView() != null) {
-                        baseView().getLocationOnScreen(baseViewLocCache);
+                        baseView().getLocationInWindow(baseViewLocCache);
                         if (getDialogImpl() != null && !baseViewLoc.isSameLoc(baseViewLocCache)) {
                             baseViewLoc.set(baseViewLocCache);
                             refreshMenuLoc();
@@ -701,7 +701,7 @@ public class PopMenu extends BaseDialog {
                                     int[] viewLoc = new int[2];
                                     if (listMenu.getChildAt(selectMenuIndex) != null) {
                                         int itemHeight = listMenu.getChildAt(selectMenuIndex).getMeasuredHeight();
-                                        listMenu.getChildAt(selectMenuIndex).getLocationOnScreen(viewLoc);
+                                        listMenu.getChildAt(selectMenuIndex).getLocationInWindow(viewLoc);
                                         selectItemYDeviation = (int) ((baseView().getMeasuredHeight() / 2f) - (viewLoc[1] - boxBody.getY()) - (itemHeight / 2f));
                                     }
                                 }
