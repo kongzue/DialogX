@@ -886,7 +886,9 @@ public abstract class BaseDialog implements LifecycleOwner {
         return windowInsets;
     }
 
-    public static void publicWindowInsets(WindowInsets windowInsets) {
+    public static void publicWindowInsets(WindowInsets windowInsets) {}
+
+    public static void publicWindowInsetsOld(WindowInsets windowInsets) {
         if (windowInsets == null) {
             return;
         }
