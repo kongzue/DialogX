@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -81,9 +82,9 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     }
 
     public static FullScreenDialog show(OnBindView<FullScreenDialog> onBindView) {
-        FullScreenDialog fullScreenDialog = new FullScreenDialog(onBindView);
-        fullScreenDialog.show();
-        return fullScreenDialog;
+        FullScreenDialog FullScreenDialog = new FullScreenDialog(onBindView);
+        FullScreenDialog.show();
+        return FullScreenDialog;
     }
 
     public FullScreenDialog show() {
@@ -124,7 +125,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
     public class DialogImpl implements DialogConvertViewInterface {
 
-        private FullScreenDialogTouchEventInterceptor fullScreenDialogTouchEventInterceptor;
+        private FullScreenDialogTouchEventInterceptor FullScreenDialog2TouchEventInterceptor;
 
         public ActivityScreenShotImageView imgZoomActivity;
         public DialogXBaseRelativeLayout boxRoot;
@@ -165,6 +166,8 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         public float bkgEnterAimY = -1;
         protected int enterY;
 
+        private Rect mUnsafeRect = new Rect(0,0,0,0);
+
         public float getEnterY() {
             return boxRoot.getSafeHeight() - enterY > 0 ? boxRoot.getSafeHeight() - enterY : 0;
         }
@@ -190,7 +193,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     FullScreenDialog.this.onDismiss(me);
-                    fullScreenDialogTouchEventInterceptor = null;
+                    FullScreenDialog2TouchEventInterceptor = null;
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
                     setLifecycleState(Lifecycle.State.DESTROYED);
@@ -214,7 +217,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 }
             });
 
-            fullScreenDialogTouchEventInterceptor = new FullScreenDialogTouchEventInterceptor(me, dialogImpl);
+            FullScreenDialog2TouchEventInterceptor = new FullScreenDialogTouchEventInterceptor(me, dialogImpl);
             boxRoot.setBkgAlpha(0f);
 
             bkg.setY(boxRoot.getHeight());
@@ -228,6 +231,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {
                 @Override
                 public void onChange(Rect unsafeRect) {
+                    mUnsafeRect.set(unsafeRect);
                     makeEnterY();
                     if (!enterAnimRunning) {
                         bkg.setY(getEnterY());
@@ -248,6 +252,36 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 }
             });
 
+            /**
+             * 给自定义布局增加监听，如果布局高度发生改变，则重新计算位置，位置发生变化，则再次使用动画移动布局到指定位置
+             * 目的是给自定义布局高度为wrap_content的用于纠正布局的Y轴位置
+             */
+            boxCustom.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    int oldHeight = oldBottom - oldTop;
+                    int newHeight = bottom - top;
+                    if (oldHeight != newHeight) {
+                        /**
+                         * 高度发生改变
+                         * 这里判断是否在两种动画途中
+                         */
+                        if (!enterAnimRunning && !boxRoot.getFitSystemBarUtils().isInSmoothingPadding()) {
+                            makeEnterY();
+                            float newBkgEnterAimY = boxRoot.getSafeHeight() - mUnsafeRect.bottom - enterY - boxRoot.getUnsafePlace().top;
+                            if (newBkgEnterAimY < 0) newBkgEnterAimY = 0;
+                            if (newBkgEnterAimY != bkgEnterAimY && bkg.getY() != newBkgEnterAimY) {
+                                float oldVal = bkgEnterAimY;
+                                bkgEnterAimY = newBkgEnterAimY;
+                                //需要重新定义终点
+                                doShowAnimRepeat((int) oldVal, (int) newBkgEnterAimY, true);
+                            } else if (bkg.getY() != newBkgEnterAimY) {
+                                bkg.setY(newBkgEnterAimY);
+                            }
+                        }
+                    }
+                }
+            });
             onDialogInit();
         }
 
@@ -337,7 +371,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 imgZoomActivity.setVisibility(View.VISIBLE);
             }
 
-            fullScreenDialogTouchEventInterceptor.refresh(me, this);
+            FullScreenDialog2TouchEventInterceptor.refresh(me, this);
 
             onDialogRefreshUI();
         }
@@ -383,32 +417,81 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
         private boolean enterAnimRunning = true;
 
+        /**
+         * 弹窗显示的动画
+         * 动画执行途中实时检测终点是否改变，如果改变则中断这次动画重新设置新终点的动画并执行
+         *
+         * @param start 起点位置
+         * @param end   终点位置
+         */
+        private void doShowAnimRepeat(int start, int end, boolean isRepeat) {
+            enterAnimRunning = true;
+            long enterAnimDurationTemp = getEnterAnimationDuration();
+
+            ValueAnimator enterAnimVal = ValueAnimator.ofInt(start, end);
+            enterAnimVal.setDuration(enterAnimDurationTemp);
+            enterAnimVal.setInterpolator(new DecelerateInterpolator());
+            enterAnimVal.addUpdateListener(animation -> {
+                int thisVal = (int) animation.getAnimatedValue();
+                bkg.setY(thisVal);
+
+                makeEnterY();
+                float newBkgEnterAimY = boxRoot.getSafeHeight() - enterY - boxRoot.getUnsafePlace().bottom - boxRoot.getUnsafePlace().top;
+                if (newBkgEnterAimY < 0) newBkgEnterAimY = 0;
+                if (newBkgEnterAimY != bkgEnterAimY) {
+                    bkgEnterAimY = newBkgEnterAimY;
+                    //需要重新定义终点
+                    animation.cancel();
+                    doShowAnimRepeat(thisVal, (int) newBkgEnterAimY, true);
+                } else if (thisVal >= end) {
+                    enterAnimRunning = false;
+                }
+            });
+            enterAnimVal.start();
+            bkg.setVisibility(View.VISIBLE);
+
+            if (!isRepeat) {
+                ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+                bkgAlpha.setDuration(enterAnimDurationTemp);
+                bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        float value = (float) animation.getAnimatedValue();
+                        boxRoot.setBkgAlpha(value);
+                    }
+                });
+                bkgAlpha.start();
+            }
+        }
+
         protected DialogXAnimInterface<FullScreenDialog> getDialogXAnimImpl() {
             if (dialogXAnimImpl == null) {
                 dialogXAnimImpl = new DialogXAnimInterface<FullScreenDialog>() {
                     @Override
                     public void doShowAnim(FullScreenDialog dialog, ViewGroup dialogBodyView) {
-                        long enterAnimDurationTemp = getEnterAnimationDuration();
+//                        long enterAnimDurationTemp = getEnterAnimationDuration();
                         makeEnterY();
                         bkgEnterAimY = boxRoot.getSafeHeight() - enterY;
                         if (bkgEnterAimY < 0) bkgEnterAimY = 0;
-                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
-                        enterAnim.setDuration(enterAnimDurationTemp);
-                        enterAnim.setInterpolator(new DecelerateInterpolator());
-                        enterAnim.start();
-                        bkg.setVisibility(View.VISIBLE);
-
-                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
-                        bkgAlpha.setDuration(enterAnimDurationTemp);
-                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animation) {
-                                float value = (float) animation.getAnimatedValue();
-                                boxRoot.setBkgAlpha(value);
-                                enterAnimRunning = !(value == 1f);
-                            }
-                        });
-                        bkgAlpha.start();
+                        //启动带监控终点位置变化的动画
+                        doShowAnimRepeat(boxRoot.getHeight(), (int) bkgEnterAimY, false);
+//                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(bkg, "y", boxRoot.getHeight(), bkgEnterAimY);
+//                        enterAnim.setDuration(enterAnimDurationTemp);
+//                        enterAnim.setInterpolator(new DecelerateInterpolator());
+//                        enterAnim.start();
+//                        bkg.setVisibility(View.VISIBLE);
+//
+//                        ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
+//                        bkgAlpha.setDuration(enterAnimDurationTemp);
+//                        bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                            @Override
+//                            public void onAnimationUpdate(ValueAnimator animation) {
+//                                float value = (float) animation.getAnimatedValue();
+//                                boxRoot.setBkgAlpha(value);
+//                                enterAnimRunning = !(value == 1f);
+//                            }
+//                        });
+//                        bkgAlpha.start();
                     }
 
                     @Override
