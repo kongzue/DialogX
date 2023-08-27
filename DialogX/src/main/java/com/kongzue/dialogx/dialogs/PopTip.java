@@ -800,11 +800,14 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
     private void moveUp() {
         if (getDialogImpl() != null && getDialogImpl().boxBody != null) {
-            runOnMain(new Runnable() {
+            if (getDialogImpl() == null || getDialogImpl().boxBody == null) return;
+            View bodyView = getDialogImpl().boxBody;
+            bodyView.post(new Runnable() {
                 @Override
                 public void run() {
-                    View bodyView = getDialogImpl().boxBody;
-                    if (getDialogImpl() == null || bodyView == null) return;
+                    if (getDialogImpl() == null) {
+                        return;
+                    }
                     if (style.popTipSettings() != null)
                         align = style.popTipSettings().align();
                     if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.TOP;
@@ -825,6 +828,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     if (bodyView.getTag() instanceof ValueAnimator) {
                         ((ValueAnimator) bodyView.getTag()).end();
                     }
+                    log("#Animation from:" + bodyView.getY() + " to:" + moveAimTop);
                     ValueAnimator valueAnimator = ValueAnimator.ofFloat(bodyView.getY(), moveAimTop);
                     bodyView.setTag(valueAnimator);
                     valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

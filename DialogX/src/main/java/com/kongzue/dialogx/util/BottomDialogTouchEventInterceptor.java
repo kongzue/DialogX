@@ -63,6 +63,7 @@ public class BottomDialogTouchEventInterceptor {
         View interceptTouchView = impl.bkg;
         if (me.isAllowInterceptTouch()) {
             if (isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas()){
+                impl.bkg.setOnTouchListener(null);
                 interceptTouchView = (View) impl.scrollView;
             }
             View finalInterceptTouchView = interceptTouchView;

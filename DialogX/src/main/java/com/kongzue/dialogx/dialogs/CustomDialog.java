@@ -1,10 +1,8 @@
 package com.kongzue.dialogx.dialogs;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -301,11 +299,6 @@ public class CustomDialog extends BaseDialog {
 
                                 onGetBaseViewLoc(baseViewLoc);
                             }
-                            Log.d("TAG", "设置" +
-                                    "" +
-                                    " X-> " + calX + "  Y-> " + calY + ",  "+
-                                    " baseViewLeft-> " + baseViewLeft + "  baseViewTop-> " + baseViewTop + ",  "
-                            );
                         }
                     };
 
