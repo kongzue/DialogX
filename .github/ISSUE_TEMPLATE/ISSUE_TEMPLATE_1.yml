@@ -24,6 +24,14 @@ body:
     validations:
       required: true
   - type: input
+    id: dialogx-version
+    attributes:
+      label: DialogX 版本
+      description: 请在此说明您使用的DialogX框架版本
+      placeholder: 例如：0.0.49.beta11
+    validations:
+      required: true
+  - type: input
     id: device-information
     attributes:
       label: 设备信息
