@@ -175,10 +175,6 @@ public abstract class BaseDialog implements LifecycleOwner {
             }
             dialog.dialogView = new WeakReference<>(view);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                publicWindowInsets(dialog.getRootFrameLayout().getRootWindowInsets());
-            }
-
             log(dialog.dialogKey() + ".show on " + dialog.getOwnActivity());
 
             addDialogToRunningList(dialog);
@@ -293,10 +289,6 @@ public abstract class BaseDialog implements LifecycleOwner {
                 return;
             }
             baseDialog.dialogView = new WeakReference<>(view);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                publicWindowInsets(baseDialog.getRootFrameLayout().getRootWindowInsets());
-            }
 
             log(baseDialog + ".show on " + activity);
             addDialogToRunningList(baseDialog);
@@ -884,27 +876,6 @@ public abstract class BaseDialog implements LifecycleOwner {
 
     public static WindowInsets publicWindowInsets() {
         return windowInsets;
-    }
-
-    public static void publicWindowInsets(WindowInsets windowInsets) {}
-
-    public static void publicWindowInsetsOld(WindowInsets windowInsets) {
-        if (windowInsets == null) {
-            return;
-        }
-        BaseDialog.windowInsets = windowInsets;
-        if (runningDialogList != null) {
-            CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
-            for (int i = copyOnWriteList.size() - 1; i >= 0; i--) {
-                BaseDialog baseDialog = copyOnWriteList.get(i);
-                if (baseDialog.isShow && baseDialog.getDialogView() != null) {
-                    View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
-                    if (boxRoot instanceof DialogXBaseRelativeLayout) {
-                        ((DialogXBaseRelativeLayout) boxRoot).paddingView(windowInsets);
-                    }
-                }
-            }
-        }
     }
 
     protected void bindFloatingActivity(DialogXFloatingWindowActivity activity) {
