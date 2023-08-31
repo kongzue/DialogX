@@ -60,6 +60,12 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private OnLifecycleCallBack onLifecycleCallBack;
     private PrivateBackPressedListener onBackPressedListener;
 
+    private FitSystemBarUtils fitSystemBarUtils;
+
+    public FitSystemBarUtils getFitSystemBarUtils() {
+        return fitSystemBarUtils;
+    }
+
     public DialogXBaseRelativeLayout(Context context) {
         super(context);
         init(null);
@@ -102,7 +108,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             setClipToPadding(false);
         }
         //新增的 设置监听 OnApplyWindowInsetsListener
-        FitSystemBarUtils.attachView(this, new FitSystemBarUtils.CallBack() {
+        fitSystemBarUtils = FitSystemBarUtils.attachView(this, new FitSystemBarUtils.CallBack() {
             @Override
             public boolean isEnable(FitSystemBarUtils.Orientation orientation) {
                 return true;
