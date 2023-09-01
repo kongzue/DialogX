@@ -1211,7 +1211,7 @@ public class WaitDialog extends BaseDialog {
         onShowRunnable = dialogXRunnable;
         return this;
     }
-ƒ
+
     public WaitDialog onDismiss(DialogXRunnable<WaitDialog> dialogXRunnable) {
         onDismissRunnable = dialogXRunnable;
         return this;
