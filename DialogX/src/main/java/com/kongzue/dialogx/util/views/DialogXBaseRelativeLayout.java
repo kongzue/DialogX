@@ -111,7 +111,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         fitSystemBarUtils = FitSystemBarUtils.attachView(this, new FitSystemBarUtils.CallBack() {
             @Override
             public boolean isEnable(FitSystemBarUtils.Orientation orientation) {
-                return true;
+                return isAutoUnsafePlacePadding();
             }
 
             @Override

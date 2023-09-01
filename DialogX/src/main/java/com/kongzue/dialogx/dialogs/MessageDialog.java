@@ -248,7 +248,7 @@ public class MessageDialog extends BaseDialog {
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
             show(dialogView);
-        }else{
+        } else {
             show(getDialogView());
         }
         return this;
@@ -264,7 +264,7 @@ public class MessageDialog extends BaseDialog {
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
             show(activity, dialogView);
-        }else{
+        } else {
             show(activity, getDialogView());
         }
     }
@@ -367,7 +367,7 @@ public class MessageDialog extends BaseDialog {
 
                                 if (blurViews != null) {
                                     for (View blurView : blurViews) {
-                                        ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                                        ((BlurViewType) blurView).setOverlayColor(backgroundColor == null ? blurFrontColor : backgroundColor);
                                         ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
                                     }
                                 }
@@ -566,7 +566,9 @@ public class MessageDialog extends BaseDialog {
                 }
 
                 if (blurViews != null) {
+                    log("#blurViews != null");
                     for (View blurView : blurViews) {
+                        log("#blurView: " + blurView);
                         ((BlurViewType) blurView).setOverlayColor(backgroundColor);
                     }
                 }

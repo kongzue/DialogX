@@ -345,7 +345,7 @@ public class WaitDialog extends BaseDialog {
             }
             if (blurViews != null) {
                 for (View blurView : blurViews) {
-                    ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                    ((BlurViewType) blurView).setOverlayColor(backgroundColor == null ? blurFrontColor : backgroundColor);
                     ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
                 }
             } else {
@@ -1211,7 +1211,7 @@ public class WaitDialog extends BaseDialog {
         onShowRunnable = dialogXRunnable;
         return this;
     }
-
+ƒ
     public WaitDialog onDismiss(DialogXRunnable<WaitDialog> dialogXRunnable) {
         onDismissRunnable = dialogXRunnable;
         return this;

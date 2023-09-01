@@ -516,7 +516,7 @@ public class PopMenu extends BaseDialog {
 
                     if (blurViews != null) {
                         for (View blurView : blurViews) {
-                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            ((BlurViewType) blurView).setOverlayColor(backgroundColor == null ? blurFrontColor : backgroundColor);
                             ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
                         }
                     }

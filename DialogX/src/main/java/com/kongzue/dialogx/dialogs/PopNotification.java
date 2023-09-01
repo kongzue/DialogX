@@ -639,7 +639,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
                     if (blurViews != null) {
                         for (View blurView : blurViews) {
-                            ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                            ((BlurViewType) blurView).setOverlayColor(backgroundColor == null ? blurFrontColor : backgroundColor);
                             ((BlurViewType) blurView).setRadiusPx(popNotificationRadius);
                         }
                     }

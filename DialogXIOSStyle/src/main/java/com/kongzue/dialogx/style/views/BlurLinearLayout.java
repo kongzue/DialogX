@@ -164,6 +164,7 @@ public class BlurLinearLayout extends MaxLinearLayout implements BlurViewType {
     }
 
     public void setOverlayColor(int color) {
+        log("#setOverlayColor: " + color);
         if (mOverlayColor != color) {
             mOverlayColor = color;
             invalidate();
