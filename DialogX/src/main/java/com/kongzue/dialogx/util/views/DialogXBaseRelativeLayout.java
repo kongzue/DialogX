@@ -50,7 +50,7 @@ import java.util.Map;
  */
 public class DialogXBaseRelativeLayout extends RelativeLayout {
 
-    public static boolean debugMode = false;
+    public static boolean debugMode = true;
 
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
     private BaseDialog parentDialog;
@@ -191,8 +191,26 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         return super.dispatchKeyEvent(event);
     }
 
+    boolean touch;
+    float touchDownX, touchDownY;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touch = true;
+                touchDownX = event.getX();
+                touchDownY = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                if (touch && findFocus() != this) {
+                    float deltaTouchOffset = parentDialog.dip2px(5);
+                    if (Math.abs(event.getX() - touchDownX) <= deltaTouchOffset && Math.abs(event.getY() - touchDownY) <= deltaTouchOffset) {
+                        callOnClick();
+                    }
+                }
+                break;
+        }
         if (getParentDialog() instanceof NoTouchInterface) {
             return super.onTouchEvent(event);
         }
