@@ -305,7 +305,11 @@ public class FitSystemBarUtils {
          * Applies this relative padding to the view.
          */
         public void applyToView(View view) {
-            ViewCompat.setPaddingRelative(view, start, top, end, bottom);
+            if (view instanceof DialogXBaseRelativeLayout) {
+                ((DialogXBaseRelativeLayout) view).setUnsafePadding(start, top, end, bottom);
+            } else {
+                ViewCompat.setPaddingRelative(view, start, top, end, bottom);
+            }
         }
     }
 

@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Px;
 import androidx.annotation.RequiresApi;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsAnimationCompat;
@@ -111,7 +112,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         fitSystemBarUtils = FitSystemBarUtils.attachView(this, new FitSystemBarUtils.CallBack() {
             @Override
             public boolean isEnable(FitSystemBarUtils.Orientation orientation) {
-                return isAutoUnsafePlacePadding();
+                return true;
             }
 
             @Override
@@ -166,6 +167,17 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 return 0;
             }
         });
+    }
+
+    public void setUnsafePadding(@Px int start, @Px int top, @Px int end, @Px int bottom) {
+        if (!isAutoUnsafePlacePadding()) {
+            return;
+        }
+        if (Build.VERSION.SDK_INT >= 17) {
+            setPaddingRelative(start, top, end, bottom);
+        } else {
+            setPadding(start, top, end, bottom);
+        }
     }
 
     @Override
