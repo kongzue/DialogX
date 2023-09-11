@@ -1,7 +1,5 @@
 package com.kongzue.dialogxdemo.activity;
 
-import static com.kongzue.dialogx.dialogs.PopTip.tip;
-
 import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -1283,7 +1281,7 @@ public class MainActivity extends BaseActivity {
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 12"));
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 13"));
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 14"));
-                                RecyclerView recyclerView = (RecyclerView) v;
+                                RecyclerView recyclerView = (RecyclerView) ((ViewGroup) v).getChildAt(0);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(me);
                                 recyclerView.setLayoutManager(layoutManager);
                                 CustomRecycleViewAdapter adapter = new CustomRecycleViewAdapter(dataArrayList);

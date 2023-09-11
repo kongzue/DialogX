@@ -198,35 +198,43 @@ public class FitSystemBarUtils {
         int cutoutPaddingRight = 0;
         int cutoutPaddingBottom = 0;
 
-        int systemWindowInsetLeft;
-        int systemWindowInsetTop;
-        int systemWindowInsetRight;
-        int systemWindowInsetBottom;
+        int systemWindowInsetLeft = 0;
+        int systemWindowInsetTop = 0;
+        int systemWindowInsetRight = 0;
+        int systemWindowInsetBottom = 0;
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            if (safeCutOutPadding) {
-                DisplayCutoutCompat displayCutout = insetsCompat.getDisplayCutout();
-                if (null != displayCutout) {
-                    cutoutPaddingTop = displayCutout.getSafeInsetTop();
-                    cutoutPaddingLeft = displayCutout.getSafeInsetLeft();
-                    cutoutPaddingRight = displayCutout.getSafeInsetRight();
-                    cutoutPaddingBottom = displayCutout.getSafeInsetRight();
-                }
+        if (safeCutOutPadding) {
+            DisplayCutoutCompat displayCutout = insetsCompat.getDisplayCutout();
+            if (null != displayCutout) {
+                cutoutPaddingTop = displayCutout.getSafeInsetTop();
+                cutoutPaddingLeft = displayCutout.getSafeInsetLeft();
+                cutoutPaddingRight = displayCutout.getSafeInsetRight();
+                cutoutPaddingBottom = displayCutout.getSafeInsetRight();
             }
         }
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
-            Insets systemBars = insetsCompat.getInsets(WindowInsetsCompat.Type.systemBars());
-            Insets ime = insetsCompat.getInsets(WindowInsetsCompat.Type.ime());
-            Insets maxInsets = androidx.core.graphics.Insets.max(ime, systemBars);
-            systemWindowInsetLeft = systemBars.left;
-            systemWindowInsetRight = systemBars.right;
+        Insets systemBars = insetsCompat.getInsets(
+                WindowInsetsCompat.Type.ime() | WindowInsetsCompat.Type.systemBars()
+        );
+        systemWindowInsetLeft = systemBars.left;
+        systemWindowInsetRight = systemBars.right;
+
+        //对api低于30的设备，做额外判断，api 30+的不需要这个
+        int suv = contentView.getRootView().getWindowSystemUiVisibility();
+        boolean statusBar = true;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            statusBar = (suv & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
+        }
+        boolean naviBar = true;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            naviBar = (suv & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+        }
+        if (naviBar && (insetsCompat.isVisible(WindowInsetsCompat.Type.ime())
+                        || insetsCompat.isVisible(WindowInsetsCompat.Type.navigationBars()))
+        ) {
+            systemWindowInsetBottom = systemBars.bottom;
+        }
+        if (statusBar && insetsCompat.isVisible(WindowInsetsCompat.Type.statusBars())) {
             systemWindowInsetTop = systemBars.top;
-            systemWindowInsetBottom = maxInsets.bottom;
-        } else {
-            systemWindowInsetLeft = insetsCompat.getSystemWindowInsetLeft();
-            systemWindowInsetRight = insetsCompat.getSystemWindowInsetRight();
-            systemWindowInsetTop = insetsCompat.getSystemWindowInsetTop();
-            systemWindowInsetBottom = insetsCompat.getSystemWindowInsetBottom();
         }
 
         if (callBack.isEnable(Orientation.Top)) {
