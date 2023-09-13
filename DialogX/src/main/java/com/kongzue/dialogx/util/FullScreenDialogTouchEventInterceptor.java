@@ -3,6 +3,7 @@ package com.kongzue.dialogx.util;
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -51,6 +52,7 @@ public class FullScreenDialogTouchEventInterceptor {
                             bkgTouchDownY = event.getY();
                             isBkgTouched = true;
                             bkgOldY = impl.bkg.getY();
+                            Log.e(">>>", "onTouchDown: " + bkgOldY );
                             break;
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
@@ -72,8 +74,8 @@ public class FullScreenDialogTouchEventInterceptor {
                                         impl.bkg.setY(me.getDialogImpl().getEnterY());
                                     }
                                 } else {
-                                    if (aimY < me.getDialogImpl().getEnterY()) {
-                                        aimY = me.getDialogImpl().getEnterY();
+                                    if (aimY < me.getDialogImpl().getMinY()) {
+                                        aimY = me.getDialogImpl().getMinY();
                                     }
                                     impl.bkg.setY(aimY);
                                 }

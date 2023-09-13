@@ -177,8 +177,8 @@ public abstract class OnBindView<D> {
             lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         parentView.addView(getCustomView(), lp);
-        onBind((D) dialog, parentView);
-        callSetEvent((D) dialog, parentView);
+        onBind((D) dialog, getCustomView());
+        callSetEvent((D) dialog, (ViewGroup) getCustomView());
         if (fragment != null || supportFragment != null) {
             if (dialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
                 BaseDialog.error(dialog.dialogKey() + "非 VIEW 实现模式不支持 fragment 作为子布局显示。\n" +
