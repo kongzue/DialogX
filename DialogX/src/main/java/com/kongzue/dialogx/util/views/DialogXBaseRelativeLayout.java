@@ -3,29 +3,19 @@ package com.kongzue.dialogx.util.views;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Insets;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
-import android.view.ViewTreeObserver;
-import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Px;
-import androidx.annotation.RequiresApi;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsAnimationCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -146,7 +136,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                                 return;
                             }
                         }
-                        unsafePlace.bottom = 0;
                         bkgView.setPadding(0, 0, 0, bottom);
                     }
                 }

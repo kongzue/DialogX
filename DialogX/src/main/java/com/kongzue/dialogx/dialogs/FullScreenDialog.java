@@ -166,10 +166,10 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         public float bkgEnterAimY = -1;
         protected int enterY;
 
-        private Rect mUnsafeRect = new Rect(0,0,0,0);
+        private Rect mUnsafeRect = new Rect(0, 0, 0, 0);
 
         public float getEnterY() {
-            return boxRoot.getSafeHeight() - enterY > 0 ? boxRoot.getSafeHeight() - enterY : 0;
+            return Math.max(0, boxRoot.getSafeHeight() - enterY);
         }
 
         @Override
@@ -439,7 +439,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 bkg.setY(thisVal);
 
                 makeEnterY();
-                float newBkgEnterAimY = getMinY();
+                float newBkgEnterAimY = getEnterY();
                 if (newBkgEnterAimY < 0) newBkgEnterAimY = 0;
                 if (newBkgEnterAimY != bkgEnterAimY) {
                     bkgEnterAimY = newBkgEnterAimY;
@@ -542,10 +542,6 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 enterAnimDurationTemp = enterAnimDuration;
             }
             return enterAnimDurationTemp;
-        }
-
-        public float getMinY() {
-            return boxRoot.getSafeHeight() - enterY - boxRoot.getUnsafePlace().bottom - boxRoot.getUnsafePlace().top;
         }
     }
 

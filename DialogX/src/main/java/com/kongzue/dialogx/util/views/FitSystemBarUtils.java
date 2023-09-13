@@ -3,9 +3,10 @@ package com.kongzue.dialogx.util.views;
 
 import static androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE;
 
-import android.graphics.Rect;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowInsets;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
@@ -177,6 +178,17 @@ public class FitSystemBarUtils {
                 @Override
                 public void onViewAttachedToWindow(View view) {
                     view.removeOnAttachStateChangeListener(this);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                        //别问为啥，问就是在解决API-29的设备上不稳定的问题
+                        ((ViewGroup)view.getParent()).setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+                            @Override
+                            public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                                return insets;
+                            }
+                        });
+                    }
+
                     ViewCompat.requestApplyInsets(view);
                 }
 

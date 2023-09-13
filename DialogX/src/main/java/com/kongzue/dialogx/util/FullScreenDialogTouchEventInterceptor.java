@@ -3,7 +3,6 @@ package com.kongzue.dialogx.util;
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -52,7 +51,6 @@ public class FullScreenDialogTouchEventInterceptor {
                             bkgTouchDownY = event.getY();
                             isBkgTouched = true;
                             bkgOldY = impl.bkg.getY();
-                            Log.e(">>>", "onTouchDown: " + bkgOldY );
                             break;
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
@@ -71,11 +69,12 @@ public class FullScreenDialogTouchEventInterceptor {
                                         if (impl.scrollView instanceof ScrollController) {
                                             ((ScrollController) impl.scrollView).lockScroll(false);
                                         }
-                                        impl.bkg.setY(me.getDialogImpl().getEnterY());
+                                        aimY = (me.getDialogImpl().getEnterY());
+                                        impl.bkg.setY(aimY);
                                     }
                                 } else {
-                                    if (aimY < me.getDialogImpl().getMinY()) {
-                                        aimY = me.getDialogImpl().getMinY();
+                                    if (aimY < me.getDialogImpl().getEnterY()) {
+                                        aimY = me.getDialogImpl().getEnterY();
                                     }
                                     impl.bkg.setY(aimY);
                                 }
@@ -134,7 +133,7 @@ public class FullScreenDialogTouchEventInterceptor {
      * @param event      触摸事件
      * @return 是否在范围内
      */
-    private boolean touchInScrollView( View slideView, ScrollController scrollView, MotionEvent event) {
+    private boolean touchInScrollView(View slideView, ScrollController scrollView, MotionEvent event) {
         View scrollViewImpl = (View) scrollView;
         RectF scrollViewLocation = new RectF();
         int[] scrollViewScreenLoc = new int[2];
