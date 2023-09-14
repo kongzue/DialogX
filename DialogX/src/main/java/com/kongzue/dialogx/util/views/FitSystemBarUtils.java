@@ -188,13 +188,20 @@ public class FitSystemBarUtils {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             //修复<=API29的部分设备上存在的非安全区不回调的问题
-                            WindowInsets windowInsets = ((ViewGroup) view.getParent()).getRootView().getRootWindowInsets();
-                            if (windowInsets != null) {
-                                log("KONGZUE DEBUG DIALOGX: RootView get Insets");
-                                formatInsets(WindowInsetsCompat.toWindowInsetsCompat(windowInsets), new RelativePadding(initialPadding));
-                            } else {
-                                log("KONGZUE DEBUG DIALOGX: RootView not get Insets");
-                            }
+                            View parentView = (View) view.getParent();
+                            parentView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                                @Override
+                                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                    WindowInsets windowInsets = v.getRootView().getRootWindowInsets();
+                                    if (windowInsets != null) {
+                                        log("    KONGZUE DEBUG DIALOGX: RootView get Insets");
+                                        formatInsets(WindowInsetsCompat.toWindowInsetsCompat(windowInsets), new RelativePadding(initialPadding));
+                                    } else {
+                                        log("    KONGZUE DEBUG DIALOGX: RootView not get Insets");
+                                    }
+                                }
+                            });
+
                         }
                     }
 
