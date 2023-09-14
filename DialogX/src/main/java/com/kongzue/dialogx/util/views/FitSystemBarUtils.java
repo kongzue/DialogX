@@ -4,6 +4,7 @@ package com.kongzue.dialogx.util.views;
 import static androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
@@ -14,6 +15,8 @@ import androidx.core.view.DisplayCutoutCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.kongzue.dialogx.DialogX;
 
 import java.util.List;
 
@@ -172,21 +175,27 @@ public class FitSystemBarUtils {
         }
 
         if (ViewCompat.isAttachedToWindow(contentView)) {
+            log("KONGZUE DEBUG DIALOGX: AttachedToWindow ok");
             ViewCompat.requestApplyInsets(contentView);
         } else {
+            log("KONGZUE DEBUG DIALOGX: wait AttachedToWindow");
             contentView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
                 public void onViewAttachedToWindow(View view) {
                     view.removeOnAttachStateChangeListener(this);
 
+                    log("KONGZUE DEBUG DIALOGX: onViewAttachedToWindow");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-                        //别问为啥，问就是在解决API-29的设备上不稳定的问题
-                        ((ViewGroup)view.getParent()).setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
-                            @Override
-                            public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
-                                return insets;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            //修复<=API29的部分设备上存在的非安全区不回调的问题
+                            WindowInsets windowInsets = ((ViewGroup) view.getParent()).getRootView().getRootWindowInsets();
+                            if (windowInsets != null) {
+                                log("KONGZUE DEBUG DIALOGX: RootView get Insets");
+                                formatInsets(WindowInsetsCompat.toWindowInsetsCompat(windowInsets), new RelativePadding(initialPadding));
+                            } else {
+                                log("KONGZUE DEBUG DIALOGX: RootView not get Insets");
                             }
-                        });
+                        }
                     }
 
                     ViewCompat.requestApplyInsets(view);
@@ -196,7 +205,6 @@ public class FitSystemBarUtils {
                 public void onViewDetachedFromWindow(View view) {
 
                 }
-
             });
         }
     }
@@ -241,12 +249,15 @@ public class FitSystemBarUtils {
             naviBar = (suv & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
         }
         if (naviBar && (insetsCompat.isVisible(WindowInsetsCompat.Type.ime())
-                        || insetsCompat.isVisible(WindowInsetsCompat.Type.navigationBars()))
+                || insetsCompat.isVisible(WindowInsetsCompat.Type.navigationBars()))
         ) {
             systemWindowInsetBottom = systemBars.bottom;
         }
         if (statusBar && insetsCompat.isVisible(WindowInsetsCompat.Type.statusBars())) {
             systemWindowInsetTop = systemBars.top;
+        }
+        if (isWrongInsets(systemBars)) {
+            return;
         }
 
         if (callBack.isEnable(Orientation.Top)) {
@@ -289,6 +300,10 @@ public class FitSystemBarUtils {
 
     }
 
+    private boolean isWrongInsets(Insets systemBars) {
+        return systemBars.top == 0 && systemBars.bottom == 0 && systemBars.left == 0 && systemBars.right == 0;
+    }
+
     public interface CallBack {
 
         //是否启用指定边的insets
@@ -326,7 +341,7 @@ public class FitSystemBarUtils {
          */
         public void applyToView(View view) {
             if (view instanceof DialogXBaseRelativeLayout) {
-                ((DialogXBaseRelativeLayout) view).setUnsafePadding(start, top, end, bottom);
+                //((DialogXBaseRelativeLayout) view).setUnsafePadding(start, top, end, bottom);
             } else {
                 ViewCompat.setPaddingRelative(view, start, top, end, bottom);
             }
@@ -335,5 +350,11 @@ public class FitSystemBarUtils {
 
     enum Orientation {
         Start, Top, End, Bottom
+    }
+
+    protected void log(String s) {
+        if (DialogXBaseRelativeLayout.debugMode && DialogX.DEBUGMODE) {
+            Log.e(">>>", s);
+        }
     }
 }

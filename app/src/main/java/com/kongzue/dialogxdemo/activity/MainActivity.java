@@ -1043,7 +1043,7 @@ public class MainActivity extends BaseActivity {
 
                         webView.loadUrl("https://github.com/kongzue/DialogX");
                     }
-                }).setBottomNonSafetyAreaBySelf(true);
+                }).setBottomNonSafetyAreaBySelf(false);
             }
         });
 

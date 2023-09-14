@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
@@ -40,10 +41,10 @@ import java.util.Map;
  */
 public class DialogXBaseRelativeLayout extends RelativeLayout {
 
-    public static boolean debugMode = true;
+    public static boolean debugMode = false;
 
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
-    private BaseDialog parentDialog;
+    private WeakReference<BaseDialog> parentDialog;
     private boolean autoUnsafePlacePadding = true;
     private boolean focusable = true;
     private boolean interceptBack = true;
@@ -97,74 +98,64 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
             setClipChildren(false);
             setClipToPadding(false);
-        }
-        //新增的 设置监听 OnApplyWindowInsetsListener
-        fitSystemBarUtils = FitSystemBarUtils.attachView(this, new FitSystemBarUtils.CallBack() {
-            @Override
-            public boolean isEnable(FitSystemBarUtils.Orientation orientation) {
-                return true;
-            }
 
-            @Override
-            public void unsafeRect(int start, int top, int end, int bottom) {
-                if (unsafePlace == null) {
-                    unsafePlace = new Rect();
-                }
-                unsafePlace.left = start;
-                unsafePlace.top = top;
-                unsafePlace.right = end;
-                unsafePlace.bottom = bottom;
-
-                if (onSafeInsetsChangeListener != null) {
-                    onSafeInsetsChangeListener.onChange(unsafePlace);
+            //新增的 设置监听 OnApplyWindowInsetsListener
+            log("KONGZUE DEBUG DIALOGX: create fitSystemBarUtils");
+            fitSystemBarUtils = FitSystemBarUtils.attachView(this, new FitSystemBarUtils.CallBack() {
+                @Override
+                public boolean isEnable(FitSystemBarUtils.Orientation orientation) {
+                    return true;
                 }
 
-                //做下判断，如果是底部对话框，则把paddingBottom设为0，改为推起子控件
-                MaxRelativeLayout bkgView = findViewById(R.id.bkg);
-                if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
-                    LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
-                    if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
-                        setPadding(extraPadding[0] + unsafePlace.left,
-                                extraPadding[1] + unsafePlace.top,
-                                extraPadding[2] + unsafePlace.right,
-                                extraPadding[3]
-                        );
-                        bkgView.setNavBarHeight(bottom);
-                        if (getParentDialog() instanceof DialogXBaseBottomDialog) {
-                            if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()) {
-                                bkgView.setPadding(0, 0, 0, 0);
-                                return;
-                            }
-                        }
-                        bkgView.setPadding(0, 0, 0, bottom);
+                @Override
+                public void unsafeRect(int start, int top, int end, int bottom) {
+                    log("KONGZUE DEBUG DIALOGX: unsafeRect t=" + top + " b=" + bottom);
+                    if (unsafePlace == null) {
+                        unsafePlace = new Rect();
                     }
-                }
-            }
+                    unsafePlace.left = start;
+                    unsafePlace.top = top;
+                    unsafePlace.right = end;
+                    unsafePlace.bottom = bottom;
 
-            @Override
-            public int initialPadding(FitSystemBarUtils.Orientation orientation) {
-                switch (orientation) {
-                    case Start:
-                        return extraPadding[0];
-                    case Top:
-                        return extraPadding[1];
-                    case End:
-                        return extraPadding[2];
-                    case Bottom:
-                        return extraPadding[3];
+                    if (onSafeInsetsChangeListener != null) {
+                        onSafeInsetsChangeListener.onChange(unsafePlace);
+                    }
+
+                    setUnsafePadding(start, top, end, bottom);
                 }
-                return 0;
-            }
-        });
+
+                @Override
+                public int initialPadding(FitSystemBarUtils.Orientation orientation) {
+                    switch (orientation) {
+                        case Start:
+                            return extraPadding[0];
+                        case Top:
+                            return extraPadding[1];
+                        case End:
+                            return extraPadding[2];
+                        case Bottom:
+                            return extraPadding[3];
+                    }
+                    return 0;
+                }
+            });
+        }
     }
 
     public void setUnsafePadding(@Px int start, @Px int top, @Px int end, @Px int bottom) {
-        if (!isAutoUnsafePlacePadding()) {
-            return;
+        log("KONGZUE DEBUG DIALOGX: getParentDialog()=" + getParentDialog()+" t=" + top + " b=" + bottom);
+        if (getParentDialog() instanceof DialogXBaseBottomDialog) {
+            log("  KONGZUE DEBUG DIALOGX: isDialogXBaseBottomDialog");
+            ViewGroup bkgView = findViewById(R.id.bkg);
+            if (!((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf() && bkgView != null) {
+                log("    KONGZUE DEBUG DIALOGX: bkgView.setPadding b=" + bottom);
+                bkgView.setPadding(0, 0, 0, bottom);
+            }
+            bottom = 0;
         }
-        if (Build.VERSION.SDK_INT >= 17) {
-            setPaddingRelative(start, top, end, bottom);
-        } else {
+        if (isAutoUnsafePlacePadding()) {
+            log("  KONGZUE DEBUG DIALOGX: root.setPadding t=" + top + " b=" + bottom);
             setPadding(start, top, end, bottom);
         }
     }
@@ -192,8 +183,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                 touchDownY = event.getY();
                 break;
             case MotionEvent.ACTION_UP:
-                if (touch && findFocus() != this) {
-                    float deltaTouchOffset = parentDialog.dip2px(5);
+                if (touch && findFocus() != this && getParentDialog() != null) {
+                    float deltaTouchOffset = getParentDialog().dip2px(5);
                     if (Math.abs(event.getX() - touchDownX) <= deltaTouchOffset && Math.abs(event.getY() - touchDownY) <= deltaTouchOffset) {
                         callOnClick();
                     }
@@ -223,27 +214,12 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         }
     }
 
-    static Map<String, List<DynamicWindowInsetsAnimationListener>> dynamicWindowInsetsAnimationListenerListMap = new HashMap<>();
-    DynamicWindowInsetsAnimationListener dynamicWindowInsetsAnimationListener;
-    String parentKey;
-
-    public List<DynamicWindowInsetsAnimationListener> getDynamicWindowInsetsAnimationListener(String key) {
-        List<DynamicWindowInsetsAnimationListener> list = dynamicWindowInsetsAnimationListenerListMap.get(key);
-        if (list == null) {
-            list = new ArrayList<>();
-            dynamicWindowInsetsAnimationListenerListMap.put(key, list);
-        }
-        return list;
-    }
-
     @Override
     protected void onDetachedFromWindow() {
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onDismiss();
         }
-        getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
         onSafeInsetsChangeListener = null;
-        parentDialog = null;
         super.onDetachedFromWindow();
     }
 
@@ -338,13 +314,19 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     public BaseDialog getParentDialog() {
-        return parentDialog;
+        return parentDialog == null ? null : parentDialog.get();
     }
 
     public DialogXBaseRelativeLayout setParentDialog(BaseDialog parentDialog) {
-        this.parentDialog = parentDialog;
+        this.parentDialog = new WeakReference<>(parentDialog);
         if (parentDialog != null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
             setFitsSystemWindows(true);
+        }
+        if (unsafePlace != null) {
+            log("KONGZUE DEBUG DIALOGX: setParentDialog()=" + getParentDialog());
+            setUnsafePadding(unsafePlace.left, unsafePlace.top, unsafePlace.right, unsafePlace.bottom);
+        } else {
+            log("KONGZUE DEBUG DIALOGX: setParentDialog() unsafePlace is null");
         }
         return this;
     }
@@ -438,7 +420,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     protected void log(String s) {
-        if (debugMode) {
+        if (debugMode && DialogX.DEBUGMODE) {
             Log.e(">>>", s);
         }
     }
