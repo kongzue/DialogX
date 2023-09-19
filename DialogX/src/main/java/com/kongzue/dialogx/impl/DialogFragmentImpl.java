@@ -1,12 +1,15 @@
 package com.kongzue.dialogx.impl;
 
+import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+import static com.kongzue.dialogx.DialogX.error;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,15 +23,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 
 import java.lang.ref.WeakReference;
-
-import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-import static android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-import static com.kongzue.dialogx.DialogX.error;
 
 /**
  * @author: Kongzue
@@ -86,7 +84,7 @@ public class DialogFragmentImpl extends DialogFragment {
                 if (baseDialog instanceof NoTouchInterface) {
                     return activity.dispatchTouchEvent(event);
                 } else {
-                    return true;
+                    return false;
                 }
             }
         });
