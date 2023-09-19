@@ -128,6 +128,8 @@ public class FitSystemBarUtils {
         applyWindowInsets();
     }
 
+    View.OnLayoutChangeListener rootViewLayoutChangeListener;
+
     public void applyWindowInsets() {
 //        view.fitsSystemWindows = true
         //创建原始padding的快照
@@ -185,11 +187,14 @@ public class FitSystemBarUtils {
                     view.removeOnAttachStateChangeListener(this);
 
                     log("KONGZUE DEBUG DIALOGX: onViewAttachedToWindow");
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             //修复<=API29的部分设备上存在的非安全区不回调的问题
                             View parentView = (View) view.getParent();
-                            parentView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                            if (rootViewLayoutChangeListener != null) {
+                                parentView.removeOnLayoutChangeListener(rootViewLayoutChangeListener);
+                            }
+                            rootViewLayoutChangeListener = new View.OnLayoutChangeListener() {
                                 @Override
                                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                                     WindowInsets windowInsets = v.getRootView().getRootWindowInsets();
@@ -200,8 +205,18 @@ public class FitSystemBarUtils {
                                         log("    KONGZUE DEBUG DIALOGX: RootView not get Insets");
                                     }
                                 }
-                            });
+                            };
+                            parentView.addOnLayoutChangeListener(rootViewLayoutChangeListener);
+                            parentView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                                @Override
+                                public void onViewAttachedToWindow(View v) {
+                                }
 
+                                @Override
+                                public void onViewDetachedFromWindow(View v) {
+                                    parentView.removeOnLayoutChangeListener(rootViewLayoutChangeListener);
+                                }
+                            });
                         }
                     }
 

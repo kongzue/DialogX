@@ -802,6 +802,13 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 MessageDialog.show("这里是标题", "此对话框演示的是自定义对话框内部布局的效果", "确定", "取消")
+                        .setDialogLifecycleCallback(new BottomDialogSlideEventLifecycleCallback<MessageDialog>() {
+                            @Override
+                            public void onShow(MessageDialog dialog) {
+                                super.onShow(dialog);
+                                dialog.getDialogImpl().txtDialogTip.setPadding(0,dip2px(20),0,0);
+                            }
+                        })
                         .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(MessageDialog dialog, View v) {

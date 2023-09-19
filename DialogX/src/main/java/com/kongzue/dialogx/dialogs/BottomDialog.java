@@ -942,7 +942,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
     public BottomDialog setAllowInterceptTouch(boolean allowInterceptTouch) {
         this.allowInterceptTouch = allowInterceptTouch;
-        refreshUI();
         return this;
     }
 

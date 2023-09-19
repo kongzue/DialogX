@@ -83,7 +83,7 @@ public class BottomDialogTouchEventInterceptor {
                             bkgOldY = impl.boxBkg.getY();
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            if (isBkgTouched) {
+                            if (isBkgTouched && me.isAllowInterceptTouch()) {
                                 float aimY = impl.boxBkg.getY() + event.getY() - bkgTouchDownY;
                                 if (impl.scrollView.isCanScroll() && touchInScrollView(finalInterceptTouchView, impl.scrollView, event)) {
                                     if (aimY > impl.boxRoot.getUnsafePlace().top) {

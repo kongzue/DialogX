@@ -381,20 +381,22 @@ public class BlurLinearLayout extends MaxLinearLayout implements BlurViewType {
         } else {
             activity = BaseDialog.getTopActivity();
         }
-        ViewGroup decorView = ((ViewGroup) activity.getWindow().getDecorView());
-        if (decorView.getChildCount() >= 1) {
-            mDecorView = decorView.getChildAt(0);
-        }
-        if (mDecorView != null) {
-            log("mDecorView is ok.");
-            mDecorView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
-            mDifferentRoot = mDecorView.getRootView() != getRootView();
-            if (mDifferentRoot) {
-                mDecorView.postInvalidate();
+        if (activity != null) {
+            ViewGroup decorView = ((ViewGroup) activity.getWindow().getDecorView());
+            if (decorView.getChildCount() >= 1) {
+                mDecorView = decorView.getChildAt(0);
             }
-        } else {
-            log("mDecorView is NULL.");
-            mDifferentRoot = false;
+            if (mDecorView != null) {
+                log("mDecorView is ok.");
+                mDecorView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
+                mDifferentRoot = mDecorView.getRootView() != getRootView();
+                if (mDifferentRoot) {
+                    mDecorView.postInvalidate();
+                }
+            } else {
+                log("mDecorView is NULL.");
+                mDifferentRoot = false;
+            }
         }
     }
 
