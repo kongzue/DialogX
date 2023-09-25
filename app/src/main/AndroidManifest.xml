@@ -21,8 +21,10 @@
             android:theme="@style/AppCompatTheme"
             android:windowSoftInputMode="adjustResize" />
 
+<!--            android:name=".activity.MainActivity"-->
+<!--            android:name=".activity.TestMainActivity"-->
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.TestMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
             android:exported="true">
             <intent-filter>
