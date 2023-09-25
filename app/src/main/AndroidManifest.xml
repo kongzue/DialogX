@@ -23,6 +23,7 @@
 
 <!--            android:name=".activity.MainActivity"-->
 <!--            android:name=".activity.TestMainActivity"-->
+
         <activity
             android:name=".activity.TestMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
