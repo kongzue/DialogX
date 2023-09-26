@@ -17,20 +17,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Px;
+import androidx.core.graphics.Insets;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
-import com.kongzue.dialogx.interfaces.DynamicWindowInsetsAnimationListener;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Kongzue
@@ -113,16 +110,40 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                     if (unsafePlace == null) {
                         unsafePlace = new Rect();
                     }
-                    unsafePlace.left = start;
-                    unsafePlace.top = top;
-                    unsafePlace.right = end;
-                    unsafePlace.bottom = bottom;
+                    // TODO Fix bug #370 在这里对这个重新做下处理，未详细测试，比如键盘弹起时的情况
+                    Insets systemBarInsets = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        WindowInsetsCompat windowInsetsCompat = WindowInsetsCompat.toWindowInsetsCompat(getRootWindowInsets());
+                        boolean navigationBarsVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.navigationBars());
+                        boolean imeVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.ime());
+                        if (!imeVisible && navigationBarsVisible) {
+                            systemBarInsets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.systemBars());
+                            if (systemBarInsets.bottom == bottom &&
+                                    systemBarInsets.top == top &&
+                                    systemBarInsets.left == start &&
+                                    systemBarInsets.right == end
+                            ) {
+                                systemBarInsets = null;
+                            }
+                        }
+                    }
+                    if (systemBarInsets != null) {
+                        unsafePlace.left = systemBarInsets.left;
+                        unsafePlace.top = systemBarInsets.top;
+                        unsafePlace.right = systemBarInsets.right;
+                        unsafePlace.bottom = systemBarInsets.bottom;
+                    } else {
+                        unsafePlace.left = start;
+                        unsafePlace.top = top;
+                        unsafePlace.right = end;
+                        unsafePlace.bottom = bottom;
+                    }
 
                     if (onSafeInsetsChangeListener != null) {
                         onSafeInsetsChangeListener.onChange(unsafePlace);
                     }
 
-                    setUnsafePadding(start, top, end, bottom);
+                    setUnsafePadding(unsafePlace.left, unsafePlace.top, unsafePlace.right, unsafePlace.bottom);
                 }
 
                 @Override
@@ -144,7 +165,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     public void setUnsafePadding(@Px int start, @Px int top, @Px int end, @Px int bottom) {
-        log("KONGZUE DEBUG DIALOGX: getParentDialog()=" + getParentDialog()+" t=" + top + " b=" + bottom);
+        log("KONGZUE DEBUG DIALOGX: getParentDialog()=" + getParentDialog() + " t=" + top + " b=" + bottom);
         if (getParentDialog() instanceof DialogXBaseBottomDialog) {
             log("  KONGZUE DEBUG DIALOGX: isDialogXBaseBottomDialog");
             ViewGroup bkgView = findViewById(R.id.bkg);
