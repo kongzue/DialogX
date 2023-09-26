@@ -112,7 +112,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                     }
                     // TODO Fix bug #370 在这里对这个重新做下处理，未详细测试，比如键盘弹起时的情况
                     Insets systemBarInsets = null;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getRootWindowInsets()!=null) {
                         WindowInsetsCompat windowInsetsCompat = WindowInsetsCompat.toWindowInsetsCompat(getRootWindowInsets());
                         boolean navigationBarsVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.navigationBars());
                         boolean imeVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.ime());
