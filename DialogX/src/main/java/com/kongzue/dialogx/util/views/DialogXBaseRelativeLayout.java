@@ -128,10 +128,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                         }
                     }
                     if (systemBarInsets != null) {
-                        unsafePlace.left = systemBarInsets.left;
-                        unsafePlace.top = systemBarInsets.top;
-                        unsafePlace.right = systemBarInsets.right;
-                        unsafePlace.bottom = systemBarInsets.bottom;
+                        unsafePlace.left = Math.max( systemBarInsets.left,start);
+                        unsafePlace.top = Math.max(systemBarInsets.top,top);
+                        unsafePlace.right = Math.max(systemBarInsets.right,end);
+                        unsafePlace.bottom = Math.max(systemBarInsets.bottom,bottom);
                     } else {
                         unsafePlace.left = start;
                         unsafePlace.top = top;
@@ -165,7 +165,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     public void setUnsafePadding(@Px int start, @Px int top, @Px int end, @Px int bottom) {
-        log("KONGZUE DEBUG DIALOGX: getParentDialog()=" + getParentDialog() + " t=" + top + " b=" + bottom);
+        log("KONGZUE DEBUG DIALOGX: setUnsafePadding=" + getParentDialog() + " t=" + top + " b=" + bottom);
         if (getParentDialog() instanceof DialogXBaseBottomDialog) {
             log("  KONGZUE DEBUG DIALOGX: isDialogXBaseBottomDialog");
             ViewGroup bkgView = findViewById(R.id.bkg);

@@ -37,6 +37,9 @@ import java.lang.ref.WeakReference;
  */
 public class DialogFragmentImpl extends DialogFragment {
 
+    public DialogFragmentImpl() {
+    }
+
     private View dialogView;
     private BaseDialog baseDialog;
 

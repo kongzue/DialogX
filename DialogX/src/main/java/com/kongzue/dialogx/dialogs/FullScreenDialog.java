@@ -301,11 +301,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             if (customViewHeight == 0 || isMatchParentHeightCustomView()) {
                 customViewHeight = ((int) boxRoot.getSafeHeight());
             }
-            if (getMaxHeight() != 0) {
-                enterY = Math.min(getMaxHeight() - boxRoot.getUnsafePlace().bottom, customViewHeight);
-            } else {
-                enterY = customViewHeight;
-            }
+            enterY = customViewHeight;
         }
 
         @Override
@@ -438,8 +434,10 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 int thisVal = (int) animation.getAnimatedValue();
                 bkg.setY(thisVal);
 
+                log("anim: " +thisVal);
+
                 makeEnterY();
-                float newBkgEnterAimY = boxRoot.getSafeHeight() - enterY - boxRoot.getUnsafePlace().bottom - boxRoot.getUnsafePlace().top;
+                float newBkgEnterAimY = boxRoot.getSafeHeight() - enterY;
                 if (newBkgEnterAimY < 0) newBkgEnterAimY = 0;
                 if (newBkgEnterAimY != bkgEnterAimY) {
                     bkgEnterAimY = newBkgEnterAimY;
