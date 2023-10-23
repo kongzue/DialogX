@@ -3,11 +3,18 @@ package com.kongzue.dialogx.util.views;
 
 import static androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE;
 
+import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.Log;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
@@ -17,6 +24,7 @@ import androidx.core.view.WindowInsetsAnimationCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.interfaces.BaseDialog;
 
 import java.util.List;
 
@@ -177,16 +185,16 @@ public class FitSystemBarUtils {
         }
 
         if (ViewCompat.isAttachedToWindow(contentView)) {
-            log("KONGZUE DEBUG DIALOGX: AttachedToWindow ok");
+            log("KONGZUE DEBUG DIALOGX FitSystemBarUtils: AttachedToWindow ok");
             ViewCompat.requestApplyInsets(contentView);
         } else {
-            log("KONGZUE DEBUG DIALOGX: wait AttachedToWindow");
+            log("KONGZUE DEBUG DIALOGX FitSystemBarUtils: wait AttachedToWindow");
             contentView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
                 public void onViewAttachedToWindow(View view) {
                     view.removeOnAttachStateChangeListener(this);
 
-                    log("KONGZUE DEBUG DIALOGX: onViewAttachedToWindow");
+                    log("KONGZUE DEBUG DIALOGX FitSystemBarUtils: onViewAttachedToWindow");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             //修复<=API29的部分设备上存在的非安全区不回调的问题
@@ -199,10 +207,10 @@ public class FitSystemBarUtils {
                                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                                     WindowInsets windowInsets = v.getRootView().getRootWindowInsets();
                                     if (windowInsets != null) {
-                                        log("    KONGZUE DEBUG DIALOGX: RootView get Insets");
+                                        log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils: RootView get Insets");
                                         formatInsets(WindowInsetsCompat.toWindowInsetsCompat(windowInsets), new RelativePadding(initialPadding));
                                     } else {
-                                        log("    KONGZUE DEBUG DIALOGX: RootView not get Insets");
+                                        log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils: RootView not get Insets");
                                     }
                                 }
                             };
@@ -231,10 +239,13 @@ public class FitSystemBarUtils {
         }
     }
 
+    RelativePadding relativePaddingCache;
+
     /**
      * 针对不同版本处理Insets
      */
     private void formatInsets(WindowInsetsCompat insetsCompat, RelativePadding initialPadding) {
+        relativePaddingCache = initialPadding;
         int cutoutPaddingLeft = 0;
         int cutoutPaddingTop = 0;
         int cutoutPaddingRight = 0;
@@ -279,31 +290,60 @@ public class FitSystemBarUtils {
             systemWindowInsetTop = systemBars.top;
         }
         if (isWrongInsets(systemBars)) {
+            log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils: isWrongInsets try special mode...");
+            switch (checkOrientationAndStatusBarSide()) {
+                case 0:
+                    initialPadding.start = getStatusBarHeight();
+                    initialPadding.end = getNavigationBarHeight();
+                    break;
+                case 1:
+                    initialPadding.end = getStatusBarHeight();
+                    initialPadding.start = getNavigationBarHeight();
+                    break;
+                default:
+                    initialPadding.top = getStatusBarHeight();
+                    initialPadding.bottom = getNavigationBarHeight();
+                    break;
+            }
+            addListenerWhenImeHeightChanged();
+        } else {
+            if (callBack.isEnable(Orientation.Top)) {
+                initialPadding.top += Math.max(systemWindowInsetTop, cutoutPaddingTop);
+            }
+            if (callBack.isEnable(Orientation.Bottom)) {
+                initialPadding.bottom += Math.max(systemWindowInsetBottom, cutoutPaddingBottom);
+            }
+
+            boolean isRtl =
+                    ViewCompat.getLayoutDirection(contentView) == ViewCompat.LAYOUT_DIRECTION_RTL;
+            if (callBack.isEnable(Orientation.Start)) {
+                if (isRtl) {
+                    initialPadding.start += Math.max(systemWindowInsetRight, cutoutPaddingRight);
+                } else {
+                    initialPadding.start += Math.max(systemWindowInsetLeft, cutoutPaddingLeft);
+                }
+            }
+            if (callBack.isEnable(Orientation.End)) {
+                if (isRtl) {
+                    initialPadding.end += Math.max(systemWindowInsetLeft, cutoutPaddingLeft);
+                } else {
+                    initialPadding.end += Math.max(systemWindowInsetRight, cutoutPaddingRight);
+                }
+            }
+        }
+
+        applyCallBack(initialPadding);
+    }
+
+    private void applyCallBack() {
+        if (relativePaddingCache != null) {
+            applyCallBack(relativePaddingCache);
+        }
+    }
+
+    private void applyCallBack(RelativePadding initialPadding) {
+        if (callBack == null) {
             return;
-        }
-
-        if (callBack.isEnable(Orientation.Top)) {
-            initialPadding.top += Math.max(systemWindowInsetTop, cutoutPaddingTop);
-        }
-        if (callBack.isEnable(Orientation.Bottom)) {
-            initialPadding.bottom += Math.max(systemWindowInsetBottom, cutoutPaddingBottom);
-        }
-
-        boolean isRtl =
-                ViewCompat.getLayoutDirection(contentView) == ViewCompat.LAYOUT_DIRECTION_RTL;
-        if (callBack.isEnable(Orientation.Start)) {
-            if (isRtl) {
-                initialPadding.start += Math.max(systemWindowInsetRight, cutoutPaddingRight);
-            } else {
-                initialPadding.start += Math.max(systemWindowInsetLeft, cutoutPaddingLeft);
-            }
-        }
-        if (callBack.isEnable(Orientation.End)) {
-            if (isRtl) {
-                initialPadding.end += Math.max(systemWindowInsetLeft, cutoutPaddingLeft);
-            } else {
-                initialPadding.end += Math.max(systemWindowInsetRight, cutoutPaddingRight);
-            }
         }
         //加上用户自定义的
         initialPadding.start += callBack.initialPadding(Orientation.Start);
@@ -313,13 +353,13 @@ public class FitSystemBarUtils {
 
         initialPadding.applyToView(contentView);
         //四边 非安全区 传递回去
+        log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils callBack: left=" + initialPadding.start + " top=" + initialPadding.top + " right=" + initialPadding.end + " bottom=" + initialPadding.bottom);
         callBack.unsafeRect(
                 initialPadding.start,
                 initialPadding.top,
                 initialPadding.end,
-                initialPadding.bottom
+                initialPadding.bottom + (specialMode ? specialModeImeHeight : 0)
         );
-
     }
 
     private boolean isWrongInsets(Insets systemBars) {
@@ -378,5 +418,113 @@ public class FitSystemBarUtils {
         if (DialogXBaseRelativeLayout.debugMode && DialogX.DEBUGMODE) {
             Log.e(">>>", s);
         }
+    }
+
+    private int getStatusBarHeight() {
+        if (isFullScreen()) {
+            return 0;
+        }
+        Resources res;
+        if (contentView == null || contentView.getContext() == null) {
+            res = Resources.getSystem();
+        } else {
+            res = contentView.getContext().getResources();
+        }
+        int result = 0;
+        int resourceId = res.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = res.getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    private int getNavigationBarHeight() {
+        if (isFullScreen()) {
+            return 0;
+        }
+        Resources res;
+        if (contentView == null || contentView.getContext() == null) {
+            res = Resources.getSystem();
+        } else {
+            res = contentView.getContext().getResources();
+        }
+        int result = 0;
+        int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = res.getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    private boolean isFullScreen() {
+        Activity activity = BaseDialog.getTopActivity();
+        if (activity == null) {
+            return false;
+        }
+        // 通过检查窗口标志来判断
+        int flags = activity.getWindow().getAttributes().flags;
+        if ((flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0) {
+            return true;
+        }
+        // 通过检查系统 UI 标志来判断
+        int uiOptions = activity.getWindow().getDecorView().getSystemUiVisibility();
+        if ((uiOptions & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private int checkOrientationAndStatusBarSide() {
+        Activity activity = BaseDialog.getTopActivity();
+        if (activity == null) {
+            return 0;
+        }
+        // 判断是否为横屏
+        if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // 判断状态栏位置
+            int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+            switch (rotation) {
+                case Surface.ROTATION_90:
+                    // 设备旋转了 90 度，状态栏在左侧
+                    return -1;
+                case Surface.ROTATION_270:
+                    // 设备旋转了 270 度，状态栏在右侧
+                    return 1;
+                default:
+                    // 其他情况，不应当发生在横屏状态
+                    return 0;
+            }
+        }
+        return 0;
+    }
+
+    private int specialModeImeHeight;
+    private boolean specialMode;
+    private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
+
+    private void addListenerWhenImeHeightChanged() {
+        specialMode = true;
+        Activity activity = BaseDialog.getTopActivity();
+        if (activity == null) {
+            return;
+        }
+        View decorView = activity.getWindow().getDecorView();
+        if (onGlobalLayoutListener != null) {
+            decorView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+        }
+        decorView.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                decorView.getWindowVisibleDisplayFrame(r);
+                int screenHeight = decorView.getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+                if (keypadHeight != specialModeImeHeight) {
+                    specialModeImeHeight = keypadHeight;
+                    log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils: specialModeImeHeight=" + specialModeImeHeight);
+                    applyCallBack();
+                }
+            }
+        });
     }
 }
