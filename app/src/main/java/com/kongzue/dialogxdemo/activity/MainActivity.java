@@ -1070,7 +1070,7 @@ public class MainActivity extends BaseActivity {
                                 });
                             }
                         })
-                        .setAlign(CustomDialog.ALIGN.LEFT)
+//                        .setAlign(CustomDialog.ALIGN.LEFT)
                         //.setAnimResId(R.anim.anim_right_in, R.anim.anim_right_out)
                         .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
                 //实现完全自定义动画效果

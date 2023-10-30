@@ -434,8 +434,6 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 int thisVal = (int) animation.getAnimatedValue();
                 bkg.setY(thisVal);
 
-                log("anim: " +thisVal);
-
                 makeEnterY();
                 float newBkgEnterAimY = boxRoot.getSafeHeight() - enterY;
                 if (newBkgEnterAimY < 0) newBkgEnterAimY = 0;

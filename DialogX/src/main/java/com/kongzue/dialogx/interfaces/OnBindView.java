@@ -8,16 +8,13 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.kongzue.dialogx.DialogX;
-import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.util.views.ExtendChildLayoutParamsFrameLayout;
 
 import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
-import static com.kongzue.dialogx.interfaces.BaseDialog.log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.lang.reflect.Field;
-import java.util.Random;
+import java.security.SecureRandom;
 
 /**
  * @author: Kongzue
@@ -82,7 +79,7 @@ public abstract class OnBindView<D> {
     }
 
     private int createFragmentParentId() {
-        fragmentParentId = new Random().nextInt();
+        fragmentParentId = new SecureRandom().nextInt();
         View somebodyView = BaseDialog.getTopActivity().findViewById(fragmentParentId);
         if (somebodyView != null) {
             return createFragmentParentId();

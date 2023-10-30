@@ -277,6 +277,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         }
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
         if (baseDialog != null) {
+            baseDialog.setOwnActivity(activity);
             if (baseDialog.getDialogView() != null) {
                 baseDialog.getDialogView().setVisibility(View.VISIBLE);
             }
@@ -779,7 +780,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (ownActivity != null) {
             ownActivity.clear();
         }
-        dialogView=null;
+        dialogView = null;
         ownActivity = null;
     }
 
@@ -1010,7 +1011,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         return styleValue;
     }
 
-    protected void setDialogView(View view){
+    protected void setDialogView(View view) {
         dialogView = new WeakReference<>(view);
     }
 }
