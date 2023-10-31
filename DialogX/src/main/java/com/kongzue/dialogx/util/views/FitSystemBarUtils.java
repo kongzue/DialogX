@@ -4,6 +4,9 @@ package com.kongzue.dialogx.util.views;
 import static androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -155,6 +158,7 @@ public class FitSystemBarUtils {
         });
         //带平滑变化的，但是支支持android R及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            log("FitSystemBarUtils: setWindowInsetsAnimationCallback");
             ViewCompat.setWindowInsetsAnimationCallback(contentView,
                     new WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
 
@@ -164,6 +168,7 @@ public class FitSystemBarUtils {
                                 @NonNull WindowInsetsCompat insets,
                                 @NonNull List<WindowInsetsAnimationCompat> runningAnimations
                         ) {
+                            log("FitSystemBarUtils: setWindowInsetsAnimationCallback#onProgress: " + insets);
                             if (smoothPadding) {
                                 formatInsets(insets, new RelativePadding(initialPadding));
                             }
@@ -172,6 +177,7 @@ public class FitSystemBarUtils {
 
                         @Override
                         public void onEnd(@NonNull WindowInsetsAnimationCompat animation) {
+                            log("FitSystemBarUtils: setWindowInsetsAnimationCallback#onEnd ");
                             inSmoothingPadding = false;
                             super.onEnd(animation);
                         }
@@ -185,17 +191,17 @@ public class FitSystemBarUtils {
         }
 
         if (ViewCompat.isAttachedToWindow(contentView)) {
-            log("KONGZUE DEBUG DIALOGX FitSystemBarUtils: AttachedToWindow ok");
+            log("FitSystemBarUtils: AttachedToWindow ok");
             ViewCompat.requestApplyInsets(contentView);
         } else {
-            log("KONGZUE DEBUG DIALOGX FitSystemBarUtils: wait AttachedToWindow");
+            log("FitSystemBarUtils: wait AttachedToWindow");
             contentView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
                 public void onViewAttachedToWindow(View view) {
                     view.removeOnAttachStateChangeListener(this);
 
-                    log("KONGZUE DEBUG DIALOGX FitSystemBarUtils: onViewAttachedToWindow");
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH && Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                    log("FitSystemBarUtils: onViewAttachedToWindow");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH && (Build.VERSION.SDK_INT < Build.VERSION_CODES.R || getAppTargetSDKVersion() < Build.VERSION_CODES.R)) {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             //修复<=API29的部分设备上存在的非安全区不回调的问题
                             View parentView = (View) view.getParent();
@@ -207,10 +213,10 @@ public class FitSystemBarUtils {
                                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                                     WindowInsets windowInsets = v.getRootView().getRootWindowInsets();
                                     if (windowInsets != null) {
-                                        log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils: RootView get Insets");
+                                        log("    FitSystemBarUtils: RootView get Insets");
                                         formatInsets(WindowInsetsCompat.toWindowInsetsCompat(windowInsets), new RelativePadding(initialPadding));
                                     } else {
-                                        log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils: RootView not get Insets");
+                                        log("    FitSystemBarUtils: RootView not get Insets");
                                     }
                                 }
                             };
@@ -290,7 +296,7 @@ public class FitSystemBarUtils {
             systemWindowInsetTop = systemBars.top;
         }
         if (isWrongInsets(systemBars)) {
-            log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils: isWrongInsets try special mode...");
+            log("    FitSystemBarUtils: isWrongInsets try special mode...");
             switch (checkOrientationAndStatusBarSide()) {
                 case 0:
                     initialPadding.start = getStatusBarHeight();
@@ -521,10 +527,23 @@ public class FitSystemBarUtils {
                 int keypadHeight = screenHeight - r.bottom;
                 if (keypadHeight != specialModeImeHeight) {
                     specialModeImeHeight = keypadHeight;
-                    log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils: specialModeImeHeight=" + specialModeImeHeight);
+                    log("    FitSystemBarUtils: specialModeImeHeight=" + specialModeImeHeight);
                     applyCallBack();
                 }
             }
         });
+    }
+
+    private int getAppTargetSDKVersion() {
+        try {
+            Context context = BaseDialog.getApplicationContext();
+            PackageManager pm = context.getPackageManager();
+            ApplicationInfo applicationInfo = pm.getApplicationInfo(context.getPackageName(), 0);
+            int targetSdkVersion = applicationInfo.targetSdkVersion;
+            return targetSdkVersion;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }
