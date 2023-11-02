@@ -8,9 +8,12 @@ import android.app.Activity;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
+import android.view.WindowInsets;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
@@ -45,6 +48,9 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
  */
 public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDialog {
 
+    public static final int ACTIVITY_CONTENT_RADIUS_KEEP = -2;
+    public static final int ACTIVITY_CONTENT_RADIUS_DEFAULT = -1;
+
     public static int overrideEnterDuration = -1;
     public static int overrideExitDuration = -1;
     public static BOOLEAN overrideCancelable;
@@ -54,6 +60,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     protected BOOLEAN privateCancelable;
     protected boolean hideZoomBackground;
     protected float backgroundRadius = -1;
+    protected float activityContentRadius = ACTIVITY_CONTENT_RADIUS_DEFAULT;
     protected boolean allowInterceptTouch = true;
     protected DialogXAnimInterface<FullScreenDialog> dialogXAnimImpl;
     protected boolean bottomNonSafetyAreaBySelf = false;
@@ -247,7 +254,9 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                     if (zoomScale > 1) zoomScale = 1;
                     if (!hideZoomBackground) {
                         imgZoomActivity.setScale(zoomScale);
-                        imgZoomActivity.setRadius(dip2px(15) * ((boxRoot.getHeight() - realY) / boxRoot.getHeight()));
+                        imgZoomActivity.setRadius(
+                                getActivityZoomRadius(getDeviceRadius(), getActivityContentRadius(), ((boxRoot.getHeight() - realY) / boxRoot.getHeight()))
+                        );
                     }
                 }
             });
@@ -871,5 +880,40 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         this.maskColor = maskColor;
         refreshUI();
         return this;
+    }
+
+    public float getActivityContentRadius() {
+        return activityContentRadius >= 0 ? activityContentRadius : activityContentRadius == ACTIVITY_CONTENT_RADIUS_KEEP ? getDeviceRadius() : (getRadius() >= 0 ? getRadius() : dip2px(15));
+    }
+
+    private Integer deviceRadiusCache;
+
+    public int getDeviceRadius() {
+        if (deviceRadiusCache == null) {
+            deviceRadiusCache = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                WindowInsets rootInsets = getRootFrameLayout().getRootWindowInsets();
+                RoundedCorner lT = rootInsets.getRoundedCorner(RoundedCorner.POSITION_TOP_LEFT);
+                RoundedCorner rT = rootInsets.getRoundedCorner(RoundedCorner.POSITION_TOP_RIGHT);
+                if (lT != null && rT != null) {
+                    deviceRadiusCache = Math.max(lT.getRadius(), rT.getRadius());
+                }
+            }
+        }
+        return deviceRadiusCache;
+    }
+
+    public FullScreenDialog setDeviceRadius(int deviceRadiusPx) {
+        deviceRadiusCache = deviceRadiusPx;
+        return this;
+    }
+
+    public FullScreenDialog setActivityContentRadius(float activityContentRadius) {
+        this.activityContentRadius = activityContentRadius;
+        return this;
+    }
+
+    private float getActivityZoomRadius(float startValue, float endValue, float progressValue) {
+        return startValue + progressValue * (endValue - startValue);
     }
 }
