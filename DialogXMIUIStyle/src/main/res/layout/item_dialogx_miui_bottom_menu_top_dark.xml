@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="55dp"
-    android:paddingLeft="25dp"
-    android:paddingRight="25dp"
+    android:paddingStart="25dp"
+    android:paddingEnd="25dp"
     android:background="@drawable/button_dialogx_miui_top_night"
     android:gravity="center_vertical"
     android:orientation="horizontal">
@@ -12,8 +12,8 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="-5dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="-5dp"
+        android:layout_marginEnd="10dp"
         android:padding="5dp"
         android:visibility="gone" />
 
@@ -35,8 +35,8 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="-5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="-5dp"
         android:padding="5dp"
         android:src="@mipmap/img_dialogx_bottom_menu_miui_item_selection"
         android:visibility="gone" />
