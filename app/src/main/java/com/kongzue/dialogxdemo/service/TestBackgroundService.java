@@ -25,7 +25,7 @@ public class TestBackgroundService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
+    
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(">>>", "TestService#onStartCommand: ");

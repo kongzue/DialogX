@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.interfaces;
 
+import com.kongzue.dialogx.dialogs.BottomMenu;
+
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/

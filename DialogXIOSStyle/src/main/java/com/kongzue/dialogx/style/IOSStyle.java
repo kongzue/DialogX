@@ -2,6 +2,7 @@ package com.kongzue.dialogx.style;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
@@ -291,7 +292,7 @@ public class IOSStyle extends DialogXStyle {
         }
 
         @Override
-        public ALIGN align() {
+        public PopNotificationSettings.ALIGN align() {
             return ALIGN.TOP;
         }
 

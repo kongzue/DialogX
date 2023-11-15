@@ -5,25 +5,27 @@
     <center><h1>Kongzue DialogX</h1></center> 
 </div>
 
-经过三代的更迭，全新的 Kongzue DialogX 已经到来，不仅仅保留了以往的优势，更带来了更灵活的扩展性和全新的流畅体验。
+一款简单易用的对话框组件，相比原生对话框使用体验更佳，可自定义程度更高，扩展性更强，轻松实现各种对话框、菜单和提示效果，更有iOS、MIUI、Material You等主题扩展可选。
 
-<a href="https://github.com/kongzue/dialogX/">
-<img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
-</a> 
-<a href="https://github.com/kongzue/DialogX/releases">
-<img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="Maven">
-</a> 
-<a href="https://jitpack.io/#kongzue/DialogX">
-<img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
-</a> 
-<a href="http://www.apache.org/licenses/LICENSE-2.0">
-<img src="https://img.shields.io/badge/License-Apache%202.0-red.svg" alt="License">
-</a> 
-<a href="http://www.kongzue.com">
-<img src="https://img.shields.io/badge/Homepage-Kongzue.com-brightgreen.svg" alt="Homepage">
-</a>
+<div align=center>    
+  <a href="https://github.com/kongzue/dialogX/">
+    <img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
+  </a> 
+  <a href="https://github.com/kongzue/DialogX/releases">
+    <img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="Maven">
+  </a> 
+  <a href="https://jitpack.io/#kongzue/DialogX">
+    <img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
+  </a> 
+  <a href="http://www.apache.org/licenses/LICENSE-2.0">
+    <img src="https://img.shields.io/badge/License-Apache%202.0-red.svg" alt="License">
+  </a> 
+  <a href="http://www.kongzue.com">
+    <img src="https://img.shields.io/badge/Homepage-Kongzue.com-brightgreen.svg" alt="Homepage">
+  </a>
+</div>
 
-![DialogX](https://repository-images.githubusercontent.com/298764877/37386d80-8986-11eb-8ff2-1206da84cd8d)
+![DialogX](https://user-images.githubusercontent.com/10115359/229279713-79c43a63-1a0a-4f70-851f-0a0783b94b45.jpg)
 
 # DialogX优势
 
@@ -129,11 +131,11 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 请从以下两个源二选一引入项目。
 
-#### MavenCentral 源
+#### MavenCentral 源（稳定版本更新）
 
 <div>
 最新版本：
-<a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/badge/MavenCentral%20Release-0.0.47.beta15-green.svg" alt="DialogX Release"></a></div>
+<a href="https://central.sonatype.dev/artifact/com.kongzue.dialogx/DialogX/0.0.49"><img src="https://img.shields.io/maven-central/v/com.kongzue.dialogx/DialogX" alt="DialogX Release"></a></div>
 
 1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
 
@@ -147,16 +149,16 @@ allprojects {
 }
 ```
 
-⚠️请注意，使用 Android Studio 北极狐版本（Arctic Fox）创建的项目，需要您前往 settings.gradle 添加上述 jitpack 仓库配置。
+⚠️请注意，使用 Android Studio 北极狐版本（Arctic Fox）创建的项目，需要您前往 settings.gradle 添加上述 mavenCentral 仓库配置。
 
 2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-def dialogx_version = "0.0.47.beta15"
+def dialogx_version = "0.0.49"
 implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
 ```
 
-#### Jitpack 源
+#### Jitpack 源（快速迭代测试版本更新）
 
 <div>
 最新版本：
@@ -180,7 +182,7 @@ allprojects {
 2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-def dialogx_version = "0.0.46"
+def dialogx_version = "0.0.49"
 implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 ```
 
@@ -220,10 +222,9 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 请参考文章 [从 DialogV3 迁移至 DialogX](https://github.com/kongzue/DialogX/wiki/%E4%BB%8E-DialogV3-%E8%BF%81%E7%A7%BB%E8%87%B3-DialogX)
 
-
 # ⭐观星者
 
-[![Stargazers over time](https://starchart.cc/kongzue/DialogX.svg?a=4)]([https://starchart.cc/kongzue/DialogX](https://github.com/kongzue/DialogX/stargazers))
+[![Stargazers over time](https://starchart.cc/kongzue/DialogX.svg?a=19)]([https://starchart.cc/kongzue/DialogX](https://github.com/kongzue/DialogX/stargazers))
 
 # 开源协议
 

@@ -36,35 +36,38 @@ import java.lang.ref.WeakReference;
  * @createTime: 2021/7/28 15:45
  */
 public class DialogFragmentImpl extends DialogFragment {
-    
+
+    public DialogFragmentImpl() {
+    }
+
     private View dialogView;
     private BaseDialog baseDialog;
-    
+
     public DialogFragmentImpl(BaseDialog baseDialog, View dialogView) {
         this.dialogView = dialogView;
         this.baseDialog = baseDialog;
         activityWeakReference = new WeakReference<>(baseDialog.getOwnActivity());
     }
-    
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return dialogView;
     }
-    
+
     WeakReference<Activity> activityWeakReference = null;
-    
+
     @Override
     public void onStart() {
         super.onStart();
         final Activity activity = activityWeakReference.get();
-        
+
         if (getDialog() == null) return;
         Window dialogWindow = getDialog().getWindow();
         if (dialogWindow == null) return;
         dialogWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        
+
         dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        
+
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -75,7 +78,7 @@ public class DialogFragmentImpl extends DialogFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 for (BaseDialog dialog : BaseDialog.getRunningDialogList()) {
                     if (dialog.getOwnActivity() == activity && dialog != baseDialog) {
-                        if (!(dialog instanceof NoTouchInterface)) {
+                        if (!(dialog instanceof NoTouchInterface) && dialog.getDialogView() != null) {
                             dialog.getDialogView().dispatchTouchEvent(event);
                             return true;
                         }
@@ -83,8 +86,8 @@ public class DialogFragmentImpl extends DialogFragment {
                 }
                 if (baseDialog instanceof NoTouchInterface) {
                     return activity.dispatchTouchEvent(event);
-                }else{
-                    return true;
+                } else {
+                    return false;
                 }
             }
         });
@@ -95,7 +98,7 @@ public class DialogFragmentImpl extends DialogFragment {
             lp.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
         dialogWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int visibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             if (activity != null) {
@@ -106,7 +109,7 @@ public class DialogFragmentImpl extends DialogFragment {
             dialogWindow.getDecorView().setSystemUiVisibility(visibility);
             dialogWindow.addFlags(
                     WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+                            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
             );
             dialogWindow.setStatusBarColor(Color.TRANSPARENT);
             dialogWindow.setNavigationBarColor(Color.TRANSPARENT);
@@ -114,7 +117,7 @@ public class DialogFragmentImpl extends DialogFragment {
             dialogWindow.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
-    
+
     @Override
     public void show(FragmentManager manager, @Nullable String tag) {
         if (manager == null) {
@@ -122,12 +125,12 @@ public class DialogFragmentImpl extends DialogFragment {
             return;
         }
         //super.show(manager, tag);
-        
+
         FragmentTransaction ft = manager.beginTransaction();
         ft.add(this, tag);
         ft.commitAllowingStateLoss();
     }
-    
+
     @Override
     public void dismiss() {
         dismissAllowingStateLoss();

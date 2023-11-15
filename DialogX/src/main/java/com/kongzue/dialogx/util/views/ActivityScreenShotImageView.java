@@ -10,10 +10,12 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.util.DialogXFloatingWindowActivity;
@@ -31,7 +33,9 @@ import java.util.Objects;
 @SuppressLint("AppCompatCustomView")
 public class ActivityScreenShotImageView extends ImageView {
 
+    public boolean hideActivityContentView;
     float width, height, mRadius;
+    public static boolean useHardwareRenderingMode = true;
 
     public ActivityScreenShotImageView(Context context) {
         super(context);
@@ -49,9 +53,11 @@ public class ActivityScreenShotImageView extends ImageView {
     }
 
     private void init(AttributeSet attrs) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            setLayerType(LAYER_TYPE_HARDWARE, null);
-        }
+        requestLayoutType();
+    }
+
+    private void requestLayoutType() {
+        setLayerType(useHardwareRenderingMode ? LAYER_TYPE_HARDWARE : LAYER_TYPE_SOFTWARE, null);
     }
 
     public void setRadius(float mRadius) {
@@ -93,11 +99,8 @@ public class ActivityScreenShotImageView extends ImageView {
 
             canvas.clipPath(path);
         }
-        try {
-            canvas.drawColor(Color.WHITE);
-            super.onDraw(canvas);
-        } catch (Exception e) {
-        }
+        canvas.drawColor(Color.WHITE);
+        super.onDraw(canvas);
     }
 
     @Override
@@ -151,20 +154,33 @@ public class ActivityScreenShotImageView extends ImageView {
         if (view.getWidth() == 0 || view.getHeight() == 0) return;
         dialog.getDialogView().setVisibility(GONE);
         setContentViewVisibility(true);
-        view.buildDrawingCache();
-        Rect rect = new Rect();
-        view.getWindowVisibleDisplayFrame(rect);
-        view.setDrawingCacheEnabled(true);
-        setImageBitmap(Bitmap.createBitmap(view.getDrawingCache(), 0, 0, view.getWidth(), view.getHeight()));
-        view.destroyDrawingCache();
-        setContentViewVisibility(false);
+        if (view.getWidth() + view.getHeight() == 0) {
+            view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        }
+        int viewWidth = view.getWidth();
+        int viewHeight = view.getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        try {
+            view.draw(canvas);
+        } catch (Exception e) {
+            if (DialogX.DEBUGMODE) e.printStackTrace();
+            if (useHardwareRenderingMode) {
+                useHardwareRenderingMode = false;
+                requestLayoutType();
+                drawViewImage(view);
+            }
+        }
+        setImageBitmap(Bitmap.createBitmap(bitmap, 0, 0, view.getWidth(), view.getHeight()));
         isScreenshotSuccess = true;
+        setContentViewVisibility(false);
         dialog.getDialogView().setVisibility(VISIBLE);
         dialog.getDialogView().requestFocus();
     }
 
     protected void setContentViewVisibility(boolean show) {
-        if (hideContentView) {
+        if (hideContentView || hideActivityContentView) {
             if (show) {
                 if (contentView != null && contentView.get() != null) {
                     contentView.get().setVisibility(VISIBLE);

@@ -58,7 +58,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:paddingTop="10dp"
                             android:paddingBottom="15dp"
                             android:text="This is content text."

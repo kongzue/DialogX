@@ -5,28 +5,27 @@
     <center><h1>Kongzue DialogX</h1></center> 
 </div>
 
+An easy-to-use dialog box component with better experience than native dialog box, more customizable, more scalable, easy to achieve a variety of dialog boxes, menus and hint effects, more iOS, MIUI, Material You and other theme extensions are available.
 
+<div align=center>    
+  <a href="https://github.com/kongzue/dialogX/">
+    <img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
+  </a> 
+  <a href="https://github.com/kongzue/DialogX/releases">
+    <img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="Maven">
+  </a> 
+  <a href="https://jitpack.io/#kongzue/DialogX">
+    <img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
+  </a> 
+  <a href="http://www.apache.org/licenses/LICENSE-2.0">
+    <img src="https://img.shields.io/badge/License-Apache%202.0-red.svg" alt="License">
+  </a> 
+  <a href="http://www.kongzue.com">
+    <img src="https://img.shields.io/badge/Homepage-Kongzue.com-brightgreen.svg" alt="Homepage">
+  </a>
+</div>
 
-
-After three generations, the new Kongzue DialogX has arrived, not only retaining the advantages of the past, but also bringing more flexible scalability and a new smooth experience.
-
-<a href="https://github.com/kongzue/dialogX/">
-<img src="https://img.shields.io/badge/Kongzue%20DialogX-Release-green.svg" alt="Kongzue Dialog">
-</a> 
-<a href="https://github.com/kongzue/DialogX/releases">
-<img src="https://img.shields.io/github/v/release/kongzue/DialogX?color=green" alt="Maven">
-</a> 
-<a href="https://jitpack.io/#kongzue/DialogX">
-<img src="https://jitpack.io/v/kongzue/DialogX.svg" alt="Jitpack.io">
-</a> 
-<a href="http://www.apache.org/licenses/LICENSE-2.0">
-<img src="https://img.shields.io/badge/License-Apache%202.0-red.svg" alt="License">
-</a> 
-<a href="http://www.kongzue.com">
-<img src="https://img.shields.io/badge/Homepage-Kongzue.com-brightgreen.svg" alt="Homepage">
-</a>
-
-![DialogX](https://repository-images.githubusercontent.com/298764877/37386d80-8986-11eb-8ff2-1206da84cd8d)
+![DialogX](https://user-images.githubusercontent.com/10115359/229279713-79c43a63-1a0a-4f70-851f-0a0783b94b45.jpg)
 
 # Advantages of DialogX
 
@@ -136,7 +135,7 @@ Please choose one of the following two sources to bring in your project.
 
 <div>
 Latest version: 
-<a href="https://github.com/kongzue/DialogX/releases"><img src="https://img.shields.io/badge/MavenCentral%20Release-0.0.47.beta15-green.svg" alt="DialogX Release"></a></div>
+<a href="https://central.sonatype.dev/artifact/com.kongzue.dialogx/DialogX/0.0.49"><img src="https://img.shields.io/maven-central/v/com.kongzue.dialogx/DialogX" alt="DialogX Release"></a></div>
 
 1) In the project's build.gradle file, find the `allprojects{}` block and add the following code.
 
@@ -155,7 +154,7 @@ allprojects {
 2) Find the `dependencies{}` code block in the app's build.gradle file and add the following statement to it.
 
 ```
-def dialogx_version = "0.0.47.beta15"
+def dialogx_version = "0.0.49"
 implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
 ```
 
@@ -189,7 +188,7 @@ allprojects {
 2) Find the `dependencies{}` block in the app's build.gradle file, and add the following statement to it：
 
 ```
-def dialogx_version = "0.0.46"
+def dialogx_version = "0.0.49"
 implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 ```
 

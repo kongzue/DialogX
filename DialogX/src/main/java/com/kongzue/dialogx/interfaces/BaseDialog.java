@@ -1,7 +1,6 @@
 package com.kongzue.dialogx.interfaces;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.kongzue.dialogx.DialogX.DEBUGMODE;
 
 import android.app.Activity;
 import android.content.Context;
@@ -34,6 +33,8 @@ import androidx.lifecycle.LifecycleRegistry;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.dialogs.BottomDialog;
+import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
 import com.kongzue.dialogx.util.ActivityRunnable;
@@ -49,6 +50,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.kongzue.dialogx.DialogX.DEBUGMODE;
 
 /**
  * @author: Kongzue
@@ -172,11 +175,7 @@ public abstract class BaseDialog implements LifecycleOwner {
             }
             dialog.dialogView = new WeakReference<>(view);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                publicWindowInsets(dialog.getRootFrameLayout().getRootWindowInsets());
-            }
-
-            log(dialog.dialogKey() + ".show");
+            log(dialog.dialogKey() + ".show on " + dialog.getOwnActivity());
 
             addDialogToRunningList(dialog);
             switch (dialog.dialogImplMode) {
@@ -278,6 +277,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         }
         final BaseDialog baseDialog = (BaseDialog) view.getTag();
         if (baseDialog != null) {
+            baseDialog.setOwnActivity(activity);
             if (baseDialog.getDialogView() != null) {
                 baseDialog.getDialogView().setVisibility(View.VISIBLE);
             }
@@ -291,11 +291,7 @@ public abstract class BaseDialog implements LifecycleOwner {
             }
             baseDialog.dialogView = new WeakReference<>(view);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                publicWindowInsets(baseDialog.getRootFrameLayout().getRootWindowInsets());
-            }
-
-            log(baseDialog + ".show");
+            log(baseDialog + ".show on " + activity);
             addDialogToRunningList(baseDialog);
 
             switch (baseDialog.dialogImplMode) {
@@ -503,7 +499,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected DialogXStyle style;
     protected DialogX.THEME theme;
     protected boolean autoShowInputKeyboard;
-    protected int backgroundColor = -1;
+    protected Integer backgroundColor = null;
     protected long enterAnimDuration = -1;
     protected long exitAnimDuration = -1;
     protected int maxWidth;
@@ -524,11 +520,11 @@ public abstract class BaseDialog implements LifecycleOwner {
     public abstract boolean isCancelable();
 
     public View createView(int layoutId) {
-        if (getApplicationContext() == null) {
+        if (getOwnActivity() == null) {
             error("DialogX 未初始化(E3)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return null;
         }
-        return LayoutInflater.from(getApplicationContext()).inflate(layoutId, null);
+        return LayoutInflater.from(getOwnActivity()).inflate(layoutId, null);
     }
 
     public boolean isShow() {
@@ -602,6 +598,9 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     public Resources getResources() {
+        if (getOwnActivity() != null) {
+            return getOwnActivity().getResources();
+        }
         if (getApplicationContext() == null) {
             return Resources.getSystem();
         }
@@ -781,6 +780,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (ownActivity != null) {
             ownActivity.clear();
         }
+        dialogView = null;
         ownActivity = null;
     }
 
@@ -805,6 +805,10 @@ public abstract class BaseDialog implements LifecycleOwner {
                     for (BaseDialog baseDialog : copyOnWriteList) {
                         if (baseDialog.getOwnActivity() == activity && baseDialog.dialogView != null) {
                             WindowUtil.dismiss(baseDialog.dialogView.get());
+                            if (baseDialog instanceof WaitDialog) {
+                                ((WaitDialog) baseDialog).cleanInstance();
+                            }
+                            runningDialogList.remove(baseDialog);
                         }
                     }
                 }
@@ -815,6 +819,10 @@ public abstract class BaseDialog implements LifecycleOwner {
                     for (BaseDialog baseDialog : copyOnWriteList) {
                         if (baseDialog.getOwnActivity() == activity && baseDialog.ownDialogFragmentImpl != null && baseDialog.ownDialogFragmentImpl.get() != null) {
                             baseDialog.ownDialogFragmentImpl.get().dismiss();
+                            if (baseDialog instanceof WaitDialog) {
+                                ((WaitDialog) baseDialog).cleanInstance();
+                            }
+                            runningDialogList.remove(baseDialog);
                         }
                     }
                 }
@@ -829,6 +837,9 @@ public abstract class BaseDialog implements LifecycleOwner {
                         if (baseDialog.getOwnActivity() == activity) {
                             baseDialog.cleanActivityContext();
                             runningDialogList.remove(baseDialog);
+                            if (baseDialog instanceof WaitDialog) {
+                                ((WaitDialog) baseDialog).cleanInstance();
+                            }
                         }
                     }
                 }
@@ -866,25 +877,6 @@ public abstract class BaseDialog implements LifecycleOwner {
 
     public static WindowInsets publicWindowInsets() {
         return windowInsets;
-    }
-
-    public static void publicWindowInsets(WindowInsets windowInsets) {
-        if (windowInsets == null) {
-            return;
-        }
-        BaseDialog.windowInsets = windowInsets;
-        if (runningDialogList != null) {
-            CopyOnWriteArrayList<BaseDialog> copyOnWriteList = new CopyOnWriteArrayList<>(runningDialogList);
-            for (int i = copyOnWriteList.size() - 1; i >= 0; i--) {
-                BaseDialog baseDialog = copyOnWriteList.get(i);
-                if (baseDialog.isShow && baseDialog.getDialogView() != null) {
-                    View boxRoot = baseDialog.getDialogView().findViewById(R.id.box_root);
-                    if (boxRoot instanceof DialogXBaseRelativeLayout) {
-                        ((DialogXBaseRelativeLayout) boxRoot).paddingView(windowInsets);
-                    }
-                }
-            }
-        }
     }
 
     protected void bindFloatingActivity(DialogXFloatingWindowActivity activity) {
@@ -1017,5 +1009,9 @@ public abstract class BaseDialog implements LifecycleOwner {
         }
         log("return styleValue=" + styleValue);
         return styleValue;
+    }
+
+    protected void setDialogView(View view) {
+        dialogView = new WeakReference<>(view);
     }
 }

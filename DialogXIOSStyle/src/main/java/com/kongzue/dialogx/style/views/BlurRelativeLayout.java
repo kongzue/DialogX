@@ -2,6 +2,7 @@ package com.kongzue.dialogx.style.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.BaseDialog;
@@ -196,11 +198,15 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
 
     private void releaseScript() {
         if (mRenderScript != null) {
-            mRenderScript.destroy();
+            try {
+                mRenderScript.destroy();
+            }catch (Exception e){}
             mRenderScript = null;
         }
         if (mBlurScript != null) {
-            mBlurScript.destroy();
+            try {
+                mBlurScript.destroy();
+            }catch (Exception e){}
             mBlurScript = null;
         }
     }
@@ -211,7 +217,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
     }
 
     protected boolean prepare() {
-        if (mBlurRadius == 0) {
+        if (mBlurRadius == 0 || !isAlive()) {
             release();
             return false;
         }
@@ -230,6 +236,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
                         if (isDebug()) {
                             e.printStackTrace();
                         }
+                        return false;
                     }
                 }
 
@@ -287,6 +294,20 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
         return true;
     }
 
+    private boolean isAlive() {
+        Context context = getContext();
+        if (context instanceof Activity) {
+            return isAttachedToWindow() && !(((Activity) context).isDestroyed());
+        }
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return isAttachedToWindow() && !(((Activity) context).isDestroyed());
+            }
+            context = ((ContextWrapper) context).getBaseContext();
+        }
+        return isAttachedToWindow() && getContext() != null;
+    }
+
     protected void blur(Bitmap bitmapToBlur, Bitmap blurredBitmap) {
         mBlurInput.copyFrom(bitmapToBlur);
         mBlurScript.setInput(mBlurInput);
@@ -297,16 +318,20 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
     private final ViewTreeObserver.OnPreDrawListener preDrawListener = new ViewTreeObserver.OnPreDrawListener() {
         @Override
         public boolean onPreDraw() {
+            if (!isAlive()) {
+                destroy();
+                return false;
+            }
             final int[] locations = new int[2];
             Bitmap oldBmp = mBlurredBitmap;
             View decor = mDecorView;
             if (decor != null && isShown() && prepare()) {
                 boolean redrawBitmap = mBlurredBitmap != oldBmp;
-                decor.getLocationOnScreen(locations);
+                decor.getLocationInWindow(locations);
                 int x = -locations[0];
                 int y = -locations[1];
 
-                getLocationOnScreen(locations);
+                getLocationInWindow(locations);
                 x += locations[0];
                 y += locations[1];
 
@@ -331,7 +356,11 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
                     mBlurringCanvas.restoreToCount(rc);
                 }
 
-                blur(mBitmapToBlur, mBlurredBitmap);
+                try {
+                    blur(mBitmapToBlur, mBlurredBitmap);
+                } catch (Exception e) {
+                    if (isDebug()) e.printStackTrace();
+                }
 
                 if (redrawBitmap || mDifferentRoot) {
                     invalidate();
@@ -351,30 +380,36 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
         } else {
             activity = BaseDialog.getTopActivity();
         }
-        ViewGroup decorView = ((ViewGroup) activity.getWindow().getDecorView());
-        if (decorView.getChildCount() >= 1) {
-            mDecorView = decorView.getChildAt(0);
-        }
-        if (mDecorView != null) {
-            log("mDecorView is ok.");
-            mDecorView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
-            mDifferentRoot = mDecorView.getRootView() != getRootView();
-            if (mDifferentRoot) {
-                mDecorView.postInvalidate();
+        if (activity != null) {
+            ViewGroup decorView = ((ViewGroup) activity.getWindow().getDecorView());
+            if (decorView.getChildCount() >= 1) {
+                mDecorView = decorView.getChildAt(0);
             }
-        } else {
-            log("mDecorView is NULL.");
-            mDifferentRoot = false;
+            if (mDecorView != null) {
+                log("mDecorView is ok.");
+                mDecorView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
+                mDifferentRoot = mDecorView.getRootView() != getRootView();
+                if (mDifferentRoot) {
+                    mDecorView.postInvalidate();
+                }
+            } else {
+                log("mDecorView is NULL.");
+                mDifferentRoot = false;
+            }
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        destroy();
+        super.onDetachedFromWindow();
+    }
+
+    private void destroy() {
         if (mDecorView != null) {
             mDecorView.getViewTreeObserver().removeOnPreDrawListener(preDrawListener);
         }
         release();
-        super.onDetachedFromWindow();
     }
 
     @Override
@@ -414,6 +449,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
     }
 
     private void drawBlurredBitmapCompat(Canvas canvas) {
+        if (getWidth() <= 0 || getHeight() <= 0) return;
         if (mBlurredBitmap != null) {
             mRectDst.right = getWidth();
             mRectDst.bottom = getHeight();
@@ -433,6 +469,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
     }
 
     protected void drawBlurredBitmap(Canvas canvas, Bitmap blurredBitmap) {
+        if (getWidth() <= 0 || getHeight() <= 0) return;
         if (blurredBitmap != null) {
             mRectSrc.right = blurredBitmap.getWidth();
             mRectSrc.bottom = blurredBitmap.getHeight();
@@ -570,7 +607,7 @@ public class BlurRelativeLayout extends MaxRelativeLayout implements BlurViewTyp
         return (int) (dpValue * scale + 0.5f);
     }
 
-    private int getOverlayColor(){
+    private int getOverlayColor() {
         return needRemoveAlphaColor() ? removeAlphaColor(mOverlayColor) : mOverlayColor;
     }
 }

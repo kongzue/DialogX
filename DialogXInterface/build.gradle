@@ -33,6 +33,7 @@ artifacts {
 }
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly files('libs\\android.jar')
 }
 
 //sourceCompatibility = "1.7"

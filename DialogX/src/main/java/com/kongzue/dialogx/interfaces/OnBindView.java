@@ -1,7 +1,5 @@
 package com.kongzue.dialogx.interfaces;
 
-import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
-
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.util.views.ExtendChildLayoutParamsFrameLayout;
 
-import java.util.Random;
+import static com.kongzue.dialogx.DialogX.ERROR_INIT_TIPS;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.security.SecureRandom;
 
 /**
  * @author: Kongzue
@@ -27,6 +27,7 @@ public abstract class OnBindView<D> {
 
     int layoutResId;
     View customView;
+    private final int PARENT_FLAG = -109;
 
     public OnBindView(int layoutResId) {
         if (BaseDialog.getTopActivity() == null) {
@@ -78,7 +79,7 @@ public abstract class OnBindView<D> {
     }
 
     private int createFragmentParentId() {
-        fragmentParentId = new Random().nextInt();
+        fragmentParentId = new SecureRandom().nextInt();
         View somebodyView = BaseDialog.getTopActivity().findViewById(fragmentParentId);
         if (somebodyView != null) {
             return createFragmentParentId();
@@ -103,6 +104,8 @@ public abstract class OnBindView<D> {
     }
 
     public abstract void onBind(D dialog, View v);
+
+    public void setEvent(D dialog, View v){}
 
     public void onFragmentBind(D dialog, View frameLayout, androidx.fragment.app.Fragment fragment, androidx.fragment.app.FragmentManager fragmentManager) {
     }
@@ -160,10 +163,10 @@ public abstract class OnBindView<D> {
             waitBind(parentView, null);
             return;
         }
+        if (getCustomView().getParent() == parentView || parentView.getTag(PARENT_FLAG) == getCustomView().toString()) {
+            return;
+        }
         if (getCustomView().getParent() != null) {
-            if (getCustomView().getParent() == parentView) {
-                return;
-            }
             ((ViewGroup) getCustomView().getParent()).removeView(getCustomView());
         }
         ViewGroup.LayoutParams lp = getCustomView().getLayoutParams();
@@ -172,6 +175,7 @@ public abstract class OnBindView<D> {
         }
         parentView.addView(getCustomView(), lp);
         onBind((D) dialog, getCustomView());
+        callSetEvent((D) dialog,  getCustomView());
         if (fragment != null || supportFragment != null) {
             if (dialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
                 BaseDialog.error(dialog.dialogKey() + "非 VIEW 实现模式不支持 fragment 作为子布局显示。\n" +
@@ -197,6 +201,16 @@ public abstract class OnBindView<D> {
                     }
                 }
             });
+        }
+    }
+
+    private int dialogHash, parentViewHash;
+
+    private void callSetEvent(D dialog, View view) {
+        if (dialog.hashCode() != dialogHash || view.hashCode() != parentViewHash) {
+            dialogHash = dialog.hashCode();
+            parentViewHash = view.hashCode();
+            setEvent(dialog, getCustomView());
         }
     }
 

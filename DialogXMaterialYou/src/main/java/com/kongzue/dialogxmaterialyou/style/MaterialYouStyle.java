@@ -243,7 +243,7 @@ public class MaterialYouStyle extends DialogXStyle {
     public class DefaultPopMenuSettings extends PopMenuSettings{
         @Override
         public int layout(boolean light) {
-            return light? R.layout.layout_dialogx_popmenu_material_you: R.layout.layout_dialogx_popmenu_material_you_dark;
+            return light?R.layout.layout_dialogx_popmenu_material_you:R.layout.layout_dialogx_popmenu_material_you_dark;
         }
 
         @Override
@@ -309,7 +309,7 @@ public class MaterialYouStyle extends DialogXStyle {
         }
 
         @Override
-        public ALIGN align() {
+        public PopNotificationSettings.ALIGN align() {
             return ALIGN.TOP;
         }
 

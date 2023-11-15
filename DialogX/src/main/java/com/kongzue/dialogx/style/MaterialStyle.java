@@ -247,7 +247,7 @@ public class MaterialStyle extends DialogXStyle {
         }
 
         @Override
-        public ALIGN align() {
+        public PopNotificationSettings.ALIGN align() {
             return ALIGN.TOP;
         }
 

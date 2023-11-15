@@ -1,6 +1,9 @@
 package com.kongzue.dialogx.interfaces;
 
+import android.animation.ValueAnimator;
 import android.view.ViewGroup;
+
+import com.kongzue.dialogx.util.ObjectRunnable;
 
 /**
  * @author: Kongzue

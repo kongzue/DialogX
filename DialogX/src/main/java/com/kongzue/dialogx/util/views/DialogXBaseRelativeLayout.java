@@ -3,42 +3,31 @@ package com.kongzue.dialogx.util.views;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Insets;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
-import android.view.ViewTreeObserver;
-import android.view.WindowInsets;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsAnimationCompat;
+import androidx.annotation.Px;
+import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
-import com.kongzue.dialogx.interfaces.DynamicWindowInsetsAnimationListener;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author: Kongzue
@@ -52,13 +41,19 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public static boolean debugMode = false;
 
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
-    private BaseDialog parentDialog;
+    private WeakReference<BaseDialog> parentDialog;
     private boolean autoUnsafePlacePadding = true;
     private boolean focusable = true;
     private boolean interceptBack = true;
 
     private OnLifecycleCallBack onLifecycleCallBack;
     private PrivateBackPressedListener onBackPressedListener;
+
+    private FitSystemBarUtils fitSystemBarUtils;
+
+    public FitSystemBarUtils getFitSystemBarUtils() {
+        return fitSystemBarUtils;
+    }
 
     public DialogXBaseRelativeLayout(Context context) {
         super(context);
@@ -93,7 +88,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (focusable) {
                 setFocusable(true);
                 setFocusableInTouchMode(true);
-                requestFocus();
             }
             setBkgAlpha(0f);
             if (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
@@ -101,56 +95,89 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             }
             setClipChildren(false);
             setClipToPadding(false);
+
+            //新增的 设置监听 OnApplyWindowInsetsListener
+            log("KONGZUE DEBUG DIALOGX: create fitSystemBarUtils");
+            fitSystemBarUtils = FitSystemBarUtils.attachView(this, new FitSystemBarUtils.CallBack() {
+                @Override
+                public boolean isEnable(FitSystemBarUtils.Orientation orientation) {
+                    return true;
+                }
+
+                @Override
+                public void unsafeRect(int start, int top, int end, int bottom) {
+                    log("KONGZUE DEBUG DIALOGX: unsafeRect t=" + top + " b=" + bottom);
+                    if (unsafePlace == null) {
+                        unsafePlace = new Rect();
+                    }
+                    // TODO Fix bug #370 在这里对这个重新做下处理，未详细测试，比如键盘弹起时的情况
+                    Insets systemBarInsets = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getRootWindowInsets()!=null) {
+                        WindowInsetsCompat windowInsetsCompat = WindowInsetsCompat.toWindowInsetsCompat(getRootWindowInsets());
+                        boolean navigationBarsVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.navigationBars());
+                        boolean imeVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.ime());
+                        if (!imeVisible && navigationBarsVisible) {
+                            systemBarInsets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.systemBars());
+                            if (systemBarInsets.bottom == bottom &&
+                                    systemBarInsets.top == top &&
+                                    systemBarInsets.left == start &&
+                                    systemBarInsets.right == end
+                            ) {
+                                systemBarInsets = null;
+                            }
+                        }
+                    }
+                    if (systemBarInsets != null) {
+                        unsafePlace.left = Math.max( systemBarInsets.left,start);
+                        unsafePlace.top = Math.max(systemBarInsets.top,top);
+                        unsafePlace.right = Math.max(systemBarInsets.right,end);
+                        unsafePlace.bottom = Math.max(systemBarInsets.bottom,bottom);
+                    } else {
+                        unsafePlace.left = start;
+                        unsafePlace.top = top;
+                        unsafePlace.right = end;
+                        unsafePlace.bottom = bottom;
+                    }
+
+                    if (onSafeInsetsChangeListener != null) {
+                        onSafeInsetsChangeListener.onChange(unsafePlace);
+                    }
+
+                    setUnsafePadding(unsafePlace.left, unsafePlace.top, unsafePlace.right, unsafePlace.bottom);
+                }
+
+                @Override
+                public int initialPadding(FitSystemBarUtils.Orientation orientation) {
+                    switch (orientation) {
+                        case Start:
+                            return extraPadding[0];
+                        case Top:
+                            return extraPadding[1];
+                        case End:
+                            return extraPadding[2];
+                        case Bottom:
+                            return extraPadding[3];
+                    }
+                    return 0;
+                }
+            });
         }
     }
 
-    @Override
-    protected boolean fitSystemWindows(Rect insets) {
-        if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW))) {
-            log("#fitSystemWindows paddingView: b=" + insets.bottom);
-            paddingView(insets.left, insets.top, insets.right, insets.bottom);
-        }
-        return super.fitSystemWindows(insets);
-    }
-
-    @Override
-    public WindowInsets dispatchApplyWindowInsets(WindowInsets insets) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (!useWindowInsetsAnimation && (DialogX.useActivityLayoutTranslationNavigationBar || (getParentDialog() != null && getParentDialog().getDialogImplMode() != DialogX.IMPL_MODE.VIEW))) {
-                paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
-                log("#dispatchApplyWindowInsets paddingView: b=" + insets.getSystemWindowInsetBottom());
+    public void setUnsafePadding(@Px int start, @Px int top, @Px int end, @Px int bottom) {
+        log("KONGZUE DEBUG DIALOGX: setUnsafePadding=" + getParentDialog() + " t=" + top + " b=" + bottom);
+        if (getParentDialog() instanceof DialogXBaseBottomDialog) {
+            log("  KONGZUE DEBUG DIALOGX: isDialogXBaseBottomDialog");
+            ViewGroup bkgView = findViewById(R.id.bkg);
+            if (!((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf() && bkgView != null) {
+                log("    KONGZUE DEBUG DIALOGX: bkgView.setPadding b=" + bottom);
+                bkgView.setPadding(0, 0, 0, bottom);
             }
+            bottom = 0;
         }
-        return super.dispatchApplyWindowInsets(insets);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void paddingView(Insets insets) {
-        if (insets != null) {
-            paddingView(insets.left, insets.top, insets.right, insets.bottom);
-            log("#paddingView(insets) paddingView: b=" + insets.bottom);
-        }
-    }
-
-    public void paddingView(WindowInsets insets) {
-        if (!isAttachedToWindow()) {
-            getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
-            return;
-        }
-        if (insets == null) {
-            if (BaseDialog.publicWindowInsets() != null) {
-                insets = BaseDialog.publicWindowInsets();
-            } else {
-                return;
-            }
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (insets.getSystemWindowInsetLeft() == 0 && insets.getSystemWindowInsetTop() == 0 && insets.getSystemWindowInsetRight() == 0 && insets.getSystemWindowInsetBottom() == 0) {
-                getWindowInsetsByDisplayMetrics();
-                return;
-            }
-            paddingView(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
-            log("#paddingView(WindowInsets) paddingView: b=" + insets.getSystemWindowInsetBottom());
+        if (isAutoUnsafePlacePadding()) {
+            log("  KONGZUE DEBUG DIALOGX: root.setPadding t=" + top + " b=" + bottom);
+            setPadding(start, top, end, bottom);
         }
     }
 
@@ -165,8 +192,26 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         return super.dispatchKeyEvent(event);
     }
 
+    boolean touch;
+    float touchDownX, touchDownY;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touch = true;
+                touchDownX = event.getX();
+                touchDownY = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                if (touch && findFocus() != this && getParentDialog() != null) {
+                    float deltaTouchOffset = getParentDialog().dip2px(5);
+                    if (Math.abs(event.getX() - touchDownX) <= deltaTouchOffset && Math.abs(event.getY() - touchDownY) <= deltaTouchOffset) {
+                        callOnClick();
+                    }
+                }
+                break;
+        }
         if (getParentDialog() instanceof NoTouchInterface) {
             return super.onTouchEvent(event);
         }
@@ -175,123 +220,27 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         return super.onTouchEvent(event);
     }
 
-    private ViewTreeObserver.OnGlobalLayoutListener decorViewLayoutListener;
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (!isInEditMode()) {
-            final ViewParent parent = getParent();
-            if (parent instanceof View) {
-                ViewCompat.setFitsSystemWindows(this, ViewCompat.getFitsSystemWindows((View) parent));
-            }
-            ViewCompat.requestApplyInsets(this);
-
             if (getParentDialog() == null || getParentDialog().getOwnActivity() == null) return;
-
-            View decorView = (View) getParent();
-            if (decorView != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    parentKey = Integer.toHexString(decorView.hashCode());
-                    getDynamicWindowInsetsAnimationListener(parentKey).add(dynamicWindowInsetsAnimationListener = new DynamicWindowInsetsAnimationListener() {
-                        @Override
-                        public void onChange(WindowInsets windowInsets) {
-                            paddingView(windowInsets);
-                        }
-                    });
-                    paddingWindowInsetsByDefault();
-                    initDynamicSafeAreaListener();
-                } else {
-                    decorView.getViewTreeObserver().addOnGlobalLayoutListener(decorViewLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            paddingWindowInsetsByDefault();
-                        }
-                    });
-                    decorViewLayoutListener.onGlobalLayout();
-                }
-            }
-
             if (onLifecycleCallBack != null) {
                 onLifecycleCallBack.onShow();
             }
             isLightMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO;
+            if (focusable) {
+                requestFocus();
+            }
         }
-    }
-
-    static Map<String, List<DynamicWindowInsetsAnimationListener>> dynamicWindowInsetsAnimationListenerListMap = new HashMap<>();
-    DynamicWindowInsetsAnimationListener dynamicWindowInsetsAnimationListener;
-    String parentKey;
-
-    public List<DynamicWindowInsetsAnimationListener> getDynamicWindowInsetsAnimationListener(String key) {
-        List<DynamicWindowInsetsAnimationListener> list = dynamicWindowInsetsAnimationListenerListMap.get(key);
-        if (list == null) {
-            list = new ArrayList<>();
-            dynamicWindowInsetsAnimationListenerListMap.put(key, list);
-        }
-        return list;
-    }
-
-    boolean useWindowInsetsAnimation = false;
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
-    private void initDynamicSafeAreaListener() {
-        View decorView = (View) getParent();
-        if (decorView != null) {
-            useWindowInsetsAnimation = true;
-            ViewCompat.setWindowInsetsAnimationCallback(decorView, new WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE) {
-
-                @NonNull
-                @Override
-                public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
-                    View decorView = (View) getParent();
-                    if (decorView != null) {
-                        String key = Integer.toHexString(decorView.hashCode());
-                        List<DynamicWindowInsetsAnimationListener> dynamicWindowInsetsAnimationListenerList = getDynamicWindowInsetsAnimationListener(key);
-                        if (dynamicWindowInsetsAnimationListenerList != null) {
-                            for (DynamicWindowInsetsAnimationListener listener : dynamicWindowInsetsAnimationListenerList) {
-                                listener.onChange(insets.toWindowInsets());
-                            }
-                        }
-                    }
-                    return insets;
-                }
-            });
-        }
-    }
-
-    private void paddingWindowInsetsByDefault() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            paddingView(getRootWindowInsets());
-        } else {
-            getWindowInsetsByDisplayMetrics();
-        }
-    }
-
-    private void getWindowInsetsByDisplayMetrics() {
-        if (getParentDialog() == null || getParentDialog().getOwnActivity() == null) return;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getParentDialog().getOwnActivity().getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
-        Rect rect = new Rect();
-        View decorView = (View) getParent();
-        decorView.getWindowVisibleDisplayFrame(rect);
-        if (rect.left == 0 && rect.top == 0 && rect.right == 0 && rect.bottom == 0) return;
-        paddingView(rect.left, rect.top, displayMetrics.widthPixels - rect.right, displayMetrics.heightPixels - rect.bottom);
-        log("#getWindowInsetsByDisplayMetrics paddingView: b=" + (displayMetrics.heightPixels - rect.bottom));
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        View decorView = (View) getParent();
-        if (decorViewLayoutListener != null && decorView != null) {
-            decorView.getViewTreeObserver().removeOnGlobalLayoutListener(decorViewLayoutListener);
-        }
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onDismiss();
         }
-        getDynamicWindowInsetsAnimationListener(parentKey).remove(dynamicWindowInsetsAnimationListener);
         onSafeInsetsChangeListener = null;
-        parentDialog = null;
         super.onDetachedFromWindow();
     }
 
@@ -319,7 +268,9 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     private WeakReference<View> requestFocusView;
 
     public void bindFocusView(View view) {
-        requestFocusView = new WeakReference<>(view);
+        if (view != this) {
+            requestFocusView = new WeakReference<>(view);
+        }
     }
 
     @Override
@@ -327,10 +278,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (getParentDialog() != null && getParentDialog() instanceof NoTouchInterface) {
             return false;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            initDynamicSafeAreaListener();
-        }
-        if (direction == View.FOCUS_DOWN && requestFocusView != null && requestFocusView.get() != null) {
+        if (direction == View.FOCUS_DOWN && requestFocusView != null && requestFocusView.get() != null && requestFocusView.get() != this) {
             return requestFocusView.get().requestFocus();
         }
         View findFocusView = findFocus();
@@ -342,13 +290,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     public void requestFocusOnResume() {
-        log("#requestFocusOnResume");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getRootWindowInsets() != null && getRootWindowInsets().getStableInsets() != null) {
-            paddingView(getRootWindowInsets().getStableInsets());
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            initDynamicSafeAreaListener();
-        }
         View findFocusView = findFocus();
         if (findFocusView != null && findFocusView != this) {
             findFocusView.requestFocus();
@@ -365,29 +306,6 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     protected Rect unsafePlace = new Rect();
-
-    private void paddingView(int left, int top, int right, int bottom) {
-        unsafePlace = new Rect(left, top, right, bottom);
-        if (onSafeInsetsChangeListener != null) onSafeInsetsChangeListener.onChange(unsafePlace);
-        MaxRelativeLayout bkgView = findViewById(R.id.bkg);
-        if (bkgView != null && bkgView.getLayoutParams() instanceof LayoutParams) {
-            LayoutParams bkgLp = (LayoutParams) bkgView.getLayoutParams();
-            if (bkgLp.getRules()[ALIGN_PARENT_BOTTOM] == RelativeLayout.TRUE && isAutoUnsafePlacePadding()) {
-                bkgView.setNavBarHeight(bottom);
-                setPadding(extraPadding[0] + left, extraPadding[1] + top, extraPadding[2] + right, extraPadding[3]);
-                if (getParentDialog() instanceof DialogXBaseBottomDialog) {
-                    if (((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf()) {
-                        bkgView.setPadding(0, 0, 0, 0);
-                        return;
-                    }
-                }
-                bkgView.setPadding(0, 0, 0, bottom);
-                return;
-            }
-        }
-        if (isAutoUnsafePlacePadding())
-            setPadding(extraPadding[0] + left, extraPadding[1] + top, extraPadding[2] + right, extraPadding[3] + bottom);
-    }
 
     public DialogXBaseRelativeLayout setOnBackPressedListener(PrivateBackPressedListener onBackPressedListener) {
         this.onBackPressedListener = onBackPressedListener;
@@ -413,23 +331,23 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     public DialogXBaseRelativeLayout setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
         this.autoUnsafePlacePadding = autoUnsafePlacePadding;
-        if (!autoUnsafePlacePadding) {
-            setPadding(extraPadding[0], extraPadding[1], extraPadding[2], extraPadding[3]);
-        }
         return this;
     }
 
     public BaseDialog getParentDialog() {
-        return parentDialog;
+        return parentDialog == null ? null : parentDialog.get();
     }
 
     public DialogXBaseRelativeLayout setParentDialog(BaseDialog parentDialog) {
-        this.parentDialog = parentDialog;
-        if (parentDialog!=null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
+        this.parentDialog = new WeakReference<>(parentDialog);
+        if (parentDialog != null && parentDialog.getDialogImplMode() != DialogX.IMPL_MODE.VIEW) {
             setFitsSystemWindows(true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                paddingView(getRootWindowInsets());
-            }
+        }
+        if (unsafePlace != null) {
+            log("KONGZUE DEBUG DIALOGX: setParentDialog()=" + getParentDialog());
+            setUnsafePadding(unsafePlace.left, unsafePlace.top, unsafePlace.right, unsafePlace.bottom);
+        } else {
+            log("KONGZUE DEBUG DIALOGX: setParentDialog() unsafePlace is null");
         }
         return this;
     }
@@ -440,7 +358,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         boolean newLightStatus = ((newConfig.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO);
-        if (isLightMode != newLightStatus && DialogX.globalTheme == DialogX.THEME.AUTO && getParentDialog()!=null) {
+        if (isLightMode != newLightStatus && DialogX.globalTheme == DialogX.THEME.AUTO && getParentDialog() != null) {
             getParentDialog().restartDialog();
         }
     }
@@ -523,8 +441,8 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     protected void log(String s) {
-        if (debugMode) {
-            Log.e(">>>" , s);
+        if (debugMode && DialogX.DEBUGMODE) {
+            Log.e(">>>", s);
         }
     }
 }

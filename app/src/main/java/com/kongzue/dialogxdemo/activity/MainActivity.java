@@ -13,17 +13,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -32,8 +27,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,11 +62,11 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
-import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnBottomMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -83,10 +76,7 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
-import com.kongzue.dialogx.util.InputInfo;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
 import com.kongzue.dialogxdemo.BuildConfig;
 import com.kongzue.dialogxdemo.R;
 import com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleViewAdapter;
@@ -498,12 +488,14 @@ public class MainActivity extends BaseActivity {
                                 btnFullScreenDialogFragment.callOnClick();
                             }
                         });
-                FullScreenDialog.show(new OnBindView<FullScreenDialog>(customFragment) {
-                    @Override
-                    public void onBind(FullScreenDialog dialog, View v) {
+                FullScreenDialog.build(new OnBindView<FullScreenDialog>(customFragment) {
+                            @Override
+                            public void onBind(FullScreenDialog dialog, View v) {
 
-                    }
-                });
+                            }
+                        })
+                        .hideActivityContentView(true)
+                        .show();
             }
         });
 
@@ -810,6 +802,13 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 MessageDialog.show("这里是标题", "此对话框演示的是自定义对话框内部布局的效果", "确定", "取消")
+                        .setDialogLifecycleCallback(new BottomDialogSlideEventLifecycleCallback<MessageDialog>() {
+                            @Override
+                            public void onShow(MessageDialog dialog) {
+                                super.onShow(dialog);
+                                dialog.getDialogImpl().txtDialogTip.setPadding(0, dip2px(20), 0, 0);
+                            }
+                        })
                         .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
                             @Override
                             public void onBind(MessageDialog dialog, View v) {
@@ -1051,7 +1050,7 @@ public class MainActivity extends BaseActivity {
 
                         webView.loadUrl("https://github.com/kongzue/DialogX");
                     }
-                }).setBottomNonSafetyAreaBySelf(true);
+                }).setBottomNonSafetyAreaBySelf(false);
             }
         });
 
@@ -1071,6 +1070,7 @@ public class MainActivity extends BaseActivity {
                                 });
                             }
                         })
+//                        .setAlign(CustomDialog.ALIGN.LEFT)
                         //.setAnimResId(R.anim.anim_right_in, R.anim.anim_right_out)
                         .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
                 //实现完全自定义动画效果
@@ -1221,9 +1221,9 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndex = index;
                             }
                         })
-                        .setCancelButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+                        .setCancelButton("确定", new OnBottomMenuButtonClickListener<BottomMenu>() {
                             @Override
-                            public boolean onClick(BottomDialog baseDialog, View v) {
+                            public boolean onClick(BottomMenu baseDialog, View v) {
                                 PopTip.show("已选择：" + singleSelectMenuText[selectMenuIndex]);
                                 return false;
                             }
@@ -1236,8 +1236,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 BottomMenu.show(multiSelectMenuText)
-                        .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
-                        .setTitle("获得权限标题")
+                        .setMessage("这里是选择城市的模拟范例，这是一个演示菜单")
+                        .setTitle("请选择城市")
                         .setOnMenuItemClickListener(new OnMenuItemSelectListener<BottomMenu>() {
                             @Override
                             public void onMultiItemSelect(BottomMenu dialog, CharSequence[] text, int[] index) {
@@ -1248,13 +1248,20 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndexArray = index;
                             }
                         })
-                        .setCancelButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+                        .setOkButton("确定", new OnBottomMenuButtonClickListener<BottomMenu>() {
                             @Override
-                            public boolean onClick(BottomDialog baseDialog, View v) {
+                            public boolean onClick(BottomMenu dialog, View v) {
                                 PopTip.show("已选择：" + multiSelectMenuResultCache);
                                 return false;
                             }
                         })
+//                        .setCancelButton("确定", new OnDialogButtonClickListener<BottomDialog>() {
+//                            @Override
+//                            public boolean onClick(BottomDialog baseDialog, View v) {
+//                                PopTip.show("已选择：" + multiSelectMenuResultCache);
+//                                return false;
+//                            }
+//                        })
                         .setSelection(selectMenuIndexArray);
             }
         });
@@ -1281,7 +1288,7 @@ public class MainActivity extends BaseActivity {
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 12"));
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 13"));
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 14"));
-                                RecyclerView recyclerView = (RecyclerView) v;
+                                RecyclerView recyclerView = (RecyclerView) ((ViewGroup) v).getChildAt(0);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(me);
                                 recyclerView.setLayoutManager(layoutManager);
                                 CustomRecycleViewAdapter adapter = new CustomRecycleViewAdapter(dataArrayList);
@@ -1372,6 +1379,30 @@ public class MainActivity extends BaseActivity {
                                         Intent intent = new Intent(me, MainActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                         startActivity(intent);
+//
+//                                        CustomDialog.build(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
+//
+//                                                    private ImageView btnOk;
+//
+//                                                    @Override
+//                                                    public void onBind(CustomDialog dialog, View v) {
+//                                                        btnOk = v.findViewById(R.id.btn_ok);
+//
+//                                                        btnOk.setOnClickListener(new View.OnClickListener() {
+//                                                            @Override
+//                                                            public void onClick(View v) {
+//                                                                Intent intent = new Intent(me, MainActivity.class);
+//                                                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                                                                startActivity(intent);
+//
+//                                                                dialog.dismiss();
+//                                                            }
+//                                                        });
+//                                                    }
+//                                                })
+//                                                .setDialogImplMode(DialogX.IMPL_MODE.WINDOW)
+//                                                .show();
+
                                         return false;
                                     }
                                 })

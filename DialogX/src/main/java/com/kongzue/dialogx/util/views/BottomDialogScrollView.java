@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
-
 import com.kongzue.dialogx.interfaces.ScrollController;
 
 /**
@@ -66,7 +65,6 @@ public class BottomDialogScrollView extends ScrollView implements ScrollControll
         }
         return super.onTouchEvent(ev);
     }
-    
     
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

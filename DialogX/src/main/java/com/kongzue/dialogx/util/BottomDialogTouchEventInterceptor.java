@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util;
 
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -30,6 +31,7 @@ public class BottomDialogTouchEventInterceptor {
     private float bkgTouchDownY;
     private float scrolledY;
     private float bkgOldY;
+    private boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas = false;
     /**
      * 0：bkg接收触控事件，-1：scrollView进行滚动
      * 此标记的意义在于，当从 [scrollView滚动] 与 [bkg接收触控事件] 状态切换时，
@@ -58,8 +60,14 @@ public class BottomDialogTouchEventInterceptor {
          *     super.onMeasure(widthMeasureSpec, expandSpec);
          * }
          */
+        View interceptTouchView = impl.bkg;
         if (me.isAllowInterceptTouch()) {
-            impl.bkg.setOnTouchListener(new View.OnTouchListener() {
+            if (isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas()){
+                impl.bkg.setOnTouchListener(null);
+                interceptTouchView = (View) impl.scrollView;
+            }
+            View finalInterceptTouchView = interceptTouchView;
+            interceptTouchView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (me.getDialogLifecycleCallback() instanceof BottomDialogSlideEventLifecycleCallback) {
@@ -75,22 +83,18 @@ public class BottomDialogTouchEventInterceptor {
                             bkgOldY = impl.boxBkg.getY();
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            if (isBkgTouched) {
+                            if (isBkgTouched && me.isAllowInterceptTouch()) {
                                 float aimY = impl.boxBkg.getY() + event.getY() - bkgTouchDownY;
-                                if (impl.scrollView.isCanScroll()) {
+                                if (impl.scrollView.isCanScroll() && touchInScrollView(finalInterceptTouchView, impl.scrollView, event)) {
                                     if (aimY > impl.boxRoot.getUnsafePlace().top) {
                                         if (impl.scrollView.getScrollDistance() == 0) {
-                                            if (impl.scrollView instanceof ScrollController) {
-                                                ((ScrollController) impl.scrollView).lockScroll(true);
-                                            }
+                                            impl.scrollView.lockScroll(true);
                                             impl.boxBkg.setY(aimY);
                                         } else {
                                             bkgTouchDownY = event.getY();
                                         }
                                     } else {
-                                        if (impl.scrollView instanceof ScrollController) {
-                                            ((ScrollController) impl.scrollView).lockScroll(false);
-                                        }
+                                        impl.scrollView.lockScroll(false);
                                         impl.boxBkg.setY(impl.boxRoot.getUnsafePlace().top);
                                     }
                                 } else {
@@ -134,12 +138,46 @@ public class BottomDialogTouchEventInterceptor {
             if (impl.scrollView instanceof ScrollController) {
                 ((ScrollController) impl.scrollView).lockScroll(false);
             }
-            impl.bkg.setOnTouchListener(null);
+            interceptTouchView.setOnTouchListener(null);
         }
+    }
+
+    /**
+     * 检查 MotionEvent 触摸点是否在 scrollView 相对于对话框移动布局 slideView 范围内
+     *
+     * @param slideView  对话框移动布局
+     * @param scrollView 内部滚动布局
+     * @param event      触摸事件
+     * @return 是否在范围内
+     */
+    private boolean touchInScrollView(View slideView, ScrollController scrollView, MotionEvent event) {
+        View scrollViewImpl = (View) scrollView;
+        RectF scrollViewLocation = new RectF();
+        int[] scrollViewScreenLoc = new int[2];
+        int[] rootViewScreenLoc = new int[2];
+        scrollViewImpl.getLocationInWindow(scrollViewScreenLoc);
+        slideView.getLocationInWindow(rootViewScreenLoc);
+
+        scrollViewLocation.left = scrollViewScreenLoc[0] - rootViewScreenLoc[0];
+        scrollViewLocation.top = scrollViewScreenLoc[1] - rootViewScreenLoc[1];
+        scrollViewLocation.right = scrollViewLocation.left + scrollViewImpl.getWidth();
+        scrollViewLocation.bottom = scrollViewLocation.top + scrollViewImpl.getHeight();
+
+        return event.getX() >= scrollViewLocation.left && event.getX() <= scrollViewLocation.right &&
+                event.getY() >= scrollViewLocation.top && event.getY() <= scrollViewLocation.bottom;
     }
 
     private int dip2px(float dpValue) {
         final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    public boolean isOnlyRestrictingSlideTouchEventsToScrollLayoutAreas() {
+        return onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+    }
+
+    public BottomDialogTouchEventInterceptor setOnlyRestrictingSlideTouchEventsToScrollLayoutAreas(boolean onlyRestrictingSlideTouchEventsToScrollLayoutAreas) {
+        this.onlyRestrictingSlideTouchEventsToScrollLayoutAreas = onlyRestrictingSlideTouchEventsToScrollLayoutAreas;
+        return this;
     }
 }

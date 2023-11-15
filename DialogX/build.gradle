@@ -11,11 +11,11 @@ ext {
 apply from: "${rootProject.projectDir}/publish-mavencentral.gradle"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 31
 
         consumerProguardFiles "consumer-rules.pro"
     }

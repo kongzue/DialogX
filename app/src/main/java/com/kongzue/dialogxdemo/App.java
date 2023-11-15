@@ -32,8 +32,8 @@ public class App extends BaseApp<App> {
                 //DefaultPopTipSettings 是主题中默认的 PopTip 设置，以下演示仅覆写其中的 align 设置
                 return new DefaultPopTipSettings(){
                     @Override
-                    public PopTipSettings.ALIGN align() {
-                        return PopTipSettings.ALIGN.BOTTOM;
+                    public ALIGN align() {
+                        return ALIGN.BOTTOM;
                     }
                 };
             }
@@ -42,7 +42,7 @@ public class App extends BaseApp<App> {
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.onlyOnePopTip = false;
         DialogX.DEBUGMODE = BuildConfig.DEBUG;
-
+    
         //以下代码用于测试后台 Service 启动对话框
 //        DialogX.implIMPLMode = DialogX.IMPL_MODE.FLOATING_ACTIVITY;
 //        Intent serviceStartIntent = new Intent(this, TestBackgroundService.class);

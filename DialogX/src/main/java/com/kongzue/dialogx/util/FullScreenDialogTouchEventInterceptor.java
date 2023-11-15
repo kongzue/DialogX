@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util;
 
 import android.animation.ObjectAnimator;
 import android.content.res.Resources;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,7 +18,7 @@ import com.kongzue.dialogx.interfaces.ScrollController;
  * @createTime: 2020/10/19 13:54
  */
 public class FullScreenDialogTouchEventInterceptor {
-    
+
     /**
      * 下边三个值用于判断触控过程，
      * isBkgTouched：标记是否已按下
@@ -28,11 +29,11 @@ public class FullScreenDialogTouchEventInterceptor {
     private boolean isBkgTouched = false;
     private float bkgTouchDownY;
     private float bkgOldY;
-    
+
     public FullScreenDialogTouchEventInterceptor(FullScreenDialog me, FullScreenDialog.DialogImpl impl) {
         refresh(me, impl);
     }
-    
+
     public void refresh(final FullScreenDialog me, final FullScreenDialog.DialogImpl impl) {
         if (me == null || impl == null || impl.bkg == null) {
             return;
@@ -54,7 +55,7 @@ public class FullScreenDialogTouchEventInterceptor {
                         case MotionEvent.ACTION_MOVE:
                             if (isBkgTouched) {
                                 float aimY = impl.bkg.getY() + event.getY() - bkgTouchDownY;
-                                if (impl.scrollView != null && impl.scrollView.isCanScroll()) {
+                                if (impl.scrollView != null && impl.scrollView.isCanScroll() && touchInScrollView(v, impl.scrollView, event)) {
                                     if (aimY > me.getDialogImpl().getEnterY()) {
                                         if (impl.scrollView.getScrollDistance() == 0) {
                                             if (impl.scrollView instanceof ScrollController) {
@@ -68,7 +69,8 @@ public class FullScreenDialogTouchEventInterceptor {
                                         if (impl.scrollView instanceof ScrollController) {
                                             ((ScrollController) impl.scrollView).lockScroll(false);
                                         }
-                                        impl.bkg.setY(me.getDialogImpl().getEnterY());
+                                        aimY = (me.getDialogImpl().getEnterY());
+                                        impl.bkg.setY(aimY);
                                     }
                                 } else {
                                     if (aimY < me.getDialogImpl().getEnterY()) {
@@ -122,7 +124,32 @@ public class FullScreenDialogTouchEventInterceptor {
             touchView.setOnTouchListener(null);
         }
     }
-    
+
+    /**
+     * 检查 MotionEvent 触摸点是否在 scrollView 相对于对话框移动布局 slideView 范围内
+     *
+     * @param slideView  对话框移动布局
+     * @param scrollView 内部滚动布局
+     * @param event      触摸事件
+     * @return 是否在范围内
+     */
+    private boolean touchInScrollView(View slideView, ScrollController scrollView, MotionEvent event) {
+        View scrollViewImpl = (View) scrollView;
+        RectF scrollViewLocation = new RectF();
+        int[] scrollViewScreenLoc = new int[2];
+        int[] rootViewScreenLoc = new int[2];
+        scrollViewImpl.getLocationInWindow(scrollViewScreenLoc);
+        slideView.getLocationInWindow(rootViewScreenLoc);
+
+        scrollViewLocation.left = scrollViewScreenLoc[0] - rootViewScreenLoc[0];
+        scrollViewLocation.top = scrollViewScreenLoc[1] - rootViewScreenLoc[1];
+        scrollViewLocation.right = scrollViewLocation.left + scrollViewImpl.getWidth();
+        scrollViewLocation.bottom = scrollViewLocation.top + scrollViewImpl.getHeight();
+
+        return event.getX() >= scrollViewLocation.left && event.getX() <= scrollViewLocation.right &&
+                event.getY() >= scrollViewLocation.top && event.getY() <= scrollViewLocation.bottom;
+    }
+
     private int dip2px(float dpValue) {
         final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);

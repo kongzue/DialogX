@@ -3,13 +3,18 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
@@ -46,12 +51,13 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.style.MaterialStyle;
-import com.kongzue.dialogx.util.InputInfo;
-import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
+import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
+import com.kongzue.dialogx.util.TextInfo;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,8 +91,6 @@ public class MessageDialog extends BaseDialog {
         super();
     }
 
-    protected View dialogView;
-
     protected CharSequence title;
     protected CharSequence message;
     protected CharSequence okText;
@@ -94,7 +98,7 @@ public class MessageDialog extends BaseDialog {
     protected CharSequence otherText;
     protected String inputText;
     protected String inputHintText;
-    protected int maskColor = -1;
+    protected Integer maskColor = null;
     protected float backgroundRadius = -1;
     protected Drawable titleIcon;
 
@@ -240,11 +244,13 @@ public class MessageDialog extends BaseDialog {
             int layoutId = style.layout(isLightTheme());
             layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
-            dialogView = createView(layoutId);
+            View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(dialogView);
+        } else {
+            show(getDialogView());
         }
-        show(dialogView);
         return this;
     }
 
@@ -254,11 +260,13 @@ public class MessageDialog extends BaseDialog {
             int layoutId = style.layout(isLightTheme());
             layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
-            dialogView = createView(layoutId);
+            View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
+            show(activity, dialogView);
+        } else {
+            show(activity, getDialogView());
         }
-        show(activity, dialogView);
     }
 
     public void refreshUI() {
@@ -290,6 +298,7 @@ public class MessageDialog extends BaseDialog {
 
         public DialogImpl(View convertView) {
             if (convertView == null) return;
+            setDialogView(convertView);
             boxRoot = convertView.findViewById(R.id.box_root);
             bkg = convertView.findViewById(R.id.bkg);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
@@ -303,7 +312,7 @@ public class MessageDialog extends BaseDialog {
             btnSelectNegative = convertView.findViewById(R.id.btn_selectNegative);
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
 
-            blurViews = findAllBlurView(dialogView);
+            blurViews = findAllBlurView(convertView);
 
             init();
 
@@ -320,7 +329,7 @@ public class MessageDialog extends BaseDialog {
             if (cancelTextInfo == null) cancelTextInfo = DialogX.buttonTextInfo;
             if (otherTextInfo == null) otherTextInfo = DialogX.buttonTextInfo;
             if (inputInfo == null) inputInfo = DialogX.inputInfo;
-            if (backgroundColor == -1) backgroundColor = DialogX.backgroundColor;
+            if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
 
             txtDialogTitle.getPaint().setFakeBoldText(true);
             btnSelectNegative.getPaint().setFakeBoldText(true);
@@ -358,7 +367,7 @@ public class MessageDialog extends BaseDialog {
 
                                 if (blurViews != null) {
                                     for (View blurView : blurViews) {
-                                        ((BlurViewType) blurView).setOverlayColor(blurFrontColor);
+                                        ((BlurViewType) blurView).setOverlayColor(backgroundColor == null ? blurFrontColor : backgroundColor);
                                         ((BlurViewType) blurView).setRadiusPx(dialogXRadius);
                                     }
                                 }
@@ -396,7 +405,6 @@ public class MessageDialog extends BaseDialog {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     MessageDialog.this.onDismiss(me);
-                    dialogView = null;
                     dialogLifecycleCallback = null;
 
                     setLifecycleState(Lifecycle.State.DESTROYED);
@@ -549,7 +557,7 @@ public class MessageDialog extends BaseDialog {
             }
 
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
-            if (backgroundColor != -1) {
+            if (backgroundColor != null) {
                 tintColor(bkg, backgroundColor);
                 if (style instanceof MaterialStyle) {
                     tintColor(btnSelectOther, backgroundColor);
@@ -558,7 +566,9 @@ public class MessageDialog extends BaseDialog {
                 }
 
                 if (blurViews != null) {
+                    log("#blurViews != null");
                     for (View blurView : blurViews) {
+                        log("#blurView: " + blurView);
                         ((BlurViewType) blurView).setOverlayColor(backgroundColor);
                     }
                 }
@@ -583,7 +593,7 @@ public class MessageDialog extends BaseDialog {
                 txtInput.setVisibility(View.GONE);
             }
             boxRoot.setClickable(true);
-            if (maskColor != -1) {
+            if (maskColor != null) {
                 boxRoot.setBackgroundColor(maskColor);
             }
             if (backgroundRadius > -1) {
@@ -645,6 +655,9 @@ public class MessageDialog extends BaseDialog {
                 txtInput.setInputType(inputType);
                 if (inputInfo.getTextInfo() != null) {
                     useTextInfo(txtInput, inputInfo.getTextInfo());
+                }
+                if (inputInfo.getInputFilters() != null && inputInfo.getInputFilters().length > 0) {
+                    txtInput.setFilters(inputInfo.getInputFilters());
                 }
             }
 
@@ -801,7 +814,7 @@ public class MessageDialog extends BaseDialog {
             if (v != null) v.setEnabled(false);
             if (getOwnActivity() == null) return;
 
-            if (!dismissAnimFlag) {
+            if (!dismissAnimFlag && getDialogXAnimImpl() != null) {
                 dismissAnimFlag = true;
                 getDialogXAnimImpl().doExitAnim(MessageDialog.this, bkg);
                 runOnMainDelay(new Runnable() {
@@ -810,7 +823,7 @@ public class MessageDialog extends BaseDialog {
                         if (boxRoot != null) {
                             boxRoot.setVisibility(View.GONE);
                         }
-                        dismiss(dialogView);
+                        dismiss(getDialogView());
                     }
                 }, getExitAnimationDuration(null));
             }
@@ -1260,8 +1273,8 @@ public class MessageDialog extends BaseDialog {
 
     @Override
     public void restartDialog() {
-        if (dialogView != null) {
-            dismiss(dialogView);
+        if (getDialogView() != null) {
+            dismiss(getDialogView());
             isShow = false;
         }
         if (getDialogImpl().boxCustom != null) {
@@ -1271,7 +1284,7 @@ public class MessageDialog extends BaseDialog {
         layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
         enterAnimDuration = 0;
-        dialogView = createView(layoutId);
+        View dialogView = createView(layoutId);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);

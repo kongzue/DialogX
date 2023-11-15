@@ -12,6 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:hardwareAccelerated="true"
         android:theme="@style/AppTheme">
 
         <activity
@@ -19,6 +20,16 @@
             android:exported="false"
             android:theme="@style/AppCompatTheme"
             android:windowSoftInputMode="adjustResize" />
+
+
+        <activity
+            android:name=".activity.TestMainActivity"
+            android:exported="false"
+            android:theme="@style/AppCompatTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+<!--            android:name=".activity.MainActivity"-->
+<!--            android:name=".activity.TestMainActivity"-->
 
         <activity
             android:name=".activity.MainActivity"

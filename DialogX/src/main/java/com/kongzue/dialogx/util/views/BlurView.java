@@ -2,6 +2,7 @@ package com.kongzue.dialogx.util.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -10,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Outline;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -284,11 +286,11 @@ public class BlurView extends View {
             View decor = mDecorView;
             if (decor != null && isShown() && prepare()) {
                 boolean redrawBitmap = mBlurredBitmap != oldBmp;
-                decor.getLocationOnScreen(locations);
+                decor.getLocationInWindow(locations);
                 int x = -locations[0];
                 int y = -locations[1];
 
-                getLocationOnScreen(locations);
+                getLocationInWindow(locations);
                 x += locations[0];
                 y += locations[1];
 
