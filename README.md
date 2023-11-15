@@ -135,7 +135,7 @@ DialogX 采用了主题分离结构，主框架仅包含 Material 设计风格�
 
 <div>
 最新版本：
-<a href="https://central.sonatype.dev/artifact/com.kongzue.dialogx/DialogX/0.0.48"><img src="https://img.shields.io/maven-central/v/com.kongzue.dialogx/DialogX" alt="DialogX Release"></a></div>
+<a href="https://central.sonatype.dev/artifact/com.kongzue.dialogx/DialogX/0.0.49"><img src="https://img.shields.io/maven-central/v/com.kongzue.dialogx/DialogX" alt="DialogX Release"></a></div>
 
 1) 在 project 的 build.gradle 文件中找到 `allprojects{}` 代码块添加以下代码：
 
@@ -154,7 +154,7 @@ allprojects {
 2) 在 app 的 build.gradle 文件中找到 `dependencies{}` 代码块，并在其中加入以下语句：
 
 ```
-def dialogx_version = "0.0.48"
+def dialogx_version = "0.0.49"
 implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
 ```
 
