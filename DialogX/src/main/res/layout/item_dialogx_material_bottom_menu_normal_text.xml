@@ -2,15 +2,15 @@
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:gravity="center_vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
 
     <ImageView
         android:id="@+id/img_dialogx_menu_icon"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginLeft="-5dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="-5dp"
+        android:layout_marginEnd="10dp"
         android:padding="5dp" />
 
     <ImageView
@@ -18,8 +18,8 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="-5dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="-5dp"
+        android:layout_marginEnd="10dp"
         android:padding="5dp"
         android:src="@mipmap/img_dialogx_bottom_menu_material_item_selection" />
 
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_weight="1"
-        android:gravity="left|center_vertical"
+        android:gravity="start|center_vertical"
         android:maxLines="1"
         android:text=""
         android:textColor="@color/black90"
@@ -38,7 +38,7 @@
         android:id="@+id/space_dialogx_right_padding"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:visibility="gone" />
 
 </LinearLayout>

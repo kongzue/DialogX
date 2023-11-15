@@ -62,7 +62,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:paddingBottom="5dp"
                             android:text="This is content text."
                             android:textColor="@color/black70"
