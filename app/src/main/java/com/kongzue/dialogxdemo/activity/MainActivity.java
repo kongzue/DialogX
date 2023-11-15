@@ -806,7 +806,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public void onShow(MessageDialog dialog) {
                                 super.onShow(dialog);
-                                dialog.getDialogImpl().txtDialogTip.setPadding(0,dip2px(20),0,0);
+                                dialog.getDialogImpl().txtDialogTip.setPadding(0, dip2px(20), 0, 0);
                             }
                         })
                         .setCustomView(new OnBindView<MessageDialog>(R.layout.layout_custom_view) {
@@ -1379,6 +1379,30 @@ public class MainActivity extends BaseActivity {
                                         Intent intent = new Intent(me, MainActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                         startActivity(intent);
+//
+//                                        CustomDialog.build(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
+//
+//                                                    private ImageView btnOk;
+//
+//                                                    @Override
+//                                                    public void onBind(CustomDialog dialog, View v) {
+//                                                        btnOk = v.findViewById(R.id.btn_ok);
+//
+//                                                        btnOk.setOnClickListener(new View.OnClickListener() {
+//                                                            @Override
+//                                                            public void onClick(View v) {
+//                                                                Intent intent = new Intent(me, MainActivity.class);
+//                                                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                                                                startActivity(intent);
+//
+//                                                                dialog.dismiss();
+//                                                            }
+//                                                        });
+//                                                    }
+//                                                })
+//                                                .setDialogImplMode(DialogX.IMPL_MODE.WINDOW)
+//                                                .show();
+
                                         return false;
                                     }
                                 })
