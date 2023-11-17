@@ -189,7 +189,7 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 <a href="https://github.com/kongzue/DialogX/wiki/"><img src="https://github.com/kongzue/DialogX/raw/master/readme/img_how_to_use_tip.png" alt="如何使用" width="450" height="280" /></a>
 
-具體的使用說明，請參閱 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
+具體的使用說明，請參閱 [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/home_tc)
 
 ### 🧩 擴展包
 
@@ -205,7 +205,7 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 ### ℹ️使用過程遇到問題？
 
-查看 [常見問題](https://github.com/kongzue/DialogX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+查看 [常見問題](https://github.com/kongzue/DialogX/wiki/FAQ_tc)
 
 技術支援和回饋建議可以加討論群：590498789
 
