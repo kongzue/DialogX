@@ -194,7 +194,7 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 ### ▶️How to use
 
-For specific instructions, see [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
+For specific instructions, see [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/home_en)
 
 ### 🧩 Expansion Pack
 
@@ -210,7 +210,7 @@ The extension package is currently in the preliminary development stage, to prev
 
 ### ℹ️Having trouble using it?
 
-View [FAQ](https://github.com/kongzue/DialogX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+View [FAQ](https://github.com/kongzue/DialogX/wiki/FAQ_en)
 
 ### ❤️Powered By DialogX
 
