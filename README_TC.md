@@ -51,7 +51,7 @@
 
 DialogX 包含以下對話框組件：
 
-- [基礎對話框 MessageDialog和 輸入對話框 InputDialog](https://github.com/kongzue/DialogX/wiki/%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%AF%9D%E6%A1%86-MessageDialog-%E5%92%8C-%E8%BE%93%E5%85%A5%E5%AF%B9%E8%AF%9D%E6%A1%86-InputDialog)
+- [基礎對話框 MessageDialog和 輸入對話框 InputDialog](https://github.com/kongzue/DialogX/wiki/MessageDialog&InputDialog_tc)
 
   ![基礎對話框 MessageDialog和 輸入對話框 InputDialog](https://github.com/kongzue/DialogX/raw/master/readme/messagedialog.png)
 
@@ -59,13 +59,13 @@ DialogX 包含以下對話框組件：
 
   輸入對話框 InputDialog 是基礎對話框的擴展組件，除了包含基礎的功能外還提供了輸入框，可自訂輸入提示文本、輸入文字樣式和點擊按鈕後的輸入內容回調等。
 
-- [等待框 WaitDialog 和提示框 TipDialog](https://github.com/kongzue/DialogX/wiki/%E7%AD%89%E5%BE%85%E6%A1%86-WaitDialog-%E5%92%8C%E6%8F%90%E7%A4%BA%E6%A1%86-TipDialog)
+- [等待框 WaitDialog 和提示框 TipDialog](https://github.com/kongzue/DialogX/wiki/WaitDialog&TipDialog_tc)
 
   ![等待框 WaitDialog 和提示框 TipDialog](https://github.com/kongzue/DialogX/raw/master/readme/waitdialog.png)
 
   阻斷式等待提示框，會顯示基礎的環形等待動畫以及進度展示動畫，它是單例的，這就意味著從等待狀態 WaitDialog 切換到提示狀態 TipDialog 是無縫的，你可以自由的選擇在等待結束後顯示成功/警告/錯誤三種狀態的消息提示，動畫的切換也會無縫銜接。
 
-- [底部對話框 BottomDialog 和底部選單 BottomMenu](https://github.com/kongzue/DialogX/wiki/%E5%BA%95%E9%83%A8%E5%AF%B9%E8%AF%9D%E6%A1%86-BottomDialog-%E5%92%8C%E5%BA%95%E9%83%A8%E8%8F%9C%E5%8D%95-BottomMenu)
+- [底部對話框 BottomDialog 和底部選單 BottomMenu](https://github.com/kongzue/DialogX/wiki/BottomDialog&BottomMenu_tc)
 
   ![底部對話框 BottomDialog 和底部選單 BottomMenu](https://github.com/kongzue/DialogX/raw/master/readme/bottomdialog.png)
 
@@ -73,31 +73,31 @@ DialogX 包含以下對話框組件：
 
   底部選單 BottomMenu 則是底部對話框 BottomDialog 的擴展組件，在底部對話框的基礎上額外提供了菜單功能，菜單可設置菜單內容/菜單圖示/單選功能，在不同的主題下還可以提供“取消”關閉按鈕
 
-- [簡單提示 PopTip](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E6%8F%90%E7%A4%BA-PopTip)
+- [簡單提示 PopTip](https://github.com/kongzue/DialogX/wiki/PopTip_tc)
 
   ![簡單提示 PopTip](https://github.com/kongzue/DialogX/raw/master/readme/poptip.png)
 
   提供一個類似 Toast 的文本提示功能，但它擁有更強大的自訂屬性。你可以設置文本提示、圖示、以及一個控制按鈕，並可以設置持續顯示或定義自動消失的時長。PopTip 是非阻斷式提示，也就是說，在 PopTip 顯示時用戶依然可以操作界面。
   
-- [簡單通知提示 PopNotification](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E9%80%9A%E7%9F%A5%E6%8F%90%E7%A4%BA-PopNotification)
+- [簡單通知提示 PopNotification](https://github.com/kongzue/DialogX/wiki/PopNotification_tc)
 
   ![簡單通知提示 PopNotification](https://github.com/kongzue/DialogX/raw/master/readme/popnotification.png)
 
   提供一個類似 Notification 的通知樣式提示功能，請注意，此組件並不能取代 Notification，默認不支持不能跨界面顯示（可使用懸浮窗權限設定允許），僅用於應用內通知提示，擁有更強大的自訂屬性。你可以設置文本提示、圖示、以及一個控制按鈕，並可以設置持續顯示或定義自動消失的時長。PopNotification 是非阻斷式提示，也就是說，在 PopNotification 顯示時用戶依然可以操作界面。
 
-- [全螢幕對話框 FullScreenDialog](https://github.com/kongzue/DialogX/wiki/%E5%85%A8%E5%B1%8F%E5%AF%B9%E8%AF%9D%E6%A1%86-FullScreenDialog)
+- [全螢幕對話框 FullScreenDialog](https://github.com/kongzue/DialogX/wiki/FullScreenDialog_tc)
 
   ![全螢幕對話框 FullScreenDialog](https://github.com/kongzue/DialogX/raw/master/readme/fullscreendialog.png)
 
   全螢幕對話框 FullScreenDialog 提供從底部彈出的對話框效果，類似 BottomDialog 但相比 BottomDialog 的訂製化自由度更高。全螢幕對話框 FullScreenDialog 將不提供任何基礎實現，開發者可以自訂實現布局。默認只提供一個預設的下劃關閉邏輯和 Activity 背景下沉的顯示效果。
 
-- [自訂對話框 CustomDialog](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E8%AF%9D%E6%A1%86-CustomDialog)
+- [自訂對話框 CustomDialog](https://github.com/kongzue/DialogX/wiki/CustomDialog_tc)
 
   ![自訂對話框 CustomDialog](https://github.com/kongzue/DialogX/raw/master/readme/customdialog.png)
 
   根據訂製化自由度的對話框組件，完全由用戶自行實現布局內容。CustomDialog 提供了 ALIGN 選項可以輕鬆訂製對話框彈出的方式，默認支持螢幕中央、螢幕底部、螢幕頂部、螢幕左側、螢幕右側多種彈出模式，也會提供相應的彈出動畫效果，當然用戶也可以自訂動畫效果。
 
-- [引導對話框 GuideDialog](https://github.com/kongzue/DialogX/wiki/%E5%BC%95%E5%AF%BC%E5%AF%B9%E8%AF%9D%E6%A1%86-GuideDialog(Beta))
+- [引導對話框 GuideDialog](https://github.com/kongzue/DialogX/wiki/GuideDialog_tc)
   
   ![引導對話框 GuideDialog](https://github.com/kongzue/DialogX/raw/master/readme/guidedialog.png)
 
@@ -113,9 +113,9 @@ DialogX 採用了主題分離結構，主框架僅包含 Material 設計風格�
 
 主題設計開發者也可以透過使用 DialogX 提供的主題訂製介面來實現自訂主題，或者對現有主題進行樣式調整和修改。
 
-你還可以更深入的 [了解如何使用 DialogX 主題](https://github.com/kongzue/DialogX/wiki/%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96-DialogX%E4%B8%BB%E9%A2%98)
+你還可以更深入的 [了解如何使用 DialogX 主題](https://github.com/kongzue/DialogX/wiki/Styles_tc)
 
-你還可以更深入的 [了解如何開發 DialogX 主題](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98)
+你還可以更深入的 [了解如何開發 DialogX 主題](https://github.com/kongzue/DialogX/wiki/CustomThemeStyle_tc)
 
 # Demo
 
