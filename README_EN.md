@@ -51,7 +51,7 @@ On the premise of ease of use, DialogX provides more personalized interfaces for
 
 DialogX contains the following dialog components：
 
-- [MessageDialog & InputDialog](https://github.com/kongzue/DialogX/wiki/%E5%9F%BA%E7%A1%80%E5%AF%B9%E8%AF%9D%E6%A1%86-MessageDialog-%E5%92%8C-%E8%BE%93%E5%85%A5%E5%AF%B9%E8%AF%9D%E6%A1%86-InputDialog)
+- [MessageDialog & InputDialog](https://github.com/kongzue/DialogX/wiki/MessageDialog&InputDialog_en)
 
   ![基础对话框 MessageDialog和 输入对话框 InputDialog](https://github.com/kongzue/DialogX/raw/master/readme/messagedialog.png)
 
@@ -59,13 +59,13 @@ DialogX contains the following dialog components：
 
   InputDialog is an extension component of the basic dialog box, which not only contains the basic functions but also provides input box, customizable input prompt text, input text style and callback of input content after clicking the button.
 
-- [WaitDialog & TipDialog](https://github.com/kongzue/DialogX/wiki/%E7%AD%89%E5%BE%85%E6%A1%86-WaitDialog-%E5%92%8C%E6%8F%90%E7%A4%BA%E6%A1%86-TipDialog)
+- [WaitDialog & TipDialog](https://github.com/kongzue/DialogX/wiki/WaitDialog&TipDialog_en)
 
   ![等待框 WaitDialog 和提示框 TipDialog](https://github.com/kongzue/DialogX/raw/master/readme/waitdialog.png)
 
   The blocking wait dialog, which displays the basic circular wait animation as well as the progress display animation, is single-instance, which means that switching from the wait state (WaitDialog) to the tip state (TipDialog) is seamless, and you can freely choose to display three states of success/warning/error message alerts at the end of the wait, and the animation switching will be seamless.
 
-- [BottomDialog & BottomMenu](https://github.com/kongzue/DialogX/wiki/%E5%BA%95%E9%83%A8%E5%AF%B9%E8%AF%9D%E6%A1%86-BottomDialog-%E5%92%8C%E5%BA%95%E9%83%A8%E8%8F%9C%E5%8D%95-BottomMenu)
+- [BottomDialog & BottomMenu](https://github.com/kongzue/DialogX/wiki/BottomDialog&BottomMenu_en)
 
   ![底部对话框 BottomDialog 和底部菜单 BottomMenu](https://github.com/kongzue/DialogX/raw/master/readme/bottomdialog.png)
 
@@ -73,31 +73,31 @@ DialogX contains the following dialog components：
 
   BottomMenu is an extension of BottomDialog, which provides additional menu function on top of BottomDialog, the menu can set menu content/menu icon/select function, and can also provide "Cancel" close button under different themes.
 
-- [PopTip](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E6%8F%90%E7%A4%BA-PopTip)
+- [PopTip](https://github.com/kongzue/DialogX/wiki/PopTip_en)
 
   ![简单提示 PopTip](https://github.com/kongzue/DialogX/raw/master/readme/poptip.png)
 
   Provides a Toast-like text prompt feature, but with more powerful customization properties. You can set text tips, icons, and a control button, and you can set a continuous display or define the length of time it will automatically disappear. popTip is a non-blocking tip, which means that the user can still operate the interface while popTip is displayed.
   
-- [PopNotification](https://github.com/kongzue/DialogX/wiki/%E7%AE%80%E5%8D%95%E9%80%9A%E7%9F%A5%E6%8F%90%E7%A4%BA-PopNotification)
+- [PopNotification](https://github.com/kongzue/DialogX/wiki/PopNotification_en)
 
   ![简单通知提示 PopNotification](https://github.com/kongzue/DialogX/raw/master/readme/popnotification.png)
 
   This component is not a replacement for Notification, does not support cross-platform display by default (you can use the hover permission to allow it), and is only used for in-app notification alerts, with more powerful customization properties. PopNotification is a non-blocking alert, meaning that the user can still operate the interface while PopNotification is displayed.
 
-- [FullScreenDialog](https://github.com/kongzue/DialogX/wiki/%E5%85%A8%E5%B1%8F%E5%AF%B9%E8%AF%9D%E6%A1%86-FullScreenDialog)
+- [FullScreenDialog](https://github.com/kongzue/DialogX/wiki/FullScreenDialog_en)
 
   ![全屏对话框 FullScreenDialog](https://github.com/kongzue/DialogX/raw/master/readme/fullscreendialog.png)
 
   FullScreenDialog provides a pop-up effect from the bottom, similar to BottomDialog but with more freedom of customization than BottomDialog. FullScreenDialog will not provide any base implementation, developers can customize the layout. By default, it will only provide a default down-close logic and a sunken Activity background display effect.
 
-- [CustomDialog](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E8%AF%9D%E6%A1%86-CustomDialog)
+- [CustomDialog](https://github.com/kongzue/DialogX/wiki/CustomDialog_en)
 
   ![自定义对话框 CustomDialog](https://github.com/kongzue/DialogX/raw/master/readme/customdialog.png)
 
   CustomDialog provides ALIGN option to easily customize the pop-up mode of the dialog box, which supports multiple pop-up modes of screen center, screen bottom, screen top, screen left and screen right by default, and also provides corresponding pop-up animation effect, of course, users can also customize the animation effect.
 
-- [GuideDialog](https://github.com/kongzue/DialogX/wiki/%E5%BC%95%E5%AF%BC%E5%AF%B9%E8%AF%9D%E6%A1%86-GuideDialog(Beta))
+- [GuideDialog](https://github.com/kongzue/DialogX/wiki/GuideDialog_en)
   
   ![引導對話框 GuideDialog](https://github.com/kongzue/DialogX/raw/master/readme/guidedialog.png)
 
@@ -113,9 +113,9 @@ In addition, each set of themes contains two display styles: light/dark, and you
 
 Theme design developers can also use the theme customization interface provided by DialogX to implement custom themes, or to style and modify existing themes.
 
-You can also go deeper [Learn how to use the DialogX theme](https://github.com/kongzue/DialogX/wiki/%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96-DialogX%E4%B8%BB%E9%A2%98)
+You can also go deeper [Learn how to use the DialogX theme](https://github.com/kongzue/DialogX/wiki/Styles_en)
 
-You can also go deeper [Learn how to make a DialogX theme](https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98)
+You can also go deeper [Learn how to make a DialogX theme](https://github.com/kongzue/DialogX/wiki/CustomThemeStyle_en)
 
 # Demo
 
@@ -194,7 +194,7 @@ implementation "com.github.kongzue.DialogX:DialogX:${dialogx_version}"
 
 ### ▶️How to use
 
-For specific instructions, see [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/)
+For specific instructions, see [DialogX Wiki](https://github.com/kongzue/DialogX/wiki/home_en)
 
 ### 🧩 Expansion Pack
 
@@ -210,7 +210,7 @@ The extension package is currently in the preliminary development stage, to prev
 
 ### ℹ️Having trouble using it?
 
-View [FAQ](https://github.com/kongzue/DialogX/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
+View [FAQ](https://github.com/kongzue/DialogX/wiki/FAQ_en)
 
 ### ❤️Powered By DialogX
 
