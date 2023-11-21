@@ -77,7 +77,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     protected OnDialogButtonClickListener<PopNotification> onPopNotificationClickListener;
     protected boolean autoTintIconInLightOrDarkMode = true;
     protected BOOLEAN tintIcon;
-    protected float backgroundRadius = -1;
+    protected float backgroundRadius = DialogX.defaultPopNotificationBackgroundRadius;
     protected DialogXAnimInterface<PopNotification> dialogXAnimImpl;
 
     protected int iconResId;
@@ -699,8 +699,11 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             }
 
             if (backgroundRadius > -1) {
-                GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
-                if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                if (boxBody.getBackground() instanceof GradientDrawable) {
+                    GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
+                    if (gradientDrawable != null)
+                        gradientDrawable.setCornerRadius(backgroundRadius);
+                }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     boxBody.setOutlineProvider(new ViewOutlineProvider() {
                         @Override

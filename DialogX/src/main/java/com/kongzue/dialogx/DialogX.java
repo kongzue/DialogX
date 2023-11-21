@@ -150,6 +150,20 @@ public class DialogX {
             "com.mobile.auth.gatewayauth",
             "com.google.android.gms.ads"
     };
+
+    public static int defaultMessageDialogBackgroundRadius = -1;
+
+    public static int defaultBottomDialogBackgroundRadius = -1;
+
+    public static int defaultFullScreenDialogBackgroundRadius = -1;
+
+    public static int defaultWaitAndTipDialogBackgroundRadius = -1;
+
+    public static int defaultPopMenuBackgroundRadius = -1;
+
+    public static int defaultPopTipBackgroundRadius = -1;
+
+    public static int defaultPopNotificationBackgroundRadius = -1;
     
     public enum THEME {
         LIGHT, DARK, AUTO

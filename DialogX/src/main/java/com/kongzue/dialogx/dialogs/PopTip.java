@@ -75,7 +75,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     protected OnDialogButtonClickListener<PopTip> onButtonClickListener;
     protected OnDialogButtonClickListener<PopTip> onPopTipClickListener;
     protected BOOLEAN tintIcon;
-    protected float backgroundRadius = -1;
+    protected float backgroundRadius = DialogX.defaultPopTipBackgroundRadius;
     protected DialogXAnimInterface<PopTip> dialogXAnimImpl;
 
     protected int iconResId;
@@ -646,8 +646,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             }
 
             if (backgroundRadius > -1) {
-                GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
-                if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                if (boxBody.getBackground() instanceof GradientDrawable) {
+                    GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
+                    if (gradientDrawable != null)
+                        gradientDrawable.setCornerRadius(backgroundRadius);
+                }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     boxBody.setOutlineProvider(new ViewOutlineProvider() {
                         @Override

@@ -75,7 +75,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
     protected OnBackPressedListener<BottomDialog> onBackPressedListener;
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
-    protected float backgroundRadius = -1;
+    protected float backgroundRadius = DialogX.defaultBottomDialogBackgroundRadius;
     protected Drawable titleIcon;
     protected DialogXAnimInterface<BottomDialog> dialogXAnimImpl;
     protected BUTTON_SELECT_RESULT buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
@@ -558,10 +558,12 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 }
             });
             if (backgroundRadius > -1) {
-                GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
-                if (gradientDrawable != null) gradientDrawable.setCornerRadii(new float[]{
-                        backgroundRadius, backgroundRadius, backgroundRadius, backgroundRadius, 0, 0, 0, 0
-                });
+                if (bkg.getBackground() instanceof GradientDrawable) {
+                    GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
+                    if (gradientDrawable != null) gradientDrawable.setCornerRadii(new float[]{
+                            backgroundRadius, backgroundRadius, backgroundRadius, backgroundRadius, 0, 0, 0, 0
+                    });
+                }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     bkg.setOutlineProvider(new ViewOutlineProvider() {
                         @Override

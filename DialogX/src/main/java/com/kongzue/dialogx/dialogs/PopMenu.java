@@ -79,7 +79,7 @@ public class PopMenu extends BaseDialog {
     protected int height = -1;                                              //指定菜单高度
     protected TextInfo menuTextInfo;
     protected boolean offScreen = false;                                    //超出屏幕
-    protected float backgroundRadius = -1;
+    protected float backgroundRadius = DialogX.defaultPopMenuBackgroundRadius;
     protected DialogXAnimInterface<PopMenu> dialogXAnimImpl;
     protected OnBackPressedListener<PopMenu> onBackPressedListener;
     protected MenuItemLayoutRefreshCallback<PopMenu> menuMenuItemLayoutRefreshCallback;
@@ -587,8 +587,11 @@ public class PopMenu extends BaseDialog {
             }
 
             if (backgroundRadius > -1) {
-                GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
-                if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                if (boxBody.getBackground() instanceof GradientDrawable) {
+                    GradientDrawable gradientDrawable = (GradientDrawable) boxBody.getBackground();
+                    if (gradientDrawable != null)
+                        gradientDrawable.setCornerRadius(backgroundRadius);
+                }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     boxBody.setOutlineProvider(new ViewOutlineProvider() {
                         @Override

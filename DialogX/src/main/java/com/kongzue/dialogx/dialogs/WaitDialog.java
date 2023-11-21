@@ -65,7 +65,7 @@ public class WaitDialog extends BaseDialog {
     protected OnBindView<WaitDialog> onBindView;
     protected int customEnterAnimResId;
     protected int customExitAnimResId;
-    protected float backgroundRadius = -1;
+    protected float backgroundRadius = DialogX.defaultWaitAndTipDialogBackgroundRadius;
     protected DialogXAnimInterface<WaitDialog> dialogXAnimImpl;
     protected OnBackPressedListener<WaitDialog> onBackPressedListener;
 

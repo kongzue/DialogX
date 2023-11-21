@@ -59,7 +59,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     protected OnBackPressedListener<FullScreenDialog> onBackPressedListener;
     protected BOOLEAN privateCancelable;
     protected boolean hideZoomBackground;
-    protected float backgroundRadius = -1;
+    protected float backgroundRadius = DialogX.defaultFullScreenDialogBackgroundRadius;
     protected float activityContentRadius = ACTIVITY_CONTENT_RADIUS_DEFAULT;
     protected boolean allowInterceptTouch = true;
     protected DialogXAnimInterface<FullScreenDialog> dialogXAnimImpl;
@@ -341,10 +341,12 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 boxRoot.setOnClickListener(null);
             }
             if (backgroundRadius > -1) {
-                GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
-                if (gradientDrawable != null) gradientDrawable.setCornerRadii(new float[]{
-                        backgroundRadius, backgroundRadius, backgroundRadius, backgroundRadius, 0, 0, 0, 0
-                });
+                if (bkg.getBackground() instanceof GradientDrawable) {
+                    GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
+                    if (gradientDrawable != null) gradientDrawable.setCornerRadii(new float[]{
+                            backgroundRadius, backgroundRadius, backgroundRadius, backgroundRadius, 0, 0, 0, 0
+                    });
+                }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     bkg.setOutlineProvider(new ViewOutlineProvider() {
                         @Override

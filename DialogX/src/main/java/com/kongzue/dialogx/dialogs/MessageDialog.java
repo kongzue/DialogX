@@ -99,7 +99,7 @@ public class MessageDialog extends BaseDialog {
     protected String inputText;
     protected String inputHintText;
     protected Integer maskColor = null;
-    protected float backgroundRadius = -1;
+    protected float backgroundRadius = DialogX.defaultMessageDialogBackgroundRadius;
     protected Drawable titleIcon;
 
     protected TextInfo titleTextInfo;
