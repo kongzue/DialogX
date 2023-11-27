@@ -1159,8 +1159,6 @@ public class PopMenu extends BaseDialog {
         return backgroundRadius;
     }
 
-    private boolean isHide;
-
     public void hide() {
         isHide = true;
         hideWithExitAnim = false;

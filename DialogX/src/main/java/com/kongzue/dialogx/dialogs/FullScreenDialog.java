@@ -705,8 +705,6 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         show(dialogView);
     }
 
-    private boolean isHide;
-
     public void hide() {
         isHide = true;
         hideWithExitAnim = false;

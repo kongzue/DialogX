@@ -1014,4 +1014,10 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected void setDialogView(View view) {
         dialogView = new WeakReference<>(view);
     }
+
+    protected boolean isHide;
+
+    public boolean isHide() {
+        return isHide;
+    }
 }

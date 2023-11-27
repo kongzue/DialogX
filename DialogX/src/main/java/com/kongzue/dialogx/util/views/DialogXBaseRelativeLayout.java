@@ -185,7 +185,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     public boolean dispatchKeyEvent(KeyEvent event) {
         log("#dispatchKeyEvent: KeyCode=" + event.getKeyCode());
         if (isAttachedToWindow() && event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK && interceptBack) {
-            if (onBackPressedListener != null) {
+            if (onBackPressedListener != null && !parentDialog.get().isHide()) {
                 return onBackPressedListener.onBackPressed();
             }
         }

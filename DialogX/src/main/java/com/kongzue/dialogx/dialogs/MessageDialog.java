@@ -1290,8 +1290,6 @@ public class MessageDialog extends BaseDialog {
         show(dialogView);
     }
 
-    private boolean isHide;
-
     public void hide() {
         isHide = true;
         hideWithExitAnim = false;

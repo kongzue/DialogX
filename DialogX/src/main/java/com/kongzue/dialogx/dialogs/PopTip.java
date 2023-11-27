@@ -1134,8 +1134,6 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         show(dialogView);
     }
 
-    private boolean isHide;
-
     public void hide() {
         isHide = true;
         if (getDialogView() != null) {
