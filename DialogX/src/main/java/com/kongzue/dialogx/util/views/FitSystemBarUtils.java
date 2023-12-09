@@ -313,6 +313,7 @@ public class FitSystemBarUtils {
             }
             addListenerWhenImeHeightChanged();
         } else {
+            specialMode = false;
             if (callBack.isEnable(Orientation.Top)) {
                 initialPadding.top += Math.max(systemWindowInsetTop, cutoutPaddingTop);
             }
@@ -359,7 +360,10 @@ public class FitSystemBarUtils {
 
         initialPadding.applyToView(contentView);
         //四边 非安全区 传递回去
-        log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils callBack: left=" + initialPadding.start + " top=" + initialPadding.top + " right=" + initialPadding.end + " bottom=" + initialPadding.bottom);
+        log("    KONGZUE DEBUG DIALOGX FitSystemBarUtils callBack: left=" + initialPadding.start + " top=" + initialPadding.top +
+                " right=" + initialPadding.end + " bottom=" + initialPadding.bottom + " specialMode=" + specialMode +
+                " specialModeImeHeight=" + specialModeImeHeight
+        );
         callBack.unsafeRect(
                 initialPadding.start,
                 initialPadding.top,
