@@ -1288,7 +1288,7 @@ public class MainActivity extends BaseActivity {
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 12"));
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 13"));
                                 dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 14"));
-                                RecyclerView recyclerView = (RecyclerView) ((ViewGroup) v).getChildAt(0);
+                                RecyclerView recyclerView = (RecyclerView) v;
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(me);
                                 recyclerView.setLayoutManager(layoutManager);
                                 CustomRecycleViewAdapter adapter = new CustomRecycleViewAdapter(dataArrayList);
