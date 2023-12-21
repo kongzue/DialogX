@@ -6,8 +6,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.ArrayMap;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -142,7 +140,7 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         return null;
     }
 
-    @Override
+    
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
         if (onActivityResumeCallBack != null) {
             if (activity instanceof DialogXFloatingWindowActivity) {
@@ -152,22 +150,22 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         }
     }
 
-    @Override
+    
     public void onActivityStarted(@NonNull Activity activity) {
         if (application == null) {
             BaseDialog.init(activity);
         }
     }
 
-    @Override
+    
     public void onActivityPreResumed(@NonNull Activity activity) {
-        Application.ActivityLifecycleCallbacks.super.onActivityPreResumed(activity);
+//        Application.ActivityLifecycleCallbacks.super.onActivityPreResumed(activity);  // # Android 4.4 bug，此代码将导致在 Android 4.4 上闪退，错误原因：java.lang.VerifyError
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             callOnResume(activity);
         }
     }
 
-    @Override
+    
     public void onActivityResumed(@NonNull Activity activity) {
         if (activity.isDestroyed() || activity.isFinishing() || activity instanceof DialogXFloatingWindowActivity) {
             return;
@@ -187,20 +185,19 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         }
     }
 
-    @Override
+    
     public void onActivityPaused(@NonNull Activity activity) {
     }
 
-    @Override
+    
     public void onActivityStopped(@NonNull Activity activity) {
     }
 
-    @Override
+    
     public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
 
     }
 
-    @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
         if (BaseDialog.getTopActivity() == activity) {
             BaseDialog.cleanContext();
@@ -210,7 +207,6 @@ public class ActivityLifecycleImpl implements Application.ActivityLifecycleCallb
         }
     }
 
-    @Override
     public void onActivityPreDestroyed(@NonNull final Activity activity) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             BaseDialog.recycleDialog(activity);
