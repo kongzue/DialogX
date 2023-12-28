@@ -50,6 +50,7 @@ import com.kongzue.dialogx.util.views.PopMenuListView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -1305,5 +1306,11 @@ public class PopMenu extends BaseDialog {
 
     protected View baseView() {
         return baseViewWeakReference == null ? null : baseViewWeakReference.get();
+    }
+
+    public PopMenu setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
+        return this;
     }
 }

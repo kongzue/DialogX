@@ -31,6 +31,7 @@ import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 /**
  * @author: Kongzue
@@ -1097,5 +1098,11 @@ public class CustomDialog extends BaseDialog {
 
     protected View baseView() {
         return baseViewWeakReference == null ? null : baseViewWeakReference.get();
+    }
+
+    public CustomDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
+        return this;
     }
 }

@@ -44,6 +44,7 @@ import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -599,7 +600,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 @Override
                 public void onChange(Rect unsafeRect) {
                     if (align == DialogXStyle.PopNotificationSettings.ALIGN.TOP) {
-                        boxBody.setY(defaultTop = (unsafeRect.top + bodyMargin[1]));
+                        boxBody.setY(defaultTop == 0 ? defaultTop = (unsafeRect.top + bodyMargin[1]) : defaultTop);
                     } else if (align == DialogXStyle.PopNotificationSettings.ALIGN.TOP_INSIDE) {
                         boxBody.setPadding(0, unsafeRect.top, 0, 0);
                     }
@@ -815,7 +816,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                                 }
                                 break;
                         }
-                        return false;
+                        return true;
                     }
                 });
             } else {
@@ -1504,5 +1505,11 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     //用于使用 new 构建实例时，override 的生命周期事件
     public void onDismiss(PopNotification dialog) {
 
+    }
+
+    public PopNotification setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
+        return this;
     }
 }

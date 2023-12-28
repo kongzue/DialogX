@@ -7,6 +7,8 @@ import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 
+import java.util.HashMap;
+
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -233,6 +235,12 @@ public class TipDialog extends WaitDialog {
     public TipDialog setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
+        return this;
+    }
+
+    public TipDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
         return this;
     }
 }

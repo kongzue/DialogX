@@ -34,6 +34,7 @@ import com.kongzue.dialogx.util.views.BottomDialogListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.view.View.OVER_SCROLL_NEVER;
@@ -1361,6 +1362,12 @@ public class BottomMenu extends BottomDialog {
 
     public BottomMenu setScrollableWhenContentLargeThanVisibleRange(boolean scrollableWhenContentLargeThanVisibleRange) {
         this.scrollableWhenContentLargeThanVisibleRange = scrollableWhenContentLargeThanVisibleRange;
+        return this;
+    }
+
+    public BottomMenu setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
         return this;
     }
 }

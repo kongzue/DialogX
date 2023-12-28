@@ -58,6 +58,7 @@ import com.kongzue.dialogx.util.TextInfo;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -1479,5 +1480,11 @@ public class MessageDialog extends BaseDialog {
     //用于使用 new 构建实例时，override 的生命周期事件
     public void onDismiss(MessageDialog dialog) {
 
+    }
+
+    public MessageDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
+        return this;
     }
 }

@@ -73,16 +73,7 @@ public abstract class OnBindView<D> {
 
     private int getFragmentParentId() {
         if (fragmentParentId == View.NO_ID) {
-            fragmentParentId = createFragmentParentId();
-        }
-        return fragmentParentId;
-    }
-
-    private int createFragmentParentId() {
-        fragmentParentId = new SecureRandom().nextInt();
-        View somebodyView = BaseDialog.getTopActivity().findViewById(fragmentParentId);
-        if (somebodyView != null) {
-            return createFragmentParentId();
+            fragmentParentId = View.generateViewId();
         }
         return fragmentParentId;
     }

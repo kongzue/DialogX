@@ -43,6 +43,7 @@ import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -1333,5 +1334,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     protected void cleanActivityContext() {
         super.cleanActivityContext();
         dismiss(getDialogView());
+    }
+
+    public PopTip setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
+        return this;
     }
 }

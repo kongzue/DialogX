@@ -20,6 +20,8 @@ import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
 
+import java.util.HashMap;
+
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -675,6 +677,12 @@ public class InputDialog extends MessageDialog {
     public InputDialog setDialogLifecycleCallback(DialogLifecycleCallback<MessageDialog> dialogLifecycleCallback) {
         this.dialogLifecycleCallback = dialogLifecycleCallback;
         if (isShow) dialogLifecycleCallback.onShow(me);
+        return this;
+    }
+
+    public InputDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
         return this;
     }
 }

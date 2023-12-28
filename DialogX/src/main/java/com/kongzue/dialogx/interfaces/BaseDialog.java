@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,6 +77,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
     private WeakReference<DialogListBuilder> dialogListBuilder;
     protected LifecycleRegistry lifecycle = new LifecycleRegistry(this);
+    protected Map<String, Object> data;
 
     public enum BUTTON_SELECT_RESULT {
         NONE,           //未做出选择
@@ -1022,5 +1024,15 @@ public abstract class BaseDialog implements LifecycleOwner {
 
     public boolean isHide() {
         return isHide;
+    }
+
+    public <T> T getData(String key) {
+        return data == null ? null : (T) data.get(key);
+    }
+
+    public BaseDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
+        return this;
     }
 }

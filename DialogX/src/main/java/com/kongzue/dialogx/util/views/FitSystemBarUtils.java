@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
@@ -297,11 +298,9 @@ public class FitSystemBarUtils {
         }
         if (isWrongInsets(systemBars)) {
             log("    FitSystemBarUtils: isWrongInsets try special mode...");
-            switch (checkOrientationAndStatusBarSide()) {
-                case 0:
-                    initialPadding.start = getStatusBarHeight();
-                    initialPadding.end = getNavigationBarHeight();
-                    break;
+            int deviceOrientation = checkOrientationAndStatusBarSide();
+            log("    FitSystemBarUtils: deviceOrientation = " + deviceOrientation);
+            switch (deviceOrientation) {
                 case 1:
                     initialPadding.end = getStatusBarHeight();
                     initialPadding.start = getNavigationBarHeight();
@@ -434,6 +433,10 @@ public class FitSystemBarUtils {
         if (isFullScreen()) {
             return 0;
         }
+        WindowInsetsController insetsController = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ? getDecorView().getWindowInsetsController() : null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && insetsController != null && (insetsController.getSystemBarsBehavior() & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) == 0) {
+            return 0;
+        }
         Resources res;
         if (contentView == null || contentView.getContext() == null) {
             res = Resources.getSystem();
@@ -450,6 +453,11 @@ public class FitSystemBarUtils {
 
     private int getNavigationBarHeight() {
         if (isFullScreen()) {
+            return 0;
+        }
+        WindowInsetsController insetsController = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ? getDecorView().getWindowInsetsController() : null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && insetsController != null && (insetsController.getSystemBarsBehavior() & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR) == 0) {
+            log("getNavigationBarHeight =0");
             return 0;
         }
         Resources res;
@@ -512,13 +520,18 @@ public class FitSystemBarUtils {
     private boolean specialMode;
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener;
 
-    private void addListenerWhenImeHeightChanged() {
-        specialMode = true;
+    private View getDecorView() {
         Activity activity = BaseDialog.getTopActivity();
         if (activity == null) {
-            return;
+            return null;
         }
-        View decorView = activity.getWindow().getDecorView();
+        return activity.getWindow().getDecorView();
+    }
+
+    private void addListenerWhenImeHeightChanged() {
+        specialMode = true;
+        View decorView = getDecorView();
+        if (decorView == null) return;
         if (onGlobalLayoutListener != null) {
             decorView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
         }
@@ -528,6 +541,10 @@ public class FitSystemBarUtils {
                 Rect r = new Rect();
                 decorView.getWindowVisibleDisplayFrame(r);
                 int screenHeight = decorView.getHeight();
+                WindowInsetsController insetsController = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ? getDecorView().getWindowInsetsController() : null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && insetsController != null && (insetsController.getSystemBarsBehavior() & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR) == 0) {
+                    r.bottom = screenHeight;
+                }
                 int keypadHeight = screenHeight - r.bottom;
                 if (keypadHeight != specialModeImeHeight) {
                     specialModeImeHeight = keypadHeight;

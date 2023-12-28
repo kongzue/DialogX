@@ -31,6 +31,7 @@ import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * @author: Kongzue
@@ -779,5 +780,11 @@ public class GuideDialog extends CustomDialog {
     
     public int getBaseViewLocationCoordinateCompensationBottom() {
         return baseViewLocationCoordinateCompensation[3];
+    }
+
+    public GuideDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
+        return this;
     }
 }

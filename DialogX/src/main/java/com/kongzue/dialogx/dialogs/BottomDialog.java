@@ -45,6 +45,7 @@ import com.kongzue.dialogx.util.views.BottomDialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -1339,6 +1340,12 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
     public BottomDialog setScrollableWhenContentLargeThanVisibleRange(boolean scrollableWhenContentLargeThanVisibleRange) {
         this.scrollableWhenContentLargeThanVisibleRange = scrollableWhenContentLargeThanVisibleRange;
+        return this;
+    }
+
+    public BottomDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
         return this;
     }
 }

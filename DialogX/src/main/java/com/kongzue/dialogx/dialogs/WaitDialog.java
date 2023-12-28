@@ -43,6 +43,7 @@ import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.views.ProgressView;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -1214,6 +1215,12 @@ public class WaitDialog extends BaseDialog {
 
     public WaitDialog onDismiss(DialogXRunnable<WaitDialog> dialogXRunnable) {
         onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public WaitDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
         return this;
     }
 }

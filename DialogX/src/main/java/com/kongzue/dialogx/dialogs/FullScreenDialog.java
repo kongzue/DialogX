@@ -39,6 +39,8 @@ import com.kongzue.dialogx.util.views.ActivityScreenShotImageView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
+import java.util.HashMap;
+
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -915,5 +917,11 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
     private float getActivityZoomRadius(float startValue, float endValue, float progressValue) {
         return startValue + progressValue * (endValue - startValue);
+    }
+
+    public FullScreenDialog setData(String key, Object obj) {
+        if (data == null) data = new HashMap<>();
+        data.put(key, obj);
+        return this;
     }
 }

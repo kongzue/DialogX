@@ -1,5 +1,7 @@
 package com.kongzue.dialogxdemo.activity;
 
+import static com.kongzue.dialogx.dialogs.PopTip.tip;
+
 import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -18,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
@@ -1310,15 +1313,16 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 notificationIndex++;
                 PopNotification.build()
+                        .noAutoDismiss()
                         .setMessage("这是一条消息 " + notificationIndex)
                         .setOnPopNotificationClickListener(new OnDialogButtonClickListener<PopNotification>() {
                             @Override
                             public boolean onClick(PopNotification dialog, View v) {
-                                TipDialog.show("点击了通知");
-                                return false;
+                                tip("点击了通知" + dialog.dialogKey());
+                                return true;
                             }
                         })
-                        .showLong();
+                        .show();
             }
         });
 
