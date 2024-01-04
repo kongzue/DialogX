@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.util.views;
 
-import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,7 +12,6 @@ import android.graphics.RectF;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -27,6 +25,7 @@ import androidx.annotation.Nullable;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.ProgressViewInterface;
+import com.kongzue.dialogx.util.DialogXValueAnimator;
 
 /**
  * @author: Kongzue
@@ -37,54 +36,54 @@ import com.kongzue.dialogx.interfaces.ProgressViewInterface;
  * @license: Apache License 2.0
  */
 public class ProgressView extends View implements ProgressViewInterface {
-    
+
     //提示动画持续时间
     public static long TIP_ANIMATOR_DURATION = 300;
     //进度动画中的逐渐跟随动画时长
     public static long PROGRESSING_ANIMATOR_DURATION = 1000;
-    
+
     public static final int STATUS_LOADING = 0;
     public static final int STATUS_SUCCESS = 1;
     public static final int STATUS_WARNING = 2;
     public static final int STATUS_ERROR = 3;
     public static final int STATUS_PROGRESSING = 4;
-    
+
     private int status = STATUS_LOADING;
-    
+
     private int width = dip2px(2);
     private int color = Color.WHITE;
-    
+
     public ProgressView(Context context) {
         super(context);
         init(null);
     }
-    
+
     public ProgressView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
-    
+
     public ProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
     }
-    
-    private ValueAnimator rotateAnimator;
-    private ValueAnimator followAnimator;
-    
+
+    private DialogXValueAnimator rotateAnimator;
+    private DialogXValueAnimator followAnimator;
+
     private float currentRotateDegrees;
     private float followRotateDegrees;
-    
+
     //跟随点度数做正弦值变化，halfSweepAMinValue为最低相较目标点度数差值，halfSweepAMaxValue为最大相较目标点度数差值
     private float halfSweepAMaxValue = 180;
     private float halfSweepAMinValue = 80;
     //正弦函数的半径
     private float halfSweepA;
-    
+
     Paint mPaint = new Paint();
-    
+
     private boolean isInited = false;
-    
+
     private void init(AttributeSet attrs) {
         synchronized (ProgressView.class) {
             if (isInited) {
@@ -95,55 +94,55 @@ public class ProgressView extends View implements ProgressViewInterface {
                 TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.ProgressView);
                 width = a.getDimensionPixelSize(R.styleable.ProgressView_progressStrokeWidth, dip2px(2));
                 color = a.getDimensionPixelSize(R.styleable.ProgressView_progressStrokeColor, color);
-                
+
                 a.recycle();
             }
-            
+
             mPaint.setAntiAlias(true);
             mPaint.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(width);
             mPaint.setStrokeCap(Paint.Cap.ROUND);
             mPaint.setColor(color);
-            
+
             if (!isInEditMode()) {
                 halfSweepA = (halfSweepAMaxValue - halfSweepAMinValue) / 2;
-                
-                rotateAnimator = ValueAnimator.ofFloat(0, 365);
+
+                rotateAnimator = DialogXValueAnimator.ofFloat(0, 365);
                 rotateAnimator.setDuration(1000);
                 rotateAnimator.setInterpolator(new LinearInterpolator());
                 rotateAnimator.setRepeatCount(-1);
-                rotateAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                rotateAnimator.addUpdateListener(new DialogXValueAnimator.ValueUpdateListener() {
                     @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        currentRotateDegrees = (float) animation.getAnimatedValue();
+                    public void onValueUpdate(float animatedValue) {
+                        currentRotateDegrees = animatedValue;
                         invalidate();
                     }
                 });
-                
-                followAnimator = ValueAnimator.ofFloat(0, 365);
+
+                followAnimator = DialogXValueAnimator.ofFloat(0, 365);
                 followAnimator.setDuration(1500);
                 followAnimator.setInterpolator(new LinearInterpolator());
                 followAnimator.setRepeatCount(-1);
-                followAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                followAnimator.addUpdateListener(new DialogXValueAnimator.ValueUpdateListener() {
                     @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        followRotateDegrees = (float) animation.getAnimatedValue();
+                    public void onValueUpdate(float animatedValue) {
+                        followRotateDegrees = animatedValue;
                     }
                 });
-                
+
                 followAnimator.start();
                 rotateAnimator.start();
             }
         }
     }
-    
+
     //旋转圆的中心坐标
     private float mCenterX;
     private float mCenterY;
     //半径
     private float mRadius = 100;
     private RectF oval;
-    
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -152,12 +151,12 @@ public class ProgressView extends View implements ProgressViewInterface {
         mRadius = Math.min(getWidth(), getHeight()) / 2 - width / 2;
         oval = new RectF(mCenterX - mRadius, mCenterY - mRadius, mCenterX + mRadius, mCenterY + mRadius);
     }
-    
+
     private int successStep = 0;
     private float nowLoadingProgressValue;
     private float nowLoadingProgressEndAngle;
     private float changeStatusAngle;
-    
+
     @Override
     protected void onDraw(Canvas canvas) {
         if (isInEditMode()) {
@@ -188,7 +187,7 @@ public class ProgressView extends View implements ProgressViewInterface {
                     case 0:
                         nowLoadingProgressEndAngle = nowLoadingProgressEndAngle + 5;
                         canvas.drawArc(oval, nowLoadingProgressValue, nowLoadingProgressEndAngle, false, mPaint);
-                        
+
                         if (nowLoadingProgressEndAngle - (360 - changeStatusAngle) >= nowLoadingProgressValue) {
                             successStep = 1;
                             if (waitArticulationAnimationRunnable != null) {
@@ -222,7 +221,7 @@ public class ProgressView extends View implements ProgressViewInterface {
                 }
         }
     }
-    
+
     private void drawDoneMark(int status, Canvas canvas) {
         if (rotateAnimator.getInterpolator() != interpolator) {
             rotateAnimator.setInterpolator(interpolator);
@@ -230,7 +229,7 @@ public class ProgressView extends View implements ProgressViewInterface {
         if (tickShowRunnable != null) {
             tickShowRunnable.run();
             tickShowRunnable = null;
-            
+
             if (DialogX.useHaptic) {
                 switch (status) {
                     case STATUS_SUCCESS:
@@ -268,15 +267,15 @@ public class ProgressView extends View implements ProgressViewInterface {
                 break;
         }
     }
-    
+
     private int line1X = 0;
     private int line1Y = 0;
     private int line2X = 0;
     private int line2Y = 0;
-    
+
     private ValueAnimator tickAnimator;
     private float tickAnimatorValue;
-    
+
     //绘制对号
     private void showSuccessTick(Canvas canvas) {
         int verticalAxisOffset = (int) (mRadius / 20);       //纵轴向下偏移量
@@ -285,7 +284,7 @@ public class ProgressView extends View implements ProgressViewInterface {
         int startY = (int) (mCenterY + verticalAxisOffset);
         int endX = (int) (mCenterX + mRadius / 2);
         int tickAnimatorX = (int) (startX + ((endX - startX) * tickAnimatorValue));
-        
+
         Path path = new Path();
         path.moveTo(startX, startY);
         if (tickAnimatorX < tickTurnLeftPoint) {
@@ -296,21 +295,21 @@ public class ProgressView extends View implements ProgressViewInterface {
             line1X = tickTurnLeftPoint;
             line1Y = (int) (startY + (line1X - startX));
             path.lineTo(line1X, line1Y);
-            
+
             line2X = tickAnimatorX;
             line2Y = line1Y - (tickAnimatorX - line1X);
             path.lineTo(line2X, line2Y);
         }
         canvas.drawPath(path, mPaint);
     }
-    
+
     //绘制感叹号
     private void showWarningTick(Canvas canvas) {
         int x = (int) mCenterX;
         int startY = (int) (mCenterY - mRadius * 1 / 2);
         int endY = (int) (mCenterY + mRadius * 1 / 8);
         int line2Y = (int) (mCenterY + mRadius * 3 / 7);
-        
+
         if (tickAnimatorValue < 0.9f) {
             canvas.drawLine(x, startY, x, startY + (endY - startY) * tickAnimatorValue, mPaint);
         } else {
@@ -318,12 +317,12 @@ public class ProgressView extends View implements ProgressViewInterface {
             canvas.drawLine(x, line2Y, x, line2Y + 1, mPaint);
         }
     }
-    
+
     //绘制错误符号
     private void showErrorTick(Canvas canvas) {
         int start = (int) (mCenterY - mRadius * 4 / 10);
         int end = (int) (mCenterX + mRadius * 4 / 10);
-        
+
         if (tickAnimatorValue < 0.5f) {
             line1X = (int) (start + (tickAnimatorValue * 2) * (end - start));
             line1Y = (int) (start + (tickAnimatorValue * 2) * (end - start));
@@ -332,15 +331,15 @@ public class ProgressView extends View implements ProgressViewInterface {
             line1X = (int) (start + (tickAnimatorValue * 2) * (end - start));
             line1Y = (int) (start + (tickAnimatorValue * 2) * (end - start));
             canvas.drawLine(start, start, end, end, mPaint);
-            
+
             line2X = (int) (end - ((tickAnimatorValue - 0.5f) * 2) * (end - start));
             line2Y = (int) (start + ((tickAnimatorValue - 0.5f) * 2) * (end - start));
             canvas.drawLine(end, start, line2X, line2Y, mPaint);
         }
     }
-    
+
     private Interpolator interpolator;
-    
+
     public void success() {
         if (status == STATUS_PROGRESSING) {
             progress(1f);
@@ -354,7 +353,7 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         initTipAnimator(STATUS_SUCCESS, new AccelerateDecelerateInterpolator());
     }
-    
+
     public void warning() {
         if (status == STATUS_PROGRESSING) {
             progress(1f);
@@ -368,7 +367,7 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         initTipAnimator(STATUS_WARNING, new AccelerateInterpolator(2f));
     }
-    
+
     public void error() {
         if (status == STATUS_PROGRESSING) {
             progress(1f);
@@ -382,9 +381,9 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         initTipAnimator(STATUS_ERROR, new DecelerateInterpolator(2));
     }
-    
+
     Runnable waitArticulationAnimationRunnable;     //等待衔接完成后再执行
-    
+
     private void initTipAnimator(int s, Interpolator i) {
         interpolator = i;
         status = s;
@@ -397,7 +396,7 @@ public class ProgressView extends View implements ProgressViewInterface {
             };
             return;
         }
-        
+
         if (tickAnimator != null) {
             tickAnimator.cancel();
             tickAnimator = null;
@@ -414,7 +413,7 @@ public class ProgressView extends View implements ProgressViewInterface {
         });
         tickAnimator.start();
     }
-    
+
     public void progress(float progress) {
         if (rotateAnimator != null) rotateAnimator.cancel();
         if (followAnimator != null) followAnimator.cancel();
@@ -423,27 +422,27 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         noShowLoading = false;
         status = STATUS_PROGRESSING;
-        rotateAnimator = ValueAnimator.ofFloat(currentRotateDegrees, 365 * progress);
+        rotateAnimator = DialogXValueAnimator.ofFloat(currentRotateDegrees, 365 * progress);
         rotateAnimator.setDuration(PROGRESSING_ANIMATOR_DURATION);
         rotateAnimator.setInterpolator(new DecelerateInterpolator(2));
         rotateAnimator.setRepeatCount(0);
-        rotateAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        rotateAnimator.addUpdateListener(new DialogXValueAnimator.ValueUpdateListener() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                currentRotateDegrees = (float) animation.getAnimatedValue();
+            public void onValueUpdate(float animatedValue) {
+                currentRotateDegrees = animatedValue;
                 invalidate();
             }
         });
         rotateAnimator.start();
     }
-    
+
     private Runnable tickShowRunnable;
-    
+
     public ProgressView whenShowTick(Runnable runnable) {
         tickShowRunnable = runnable;
         return this;
     }
-    
+
     public void loading() {
         noShowLoading = false;
         successStep = 0;
@@ -457,11 +456,11 @@ public class ProgressView extends View implements ProgressViewInterface {
         isInited = false;
         init(null);
     }
-    
+
     public int getStatus() {
         return status;
     }
-    
+
     @Override
     protected void onDetachedFromWindow() {
         if (rotateAnimator != null) {
@@ -472,33 +471,33 @@ public class ProgressView extends View implements ProgressViewInterface {
         }
         super.onDetachedFromWindow();
     }
-    
+
     public int getStrokeWidth() {
         return width;
     }
-    
+
     public ProgressView setStrokeWidth(int width) {
         this.width = width;
         if (mPaint != null) mPaint.setStrokeWidth(width);
         return this;
     }
-    
+
     public int getColor() {
         return color;
     }
-    
+
     public ProgressView setColor(int color) {
         this.color = color;
         if (mPaint != null) mPaint.setColor(color);
         return this;
     }
-    
+
     private boolean noShowLoading;
-    
+
     public void noLoading() {
         noShowLoading = true;
     }
-    
+
     private int dip2px(float dpValue) {
         final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
