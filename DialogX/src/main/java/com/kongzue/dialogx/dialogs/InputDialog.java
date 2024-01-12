@@ -12,6 +12,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -683,6 +684,25 @@ public class InputDialog extends MessageDialog {
     public InputDialog setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public InputDialog onShow(DialogXRunnable<MessageDialog> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+        }
+        return this;
+    }
+
+    public InputDialog onDismiss(DialogXRunnable<MessageDialog> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public InputDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
+        this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
         return this;
     }
 }

@@ -28,6 +28,7 @@ import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -320,6 +321,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
+            boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != null) {
                 tintColor(bkg, backgroundColor);
@@ -828,7 +830,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
      * }
      * }
      */
-    public void onShow(FullScreenDialog dialog) {
+    protected void onShow(FullScreenDialog dialog) {
 
     }
 
@@ -852,7 +854,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
      * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(FullScreenDialog dialog) {
+    protected void onDismiss(FullScreenDialog dialog) {
 
     }
 
@@ -922,6 +924,25 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     public FullScreenDialog setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public FullScreenDialog onShow(DialogXRunnable<FullScreenDialog> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+        }
+        return this;
+    }
+
+    public FullScreenDialog onDismiss(DialogXRunnable<FullScreenDialog> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public FullScreenDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
+        this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
         return this;
     }
 }

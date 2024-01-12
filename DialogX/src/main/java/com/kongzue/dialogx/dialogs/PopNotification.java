@@ -34,6 +34,7 @@ import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnBindView;
@@ -678,7 +679,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
         @Override
         public void refreshView() {
-            if (boxRoot == null || getOwnActivity() == null) {
+            if (boxRoot == null) {
                 return;
             }
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
@@ -859,7 +860,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 dialogXAnimImpl = new DialogXAnimInterface<PopNotification>() {
                     @Override
                     public void doShowAnim(PopNotification dialog, ViewGroup dialogBodyView) {
-                        Animation enterAnim = AnimationUtils.loadAnimation(getOwnActivity(), enterAnimResId == 0 ? R.anim.anim_dialogx_notification_enter : enterAnimResId);
+                        Animation enterAnim = AnimationUtils.loadAnimation(getApplicationContext(), enterAnimResId == 0 ? R.anim.anim_dialogx_notification_enter : enterAnimResId);
                         long enterAnimDuration = getEnterAnimationDuration(enterAnim);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                         enterAnim.setDuration(enterAnimDuration);
@@ -875,7 +876,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
                     @Override
                     public void doExitAnim(PopNotification dialog, ViewGroup dialogBodyView) {
-                        Animation exitAnim = AnimationUtils.loadAnimation(getOwnActivity() == null ? boxRoot.getContext() : getOwnActivity(), exitAnimResId == 0 ? R.anim.anim_dialogx_notification_exit : exitAnimResId);
+                        Animation exitAnim = AnimationUtils.loadAnimation(getApplicationContext() == null ? boxRoot.getContext() : getApplicationContext(), exitAnimResId == 0 ? R.anim.anim_dialogx_notification_exit : exitAnimResId);
                         long exitAnimDuration = getExitAnimationDuration(exitAnim);
                         exitAnim.setDuration(exitAnimDuration);
                         exitAnim.setFillAfter(true);
@@ -1479,7 +1480,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
      * }
      * }
      */
-    public void onShow(PopNotification dialog) {
+    protected void onShow(PopNotification dialog) {
 
     }
 
@@ -1503,13 +1504,26 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
      * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(PopNotification dialog) {
+    protected void onDismiss(PopNotification dialog) {
 
     }
 
     public PopNotification setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public PopNotification onShow(DialogXRunnable<PopNotification> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+        }
+        return this;
+    }
+
+    public PopNotification onDismiss(DialogXRunnable<PopNotification> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
         return this;
     }
 }

@@ -44,6 +44,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.kongzue.baseframework.BaseActivity;
 import com.kongzue.baseframework.interfaces.DarkNavigationBarTheme;
 import com.kongzue.baseframework.interfaces.DarkStatusBarTheme;
+import com.kongzue.baseframework.interfaces.FullScreen;
 import com.kongzue.baseframework.interfaces.Layout;
 import com.kongzue.baseframework.interfaces.NavigationBarBackgroundColorRes;
 import com.kongzue.baseframework.util.CycleRunner;
@@ -65,6 +66,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -506,6 +508,18 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 MessageDialog.show("标题", "这里是正文内容。", "确定")
+                        .onShow(new DialogXRunnable<MessageDialog>() {
+                            @Override
+                            public void run(MessageDialog dialog) {
+                                tip("onshow");
+                            }
+                        })
+                        .onDismiss(new DialogXRunnable<MessageDialog>() {
+                            @Override
+                            public void run(MessageDialog dialog) {
+                                tip("dismiss");
+                            }
+                        })
                         .setTitleIcon(R.mipmap.img_demo_avatar)
                         .setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                             @Override

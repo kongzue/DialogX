@@ -26,11 +26,11 @@ public class App extends BaseApp<App> {
         DialogX.useHaptic = true;
 
         //演示仅覆写一个设置，不覆写其他设置：
-        DialogX.globalStyle = new MaterialStyle(){
+        DialogX.globalStyle = new MaterialStyle() {
             @Override
             public PopTipSettings popTipSettings() {
                 //DefaultPopTipSettings 是主题中默认的 PopTip 设置，以下演示仅覆写其中的 align 设置
-                return new DefaultPopTipSettings(){
+                return new DefaultPopTipSettings() {
                     @Override
                     public ALIGN align() {
                         return ALIGN.BOTTOM;
@@ -42,7 +42,8 @@ public class App extends BaseApp<App> {
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.onlyOnePopTip = false;
         DialogX.DEBUGMODE = BuildConfig.DEBUG;
-    
+        //DialogX.ignoreUnsafeInsetsHorizontal = true;
+
         //以下代码用于测试后台 Service 启动对话框
 //        DialogX.implIMPLMode = DialogX.IMPL_MODE.FLOATING_ACTIVITY;
 //        Intent serviceStartIntent = new Intent(this, TestBackgroundService.class);

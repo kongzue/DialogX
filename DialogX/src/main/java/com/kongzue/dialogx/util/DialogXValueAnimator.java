@@ -164,4 +164,16 @@ public class DialogXValueAnimator {
     public Interpolator getInterpolator() {
         return interpolator;
     }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public int getRepeatCount() {
+        return repeatCount;
+    }
+
+    public int getCurrentRepeatCount() {
+        return currentRepeatCount;
+    }
 }

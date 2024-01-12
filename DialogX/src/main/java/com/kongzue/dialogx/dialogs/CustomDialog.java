@@ -22,6 +22,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -55,7 +56,6 @@ public class CustomDialog extends BaseDialog {
     protected int enterAnimResId = R.anim.anim_dialogx_default_enter;
     protected int exitAnimResId = R.anim.anim_dialogx_default_exit;
     protected ALIGN align = ALIGN.CENTER;
-    protected boolean autoUnsafePlacePadding = true;
     protected int maskColor = Color.TRANSPARENT;
     protected BOOLEAN privateCancelable;
     protected boolean bkgInterceptTouch = true;
@@ -251,6 +251,7 @@ public class CustomDialog extends BaseDialog {
             if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
+            boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (baseView() != null) {
                 if (!initSetCustomViewLayoutListener) {
@@ -390,7 +391,6 @@ public class CustomDialog extends BaseDialog {
                 }
             }
 
-            boxRoot.setAutoUnsafePlacePadding(autoUnsafePlacePadding);
             if (bkgInterceptTouch) {
                 if (isCancelable()) {
                     boxRoot.setOnClickListener(new View.OnClickListener() {
@@ -756,18 +756,28 @@ public class CustomDialog extends BaseDialog {
     }
 
     public boolean isAutoUnsafePlacePadding() {
-        return autoUnsafePlacePadding;
+        return isEnableImmersiveMode();
     }
 
+    /**
+     * 改为使用 .setEnableImmersiveMode(boolean) 来控制是否适配沉浸式
+     * @param autoUnsafePlacePadding 是否适配沉浸式
+     * @return CustomDialog
+     */
+    @Deprecated
     public CustomDialog setAutoUnsafePlacePadding(boolean autoUnsafePlacePadding) {
-        this.autoUnsafePlacePadding = autoUnsafePlacePadding;
-        refreshUI();
+        setEnableImmersiveMode(autoUnsafePlacePadding);
         return this;
     }
 
+    /**
+     * 改为使用 .setEnableImmersiveMode(boolean) 来控制是否适配沉浸式
+     * @param fullscreen 是否适配沉浸式
+     * @return CustomDialog
+     */
+    @Deprecated
     public CustomDialog setFullScreen(boolean fullscreen) {
-        this.autoUnsafePlacePadding = !autoUnsafePlacePadding;
-        refreshUI();
+        setEnableImmersiveMode(!fullscreen);
         return this;
     }
 
@@ -1058,7 +1068,7 @@ public class CustomDialog extends BaseDialog {
      * }
      * }
      */
-    public void onShow(CustomDialog dialog) {
+    protected void onShow(CustomDialog dialog) {
 
     }
 
@@ -1082,7 +1092,7 @@ public class CustomDialog extends BaseDialog {
      * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(CustomDialog dialog) {
+    protected void onDismiss(CustomDialog dialog) {
 
     }
 
@@ -1103,6 +1113,25 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public CustomDialog onShow(DialogXRunnable<CustomDialog> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+        }
+        return this;
+    }
+
+    public CustomDialog onDismiss(DialogXRunnable<CustomDialog> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public CustomDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
+        this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
         return this;
     }
 }

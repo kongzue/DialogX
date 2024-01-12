@@ -164,7 +164,13 @@ public class DialogX {
     public static int defaultPopTipBackgroundRadius = -1;
 
     public static int defaultPopNotificationBackgroundRadius = -1;
-    
+
+    //开启沉浸式适配
+    public static boolean enableImmersiveMode = true;
+
+    //沉浸式忽略左右的非安全区
+    public static boolean ignoreUnsafeInsetsHorizontal = false;
+
     public enum THEME {
         LIGHT, DARK, AUTO
     }

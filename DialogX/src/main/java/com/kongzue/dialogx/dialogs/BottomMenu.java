@@ -17,6 +17,7 @@ import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BottomMenuListViewTouchEvent;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.MenuItemLayoutRefreshCallback;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
@@ -1368,6 +1369,25 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public BottomMenu onShow(DialogXRunnable<BottomDialog> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+        }
+        return this;
+    }
+
+    public BottomMenu onDismiss(DialogXRunnable<BottomDialog> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public BottomMenu setEnableImmersiveMode(boolean enableImmersiveMode) {
+        this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
         return this;
     }
 }

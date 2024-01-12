@@ -78,6 +78,9 @@ public abstract class BaseDialog implements LifecycleOwner {
     private WeakReference<DialogListBuilder> dialogListBuilder;
     protected LifecycleRegistry lifecycle = new LifecycleRegistry(this);
     protected Map<String, Object> data;
+    protected DialogXRunnable onShowRunnable;
+    protected DialogXRunnable onDismissRunnable;
+    protected boolean enableImmersiveMode = true;   //沉浸式适配
 
     public enum BUTTON_SELECT_RESULT {
         NONE,           //未做出选择
@@ -388,7 +391,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (baseDialog.dialogView != null) {
             baseDialog.dialogView.clear();
         }
-
+        baseDialog.onDialogDismiss();
         switch (baseDialog.dialogImplMode) {
             case WINDOW:
                 WindowUtil.dismiss(dialogView);
@@ -520,6 +523,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         enterAnimDuration = DialogX.enterAnimDuration;
         exitAnimDuration = DialogX.exitAnimDuration;
         autoShowInputKeyboard = DialogX.autoShowInputKeyboard;
+        enableImmersiveMode = DialogX.enableImmersiveMode;
     }
 
     public abstract boolean isCancelable();
@@ -920,12 +924,20 @@ public abstract class BaseDialog implements LifecycleOwner {
     public abstract <D extends BaseDialog> D show();
 
     protected void onDialogShow() {
+        if (onShowRunnable != null) onShowRunnable.run(this);
+    }
+
+    protected void refreshUI() {
     }
 
     protected void onDialogInit() {
     }
 
     protected void onDialogRefreshUI() {
+    }
+
+    protected void onDialogDismiss() {
+        if (onDismissRunnable != null) onDismissRunnable.run(this);
     }
 
     @NonNull
@@ -1033,6 +1045,16 @@ public abstract class BaseDialog implements LifecycleOwner {
     public BaseDialog setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public boolean isEnableImmersiveMode() {
+        return enableImmersiveMode;
+    }
+
+    public BaseDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
+        this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
         return this;
     }
 }

@@ -33,6 +33,7 @@ import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.MenuItemLayoutRefreshCallback;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -558,6 +559,7 @@ public class PopMenu extends BaseDialog {
             if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
+            boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (listMenu.getAdapter() == null) {
                 listMenu.setAdapter(menuListAdapter);
@@ -1257,7 +1259,7 @@ public class PopMenu extends BaseDialog {
      * }
      * }
      */
-    public void onShow(PopMenu dialog) {
+    protected void onShow(PopMenu dialog) {
 
     }
 
@@ -1281,7 +1283,7 @@ public class PopMenu extends BaseDialog {
      * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(PopMenu dialog) {
+    protected void onDismiss(PopMenu dialog) {
 
     }
 
@@ -1311,6 +1313,25 @@ public class PopMenu extends BaseDialog {
     public PopMenu setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public PopMenu onShow(DialogXRunnable<PopMenu> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+        }
+        return this;
+    }
+
+    public PopMenu onDismiss(DialogXRunnable<PopMenu> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public PopMenu setEnableImmersiveMode(boolean enableImmersiveMode) {
+        this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
         return this;
     }
 }

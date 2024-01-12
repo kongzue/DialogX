@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -374,9 +375,6 @@ public class WaitDialog extends BaseDialog {
 
                             onDialogShow();
                             getDialogLifecycleCallback().onShow(WaitDialog.this);
-                            if (onShowRunnable != null) {
-                                onShowRunnable.run(WaitDialog.this);
-                            }
                             setLifecycleState(Lifecycle.State.RESUMED);
                         }
                     });
@@ -422,6 +420,7 @@ public class WaitDialog extends BaseDialog {
             if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
+            boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
 
             bkg.setMaxWidth(getMaxWidth());
@@ -700,9 +699,6 @@ public class WaitDialog extends BaseDialog {
     public void cleanInstance() {
         isShow = false;
         getDialogLifecycleCallback().onDismiss(WaitDialog.this);
-        if (onDismissRunnable != null) {
-            onDismissRunnable.run(WaitDialog.this);
-        }
         if (dialogImpl != null) dialogImpl.clear();
         dialogImpl = null;
         if (dialogView != null) dialogView.clear();
@@ -1205,11 +1201,11 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
 
-    DialogXRunnable<WaitDialog> onShowRunnable;
-    DialogXRunnable<WaitDialog> onDismissRunnable;
-
     public WaitDialog onShow(DialogXRunnable<WaitDialog> dialogXRunnable) {
         onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+        }
         return this;
     }
 
@@ -1221,6 +1217,12 @@ public class WaitDialog extends BaseDialog {
     public WaitDialog setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public WaitDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
+        this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
         return this;
     }
 }

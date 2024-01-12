@@ -32,6 +32,7 @@ import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
@@ -1302,7 +1303,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
      * }
      * }
      */
-    public void onShow(PopTip dialog) {
+    protected void onShow(PopTip dialog) {
 
     }
 
@@ -1326,7 +1327,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
      * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(PopTip dialog) {
+    protected void onDismiss(PopTip dialog) {
 
     }
 
@@ -1339,6 +1340,19 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     public PopTip setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public PopTip onShow(DialogXRunnable<PopTip> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+        }
+        return this;
+    }
+
+    public PopTip onDismiss(DialogXRunnable<PopTip> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
         return this;
     }
 }

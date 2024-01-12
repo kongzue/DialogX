@@ -44,6 +44,7 @@ import com.kongzue.dialogx.interfaces.BlurViewType;
 import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
+import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -506,6 +507,7 @@ public class MessageDialog extends BaseDialog {
                 return;
             }
 
+            boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
             //修改下划线颜色
             if (inputInfo != null && inputInfo.getBottomLineColor() != null) {
                 txtInput.getBackground().mutate().setColorFilter(inputInfo.getBottomLineColor(), PorterDuff.Mode.SRC_ATOP);
@@ -1454,7 +1456,7 @@ public class MessageDialog extends BaseDialog {
      * }
      * }
      */
-    public void onShow(MessageDialog dialog) {
+    protected void onShow(MessageDialog dialog) {
 
     }
 
@@ -1478,13 +1480,35 @@ public class MessageDialog extends BaseDialog {
      * }
      */
     //用于使用 new 构建实例时，override 的生命周期事件
-    public void onDismiss(MessageDialog dialog) {
+    protected void onDismiss(MessageDialog dialog) {
 
     }
 
     public MessageDialog setData(String key, Object obj) {
         if (data == null) data = new HashMap<>();
         data.put(key, obj);
+        return this;
+    }
+
+    public MessageDialog onShow(DialogXRunnable<MessageDialog> dialogXRunnable) {
+        onShowRunnable = dialogXRunnable;
+        if (isShow() && onShowRunnable != null) {
+            onShowRunnable.run(this);
+            if (isShow() && onShowRunnable != null) {
+                onShowRunnable.run(this);
+            }
+        }
+        return this;
+    }
+
+    public MessageDialog onDismiss(DialogXRunnable<MessageDialog> dialogXRunnable) {
+        onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public MessageDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
+        this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
         return this;
     }
 }

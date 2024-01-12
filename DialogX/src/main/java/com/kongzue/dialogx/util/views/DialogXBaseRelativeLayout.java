@@ -112,7 +112,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                     }
                     // TODO Fix bug #370 在这里对这个重新做下处理，未详细测试，比如键盘弹起时的情况
                     Insets systemBarInsets = null;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getRootWindowInsets()!=null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getRootWindowInsets() != null) {
                         WindowInsetsCompat windowInsetsCompat = WindowInsetsCompat.toWindowInsetsCompat(getRootWindowInsets());
                         boolean navigationBarsVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.navigationBars());
                         boolean imeVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.ime());
@@ -128,10 +128,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                         }
                     }
                     if (systemBarInsets != null) {
-                        unsafePlace.left = Math.max( systemBarInsets.left,start);
-                        unsafePlace.top = Math.max(systemBarInsets.top,top);
-                        unsafePlace.right = Math.max(systemBarInsets.right,end);
-                        unsafePlace.bottom = Math.max(systemBarInsets.bottom,bottom);
+                        unsafePlace.left = Math.max(systemBarInsets.left, start);
+                        unsafePlace.top = Math.max(systemBarInsets.top, top);
+                        unsafePlace.right = Math.max(systemBarInsets.right, end);
+                        unsafePlace.bottom = Math.max(systemBarInsets.bottom, bottom);
                     } else {
                         unsafePlace.left = start;
                         unsafePlace.top = top;
@@ -177,7 +177,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         }
         if (isAutoUnsafePlacePadding()) {
             log("  KONGZUE DEBUG DIALOGX: root.setPadding t=" + top + " b=" + bottom);
-            setPadding(start, top, end, bottom);
+            setPadding(DialogX.ignoreUnsafeInsetsHorizontal ? 0 : start, top, DialogX.ignoreUnsafeInsetsHorizontal ? 0 : end, bottom);
         }
     }
 
