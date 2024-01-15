@@ -232,6 +232,48 @@ public class FitSystemBarUtils {
                                     parentView.removeOnLayoutChangeListener(rootViewLayoutChangeListener);
                                 }
                             });
+                        } else {
+                            View parentView = (View) view.getParent();
+                            ViewTreeObserver.OnPreDrawListener preDrawListener = new ViewTreeObserver.OnPreDrawListener() {
+                                @Override
+                                public boolean onPreDraw() {
+                                    // 获取状态栏高度
+                                    Rect insets = new Rect();
+                                    parentView.getWindowVisibleDisplayFrame(insets);
+                                    int statusBarHeight = insets.top;
+
+                                    // 获取导航栏高度
+                                    int navigationBarHeight = 0;
+                                    Resources resources = parentView.getResources();
+                                    int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                                    if (resourceId > 0) {
+                                        navigationBarHeight = resources.getDimensionPixelSize(resourceId);
+                                    }
+
+                                    log("FitSystemBarUtils: below Android M use support mode: statusBarHeight=" + statusBarHeight + ", navigationBarHeight=" + navigationBarHeight);
+                                    int deviceOrientation = checkOrientationAndStatusBarSide();
+                                    log("    FitSystemBarUtils: deviceOrientation = " + deviceOrientation);
+                                    switch (deviceOrientation) {
+                                        case 1:
+                                        case -1:
+                                            initialPadding.end = navigationBarHeight;
+                                            initialPadding.start = 0;
+                                            break;
+                                        default:
+                                            initialPadding.top = statusBarHeight;
+                                            initialPadding.bottom = navigationBarHeight;
+                                            break;
+                                    }
+
+                                    applyCallBack(initialPadding);
+
+                                    parentView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                                    return true;
+                                }
+                            };
+                            parentView.getViewTreeObserver().addOnPreDrawListener(preDrawListener);
+
                         }
                     }
 
