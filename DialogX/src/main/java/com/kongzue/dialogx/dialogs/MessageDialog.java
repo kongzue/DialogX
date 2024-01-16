@@ -1494,9 +1494,6 @@ public class MessageDialog extends BaseDialog {
         onShowRunnable = dialogXRunnable;
         if (isShow() && onShowRunnable != null) {
             onShowRunnable.run(this);
-            if (isShow() && onShowRunnable != null) {
-                onShowRunnable.run(this);
-            }
         }
         return this;
     }

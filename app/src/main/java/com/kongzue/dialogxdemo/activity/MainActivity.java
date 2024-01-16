@@ -511,13 +511,13 @@ public class MainActivity extends BaseActivity {
                         .onShow(new DialogXRunnable<MessageDialog>() {
                             @Override
                             public void run(MessageDialog dialog) {
-                                tip("onshow");
+                                tip("onShow");
                             }
                         })
                         .onDismiss(new DialogXRunnable<MessageDialog>() {
                             @Override
                             public void run(MessageDialog dialog) {
-                                tip("dismiss");
+                                tip("onDismiss");
                             }
                         })
                         .setTitleIcon(R.mipmap.img_demo_avatar)
