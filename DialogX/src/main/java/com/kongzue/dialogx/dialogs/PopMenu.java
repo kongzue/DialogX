@@ -72,6 +72,8 @@ public class PopMenu extends BaseDialog {
     protected DialogLifecycleCallback<PopMenu> dialogLifecycleCallback;     //对话框生命周期
     protected OnBackgroundMaskClickListener<PopMenu> onBackgroundMaskClickListener;
     protected List<CharSequence> menuList;
+    protected List<Integer> iconResIds;
+    protected boolean autoTintIconInLightOrDarkMode = true;
     protected DialogImpl dialogImpl;
     protected WeakReference<View> baseViewWeakReference;
     protected boolean overlayBaseView = true;                               //允许菜单覆盖在 baseView 上
@@ -114,7 +116,12 @@ public class PopMenu extends BaseDialog {
         this.menuList.addAll(menuList);
     }
 
-    public PopMenu(CharSequence[] menuList) {
+    public PopMenu(CharSequence... menuList) {
+        this.menuList = new ArrayList<>();
+        this.menuList.addAll(Arrays.asList(menuList));
+    }
+
+    public PopMenu(String... menuList) {
         this.menuList = new ArrayList<>();
         this.menuList.addAll(Arrays.asList(menuList));
     }
@@ -162,7 +169,13 @@ public class PopMenu extends BaseDialog {
         return new PopMenu().setStyle(style);
     }
 
-    public static PopMenu show(CharSequence[] menus) {
+    public static PopMenu show(CharSequence... menus) {
+        PopMenu popMenu = new PopMenu(menus);
+        popMenu.show();
+        return popMenu;
+    }
+
+    public static PopMenu show(String... menus) {
         PopMenu popMenu = new PopMenu(menus);
         popMenu.show();
         return popMenu;
@@ -945,6 +958,20 @@ public class PopMenu extends BaseDialog {
         return this;
     }
 
+    public PopMenu setMenus(String... menuList) {
+        this.menuList = new ArrayList<>();
+        this.menuList.addAll(Arrays.asList(menuList));
+        refreshUI();
+        return this;
+    }
+
+    public PopMenu setMenus(CharSequence... menuList) {
+        this.menuList = new ArrayList<>();
+        this.menuList.addAll(Arrays.asList(menuList));
+        refreshUI();
+        return this;
+    }
+
     public void refreshUI() {
         if (getDialogImpl() == null) {
             return;
@@ -1332,6 +1359,43 @@ public class PopMenu extends BaseDialog {
     public PopMenu setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
         refreshUI();
+        return this;
+    }
+
+    public List<Integer> getIconResIds() {
+        return iconResIds;
+    }
+
+    public int getIconResIds(int position) {
+        if (iconResIds != null && position >= 0 && position < iconResIds.size()) {
+            return iconResIds.get(position);
+        }
+        return 0;
+    }
+
+    public PopMenu setIconResIds(int... resIds) {
+        if (iconResIds == null) {
+            iconResIds = new ArrayList<>();
+        }
+        for (int id : resIds) {
+            iconResIds.add(id);
+        }
+        refreshUI();
+        return this;
+    }
+
+    public PopMenu setIconResIds(List<Integer> iconResIds) {
+        this.iconResIds = iconResIds;
+        refreshUI();
+        return this;
+    }
+
+    public boolean isAutoTintIconInLightOrDarkMode() {
+        return autoTintIconInLightOrDarkMode;
+    }
+
+    public PopMenu setAutoTintIconInLightOrDarkMode(boolean autoTintIconInLightOrDarkMode) {
+        this.autoTintIconInLightOrDarkMode = autoTintIconInLightOrDarkMode;
         return this;
     }
 }

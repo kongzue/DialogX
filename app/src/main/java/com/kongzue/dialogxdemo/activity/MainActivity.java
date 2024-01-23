@@ -437,7 +437,8 @@ public class MainActivity extends BaseActivity {
         btnContextMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopMenu.show(new String[]{"添加", "编辑", "删除", "分享"})
+                PopMenu.show("添加", "编辑", "删除", "分享")
+                        .setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_edit, R.mipmap.img_dialogx_demo_delete, R.mipmap.img_dialogx_demo_share)
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
                             public boolean onClick(PopMenu dialog, CharSequence text, int index) {
@@ -763,6 +764,10 @@ public class MainActivity extends BaseActivity {
                                 }
                             })
                             .show();
+
+//                      测试用代码
+//                    BottomMenu.show("添加", "查看", "编辑")
+//                            .setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_view, R.mipmap.img_dialogx_demo_edit);
                 } else {
                     BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
                             .setMessage("http://www.kongzue.com/DialogX")

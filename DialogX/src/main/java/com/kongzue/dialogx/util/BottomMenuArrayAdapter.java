@@ -28,48 +28,48 @@ import java.util.List;
  * @createTime: 2020/10/7 0:00
  */
 public class BottomMenuArrayAdapter extends BaseAdapter {
-    
+
     private BottomMenu bottomMenu;
     public List<CharSequence> objects;
     public Context context;
-    
+
     public BottomMenuArrayAdapter(BottomMenu bottomMenu, Context context, List<CharSequence> objects) {
         this.objects = objects;
         this.context = context;
         this.bottomMenu = bottomMenu;
     }
-    
+
     class ViewHolder {
         ImageView imgDialogxMenuIcon;
         ImageView imgDialogxMenuSelection;
         TextView txtDialogxMenuText;
         Space spaceDialogxRightPadding;
     }
-    
+
     @Override
     public int getCount() {
         return objects.size();
     }
-    
+
     @Override
     public CharSequence getItem(int position) {
         return objects.get(position);
     }
-    
+
     @Override
     public long getItemId(int position) {
         return position;
     }
-    
+
     TextInfo defaultMenuTextInfo;
-    
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
             viewHolder = new ViewHolder();
             LayoutInflater mInflater = LayoutInflater.from(context);
-            
+
             int resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
             if (bottomMenu.getStyle().overrideBottomDialogRes() != null) {
                 resourceId = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(bottomMenu.isLightTheme(), position, getCount(), false);
@@ -85,12 +85,12 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                 }
             }
             convertView = mInflater.inflate(resourceId, null);
-            
+
             viewHolder.imgDialogxMenuIcon = convertView.findViewById(R.id.img_dialogx_menu_icon);
             viewHolder.imgDialogxMenuSelection = convertView.findViewById(R.id.img_dialogx_menu_selection);
             viewHolder.txtDialogxMenuText = convertView.findViewById(R.id.txt_dialogx_menu_text);
             viewHolder.spaceDialogxRightPadding = convertView.findViewById(R.id.space_dialogx_right_padding);
-            
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -147,14 +147,14 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
             }
         }
         CharSequence text = objects.get(position);
-        
+
         int textColor = bottomMenu.isLightTheme() ? R.color.black90 : R.color.white90;
         if (bottomMenu.getStyle().overrideBottomDialogRes() != null) {
             if (bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuTextColor(bottomMenu.isLightTheme()) != 0) {
                 textColor = bottomMenu.getStyle().overrideBottomDialogRes().overrideMenuTextColor(bottomMenu.isLightTheme());
             }
         }
-        
+
         if (null != text) {
             if (defaultMenuTextInfo == null) {
                 defaultMenuTextInfo = new TextInfo()
@@ -192,11 +192,11 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                     }
                 }
             }
-            
+
             if (bottomMenu.getOnIconChangeCallBack() != null) {
                 int resId = bottomMenu.getOnIconChangeCallBack().getIcon(bottomMenu, position, text.toString());
-                boolean autoTintIconInLightOrDarkMode = bottomMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
-                
+                boolean autoTintIconInLightOrDarkMode = bottomMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode() == null ? bottomMenu.isAutoTintIconInLightOrDarkMode() : bottomMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
+
                 if (resId != 0) {
                     viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
                     viewHolder.imgDialogxMenuIcon.setImageResource(resId);
@@ -215,9 +215,32 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
                     }
                 }
             } else {
-                viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
-                if (viewHolder.spaceDialogxRightPadding != null) {
-                    viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                if (bottomMenu.getIconResIds() != null) {
+                    int resId = bottomMenu.getIconResIds(position);
+                    boolean autoTintIconInLightOrDarkMode = bottomMenu.isAutoTintIconInLightOrDarkMode();
+
+                    if (resId != 0) {
+                        viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
+                        viewHolder.imgDialogxMenuIcon.setImageResource(resId);
+                        if (viewHolder.spaceDialogxRightPadding != null) {
+                            viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            if (autoTintIconInLightOrDarkMode) {
+                                viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                            }
+                        }
+                    } else {
+                        viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
+                        if (viewHolder.spaceDialogxRightPadding != null) {
+                            viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                        }
+                    }
+                } else {
+                    viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
+                    if (viewHolder.spaceDialogxRightPadding != null) {
+                        viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                    }
                 }
             }
         }
@@ -226,7 +249,7 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         }
         return convertView;
     }
-    
+
     private int px2dip(float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);

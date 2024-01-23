@@ -80,11 +80,13 @@ public class BottomMenu extends BottomDialog {
         super();
     }
 
-    private OnIconChangeCallBack<BottomMenu> onIconChangeCallBack;
-    private MenuItemTextInfoInterceptor<BottomMenu> menuItemTextInfoInterceptor;
-    private BottomDialogListView listView;
-    private BaseAdapter menuListAdapter;
-    private List<CharSequence> menuList;
+    protected OnIconChangeCallBack<BottomMenu> onIconChangeCallBack;
+    protected MenuItemTextInfoInterceptor<BottomMenu> menuItemTextInfoInterceptor;
+    protected BottomDialogListView listView;
+    protected BaseAdapter menuListAdapter;
+    protected List<CharSequence> menuList;
+    protected List<Integer> iconResIds;
+    protected boolean autoTintIconInLightOrDarkMode = true;
 
     public static BottomMenu show(List<CharSequence> menuList) {
         BottomMenu bottomMenu = new BottomMenu();
@@ -116,7 +118,7 @@ public class BottomMenu extends BottomDialog {
         return bottomMenu;
     }
 
-    public static BottomMenu show(String[] menuList) {
+    public static BottomMenu show(String... menuList) {
         BottomMenu bottomMenu = new BottomMenu();
         bottomMenu.setMenuList(menuList);
         bottomMenu.show();
@@ -701,6 +703,20 @@ public class BottomMenu extends BottomDialog {
     }
 
     public BottomMenu setMenuList(CharSequence[] menuList) {
+        this.menuList = Arrays.asList(menuList);
+        this.menuListAdapter = null;
+        preRefreshUI();
+        return this;
+    }
+
+    public BottomMenu setMenus(CharSequence... menuList) {
+        this.menuList = Arrays.asList(menuList);
+        this.menuListAdapter = null;
+        preRefreshUI();
+        return this;
+    }
+
+    public BottomMenu setMenus(String... menuList) {
         this.menuList = Arrays.asList(menuList);
         this.menuListAdapter = null;
         preRefreshUI();
@@ -1387,6 +1403,44 @@ public class BottomMenu extends BottomDialog {
 
     public BottomMenu setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
+        return this;
+    }
+
+    public List<Integer> getIconResIds() {
+        return iconResIds;
+    }
+
+    public int getIconResIds(int position) {
+        if (iconResIds != null && position >= 0 && position < iconResIds.size()) {
+            return iconResIds.get(position);
+        }
+        return 0;
+    }
+
+    public BottomMenu setIconResIds(List<Integer> iconResIds) {
+        this.iconResIds = iconResIds;
+        refreshUI();
+        return this;
+    }
+
+    public BottomMenu setIconResIds(int... resIds) {
+        if (iconResIds == null) {
+            iconResIds = new ArrayList<>();
+        }
+        for (int id : resIds) {
+            iconResIds.add(id);
+        }
+        refreshUI();
+        return this;
+    }
+
+    public boolean isAutoTintIconInLightOrDarkMode() {
+        return autoTintIconInLightOrDarkMode;
+    }
+
+    public BottomMenu setAutoTintIconInLightOrDarkMode(boolean autoTintIconInLightOrDarkMode) {
+        this.autoTintIconInLightOrDarkMode = autoTintIconInLightOrDarkMode;
         refreshUI();
         return this;
     }

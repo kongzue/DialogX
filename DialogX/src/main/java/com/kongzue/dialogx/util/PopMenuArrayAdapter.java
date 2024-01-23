@@ -120,8 +120,8 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         
         if (popMenu.getOnIconChangeCallBack() != null) {
             int resId = popMenu.getOnIconChangeCallBack().getIcon(popMenu, position, menuList.get(position).toString());
-            boolean autoTintIconInLightOrDarkMode = popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
-            
+            boolean autoTintIconInLightOrDarkMode = popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode() == null ? popMenu.isAutoTintIconInLightOrDarkMode() : popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
+
             if (resId != 0) {
                 viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
                 viewHolder.imgDialogxMenuIcon.setImageResource(resId);
@@ -142,9 +142,32 @@ public class PopMenuArrayAdapter extends BaseAdapter {
                 }
             }
         } else {
-            viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
-            if (viewHolder.spaceDialogxRightPadding != null) {
-                viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+            if (popMenu.getIconResIds() != null) {
+                int resId = popMenu.getIconResIds(position);
+                boolean autoTintIconInLightOrDarkMode = popMenu.isAutoTintIconInLightOrDarkMode();
+
+                if (resId != 0) {
+                    viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
+                    viewHolder.imgDialogxMenuIcon.setImageResource(resId);
+                    if (viewHolder.spaceDialogxRightPadding != null) {
+                        viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (autoTintIconInLightOrDarkMode) {
+                            viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                        }
+                    }
+                } else {
+                    viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
+                    if (viewHolder.spaceDialogxRightPadding != null) {
+                        viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                    }
+                }
+            } else {
+                viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
+                if (viewHolder.spaceDialogxRightPadding != null) {
+                    viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                }
             }
         }
         
