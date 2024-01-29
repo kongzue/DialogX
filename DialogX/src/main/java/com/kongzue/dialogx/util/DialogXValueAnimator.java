@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.util;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.animation.Interpolator;
 
 public class DialogXValueAnimator {
@@ -7,6 +9,8 @@ public class DialogXValueAnimator {
     public static final int RESTART = 1;
     public static final int REVERSE = 2;
     public static final int INFINITE = -1;
+
+    Handler handler = new Handler(Looper.getMainLooper());
 
     private long duration;
     private long startTime;
@@ -68,7 +72,12 @@ public class DialogXValueAnimator {
 
                         // 通知监听器
                         if (listener != null) {
-                            listener.onValueUpdate(animatedValue);
+                            getHandler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    listener.onValueUpdate(animatedValue);
+                                }
+                            });
                         }
                     } else {
                         // 动画结束
@@ -93,6 +102,13 @@ public class DialogXValueAnimator {
                 }
             }
         }).start();
+    }
+
+    private Handler getHandler() {
+        if (handler==null) {
+            handler = new Handler(Looper.getMainLooper());
+        }
+        return handler;
     }
 
     private void onAnimationEnd() {

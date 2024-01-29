@@ -767,7 +767,10 @@ public class MainActivity extends BaseActivity {
 
 //                      测试用代码
 //                    BottomMenu.show("添加", "查看", "编辑")
-//                            .setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_view, R.mipmap.img_dialogx_demo_edit);
+//                            .setIconResIds(R.mipmap.img_dialogx_demo_add,
+//                                    R.mipmap.img_dialogx_demo_view,
+//                                    R.mipmap.img_dialogx_demo_edit
+//                            );
                 } else {
                     BottomMenu.show(new String[]{"新标签页中打开", "稍后阅读", "复制链接网址"})
                             .setMessage("http://www.kongzue.com/DialogX")
