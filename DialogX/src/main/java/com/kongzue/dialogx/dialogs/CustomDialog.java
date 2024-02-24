@@ -264,8 +264,8 @@ public class CustomDialog extends BaseDialog {
                     Runnable onLayoutChangeRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            int baseViewLeft = baseViewLoc[0] - (int)boxRoot.getX();
-                            int baseViewTop = baseViewLoc[1] - (int)boxRoot.getY();
+                            int baseViewLeft = baseViewLoc[0] - (int) boxRoot.getX();
+                            int baseViewTop = baseViewLoc[1] - (int) boxRoot.getY();
                             int calX = 0, calY = 0;
                             if (alignViewGravity != -1) {
                                 if (isAlignBaseViewGravity(Gravity.CENTER_VERTICAL)) {
@@ -311,9 +311,13 @@ public class CustomDialog extends BaseDialog {
                             int[] baseViewLocCache = new int[2];
                             if (baseView() != null) {
                                 baseView().getLocationInWindow(baseViewLocCache);
-                                if (getDialogImpl() != null && isShow) {
-                                    baseViewLoc[0] = baseViewLocCache[0];
-                                    baseViewLoc[1] = baseViewLocCache[1];
+                                if (getDialogImpl() != null && isShow && baseView().getVisibility() == View.VISIBLE) {
+                                    if (baseViewLocCache[0] != 0) {
+                                        baseViewLoc[0] = baseViewLocCache[0];
+                                    }
+                                    if (baseViewLocCache[1] != 0) {
+                                        baseViewLoc[1] = baseViewLocCache[1];
+                                    }
                                     onLayoutChangeRunnable.run();
                                 }
                             } else {
@@ -761,6 +765,7 @@ public class CustomDialog extends BaseDialog {
 
     /**
      * 改为使用 .setEnableImmersiveMode(boolean) 来控制是否适配沉浸式
+     *
      * @param autoUnsafePlacePadding 是否适配沉浸式
      * @return CustomDialog
      */
@@ -772,6 +777,7 @@ public class CustomDialog extends BaseDialog {
 
     /**
      * 改为使用 .setEnableImmersiveMode(boolean) 来控制是否适配沉浸式
+     *
      * @param fullscreen 是否适配沉浸式
      * @return CustomDialog
      */

@@ -21,13 +21,10 @@ public class DialogXValueAnimator {
     private float endValue;
     private int repeatCount = 0;
     private int currentRepeatCount = 0;
+    private int refreshInterval = 16;       // 控制更新频率，默认 60 FPS
 
     public static DialogXValueAnimator ofFloat(float start, float end){
         return new DialogXValueAnimator(start, end);
-    }
-
-    public DialogXValueAnimator(long duration) {
-        this.duration = duration;
     }
 
     public DialogXValueAnimator(float startValue, float endValue) {
@@ -94,8 +91,7 @@ public class DialogXValueAnimator {
                     }
 
                     try {
-                        // 控制更新频率，可以根据需要调整
-                        Thread.sleep(16); // 60 FPS
+                        Thread.sleep(refreshInterval);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -191,5 +187,14 @@ public class DialogXValueAnimator {
 
     public int getCurrentRepeatCount() {
         return currentRepeatCount;
+    }
+
+    public int getRefreshInterval() {
+        return refreshInterval;
+    }
+
+    public DialogXValueAnimator setRefreshInterval(int refreshInterval) {
+        this.refreshInterval = refreshInterval;
+        return this;
     }
 }

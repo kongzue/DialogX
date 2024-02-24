@@ -265,7 +265,7 @@ public class PopMenu extends BaseDialog {
                     int[] baseViewLocCache = new int[2];
                     if (baseView() != null) {
                         baseView().getLocationInWindow(baseViewLocCache);
-                        if (getDialogImpl() != null && !baseViewLoc.isSameLoc(baseViewLocCache)) {
+                        if (getDialogImpl() != null && !baseViewLoc.isSameLoc(baseViewLocCache) && baseView().getVisibility() == VISIBLE) {
                             baseViewLoc.set(baseViewLocCache);
                             refreshMenuLoc();
                         }

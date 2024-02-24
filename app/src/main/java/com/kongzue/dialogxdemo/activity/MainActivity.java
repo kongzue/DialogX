@@ -448,23 +448,6 @@ public class MainActivity extends BaseActivity {
                                 }
                                 return false;
                             }
-                        })
-                        .setOnIconChangeCallBack(new OnIconChangeCallBack<PopMenu>(true) {
-                            @Override
-                            public int getIcon(PopMenu dialog, int index, String menuText) {
-                                switch (menuText) {
-                                    case "添加":
-                                        return R.mipmap.img_dialogx_demo_add;
-                                    case "编辑":
-                                        return R.mipmap.img_dialogx_demo_edit;
-                                    case "删除":
-                                        return R.mipmap.img_dialogx_demo_delete;
-                                    case "分享":
-                                        return R.mipmap.img_dialogx_demo_share;
-                                    default:
-                                        return 0;
-                                }
-                            }
                         });
             }
         });

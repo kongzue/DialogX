@@ -9,11 +9,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -105,15 +109,21 @@ public class ProgressView extends View implements ProgressViewInterface {
             mPaint.setColor(color);
 
             if (!isInEditMode()) {
+                int refreshInterval = (int) calculateMillisPerFrame(getContext());
+
                 halfSweepA = (halfSweepAMaxValue - halfSweepAMinValue) / 2;
 
                 rotateAnimator = DialogXValueAnimator.ofFloat(0, 365);
                 rotateAnimator.setDuration(1000);
                 rotateAnimator.setInterpolator(new LinearInterpolator());
                 rotateAnimator.setRepeatCount(-1);
+                rotateAnimator.setRefreshInterval(refreshInterval);
                 rotateAnimator.addUpdateListener(new DialogXValueAnimator.ValueUpdateListener() {
                     @Override
                     public void onValueUpdate(float animatedValue) {
+                        if (!isAttachedToWindow()){
+                            return;
+                        }
                         currentRotateDegrees = animatedValue;
                         invalidate();
                     }
@@ -121,6 +131,7 @@ public class ProgressView extends View implements ProgressViewInterface {
 
                 followAnimator = DialogXValueAnimator.ofFloat(0, 365);
                 followAnimator.setDuration(1500);
+                followAnimator.setRefreshInterval(refreshInterval);
                 followAnimator.setInterpolator(new LinearInterpolator());
                 followAnimator.setRepeatCount(-1);
                 followAnimator.addUpdateListener(new DialogXValueAnimator.ValueUpdateListener() {
@@ -501,5 +512,29 @@ public class ProgressView extends View implements ProgressViewInterface {
     private int dip2px(float dpValue) {
         final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    private float getRefreshRate(Context context) {
+        float refreshRate = 60.0f; // 默认值
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Display display = context.getSystemService(WindowManager.class).getDefaultDisplay();
+            Display.Mode mode = display.getMode();
+            refreshRate = mode.getRefreshRate();
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            refreshRate = display.getRefreshRate();
+        }
+
+        return refreshRate;
+    }
+
+    private long calculateMillisPerFrame(Context context) {
+        float refreshRate = getRefreshRate(context);
+
+        if (refreshRate > 0) {
+            return (long) (1000.0 / refreshRate);
+        } else {
+            return 16; // 获取刷新率失败
+        }
     }
 }

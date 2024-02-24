@@ -1,6 +1,9 @@
 package com.kongzue.dialogx.util;
 
 public class DialogXViewLoc {
+
+    public static boolean skipErrorLoc = true;
+
     private float x;
     private float y;
     private float w;
@@ -42,7 +45,7 @@ public class DialogXViewLoc {
         return this;
     }
 
-    public boolean isSameLoc(int[] loc){
+    public boolean isSameLoc(int[] loc) {
         if (loc.length == 2) {
             return x == loc[0] && y == loc[1];
         }
@@ -54,12 +57,30 @@ public class DialogXViewLoc {
 
     public void set(int[] loc) {
         if (loc.length == 2) {
-            x = loc[0];
-            y = loc[1];
+            if (skipErrorLoc) {
+                if (loc[0] != 0) {
+                    x = loc[0];
+                }
+                if (loc[1] != 0) {
+                    y = loc[1];
+                }
+            } else {
+                x = loc[0];
+                y = loc[1];
+            }
         }
         if (loc.length == 4) {
-            x = loc[0];
-            y = loc[1];
+            if (skipErrorLoc) {
+                if (loc[0] != 0) {
+                    x = loc[0];
+                }
+                if (loc[1] != 0) {
+                    y = loc[1];
+                }
+            } else {
+                x = loc[0];
+                y = loc[1];
+            }
             w = loc[2];
             h = loc[3];
         }
