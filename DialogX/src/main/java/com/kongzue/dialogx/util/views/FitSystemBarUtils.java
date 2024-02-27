@@ -472,7 +472,7 @@ public class FitSystemBarUtils {
     }
 
     private int getStatusBarHeight() {
-        if (isFullScreen()) {
+        if (isFullScreen() || getDecorView() == null) {
             return 0;
         }
         WindowInsetsController insetsController = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ? getDecorView().getWindowInsetsController() : null;
@@ -494,7 +494,7 @@ public class FitSystemBarUtils {
     }
 
     private int getNavigationBarHeight() {
-        if (isFullScreen()) {
+        if (isFullScreen() || getDecorView() == null) {
             return 0;
         }
         WindowInsetsController insetsController = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ? getDecorView().getWindowInsetsController() : null;
@@ -600,6 +600,9 @@ public class FitSystemBarUtils {
     private int getAppTargetSDKVersion() {
         try {
             Context context = BaseDialog.getApplicationContext();
+            if (context == null) {
+                return -1;
+            }
             PackageManager pm = context.getPackageManager();
             ApplicationInfo applicationInfo = pm.getApplicationInfo(context.getPackageName(), 0);
             int targetSdkVersion = applicationInfo.targetSdkVersion;

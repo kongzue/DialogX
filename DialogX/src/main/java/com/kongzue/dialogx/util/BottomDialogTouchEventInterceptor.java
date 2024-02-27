@@ -129,6 +129,7 @@ public class BottomDialogTouchEventInterceptor {
                                     enterAnim.start();
                                 }
                             }
+                            impl.scrollView.lockScroll(false);
                             break;
                     }
                     return false;

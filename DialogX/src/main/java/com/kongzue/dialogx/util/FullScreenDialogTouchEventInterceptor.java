@@ -108,6 +108,7 @@ public class FullScreenDialogTouchEventInterceptor {
                                     enterAnim.start();
                                 }
                             }
+                            ((ScrollController) impl.scrollView).lockScroll(false);
                             break;
                     }
                     return false;

@@ -1309,6 +1309,7 @@ public class MainActivity extends BaseActivity {
                                 recyclerView.setAdapter(adapter);
                             }
                         })
+                        .setScrollableWhenContentLargeThanVisibleRange(false)
                         .show();
             }
         });
