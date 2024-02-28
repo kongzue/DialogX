@@ -111,7 +111,8 @@ public class FullScreenDialogTouchEventInterceptor {
                                 }
                             }
                             if (impl.scrollView != null)
-                                ((ScrollController) impl.scrollView).lockScroll(false);
+                                if (impl.scrollView instanceof ScrollController)
+                                    ((ScrollController) impl.scrollView).lockScroll(false);
                             break;
                     }
                     return false;
@@ -121,9 +122,9 @@ public class FullScreenDialogTouchEventInterceptor {
             View touchView = impl.boxCustom;
             if (impl.scrollView != null) {
                 touchView = impl.bkg;
-            }
-            if (impl.scrollView instanceof ScrollController) {
-                ((ScrollController) impl.scrollView).lockScroll(false);
+                if (impl.scrollView instanceof ScrollController) {
+                    ((ScrollController) impl.scrollView).lockScroll(false);
+                }
             }
             touchView.setOnTouchListener(null);
         }
