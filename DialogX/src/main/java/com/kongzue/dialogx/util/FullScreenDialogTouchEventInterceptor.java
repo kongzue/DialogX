@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.util;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.RectF;
 import android.view.MotionEvent;
@@ -34,6 +35,7 @@ public class FullScreenDialogTouchEventInterceptor {
         refresh(me, impl);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void refresh(final FullScreenDialog me, final FullScreenDialog.DialogImpl impl) {
         if (me == null || impl == null || impl.bkg == null) {
             return;
@@ -108,7 +110,8 @@ public class FullScreenDialogTouchEventInterceptor {
                                     enterAnim.start();
                                 }
                             }
-                            ((ScrollController) impl.scrollView).lockScroll(false);
+                            if (impl.scrollView != null)
+                                ((ScrollController) impl.scrollView).lockScroll(false);
                             break;
                     }
                     return false;
