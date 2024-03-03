@@ -1184,6 +1184,11 @@ public class PopMenu extends BaseDialog {
         return this;
     }
 
+    public PopMenu setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
+
     public float getRadius() {
         return backgroundRadius;
     }

@@ -1147,6 +1147,11 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
 
+    public MessageDialog setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
+
     public TextInfo getCancelTextInfo() {
         return cancelTextInfo;
     }

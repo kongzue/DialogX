@@ -1157,6 +1157,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         return this;
     }
 
+    public PopTip setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
+
     @Override
     protected void shutdown() {
         dismiss();

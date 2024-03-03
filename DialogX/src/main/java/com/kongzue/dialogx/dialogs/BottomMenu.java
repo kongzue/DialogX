@@ -1086,6 +1086,10 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
+    public BottomMenu setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
 
     /**
      * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(OnBottomMenuButtonClickListener<BottomMenu>)}

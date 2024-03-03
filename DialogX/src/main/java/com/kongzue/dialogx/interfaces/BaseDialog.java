@@ -1028,11 +1028,6 @@ public abstract class BaseDialog implements LifecycleOwner {
         dialogView = new WeakReference<>(view);
     }
 
-    public BaseDialog setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
-        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
-        return this;
-    }
-
     protected void haptic(View v) {
         if (v != null)
             if (DialogX.useHaptic && isHapticFeedbackEnabled == -1)

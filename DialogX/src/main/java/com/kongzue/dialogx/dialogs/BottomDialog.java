@@ -1354,6 +1354,11 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         return this;
     }
 
+    public BottomDialog setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
+
     public BottomDialog onShow(DialogXRunnable<BottomDialog> dialogXRunnable) {
         onShowRunnable = dialogXRunnable;
         if (isShow() && onShowRunnable != null) {
