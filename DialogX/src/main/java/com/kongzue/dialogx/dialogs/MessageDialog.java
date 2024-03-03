@@ -1147,7 +1147,6 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
 
-
     public TextInfo getCancelTextInfo() {
         return cancelTextInfo;
     }
