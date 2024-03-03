@@ -1,9 +1,9 @@
 package com.kongzue.dialogx.interfaces;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.kongzue.dialogx.DialogX.DEBUGMODE;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -11,11 +11,11 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +25,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
@@ -37,7 +35,6 @@ import androidx.lifecycle.LifecycleRegistry;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.impl.ActivityLifecycleImpl;
 import com.kongzue.dialogx.impl.DialogFragmentImpl;
@@ -55,8 +52,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static com.kongzue.dialogx.DialogX.DEBUGMODE;
-
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -71,6 +66,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected WeakReference<Activity> ownActivity;
     private WeakReference<FrameLayout> rootFrameLayout;
     private static List<BaseDialog> runningDialogList;
+    protected int isHapticFeedbackEnabled = -1;
     private WeakReference<View> dialogView;
     protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
     protected DialogX.IMPL_MODE dialogImplMode = DialogX.implIMPLMode;
@@ -80,13 +76,13 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected Map<String, Object> data;
     protected DialogXRunnable onShowRunnable;
     protected DialogXRunnable onDismissRunnable;
-    protected boolean enableImmersiveMode = true;   //沉浸式适配
+    protected boolean enableImmersiveMode = true;   // 沉浸式适配
 
     public enum BUTTON_SELECT_RESULT {
-        NONE,           //未做出选择
-        BUTTON_OK,      //选择了确定按钮
-        BUTTON_CANCEL,  //选择了取消按钮
-        BUTTON_OTHER    //选择了其他按钮
+        NONE,           // 未做出选择
+        BUTTON_OK,      // 选择了确定按钮
+        BUTTON_CANCEL,  // 选择了取消按钮
+        BUTTON_OTHER    // 选择了其他按钮
     }
 
     public static void init(Context context) {
@@ -448,10 +444,10 @@ public abstract class BaseDialog implements LifecycleOwner {
 
     public static Activity getTopActivity() {
         if (activityWeakReference == null || activityWeakReference.get() == null) {
-            //尝试反射初始化
+            // 尝试反射初始化
             init(null);
             if (activityWeakReference == null || activityWeakReference.get() == null) {
-                //若还为空，无奈，尝试直接反射拿顶层 activity
+                // 若还为空，无奈，尝试直接反射拿顶层 activity
                 Activity topActivity = ActivityLifecycleImpl.getTopActivity();
                 init(topActivity);
                 return topActivity;
@@ -679,7 +675,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         dismissAnimFlag = false;
         setOwnActivity(getTopActivity());
         if (getOwnActivity() == null) {
-            //尝试重新获取 activity
+            // 尝试重新获取 activity
             init(null);
             if (getOwnActivity() == null) {
                 error("DialogX 未初始化(E5)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
@@ -702,7 +698,7 @@ public abstract class BaseDialog implements LifecycleOwner {
             });
         }
 
-        //Hide IME
+        // Hide IME
         if (!(this instanceof NoTouchInterface)) {
             View view = getOwnActivity().getCurrentFocus();
             if (view != null) {
@@ -1030,6 +1026,19 @@ public abstract class BaseDialog implements LifecycleOwner {
 
     protected void setDialogView(View view) {
         dialogView = new WeakReference<>(view);
+    }
+
+    public BaseDialog setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
+
+    protected void haptic(View v) {
+        if (v != null)
+            if (DialogX.useHaptic && isHapticFeedbackEnabled == -1)
+                v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            else if (isHapticFeedbackEnabled == 1)
+                v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
     }
 
     protected boolean isHide;

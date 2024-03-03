@@ -384,6 +384,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 btnSelectNegative.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        haptic(v);
                         buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_CANCEL;
                         if (cancelButtonClickListener != null) {
                             if (cancelButtonClickListener instanceof OnDialogButtonClickListener) {
@@ -405,6 +406,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 btnSelectOther.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        haptic(v);
                         buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OTHER;
                         if (otherButtonClickListener != null) {
                             if (otherButtonClickListener instanceof OnDialogButtonClickListener) {
@@ -426,6 +428,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        haptic(v);
                         buttonSelectResult = BUTTON_SELECT_RESULT.BUTTON_OK;
                         if (okButtonClickListener != null) {
                             if (okButtonClickListener instanceof OnDialogButtonClickListener) {
@@ -713,14 +716,14 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                             boxBkg.setPadding(0, 0, 0, (int) customDialogTop);
                         }
 
-                        //上移动画
+                        // 上移动画
                         ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", getRootFrameLayout().getMeasuredHeight(), bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop);
                         enterAnim.setDuration(enterAnimDurationTemp);
                         enterAnim.setAutoCancel(true);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
                         enterAnim.start();
 
-                        //遮罩层动画
+                        // 遮罩层动画
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(0f, 1f);
                         bkgAlpha.setDuration(enterAnimDurationTemp);
                         bkgAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1322,7 +1325,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
      * }
      * }
      */
-    //用于使用 new 构建实例时，override 的生命周期事件
+    // 用于使用 new 构建实例时，override 的生命周期事件
     protected void onDismiss(BottomDialog dialog) {
 
     }
