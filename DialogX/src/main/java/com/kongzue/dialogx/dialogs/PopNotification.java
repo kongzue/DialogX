@@ -8,8 +8,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -652,6 +650,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             boxBody.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    haptic(v);
                     if (onPopNotificationClickListener != null) {
                         if (!onPopNotificationClickListener.onClick(me, v)) {
                             dismiss();
@@ -665,6 +664,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             txtDialogxButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    haptic(v);
                     if (onButtonClickListener != null) {
                         if (!onButtonClickListener.onClick(me, v)) {
                             doDismiss(v);
@@ -1456,6 +1456,11 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     public PopNotification setRootPadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
         this.screenPaddings = new int[]{paddingLeft, paddingTop, paddingRight, paddingBottom};
         refreshUI();
+        return this;
+    }
+
+    public PopNotification setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
         return this;
     }
 

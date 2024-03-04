@@ -92,6 +92,10 @@ public class PopMenu extends BaseDialog {
     // 记录 baseView 位置
     protected DialogXViewLoc baseViewLoc = new DialogXViewLoc();
     private int selectIndex;
+    public boolean notCheckHash = false;
+    public int lastHash = -1;
+
+    private HashMap<Integer, Integer> mMenusMap = new HashMap<>();
 
     public PopMenu() {
         super();
@@ -554,16 +558,30 @@ public class PopMenu extends BaseDialog {
             listMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    haptic(view);
                     selectIndex = position;
                     if (!closing) {
-                        if (!getOnMenuItemClickListener().onClick(me, menuList.get(position), position)) {
-                            haptic(view);
+                        lastHash = menuList.hashCode();
+                        boolean callBack = getOnMenuItemClickListener().onClick(me, menuList.get(position), position);
+                        Integer hash = addMenuMap(0, menuList.hashCode());
+                        if (hash != null && !notCheckHash) {
+                            if (hash != lastHash) {
+                                if (callBack) {
+                                    callBack = false;
+                                }
+                            }
+                        }
+                        if (!callBack) {
                             dismiss();
                         }
                     }
                 }
             });
             onDialogInit();
+        }
+
+        private Integer addMenuMap(int position, int hashCode) {
+            return mMenusMap.put(position, hashCode);
         }
 
         @Override
@@ -900,6 +918,7 @@ public class PopMenu extends BaseDialog {
                 if (dialogImpl == null) {
                     return;
                 }
+                mMenusMap.clear();
                 dialogImpl.doDismiss(null);
             }
         });
