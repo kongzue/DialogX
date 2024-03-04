@@ -3,18 +3,13 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.LinkMovementMethod;
@@ -52,13 +47,12 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.style.MaterialStyle;
-import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.InputInfo;
-import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
+import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -436,6 +430,7 @@ public class MessageDialog extends BaseDialog {
                     if (txtInput != null) {
                         imeShow(txtInput, false);
                     }
+                    haptic(v);
                     if (okButtonClickListener != null) {
                         if (okButtonClickListener instanceof OnInputDialogButtonClickListener) {
                             String s = txtInput == null ? "" : txtInput.getText().toString();
@@ -459,6 +454,7 @@ public class MessageDialog extends BaseDialog {
                     if (txtInput != null) {
                         imeShow(txtInput, false);
                     }
+                    haptic(v);
                     if (cancelButtonClickListener != null) {
                         if (cancelButtonClickListener instanceof OnInputDialogButtonClickListener) {
                             String s = txtInput == null ? "" : txtInput.getText().toString();
@@ -482,6 +478,7 @@ public class MessageDialog extends BaseDialog {
                     if (txtInput != null) {
                         imeShow(txtInput, false);
                     }
+                    haptic(v);
                     if (otherButtonClickListener != null) {
                         if (otherButtonClickListener instanceof OnInputDialogButtonClickListener) {
                             String s = txtInput == null ? "" : txtInput.getText().toString();
@@ -508,11 +505,11 @@ public class MessageDialog extends BaseDialog {
             }
 
             boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
-            //修改下划线颜色
+            // 修改下划线颜色
             if (inputInfo != null && inputInfo.getBottomLineColor() != null) {
                 txtInput.getBackground().mutate().setColorFilter(inputInfo.getBottomLineColor(), PorterDuff.Mode.SRC_ATOP);
             }
-            //修改光标颜色
+            // 修改光标颜色
             if (inputInfo != null && inputInfo.getCursorColor() != null) {
                 int cursorColor = inputInfo.getCursorColor();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -533,7 +530,7 @@ public class MessageDialog extends BaseDialog {
                         }
                     }
                 } else {
-                    //Thanks for @Jared Rummler https://stackoverflow.com/questions/11554078/set-textcursordrawable-programmatically/57555148#57555148
+                    // Thanks for @Jared Rummler https://stackoverflow.com/questions/11554078/set-textcursordrawable-programmatically/57555148#57555148
                     try {
                         Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
                         fCursorDrawableRes.setAccessible(true);
@@ -600,8 +597,8 @@ public class MessageDialog extends BaseDialog {
                 boxRoot.setBackgroundColor(maskColor);
             }
             if (backgroundRadius > -1) {
-                //GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
-                //if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
+                // GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
+                // if (gradientDrawable != null) gradientDrawable.setCornerRadius(backgroundRadius);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     bkg.setOutlineProvider(new ViewOutlineProvider() {
                         @Override
@@ -681,7 +678,7 @@ public class MessageDialog extends BaseDialog {
 
             boxButton.setOrientation(buttonOrientation);
             if (buttonOrientation == LinearLayout.VERTICAL) {
-                //纵向
+                // 纵向
                 if (style.verticalButtonOrder() != null && style.verticalButtonOrder().length != 0) {
                     boxButton.removeAllViews();
                     for (int buttonType : style.verticalButtonOrder()) {
@@ -726,7 +723,7 @@ public class MessageDialog extends BaseDialog {
                     }
                 }
             } else {
-                //横向
+                // 横向
                 if (style.horizontalButtonOrder() != null && style.horizontalButtonOrder().length != 0) {
                     boxButton.removeAllViews();
                     for (int buttonType : style.horizontalButtonOrder()) {
@@ -786,7 +783,7 @@ public class MessageDialog extends BaseDialog {
                 }
             }
 
-            //Events
+            // Events
             if (bkgInterceptTouch) {
                 if (isCancelable()) {
                     boxRoot.setOnClickListener(new View.OnClickListener() {
@@ -1150,6 +1147,11 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
 
+    public MessageDialog setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
+
     public TextInfo getCancelTextInfo() {
         return cancelTextInfo;
     }
@@ -1479,7 +1481,7 @@ public class MessageDialog extends BaseDialog {
      * }
      * }
      */
-    //用于使用 new 构建实例时，override 的生命周期事件
+    // 用于使用 new 构建实例时，override 的生命周期事件
     protected void onDismiss(MessageDialog dialog) {
 
     }

@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.dialogs;
 
-import static android.view.View.GONE;
 import static android.view.View.OVER_SCROLL_NEVER;
 import static android.view.View.VISIBLE;
 
@@ -18,7 +17,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -68,30 +66,30 @@ public class PopMenu extends BaseDialog {
 
     protected PopMenu me = this;
     protected boolean bkgInterceptTouch = true;
-    protected OnBindView<PopMenu> onBindView;                               //自定义布局
-    protected DialogLifecycleCallback<PopMenu> dialogLifecycleCallback;     //对话框生命周期
+    protected OnBindView<PopMenu> onBindView;                               // 自定义布局
+    protected DialogLifecycleCallback<PopMenu> dialogLifecycleCallback;     // 对话框生命周期
     protected OnBackgroundMaskClickListener<PopMenu> onBackgroundMaskClickListener;
     protected List<CharSequence> menuList;
     protected List<Integer> iconResIds;
     protected boolean autoTintIconInLightOrDarkMode = true;
     protected DialogImpl dialogImpl;
     protected WeakReference<View> baseViewWeakReference;
-    protected boolean overlayBaseView = true;                               //允许菜单覆盖在 baseView 上
+    protected boolean overlayBaseView = true;                               // 允许菜单覆盖在 baseView 上
     protected OnMenuItemClickListener<PopMenu> onMenuItemClickListener;
-    protected OnIconChangeCallBack<PopMenu> onIconChangeCallBack;           //设置图标
-    protected int width = -1;                                               //指定菜单宽度
-    protected int height = -1;                                              //指定菜单高度
+    protected OnIconChangeCallBack<PopMenu> onIconChangeCallBack;           // 设置图标
+    protected int width = -1;                                               // 指定菜单宽度
+    protected int height = -1;                                              // 指定菜单高度
     protected TextInfo menuTextInfo;
-    protected boolean offScreen = false;                                    //超出屏幕
+    protected boolean offScreen = false;                                    // 超出屏幕
     protected float backgroundRadius = DialogX.defaultPopMenuBackgroundRadius;
     protected DialogXAnimInterface<PopMenu> dialogXAnimImpl;
     protected OnBackPressedListener<PopMenu> onBackPressedListener;
     protected MenuItemLayoutRefreshCallback<PopMenu> menuMenuItemLayoutRefreshCallback;
     protected int pressedIndex = -1;
 
-    protected int alignGravity = -1;                                        //指定菜单相对 baseView 的位置
+    protected int alignGravity = -1;                                        // 指定菜单相对 baseView 的位置
 
-    //记录 baseView 位置
+    // 记录 baseView 位置
     protected DialogXViewLoc baseViewLoc = new DialogXViewLoc();
     private int selectIndex;
 
@@ -311,7 +309,7 @@ public class PopMenu extends BaseDialog {
 
         MaxRelativeLayout boxBody = getDialogImpl().boxBody;
         DialogXBaseRelativeLayout boxRoot = getDialogImpl().boxRoot;
-        //菜单位置计算逻辑
+        // 菜单位置计算逻辑
         int baseViewLeft = (int) baseViewLoc.getX();
         int baseViewTop = (int) baseViewLoc.getY();
         int calX = 0, calY = 0;
@@ -331,7 +329,7 @@ public class PopMenu extends BaseDialog {
                 calY = (Math.max(0, baseViewTop + baseView().getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
             }
             if (overlayBaseView) {
-                //菜单覆盖在 baseView 上时
+                // 菜单覆盖在 baseView 上时
                 if (isAlignGravity(Gravity.TOP)) {
                     calY = (baseViewTop + baseView().getMeasuredHeight() - boxBody.getHeight());
                     if (calX == 0) {
@@ -434,7 +432,7 @@ public class PopMenu extends BaseDialog {
     }
 
     protected PopMenuArrayAdapter menuListAdapter;
-    protected int selectItemYDeviation; //如果找到了选中菜单，这里记录的是其位置的 Y 偏差值
+    protected int selectItemYDeviation; // 如果找到了选中菜单，这里记录的是其位置的 Y 偏差值
     protected boolean isEnterAnimRunning;
 
     public class DialogImpl implements DialogConvertViewInterface {
@@ -457,7 +455,7 @@ public class PopMenu extends BaseDialog {
 
             blurViews = findAllBlurView(convertView);
 
-            //先设置为 -1 表示未初始化位置
+            // 先设置为 -1 表示未初始化位置
             boxBody.setX(-1);
             boxBody.setY(-1);
             init();
@@ -559,6 +557,7 @@ public class PopMenu extends BaseDialog {
                     selectIndex = position;
                     if (!closing) {
                         if (!getOnMenuItemClickListener().onClick(me, menuList.get(position), position)) {
+                            haptic(view);
                             dismiss();
                         }
                     }
@@ -701,7 +700,7 @@ public class PopMenu extends BaseDialog {
                         long enterAnimDurationTemp = getEnterAnimationDuration(null);
 
                         if (baseView() != null) {
-                            //有绑定按钮的情况下
+                            // 有绑定按钮的情况下
                             int targetHeight = getBodyRealHeight();
                             boxBody.getLayoutParams().height = 1;
 
@@ -715,7 +714,7 @@ public class PopMenu extends BaseDialog {
                                         }
                                     }
                                 }
-                                //找到已选中的项目
+                                // 找到已选中的项目
                                 if (selectMenuIndex != -1) {
                                     int[] viewLoc = new int[2];
                                     if (listMenu.getChildAt(selectMenuIndex) != null) {
@@ -729,7 +728,7 @@ public class PopMenu extends BaseDialog {
                             refreshMenuLoc();
                             selectItemYDeviation = (int) (getMenuLoc().getY() - baseViewLoc.getY());
 
-                            //展开动画
+                            // 展开动画
                             ValueAnimator enterAnim = ValueAnimator.ofFloat(0f, 1f);
                             enterAnim.setInterpolator(new DecelerateInterpolator());
                             enterAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -781,7 +780,7 @@ public class PopMenu extends BaseDialog {
                             enterAnim.setDuration(enterAnimDurationTemp);
                             enterAnim.start();
                         } else {
-                            //无绑定按钮的情况下
+                            // 无绑定按钮的情况下
                             RelativeLayout.LayoutParams rLp = (RelativeLayout.LayoutParams) boxBody.getLayoutParams();
                             rLp.addRule(RelativeLayout.CENTER_IN_PARENT);
                             rLp.width = getWidth() == -1 ? RelativeLayout.LayoutParams.MATCH_PARENT : getWidth();
@@ -1185,6 +1184,11 @@ public class PopMenu extends BaseDialog {
         return this;
     }
 
+    public PopMenu setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
+
     public float getRadius() {
         return backgroundRadius;
     }
@@ -1259,7 +1263,7 @@ public class PopMenu extends BaseDialog {
         return pressedIndex;
     }
 
-    //设置已选择的菜单项（菜单背景会有选中状态的显示）
+    // 设置已选择的菜单项（菜单背景会有选中状态的显示）
     public PopMenu setPressedIndex(int pressedIndex) {
         this.pressedIndex = pressedIndex;
         refreshUI();
@@ -1309,7 +1313,7 @@ public class PopMenu extends BaseDialog {
      * }
      * }
      */
-    //用于使用 new 构建实例时，override 的生命周期事件
+    // 用于使用 new 构建实例时，override 的生命周期事件
     protected void onDismiss(PopMenu dialog) {
 
     }

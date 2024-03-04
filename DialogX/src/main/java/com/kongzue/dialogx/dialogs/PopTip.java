@@ -6,8 +6,6 @@ import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -35,11 +33,9 @@ import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
-import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
-import com.kongzue.dialogx.util.ObjectRunnable;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
@@ -592,6 +588,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             txtDialogxButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    haptic(v);
                     if (onButtonClickListener != null) {
                         if (!onButtonClickListener.onClick(me, v)) {
                             doDismiss(v);
@@ -675,6 +672,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     @Override
                     public void onClick(View v) {
                         if (!onPopTipClickListener.onClick(me, v)) {
+                            haptic(v);
                             dismiss();
                         }
                     }
@@ -1156,6 +1154,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
     public PopTip setExitAnimResId(int exitResId) {
         this.exitAnimResId = exitResId;
+        return this;
+    }
+
+    public PopTip setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
         return this;
     }
 

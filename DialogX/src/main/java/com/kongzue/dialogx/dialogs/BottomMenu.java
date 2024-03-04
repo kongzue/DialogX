@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
+import static android.view.View.OVER_SCROLL_NEVER;
+
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -37,8 +39,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import static android.view.View.OVER_SCROLL_NEVER;
 
 /**
  * @author: Kongzue
@@ -527,6 +527,7 @@ public class BottomMenu extends BottomDialog {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    haptic(view);
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastClickTime > ITEM_CLICK_DELAY) {
                         lastClickTime = currentTime;
@@ -629,7 +630,7 @@ public class BottomMenu extends BottomDialog {
             }
         }
 
-        //部分主题下选中项默认按下效果
+        // 部分主题下选中项默认按下效果
         if (showSelectedBackgroundTips) {
             listView.post(new Runnable() {
                 @Override
@@ -1085,6 +1086,10 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
+    public BottomMenu setHapticFeedbackEnabled(boolean isHapticFeedbackEnabled) {
+        this.isHapticFeedbackEnabled = isHapticFeedbackEnabled ? 1 : 0;
+        return this;
+    }
 
     /**
      * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(OnBottomMenuButtonClickListener<BottomMenu>)}
@@ -1335,17 +1340,17 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    //返回点击的菜单索引
+    // 返回点击的菜单索引
     public int getSelectionIndex() {
         return selectionIndex;
     }
 
-    //返回多选时，选择的菜单索引集合
+    // 返回多选时，选择的菜单索引集合
     public int[] getSelectionIndexArray() {
         return resultArray;
     }
 
-    //返回多选时，选择的菜单文本集合
+    // 返回多选时，选择的菜单文本集合
     public CharSequence[] getSelectTextArray() {
         return selectTextArray;
     }
