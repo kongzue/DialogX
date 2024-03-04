@@ -95,8 +95,6 @@ public class PopMenu extends BaseDialog {
     public boolean notCheckHash = false;
     public int lastHash = -1;
 
-    private HashMap<Integer, Integer> mMenusMap = new HashMap<>();
-
     public PopMenu() {
         super();
     }
@@ -563,9 +561,8 @@ public class PopMenu extends BaseDialog {
                     if (!closing) {
                         lastHash = menuList.hashCode();
                         boolean callBack = getOnMenuItemClickListener().onClick(me, menuList.get(position), position);
-                        Integer hash = addMenuMap(0, menuList.hashCode());
-                        if (hash != null && !notCheckHash) {
-                            if (hash != lastHash) {
+                        if (!notCheckHash) {
+                            if (lastHash == menuList.hashCode()) {
                                 if (callBack) {
                                     callBack = false;
                                 }
@@ -578,10 +575,6 @@ public class PopMenu extends BaseDialog {
                 }
             });
             onDialogInit();
-        }
-
-        private Integer addMenuMap(int position, int hashCode) {
-            return mMenusMap.put(position, hashCode);
         }
 
         @Override
@@ -918,7 +911,6 @@ public class PopMenu extends BaseDialog {
                 if (dialogImpl == null) {
                     return;
                 }
-                mMenusMap.clear();
                 dialogImpl.doDismiss(null);
             }
         });
