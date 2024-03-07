@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
@@ -702,6 +703,12 @@ public class InputDialog extends MessageDialog {
 
     public InputDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
+        return this;
+    }
+
+    public InputDialog appendMessage(CharSequence message){
+        this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
     }

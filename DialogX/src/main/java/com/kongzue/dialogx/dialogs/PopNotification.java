@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1529,6 +1530,12 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
     public PopNotification onDismiss(DialogXRunnable<PopNotification> dialogXRunnable) {
         onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public PopNotification appendMessage(CharSequence message){
+        this.message = TextUtils.concat(this.message, message);
+        refreshUI();
         return this;
     }
 }

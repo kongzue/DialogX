@@ -6,6 +6,7 @@ import android.graphics.Outline;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -1356,6 +1357,12 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
     public PopTip onDismiss(DialogXRunnable<PopTip> dialogXRunnable) {
         onDismissRunnable = dialogXRunnable;
+        return this;
+    }
+
+    public PopTip appendMessage(CharSequence message){
+        this.message = TextUtils.concat(this.message, message);
+        refreshUI();
         return this;
     }
 }

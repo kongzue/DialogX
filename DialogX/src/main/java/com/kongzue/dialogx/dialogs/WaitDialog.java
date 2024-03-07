@@ -10,6 +10,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -1222,6 +1223,12 @@ public class WaitDialog extends BaseDialog {
 
     public WaitDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
+        return this;
+    }
+
+    public WaitDialog appendMessage(CharSequence message){
+        this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
     }

@@ -5,6 +5,7 @@ import static android.view.View.OVER_SCROLL_NEVER;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1446,6 +1447,12 @@ public class BottomMenu extends BottomDialog {
 
     public BottomMenu setAutoTintIconInLightOrDarkMode(boolean autoTintIconInLightOrDarkMode) {
         this.autoTintIconInLightOrDarkMode = autoTintIconInLightOrDarkMode;
+        refreshUI();
+        return this;
+    }
+
+    public BottomMenu appendMessage(CharSequence message){
+        this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
     }
