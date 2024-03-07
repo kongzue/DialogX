@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
@@ -260,6 +261,12 @@ public class TipDialog extends WaitDialog {
 
     public TipDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
+        return this;
+    }
+
+    public TipDialog appendMessage(CharSequence message){
+        this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
     }

@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -1374,6 +1375,12 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
     public BottomDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
+        return this;
+    }
+
+    public BottomDialog appendMessage(CharSequence message){
+        this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
     }

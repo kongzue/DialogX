@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1507,6 +1508,12 @@ public class MessageDialog extends BaseDialog {
 
     public MessageDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
+        refreshUI();
+        return this;
+    }
+
+    public MessageDialog appendMessage(CharSequence message){
+        this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
     }
