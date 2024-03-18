@@ -812,6 +812,9 @@ public class MessageDialog extends BaseDialog {
         }
 
         public void doDismiss(View v) {
+            if (MessageDialog.this.preDismiss(MessageDialog.this)){
+                return;
+            }
             if (v != null) v.setEnabled(false);
             if (getOwnActivity() == null) return;
 

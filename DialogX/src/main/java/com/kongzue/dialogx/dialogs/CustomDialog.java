@@ -435,6 +435,9 @@ public class CustomDialog extends BaseDialog {
 
         @Override
         public void doDismiss(View v) {
+            if (CustomDialog.this.preDismiss(CustomDialog.this)){
+                return;
+            }
             if (v != null) v.setEnabled(false);
             if (!dismissAnimFlag && boxCustom != null) {
                 dismissAnimFlag = true;

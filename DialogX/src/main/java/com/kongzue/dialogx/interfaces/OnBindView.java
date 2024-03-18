@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.interfaces;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,6 +155,7 @@ public abstract class OnBindView<D> {
             waitBind(parentView, null);
             return;
         }
+        Log.e(">>>", "bindParent: getCustomView().getParent()=" + getCustomView().getParent() + "  parentView="+parentView );
         if (getCustomView().getParent() == parentView || parentView.getTag(PARENT_FLAG) == getCustomView().toString()) {
             return;
         }

@@ -392,6 +392,9 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
         @Override
         public void doDismiss(View v) {
+            if (FullScreenDialog.this.preDismiss(FullScreenDialog.this)){
+                return;
+            }
             if (v != null) v.setEnabled(false);
             if (getOwnActivity() == null) return;
 

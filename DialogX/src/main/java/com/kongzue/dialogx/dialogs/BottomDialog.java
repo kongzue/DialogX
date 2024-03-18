@@ -651,6 +651,9 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
         @Override
         public void doDismiss(View v) {
+            if (BottomDialog.this.preDismiss(BottomDialog.this)){
+                return;
+            }
             if (v != null) v.setEnabled(false);
             if (getOwnActivity() == null) return;
 

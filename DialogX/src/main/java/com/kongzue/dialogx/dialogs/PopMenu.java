@@ -656,6 +656,9 @@ public class PopMenu extends BaseDialog {
 
         @Override
         public void doDismiss(View v) {
+            if (preDismiss(PopMenu.this)){
+                return;
+            }
             if (v != null) {
                 v.setEnabled(false);
             }

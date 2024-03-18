@@ -177,6 +177,9 @@ public abstract class BaseDialog implements LifecycleOwner {
                 error(((BaseDialog) view.getTag()).dialogKey() + "已处于显示状态，请勿重复执行 show() 指令。");
                 return;
             }
+            if (dialog.preShow(dialog)) {
+                return;
+            }
             dialog.dialogView = new WeakReference<>(view);
 
             log(dialog.dialogKey() + ".show on " + dialog.getOwnActivity());
@@ -291,6 +294,9 @@ public abstract class BaseDialog implements LifecycleOwner {
             }
             if (activity.isDestroyed()) {
                 error(((BaseDialog) view.getTag()).dialogKey() + ".show ERROR: activity is Destroyed.");
+                return;
+            }
+            if (baseDialog.preShow(baseDialog)) {
                 return;
             }
             baseDialog.dialogView = new WeakReference<>(view);
@@ -632,23 +638,14 @@ public abstract class BaseDialog implements LifecycleOwner {
         if (activity == null) {
             activity = getTopActivity();
             if (activity == null) {
-                error("DialogX 错误：在 getRootFrameLayout() 时无法获取绑定的 activity，请确认是否正确初始化：\n" +
-                        "DialogX.init(context);\n\n" +
-                        "或者使用 .show(activity) 启动对话框\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+                error("DialogX 错误：在 getRootFrameLayout() 时无法获取绑定的 activity，请确认是否正确初始化：\n" + "DialogX.init(context);\n\n" + "或者使用 .show(activity) 启动对话框\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
                 return null;
             }
             setOwnActivity(activity);
         }
         FrameLayout decorView = getDecorView(activity);
         if (decorView == null) {
-            error("DialogX 错误：在 getRootFrameLayout() 时无法获 activity(" + activity + ") 的 decorView，请检查该 activity 是否正常显示且可以使 DialogX 基于其显示。\n" +
-                    "若该 activity 不可用，可通过以下代码配置豁免 DialogX 对话框绑定至该 activity，例如：\n" +
-                    "DialogX.unsupportedActivitiesPackageNames = new String[]{\n" +
-                    "        \"com.bytedance.sdk.openadsdk.stub.activity\",\n" +
-                    "        \"com.mobile.auth.gatewayauth\",\n" +
-                    "        \"com.google.android.gms.ads\"\n" +
-                    "};\n\n" +
-                    "另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
+            error("DialogX 错误：在 getRootFrameLayout() 时无法获 activity(" + activity + ") 的 decorView，请检查该 activity 是否正常显示且可以使 DialogX 基于其显示。\n" + "若该 activity 不可用，可通过以下代码配置豁免 DialogX 对话框绑定至该 activity，例如：\n" + "DialogX.unsupportedActivitiesPackageNames = new String[]{\n" + "        \"com.bytedance.sdk.openadsdk.stub.activity\",\n" + "        \"com.mobile.auth.gatewayauth\",\n" + "        \"com.google.android.gms.ads\"\n" + "};\n\n" + "另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return null;
         }
         rootFrameLayout = new WeakReference<>(decorView);
@@ -1029,11 +1026,10 @@ public abstract class BaseDialog implements LifecycleOwner {
     }
 
     protected void haptic(View v) {
-        if (v != null)
-            if (DialogX.useHaptic && isHapticFeedbackEnabled == -1)
-                v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
-            else if (isHapticFeedbackEnabled == 1)
-                v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+        if (v != null) if (DialogX.useHaptic && isHapticFeedbackEnabled == -1)
+            v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+        else if (isHapticFeedbackEnabled == 1)
+            v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
     }
 
     protected boolean isHide;
@@ -1060,5 +1056,23 @@ public abstract class BaseDialog implements LifecycleOwner {
         this.enableImmersiveMode = enableImmersiveMode;
         refreshUI();
         return this;
+    }
+
+    /**
+     * 启动前执行
+     *
+     * @return 若返回 true 表示拦截启动流程
+     */
+    public boolean preShow(BaseDialog dialog) {
+        return false;
+    }
+
+    /**
+     * 关闭前执行
+     *
+     * @return 若返回 true 表示拦截退出流程
+     */
+    public boolean preDismiss(BaseDialog dialog) {
+        return false;
     }
 }

@@ -836,6 +836,9 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
         @Override
         public void doDismiss(final View v) {
+            if (PopNotification.this.preDismiss(PopNotification.this)){
+                return;
+            }
             if (v != null) v.setEnabled(false);
 
             if (!dismissAnimFlag && boxRoot != null) {

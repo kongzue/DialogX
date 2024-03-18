@@ -80,13 +80,7 @@ public class WaitDialog extends BaseDialog {
          * <p>
          * 要是用进度，请直接使用 WaitDialog.show(float)
          */
-        @Deprecated
-        NONE,
-        SUCCESS,
-        WARNING,
-        ERROR,
-        @Deprecated
-        PROGRESSING
+        @Deprecated NONE, SUCCESS, WARNING, ERROR, @Deprecated PROGRESSING
     }
 
     protected static WeakReference<WaitDialog> me;
@@ -342,9 +336,7 @@ public class WaitDialog extends BaseDialog {
             Float dialogXRadius = (float) dip2px(15);
             if (style.overrideWaitTipRes() != null) {
                 dialogXRadius = getFloatStyleAttr((float) style.overrideWaitTipRes().overrideRadiusPx(), dialogXRadius);
-                blurFrontColor = getColorNullable(
-                        getIntStyleAttr(style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme()), isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight),
-                        blurFrontColor);
+                blurFrontColor = getColorNullable(getIntStyleAttr(style.overrideWaitTipRes().overrideBackgroundColorRes(isLightTheme()), isLightTheme() ? R.color.dialogxWaitBkgDark : R.color.dialogxWaitBkgLight), blurFrontColor);
             }
             if (blurViews != null) {
                 for (View blurView : blurViews) {
@@ -509,6 +501,9 @@ public class WaitDialog extends BaseDialog {
         }
 
         public void doDismiss(final View v) {
+            if (WaitDialog.this.preDismiss(WaitDialog.this)) {
+                return;
+            }
             if (boxRoot == null) return;
             if (getOwnActivity() == null) return;
 
@@ -562,11 +557,7 @@ public class WaitDialog extends BaseDialog {
                         });
                         bkgAlpha.start();
 
-                        boxRoot.animate()
-                                .setDuration(enterAnimDurationTemp)
-                                .alpha(1f)
-                                .setInterpolator(new DecelerateInterpolator())
-                                .setListener(null);
+                        boxRoot.animate().setDuration(enterAnimDurationTemp).alpha(1f).setInterpolator(new DecelerateInterpolator()).setListener(null);
                     }
 
                     @Override
@@ -588,10 +579,7 @@ public class WaitDialog extends BaseDialog {
                         exitAnim.setInterpolator(new AccelerateInterpolator());
                         bkg.startAnimation(exitAnim);
 
-                        boxRoot.animate()
-                                .alpha(0f)
-                                .setInterpolator(new AccelerateInterpolator())
-                                .setDuration(exitAnimDurationTemp);
+                        boxRoot.animate().alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(exitAnimDurationTemp);
 
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1f, 0f);
                         bkgAlpha.setDuration(exitAnimDurationTemp);
@@ -1227,7 +1215,7 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
 
-    public WaitDialog appendMessage(CharSequence message){
+    public WaitDialog appendMessage(CharSequence message) {
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
