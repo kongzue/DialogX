@@ -92,6 +92,8 @@ public class PopMenu extends BaseDialog {
     // 记录 baseView 位置
     protected DialogXViewLoc baseViewLoc = new DialogXViewLoc();
     private int selectIndex;
+    public boolean notCheckHash = false;
+    public int lastHash = -1;
 
     public PopMenu() {
         super();
@@ -554,10 +556,19 @@ public class PopMenu extends BaseDialog {
             listMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    haptic(view);
                     selectIndex = position;
                     if (!closing) {
-                        if (!getOnMenuItemClickListener().onClick(me, menuList.get(position), position)) {
-                            haptic(view);
+                        lastHash = menuList.hashCode();
+                        boolean callBack = getOnMenuItemClickListener().onClick(me, menuList.get(position), position);
+                        if (!notCheckHash) {
+                            if (lastHash == menuList.hashCode()) {
+                                if (callBack) {
+                                    callBack = false;
+                                }
+                            }
+                        }
+                        if (!callBack) {
                             dismiss();
                         }
                     }
