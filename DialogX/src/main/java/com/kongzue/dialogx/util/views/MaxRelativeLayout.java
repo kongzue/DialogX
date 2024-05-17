@@ -82,8 +82,6 @@ public class MaxRelativeLayout extends RelativeLayout {
         }
     }
 
-    private ScrollView childScrollView;
-
     public MaxRelativeLayout setMaxHeight(int maxHeight) {
         if (maxHeight > 0) this.maxHeight = maxHeight;
         return this;
@@ -125,56 +123,10 @@ public class MaxRelativeLayout extends RelativeLayout {
         if (widthSize > maxWidth && maxWidth != 0) {
             widthSize = maxWidth + getPaddingLeft() + getPaddingRight();
         }
-        View blurView = findViewWithTag("blurView");
-        View contentView = this.contentView == null ? findViewWithoutTag("blurView") : this.contentView;
-        if (contentView != null && blurView != null) {
-            int widthTemp = contentView.getMeasuredWidth() == 0 ? getMeasuredWidth() : contentView.getMeasuredWidth();
-            int heightTemp = contentView.getMeasuredHeight() == 0 ? getMeasuredHeight() : contentView.getMeasuredHeight();
-            if (widthTemp < minWidth) widthTemp = minWidth;
-            if (heightTemp < minHeight) heightTemp = minHeight;
-
-            LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
-            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-            lp.width = widthTemp;
-            lp.height = heightTemp;
-            blurView.setLayoutParams(lp);
-        } else {
-            if (blurView != null) {
-                LayoutParams lp = (LayoutParams) blurView.getLayoutParams();
-                lp.width = getMeasuredWidth();
-                lp.height = getMeasuredHeight();
-                blurView.setLayoutParams(lp);
-            }
-        }
 
         int maxHeightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, heightMode);
         int maxWidthMeasureSpec = MeasureSpec.makeMeasureSpec(widthSize, widthMode);
         super.onMeasure(maxWidthMeasureSpec, maxHeightMeasureSpec);
-
-        childScrollView = findViewById(R.id.scrollView);
-    }
-
-    private View findViewWithoutTag(String tag) {
-        for (int i = 0; i < getChildCount(); i++) {
-            if (!tag.equals(getChildAt(i).getTag())) {
-                return getChildAt(i);
-            }
-        }
-        return null;
-    }
-
-    @Deprecated
-    public boolean isChildScrollViewCanScroll() {
-        if (childScrollView == null) return false;
-        if (!childScrollView.isEnabled()) {
-            return false;
-        }
-        View child = childScrollView.getChildAt(0);
-        if (child != null) {
-            int childHeight = child.getHeight();
-            return childScrollView.getHeight() < childHeight;
-        }
-        return false;
     }
 
     public int dip2px(float dpValue) {

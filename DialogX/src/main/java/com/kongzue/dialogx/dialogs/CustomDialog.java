@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -182,6 +183,11 @@ public class CustomDialog extends BaseDialog {
                 baseViewLoc[2] = baseView().getWidth();
                 baseViewLoc[3] = baseView().getHeight();
             }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(getThisOrderIndex());
+            }
+
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
@@ -1141,6 +1147,23 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
         refreshUI();
+        return this;
+    }
+
+    public CustomDialog setThisOrderIndex(int orderIndex) {
+        this.thisOrderIndex = orderIndex;
+        if (getDialogView() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(orderIndex);
+            } else {
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+            }
+        }
+        return this;
+    }
+
+    public CustomDialog bringToFront() {
+        setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
 }

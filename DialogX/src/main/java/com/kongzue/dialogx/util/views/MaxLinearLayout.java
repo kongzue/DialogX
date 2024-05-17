@@ -86,40 +86,10 @@ public class MaxLinearLayout extends LinearLayout {
         if (widthSize > maxWidth && maxWidth != 0) {
             widthSize = maxWidth;
         }
-        View blurView = findViewWithTag("blurView");
-        View contentView = findViewWithoutTag("blurView");
-        if (contentView != null && blurView != null) {
-            int widthTemp = contentView.getMeasuredWidth() == 0 ? getMeasuredWidth() : contentView.getMeasuredWidth();
-            int heightTemp = contentView.getMeasuredHeight() == 0 ? getMeasuredHeight() : contentView.getMeasuredHeight();
-            if (widthTemp < minWidth) widthTemp = minWidth;
-            if (heightTemp < minHeight) heightTemp = minHeight;
-            
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) blurView.getLayoutParams();
-            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
-            lp.width = widthTemp;
-            lp.height = heightTemp;
-            blurView.setLayoutParams(lp);
-        } else {
-            if (blurView != null) {
-                RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) blurView.getLayoutParams();
-                lp.width = getMeasuredWidth();
-                lp.height = getMeasuredHeight();
-                blurView.setLayoutParams(lp);
-            }
-        }
         
         int maxHeightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, heightMode);
         int maxWidthMeasureSpec = MeasureSpec.makeMeasureSpec(widthSize, widthMode);
         super.onMeasure(maxWidthMeasureSpec, maxHeightMeasureSpec);
-    }
-    
-    private View findViewWithoutTag(String tag) {
-        for (int i = 0; i < getChildCount(); i++) {
-            if (!tag.equals(getChildAt(i).getTag())) {
-                return getChildAt(i);
-            }
-        }
-        return null;
     }
     
     public int dip2px(float dpValue) {

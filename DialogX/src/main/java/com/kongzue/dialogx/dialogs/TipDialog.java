@@ -1,6 +1,7 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.app.Activity;
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.kongzue.dialogx.DialogX;
@@ -268,6 +269,23 @@ public class TipDialog extends WaitDialog {
     public TipDialog appendMessage(CharSequence message){
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
+        return this;
+    }
+
+    public TipDialog setThisOrderIndex(int orderIndex) {
+        this.thisOrderIndex = orderIndex;
+        if (getDialogView() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(orderIndex);
+            } else {
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+            }
+        }
+        return this;
+    }
+
+    public TipDialog bringToFront() {
+        setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
 }

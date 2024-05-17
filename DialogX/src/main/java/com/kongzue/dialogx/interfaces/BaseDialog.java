@@ -77,6 +77,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected DialogXRunnable onShowRunnable;
     protected DialogXRunnable onDismissRunnable;
     protected boolean enableImmersiveMode = true;   // 沉浸式适配
+    protected int thisOrderIndex = 0;
 
     public enum BUTTON_SELECT_RESULT {
         NONE,           // 未做出选择
@@ -705,12 +706,15 @@ public abstract class BaseDialog implements LifecycleOwner {
         }
     }
 
-    protected String getString(int titleResId) {
+    protected String getString(int resId) {
         if (getApplicationContext() == null) {
             error("DialogX 未初始化(E6)。\n请检查是否在启动对话框前进行初始化操作，使用以下代码进行初始化：\nDialogX.init(context);\n\n另外建议您前往查看 DialogX 的文档进行使用：https://github.com/kongzue/DialogX");
             return null;
         }
-        return getResources().getString(titleResId);
+        if (resId == 0) {
+            return "";
+        }
+        return getResources().getString(resId);
     }
 
     protected int getColor(int backgroundRes) {
@@ -1074,5 +1078,21 @@ public abstract class BaseDialog implements LifecycleOwner {
      */
     public boolean preDismiss(BaseDialog dialog) {
         return false;
+    }
+
+    public int getThisOrderIndex() {
+        return thisOrderIndex;
+    }
+
+    public BaseDialog setThisOrderIndex(int thisOrderIndex) {
+        this.thisOrderIndex = thisOrderIndex;
+        return this;
+    }
+
+    protected int getHighestOrderIndex() {
+        if (getOwnActivity() != null && getDecorView(getOwnActivity()) != null) {
+            return getDecorView(getOwnActivity()).getChildCount();
+        }
+        return runningDialogList == null ? 1 : runningDialogList.size();
     }
 }

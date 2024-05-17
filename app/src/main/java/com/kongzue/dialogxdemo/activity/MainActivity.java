@@ -437,43 +437,18 @@ public class MainActivity extends BaseActivity {
         btnContextMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new PopMenu() {
-                    @Override
-                    public boolean preDismiss(BaseDialog dialog) {
-                        log(System.currentTimeMillis() + " preDismissEvent");
-                        return super.preDismiss(dialog);
-                    }
-                }
-                        .setMenus("添加", "编辑", "删除", "分享")
+                PopMenu.show("添加", "编辑", "删除", "分享")
+                        .setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_edit, R.mipmap.img_dialogx_demo_delete, R.mipmap.img_dialogx_demo_share)
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
                             public boolean onClick(PopMenu dialog, CharSequence text, int index) {
-                                log(System.currentTimeMillis() + " onItemClickEvent");
+                                if (index == 0) {
+                                    dialog.setMenuList(new String[]{"产品A", "产品B", "产品C"});
+                                    return true;
+                                }
                                 return false;
                             }
-                        })
-                        .onDismiss(new DialogXRunnable<PopMenu>() {
-                            @Override
-                            public void run(PopMenu dialog) {
-                                log(System.currentTimeMillis() + " onDismissEvent");
-                            }
-                        })
-                        .show();
-                ;
-
-
-//                PopMenu.show("添加", "编辑", "删除", "分享")
-//                        .setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_edit, R.mipmap.img_dialogx_demo_delete, R.mipmap.img_dialogx_demo_share)
-//                        .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
-//                            @Override
-//                            public boolean onClick(PopMenu dialog, CharSequence text, int index) {
-//                                if (index == 0) {
-//                                    dialog.setMenuList(new String[]{"产品A", "产品B", "产品C"});
-//                                    return true;
-//                                }
-//                                return false;
-//                            }
-//                        });
+                        });
             }
         });
 
@@ -534,7 +509,7 @@ public class MainActivity extends BaseActivity {
                             @Override
                             public boolean onClick(MessageDialog baseDialog, View v) {
                                 PopTip.show("点击确定按钮");
-                                return false;
+                                return true;
                             }
                         });
             }
@@ -718,6 +693,8 @@ public class MainActivity extends BaseActivity {
                                 return super.onSlideTouchEvent(dialog, v, event);
                             }
                         })
+
+                        .setMinHeight(dip2px(400))
                         .show();
             }
         });
@@ -1344,7 +1321,6 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 notificationIndex++;
                 PopNotification.build()
-                        .noAutoDismiss()
                         .setMessage("这是一条消息 " + notificationIndex)
                         .setOnPopNotificationClickListener(new OnDialogButtonClickListener<PopNotification>() {
                             @Override

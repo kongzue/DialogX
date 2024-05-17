@@ -185,6 +185,11 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         @Override
         public void init() {
             boxRoot.setParentDialog(me);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(getThisOrderIndex());
+            }
+
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -946,6 +951,23 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     public FullScreenDialog setEnableImmersiveMode(boolean enableImmersiveMode) {
         this.enableImmersiveMode = enableImmersiveMode;
         refreshUI();
+        return this;
+    }
+
+    public FullScreenDialog setThisOrderIndex(int orderIndex) {
+        this.thisOrderIndex = orderIndex;
+        if (getDialogView() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(orderIndex);
+            } else {
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+            }
+        }
+        return this;
+    }
+
+    public FullScreenDialog bringToFront() {
+        setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
 }

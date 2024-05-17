@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -292,7 +293,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                 ((ViewGroup) boxContent.getParent()).removeView(boxContent);
                 bodyContent.addView(boxContent, 1, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
-
             boxCancel = convertView.findViewWithTag("cancelBox");
 
             boxButton = convertView.findViewById(R.id.box_button);
@@ -329,6 +329,10 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         @Override
         public void init() {
             buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(getThisOrderIndex());
+            }
 
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
@@ -651,7 +655,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
         @Override
         public void doDismiss(View v) {
-            if (BottomDialog.this.preDismiss(BottomDialog.this)){
+            if (BottomDialog.this.preDismiss(BottomDialog.this)) {
                 return;
             }
             if (v != null) v.setEnabled(false);
@@ -1382,9 +1386,26 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         return this;
     }
 
-    public BottomDialog appendMessage(CharSequence message){
+    public BottomDialog appendMessage(CharSequence message) {
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
+        return this;
+    }
+
+    public BottomDialog setThisOrderIndex(int orderIndex) {
+        this.thisOrderIndex = orderIndex;
+        if (getDialogView() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(orderIndex);
+            } else {
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+            }
+        }
+        return this;
+    }
+
+    public BottomDialog bringToFront() {
+        setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
 }

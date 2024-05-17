@@ -319,6 +319,11 @@ public class MessageDialog extends BaseDialog {
 
         public void init() {
             buttonSelectResult = BUTTON_SELECT_RESULT.NONE;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(getThisOrderIndex());
+            }
+
             if (titleTextInfo == null) titleTextInfo = DialogX.titleTextInfo;
             if (messageTextInfo == null) messageTextInfo = DialogX.messageTextInfo;
             if (okTextInfo == null) okTextInfo = DialogX.okButtonTextInfo;
@@ -1518,6 +1523,23 @@ public class MessageDialog extends BaseDialog {
     public MessageDialog appendMessage(CharSequence message){
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
+        return this;
+    }
+
+    public MessageDialog setThisOrderIndex(int orderIndex) {
+        this.thisOrderIndex = orderIndex;
+        if (getDialogView() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(orderIndex);
+            } else {
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+            }
+        }
+        return this;
+    }
+
+    public MessageDialog bringToFront() {
+        setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
 }

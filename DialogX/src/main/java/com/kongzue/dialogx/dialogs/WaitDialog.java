@@ -219,6 +219,7 @@ public class WaitDialog extends BaseDialog {
 
     protected void setWaitDialogView(View v) {
         dialogView = new WeakReference<>(v);
+        setDialogView(v);
     }
 
     public WaitDialog show() {
@@ -327,6 +328,10 @@ public class WaitDialog extends BaseDialog {
         }
 
         public void init() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(getThisOrderIndex());
+            }
+
             if (messageTextInfo == null) messageTextInfo = DialogX.tipTextInfo;
             if (backgroundColor == null) backgroundColor = DialogX.tipBackgroundColor;
 
@@ -1218,6 +1223,22 @@ public class WaitDialog extends BaseDialog {
     public WaitDialog appendMessage(CharSequence message) {
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
+        return this;
+    }
+    public WaitDialog setThisOrderIndex(int orderIndex) {
+        this.thisOrderIndex = orderIndex;
+        if (getDialogView() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(orderIndex);
+            } else {
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+            }
+        }
+        return this;
+    }
+
+    public WaitDialog bringToFront() {
+        setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
 }

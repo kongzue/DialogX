@@ -499,6 +499,10 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
         @Override
         public void init() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(getThisOrderIndex());
+            }
+
             if (messageTextInfo == null) messageTextInfo = DialogX.popTextInfo;
             if (buttonTextInfo == null) buttonTextInfo = DialogX.buttonTextInfo;
             if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
@@ -1366,6 +1370,23 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     public PopTip appendMessage(CharSequence message){
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
+        return this;
+    }
+
+    public PopTip setThisOrderIndex(int orderIndex) {
+        this.thisOrderIndex = orderIndex;
+        if (getDialogView() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(orderIndex);
+            } else {
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+            }
+        }
+        return this;
+    }
+
+    public PopTip bringToFront() {
+        setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
 }

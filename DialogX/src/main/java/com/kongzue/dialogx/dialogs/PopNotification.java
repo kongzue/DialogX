@@ -533,6 +533,10 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             if (buttonTextInfo == null) buttonTextInfo = DialogX.buttonTextInfo;
             if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(getThisOrderIndex());
+            }
+
             if (autoDismissTimer == null) {
                 showShort();
             }
@@ -1539,6 +1543,23 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
     public PopNotification appendMessage(CharSequence message){
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
+        return this;
+    }
+
+    public PopNotification setThisOrderIndex(int orderIndex) {
+        this.thisOrderIndex = orderIndex;
+        if (getDialogView() != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getDialogView().setTranslationZ(orderIndex);
+            } else {
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+            }
+        }
+        return this;
+    }
+
+    public PopNotification bringToFront() {
+        setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
 }
