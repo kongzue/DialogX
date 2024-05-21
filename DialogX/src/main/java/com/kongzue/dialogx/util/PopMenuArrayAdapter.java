@@ -88,6 +88,11 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        if (!popMenu.isMenuItemEnable(position)) {
+            convertView.setAlpha(0.4f);
+        } else {
+            convertView.setAlpha(1f);
+        }
         int customBackgroundRes = popMenu.getStyle().popMenuSettings() == null ? 0 : popMenu.getStyle().popMenuSettings().overrideMenuItemBackgroundRes(popMenu.isLightTheme(), position, getCount(), false);
         if (customBackgroundRes != 0) {
             convertView.setBackgroundResource(customBackgroundRes);

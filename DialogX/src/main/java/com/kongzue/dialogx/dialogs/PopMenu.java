@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Kongzue
@@ -86,6 +87,7 @@ public class PopMenu extends BaseDialog {
     protected OnBackPressedListener<PopMenu> onBackPressedListener;
     protected MenuItemLayoutRefreshCallback<PopMenu> menuMenuItemLayoutRefreshCallback;
     protected int pressedIndex = -1;
+    protected Map<Integer, Boolean> menuUsability = new HashMap<Integer, Boolean>();
 
     protected int alignGravity = -1;                                        // 指定菜单相对 baseView 的位置
 
@@ -556,6 +558,9 @@ public class PopMenu extends BaseDialog {
             listMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (!isMenuItemEnable(position)) {
+                        return;
+                    }
                     haptic(view);
                     selectIndex = position;
                     if (!closing) {
@@ -1432,5 +1437,75 @@ public class PopMenu extends BaseDialog {
     public PopMenu bringToFront() {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
+    }
+
+    public PopMenu enableMenu(int... menuIndex) {
+        for (int i : menuIndex) {
+            menuUsability.put(i, true);
+        }
+        return this;
+    }
+
+    public PopMenu enableMenu(CharSequence... menuText) {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (CharSequence c : menuText) {
+                int index = menuList.indexOf(c);
+                menuUsability.put(index, true);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .enableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public PopMenu enableMenu(String... menuText) {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (String c : menuText) {
+                int index = menuList.indexOf(c);
+                menuUsability.put(index, true);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .enableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public PopMenu disableMenu(int... menuIndex) {
+        for (int i : menuIndex) {
+            menuUsability.put(i, false);
+        }
+        return this;
+    }
+
+    public PopMenu disableMenu(CharSequence... menuText) {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (CharSequence c : menuText) {
+                int index = menuList.indexOf(c);
+                menuUsability.put(index, false);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .disableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public PopMenu disableMenu(String... menuText) {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (String c : menuText) {
+                int index = menuList.indexOf(c);
+                menuUsability.put(index, false);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .disableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public boolean isMenuItemEnable(int index) {
+        Boolean enabled = menuUsability.get(index);
+        if (enabled == null) {
+            return true;
+        }
+        return enabled;
     }
 }

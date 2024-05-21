@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: Kongzue
@@ -52,9 +53,7 @@ import java.util.List;
 public class BottomMenu extends BottomDialog {
 
     public enum SELECT_MODE {
-        NONE,
-        SINGLE,
-        MULTIPLE
+        NONE, SINGLE, MULTIPLE
     }
 
     protected BottomMenu me = this;
@@ -63,6 +62,7 @@ public class BottomMenu extends BottomDialog {
     protected ArrayList<Integer> selectionItems;
     protected boolean showSelectedBackgroundTips = false;
     protected MenuItemLayoutRefreshCallback<BottomMenu> menuMenuItemLayoutRefreshCallback;
+    protected Map<Integer, Boolean> menuUsability = new HashMap<Integer, Boolean>();
 
     protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
 
@@ -529,6 +529,9 @@ public class BottomMenu extends BottomDialog {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (!isMenuItemEnable(position)) {
+                        return;
+                    }
                     haptic(view);
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastClickTime > ITEM_CLICK_DELAY) {
@@ -1452,7 +1455,7 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu appendMessage(CharSequence message){
+    public BottomMenu appendMessage(CharSequence message) {
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
@@ -1464,7 +1467,7 @@ public class BottomMenu extends BottomDialog {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getDialogView().setTranslationZ(orderIndex);
             } else {
-                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex(" + orderIndex + ") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
             }
         }
         return this;
@@ -1473,5 +1476,75 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu bringToFront() {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
+    }
+
+    public BottomMenu enableMenu(int... menuIndex) {
+        for (int i : menuIndex) {
+            menuUsability.put(i, true);
+        }
+        return this;
+    }
+
+    public BottomMenu enableMenu(CharSequence... menuText) {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (CharSequence c : menuText) {
+                int index = menuList.indexOf(c);
+                menuUsability.put(index, true);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .enableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public BottomMenu enableMenu(String... menuText) {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (String c : menuText) {
+                int index = menuList.indexOf(c);
+                menuUsability.put(index, true);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .enableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public BottomMenu disableMenu(int... menuIndex) {
+        for (int i : menuIndex) {
+            menuUsability.put(i, false);
+        }
+        return this;
+    }
+
+    public BottomMenu disableMenu(CharSequence... menuText) {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (CharSequence c : menuText) {
+                int index = menuList.indexOf(c);
+                menuUsability.put(index, false);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .disableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public BottomMenu disableMenu(String... menuText) {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (String c : menuText) {
+                int index = menuList.indexOf(c);
+                menuUsability.put(index, false);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .disableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public boolean isMenuItemEnable(int index) {
+        Boolean enabled = menuUsability.get(index);
+        if (enabled == null) {
+            return true;
+        }
+        return enabled;
     }
 }

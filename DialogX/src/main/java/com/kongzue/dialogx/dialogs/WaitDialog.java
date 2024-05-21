@@ -328,7 +328,7 @@ public class WaitDialog extends BaseDialog {
         }
 
         public void init() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getDialogView() != null) {
                 getDialogView().setTranslationZ(getThisOrderIndex());
             }
 
@@ -1225,13 +1225,14 @@ public class WaitDialog extends BaseDialog {
         refreshUI();
         return this;
     }
+
     public WaitDialog setThisOrderIndex(int orderIndex) {
         this.thisOrderIndex = orderIndex;
         if (getDialogView() != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getDialogView().setTranslationZ(orderIndex);
             } else {
-                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex(" + orderIndex + ") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
             }
         }
         return this;

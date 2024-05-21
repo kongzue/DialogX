@@ -95,6 +95,11 @@ public class BottomMenuArrayAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        if (!bottomMenu.isMenuItemEnable(position)) {
+            convertView.setAlpha(0.4f);
+        } else {
+            convertView.setAlpha(1f);
+        }
         if (bottomMenu.getSelectMode() == BottomMenu.SELECT_MODE.SINGLE) {
             if (viewHolder.imgDialogxMenuSelection != null) {
                 if (bottomMenu.getSelection() == position) {

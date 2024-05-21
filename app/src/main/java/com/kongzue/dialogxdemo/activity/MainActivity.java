@@ -438,6 +438,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 PopMenu.show("添加", "编辑", "删除", "分享")
+                        .disableMenu("编辑", "删除")
                         .setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_edit, R.mipmap.img_dialogx_demo_delete, R.mipmap.img_dialogx_demo_share)
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
