@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black20"
-    android:theme="@style/DialogXCompatThemeLight"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/DialogXCompatThemeLight">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,16 +33,17 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_vertical"
-                    android:textAppearance="?attr/textAppearanceHeadline2"
                     android:paddingStart="20dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="20dp"
                     android:paddingBottom="15dp"
                     android:text="Title"
+                    android:textAppearance="?attr/textAppearanceHeadline2"
                     android:textColor="@color/black"
                     android:textSize="21dp" />
 
-                <ScrollView
+                <com.kongzue.dialogx.util.views.DialogScrollView
+                    android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -70,6 +71,11 @@
                             android:layout_height="wrap_content"
                             android:visibility="gone" />
 
+                        <FrameLayout
+                            android:id="@+id/box_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -79,13 +85,13 @@
                                 android:id="@+id/txt_input"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="10dp"
+                                android:layout_gravity="center_horizontal"
                                 android:layout_marginStart="20dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginEnd="20dp"
-                                android:layout_gravity="center_horizontal"
                                 android:inputType="text"
                                 android:maxLines="1"
+                                android:padding="10dp"
                                 android:scrollbars="vertical"
                                 android:textColor="@color/black90"
                                 android:textSize="18dp" />
@@ -94,7 +100,7 @@
 
                     </LinearLayout>
 
-                </ScrollView>
+                </com.kongzue.dialogx.util.views.DialogScrollView>
 
                 <LinearLayout
                     android:id="@+id/box_button"

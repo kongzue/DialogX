@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.kongzue.dialogx.interfaces.ScrollController;
+import com.kongzue.dialogx.util.views.DialogScrollView;
 
 /**
  * 自定义滑动布局范例。此处以 RecyclerView 为主要例子
@@ -63,7 +64,7 @@ public class CustomRecycleView extends RecyclerView implements ScrollController 
     /**
      * 是否可以滑动判断依据，若当前滑动布局内容高度小于布局高度则为不可滑动。
      * 此处列举的是 RecycleView 的判断依据编写方法，
-     * ScrollView 的范例请参考 {@link com.kongzue.dialogx.util.views.BottomDialogScrollView#isCanScroll()}
+     * ScrollView 的范例请参考 {@link DialogScrollView#isCanScroll()}
      *
      * @return 是否可滑动
      */
@@ -75,7 +76,7 @@ public class CustomRecycleView extends RecyclerView implements ScrollController 
     /**
      * 此处请给出已滑动距离值，BottomDialog 需要根据此值判断当子布局滑动过程中，父布局是否需要介入滑动流程。
      * 此处列举的是 RecycleView 的判断依据编写方法，
-     * ScrollView 的范例请参考 {@link com.kongzue.dialogx.util.views.BottomDialogScrollView#getScrollDistance()}
+     * ScrollView 的范例请参考 {@link DialogScrollView#getScrollDistance()}
      *
      * @return 已滑动距离
      */

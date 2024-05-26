@@ -47,9 +47,12 @@ import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
+import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogx.util.views.DialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
@@ -283,7 +286,9 @@ public class MessageDialog extends BaseDialog {
         public DialogXBaseRelativeLayout boxRoot;
         public MaxRelativeLayout bkg;
         public TextView txtDialogTitle;
+        public ScrollController scrollView;
         public TextView txtDialogTip;
+        public ViewGroup boxList;
         public RelativeLayout boxCustom;
         public EditText txtInput;
         public LinearLayout boxButton;
@@ -299,7 +304,9 @@ public class MessageDialog extends BaseDialog {
             boxRoot = convertView.findViewById(R.id.box_root);
             bkg = convertView.findViewById(R.id.bkg);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
+            scrollView = convertView.findViewById(R.id.scrollView);
             txtDialogTip = convertView.findViewById(R.id.txt_dialog_tip);
+            boxList = convertView.findViewById(R.id.box_list);
             boxCustom = convertView.findViewById(R.id.box_custom);
             txtInput = convertView.findViewById(R.id.txt_input);
             boxButton = convertView.findViewById(R.id.box_button);
@@ -447,6 +454,10 @@ public class MessageDialog extends BaseDialog {
                             if (!((OnDialogButtonClickListener) okButtonClickListener).onClick(me, v)) {
                                 doDismiss(v);
                             }
+                        } else if (okButtonClickListener instanceof OnMenuButtonClickListener) {
+                            if (!((OnMenuButtonClickListener) okButtonClickListener).onClick(me, v)) {
+                                doDismiss(v);
+                            }
                         }
                     } else {
                         doDismiss(v);
@@ -465,6 +476,10 @@ public class MessageDialog extends BaseDialog {
                         if (cancelButtonClickListener instanceof OnInputDialogButtonClickListener) {
                             String s = txtInput == null ? "" : txtInput.getText().toString();
                             if (!((OnInputDialogButtonClickListener) cancelButtonClickListener).onClick(me, v, s)) {
+                                doDismiss(v);
+                            }
+                        } else if (cancelButtonClickListener instanceof OnMenuButtonClickListener) {
+                            if (!((OnMenuButtonClickListener) cancelButtonClickListener).onClick(me, v)) {
                                 doDismiss(v);
                             }
                         } else {
@@ -489,6 +504,10 @@ public class MessageDialog extends BaseDialog {
                         if (otherButtonClickListener instanceof OnInputDialogButtonClickListener) {
                             String s = txtInput == null ? "" : txtInput.getText().toString();
                             if (!((OnInputDialogButtonClickListener) otherButtonClickListener).onClick(me, v, s)) {
+                                doDismiss(v);
+                            }
+                        } else if (otherButtonClickListener instanceof OnMenuButtonClickListener) {
+                            if (!((OnMenuButtonClickListener) otherButtonClickListener).onClick(me, v)) {
                                 doDismiss(v);
                             }
                         } else {
@@ -810,6 +829,20 @@ public class MessageDialog extends BaseDialog {
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
                 boxCustom.setVisibility(View.VISIBLE);
+                if (onBindView.getCustomView() instanceof ScrollController) {
+                    if (scrollView instanceof DialogScrollView) {
+                        ((DialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
+                    }
+                    scrollView = (ScrollController) onBindView.getCustomView();
+                } else {
+                    View scrollController = onBindView.getCustomView().findViewWithTag("ScrollController");
+                    if (scrollController instanceof ScrollController) {
+                        if (scrollView instanceof DialogScrollView) {
+                            ((DialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
+                        }
+                        scrollView = (ScrollController) scrollController;
+                    }
+                }
             } else {
                 boxCustom.setVisibility(View.GONE);
             }
@@ -817,7 +850,7 @@ public class MessageDialog extends BaseDialog {
         }
 
         public void doDismiss(View v) {
-            if (MessageDialog.this.preDismiss(MessageDialog.this)){
+            if (MessageDialog.this.preDismiss(MessageDialog.this)) {
                 return;
             }
             if (v != null) v.setEnabled(false);
@@ -1294,6 +1327,9 @@ public class MessageDialog extends BaseDialog {
         if (getDialogImpl().boxCustom != null) {
             getDialogImpl().boxCustom.removeAllViews();
         }
+        if (getDialogImpl().boxList != null) {
+            getDialogImpl().boxList.removeAllViews();
+        }
         int layoutId = style.layout(isLightTheme());
         layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
@@ -1520,7 +1556,7 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
 
-    public MessageDialog appendMessage(CharSequence message){
+    public MessageDialog appendMessage(CharSequence message) {
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
@@ -1532,7 +1568,7 @@ public class MessageDialog extends BaseDialog {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getDialogView().setTranslationZ(orderIndex);
             } else {
-                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex(" + orderIndex + ") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
             }
         }
         return this;

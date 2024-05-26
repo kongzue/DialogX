@@ -314,6 +314,39 @@
                     app:cornerRadius="99dp"
                     app:icon="@mipmap/img_button_inputdialog" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_select_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="单选菜单对话框"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_messagemenu" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_multiSelect_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginTop="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="多选菜单对话框"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp"
+                    app:icon="@mipmap/img_button_messagemenu" />
             </com.kongzue.stacklabelview.StackLayout>
 
             <TextView
