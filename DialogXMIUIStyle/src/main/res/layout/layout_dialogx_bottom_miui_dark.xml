@@ -39,7 +39,7 @@
                     android:textColor="@color/dialogxMIUITextDark"
                     android:textSize="18dp" />
 
-                <com.kongzue.dialogx.util.views.BottomDialogScrollView
+                <com.kongzue.dialogx.util.views.DialogScrollView
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
 
                     </LinearLayout>
 
-                </com.kongzue.dialogx.util.views.BottomDialogScrollView>
+                </com.kongzue.dialogx.util.views.DialogScrollView>
 
                 <LinearLayout
                     android:id="@+id/box_button"

@@ -9,8 +9,8 @@ import android.widget.ListView;
 
 import androidx.appcompat.view.ContextThemeWrapper;
 
-import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.interfaces.BottomMenuListViewTouchEvent;
+import com.kongzue.dialogx.interfaces.DialogConvertViewInterface;
 
 /**
  * @author: Kongzue
@@ -19,31 +19,31 @@ import com.kongzue.dialogx.interfaces.BottomMenuListViewTouchEvent;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/10/6 23:42
  */
-public class BottomDialogListView extends ListView {
+public class DialogListView extends ListView {
     
     private BottomMenuListViewTouchEvent bottomMenuListViewTouchEvent;
     
-    public BottomDialogListView(Context context) {
+    public DialogListView(Context context) {
         super(context);
     }
     
-    public BottomDialogListView(Context context, AttributeSet attrs) {
+    public DialogListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
     
-    public BottomDialogListView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DialogListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
     
-    private BottomDialog.DialogImpl dialogImpl;
+    private DialogConvertViewInterface dialogImpl;
     
-    public BottomDialogListView(BottomDialog.DialogImpl dialog, Context context) {
+    public DialogListView(DialogConvertViewInterface dialog, Context context) {
         super(context);
         dialogImpl = dialog;
         setVerticalScrollBarEnabled(false);
     }
     
-    public BottomDialogListView(BottomDialog.DialogImpl dialog, Context context,int theme) {
+    public DialogListView(DialogConvertViewInterface dialog, Context context, int theme) {
         super(new ContextThemeWrapper(context,theme));
         dialogImpl = dialog;
         setVerticalScrollBarEnabled(false);
@@ -114,7 +114,7 @@ public class BottomDialogListView extends ListView {
         super.setAdapter(adapter);
     }
     
-    public BottomDialogListView setBottomMenuListViewTouchEvent(BottomMenuListViewTouchEvent bottomMenuListViewTouchEvent) {
+    public DialogListView setBottomMenuListViewTouchEvent(BottomMenuListViewTouchEvent bottomMenuListViewTouchEvent) {
         this.bottomMenuListViewTouchEvent = bottomMenuListViewTouchEvent;
         return this;
     }
