@@ -7,17 +7,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
-
-import static android.view.View.MeasureSpec.EXACTLY;
+import com.kongzue.dialogx.interfaces.DialogXSafetyModeInterface;
 
 /**
  * @author: Kongzue
@@ -26,7 +22,7 @@ import static android.view.View.MeasureSpec.EXACTLY;
  * @mail: myzcxhh@live.cn
  * @createTime: 2019/9/24 17:34
  */
-public class MaxRelativeLayout extends RelativeLayout {
+public class MaxRelativeLayout extends RelativeLayout implements DialogXSafetyModeInterface {
 
     private int maxWidth;
     private int maxHeight;
@@ -35,6 +31,7 @@ public class MaxRelativeLayout extends RelativeLayout {
     private boolean lockWidth;
     private boolean interceptTouch = true;
     private View contentView;
+    private int dialogXSafetyMode;
 
     public MaxRelativeLayout(Context context) {
         super(context);
@@ -62,7 +59,7 @@ public class MaxRelativeLayout extends RelativeLayout {
             minHeight = a.getDimensionPixelSize(R.styleable.DialogXMaxLayout_minLayoutHeight, 0);
             lockWidth = a.getBoolean(R.styleable.DialogXMaxLayout_lockWidth, false);
             interceptTouch = a.getBoolean(R.styleable.DialogXMaxLayout_interceptTouch, true);
-
+            dialogXSafetyMode = a.getInt(R.styleable.DialogXMaxLayout_dialogXSafetyMode, 0);
             a.recycle();
         }
         minWidth = minWidth == 0 ? getMinimumWidth() : minWidth;
@@ -213,5 +210,14 @@ public class MaxRelativeLayout extends RelativeLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return reInterceptTouch;
+    }
+
+    public int getDialogXSafetyMode() {
+        return dialogXSafetyMode;
+    }
+
+    public MaxRelativeLayout setDialogXSafetyMode(int dialogXSafetyMode) {
+        this.dialogXSafetyMode = dialogXSafetyMode;
+        return this;
     }
 }

@@ -8,6 +8,14 @@
         <attr name="minLayoutHeight" format="dimension"/>
         <attr name="lockWidth" format="boolean"/>
         <attr name="interceptTouch" format="boolean"/>
+
+        <attr name="dialogXSafetyMode" format="flags">
+            <flag name="none" value="0"/>
+            <flag name="top" value="0x1"/>
+            <flag name="left" value="0x2"/>
+            <flag name="bottom" value="0x4"/>
+            <flag name="right" value="0x8"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="RealtimeBlurView">

@@ -24,6 +24,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.DialogXBaseBottomDialog;
+import com.kongzue.dialogx.interfaces.DialogXSafetyModeInterface;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 
@@ -38,7 +39,7 @@ import java.lang.ref.WeakReference;
  */
 public class DialogXBaseRelativeLayout extends RelativeLayout {
 
-    public static boolean debugMode = false;
+    public static boolean debugMode = true;
 
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
     private WeakReference<BaseDialog> parentDialog;
@@ -118,11 +119,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                         boolean imeVisible = windowInsetsCompat.isVisible(WindowInsetsCompat.Type.ime());
                         if (!imeVisible && navigationBarsVisible) {
                             systemBarInsets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.systemBars());
-                            if (systemBarInsets.bottom == bottom &&
-                                    systemBarInsets.top == top &&
-                                    systemBarInsets.left == start &&
-                                    systemBarInsets.right == end
-                            ) {
+                            if (systemBarInsets.bottom == bottom && systemBarInsets.top == top && systemBarInsets.left == start && systemBarInsets.right == end) {
                                 systemBarInsets = null;
                             }
                         }
@@ -166,19 +163,51 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     public void setUnsafePadding(@Px int start, @Px int top, @Px int end, @Px int bottom) {
         log("KONGZUE DEBUG DIALOGX: setUnsafePadding=" + getParentDialog() + " t=" + top + " b=" + bottom);
-        if (getParentDialog() instanceof DialogXBaseBottomDialog) {
-            log("  KONGZUE DEBUG DIALOGX: isDialogXBaseBottomDialog");
-            ViewGroup bkgView = findViewById(R.id.bkg);
-            if (!((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf() && bkgView != null) {
-                log("    KONGZUE DEBUG DIALOGX: bkgView.setPadding b=" + bottom);
-                bkgView.setPadding(0, 0, 0, bottom);
+        if (DialogX.ignoreUnsafeInsetsHorizontal) {
+            log("  KONGZUE DEBUG DIALOGX: ignoreUnsafeInsetsHorizontal, start and end set 0");
+            start = 0;
+            end = 0;
+        }
+        if (isAlignBottomDialog(getParentDialog())) {
+            log("  KONGZUE DEBUG DIALOGX: Dialog is align bottom");
+            View dialogXSafetyArea = findViewWithTag("DialogXSafetyArea");
+            if (dialogXSafetyArea instanceof DialogXSafetyModeInterface) {
+                int dialogxSafetyMode = ((DialogXSafetyModeInterface) dialogXSafetyArea).getDialogXSafetyMode();
+                boolean hasTop = (dialogxSafetyMode & 0x1) != 0;
+                boolean hasLeft = (dialogxSafetyMode & 0x2) != 0;
+                boolean hasBottom = (dialogxSafetyMode & 0x4) != 0;
+                boolean hasRight = (dialogxSafetyMode & 0x8) != 0;
+                log("    KONGZUE DEBUG DIALOGX: dialogXSafetyArea" + dialogXSafetyArea + " hasLeft=" + hasLeft + "hasTop=" + hasTop + " hasRight=" + hasRight + " hasBottom=" + hasBottom);
+                dialogXSafetyArea.setPadding(hasLeft ? start : 0, hasTop ? top : 0, hasRight ? end : 0, hasBottom ? bottom : 0);
+                if (hasTop) {
+                    top = 0;
+                }
+                if (hasLeft) {
+                    start = 0;
+                }
+                if (hasRight) {
+                    end = 0;
+                }
+                if (hasBottom) {
+                    bottom = 0;
+                }
+            } else {
+                ViewGroup bkgView = findViewById(R.id.bkg);
+                if (!((DialogXBaseBottomDialog) getParentDialog()).isBottomNonSafetyAreaBySelf() && bkgView != null) {
+                    log("    KONGZUE DEBUG DIALOGX: bkgView.setPadding b=" + bottom);
+                    bkgView.setPadding(0, 0, 0, bottom);
+                }
+                bottom = 0;
             }
-            bottom = 0;
         }
         if (isAutoUnsafePlacePadding()) {
             log("  KONGZUE DEBUG DIALOGX: root.setPadding t=" + top + " b=" + bottom);
-            setPadding(DialogX.ignoreUnsafeInsetsHorizontal ? 0 : start, top, DialogX.ignoreUnsafeInsetsHorizontal ? 0 : end, bottom);
+            setPadding(start, top, end, bottom);
         }
+    }
+
+    private boolean isAlignBottomDialog(BaseDialog parentDialog) {
+        return getParentDialog() instanceof DialogXBaseBottomDialog || findViewWithTag("DialogXSafetyArea") instanceof DialogXSafetyModeInterface;
     }
 
     @Override

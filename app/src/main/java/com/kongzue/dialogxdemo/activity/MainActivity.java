@@ -754,8 +754,6 @@ public class MainActivity extends BaseActivity {
                                 return super.onSlideTouchEvent(dialog, v, event);
                             }
                         })
-
-                        .setMinHeight(dip2px(400))
                         .show();
             }
         });
