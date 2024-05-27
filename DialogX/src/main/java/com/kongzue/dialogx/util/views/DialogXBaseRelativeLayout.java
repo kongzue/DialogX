@@ -39,7 +39,7 @@ import java.lang.ref.WeakReference;
  */
 public class DialogXBaseRelativeLayout extends RelativeLayout {
 
-    public static boolean debugMode = true;
+    public static boolean debugMode = false;
 
     private OnSafeInsetsChangeListener onSafeInsetsChangeListener;
     private WeakReference<BaseDialog> parentDialog;
