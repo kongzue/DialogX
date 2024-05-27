@@ -28,14 +28,15 @@ import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
-import com.kongzue.dialogx.interfaces.OnBottomMenuButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
+import com.kongzue.dialogx.interfaces.SELECT_MODE;
 import com.kongzue.dialogx.util.BottomMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.BottomDialogListView;
+import com.kongzue.dialogx.util.views.DialogListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,10 +52,6 @@ import java.util.Map;
  * @createTime: 2020/10/6 23:48
  */
 public class BottomMenu extends BottomDialog {
-
-    public enum SELECT_MODE {
-        NONE, SINGLE, MULTIPLE
-    }
 
     protected BottomMenu me = this;
     protected int selectionIndex = -1;
@@ -84,7 +81,7 @@ public class BottomMenu extends BottomDialog {
 
     protected OnIconChangeCallBack<BottomMenu> onIconChangeCallBack;
     protected MenuItemTextInfoInterceptor<BottomMenu> menuItemTextInfoInterceptor;
-    protected BottomDialogListView listView;
+    protected DialogListView listView;
     protected BaseAdapter menuListAdapter;
     protected List<CharSequence> menuList;
     protected List<Integer> iconResIds;
@@ -511,9 +508,9 @@ public class BottomMenu extends BottomDialog {
 
 
             if (!isLightTheme()) {
-                listView = new BottomDialogListView(getDialogImpl(), getOwnActivity(), R.style.DialogXCompatThemeDark);
+                listView = new DialogListView(getDialogImpl(), getOwnActivity(), R.style.DialogXCompatThemeDark);
             } else {
-                listView = new BottomDialogListView(getDialogImpl(), getOwnActivity());
+                listView = new DialogListView(getDialogImpl(), getOwnActivity());
             }
             listView.setOverScrollMode(OVER_SCROLL_NEVER);
             listView.setDivider(getResources().getDrawable(dividerDrawableResId));
@@ -832,19 +829,19 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu setCancelButton(OnBottomMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
+    public BottomMenu setCancelButton(OnMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
 
-    public BottomMenu setCancelButton(CharSequence cancelText, OnBottomMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
+    public BottomMenu setCancelButton(CharSequence cancelText, OnMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
         this.cancelText = cancelText;
         this.cancelButtonClickListener = cancelButtonClickListener;
         preRefreshUI();
         return this;
     }
 
-    public BottomMenu setCancelButton(int cancelTextResId, OnBottomMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
+    public BottomMenu setCancelButton(int cancelTextResId, OnMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
         this.cancelText = getString(cancelTextResId);
         this.cancelButtonClickListener = cancelButtonClickListener;
         preRefreshUI();
@@ -852,7 +849,7 @@ public class BottomMenu extends BottomDialog {
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setCancelButton(OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
@@ -861,7 +858,7 @@ public class BottomMenu extends BottomDialog {
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(CharSequence cancelText, OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(CharSequence cancelText, OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setCancelButton(CharSequence cancelText, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
@@ -872,7 +869,7 @@ public class BottomMenu extends BottomDialog {
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(int cancelTextResId, OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setCancelButton(int cancelTextResId, OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setCancelButton(int cancelTextResId, OnDialogButtonClickListener<BottomDialog> cancelButtonClickListener) {
@@ -936,11 +933,11 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public OnBottomMenuButtonClickListener<BottomMenu> getBottomMenuCancelButtonClickListener() {
-        return (OnBottomMenuButtonClickListener<BottomMenu>) cancelButtonClickListener;
+    public OnMenuButtonClickListener<BottomMenu> getBottomMenuCancelButtonClickListener() {
+        return (OnMenuButtonClickListener<BottomMenu>) cancelButtonClickListener;
     }
 
-    public BottomMenu setCancelButtonClickListener(OnBottomMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
+    public BottomMenu setCancelButtonClickListener(OnMenuButtonClickListener<BottomMenu> cancelButtonClickListener) {
         this.cancelButtonClickListener = cancelButtonClickListener;
         return this;
     }
@@ -1074,18 +1071,18 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu setOkButton(OnBottomMenuButtonClickListener<BottomMenu> okButtonClickListener) {
+    public BottomMenu setOkButton(OnMenuButtonClickListener<BottomMenu> okButtonClickListener) {
         this.okButtonClickListener = okButtonClickListener;
         return this;
     }
 
-    public BottomMenu setOkButton(CharSequence okText, OnBottomMenuButtonClickListener<BottomMenu> okButtonClickListener) {
+    public BottomMenu setOkButton(CharSequence okText, OnMenuButtonClickListener<BottomMenu> okButtonClickListener) {
         this.okText = okText;
         this.okButtonClickListener = okButtonClickListener;
         return this;
     }
 
-    public BottomMenu setOkButton(int okTextResId, OnBottomMenuButtonClickListener<BottomMenu> okButtonClickListener) {
+    public BottomMenu setOkButton(int okTextResId, OnMenuButtonClickListener<BottomMenu> okButtonClickListener) {
         this.okText = getString(okTextResId);
         this.okButtonClickListener = okButtonClickListener;
         return this;
@@ -1097,7 +1094,7 @@ public class BottomMenu extends BottomDialog {
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setOkButton(OnDialogButtonClickListener<BottomDialog> okButtonClickListener) {
@@ -1106,7 +1103,7 @@ public class BottomMenu extends BottomDialog {
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(CharSequence okText, OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(CharSequence okText, OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setOkButton(CharSequence okText, OnDialogButtonClickListener<BottomDialog> okButtonClickListener) {
@@ -1116,7 +1113,7 @@ public class BottomMenu extends BottomDialog {
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(int okTextResId, OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOkButton(int okTextResId, OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setOkButton(int okTextResId, OnDialogButtonClickListener<BottomDialog> okButtonClickListener) {
@@ -1141,25 +1138,25 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu setOtherButton(OnBottomMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
+    public BottomMenu setOtherButton(OnMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
         this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
 
-    public BottomMenu setOtherButton(CharSequence otherText, OnBottomMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
+    public BottomMenu setOtherButton(CharSequence otherText, OnMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
         this.otherText = otherText;
         this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
 
-    public BottomMenu setOtherButton(int otherTextResId, OnBottomMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
+    public BottomMenu setOtherButton(int otherTextResId, OnMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
         this.otherText = getString(otherTextResId);
         this.otherButtonClickListener = otherButtonClickListener;
         return this;
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setOtherButton(OnDialogButtonClickListener<BottomDialog> otherButtonClickListener) {
@@ -1168,7 +1165,7 @@ public class BottomMenu extends BottomDialog {
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(CharSequence otherText, OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(CharSequence otherText, OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setOtherButton(CharSequence otherText, OnDialogButtonClickListener<BottomDialog> otherButtonClickListener) {
@@ -1178,7 +1175,7 @@ public class BottomMenu extends BottomDialog {
     }
 
     /**
-     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(int otherTextResId, OnBottomMenuButtonClickListener<BottomMenu>)}
+     * 建议使用 {@link com.kongzue.dialogx.dialogs.BottomMenu#setOtherButton(int otherTextResId, OnMenuButtonClickListener <BottomMenu>)}
      */
     @Deprecated
     public BottomMenu setOtherButton(int otherTextResId, OnDialogButtonClickListener<BottomDialog> otherButtonClickListener) {

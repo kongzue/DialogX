@@ -39,7 +39,9 @@
                     android:textColor="@color/black"
                     android:textSize="20dp" />
 
-                <ScrollView
+
+                <com.kongzue.dialogx.util.views.DialogScrollView
+                    android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -72,6 +74,11 @@
                             android:layout_height="wrap_content"
                             android:visibility="gone" />
 
+                        <FrameLayout
+                            android:id="@+id/box_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
                         <EditText
                             android:id="@+id/txt_input"
                             android:layout_width="match_parent"
@@ -97,7 +104,7 @@
 
                     </LinearLayout>
 
-                </ScrollView>
+                </com.kongzue.dialogx.util.views.DialogScrollView>
 
                 <LinearLayout
                     android:id="@+id/box_button"

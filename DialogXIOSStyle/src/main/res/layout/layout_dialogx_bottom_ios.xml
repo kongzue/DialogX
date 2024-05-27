@@ -55,7 +55,7 @@
                             android:textSize="12dp"
                             android:textStyle="bold" />
 
-                        <com.kongzue.dialogx.util.views.BottomDialogScrollView
+                        <com.kongzue.dialogx.util.views.DialogScrollView
                             android:id="@+id/scrollView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
 
                             </LinearLayout>
 
-                        </com.kongzue.dialogx.util.views.BottomDialogScrollView>
+                        </com.kongzue.dialogx.util.views.DialogScrollView>
 
                     </com.kongzue.dialogx.style.views.BlurLinearLayout>
 

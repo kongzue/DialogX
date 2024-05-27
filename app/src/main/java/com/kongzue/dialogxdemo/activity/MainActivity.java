@@ -20,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
-import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
@@ -44,7 +43,6 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.kongzue.baseframework.BaseActivity;
 import com.kongzue.baseframework.interfaces.DarkNavigationBarTheme;
 import com.kongzue.baseframework.interfaces.DarkStatusBarTheme;
-import com.kongzue.baseframework.interfaces.FullScreen;
 import com.kongzue.baseframework.interfaces.Layout;
 import com.kongzue.baseframework.interfaces.NavigationBarBackgroundColorRes;
 import com.kongzue.baseframework.util.CycleRunner;
@@ -57,6 +55,7 @@ import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.GuideDialog;
 import com.kongzue.dialogx.dialogs.InputDialog;
 import com.kongzue.dialogx.dialogs.MessageDialog;
+import com.kongzue.dialogx.dialogs.MessageMenu;
 import com.kongzue.dialogx.dialogs.PopMenu;
 import com.kongzue.dialogx.dialogs.PopNotification;
 import com.kongzue.dialogx.dialogs.PopTip;
@@ -71,7 +70,7 @@ import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
-import com.kongzue.dialogx.interfaces.OnBottomMenuButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -121,6 +120,8 @@ public class MainActivity extends BaseActivity {
     private MaterialButton btnMessageDialog;
     private MaterialButton btnSelectDialog;
     private MaterialButton btnInputDialog;
+    private MaterialButton btnSelectMessageMenu;
+    private MaterialButton btnMutiSelectMessageMenu;
     private MaterialButton btnWaitDialog;
     private MaterialButton btnWaitAndTipDialog;
     private MaterialButton btnTipSuccess;
@@ -183,6 +184,8 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog = findViewById(R.id.btn_messageDialog);
         btnSelectDialog = findViewById(R.id.btn_selectDialog);
         btnInputDialog = findViewById(R.id.btn_inputDialog);
+        btnSelectMessageMenu = findViewById(R.id.btn_select_menu);
+        btnMutiSelectMessageMenu = findViewById(R.id.btn_multiSelect_menu);
         btnWaitDialog = findViewById(R.id.btn_waitDialog);
         btnWaitAndTipDialog = findViewById(R.id.btn_waitAndTipDialog);
         btnTipSuccess = findViewById(R.id.btn_tipSuccess);
@@ -541,6 +544,63 @@ public class MainActivity extends BaseActivity {
                             }
                         })
                         .show();
+            }
+        });
+
+        btnSelectMessageMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MessageMenu.show(singleSelectMenuText)
+                        .setShowSelectedBackgroundTips(rdoMiui.isChecked())
+                        .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
+                        .setTitle("获得权限标题")
+                        .setOnMenuItemClickListener(new OnMenuItemSelectListener<MessageMenu>() {
+                            @Override
+                            public void onOneItemSelect(MessageMenu dialog, CharSequence text, int index, boolean select) {
+                                selectMenuIndex = index;
+                            }
+                        })
+                        .setCancelButton("确定", new OnMenuButtonClickListener<MessageMenu>() {
+                            @Override
+                            public boolean onClick(MessageMenu baseDialog, View v) {
+                                PopTip.show("已选择：" + singleSelectMenuText[selectMenuIndex]);
+                                return false;
+                            }
+                        })
+                        .setSelection(selectMenuIndex);
+            }
+        });
+        btnMutiSelectMessageMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MessageMenu.show(multiSelectMenuText)
+                        .setMessage("这里是选择城市的模拟范例，这是一个演示菜单")
+                        .setTitle("请选择城市")
+                        .setOnMenuItemClickListener(new OnMenuItemSelectListener<MessageMenu>() {
+                            @Override
+                            public void onMultiItemSelect(MessageMenu dialog, CharSequence[] text, int[] index) {
+                                multiSelectMenuResultCache = "";
+                                for (CharSequence c : text) {
+                                    multiSelectMenuResultCache = multiSelectMenuResultCache + " " + c;
+                                }
+                                selectMenuIndexArray = index;
+                            }
+                        })
+                        .setOkButton("确定", new OnMenuButtonClickListener<MessageMenu>() {
+                            @Override
+                            public boolean onClick(MessageMenu dialog, View v) {
+                                PopTip.show("已选择：" + multiSelectMenuResultCache);
+                                return false;
+                            }
+                        })
+//                        .setCancelButton("确定", new OnDialogButtonClickListener<MessageDialog>() {
+//                            @Override
+//                            public boolean onClick(MessageDialog baseDialog, View v) {
+//                                PopTip.show("已选择：" + multiSelectMenuResultCache);
+//                                return false;
+//                            }
+//                        })
+                        .setSelection(selectMenuIndexArray);
             }
         });
 
@@ -1232,7 +1292,7 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndex = index;
                             }
                         })
-                        .setCancelButton("确定", new OnBottomMenuButtonClickListener<BottomMenu>() {
+                        .setCancelButton("确定", new OnMenuButtonClickListener<BottomMenu>() {
                             @Override
                             public boolean onClick(BottomMenu baseDialog, View v) {
                                 PopTip.show("已选择：" + singleSelectMenuText[selectMenuIndex]);
@@ -1259,7 +1319,7 @@ public class MainActivity extends BaseActivity {
                                 selectMenuIndexArray = index;
                             }
                         })
-                        .setOkButton("确定", new OnBottomMenuButtonClickListener<BottomMenu>() {
+                        .setOkButton("确定", new OnMenuButtonClickListener<BottomMenu>() {
                             @Override
                             public boolean onClick(BottomMenu dialog, View v) {
                                 PopTip.show("已选择：" + multiSelectMenuResultCache);

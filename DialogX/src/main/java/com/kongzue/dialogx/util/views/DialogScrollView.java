@@ -14,21 +14,21 @@ import com.kongzue.dialogx.interfaces.ScrollController;
  * @mail: myzcxhh@live.cn
  * @createTime: 2020/11/17 15:29
  */
-public class BottomDialogScrollView extends ScrollView implements ScrollController {
+public class DialogScrollView extends ScrollView implements ScrollController {
     
-    public BottomDialogScrollView(Context context) {
+    public DialogScrollView(Context context) {
         super(context);
     }
     
-    public BottomDialogScrollView(Context context, AttributeSet attrs) {
+    public DialogScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
     
-    public BottomDialogScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DialogScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
     
-    public BottomDialogScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public DialogScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
     

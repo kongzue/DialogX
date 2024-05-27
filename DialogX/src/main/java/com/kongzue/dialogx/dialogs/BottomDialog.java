@@ -39,12 +39,12 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
-import com.kongzue.dialogx.interfaces.OnBottomMenuButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.TextInfo;
-import com.kongzue.dialogx.util.views.BottomDialogScrollView;
+import com.kongzue.dialogx.util.views.DialogScrollView;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 import com.kongzue.dialogx.util.views.MaxRelativeLayout;
 
@@ -396,8 +396,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                                 if (!((OnDialogButtonClickListener) cancelButtonClickListener).onClick(me, v)) {
                                     dismiss();
                                 }
-                            } else if (cancelButtonClickListener instanceof OnBottomMenuButtonClickListener) {
-                                if (!((OnBottomMenuButtonClickListener) cancelButtonClickListener).onClick(me, v)) {
+                            } else if (cancelButtonClickListener instanceof OnMenuButtonClickListener) {
+                                if (!((OnMenuButtonClickListener) cancelButtonClickListener).onClick(me, v)) {
                                     dismiss();
                                 }
                             }
@@ -418,8 +418,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                                 if (!((OnDialogButtonClickListener) otherButtonClickListener).onClick(me, v)) {
                                     dismiss();
                                 }
-                            } else if (otherButtonClickListener instanceof OnBottomMenuButtonClickListener) {
-                                if (!((OnBottomMenuButtonClickListener) otherButtonClickListener).onClick(me, v)) {
+                            } else if (otherButtonClickListener instanceof OnMenuButtonClickListener) {
+                                if (!((OnMenuButtonClickListener) otherButtonClickListener).onClick(me, v)) {
                                     dismiss();
                                 }
                             }
@@ -440,8 +440,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                                 if (!((OnDialogButtonClickListener) okButtonClickListener).onClick(me, v)) {
                                     dismiss();
                                 }
-                            } else if (okButtonClickListener instanceof OnBottomMenuButtonClickListener) {
-                                if (!((OnBottomMenuButtonClickListener) okButtonClickListener).onClick(me, v)) {
+                            } else if (okButtonClickListener instanceof OnMenuButtonClickListener) {
+                                if (!((OnMenuButtonClickListener) okButtonClickListener).onClick(me, v)) {
                                     dismiss();
                                 }
                             }
@@ -599,15 +599,15 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (onBindView != null && onBindView.getCustomView() != null) {
                 onBindView.bindParent(boxCustom, me);
                 if (onBindView.getCustomView() instanceof ScrollController) {
-                    if (scrollView instanceof BottomDialogScrollView) {
-                        ((BottomDialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
+                    if (scrollView instanceof DialogScrollView) {
+                        ((DialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
                     }
                     scrollView = (ScrollController) onBindView.getCustomView();
                 } else {
                     View scrollController = onBindView.getCustomView().findViewWithTag("ScrollController");
                     if (scrollController instanceof ScrollController) {
-                        if (scrollView instanceof BottomDialogScrollView) {
-                            ((BottomDialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
+                        if (scrollView instanceof DialogScrollView) {
+                            ((DialogScrollView) scrollView).setVerticalScrollBarEnabled(false);
                         }
                         scrollView = (ScrollController) scrollController;
                     }
