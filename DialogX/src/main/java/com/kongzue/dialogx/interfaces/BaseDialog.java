@@ -1095,4 +1095,11 @@ public abstract class BaseDialog implements LifecycleOwner {
         }
         return runningDialogList == null ? 1 : runningDialogList.size();
     }
+
+    protected static boolean isActivityDestroyed(Activity activity) {
+        return activity == null
+                || activity.isFinishing()
+                || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && activity.isDestroyed())
+                || (activity instanceof LifecycleOwner && ((LifecycleOwner) activity).getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED);
+    }
 }

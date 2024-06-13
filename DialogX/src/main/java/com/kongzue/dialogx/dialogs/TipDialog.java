@@ -32,133 +32,124 @@ public class TipDialog extends WaitDialog {
     }
 
     public static WaitDialog show(int messageResId) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(messageResId, TYPE.WARNING);
-        showWithInstance(noInstance);
-        return me();
+        return show((Activity) null, messageResId);
     }
 
     public static WaitDialog show(Activity activity, int messageResId) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(messageResId, TYPE.WARNING);
-        showWithInstance(noInstance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(messageResId, TYPE.WARNING);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(CharSequence message) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(message, TYPE.WARNING);
-        showWithInstance(noInstance);
-        return me();
+        return show(null, message);
     }
 
     public static WaitDialog show(Activity activity, CharSequence message) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(message, TYPE.WARNING);
-        if (noInstance) showWithInstance(noInstance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(message, TYPE.WARNING);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(int messageResId, TYPE tip) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(messageResId, tip);
-        showWithInstance(noInstance);
-        return me();
+        return show(null, messageResId, tip);
     }
 
     public static WaitDialog show(Activity activity, int messageResId, TYPE tip) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(messageResId, tip);
-        if (noInstance) showWithInstance(noInstance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(messageResId, tip);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(CharSequence message, TYPE tip) {
-        boolean noInstance = noInstance();
-        log("noInstance:" + noInstance);
-        if (noInstance) instanceBuild();
-        me().setTip(message, tip);
-        showWithInstance(noInstance);
-        return me();
+        return show(null, message, tip);
     }
 
     public static WaitDialog show(Activity activity, CharSequence message, TYPE tip) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(message, tip);
-        if (noInstance) showWithInstance(noInstance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(message, tip);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(int messageResId, TYPE tip, long duration) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(messageResId, tip);
-        me().setTipShowDuration(duration);
-        showWithInstance(noInstance);
-        return me();
+        return show(null, messageResId, tip, duration);
     }
 
     public static WaitDialog show(Activity activity, int messageResId, TYPE tip, long duration) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(messageResId, tip);
-        instance.setTipShowDuration(duration);
-        if (noInstance) showWithInstance(noInstance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(messageResId, tip);
+            dialog.setTipShowDuration(duration);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(CharSequence message, TYPE tip, long duration) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(message, tip);
-        me().setTipShowDuration(duration);
-        showWithInstance(noInstance);
-        return me();
+        return show(null, message, tip, duration);
     }
 
     public static WaitDialog show(Activity activity, CharSequence message, TYPE tip, long duration) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(message, tip);
-        instance.setTipShowDuration(duration);
-        if (noInstance) showWithInstance(noInstance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(message, tip);
+            dialog.setTipShowDuration(duration);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     @Override
     public String dialogKey() {
         return getClass().getSimpleName() + "(" + Integer.toHexString(hashCode()) + ")";
-    }
-
-    protected static void showWithInstance(boolean noInstance) {
-        if (noInstance) {
-            me().show();
-        } else {
-            me().refreshUI();
-            me().showTip(me().readyTipType);
-        }
-    }
-
-    protected static void showWithInstance(boolean noInstance, Activity activity) {
-        if (noInstance) {
-            me().show(activity);
-        } else {
-            me().refreshUI();
-            me().showTip(me().readyTipType);
-        }
     }
 
     public TipDialog setMaxWidth(int maxWidth) {
@@ -266,7 +257,7 @@ public class TipDialog extends WaitDialog {
         return this;
     }
 
-    public TipDialog appendMessage(CharSequence message){
+    public TipDialog appendMessage(CharSequence message) {
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
@@ -278,7 +269,7 @@ public class TipDialog extends WaitDialog {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getDialogView().setTranslationZ(orderIndex);
             } else {
-                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex(" + orderIndex + ") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
             }
         }
         return this;

@@ -1,17 +1,13 @@
 package com.kongzue.dialogxdemo.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kongzue.dialogx.dialogs.BottomDialog;
-import com.kongzue.dialogx.dialogs.PopTip;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogxdemo.R;
@@ -36,7 +32,13 @@ public class AppCompatActivityTest extends AppCompatActivity {
                         v.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                PopTip.show("TESTA!!");
+                                WaitDialog.show("please wait...");
+                                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AppCompatActivityTest.this.finish();
+                                    }
+                                },2000);
                             }
                         });
                     }

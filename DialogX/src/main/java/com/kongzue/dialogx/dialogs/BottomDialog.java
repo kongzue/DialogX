@@ -39,8 +39,8 @@ import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
-import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
 import com.kongzue.dialogx.util.BottomDialogTouchEventInterceptor;
 import com.kongzue.dialogx.util.TextInfo;
@@ -343,7 +343,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
             if (cancelText == null) cancelText = DialogX.cancelButtonText;
 
-            txtDialogTitle.getPaint().setFakeBoldText(true);
+            if (txtDialogTitle != null)txtDialogTitle.getPaint().setFakeBoldText(true);
             if (btnSelectNegative != null) btnSelectNegative.getPaint().setFakeBoldText(true);
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);

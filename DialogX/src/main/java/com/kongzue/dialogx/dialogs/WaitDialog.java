@@ -1,15 +1,11 @@
 package com.kongzue.dialogx.dialogs;
 
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +79,6 @@ public class WaitDialog extends BaseDialog {
         @Deprecated NONE, SUCCESS, WARNING, ERROR, @Deprecated PROGRESSING
     }
 
-    protected static WeakReference<WaitDialog> me;
     protected CharSequence message;
     protected long tipShowDuration = 1500;
     protected float waitProgress = -1;
@@ -97,12 +92,12 @@ public class WaitDialog extends BaseDialog {
 
     protected WaitDialog() {
         super();
+        ownActivity = new WeakReference<>(getTopActivity());
         cancelable = DialogX.cancelableTipDialog;
     }
 
     protected static WaitDialog instanceBuild() {
-        me = new WeakReference<>(new WaitDialog());
-        return me.get();
+        return new WaitDialog();
     }
 
     public static WaitDialog build() {
@@ -110,94 +105,159 @@ public class WaitDialog extends BaseDialog {
     }
 
     public static WaitDialog show(CharSequence message) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(message, TYPE.NONE);
-        showWithInstance(noInstance);
-        return me();
+        WaitDialog dialog = getInstance();
+        if (dialog != null) {
+            dialog.setTip(message, TYPE.NONE);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(Activity activity, CharSequence message) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(message, TYPE.NONE);
-        if (noInstance) showWithInstance(instance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(message, TYPE.NONE);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(int messageResId) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(messageResId, TYPE.NONE);
-        showWithInstance(noInstance);
-        return me();
+        WaitDialog dialog = getInstance();
+        if (dialog != null) {
+            dialog.setTip(messageResId, TYPE.NONE);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(Activity activity, int messageResId) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(messageResId, TYPE.PROGRESSING);
-        if (noInstance) showWithInstance(instance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(messageResId, TYPE.NONE);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(CharSequence message, float progress) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(message, TYPE.PROGRESSING);
-        me().setProgress(progress);
-        showWithInstance(noInstance);
-        return me();
+        WaitDialog dialog = getInstance();
+        if (dialog != null) {
+            dialog.setTip(message, TYPE.PROGRESSING);
+            dialog.setProgress(progress);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(Activity activity, CharSequence message, float progress) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(message, TYPE.PROGRESSING);
-        instance.setProgress(progress);
-        if (noInstance) showWithInstance(instance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(message, TYPE.PROGRESSING);
+            dialog.setProgress(progress);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(int messageResId, float progress) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(messageResId, TYPE.PROGRESSING);
-        me().setProgress(progress);
-        showWithInstance(noInstance);
-        return me();
+        WaitDialog dialog = getInstance();
+        if (dialog != null) {
+            dialog.setTip(messageResId, TYPE.PROGRESSING);
+            dialog.setProgress(progress);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(Activity activity, int messageResId, float progress) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(messageResId, TYPE.PROGRESSING);
-        instance.setProgress(progress);
-        if (noInstance) showWithInstance(instance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(messageResId, TYPE.PROGRESSING);
+            dialog.setProgress(progress);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(Activity activity, float progress) {
-        boolean noInstance = noInstance(activity);
-        if (noInstance) instanceBuild();
-        WaitDialog instance = getInstanceNotNull(activity);
-        instance.setTip(TYPE.PROGRESSING);
-        instance.setProgress(progress);
-        if (noInstance) showWithInstance(instance, activity);
-        return instance;
+        WaitDialog dialog = getInstance(activity);
+        if (dialog != null) {
+            dialog.setTip(TYPE.PROGRESSING);
+            dialog.setProgress(progress);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public static WaitDialog show(float progress) {
-        boolean noInstance = noInstance();
-        if (noInstance) instanceBuild();
-        me().setTip(TYPE.PROGRESSING);
-        me().setProgress(progress);
-        showWithInstance(noInstance);
-        return me();
+        WaitDialog dialog = getInstance();
+        if (dialog != null) {
+            dialog.setTip(TYPE.PROGRESSING);
+            dialog.setProgress(progress);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
     }
 
     public float getProgress() {
@@ -356,7 +416,7 @@ public class WaitDialog extends BaseDialog {
             }
             boxRoot.setClickable(true);
 
-            boxRoot.setParentDialog(me());
+            boxRoot.setParentDialog(WaitDialog.this);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
                 public void onShow() {
@@ -698,8 +758,7 @@ public class WaitDialog extends BaseDialog {
         if (dialogView != null) dialogView.clear();
         dialogView = null;
         dialogLifecycleCallback = null;
-        if (me != null) me.clear();
-        me = null;
+        if (ownActivity != null) ownActivity.clear();
         setLifecycleState(Lifecycle.State.DESTROYED);
         System.gc();
     }
@@ -745,7 +804,10 @@ public class WaitDialog extends BaseDialog {
     }
 
     public static void dismiss() {
-        me().doDismiss();
+        WaitDialog instance = getInstance();
+        if (instance != null) {
+            instance.doDismiss();
+        }
     }
 
     public static void dismiss(Activity activity) {
@@ -753,33 +815,35 @@ public class WaitDialog extends BaseDialog {
         if (instance != null) instance.doDismiss();
     }
 
-    protected static Timer delayDismissTimer;
+    protected Timer delayDismissTimer;
 
-    public static void dismiss(long delayTime) {
+    protected void cancelDelayDismissTimer() {
         if (delayDismissTimer != null) {
             delayDismissTimer.cancel();
         }
+    }
+
+    public static void dismiss(long delayTime) {
+        WaitDialog instance = getInstance();
+        if (instance != null) {
+            instance.doDismiss(delayTime);
+        }
+    }
+
+    public void doDismiss(long delayTime) {
+        cancelDelayDismissTimer();
         delayDismissTimer = new Timer();
         delayDismissTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                dismiss();
+                doDismiss();
             }
         }, delayTime);
     }
 
     protected static WaitDialog me() {
-        for (BaseDialog baseDialog : getRunningDialogList()) {
-            if (baseDialog instanceof WaitDialog) {
-                if (baseDialog.isShow() && baseDialog.getOwnActivity() == getTopActivity()) {
-                    return (WaitDialog) baseDialog;
-                }
-            }
-        }
-        if (me == null || me.get() == null) {
-            return instanceBuild();
-        }
-        return me.get();
+        WaitDialog instance = getInstance();
+        return instance == null ? instanceBuild() : instance;
     }
 
     protected TYPE readyTipType;
@@ -849,15 +913,23 @@ public class WaitDialog extends BaseDialog {
     }
 
     public static WaitDialog setMessage(CharSequence message) {
-        me().preMessage(message);
-        me().refreshUI();
-        return me();
+        WaitDialog instance = getInstance();
+        if (instance != null) {
+            instance.preMessage(message);
+            instance.refreshUI();
+            return instance;
+        }
+        return instanceBuild();
     }
 
     public static WaitDialog setMessage(int messageResId) {
-        me().preMessage(messageResId);
-        me().refreshUI();
-        return me();
+        WaitDialog instance = getInstance();
+        if (instance != null) {
+            instance.preMessage(messageResId);
+            instance.refreshUI();
+            return instance;
+        }
+        return instanceBuild();
     }
 
     public boolean isCancelable() {
@@ -977,10 +1049,6 @@ public class WaitDialog extends BaseDialog {
         refreshUI();
     }
 
-    public static WaitDialog getInstance() {
-        return me();
-    }
-
     /**
      * 获取当前 WaitDialog 显示状态
      * <p>
@@ -1013,32 +1081,17 @@ public class WaitDialog extends BaseDialog {
         return this;
     }
 
-    protected static boolean noInstance() {
-        if (getTopActivity() != null && getInstance((Activity) getTopActivity()) != null) {
-            return false;
-        }
-        return me == null || me.get() == null || me.get().getOwnActivity() == null || me.get().getOwnActivity() != getTopActivity() || !me.get().isShow;
-    }
-
-    protected static boolean noInstance(Activity activity) {
-        if (getTopActivity() != null && getInstance(activity) != null) {
-            return false;
-        }
-        return me == null || me.get() == null || me.get().getOwnActivity() == null || me.get().getOwnActivity() != activity || !me.get().isShow;
-    }
-
-    public static WaitDialog getInstanceNotNull(Activity activity) {
-        for (BaseDialog baseDialog : getRunningDialogList()) {
-            if (baseDialog instanceof WaitDialog) {
-                if (baseDialog.isShow() && baseDialog.getOwnActivity() == activity) {
-                    return (WaitDialog) baseDialog;
-                }
-            }
-        }
-        return instanceBuild();
+    public static WaitDialog getInstance() {
+        return getInstance(null);
     }
 
     public static WaitDialog getInstance(Activity activity) {
+        if (activity == null) {
+            activity = getTopActivity();
+        }
+        if (isActivityDestroyed(activity)) {
+            return null;
+        }
         for (BaseDialog baseDialog : getRunningDialogList()) {
             if (baseDialog instanceof WaitDialog) {
                 if (baseDialog.isShow() && baseDialog.getOwnActivity() == activity) {
@@ -1046,29 +1099,7 @@ public class WaitDialog extends BaseDialog {
                 }
             }
         }
-        return null;
-    }
-
-    protected static void showWithInstance(boolean noInstance) {
-        if (delayDismissTimer != null) {
-            delayDismissTimer.cancel();
-        }
-        if (noInstance) {
-            me().show();
-        } else {
-            me().refreshUI();
-        }
-    }
-
-    protected static void showWithInstance(WaitDialog instance, Activity activity) {
-        if (delayDismissTimer != null) {
-            delayDismissTimer.cancel();
-        }
-        if (activity == null) {
-            instance.show();
-        } else {
-            instance.show(activity);
-        }
+        return new WaitDialog();
     }
 
     @Override
