@@ -551,10 +551,12 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
             switch (align) {
                 case TOP:
+                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
                     rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                     break;
                 case BOTTOM:
+                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
                     rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
                     rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                     break;
