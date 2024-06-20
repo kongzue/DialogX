@@ -546,27 +546,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 }
             });
 
-            RelativeLayout.LayoutParams rlp;
-            rlp = ((RelativeLayout.LayoutParams) boxBody.getLayoutParams());
-            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
-            switch (align) {
-                case TOP:
-                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    break;
-                case BOTTOM:
-                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                    rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    break;
-                case CENTER:
-                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    rlp.addRule(RelativeLayout.CENTER_IN_PARENT);
-                    break;
-            }
-            boxBody.setLayoutParams(rlp);
+            applyPopTipAlign();
 
             boxRoot.setOnSafeInsetsChangeListener(new OnSafeInsetsChangeListener() {
                 @Override
@@ -606,6 +586,30 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                 }
             });
             onDialogInit();
+        }
+
+        private void applyPopTipAlign() {
+            RelativeLayout.LayoutParams rlp;
+            rlp = ((RelativeLayout.LayoutParams) boxBody.getLayoutParams());
+            if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.BOTTOM;
+            switch (align) {
+                case TOP:
+                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    break;
+                case BOTTOM:
+                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
+                    rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    break;
+                case CENTER:
+                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    rlp.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    rlp.addRule(RelativeLayout.CENTER_IN_PARENT);
+                    break;
+            }
+            boxBody.setLayoutParams(rlp);
         }
 
         @Override
@@ -701,7 +705,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
         @Override
         public void doDismiss(final View v) {
-            if (PopTip.this.preDismiss(PopTip.this)){
+            if (PopTip.this.preDismiss(PopTip.this)) {
                 return;
             }
             if (v != null) v.setEnabled(false);
@@ -822,8 +826,9 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     if (getDialogImpl() == null) {
                         return;
                     }
-                    if (style.popTipSettings() != null)
+                    if (align == null && style.popTipSettings() != null) {
                         align = style.popTipSettings().align();
+                    }
                     if (align == null) align = DialogXStyle.PopTipSettings.ALIGN.TOP;
                     float moveAimTop = 0;
                     switch (align) {
@@ -931,9 +936,11 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         return align;
     }
 
-    @Deprecated
     public PopTip setAlign(DialogXStyle.PopTipSettings.ALIGN align) {
         this.align = align;
+        if (getDialogImpl() != null) {
+            getDialogImpl().applyPopTipAlign();
+        }
         return this;
     }
 
@@ -1370,7 +1377,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         return this;
     }
 
-    public PopTip appendMessage(CharSequence message){
+    public PopTip appendMessage(CharSequence message) {
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
@@ -1382,7 +1389,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getDialogView().setTranslationZ(orderIndex);
             } else {
-                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex(" + orderIndex + ") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
             }
         }
         return this;

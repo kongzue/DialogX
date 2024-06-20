@@ -66,6 +66,7 @@ import com.kongzue.dialogx.interfaces.BottomDialogSlideEventLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXRunnable;
+import com.kongzue.dialogx.interfaces.DialogXStyle;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -1251,7 +1252,7 @@ public class MainActivity extends BaseActivity {
                             toast("邮件已撤回");
                             return false;
                         }
-                    }).setTintIcon(true).showLong();
+                    }).setTintIcon(true).showLong().setAlign(DialogXStyle.PopTipSettings.ALIGN.TOP);
                 }
             }
         });
