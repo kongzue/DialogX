@@ -634,24 +634,27 @@ public class BottomMenu extends BottomDialog {
 
         // 部分主题下选中项默认按下效果
         if (showSelectedBackgroundTips) {
-            listView.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (menuListAdapter instanceof BottomMenuArrayAdapter && showSelectedBackgroundTips) {
-                        BottomMenuArrayAdapter bottomMenuArrayAdapter = ((BottomMenuArrayAdapter) menuListAdapter);
+            if (listView != null) {
+                listView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (menuListAdapter instanceof BottomMenuArrayAdapter && showSelectedBackgroundTips) {
+                            BottomMenuArrayAdapter bottomMenuArrayAdapter = ((BottomMenuArrayAdapter) menuListAdapter);
 
-                        View selectItemView = listView.getChildAt(getSelection());
-                        if (selectItemView != null) {
-                            selectItemView.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    selectItemView.setPressed(true);
-                                }
-                            });
+                            View selectItemView = listView.getChildAt(getSelection());
+                            if (selectItemView != null) {
+                                selectItemView.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        selectItemView.setPressed(true);
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+
         }
         super.refreshUI();
     }
