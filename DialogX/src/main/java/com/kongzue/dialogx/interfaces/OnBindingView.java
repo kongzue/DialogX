@@ -11,6 +11,8 @@ import androidx.viewbinding.ViewBinding;
 import com.kongzue.dialogx.R;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public abstract class OnBindingView<D, VB extends ViewBinding> extends OnBindView<D> {
 
@@ -19,6 +21,12 @@ public abstract class OnBindingView<D, VB extends ViewBinding> extends OnBindVie
     public OnBindingView(VB binding) {
         super(binding.getRoot());
         this.binding = binding;
+    }
+
+    public OnBindingView() {
+        super(new View(BaseDialog.getContext()));
+        setCustomView(getBindingRootView(getViewBinding()));
+        this.binding = (VB) getCustomView().getTag(R.id.dialogx_view_binding_tag_key);
     }
 
     public OnBindingView(Class viewBindingClass) {
@@ -40,11 +48,22 @@ public abstract class OnBindingView<D, VB extends ViewBinding> extends OnBindVie
         return view;
     }
 
+    private ViewBinding getViewBinding() {
+        Type superclass = getClass().getGenericSuperclass();
+        if (superclass instanceof ParameterizedType) {
+            Class<VB> clazz = (Class<VB>) ((ParameterizedType) superclass).getActualTypeArguments()[1];
+            return getViewBinding(clazz);
+        } else {
+            error("DialogX: OnBindingView初始化异常，若要使用无参构建，必须指定ViewBinding泛型");
+            return null;
+        }
+    }
+
     private static ViewBinding getViewBinding(String bindingClassName) {
         try {
             return getViewBinding(Class.forName(bindingClassName));
         } catch (ClassNotFoundException e) {
-            error("DialogX: OnBindingView初始化异常，未能根据bindingClassName："+bindingClassName +"找到对应的ViewBinding，请尝试指定ViewBinding实例");
+            error("DialogX: OnBindingView初始化异常，未能根据bindingClassName：" + bindingClassName + "找到对应的ViewBinding，请尝试指定ViewBinding实例");
             throw new RuntimeException(e);
         }
     }
