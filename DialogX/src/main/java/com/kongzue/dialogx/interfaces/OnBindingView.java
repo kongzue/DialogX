@@ -22,7 +22,7 @@ public abstract class OnBindingView<D, VB extends ViewBinding> extends OnBindVie
     }
 
     public OnBindingView(Class viewBindingClass) {
-        super(getBindingRootView(getViewBinding(viewBindingClass.getSimpleName())));
+        super(getBindingRootView(getViewBinding(viewBindingClass.getName())));
         this.binding = (VB) getCustomView().getTag(R.id.dialogx_view_binding_tag_key);
     }
 
