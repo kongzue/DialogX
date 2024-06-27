@@ -22,7 +22,7 @@ public abstract class OnBindingView<D, VB extends ViewBinding> extends OnBindVie
     }
 
     public OnBindingView(Class viewBindingClass) {
-        super(getBindingRootView(getViewBinding(viewBindingClass.getName())));
+        super(getBindingRootView(getViewBinding(viewBindingClass)));
         this.binding = (VB) getCustomView().getTag(R.id.dialogx_view_binding_tag_key);
     }
 
@@ -42,11 +42,19 @@ public abstract class OnBindingView<D, VB extends ViewBinding> extends OnBindVie
 
     private static ViewBinding getViewBinding(String bindingClassName) {
         try {
-            Class<?> bindingClass = Class.forName(bindingClassName);
+            return getViewBinding(Class.forName(bindingClassName));
+        } catch (ClassNotFoundException e) {
+            error("DialogX: OnBindingView初始化异常，未能根据bindingClassName："+bindingClassName +"找到对应的ViewBinding，请尝试指定ViewBinding实例");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static ViewBinding getViewBinding(Class bindingClass) {
+        try {
             Method inflateMethod = bindingClass.getMethod("inflate", LayoutInflater.class);
             return (ViewBinding) inflateMethod.invoke((Object) null, LayoutInflater.from(BaseDialog.getContext()));
         } catch (Exception var5) {
-            error("DialogX: OnBindingView初始化异常，未能根据bindingClassName找到对应的ViewBinding，请尝试指定ViewBinding实例");
+            error("DialogX: OnBindingView初始化异常，未能根据bindingClass找到对应的ViewBinding，请尝试指定ViewBinding实例");
             var5.printStackTrace();
         }
         return null;
