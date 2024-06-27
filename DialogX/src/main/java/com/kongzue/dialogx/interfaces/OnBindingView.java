@@ -24,7 +24,7 @@ public abstract class OnBindingView<D, VB extends ViewBinding> extends OnBindVie
     }
 
     public OnBindingView() {
-        super(new View(BaseDialog.getContext()));
+        super((View) null);
         setCustomView(getBindingRootView(getViewBinding()));
         this.binding = (VB) getCustomView().getTag(R.id.dialogx_view_binding_tag_key);
     }
