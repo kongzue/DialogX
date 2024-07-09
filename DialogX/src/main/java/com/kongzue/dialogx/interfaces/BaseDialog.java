@@ -577,6 +577,9 @@ public abstract class BaseDialog implements LifecycleOwner {
         } else {
             textView.setMaxLines(Integer.MAX_VALUE);
         }
+        if (textInfo.getTypeface() != null) {
+            textView.setTypeface(textInfo.getTypeface());
+        }
 
         textView.getPaint().setFakeBoldText(textInfo.isBold());
     }

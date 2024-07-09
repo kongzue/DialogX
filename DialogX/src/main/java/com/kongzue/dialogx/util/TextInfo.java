@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.util;
 
+import android.graphics.Typeface;
 import android.util.TypedValue;
 
 import androidx.annotation.ColorInt;
@@ -20,6 +21,7 @@ public class TextInfo {
     private boolean bold = false;           //是否粗体
     private int maxLines = -1;              //最大行数
     private boolean showEllipsis = false;   //显示省略号
+    private Typeface typeface;              //指定字体样式
     
     public enum FONT_SIZE_UNIT {
         DP,
@@ -103,7 +105,16 @@ public class TextInfo {
         this.fontSizeUnit = fontSizeUnit;
         return this;
     }
-    
+
+    public Typeface getTypeface() {
+        return typeface;
+    }
+
+    public TextInfo setTypeface(Typeface typeface) {
+        this.typeface = typeface;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "TextInfo{" +
@@ -113,6 +124,7 @@ public class TextInfo {
                 ", bold=" + bold +
                 ", maxLines=" + maxLines +
                 ", showEllipsis=" + showEllipsis +
+                ", typeface=" + typeface +
                 '}';
     }
 }
