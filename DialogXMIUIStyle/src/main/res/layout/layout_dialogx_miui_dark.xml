@@ -96,6 +96,7 @@
                             android:scrollbars="vertical"
                             android:text=""
                             android:textColor="@color/white"
+                            android:textColorHint="@color/dialogxMIUIEditTextHintColorDark"
                             android:textSize="16dp"
                             android:theme="@style/DialogXCompatThemeLight"
                             android:visibility="gone" />

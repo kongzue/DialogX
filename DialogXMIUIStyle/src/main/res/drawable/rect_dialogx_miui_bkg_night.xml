@@ -3,7 +3,7 @@
     android:shape="rectangle">
     <!--left to right-->
     <solid
-        android:color="@color/dialogxMIUIEditboxBkgDark"/>
+        android:color="@color/dialogxMIUIDialogBkgDark"/>
 
     <corners
         android:topRightRadius="20dp"

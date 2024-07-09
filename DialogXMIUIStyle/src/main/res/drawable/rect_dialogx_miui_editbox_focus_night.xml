@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <stroke
-        android:color="#0C84FF"
+        android:color="@color/dialogxMIUIEditboxBlue"
         android:width="2dp"/>
 
     <solid

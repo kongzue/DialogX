@@ -32,6 +32,7 @@
 
     <color name="dialogxColorBlue">#2196F3</color>
 
+    <color name="dialogxMIUIDialogBkgDark">#222224</color>
     <color name="dialogxMIUIEditboxBkgDark">#222224</color>
     <color name="dialogxMIUIEditboxBlue">#0C84FF</color>
     <color name="dialogxMIUIEditboxBkg">#EDEDED</color>
@@ -48,6 +49,8 @@
     <color name="dialogxMIUIButtonGrayPressDark">#29292B</color>
     <color name="dialogxMIUIItemSelectionBkg">#1A0C84FF</color>
     <color name="dialogxMIUIItemSelectionBkgDark">#6282BA</color>
+    <color name="dialogxMIUIEditTextHintColor">#ACACAC</color>
+    <color name="dialogxMIUIEditTextHintColorDark">#5F5F5F</color>
 
     <color name="dialogxWaitBkgLight">#F5F6F7</color>
     <color name="dialogxWaitBkgDark">#3F3F3F</color>

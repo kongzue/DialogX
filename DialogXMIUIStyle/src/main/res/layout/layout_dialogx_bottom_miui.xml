@@ -46,6 +46,7 @@
                     android:layout_weight="1"
                     android:overScrollMode="never"
                     android:scrollbarSize="7dp"
+                    android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical"
                     android:scrollbars="vertical">
 
                     <LinearLayout

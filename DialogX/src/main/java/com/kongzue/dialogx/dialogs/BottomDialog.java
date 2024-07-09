@@ -343,7 +343,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (backgroundColor == null) backgroundColor = DialogX.backgroundColor;
             if (cancelText == null) cancelText = DialogX.cancelButtonText;
 
-            if (txtDialogTitle != null)txtDialogTitle.getPaint().setFakeBoldText(true);
+            if (txtDialogTitle != null) txtDialogTitle.getPaint().setFakeBoldText(true);
             if (btnSelectNegative != null) btnSelectNegative.getPaint().setFakeBoldText(true);
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
@@ -538,6 +538,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             useTextInfo(btnSelectNegative, cancelTextInfo);
             useTextInfo(btnSelectOther, otherTextInfo);
             useTextInfo(btnSelectPositive, okTextInfo);
+
+            boxButton.setVisibility(btnSelectNegative.getVisibility() == View.VISIBLE || btnSelectOther.getVisibility() == View.VISIBLE || btnSelectPositive.getVisibility() == View.VISIBLE ? View.VISIBLE : View.GONE);
 
             if (titleIcon != null) {
                 int size = (int) txtDialogTitle.getTextSize();
@@ -1398,7 +1400,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getDialogView().setTranslationZ(orderIndex);
             } else {
-                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex(" + orderIndex + ") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
             }
         }
         return this;

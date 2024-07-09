@@ -542,8 +542,7 @@ public class MessageDialog extends BaseDialog {
                         txtInput.getTextCursorDrawable().mutate().setColorFilter((new PorterDuffColorFilter(cursorColor, PorterDuff.Mode.SRC_ATOP)));
                     } else {
                         try {
-                            @SuppressLint("SoonBlockedPrivateApi")
-                            Field field = TextView.class.getDeclaredField("mCursorDrawableRes");
+                            @SuppressLint("SoonBlockedPrivateApi") Field field = TextView.class.getDeclaredField("mCursorDrawableRes");
                             field.setAccessible(true);
                             field.set(txtInput, R.drawable.rect_dialogx_defalut_edittxt_cursor);
                             txtInput.getTextCursorDrawable().mutate().setColorFilter((new PorterDuffColorFilter(cursorColor, PorterDuff.Mode.SRC_ATOP)));
@@ -663,6 +662,8 @@ public class MessageDialog extends BaseDialog {
             useTextInfo(btnSelectNegative, cancelTextInfo);
             useTextInfo(btnSelectOther, otherTextInfo);
 
+            boxButton.setVisibility(btnSelectNegative.getVisibility() == View.VISIBLE || btnSelectOther.getVisibility() == View.VISIBLE || btnSelectPositive.getVisibility() == View.VISIBLE ? View.VISIBLE : View.GONE);
+
             if (titleIcon != null) {
                 int size = (int) txtDialogTitle.getTextSize();
                 titleIcon.setBounds(0, 0, size, size);
@@ -711,25 +712,19 @@ public class MessageDialog extends BaseDialog {
                             case DialogXStyle.BUTTON_OK:
                                 boxButton.addView(btnSelectPositive);
                                 if (style.overrideVerticalButtonRes() != null) {
-                                    btnSelectPositive.setBackgroundResource(
-                                            style.overrideVerticalButtonRes().overrideVerticalOkButtonBackgroundRes(visibleButtonCount, isLightTheme())
-                                    );
+                                    btnSelectPositive.setBackgroundResource(style.overrideVerticalButtonRes().overrideVerticalOkButtonBackgroundRes(visibleButtonCount, isLightTheme()));
                                 }
                                 break;
                             case DialogXStyle.BUTTON_OTHER:
                                 boxButton.addView(btnSelectOther);
                                 if (style.overrideVerticalButtonRes() != null) {
-                                    btnSelectOther.setBackgroundResource(
-                                            style.overrideVerticalButtonRes().overrideVerticalOtherButtonBackgroundRes(visibleButtonCount, isLightTheme())
-                                    );
+                                    btnSelectOther.setBackgroundResource(style.overrideVerticalButtonRes().overrideVerticalOtherButtonBackgroundRes(visibleButtonCount, isLightTheme()));
                                 }
                                 break;
                             case DialogXStyle.BUTTON_CANCEL:
                                 boxButton.addView(btnSelectNegative);
                                 if (style.overrideVerticalButtonRes() != null) {
-                                    btnSelectNegative.setBackgroundResource(
-                                            style.overrideVerticalButtonRes().overrideVerticalCancelButtonBackgroundRes(visibleButtonCount, isLightTheme())
-                                    );
+                                    btnSelectNegative.setBackgroundResource(style.overrideVerticalButtonRes().overrideVerticalCancelButtonBackgroundRes(visibleButtonCount, isLightTheme()));
                                 }
                                 break;
                             case DialogXStyle.SPACE:
@@ -756,25 +751,19 @@ public class MessageDialog extends BaseDialog {
                             case DialogXStyle.BUTTON_OK:
                                 boxButton.addView(btnSelectPositive);
                                 if (style.overrideHorizontalButtonRes() != null) {
-                                    btnSelectPositive.setBackgroundResource(
-                                            style.overrideHorizontalButtonRes().overrideHorizontalOkButtonBackgroundRes(visibleButtonCount, isLightTheme())
-                                    );
+                                    btnSelectPositive.setBackgroundResource(style.overrideHorizontalButtonRes().overrideHorizontalOkButtonBackgroundRes(visibleButtonCount, isLightTheme()));
                                 }
                                 break;
                             case DialogXStyle.BUTTON_OTHER:
                                 boxButton.addView(btnSelectOther);
                                 if (style.overrideHorizontalButtonRes() != null) {
-                                    btnSelectOther.setBackgroundResource(
-                                            style.overrideHorizontalButtonRes().overrideHorizontalOtherButtonBackgroundRes(visibleButtonCount, isLightTheme())
-                                    );
+                                    btnSelectOther.setBackgroundResource(style.overrideHorizontalButtonRes().overrideHorizontalOtherButtonBackgroundRes(visibleButtonCount, isLightTheme()));
                                 }
                                 break;
                             case DialogXStyle.BUTTON_CANCEL:
                                 boxButton.addView(btnSelectNegative);
                                 if (style.overrideHorizontalButtonRes() != null) {
-                                    btnSelectNegative.setBackgroundResource(
-                                            style.overrideHorizontalButtonRes().overrideHorizontalCancelButtonBackgroundRes(visibleButtonCount, isLightTheme())
-                                    );
+                                    btnSelectNegative.setBackgroundResource(style.overrideHorizontalButtonRes().overrideHorizontalCancelButtonBackgroundRes(visibleButtonCount, isLightTheme()));
                                 }
                                 break;
                             case DialogXStyle.SPACE:
