@@ -662,8 +662,9 @@ public class MessageDialog extends BaseDialog {
             useTextInfo(btnSelectNegative, cancelTextInfo);
             useTextInfo(btnSelectOther, otherTextInfo);
 
-            boxButton.setVisibility(btnSelectNegative.getVisibility() == View.VISIBLE || btnSelectOther.getVisibility() == View.VISIBLE || btnSelectPositive.getVisibility() == View.VISIBLE ? View.VISIBLE : View.GONE);
-
+            if (boxButton != null) {
+                boxButton.setVisibility(btnSelectNegative.getVisibility() == View.VISIBLE || btnSelectOther.getVisibility() == View.VISIBLE || btnSelectPositive.getVisibility() == View.VISIBLE ? View.VISIBLE : View.GONE);
+            }
             if (titleIcon != null) {
                 int size = (int) txtDialogTitle.getTextSize();
                 titleIcon.setBounds(0, 0, size, size);

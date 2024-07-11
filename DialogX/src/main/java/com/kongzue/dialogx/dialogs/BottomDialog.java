@@ -539,8 +539,9 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             useTextInfo(btnSelectOther, otherTextInfo);
             useTextInfo(btnSelectPositive, okTextInfo);
 
-            boxButton.setVisibility(btnSelectNegative.getVisibility() == View.VISIBLE || btnSelectOther.getVisibility() == View.VISIBLE || btnSelectPositive.getVisibility() == View.VISIBLE ? View.VISIBLE : View.GONE);
-
+            if (boxButton != null) {
+                boxButton.setVisibility(btnSelectNegative.getVisibility() == View.VISIBLE || btnSelectOther.getVisibility() == View.VISIBLE || btnSelectPositive.getVisibility() == View.VISIBLE ? View.VISIBLE : View.GONE);
+            }
             if (titleIcon != null) {
                 int size = (int) txtDialogTitle.getTextSize();
                 titleIcon.setBounds(0, 0, size, size);
@@ -573,9 +574,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (backgroundRadius > -1) {
                 if (bkg.getBackground() instanceof GradientDrawable) {
                     GradientDrawable gradientDrawable = (GradientDrawable) bkg.getBackground();
-                    if (gradientDrawable != null) gradientDrawable.setCornerRadii(new float[]{
-                            backgroundRadius, backgroundRadius, backgroundRadius, backgroundRadius, 0, 0, 0, 0
-                    });
+                    if (gradientDrawable != null)
+                        gradientDrawable.setCornerRadii(new float[]{backgroundRadius, backgroundRadius, backgroundRadius, backgroundRadius, 0, 0, 0, 0});
                 }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     bkg.setOutlineProvider(new ViewOutlineProvider() {
