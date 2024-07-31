@@ -17,7 +17,9 @@
         android:clickable="true"
         android:elevation="30dp"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
         <RelativeLayout
             android:id="@+id/box_custom"
