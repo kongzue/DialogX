@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.kongzue.baseframework.BaseApp;
 import com.kongzue.baseframework.BaseFrameworkSettings;
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogxdemo.service.TestBackgroundService;
@@ -20,7 +21,7 @@ public class App extends BaseApp<App> {
     @Override
     public void init() {
         BaseFrameworkSettings.DEBUGMODE = BuildConfig.DEBUG;
-
+        
         DialogX.init(this);
         DialogX.implIMPLMode = DialogX.IMPL_MODE.VIEW;
         DialogX.useHaptic = true;

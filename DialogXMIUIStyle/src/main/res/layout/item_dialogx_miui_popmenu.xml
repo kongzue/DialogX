@@ -1,18 +1,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="58dp"
-    android:gravity="center_vertical"
-    android:paddingLeft="25dp"
-    android:paddingRight="15dp">
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/txt_dialogx_menu_text"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_weight="1"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
         android:gravity="left|center_vertical"
         android:maxLines="1"
-        android:text=""
+        android:text="aaa"
         android:textColor="@color/black90"
         android:textSize="16dp"/>
 
@@ -20,7 +20,8 @@
         android:id="@+id/img_dialogx_menu_icon"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="-17dp"
         android:padding="7dp" />
 
 </LinearLayout>

@@ -1109,6 +1109,14 @@ public class MainActivity extends BaseActivity {
                                 });
                             }
                         })
+                        .setMaskColor(getColorS(com.kongzue.dialogx.R.color.black50))
+                        .setOnBackgroundMaskClickListener(new OnBackgroundMaskClickListener<CustomDialog>() {
+                            @Override
+                            public boolean onClick(CustomDialog dialog, View v) {
+                                log("点击遮罩层");
+                                return false;
+                            }
+                        })
                         .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
 //                        .setAlign(CustomDialog.ALIGN.LEFT)
                 //.setAnimResId(R.anim.anim_right_in, R.anim.anim_right_out)
