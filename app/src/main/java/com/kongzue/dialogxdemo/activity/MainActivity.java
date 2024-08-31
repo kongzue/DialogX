@@ -485,22 +485,36 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 MessageDialog.show("标题", "这里是正文内容。", "确定").onShow(new DialogXRunnable<MessageDialog>() {
-                    @Override
-                    public void run(MessageDialog dialog) {
-                        tip("onShow");
-                    }
-                }).onDismiss(new DialogXRunnable<MessageDialog>() {
-                    @Override
-                    public void run(MessageDialog dialog) {
-                        tip("onDismiss");
-                    }
-                }).setTitleIcon(R.mipmap.img_demo_avatar).setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
-                    @Override
-                    public boolean onClick(MessageDialog baseDialog, View v) {
-                        PopTip.show("点击确定按钮");
-                        return true;
-                    }
-                });
+                            @Override
+                            public void run(MessageDialog dialog) {
+                                tip("onShow");
+                            }
+                        }).onDismiss(new DialogXRunnable<MessageDialog>() {
+                            @Override
+                            public void run(MessageDialog dialog) {
+                                tip("onDismiss");
+                            }
+                        })
+                        .onShow(new DialogXRunnable<MessageDialog>() {
+                            @Override
+                            public void run(MessageDialog dialog) {
+                                dialog.getDialogImpl().btnSelectPositive
+                                        .post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                dialog.getDialogImpl().btnSelectPositive
+                                                        .setBackgroundColor(Color.GREEN);
+                                            }
+                                        });
+                            }
+                        })
+                        .setTitleIcon(R.mipmap.img_demo_avatar).setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                            @Override
+                            public boolean onClick(MessageDialog baseDialog, View v) {
+                                PopTip.show("点击确定按钮");
+                                return true;
+                            }
+                        });
             }
         });
 
@@ -582,7 +596,7 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public boolean onBackPressed(WaitDialog dialog) {
                         PopTip.show("按下返回")
-                                .setButton("取消",new OnDialogButtonClickListener<PopTip>() {
+                                .setButton("取消", new OnDialogButtonClickListener<PopTip>() {
                                     @Override
                                     public boolean onClick(PopTip dialog, View v) {
                                         WaitDialog.dismiss();
