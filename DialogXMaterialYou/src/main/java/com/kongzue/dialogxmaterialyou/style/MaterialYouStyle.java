@@ -328,4 +328,9 @@ public class MaterialYouStyle extends DialogXStyle {
             return false;
         }
     }
+
+    @Override
+    public boolean tintButtonBackground() {
+        return true;
+    }
 }

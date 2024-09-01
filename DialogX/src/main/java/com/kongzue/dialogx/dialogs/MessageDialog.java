@@ -583,7 +583,7 @@ public class MessageDialog extends BaseDialog {
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != null) {
                 tintColor(bkg, backgroundColor);
-                if (style instanceof MaterialStyle) {
+                if (style.tintButtonBackground()) {
                     tintColor(btnSelectOther, backgroundColor);
                     tintColor(btnSelectNegative, backgroundColor);
                     tintColor(btnSelectPositive, backgroundColor);

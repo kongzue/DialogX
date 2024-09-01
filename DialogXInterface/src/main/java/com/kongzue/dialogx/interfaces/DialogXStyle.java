@@ -8,7 +8,7 @@ public abstract class DialogXStyle {
      * DialogXStyle 版本
      * 相关文档请参阅：https://github.com/kongzue/DialogX/wiki/%E8%87%AA%E5%AE%9A%E4%B9%89-DialogX-%E4%B8%BB%E9%A2%98
      */
-    public static final int styleVer = 5;
+    public static final int styleVer = 6;
     
     /**
      * 按钮类型常量
@@ -601,4 +601,10 @@ public abstract class DialogXStyle {
             return null;
         }
     }
+
+    /**
+     * 是否需要在设置对话框背景色时对按钮背景也进行染色
+     * @return false 不进行染色
+     */
+    public boolean tintButtonBackground(){return false;}
 }

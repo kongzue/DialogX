@@ -519,9 +519,11 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != null) {
                 tintColor(bkg, backgroundColor);
-                tintColor(btnSelectOther, backgroundColor);
-                tintColor(btnSelectNegative, backgroundColor);
-                tintColor(btnSelectPositive, backgroundColor);
+                if (style.tintButtonBackground()){
+                    tintColor(btnSelectOther, backgroundColor);
+                    tintColor(btnSelectNegative, backgroundColor);
+                    tintColor(btnSelectPositive, backgroundColor);
+                }
 
                 if (blurViews != null) {
                     for (View blurView : blurViews) {

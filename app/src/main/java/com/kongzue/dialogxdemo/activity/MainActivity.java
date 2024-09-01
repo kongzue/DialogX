@@ -495,19 +495,7 @@ public class MainActivity extends BaseActivity {
                                 tip("onDismiss");
                             }
                         })
-                        .onShow(new DialogXRunnable<MessageDialog>() {
-                            @Override
-                            public void run(MessageDialog dialog) {
-                                dialog.getDialogImpl().btnSelectPositive
-                                        .post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                dialog.getDialogImpl().btnSelectPositive
-                                                        .setBackgroundColor(Color.GREEN);
-                                            }
-                                        });
-                            }
-                        })
+                        .setBackgroundColor(Color.RED)
                         .setTitleIcon(R.mipmap.img_demo_avatar).setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                             @Override
                             public boolean onClick(MessageDialog baseDialog, View v) {
