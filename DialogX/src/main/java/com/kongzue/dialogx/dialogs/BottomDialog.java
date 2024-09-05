@@ -519,7 +519,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != null) {
                 tintColor(bkg, backgroundColor);
-                if (style.tintButtonBackground()){
+                if (style.tintButtonBackground()) {
                     tintColor(btnSelectOther, backgroundColor);
                     tintColor(btnSelectNegative, backgroundColor);
                     tintColor(btnSelectPositive, backgroundColor);
@@ -542,7 +542,10 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             useTextInfo(btnSelectPositive, okTextInfo);
 
             if (boxButton != null) {
-                boxButton.setVisibility(btnSelectNegative.getVisibility() == View.VISIBLE || btnSelectOther.getVisibility() == View.VISIBLE || btnSelectPositive.getVisibility() == View.VISIBLE ? View.VISIBLE : View.GONE);
+                boxButton.setVisibility((btnSelectNegative != null && btnSelectNegative.getVisibility() == View.VISIBLE) ||
+                        (btnSelectOther != null && btnSelectOther.getVisibility() == View.VISIBLE) ||
+                        (btnSelectPositive != null && btnSelectPositive.getVisibility() == View.VISIBLE) ?
+                        View.VISIBLE : View.GONE);
             }
             if (titleIcon != null) {
                 int size = (int) txtDialogTitle.getTextSize();
