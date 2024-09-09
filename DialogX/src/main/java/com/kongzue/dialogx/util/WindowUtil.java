@@ -29,7 +29,13 @@ import static android.view.WindowManager.LayoutParams.*;
  * @createTime: 2021/4/29 16:02
  */
 public class WindowUtil {
-    
+
+    public abstract static class WindowSettings {
+        public abstract WindowManager.LayoutParams overrideWindowLayoutParamsInterface(Context context, View dialogView, WindowManager.LayoutParams originWindowLayoutParams);
+    }
+
+    public static WindowSettings windowSettings;
+
     public static void show(Activity activity, View dialogView, boolean touchEnable) {
         try {
             if (activity.getWindow().getDecorView().isAttachedToWindow()) {
@@ -48,7 +54,7 @@ public class WindowUtil {
             }
         }
     }
-    
+
     private static void showNow(Activity activity, View dialogView, boolean touchEnable) {
         if (DialogX.globalHoverWindow && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(activity)) {
             Toast.makeText(activity, "使用 DialogX.globalHoverWindow 必须开启悬浮窗权限", Toast.LENGTH_LONG).show();
@@ -101,9 +107,15 @@ public class WindowUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             layoutParams.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
+        if (windowSettings != null) {
+            WindowManager.LayoutParams layoutParamsTemp = windowSettings.overrideWindowLayoutParamsInterface(activity, dialogView, layoutParams);
+            if (layoutParamsTemp != null) {
+                layoutParams = layoutParamsTemp;
+            }
+        }
         manager.addView(rootLayout, layoutParams);
     }
-    
+
     public static void dismiss(View dialogView) {
         BaseDialog baseDialog = (BaseDialog) dialogView.getTag();
         if (baseDialog != null && baseDialog.getOwnActivity() != null) {

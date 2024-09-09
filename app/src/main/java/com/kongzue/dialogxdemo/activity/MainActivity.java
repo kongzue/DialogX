@@ -28,6 +28,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -84,6 +85,7 @@ import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.TextInfo;
+import com.kongzue.dialogx.util.WindowUtil;
 import com.kongzue.dialogxdemo.BuildConfig;
 import com.kongzue.dialogxdemo.R;
 import com.kongzue.dialogxdemo.custom.recycleview.CustomRecycleViewAdapter;
@@ -486,7 +488,8 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageDialog.show("标题", "这里是正文内容。", "确定").onShow(new DialogXRunnable<MessageDialog>() {
+                MessageDialog.show("标题", "这里是正文内容。", "确定")
+                        .onShow(new DialogXRunnable<MessageDialog>() {
                             @Override
                             public void run(MessageDialog dialog) {
                                 tip("onShow");
@@ -497,11 +500,12 @@ public class MainActivity extends BaseActivity {
                                 tip("onDismiss");
                             }
                         })
-                        .setTitleIcon(R.mipmap.img_demo_avatar).setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                        .setTitleIcon(R.mipmap.img_demo_avatar)
+                        .setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                             @Override
                             public boolean onClick(MessageDialog baseDialog, View v) {
                                 PopTip.show("点击确定按钮");
-                                return true;
+                                return false;
                             }
                         });
             }
