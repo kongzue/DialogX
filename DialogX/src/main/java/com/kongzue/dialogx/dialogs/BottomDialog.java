@@ -255,6 +255,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         public RelativeLayout boxBkg;
         public MaxRelativeLayout bkg;
         public ImageView imgTab;
+        public ViewGroup boxBody;
         public TextView txtDialogTitle;
         public ScrollController scrollView;
         public LinearLayout boxContent;
@@ -280,6 +281,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             boxBkg = convertView.findViewById(R.id.box_bkg);
             bkg = convertView.findViewById(R.id.bkg);
             imgTab = convertView.findViewById(R.id.img_tab);
+            boxBody = convertView.findViewById(R.id.box_body);
             txtDialogTitle = convertView.findViewById(R.id.txt_dialog_title);
             scrollView = convertView.findViewById(R.id.scrollView);
             boxContent = convertView.findViewById(R.id.box_content);

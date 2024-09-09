@@ -32,6 +32,7 @@
                 android:src="@drawable/rect_dialogx_material_you_dialogtap" />
 
             <LinearLayout
+                android:id="@+id/box_body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
