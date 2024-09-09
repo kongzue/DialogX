@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -77,6 +78,7 @@ import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
+import com.kongzue.dialogx.interfaces.OnSafeInsetsChangeListener;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -495,7 +497,6 @@ public class MainActivity extends BaseActivity {
                                 tip("onDismiss");
                             }
                         })
-                        .setBackgroundColor(Color.RED)
                         .setTitleIcon(R.mipmap.img_demo_avatar).setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
                             @Override
                             public boolean onClick(MessageDialog baseDialog, View v) {
@@ -1181,63 +1182,27 @@ public class MainActivity extends BaseActivity {
         btnCustomDialogAlign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog_align) {
-//
-//                            private TextView btnSelectPositive;
-//
-//                            @Override
-//                            public void onBind(final CustomDialog dialog, View v) {
-//                                btnSelectPositive = v.findViewById(R.id.btn_selectPositive);
-//                                btnSelectPositive.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        PopTip.show("我知道了");
-//                                        dialog.dismiss();
-//                                    }
-//                                });
-//                            }
-//                        })
-//                        .setCancelable(false)
-//                        .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
-//                        .setEnterAnimResId(R.anim.anim_custom_pop_enter).setExitAnimResId(R.anim.anim_custom_pop_exit)
-//                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP | Gravity.CENTER_HORIZONTAL)
-//                        .setBaseViewMarginBottom(-dip2px(45))
-//                        .show();
+                CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog_align) {
 
-                CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_recycleview) {
+                            private TextView btnSelectPositive;
+
                             @Override
-                            public void onBind(CustomDialog dialog, View v) {
-                                v.setBackgroundColor(Color.WHITE);
-                                List<CustomRecycleViewAdapter.Data> dataArrayList = new ArrayList<>();
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 1"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 2"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 3"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 4"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 5"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 6"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 7"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 8"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 9"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 10"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 11"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 12"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 13"));
-                                dataArrayList.add(new CustomRecycleViewAdapter.Data("Item Text 14"));
-                                RecyclerView recyclerView = (RecyclerView) v;
-                                LinearLayoutManager layoutManager = new LinearLayoutManager(me);
-                                recyclerView.setLayoutManager(layoutManager);
-                                CustomRecycleViewAdapter adapter = new CustomRecycleViewAdapter(dataArrayList);
-                                adapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            public void onBind(final CustomDialog dialog, View v) {
+                                btnSelectPositive = v.findViewById(R.id.btn_selectPositive);
+                                btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                                     @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        PopTip.show("点击了第 " + position + " 个");
+                                    public void onClick(View v) {
+                                        PopTip.show("我知道了");
+                                        dialog.dismiss();
                                     }
                                 });
-                                recyclerView.setAdapter(adapter);
                             }
                         })
+                        .setCancelable(false)
                         .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
-                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL)
+                        .setEnterAnimResId(R.anim.anim_custom_pop_enter).setExitAnimResId(R.anim.anim_custom_pop_exit)
+                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP | Gravity.CENTER_HORIZONTAL)
+                        .setBaseViewMarginBottom(-dip2px(45))
                         .show();
             }
         });
