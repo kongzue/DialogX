@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
@@ -1104,5 +1105,16 @@ public abstract class BaseDialog implements LifecycleOwner {
                 || activity.isFinishing()
                 || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && activity.isDestroyed())
                 || (activity instanceof LifecycleOwner && ((LifecycleOwner) activity).getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED);
+    }
+
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (getDialogView()==null){
+            if (ownActivity!=null && ownActivity.get()!=null){
+             return    ownActivity.get().dispatchTouchEvent(event);
+            }else{
+                return false;
+            }
+        }
+        return getDialogView().dispatchTouchEvent(event);
     }
 }

@@ -31,9 +31,15 @@ import static android.view.WindowManager.LayoutParams.*;
 public class WindowUtil {
 
     public abstract static class WindowSettings {
+
+        //自定义window参数
         public abstract WindowManager.LayoutParams overrideWindowLayoutParamsInterface(Context context, View dialogView, WindowManager.LayoutParams originWindowLayoutParams);
+
+        //自定义根布局
+        public abstract ViewGroup overrideRootView(Context context);
     }
 
+    //自定义window设置
     public static WindowSettings windowSettings;
 
     public static void show(Activity activity, View dialogView, boolean touchEnable) {
@@ -63,7 +69,11 @@ public class WindowUtil {
             activity.startActivity(intent);
             return;
         }
-        FrameLayout rootLayout = new FrameLayout(activity);
+        ViewGroup customRootView = null;
+        if (windowSettings != null) {
+            customRootView = windowSettings.overrideRootView(activity);
+        }
+        ViewGroup rootLayout = customRootView == null ? new FrameLayout(activity) : customRootView;
         if (dialogView.getParent() != null) {
             ((ViewGroup) dialogView.getParent()).removeView(dialogView);
         }
@@ -97,7 +107,7 @@ public class WindowUtil {
                             if (baseDialog.getDialogView() == null) {
                                 return false;
                             }
-                            return baseDialog.getOwnActivity().dispatchTouchEvent(event);
+                            return baseDialog.dispatchTouchEvent(event);
                         }
                     }
                     return activity.dispatchTouchEvent(event);
