@@ -352,11 +352,6 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
             boxBkg.setY(getRootFrameLayout().getMeasuredHeight());
 
-            bkg.setMaxWidth(getMaxWidth());
-            bkg.setMaxHeight(getMaxHeight());
-            bkg.setMinimumWidth(getMinWidth());
-            bkg.setMinimumHeight(getMinHeight());
-
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
                 @Override
@@ -517,6 +512,12 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
+
+            bkg.setMaxWidth(getMaxWidth());
+            bkg.setMaxHeight(getMaxHeight());
+            bkg.setMinWidth(getMinWidth());
+            bkg.setMinHeight(getMinHeight());
+
             boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (backgroundColor != null) {

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -91,11 +92,12 @@ public class MaxRelativeLayout extends RelativeLayout implements DialogXSafetyMo
 
     public void setMinHeight(int minHeight) {
         if (minHeight > 0) this.minHeight = minHeight;
-
+        setMinimumHeight(minHeight);
     }
 
     public void setMinWidth(int minWidth) {
         if (minWidth > 0) this.minWidth = minWidth;
+        setMinimumWidth(minWidth);
     }
 
     private int preWidth = -1;

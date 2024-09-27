@@ -1021,11 +1021,8 @@ public abstract class BaseDialog implements LifecycleOwner {
 
     protected Float getFloatStyleAttr(Float styleValue, Float defaultValue) {
         if (styleValue <= 0) {
-            log("styleValue=" + styleValue + "<=0 ");
-            log("return defaultValue=" + defaultValue);
             return defaultValue;
         }
-        log("return styleValue=" + styleValue);
         return styleValue;
     }
 
