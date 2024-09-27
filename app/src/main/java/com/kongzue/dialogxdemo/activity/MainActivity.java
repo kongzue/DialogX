@@ -75,6 +75,7 @@ import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnBindingView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -602,7 +603,6 @@ public class MainActivity extends BaseActivity {
                     }
                 });
                 WaitDialog.dismiss(3000);
-
             }
         });
 
@@ -852,7 +852,7 @@ public class MainActivity extends BaseActivity {
                     public void onBind(MessageDialog dialog, View v) {
 
                     }
-                });
+                }).setMaskColor(Color.TRANSPARENT);
             }
         });
 

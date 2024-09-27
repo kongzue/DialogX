@@ -36,7 +36,7 @@ public class WindowUtil {
         public abstract WindowManager.LayoutParams overrideWindowLayoutParamsInterface(Context context, View dialogView, WindowManager.LayoutParams originWindowLayoutParams);
 
         //自定义根布局
-        public abstract ViewGroup overrideRootView(Context context);
+        public ViewGroup overrideRootView(Context context){return null;};
     }
 
     //自定义window设置

@@ -472,7 +472,7 @@ public class WaitDialog extends BaseDialog {
             onDialogInit();
         }
 
-        private float oldProgress;
+        private float oldProgress = -1;
 
         public void refreshView() {
             if (boxRoot == null || getOwnActivity() == null) {
