@@ -515,8 +515,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
             bkg.setMaxWidth(getMaxWidth());
             bkg.setMaxHeight(getMaxHeight());
-            bkg.setMinWidth(getMinWidth());
-            bkg.setMinHeight(getMinHeight());
+            bkg.setMinimumWidth(getMinWidth());
+            bkg.setMinimumHeight(getMinHeight());
 
             boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);

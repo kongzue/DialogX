@@ -92,12 +92,10 @@ public class MaxRelativeLayout extends RelativeLayout implements DialogXSafetyMo
 
     public void setMinHeight(int minHeight) {
         if (minHeight > 0) this.minHeight = minHeight;
-        setMinimumHeight(minHeight);
     }
 
     public void setMinWidth(int minWidth) {
         if (minWidth > 0) this.minWidth = minWidth;
-        setMinimumWidth(minWidth);
     }
 
     private int preWidth = -1;
