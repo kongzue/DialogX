@@ -655,6 +655,10 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             boxBody.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (dismissAnimFlag){
+                        log("skip click @ A");
+                        return;
+                    }
                     haptic(v);
                     if (onPopNotificationClickListener != null) {
                         if (!onPopNotificationClickListener.onClick(me, v)) {
@@ -669,6 +673,9 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             txtDialogxButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (dismissAnimFlag){
+                        return;
+                    }
                     haptic(v);
                     if (onButtonClickListener != null) {
                         if (!onButtonClickListener.onClick(me, v)) {
@@ -847,6 +854,16 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
             if (!dismissAnimFlag && boxRoot != null) {
                 dismissAnimFlag = true;
+                boxBody.setFocusable(false);
+                boxBody.setClickable(false);
+                boxBody.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return false;
+                    }
+                });
+                txtDialogxButton.setFocusable(false);
+                txtDialogxButton.setClickable(false);
                 boxRoot.post(new Runnable() {
                     @Override
                     public void run() {

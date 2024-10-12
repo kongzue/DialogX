@@ -42,6 +42,7 @@ public class App extends BaseApp<App> {
 
         DialogX.globalTheme = DialogX.THEME.AUTO;
         DialogX.onlyOnePopTip = false;
+        DialogX.onlyOnePopNotification=false;
         DialogX.DEBUGMODE = BuildConfig.DEBUG;
         //DialogX.ignoreUnsafeInsetsHorizontal = true;
 
