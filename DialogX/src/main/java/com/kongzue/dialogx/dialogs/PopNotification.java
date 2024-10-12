@@ -854,6 +854,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
             if (!dismissAnimFlag && boxRoot != null) {
                 dismissAnimFlag = true;
+                boxCustom.setVisibility(View.GONE);
                 boxBody.setFocusable(false);
                 boxBody.setClickable(false);
                 boxBody.setOnTouchListener(new View.OnTouchListener() {
