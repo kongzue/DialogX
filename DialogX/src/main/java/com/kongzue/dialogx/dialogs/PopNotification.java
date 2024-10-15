@@ -604,7 +604,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 @Override
                 public void onChange(Rect unsafeRect) {
                     if (align == DialogXStyle.PopNotificationSettings.ALIGN.TOP) {
-                        boxBody.setY(defaultTop == 0 ? defaultTop = (unsafeRect.top + bodyMargin[1]) : defaultTop);
+                        boxBody.setY(defaultTop <= 0 ? defaultTop = (unsafeRect.top + bodyMargin[1]) : defaultTop);
                     } else if (align == DialogXStyle.PopNotificationSettings.ALIGN.TOP_INSIDE) {
                         boxBody.setPadding(0, unsafeRect.top, 0, 0);
                     }

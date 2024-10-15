@@ -77,7 +77,7 @@ public class DialogFragmentImpl extends DialogFragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 for (BaseDialog dialog : BaseDialog.getRunningDialogList()) {
-                    if (dialog.getOwnActivity() == activity && dialog != baseDialog) {
+                    if (dialog.getOwnActivity() == activity && dialog != baseDialog && dialog.getDialogImplMode() == baseDialog.getDialogImplMode()) {
                         if (!(dialog instanceof NoTouchInterface) && dialog.getDialogView() != null) {
                             dialog.getDialogView().dispatchTouchEvent(event);
                             return true;
@@ -107,10 +107,7 @@ public class DialogFragmentImpl extends DialogFragment {
                 }
             }
             dialogWindow.getDecorView().setSystemUiVisibility(visibility);
-            dialogWindow.addFlags(
-                    WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS |
-                            WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
-            );
+            dialogWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             dialogWindow.setStatusBarColor(Color.TRANSPARENT);
             dialogWindow.setNavigationBarColor(Color.TRANSPARENT);
         } else {
