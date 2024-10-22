@@ -127,6 +127,10 @@ public class MessageDialog extends BaseDialog {
         return new MessageDialog().setCustomView(onBindView);
     }
 
+    public MessageDialog(CharSequence message) {
+        this.message = message;
+    }
+
     public MessageDialog(CharSequence title, CharSequence message) {
         this.title = title;
         this.message = message;
@@ -640,7 +644,7 @@ public class MessageDialog extends BaseDialog {
                 }
             }
 
-            showText(txtDialogTitle, title);
+            showText(txtDialogTitle, title == null ? DialogX.defaultMessageDialogTitleText : title);
             showText(txtDialogTip, message);
             showText(btnSelectPositive, okText);
             showText(btnSelectNegative, cancelText);

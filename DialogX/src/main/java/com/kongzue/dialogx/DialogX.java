@@ -199,4 +199,19 @@ public class DialogX {
     public static DialogListBuilder showDialogList(BaseDialog... dialogs) {
         return DialogListBuilder.create(dialogs).show();
     }
+
+    // 默认消息对话框标题文本
+    public static CharSequence defaultMessageDialogTitleText;
+
+    // 等待提示框默认文本
+    public static CharSequence defaultWaitDialogWaitingText;
+
+    // 成功提示框默认文本
+    public static CharSequence defaultTipDialogSuccessText;
+
+    // 错误提示框默认文本
+    public static CharSequence defaultTipDialogErrorText;
+
+    // 警告提示框默认文本
+    public static CharSequence defaultTipDialogWarningText;
 }

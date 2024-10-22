@@ -104,6 +104,36 @@ public class WaitDialog extends BaseDialog {
         return new WaitDialog();
     }
 
+    public static WaitDialog showWaitWithDefaultText() {
+        WaitDialog dialog = getInstance();
+        if (dialog != null) {
+            dialog.setTip(null, TYPE.NONE);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
+    }
+
+    protected static WaitDialog showTipWithDefaultText(TYPE tip) {
+        WaitDialog dialog = getInstance();
+        if (dialog != null) {
+            dialog.setTip(null, tip);
+            if (dialog.getDialogImpl() == null) {
+                dialog.show();
+            } else {
+                dialog.cancelDelayDismissTimer();
+            }
+            return dialog;
+        } else {
+            return instanceBuild();
+        }
+    }
+
     public static WaitDialog show(CharSequence message) {
         WaitDialog dialog = getInstance();
         if (dialog != null) {
@@ -530,7 +560,7 @@ public class WaitDialog extends BaseDialog {
                 }
             }
 
-            showText(txtInfo, message);
+            showText(txtInfo, message == null ? getDefaultTipText(readyTipType) : message);
             useTextInfo(txtInfo, messageTextInfo);
 
             if (maskColor != null) {
@@ -563,6 +593,21 @@ public class WaitDialog extends BaseDialog {
                 boxRoot.setClickable(false);
             }
             onDialogRefreshUI();
+        }
+
+        private CharSequence getDefaultTipText(TYPE readyTipType) {
+            switch (readyTipType) {
+                case WARNING:
+                    return DialogX.defaultTipDialogWarningText;
+                case SUCCESS:
+                    return DialogX.defaultTipDialogSuccessText;
+                case ERROR:
+                    return DialogX.defaultTipDialogErrorText;
+                case NONE:
+                    return DialogX.defaultWaitDialogWaitingText;
+                default:
+                    return null;
+            }
         }
 
         public void doDismiss(final View v) {

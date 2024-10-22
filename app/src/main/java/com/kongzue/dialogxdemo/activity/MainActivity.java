@@ -1233,7 +1233,7 @@ public class MainActivity extends BaseActivity {
                             toast("邮件已撤回");
                             return false;
                         }
-                    }).setTintIcon(true).showLong().setAlign(DialogXStyle.PopTipSettings.ALIGN.TOP);
+                    }).setTintIcon(true).showLong();
                 }
             }
         });

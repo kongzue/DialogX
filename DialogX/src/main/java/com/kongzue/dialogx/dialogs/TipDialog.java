@@ -31,6 +31,10 @@ public class TipDialog extends WaitDialog {
         super();
     }
 
+    public static WaitDialog showTipWithDefaultText(TYPE tip) {
+        return WaitDialog.showTipWithDefaultText(tip);
+    }
+
     public static WaitDialog show(int messageResId) {
         return show((Activity) null, messageResId);
     }

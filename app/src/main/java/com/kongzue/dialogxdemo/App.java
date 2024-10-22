@@ -44,6 +44,8 @@ public class App extends BaseApp<App> {
         DialogX.onlyOnePopTip = false;
         DialogX.onlyOnePopNotification=false;
         DialogX.DEBUGMODE = BuildConfig.DEBUG;
+        DialogX.defaultWaitDialogWaitingText="hahah";
+        DialogX.defaultTipDialogSuccessText="okok!!!";
         //DialogX.ignoreUnsafeInsetsHorizontal = true;
 
         //以下代码用于测试后台 Service 启动对话框
