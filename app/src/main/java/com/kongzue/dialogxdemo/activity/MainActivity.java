@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -491,26 +492,23 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageDialog.show("标题", "这里是正文内容。", "确定")
-                        .onShow(new DialogXRunnable<MessageDialog>() {
-                            @Override
-                            public void run(MessageDialog dialog) {
-                                tip("onShow");
-                            }
-                        }).onDismiss(new DialogXRunnable<MessageDialog>() {
-                            @Override
-                            public void run(MessageDialog dialog) {
-                                tip("onDismiss");
-                            }
-                        })
-                        .setTitleIcon(R.mipmap.img_demo_avatar)
-                        .setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
-                            @Override
-                            public boolean onClick(MessageDialog baseDialog, View v) {
-                                PopTip.show("点击确定按钮");
-                                return false;
-                            }
-                        });
+                MessageDialog.show("标题", "这里是正文内容。", "确定").onShow(new DialogXRunnable<MessageDialog>() {
+                    @Override
+                    public void run(MessageDialog dialog) {
+                        tip("onShow");
+                    }
+                }).onDismiss(new DialogXRunnable<MessageDialog>() {
+                    @Override
+                    public void run(MessageDialog dialog) {
+                        tip("onDismiss");
+                    }
+                }).setTitleIcon(R.mipmap.img_demo_avatar).setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                    @Override
+                    public boolean onClick(MessageDialog baseDialog, View v) {
+                        PopTip.show("点击确定按钮");
+                        return false;
+                    }
+                });
             }
         });
 
@@ -591,14 +589,13 @@ public class MainActivity extends BaseActivity {
                 WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
                     @Override
                     public boolean onBackPressed(WaitDialog dialog) {
-                        PopTip.show("按下返回")
-                                .setButton("取消", new OnDialogButtonClickListener<PopTip>() {
-                                    @Override
-                                    public boolean onClick(PopTip dialog, View v) {
-                                        WaitDialog.dismiss();
-                                        return false;
-                                    }
-                                });
+                        PopTip.show("按下返回").setButton("取消", new OnDialogButtonClickListener<PopTip>() {
+                            @Override
+                            public boolean onClick(PopTip dialog, View v) {
+                                WaitDialog.dismiss();
+                                return false;
+                            }
+                        });
                         return false;
                     }
                 });
@@ -713,9 +710,6 @@ public class MainActivity extends BaseActivity {
                 new BottomDialog("标题", "这里是对话框内容。\n" + s + "。\n底部对话框也支持自定义布局扩展使用方式。", new OnBindView<BottomDialog>(R.layout.layout_custom_view) {
                     @Override
                     public void onBind(BottomDialog dialog, View v) {
-                        if (dialog.getDialogImpl().imgTab != null) {
-                            ((ViewGroup) dialog.getDialogImpl().imgTab.getParent()).removeView(dialog.getDialogImpl().imgTab);
-                        }
                         v.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -745,7 +739,9 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 if (rdoMaterial.isChecked()) {
                     //Material 可滑动展开 BottomMenu 演示
-                    BottomMenu.build().setBottomDialogMaxHeight(0.6f).setMenuList(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"}).setOnIconChangeCallBack(new OnIconChangeCallBack<BottomMenu>(true) {
+                    BottomMenu.build()
+                            .setBottomDialogMaxHeight(0.6f)
+                            .setMenuList(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"}).setOnIconChangeCallBack(new OnIconChangeCallBack<BottomMenu>(true) {
                         @Override
                         public int getIcon(BottomMenu bottomMenu, int index, String menuText) {
                             switch (menuText) {
@@ -807,7 +803,7 @@ public class MainActivity extends BaseActivity {
                             PopTip.show(text);
                             return false;
                         }
-                    });
+                    }).setIconResIds(R.mipmap.img_dialogx_demo_add,R.mipmap.img_dialogx_demo_view,R.mipmap.img_dialogx_demo_link);
                 }
             }
         });
@@ -1106,27 +1102,24 @@ public class MainActivity extends BaseActivity {
 //                        .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30));
 
                 CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
+                    @Override
+                    public void onBind(final CustomDialog dialog, View v) {
+                        ImageView btnOk;
+                        btnOk = v.findViewById(R.id.btn_ok);
+                        btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onBind(final CustomDialog dialog, View v) {
-                                ImageView btnOk;
-                                btnOk = v.findViewById(R.id.btn_ok);
-                                btnOk.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
+                            public void onClick(View v) {
+                                dialog.dismiss();
                             }
-                        })
-                        .setMaskColor(getColorS(com.kongzue.dialogx.R.color.black50))
-                        .setOnBackgroundMaskClickListener(new OnBackgroundMaskClickListener<CustomDialog>() {
-                            @Override
-                            public boolean onClick(CustomDialog dialog, View v) {
-                                log("点击遮罩层");
-                                return false;
-                            }
-                        })
-                        .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
+                        });
+                    }
+                }).setMaskColor(getColorS(com.kongzue.dialogx.R.color.black50)).setOnBackgroundMaskClickListener(new OnBackgroundMaskClickListener<CustomDialog>() {
+                    @Override
+                    public boolean onClick(CustomDialog dialog, View v) {
+                        log("点击遮罩层");
+                        return false;
+                    }
+                }).setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
 //                        .setAlign(CustomDialog.ALIGN.LEFT)
                 //.setAnimResId(R.anim.anim_right_in, R.anim.anim_right_out)
 
@@ -1190,26 +1183,20 @@ public class MainActivity extends BaseActivity {
             public void onClick(View v) {
                 CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog_align) {
 
-                            private TextView btnSelectPositive;
+                    private TextView btnSelectPositive;
 
+                    @Override
+                    public void onBind(final CustomDialog dialog, View v) {
+                        btnSelectPositive = v.findViewById(R.id.btn_selectPositive);
+                        btnSelectPositive.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onBind(final CustomDialog dialog, View v) {
-                                btnSelectPositive = v.findViewById(R.id.btn_selectPositive);
-                                btnSelectPositive.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        PopTip.show("我知道了");
-                                        dialog.dismiss();
-                                    }
-                                });
+                            public void onClick(View v) {
+                                PopTip.show("我知道了");
+                                dialog.dismiss();
                             }
-                        })
-                        .setCancelable(false)
-                        .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
-                        .setEnterAnimResId(R.anim.anim_custom_pop_enter).setExitAnimResId(R.anim.anim_custom_pop_exit)
-                        .setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP | Gravity.CENTER_HORIZONTAL)
-                        .setBaseViewMarginBottom(-dip2px(45))
-                        .show();
+                        });
+                    }
+                }).setCancelable(false).setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30)).setEnterAnimResId(R.anim.anim_custom_pop_enter).setExitAnimResId(R.anim.anim_custom_pop_exit).setAlignBaseViewGravity(btnCustomDialogAlign, Gravity.TOP | Gravity.CENTER_HORIZONTAL).setBaseViewMarginBottom(-dip2px(45)).show();
             }
         });
 
@@ -1414,30 +1401,6 @@ public class MainActivity extends BaseActivity {
                                 Intent intent = new Intent(me, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                 startActivity(intent);
-//
-//                                        CustomDialog.build(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
-//
-//                                                    private ImageView btnOk;
-//
-//                                                    @Override
-//                                                    public void onBind(CustomDialog dialog, View v) {
-//                                                        btnOk = v.findViewById(R.id.btn_ok);
-//
-//                                                        btnOk.setOnClickListener(new View.OnClickListener() {
-//                                                            @Override
-//                                                            public void onClick(View v) {
-//                                                                Intent intent = new Intent(me, MainActivity.class);
-//                                                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                                                                startActivity(intent);
-//
-//                                                                dialog.dismiss();
-//                                                            }
-//                                                        });
-//                                                    }
-//                                                })
-//                                                .setDialogImplMode(DialogX.IMPL_MODE.WINDOW)
-//                                                .show();
-
                                 return false;
                             }
                         }).showLong();

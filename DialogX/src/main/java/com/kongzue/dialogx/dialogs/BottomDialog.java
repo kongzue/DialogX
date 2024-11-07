@@ -3,6 +3,7 @@ package com.kongzue.dialogx.dialogs;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Outline;
 import android.graphics.drawable.BitmapDrawable;
@@ -350,7 +351,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (btnSelectPositive != null) btnSelectPositive.getPaint().setFakeBoldText(true);
             if (btnSelectOther != null) btnSelectOther.getPaint().setFakeBoldText(true);
 
-            boxBkg.setY(getRootFrameLayout().getMeasuredHeight());
+            boxBkg.setY(getRootFrameLayout() == null ? Resources.getSystem().getDisplayMetrics().heightPixels : getRootFrameLayout().getMeasuredHeight());
 
             boxRoot.setParentDialog(me);
             boxRoot.setOnLifecycleCallBack(new DialogXBaseRelativeLayout.OnLifecycleCallBack() {
@@ -735,7 +736,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                         }
 
                         // 上移动画
-                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", getRootFrameLayout().getMeasuredHeight(), bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop);
+                        ObjectAnimator enterAnim = ObjectAnimator.ofFloat(boxBkg, "y", getRootFrameLayout() == null ? Resources.getSystem().getDisplayMetrics().heightPixels : getRootFrameLayout().getMeasuredHeight(), bkgEnterAimY = boxRoot.getUnsafePlace().top + customDialogTop);
                         enterAnim.setDuration(enterAnimDurationTemp);
                         enterAnim.setAutoCancel(true);
                         enterAnim.setInterpolator(new DecelerateInterpolator(2f));
