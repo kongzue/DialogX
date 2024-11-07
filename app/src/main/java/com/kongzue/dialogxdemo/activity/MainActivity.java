@@ -800,7 +800,13 @@ public class MainActivity extends BaseActivity {
                     }).setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                         @Override
                         public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
+                            log("点击了菜单："+ index + " 文本：" + text);
                             PopTip.show(text);
+                            try {
+                               throw  new RuntimeException("test");
+                            }catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             return false;
                         }
                     }).setIconResIds(R.mipmap.img_dialogx_demo_add,R.mipmap.img_dialogx_demo_view,R.mipmap.img_dialogx_demo_link);
@@ -1530,7 +1536,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+      //  AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
     }
 }
