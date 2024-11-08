@@ -45,7 +45,9 @@ import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -955,15 +957,31 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
      * 等待所有 popNotification 处于待回收状态时一并回收可以避免此问题
      */
     private void waitForDismiss() {
+        if (popNotificationList == null || popNotificationList.isEmpty()) {
+            return;
+        }
         preRecycle = true;
-        if (popNotificationList != null) {
-            for (PopNotification popNotification : popNotificationList) {
-                if (!popNotification.preRecycle) {
-                    return;
+        CopyOnWriteArrayList<PopNotification> copyPopNotificationList = new CopyOnWriteArrayList<>(popNotificationList);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            copyPopNotificationList.removeIf(Objects::isNull);
+        }else{
+            Iterator<PopNotification> iterator = copyPopNotificationList.iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next() == null) {
+                    iterator.remove();
                 }
             }
-            for (PopNotification popNotification : new CopyOnWriteArrayList<>(popNotificationList)) {
-                dismiss(popNotification.getDialogView());
+        }
+        boolean allPreRecycled = true;
+        for (PopNotification popTip : copyPopNotificationList) {
+            if (!popTip.preRecycle) {
+                allPreRecycled = false;
+                break;
+            }
+        }
+        if (allPreRecycled) {
+            for (PopNotification popTip : copyPopNotificationList) {
+                dismiss(popTip.getDialogView());
             }
         }
     }

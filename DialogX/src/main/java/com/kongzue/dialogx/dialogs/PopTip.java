@@ -42,7 +42,9 @@ import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -802,14 +804,29 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
      * 等待所有 PopTip 处于待回收状态时一并回收可以避免此问题
      */
     private void waitForDismiss() {
+        if (popTipList == null || popTipList.isEmpty()) {
+            return;
+        }
         preRecycle = true;
-        if (popTipList != null) {
-            CopyOnWriteArrayList<PopTip> copyPopTipList = new CopyOnWriteArrayList<>(popTipList);
-            for (PopTip popTip : copyPopTipList) {
-                if (!popTip.preRecycle) {
-                    return;
+        CopyOnWriteArrayList<PopTip> copyPopTipList = new CopyOnWriteArrayList<>(popTipList);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            copyPopTipList.removeIf(Objects::isNull);
+        }else{
+            Iterator<PopTip> iterator = copyPopTipList.iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next() == null) {
+                    iterator.remove();
                 }
             }
+        }
+        boolean allPreRecycled = true;
+        for (PopTip popTip : copyPopTipList) {
+            if (!popTip.preRecycle) {
+                allPreRecycled = false;
+                break;
+            }
+        }
+        if (allPreRecycled) {
             for (PopTip popTip : copyPopTipList) {
                 dismiss(popTip.getDialogView());
             }
