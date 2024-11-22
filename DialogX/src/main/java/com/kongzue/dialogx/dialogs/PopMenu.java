@@ -285,7 +285,7 @@ public class PopMenu extends BaseDialog {
     }
 
     private void refreshMenuLoc() {
-        if (getDialogImpl() == null || getDialogImpl().boxRoot == null) {
+        if (getDialogImpl() == null || getDialogImpl().boxRoot == null || baseView() == null) {
             return;
         }
         getDialogImpl().boxBody.setTag(null);
@@ -672,7 +672,7 @@ public class PopMenu extends BaseDialog {
 
         @Override
         public void doDismiss(View v) {
-            if (preDismiss(PopMenu.this)){
+            if (preDismiss(PopMenu.this)) {
                 return;
             }
             if (v != null) {
@@ -1428,7 +1428,7 @@ public class PopMenu extends BaseDialog {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getDialogView().setTranslationZ(orderIndex);
             } else {
-                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex(" + orderIndex + ") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
             }
         }
         return this;
