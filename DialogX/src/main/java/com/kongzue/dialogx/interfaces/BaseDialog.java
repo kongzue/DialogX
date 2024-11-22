@@ -73,7 +73,8 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected WeakReference<DialogFragmentImpl> ownDialogFragmentImpl;
     protected DialogX.IMPL_MODE dialogImplMode = DialogX.implIMPLMode;
     protected WeakReference<DialogXFloatingWindowActivity> floatingWindowActivity;
-    private WeakReference<DialogListBuilder> dialogListBuilder;
+    @Nullable
+    private DialogListBuilder dialogListBuilder;
     protected LifecycleRegistry lifecycle = new LifecycleRegistry(this);
     protected Map<String, Object> data;
     protected DialogXRunnable onShowRunnable;
@@ -433,8 +434,12 @@ public abstract class BaseDialog implements LifecycleOwner {
                 }, true);
                 break;
         }
-        if (baseDialog.getDialogListBuilder() != null && !baseDialog.getDialogListBuilder().isEmpty()) {
-            baseDialog.getDialogListBuilder().showNext();
+        if (baseDialog.getDialogListBuilder() != null) {
+            if (baseDialog.getDialogListBuilder().isEmpty()) {
+                baseDialog.cleanDialogList();
+            } else {
+                baseDialog.getDialogListBuilder().showNext();
+            }
         }
     }
 
@@ -918,18 +923,19 @@ public abstract class BaseDialog implements LifecycleOwner {
         return mMainHandler.get();
     }
 
+    @Nullable
     public DialogListBuilder getDialogListBuilder() {
-        if (dialogListBuilder == null) {
-            return null;
-        }
-        return dialogListBuilder.get();
+        return dialogListBuilder;
     }
 
-    public void setDialogListBuilder(DialogListBuilder dialogListBuilder) {
-        this.dialogListBuilder = new WeakReference<>(dialogListBuilder);
+    public void setDialogListBuilder(@NonNull DialogListBuilder dialogListBuilder) {
+        this.dialogListBuilder = dialogListBuilder;
     }
 
     public void cleanDialogList() {
+        if (this.dialogListBuilder != null) {
+            this.dialogListBuilder.clear();
+        }
         this.dialogListBuilder = null;
     }
 
