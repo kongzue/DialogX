@@ -21,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
@@ -615,6 +617,9 @@ public class PopMenu extends BaseDialog {
                 }
             } else {
                 boxRoot.setClickable(false);
+            }
+            if (backgroundColor != null) {
+                tintColor(boxBody, backgroundColor);
             }
 
             if (backgroundRadius > -1) {
@@ -1507,5 +1512,21 @@ public class PopMenu extends BaseDialog {
             return true;
         }
         return enabled;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public PopMenu setBackgroundColor(@ColorInt int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        refreshUI();
+        return this;
+    }
+
+    public PopMenu setBackgroundColorRes(@ColorRes int backgroundColorResId) {
+        this.backgroundColor = getColor(backgroundColorResId);
+        refreshUI();
+        return this;
     }
 }
