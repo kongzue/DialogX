@@ -538,6 +538,7 @@ public class BottomMenu extends BottomDialog {
                             return;
                         }
                         selectionIndex = position;
+                        log("### onMenuItemClickListener=" + onMenuItemClickListener);
                         switch (selectMode) {
                             case NONE:
                                 if (onMenuItemClickListener != null) {
@@ -563,7 +564,7 @@ public class BottomMenu extends BottomDialog {
                                             dismiss();
                                         }
                                     } else {
-                                        dismiss();
+                                        menuListAdapter.notifyDataSetInvalidated();
                                     }
                                 }
                                 break;
@@ -593,7 +594,18 @@ public class BottomMenu extends BottomDialog {
                                             dismiss();
                                         }
                                     } else {
-                                        dismiss();
+                                        if (selectionItems.contains(position)) {
+                                            selectionItems.remove(new Integer(position));
+                                        } else {
+                                            selectionItems.add(position);
+                                        }
+                                        menuListAdapter.notifyDataSetInvalidated();
+                                        resultArray = new int[selectionItems.size()];
+                                        selectTextArray = new CharSequence[selectionItems.size()];
+                                        for (int i = 0; i < selectionItems.size(); i++) {
+                                            resultArray[i] = selectionItems.get(i);
+                                            selectTextArray[i] = menuList.get(resultArray[i]);
+                                        }
                                     }
                                 }
                                 break;

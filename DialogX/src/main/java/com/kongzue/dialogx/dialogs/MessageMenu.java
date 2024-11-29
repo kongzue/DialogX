@@ -561,7 +561,7 @@ public class MessageMenu extends MessageDialog {
                                             dismiss();
                                         }
                                     } else {
-                                        dismiss();
+                                        menuListAdapter.notifyDataSetInvalidated();
                                     }
                                 }
                                 break;
@@ -591,7 +591,18 @@ public class MessageMenu extends MessageDialog {
                                             dismiss();
                                         }
                                     } else {
-                                        dismiss();
+                                        if (selectionItems.contains(position)) {
+                                            selectionItems.remove(new Integer(position));
+                                        } else {
+                                            selectionItems.add(position);
+                                        }
+                                        menuListAdapter.notifyDataSetInvalidated();
+                                        resultArray = new int[selectionItems.size()];
+                                        selectTextArray = new CharSequence[selectionItems.size()];
+                                        for (int i = 0; i < selectionItems.size(); i++) {
+                                            resultArray[i] = selectionItems.get(i);
+                                            selectTextArray[i] = menuList.get(resultArray[i]);
+                                        }
                                     }
                                 }
                                 break;
