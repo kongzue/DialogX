@@ -682,7 +682,7 @@ public class MessageDialog extends BaseDialog {
             if (inputInfo != null) {
                 if (inputInfo.getMAX_LENGTH() != -1)
                     txtInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(inputInfo.getMAX_LENGTH())});
-                int inputType = InputType.TYPE_CLASS_TEXT | inputInfo.getInputType();
+                int inputType = inputInfo.getInputType();
                 if (inputInfo.isMultipleLines()) {
                     inputType = inputType | InputType.TYPE_TEXT_FLAG_MULTI_LINE;
                 }
