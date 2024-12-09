@@ -12,6 +12,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -1128,6 +1130,23 @@ public class MainActivity extends BaseActivity {
                         return false;
                     }
                 }).setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
+                        //实验性，RenderEffect实现的背景模糊效果
+                        .setDialogLifecycleCallback(new DialogLifecycleCallback<CustomDialog>() {
+                            @Override
+                            public void onShow(CustomDialog dialog) {
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                                    RenderEffect blurEffect = RenderEffect.createBlurEffect(20f, 20f, Shader.TileMode.CLAMP);
+                                    ((ViewGroup) getWindow().getDecorView()).getChildAt(0).setRenderEffect(blurEffect);
+                                }
+                            }
+
+                            @Override
+                            public void onDismiss(CustomDialog dialog) {
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                                    ((ViewGroup) getWindow().getDecorView()).getChildAt(0).setRenderEffect(null);
+                                }
+                            }
+                        })
 //                        .setAlign(CustomDialog.ALIGN.LEFT)
                 //.setAnimResId(R.anim.anim_right_in, R.anim.anim_right_out)
 

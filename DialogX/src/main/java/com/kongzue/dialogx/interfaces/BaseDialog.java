@@ -186,7 +186,7 @@ public abstract class BaseDialog implements LifecycleOwner {
             }
             dialog.dialogView = new WeakReference<>(view);
 
-            log(dialog.dialogKey() + ".show on " +( dialog.isActivityImplMode()? dialog.getOwnActivity():"window"));
+            log(dialog.dialogKey() + ".show on " + (dialog.isActivityImplMode() ? dialog.getOwnActivity() : "window"));
 
             addDialogToRunningList(dialog);
             switch (dialog.dialogImplMode) {
@@ -885,6 +885,16 @@ public abstract class BaseDialog implements LifecycleOwner {
             return new ArrayList<>();
         }
         return new CopyOnWriteArrayList<>(runningDialogList);
+    }
+
+    public static List<BaseDialog> getRunningDialogList(Activity activity) {
+        List<BaseDialog> result = new ArrayList<>();
+        for (BaseDialog dialog : runningDialogList) {
+            if (dialog != null && dialog.isShow && dialog.getOwnActivity() == activity) {
+                result.add(dialog);
+            }
+        }
+        return result;
     }
 
     protected void imeShow(EditText editText, boolean show) {
