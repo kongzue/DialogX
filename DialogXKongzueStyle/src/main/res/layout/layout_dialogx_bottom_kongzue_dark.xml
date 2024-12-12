@@ -45,7 +45,6 @@
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:overScrollMode="never"
                     android:scrollbarSize="7dp"
                     android:scrollbars="vertical">
@@ -80,14 +79,14 @@
                             android:background="@color/dialogxKongzueDarkButtonSplitLineColor"
                             android:tag="split" />
 
-                        <RelativeLayout
-                            android:id="@+id/box_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
                     </LinearLayout>
 
                 </com.kongzue.dialogx.util.views.DialogScrollView>
+
+                <FrameLayout
+                    android:id="@+id/box_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

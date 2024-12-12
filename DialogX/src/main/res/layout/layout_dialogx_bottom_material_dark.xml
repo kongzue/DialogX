@@ -54,7 +54,6 @@
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:overScrollMode="never"
                     android:scrollbars="vertical">
 
@@ -81,14 +80,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
-                        <FrameLayout
-                            android:id="@+id/box_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
                     </LinearLayout>
 
                 </com.kongzue.dialogx.util.views.DialogScrollView>
+
+                <FrameLayout
+                    android:id="@+id/box_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <LinearLayout
                     android:id="@+id/box_button"

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.PopMenu;
+import com.kongzue.dialogx.interfaces.MenuIconAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,26 +125,47 @@ public class PopMenuArrayAdapter extends BaseAdapter {
         viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
         
         if (popMenu.getOnIconChangeCallBack() != null) {
-            int resId = popMenu.getOnIconChangeCallBack().getIcon(popMenu, position, menuList.get(position).toString());
-            boolean autoTintIconInLightOrDarkMode = popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode() == null ? popMenu.isAutoTintIconInLightOrDarkMode() : popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
+            if (popMenu.getOnIconChangeCallBack() instanceof MenuIconAdapter) {
+                boolean result = ((MenuIconAdapter) popMenu.getOnIconChangeCallBack()).applyIcon(popMenu, position, menuList.get(position).toString(), viewHolder.imgDialogxMenuIcon);
+                boolean autoTintIconInLightOrDarkMode = popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode() == null ? popMenu.isAutoTintIconInLightOrDarkMode() : popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
 
-            if (resId != 0) {
-                viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
-                viewHolder.imgDialogxMenuIcon.setImageResource(resId);
-                if (isHaveProperties(viewHolder.txtDialogxMenuText.getGravity(), Gravity.CENTER) || isHaveProperties(viewHolder.txtDialogxMenuText.getGravity(), Gravity.CENTER_HORIZONTAL)) {
+                viewHolder.imgDialogxMenuIcon.setVisibility(result ? View.VISIBLE : View.GONE);
+                if (result) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (autoTintIconInLightOrDarkMode) {
+                            viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                        }
+                    }
                     if (viewHolder.spaceDialogxRightPadding != null) {
                         viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
                     }
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (autoTintIconInLightOrDarkMode) {
-                        viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                } else {
+                    if (viewHolder.spaceDialogxRightPadding != null) {
+                        viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
                     }
                 }
-            } else {
-                viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
-                if (viewHolder.spaceDialogxRightPadding != null) {
-                    viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+            }else{
+                int resId = popMenu.getOnIconChangeCallBack().getIcon(popMenu, position, menuList.get(position).toString());
+                boolean autoTintIconInLightOrDarkMode = popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode() == null ? popMenu.isAutoTintIconInLightOrDarkMode() : popMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
+
+                if (resId != 0) {
+                    viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
+                    viewHolder.imgDialogxMenuIcon.setImageResource(resId);
+                    if (isHaveProperties(viewHolder.txtDialogxMenuText.getGravity(), Gravity.CENTER) || isHaveProperties(viewHolder.txtDialogxMenuText.getGravity(), Gravity.CENTER_HORIZONTAL)) {
+                        if (viewHolder.spaceDialogxRightPadding != null) {
+                            viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (autoTintIconInLightOrDarkMode) {
+                            viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                        }
+                    }
+                } else {
+                    viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
+                    if (viewHolder.spaceDialogxRightPadding != null) {
+                        viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                    }
                 }
             }
         } else {

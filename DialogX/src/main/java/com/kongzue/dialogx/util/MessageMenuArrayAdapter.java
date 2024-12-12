@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.kongzue.dialogx.R;
 import com.kongzue.dialogx.dialogs.MessageMenu;
+import com.kongzue.dialogx.interfaces.MenuIconAdapter;
 import com.kongzue.dialogx.interfaces.SELECT_MODE;
 
 import java.util.List;
@@ -69,8 +70,7 @@ public class MessageMenuArrayAdapter extends BaseAdapter {
                 if (resourceId == 0) {
                     resourceId = R.layout.item_dialogx_material_bottom_menu_normal_text;
                 } else {
-                    if (!isNull(messageMenu.getTitle()) || !isNull(messageMenu.getMessage()) ||
-                            messageMenu.getCustomView() != null) {
+                    if (!isNull(messageMenu.getTitle()) || !isNull(messageMenu.getMessage()) || messageMenu.getCustomView() != null) {
                         if (position == 0) {
                             resourceId = messageMenu.getStyle().overrideBottomDialogRes().overrideMenuItemLayout(messageMenu.isLightTheme(), position, getCount(), true);
                         }
@@ -155,13 +155,7 @@ public class MessageMenuArrayAdapter extends BaseAdapter {
 
         if (null != text) {
             if (defaultMenuTextInfo == null) {
-                defaultMenuTextInfo = new TextInfo()
-                        .setShowEllipsis(viewHolder.txtDialogxMenuText.getEllipsize() == TextUtils.TruncateAt.END)
-                        .setFontColor(viewHolder.txtDialogxMenuText.getTextColors().getDefaultColor())
-                        .setBold(viewHolder.txtDialogxMenuText.getPaint().isFakeBoldText())
-                        .setFontSize(px2dip(viewHolder.txtDialogxMenuText.getTextSize()))
-                        .setGravity(viewHolder.txtDialogxMenuText.getGravity())
-                        .setMaxLines(viewHolder.txtDialogxMenuText.getMaxLines());
+                defaultMenuTextInfo = new TextInfo().setShowEllipsis(viewHolder.txtDialogxMenuText.getEllipsize() == TextUtils.TruncateAt.END).setFontColor(viewHolder.txtDialogxMenuText.getTextColors().getDefaultColor()).setBold(viewHolder.txtDialogxMenuText.getPaint().isFakeBoldText()).setFontSize(px2dip(viewHolder.txtDialogxMenuText.getTextSize())).setGravity(viewHolder.txtDialogxMenuText.getGravity()).setMaxLines(viewHolder.txtDialogxMenuText.getMaxLines());
             }
             viewHolder.txtDialogxMenuText.setText(text);
             viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
@@ -192,24 +186,45 @@ public class MessageMenuArrayAdapter extends BaseAdapter {
             }
 
             if (messageMenu.getOnIconChangeCallBack() != null) {
-                int resId = messageMenu.getOnIconChangeCallBack().getIcon(messageMenu, position, text.toString());
-                boolean autoTintIconInLightOrDarkMode = messageMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode() == null ? messageMenu.isAutoTintIconInLightOrDarkMode() : messageMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
+                if (messageMenu.getOnIconChangeCallBack() instanceof MenuIconAdapter) {
+                    boolean result = ((MenuIconAdapter) messageMenu.getOnIconChangeCallBack()).applyIcon(messageMenu, position, text.toString(), viewHolder.imgDialogxMenuIcon);
+                    boolean autoTintIconInLightOrDarkMode = messageMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode() == null ? messageMenu.isAutoTintIconInLightOrDarkMode() : messageMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
 
-                if (resId != 0) {
-                    viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
-                    viewHolder.imgDialogxMenuIcon.setImageResource(resId);
-                    if (viewHolder.spaceDialogxRightPadding != null) {
-                        viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        if (autoTintIconInLightOrDarkMode) {
-                            viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                    viewHolder.imgDialogxMenuIcon.setVisibility(result ? View.VISIBLE : View.GONE);
+                    if (result) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            if (autoTintIconInLightOrDarkMode) {
+                                viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                            }
+                        }
+                        if (viewHolder.spaceDialogxRightPadding != null) {
+                            viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        if (viewHolder.spaceDialogxRightPadding != null) {
+                            viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
                         }
                     }
                 } else {
-                    viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
-                    if (viewHolder.spaceDialogxRightPadding != null) {
-                        viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                    int resId = messageMenu.getOnIconChangeCallBack().getIcon(messageMenu, position, text.toString());
+                    boolean autoTintIconInLightOrDarkMode = messageMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode() == null ? messageMenu.isAutoTintIconInLightOrDarkMode() : messageMenu.getOnIconChangeCallBack().isAutoTintIconInLightOrDarkMode();
+
+                    if (resId != 0) {
+                        viewHolder.imgDialogxMenuIcon.setVisibility(View.VISIBLE);
+                        viewHolder.imgDialogxMenuIcon.setImageResource(resId);
+                        if (viewHolder.spaceDialogxRightPadding != null) {
+                            viewHolder.spaceDialogxRightPadding.setVisibility(View.VISIBLE);
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            if (autoTintIconInLightOrDarkMode) {
+                                viewHolder.imgDialogxMenuIcon.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(textColor)));
+                            }
+                        }
+                    } else {
+                        viewHolder.imgDialogxMenuIcon.setVisibility(View.GONE);
+                        if (viewHolder.spaceDialogxRightPadding != null) {
+                            viewHolder.spaceDialogxRightPadding.setVisibility(View.GONE);
+                        }
                     }
                 }
             } else {

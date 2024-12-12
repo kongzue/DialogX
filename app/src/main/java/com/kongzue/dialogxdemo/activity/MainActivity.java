@@ -46,6 +46,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.kongzue.baseframework.BaseActivity;
@@ -75,6 +76,7 @@ import com.kongzue.dialogx.interfaces.DialogLifecycleCallback;
 import com.kongzue.dialogx.interfaces.DialogXAnimInterface;
 import com.kongzue.dialogx.interfaces.DialogXRunnable;
 import com.kongzue.dialogx.interfaces.DialogXStyle;
+import com.kongzue.dialogx.interfaces.MenuIconAdapter;
 import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
@@ -748,45 +750,46 @@ public class MainActivity extends BaseActivity {
                             .setMessage("message")
                             .setBottomDialogMaxHeight(0.6f)
                             .setMenuList(new String[]{"添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐", "添加", "查看", "编辑", "删除", "分享", "评论", "下载", "收藏", "赞！", "不喜欢", "所属专辑", "复制链接", "类似推荐"}).setOnIconChangeCallBack(new OnIconChangeCallBack<BottomMenu>(true) {
-                        @Override
-                        public int getIcon(BottomMenu bottomMenu, int index, String menuText) {
-                            switch (menuText) {
-                                case "添加":
-                                    return R.mipmap.img_dialogx_demo_add;
-                                case "查看":
-                                    return R.mipmap.img_dialogx_demo_view;
-                                case "编辑":
-                                    return R.mipmap.img_dialogx_demo_edit;
-                                case "删除":
-                                    return R.mipmap.img_dialogx_demo_delete;
-                                case "分享":
-                                    return R.mipmap.img_dialogx_demo_share;
-                                case "评论":
-                                    return R.mipmap.img_dialogx_demo_comment;
-                                case "下载":
-                                    return R.mipmap.img_dialogx_demo_download;
-                                case "收藏":
-                                    return R.mipmap.img_dialogx_demo_favorite;
-                                case "赞！":
-                                    return R.mipmap.img_dialogx_demo_good;
-                                case "不喜欢":
-                                    return R.mipmap.img_dialogx_demo_dislike;
-                                case "所属专辑":
-                                    return R.mipmap.img_dialogx_demo_album;
-                                case "复制链接":
-                                    return R.mipmap.img_dialogx_demo_link;
-                                case "类似推荐":
-                                    return R.mipmap.img_dialogx_demo_recommend;
-                            }
-                            return 0;
-                        }
-                    }).setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
-                        @Override
-                        public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                            PopTip.show(text);
-                            return false;
-                        }
-                    }).show();
+
+                                @Override
+                                public int getIcon(BottomMenu bottomMenu, int index, String menuText) {
+                                    switch (menuText) {
+                                        case "添加":
+                                            return R.mipmap.img_dialogx_demo_add;
+                                        case "查看":
+                                            return R.mipmap.img_dialogx_demo_view;
+                                        case "编辑":
+                                            return R.mipmap.img_dialogx_demo_edit;
+                                        case "删除":
+                                            return R.mipmap.img_dialogx_demo_delete;
+                                        case "分享":
+                                            return R.mipmap.img_dialogx_demo_share;
+                                        case "评论":
+                                            return R.mipmap.img_dialogx_demo_comment;
+                                        case "下载":
+                                            return R.mipmap.img_dialogx_demo_download;
+                                        case "收藏":
+                                            return R.mipmap.img_dialogx_demo_favorite;
+                                        case "赞！":
+                                            return R.mipmap.img_dialogx_demo_good;
+                                        case "不喜欢":
+                                            return R.mipmap.img_dialogx_demo_dislike;
+                                        case "所属专辑":
+                                            return R.mipmap.img_dialogx_demo_album;
+                                        case "复制链接":
+                                            return R.mipmap.img_dialogx_demo_link;
+                                        case "类似推荐":
+                                            return R.mipmap.img_dialogx_demo_recommend;
+                                    }
+                                    return 0;
+                                }
+                            }).setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
+                                @Override
+                                public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
+                                    PopTip.show(text);
+                                    return false;
+                                }
+                            }).show();
 
 //                      测试用代码
 //                    BottomMenu.show("添加", "查看", "编辑")
@@ -806,16 +809,29 @@ public class MainActivity extends BaseActivity {
                     }).setOnMenuItemClickListener(new OnMenuItemClickListener<BottomMenu>() {
                         @Override
                         public boolean onClick(BottomMenu dialog, CharSequence text, int index) {
-                            log("点击了菜单："+ index + " 文本：" + text);
+                            log("点击了菜单：" + index + " 文本：" + text);
                             PopTip.show(text);
                             try {
-                               throw  new RuntimeException("test");
-                            }catch (Exception e) {
+                                throw new RuntimeException("test");
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             return false;
                         }
-                    }).setIconResIds(R.mipmap.img_dialogx_demo_add,R.mipmap.img_dialogx_demo_view,R.mipmap.img_dialogx_demo_link);
+                    }).setOnIconChangeCallBack(new MenuIconAdapter<BottomMenu>(false) {
+
+                        String[] urls = {
+                                "http://www.kongzue.com/test/res/dialogx/ic_menu_add.png",
+                                "http://www.kongzue.com/test/res/dialogx/ic_menu_read_later.png",
+                                "http://www.kongzue.com/test/res/dialogx/ic_menu_link.png"
+                        };
+
+                        @Override
+                        public boolean applyIcon(BottomMenu dialog, int index, String menuText, ImageView iconImageView) {
+                            Glide.with(MainActivity.this).load(urls[index]).into(iconImageView);
+                            return true;
+                        }
+                    });//.setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_view, R.mipmap.img_dialogx_demo_link);
                 }
             }
         });
@@ -1114,24 +1130,24 @@ public class MainActivity extends BaseActivity {
 //                        .setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30));
 
                 CustomDialog.show(new OnBindView<CustomDialog>(R.layout.layout_custom_dialog) {
-                    @Override
-                    public void onBind(final CustomDialog dialog, View v) {
-                        ImageView btnOk;
-                        btnOk = v.findViewById(R.id.btn_ok);
-                        btnOk.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
+                            public void onBind(final CustomDialog dialog, View v) {
+                                ImageView btnOk;
+                                btnOk = v.findViewById(R.id.btn_ok);
+                                btnOk.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
                             }
-                        });
-                    }
-                }).setMaskColor(getColorS(com.kongzue.dialogx.R.color.black50)).setOnBackgroundMaskClickListener(new OnBackgroundMaskClickListener<CustomDialog>() {
-                    @Override
-                    public boolean onClick(CustomDialog dialog, View v) {
-                        log("点击遮罩层");
-                        return false;
-                    }
-                }).setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
+                        }).setMaskColor(getColorS(com.kongzue.dialogx.R.color.black50)).setOnBackgroundMaskClickListener(new OnBackgroundMaskClickListener<CustomDialog>() {
+                            @Override
+                            public boolean onClick(CustomDialog dialog, View v) {
+                                log("点击遮罩层");
+                                return false;
+                            }
+                        }).setMaskColor(getResources().getColor(com.kongzue.dialogx.iostheme.R.color.black30))
                         //实验性，RenderEffect实现的背景模糊效果
                         .setDialogLifecycleCallback(new DialogLifecycleCallback<CustomDialog>() {
                             @Override
@@ -1559,7 +1575,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-      //  AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        //  AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
     }
 }

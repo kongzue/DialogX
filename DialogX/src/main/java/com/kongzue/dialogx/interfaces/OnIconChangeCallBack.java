@@ -1,7 +1,5 @@
 package com.kongzue.dialogx.interfaces;
 
-import com.kongzue.dialogx.dialogs.BottomMenu;
-
 /**
  * @author: Kongzue
  * @github: https://github.com/kongzue/
@@ -10,18 +8,18 @@ import com.kongzue.dialogx.dialogs.BottomMenu;
  * @createTime: 2020/10/9 14:54
  */
 public abstract class OnIconChangeCallBack<D extends BaseDialog> {
-    
-    private Boolean autoTintIconInLightOrDarkMode;
-    
+
     public OnIconChangeCallBack() {
     }
-    
+
+    private Boolean autoTintIconInLightOrDarkMode;
+
     public OnIconChangeCallBack(boolean autoTintIconInLightOrDarkMode) {
         this.autoTintIconInLightOrDarkMode = autoTintIconInLightOrDarkMode;
     }
-    
+
     public abstract int getIcon(D dialog, int index, String menuText);
-    
+
     public Boolean isAutoTintIconInLightOrDarkMode() {
         return autoTintIconInLightOrDarkMode;
     }
