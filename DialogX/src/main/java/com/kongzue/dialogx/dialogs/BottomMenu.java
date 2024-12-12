@@ -512,14 +512,17 @@ public class BottomMenu extends BottomDialog {
             } else {
                 listView = new DialogListView(getDialogImpl(), getOwnActivity());
             }
+            listView.setTag("ScrollController");
             listView.setOverScrollMode(OVER_SCROLL_NEVER);
             listView.setDivider(getResources().getDrawable(dividerDrawableResId));
             listView.setDividerHeight(dividerHeight);
+            getDialogImpl().scrollView = listView;
 
             listView.setBottomMenuListViewTouchEvent(new BottomMenuListViewTouchEvent() {
                 @Override
                 public void down(MotionEvent event) {
-                    touchDownY = getDialogImpl().bkg.getY();
+                    touchDownY = getDialogImpl().boxBkg.getY();
+                    log("#TouchDown: " + touchDownY);
                 }
             });
 
@@ -533,7 +536,8 @@ public class BottomMenu extends BottomDialog {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - lastClickTime > ITEM_CLICK_DELAY) {
                         lastClickTime = currentTime;
-                        float deltaY = Math.abs(touchDownY - getDialogImpl().bkg.getY());
+                        float deltaY = Math.abs(touchDownY - getDialogImpl().boxBkg.getY());
+                        log("#Click:deltaY= " + deltaY);
                         if (deltaY > dip2px(15)) {
                             return;
                         }
