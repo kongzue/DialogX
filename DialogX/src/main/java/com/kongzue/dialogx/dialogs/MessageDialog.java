@@ -680,9 +680,17 @@ public class MessageDialog extends BaseDialog {
             }
 
             if (inputInfo != null) {
-                if (inputInfo.getMAX_LENGTH() != -1)
-                    txtInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(inputInfo.getMAX_LENGTH())});
                 int inputType = inputInfo.getInputType();
+                if (inputInfo.getMAX_LENGTH() != -1) {
+                    int inputClass = inputType & InputType.TYPE_MASK_CLASS;
+                    if (inputClass != InputType.TYPE_CLASS_TEXT &&
+                            inputClass != InputType.TYPE_CLASS_NUMBER &&
+                            inputClass != InputType.TYPE_CLASS_PHONE &&
+                            inputClass != InputType.TYPE_CLASS_DATETIME) {
+                        inputType = (inputType & ~InputType.TYPE_MASK_CLASS) | InputType.TYPE_CLASS_TEXT;
+                    }
+                    txtInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(inputInfo.getMAX_LENGTH())});
+                }
                 if (inputInfo.isMultipleLines()) {
                     inputType = inputType | InputType.TYPE_TEXT_FLAG_MULTI_LINE;
                 }
