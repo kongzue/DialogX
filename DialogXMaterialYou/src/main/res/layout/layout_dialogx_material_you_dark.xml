@@ -45,7 +45,6 @@
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:overScrollMode="never">
 
                     <LinearLayout
@@ -69,11 +68,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:visibility="gone" />
-
-                        <FrameLayout
-                            android:id="@+id/box_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -101,6 +95,12 @@
                     </LinearLayout>
 
                 </com.kongzue.dialogx.util.views.DialogScrollView>
+
+                <FrameLayout
+                    android:id="@+id/box_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
                 <LinearLayout
                     android:id="@+id/box_button"
