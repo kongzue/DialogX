@@ -40,61 +40,68 @@
                     android:textColor="@color/white"
                     android:textSize="21dp" />
 
-
-                <com.kongzue.dialogx.util.views.DialogScrollView
-                    android:id="@+id/scrollView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <com.kongzue.dialogx.util.views.DialogScrollView
+                        android:id="@+id/scrollView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:overScrollMode="never">
 
-                        <TextView
-                            android:id="@+id/txt_dialog_tip"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
-                            android:text="This is content text."
-                            android:textColor="@color/white60"
-                            android:textSize="16dp" />
+                            android:orientation="vertical">
 
-                        <RelativeLayout
-                            android:id="@+id/box_custom"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone" />
+                            <TextView
+                                android:id="@+id/txt_dialog_tip"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginEnd="20dp"
+                                android:text="This is content text."
+                                android:textColor="@color/white60"
+                                android:textSize="16dp" />
 
-                        <EditText
-                            android:id="@+id/txt_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="20dp"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:paddingTop="10dp"
-                            android:paddingBottom="10dp"
-                            android:scrollbars="vertical"
-                            android:text=""
-                            android:textColor="@color/white"
-                            android:textSize="18dp"
-                            android:theme="@style/DialogXCompatThemeDark" />
-                    </LinearLayout>
+                            <RelativeLayout
+                                android:id="@+id/box_custom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
 
-                </com.kongzue.dialogx.util.views.DialogScrollView>
+                            <EditText
+                                android:id="@+id/txt_input"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginStart="20dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="20dp"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:scrollbars="vertical"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="18dp"
+                                android:theme="@style/DialogXCompatThemeDark" />
+                        </LinearLayout>
 
-                <FrameLayout
-                    android:id="@+id/box_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    </com.kongzue.dialogx.util.views.DialogScrollView>
+
+                    <FrameLayout
+                        android:id="@+id/box_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/box_button"

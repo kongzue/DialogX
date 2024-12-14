@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -504,7 +505,6 @@ public class MessageMenu extends MessageDialog {
                 dividerDrawableResId = isLightTheme() ? R.drawable.rect_dialogx_material_menu_split_divider : R.drawable.rect_dialogx_material_menu_split_divider_night;
             }
 
-
             if (!isLightTheme()) {
                 listView = new DialogListView(getDialogImpl(), getOwnActivity(), R.style.DialogXCompatThemeDark);
             } else {
@@ -618,7 +618,6 @@ public class MessageMenu extends MessageDialog {
 
             ViewGroup.LayoutParams listViewLp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             getDialogImpl().boxList.addView(listView, listViewLp);
-
             refreshUI();
         }
     }

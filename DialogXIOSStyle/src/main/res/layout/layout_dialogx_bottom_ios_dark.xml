@@ -57,54 +57,61 @@
                             android:textSize="12dp"
                             android:textStyle="bold" />
 
-                        <com.kongzue.dialogx.util.views.DialogScrollView
-                            android:id="@+id/scrollView"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:overScrollMode="never"
-                            android:scrollbarSize="7dp"
-                            android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
-                            android:scrollbars="vertical">
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/box_content"
+                            <com.kongzue.dialogx.util.views.DialogScrollView
+                                android:id="@+id/scrollView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:overScrollMode="never"
+                                android:scrollbarSize="7dp"
+                                android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
+                                android:scrollbars="vertical">
 
-                                <TextView
-                                    android:id="@+id/txt_dialog_tip"
+                                <LinearLayout
+                                    android:id="@+id/box_content"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginRight="20dp"
-                                    android:gravity="center"
-                                    android:paddingTop="13dp"
-                                    android:paddingBottom="13dp"
-                                    android:text="This is content text."
-                                    android:textColor="@color/dialogxIOSTipTextDark"
-                                    android:textSize="12dp" />
+                                    android:orientation="vertical">
 
-                                <RelativeLayout
-                                    android:id="@+id/box_custom"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content" />
+                                    <TextView
+                                        android:id="@+id/txt_dialog_tip"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="20dp"
+                                        android:layout_marginRight="20dp"
+                                        android:gravity="center"
+                                        android:paddingTop="13dp"
+                                        android:paddingBottom="13dp"
+                                        android:text="This is content text."
+                                        android:textColor="@color/dialogxIOSTipTextDark"
+                                        android:textSize="12dp" />
 
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1px"
-                                    android:tag="split"
-                                    android:visibility="gone" />
+                                    <RelativeLayout
+                                        android:id="@+id/box_custom"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content" />
 
-                            </LinearLayout>
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1px"
+                                        android:tag="split"
+                                        android:visibility="gone" />
 
-                        </com.kongzue.dialogx.util.views.DialogScrollView>
+                                </LinearLayout>
 
-                        <FrameLayout
-                            android:id="@+id/box_list"
-                            android:layout_weight="1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            </com.kongzue.dialogx.util.views.DialogScrollView>
+
+                            <FrameLayout
+                                android:id="@+id/box_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
+                        </LinearLayout>
 
                     </com.kongzue.dialogx.style.views.BlurLinearLayout>
 
@@ -118,8 +125,8 @@
                     android:divider="@drawable/rect_dialogx_ios_menu_split_divider"
                     android:orientation="vertical"
                     android:showDividers="middle"
-                    app:dialogxOverlayColorNoAlpha="true"
-                    app:dialogxDarkMode="true">
+                    app:dialogxDarkMode="true"
+                    app:dialogxOverlayColorNoAlpha="true">
 
                     <TextView
                         android:id="@+id/btn_selectPositive"

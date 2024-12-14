@@ -41,66 +41,74 @@
                     android:textColor="@color/white"
                     android:textSize="21dp" />
 
-                <com.kongzue.dialogx.util.views.DialogScrollView
-                    android:id="@+id/scrollView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <com.kongzue.dialogx.util.views.DialogScrollView
+                        android:id="@+id/scrollView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:overScrollMode="never">
 
-                        <TextView
-                            android:id="@+id/txt_dialog_tip"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginEnd="20dp"
-                            android:text="This is content text."
-                            android:textColor="@color/white"
-                            android:textSize="16dp" />
+                            android:orientation="vertical">
 
-                        <RelativeLayout
-                            android:id="@+id/box_custom"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone" />
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:tag="dialogx_editbox">
-
-                            <EditText
-                                android:id="@+id/txt_input"
+                            <TextView
+                                android:id="@+id/txt_dialog_tip"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginStart="20dp"
-                                android:layout_marginTop="10dp"
                                 android:layout_marginEnd="20dp"
-                                android:inputType="text"
-                                android:maxLines="1"
-                                android:padding="10dp"
-                                android:scrollbars="vertical"
-                                android:text=""
+                                android:text="This is content text."
                                 android:textColor="@color/white"
-                                android:textSize="18dp" />
+                                android:textSize="16dp" />
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                            <RelativeLayout
+                                android:id="@+id/box_custom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
 
-                    </LinearLayout>
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:tag="dialogx_editbox">
 
-                </com.kongzue.dialogx.util.views.DialogScrollView>
+                                <EditText
+                                    android:id="@+id/txt_input"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginStart="20dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginEnd="20dp"
+                                    android:inputType="text"
+                                    android:maxLines="1"
+                                    android:padding="10dp"
+                                    android:scrollbars="vertical"
+                                    android:text=""
+                                    android:textColor="@color/white"
+                                    android:textSize="18dp" />
 
-                <FrameLayout
-                    android:id="@+id/box_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </com.kongzue.dialogx.util.views.DialogScrollView>
+
+                    <FrameLayout
+                        android:id="@+id/box_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/box_button"

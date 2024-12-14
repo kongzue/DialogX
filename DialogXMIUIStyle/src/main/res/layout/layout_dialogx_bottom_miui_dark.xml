@@ -40,52 +40,58 @@
                     android:textColor="@color/dialogxMIUITextDark"
                     android:textSize="18dp" />
 
-                <com.kongzue.dialogx.util.views.DialogScrollView
-                    android:id="@+id/scrollView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never"
-                    android:scrollbarSize="7dp"
-                    android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
-                    android:scrollbars="vertical">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/box_content"
+                    <com.kongzue.dialogx.util.views.DialogScrollView
+                        android:id="@+id/scrollView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:overScrollMode="never"
+                        android:scrollbarSize="7dp"
+                        android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
+                        android:scrollbars="vertical">
 
-                        <TextView
-                            android:id="@+id/txt_dialog_tip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginLeft="26dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="26dp"
-                            android:gravity="start"
-                            android:paddingBottom="5dp"
-                            android:text="This is content text."
-                            android:textColor="@color/dialogxMIUITextDark"
-                            android:textSize="16dp" />
-
-                        <RelativeLayout
-                            android:id="@+id/box_custom"
+                        <LinearLayout
+                            android:id="@+id/box_content"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/txt_dialog_tip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginLeft="26dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="26dp"
+                                android:gravity="start"
+                                android:paddingBottom="5dp"
+                                android:text="This is content text."
+                                android:textColor="@color/dialogxMIUITextDark"
+                                android:textSize="16dp" />
 
-                </com.kongzue.dialogx.util.views.DialogScrollView>
+                            <RelativeLayout
+                                android:id="@+id/box_custom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
 
-                <FrameLayout
-                    android:id="@+id/box_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:visibility="gone" />
+                        </LinearLayout>
+
+                    </com.kongzue.dialogx.util.views.DialogScrollView>
+
+                    <FrameLayout
+                        android:id="@+id/box_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/box_button"

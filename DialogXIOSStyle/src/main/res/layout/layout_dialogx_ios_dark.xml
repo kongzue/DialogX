@@ -41,66 +41,72 @@
                     android:textColor="@color/white"
                     android:textSize="17dp" />
 
-
-                <com.kongzue.dialogx.util.views.DialogScrollView
-                    android:id="@+id/scrollView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never"
-                    android:scrollbarSize="7dp"
-                    android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
-                    android:scrollbars="vertical">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <com.kongzue.dialogx.util.views.DialogScrollView
+                        android:id="@+id/scrollView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:overScrollMode="never"
+                        android:scrollbarSize="7dp"
+                        android:scrollbarThumbVertical="@drawable/scrollbar_dialogx_vertical_dark"
+                        android:scrollbars="vertical">
 
-                        <TextView
-                            android:id="@+id/txt_dialog_tip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginEnd="15dp"
-                            android:gravity="start"
-                            android:text="This is content text."
-                            android:textColor="@color/white"
-                            android:textSize="13dp" />
-
-                        <RelativeLayout
-                            android:id="@+id/box_custom"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone" />
+                            android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/txt_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="15dp"
-                            android:background="@drawable/editbox_dialogx_ios_dark"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:padding="5dp"
-                            android:scrollbars="vertical"
-                            android:text=""
-                            android:textColor="@color/white"
-                            android:textSize="14dp"
-                            android:theme="@style/DialogXCompatThemeDark" />
+                            <TextView
+                                android:id="@+id/txt_dialog_tip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:gravity="start"
+                                android:text="This is content text."
+                                android:textColor="@color/white"
+                                android:textSize="13dp" />
 
-                    </LinearLayout>
+                            <RelativeLayout
+                                android:id="@+id/box_custom"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
 
-                </com.kongzue.dialogx.util.views.DialogScrollView>
+                            <EditText
+                                android:id="@+id/txt_input"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="15dp"
+                                android:background="@drawable/editbox_dialogx_ios_dark"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:scrollbars="vertical"
+                                android:text=""
+                                android:textColor="@color/white"
+                                android:textSize="14dp"
+                                android:theme="@style/DialogXCompatThemeDark" />
 
-                <FrameLayout
-                    android:id="@+id/box_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                        </LinearLayout>
+
+                    </com.kongzue.dialogx.util.views.DialogScrollView>
+
+                    <FrameLayout
+                        android:id="@+id/box_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/split_horizontal"
