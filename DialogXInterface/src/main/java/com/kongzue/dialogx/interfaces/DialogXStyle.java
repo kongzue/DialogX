@@ -135,23 +135,23 @@ public abstract class DialogXStyle {
         return null;
     }
 
-    /**
-     * 消息对话框正文文本 UI 定义
-     *
-     * @return null 代表使用默认定义
-     */
-    public UIAttributeDefinition messageDialogMessageTextViewUIAD() {
-        return null;
-    }
-
-    /**
-     * InputDialog 输入框 UI 定义
-     *
-     * @return null 代表使用默认定义
-     */
-    public UIAttributeDefinition inputEditTextUIAD() {
-        return null;
-    }
+//    /**
+//     * 消息对话框正文文本 UI 定义
+//     *
+//     * @return null 代表使用默认定义
+//     */
+//    public UIAttributeDefinition messageDialogMessageTextViewUIAD() {
+//        return null;
+//    }
+//
+//    /**
+//     * InputDialog 输入框 UI 定义
+//     *
+//     * @return null 代表使用默认定义
+//     */
+//    public UIAttributeDefinition inputEditTextUIAD() {
+//        return null;
+//    }
 
     /**
      * 修改等待/提示框的样式
