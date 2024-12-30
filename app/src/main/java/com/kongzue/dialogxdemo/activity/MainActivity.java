@@ -592,32 +592,20 @@ public class MainActivity extends BaseActivity {
         btnWaitDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
-//                    @Override
-//                    public boolean onBackPressed(WaitDialog dialog) {
-//                        PopTip.show("按下返回").setButton("取消", new OnDialogButtonClickListener<PopTip>() {
-//                            @Override
-//                            public boolean onClick(PopTip dialog, View v) {
-//                                WaitDialog.dismiss();
-//                                return false;
-//                            }
-//                        });
-//                        return false;
-//                    }
-//                });
-//                WaitDialog.dismiss(3000);
-
-                WaitDialog.build()
-                        .setDialogImplMode(DialogX.IMPL_MODE.DIALOG_FRAGMENT)
-                        .setStyle(MaterialStyle.style())
-                        .setMessageContent("msg")
-                        .show();
-
-                WaitDialog.build()
-                        .setDialogImplMode(DialogX.IMPL_MODE.DIALOG_FRAGMENT)
-                        .setStyle(MaterialStyle.style())
-                        .setMessageContent("msg2")
-                        .show();
+                WaitDialog.show("Please Wait!").setOnBackPressedListener(new OnBackPressedListener<WaitDialog>() {
+                    @Override
+                    public boolean onBackPressed(WaitDialog dialog) {
+                        PopTip.show("按下返回").setButton("取消", new OnDialogButtonClickListener<PopTip>() {
+                            @Override
+                            public boolean onClick(PopTip dialog, View v) {
+                                WaitDialog.dismiss();
+                                return false;
+                            }
+                        });
+                        return false;
+                    }
+                });
+                WaitDialog.dismiss(3000);
             }
         });
 
