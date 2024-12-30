@@ -269,6 +269,10 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (onLifecycleCallBack != null) {
             onLifecycleCallBack.onDismiss();
         }
+        if (fitSystemBarUtils != null) {
+            fitSystemBarUtils.recycle();
+        }
+        fitSystemBarUtils = null;
         onSafeInsetsChangeListener = null;
         super.onDetachedFromWindow();
     }

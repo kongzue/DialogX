@@ -10,6 +10,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -79,6 +80,7 @@ public class DialogFragmentImpl extends DialogFragment {
                 for (BaseDialog dialog : BaseDialog.getRunningDialogList()) {
                     if (dialog.getOwnActivity() == activity && dialog != baseDialog && dialog.getDialogImplMode() == baseDialog.getDialogImplMode()) {
                         if (!(dialog instanceof NoTouchInterface) && dialog.getDialogView() != null) {
+                            Log.e(">>>", "onTouch: dialog=" + dialog + "  baseDialog="+baseDialog );
                             dialog.getDialogView().dispatchTouchEvent(event);
                             return true;
                         }
