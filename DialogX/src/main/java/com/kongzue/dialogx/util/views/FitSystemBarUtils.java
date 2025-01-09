@@ -1,6 +1,5 @@
 package com.kongzue.dialogx.util.views;
 
-
 import static androidx.core.view.WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE;
 
 import android.app.Activity;

@@ -21,6 +21,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.text.InputType;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -297,6 +301,8 @@ public class MainActivity extends BaseActivity {
         }
 
         txtVer.setText("当前版本：" + BuildConfig.VERSION_NAME);
+
+        checkAndroid14InDebugMode();
 
 //        //合并处理演示，在 onDismiss 中获取用户选择进行统一处理，以防止编写大量可能在不同选择下都要处理的重复代码
 //        MessageDialog.show("Title", "Ask Question", "OK", "NO", "OTHER").setDialogLifecycleCallback(new DialogLifecycleCallback<MessageDialog>() {
@@ -1577,5 +1583,44 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //  AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
+    }
+
+    // 检查是否处于debug模式且系统版本为Android 14
+    private void checkAndroid14InDebugMode() {
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT == 34) {
+            String fullText = "当前系统版本在debug模式下可能存在卡顿现象，属于系统故障，程序编译为release版本后将恢复正常，具体原因请参阅：《Android14 设备上 debug 调试 app 出现卡顿的问题及临时修复办法》";
+            String linkText = "《Android14 设备上 debug 调试 app 出现卡顿的问题及临时修复办法》";
+            String url = "https://xiaozhuanlan.com/topic/1023694578";
+
+            SpannableString spannableString = new SpannableString(fullText);
+            int start = fullText.indexOf(linkText);
+            int end = start + linkText.length();
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    // 点击后跳转到指定链接
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(Color.BLUE); // 设置链接颜色
+                    ds.setUnderlineText(true); // 添加下划线
+                }
+            };
+            spannableString.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            MessageDialog.build()
+                    .setTitle("警告")
+                    .setMessage(spannableString)
+                    .setOkButton("知道了", new OnDialogButtonClickListener<MessageDialog>() {
+                        @Override
+                        public boolean onClick(MessageDialog dialog, View v) {
+                            return false;
+                        }
+                    })
+                    .show();
+        }
     }
 }
