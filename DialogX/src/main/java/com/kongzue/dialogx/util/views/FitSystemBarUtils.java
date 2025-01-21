@@ -298,6 +298,8 @@ public class FitSystemBarUtils {
      * 针对不同版本处理Insets
      */
     private void formatInsets(WindowInsetsCompat insetsCompat, RelativePadding initialPadding) {
+        if (contentView == null || insetsCompat == null || initialPadding == null) return;
+
         relativePaddingCache = initialPadding;
         int cutoutPaddingLeft = 0;
         int cutoutPaddingTop = 0;
