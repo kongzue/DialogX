@@ -1529,4 +1529,19 @@ public class PopMenu extends BaseDialog {
         refreshUI();
         return this;
     }
+
+    public PopMenu setActionRunnable(int actionId, DialogXRunnable<PopMenu> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public PopMenu cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public PopMenu cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

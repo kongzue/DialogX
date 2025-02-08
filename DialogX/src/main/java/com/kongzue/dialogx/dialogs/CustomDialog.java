@@ -1166,4 +1166,19 @@ public class CustomDialog extends BaseDialog {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public CustomDialog setActionRunnable(int actionId, DialogXRunnable<CustomDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public CustomDialog cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public CustomDialog cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

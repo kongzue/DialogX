@@ -1416,4 +1416,19 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public PopTip setActionRunnable(int actionId, DialogXRunnable<PopTip> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public PopTip cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public PopTip cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

@@ -1563,4 +1563,19 @@ public class BottomMenu extends BottomDialog {
         }
         return enabled;
     }
+
+    public BottomMenu setActionRunnable(int actionId, DialogXRunnable<BottomDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public BottomMenu cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public BottomMenu cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

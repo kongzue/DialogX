@@ -81,6 +81,7 @@ public abstract class BaseDialog implements LifecycleOwner {
     protected DialogXRunnable onDismissRunnable;
     protected boolean enableImmersiveMode = true;   // 沉浸式适配
     protected int thisOrderIndex = 0;
+    protected Map<Integer, DialogXRunnable> dialogActionRunnableMap = new HashMap<Integer, DialogXRunnable>();
 
     public enum BUTTON_SELECT_RESULT {
         NONE,           // 未做出选择
@@ -1144,5 +1145,14 @@ public abstract class BaseDialog implements LifecycleOwner {
             }
         }
         return getDialogView().dispatchTouchEvent(event);
+    }
+
+    public boolean runAction(int actionId) {
+        DialogXRunnable runnable = dialogActionRunnableMap.get(actionId);
+        if (runnable != null) {
+            runnable.run(this);
+            return true;
+        }
+        return false;
     }
 }

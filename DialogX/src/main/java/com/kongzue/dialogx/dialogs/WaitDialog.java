@@ -1318,4 +1318,19 @@ public class WaitDialog extends BaseDialog {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public WaitDialog setActionRunnable(int actionId, DialogXRunnable<WaitDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public WaitDialog cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public WaitDialog cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

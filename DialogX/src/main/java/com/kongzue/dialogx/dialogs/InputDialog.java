@@ -730,4 +730,19 @@ public class InputDialog extends MessageDialog {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public InputDialog setActionRunnable(int actionId, DialogXRunnable<MessageDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public InputDialog cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public InputDialog cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

@@ -995,4 +995,19 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public FullScreenDialog setActionRunnable(int actionId, DialogXRunnable<FullScreenDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public FullScreenDialog cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public FullScreenDialog cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

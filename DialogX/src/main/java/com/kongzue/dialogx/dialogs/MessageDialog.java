@@ -1583,4 +1583,19 @@ public class MessageDialog extends BaseDialog {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public MessageDialog setActionRunnable(int actionId, DialogXRunnable<MessageDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public MessageDialog cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public MessageDialog cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

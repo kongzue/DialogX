@@ -1598,4 +1598,19 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public PopNotification setActionRunnable(int actionId, DialogXRunnable<PopNotification> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public PopNotification cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public PopNotification cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

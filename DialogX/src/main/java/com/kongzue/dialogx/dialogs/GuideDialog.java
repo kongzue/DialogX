@@ -823,4 +823,19 @@ public class GuideDialog extends CustomDialog {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public GuideDialog setActionRunnable(int actionId, DialogXRunnable<CustomDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public GuideDialog cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public GuideDialog cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

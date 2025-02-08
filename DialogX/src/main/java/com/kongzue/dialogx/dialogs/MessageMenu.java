@@ -1556,4 +1556,19 @@ public class MessageMenu extends MessageDialog {
         return enabled;
     }
 
+    public MessageMenu setActionRunnable(int actionId, DialogXRunnable<MessageDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public MessageMenu cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public MessageMenu cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
+
 }

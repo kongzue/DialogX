@@ -283,4 +283,19 @@ public class TipDialog extends WaitDialog {
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public TipDialog setActionRunnable(int actionId, DialogXRunnable<WaitDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public TipDialog cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public TipDialog cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

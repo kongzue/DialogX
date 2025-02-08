@@ -1419,4 +1419,19 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         setThisOrderIndex(getHighestOrderIndex());
         return this;
     }
+
+    public BottomDialog setActionRunnable(int actionId, DialogXRunnable<BottomDialog> runnable) {
+        dialogActionRunnableMap.put(actionId, runnable);
+        return this;
+    }
+
+    public BottomDialog cleanAction(int actionId){
+        dialogActionRunnableMap.remove(actionId);
+        return this;
+    }
+
+    public BottomDialog cleanAllAction(){
+        dialogActionRunnableMap.clear();
+        return this;
+    }
 }

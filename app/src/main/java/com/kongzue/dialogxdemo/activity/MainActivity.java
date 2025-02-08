@@ -504,23 +504,39 @@ public class MainActivity extends BaseActivity {
         btnMessageDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageDialog.show("标题", "这里是正文内容。", "确定").onShow(new DialogXRunnable<MessageDialog>() {
-                    @Override
-                    public void run(MessageDialog dialog) {
-                        tip("onShow");
-                    }
-                }).onDismiss(new DialogXRunnable<MessageDialog>() {
-                    @Override
-                    public void run(MessageDialog dialog) {
-                        tip("onDismiss");
-                    }
-                }).setTitleIcon(R.mipmap.img_demo_avatar).setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
-                    @Override
-                    public boolean onClick(MessageDialog baseDialog, View v) {
-                        PopTip.show("点击确定按钮");
-                        return false;
-                    }
-                });
+                MessageDialog.show("标题", "这里是正文内容。", "确定")
+                        .onShow(new DialogXRunnable<MessageDialog>() {
+                            @Override
+                            public void run(MessageDialog dialog) {
+                                tip("onShow");
+
+                                //预置操作：动作1
+                                dialog.setActionRunnable(1, new DialogXRunnable<MessageDialog>() {
+                                    @Override
+                                    public void run(MessageDialog dialog) {
+                                        tip("action 1 run!");
+                                        //举例：需要通过网络加载数据到 dialog 中显示
+                                    }
+                                });
+                                //执行动作1
+                                dialog.runAction(1);
+                            }
+                        }).onDismiss(new DialogXRunnable<MessageDialog>() {
+                            @Override
+                            public void run(MessageDialog dialog) {
+                                tip("onDismiss");
+                            }
+                        }).setTitleIcon(R.mipmap.img_demo_avatar)
+                        .setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                            @Override
+                            public boolean onClick(MessageDialog dialog, View v) {
+                                PopTip.show("点击确定按钮");
+                                //举例：点击ok按钮后执行了一些操作但需要在不关掉对话框情况下重新加载执行动作1
+                                //执行动作1
+                                dialog.runAction(1);
+                                return true;
+                            }
+                        });
             }
         });
 
