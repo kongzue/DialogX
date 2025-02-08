@@ -27,25 +27,22 @@ An easy-to-use dialog box component with better experience than native dialog bo
 
 ![DialogX](https://user-images.githubusercontent.com/10115359/229279713-79c43a63-1a0a-4f70-851f-0a0783b94b45.jpg)
 
-# Advantages of DialogX
+# DialogX Advantages
 
-DialogX is an important component of software that responds and gives feedback to user actions, and DialogX will help developers to do this quickly.
+Dialogs are a crucial part of software-user interaction, and DialogX makes it easy for developers to handle all of this. We are committed to creating a dialog component that is convenient to use anytime, anywhere, allowing developers to worry less and accomplish more. DialogX is not only user-friendly but also provides a wealth of customization interfaces, such as custom layouts, day-night mode switching, and the creation of exclusive app themes.
 
-We have tried to reduce the amount of worries and concerns developers have, and create a dialog component that can be used easily at any time and in any situation.
+### ✅ DialogX Highlights
 
-On the premise of ease of use, DialogX provides more personalized interfaces for developers to extend, including inserting custom layouts inside dialogs, switching between light and dark color modes, and even customizing custom themes to better fit the App UI.
-
-### ✅Features of DialogX
-
-- DialogX adopts a new implementation, the default View implementation is lighter, and you can also choose Window or DialogFragment implementation for freedom and flexibility.
-- DialogX is thread-independent, you can **start DialogX in any thread** and it will automatically run in the UI thread.
-- DialogX can be started **without context parameter** and provides a static method to start the dialog by default, which is more convenient to use.
-- More freedom, developers can easily customize the style of any component in the dialog box, including text style, button text style, menu text style, input text style, from large to title, small to prompt message can be modified as needed.
-- DialogX adopts **theme separation design**, which comes with Material theme by default and can optionally introduce other style themes such as IOS, Kongzue, MIUI, etc., greatly reducing the size of the App, while providing a theme interface, so you can fully implement a set of private themes if you have customization needs.
-- Lower coupling, less problems, DialogX allows you to **close the Activity while the dialog is running** without worrying about the WindowLeaked error that components like AlertDialog used to raise.
-- DialogX is richer in animation effects, the dialog start animation is realized by **non-linear animation**, and it comes with a coherent transition effect from waiting prompt to completion error animation, making your APP more dynamic.
-- All themes support both light and dark modes by default, just one click configuration can realize light and dark dialog box theme switching, more free layout content to meet the customization needs, DialogX also supports automatic adaptation to the system light and dark color mode switching, can automatically determine the light and dark color display effect switching according to the system settings.
-- It is easy to realize the lifecycle control and immersive adaptation of dialogs.
+- **Diverse Implementations**: DialogX defaults to a lighter View implementation but also supports other modes like Window or DialogFragment, offering flexibility and freedom.
+- **Thread Safety**: No matter which thread you start DialogX from, it will automatically run on the UI thread, eliminating thread-related concerns.
+- **One-Click Launch**: No need for a context parameter; just one line of code to launch the dialog—super convenient.
+- **Style Customization**: Customize the styles of all components, from titles to hints, including text, buttons, menus, input fields, or even inserting any custom layout.
+- **Multiple Themes**: Comes with a Material theme by default, with additional options like Material You, iOS, Kongzue, MIUI, and more. It also supports custom themes, helping to reduce app size.
+- **Low Coupling**: Even if the Activity is closed during runtime, DialogX can automatically destroy itself to avoid memory leaks like WindowLeaked.
+- **Rich Animations**: Utilizes non-linear animations and smooth transitions from loading to error states, making your app more dynamic.
+- **Light/Dark Mode**: Switch between light and dark themes with one click, automatically adapting to the system's light/dark mode to meet customization needs.
+- **Lifecycle and Immersive Support**: Easily manage dialog lifecycles and perfectly adapt to immersive experiences.
+- **Penetration Capabilities**: Two powerful features—data penetration (temporary storage locker) and action penetration (shortcut keys)—help you effortlessly achieve data transfer and flexible control, ensuring safety and reliability. 
 
 # DialogX
 
