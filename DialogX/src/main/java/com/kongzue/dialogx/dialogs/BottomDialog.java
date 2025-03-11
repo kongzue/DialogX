@@ -375,10 +375,10 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     BottomDialog.this.onDismiss(me);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     dialogImpl = null;
                     bottomDialogTouchEventInterceptor = null;
                     dialogLifecycleCallback = null;
-                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

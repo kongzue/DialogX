@@ -209,9 +209,9 @@ public class CustomDialog extends BaseDialog {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     CustomDialog.this.onDismiss(me);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
-                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

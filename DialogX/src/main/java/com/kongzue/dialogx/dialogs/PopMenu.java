@@ -492,11 +492,11 @@ public class PopMenu extends BaseDialog {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     PopMenu.this.onDismiss(me);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     menuListAdapter = null;
                     dialogImpl = null;
                     baseView(null);
                     dialogLifecycleCallback = null;
-                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

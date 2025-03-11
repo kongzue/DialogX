@@ -798,13 +798,13 @@ public class WaitDialog extends BaseDialog {
     public void cleanInstance() {
         isShow = false;
         getDialogLifecycleCallback().onDismiss(WaitDialog.this);
+        setLifecycleState(Lifecycle.State.DESTROYED);
         if (dialogImpl != null) dialogImpl.clear();
         dialogImpl = null;
         if (dialogView != null) dialogView.clear();
         dialogView = null;
         dialogLifecycleCallback = null;
         if (ownActivity != null) ownActivity.clear();
-        setLifecycleState(Lifecycle.State.DESTROYED);
         System.gc();
     }
 

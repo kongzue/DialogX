@@ -418,9 +418,9 @@ public class MessageDialog extends BaseDialog {
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     MessageDialog.this.onDismiss(me);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     dialogLifecycleCallback = null;
 
-                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });

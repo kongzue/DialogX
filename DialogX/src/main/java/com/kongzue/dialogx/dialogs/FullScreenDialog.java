@@ -209,10 +209,10 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                     isShow = false;
                     getDialogLifecycleCallback().onDismiss(me);
                     FullScreenDialog.this.onDismiss(me);
+                    setLifecycleState(Lifecycle.State.DESTROYED);
                     fullScreenDialogTouchEventInterceptor = null;
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
-                    setLifecycleState(Lifecycle.State.DESTROYED);
                     System.gc();
                 }
             });
