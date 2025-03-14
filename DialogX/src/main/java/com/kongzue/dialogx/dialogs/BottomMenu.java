@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -1576,6 +1577,16 @@ public class BottomMenu extends BottomDialog {
 
     public BottomMenu cleanAllAction(){
         dialogActionRunnableMap.clear();
+        return this;
+    }
+
+    // for BaseDialog use
+    protected void callDialogDismissPrivate(){
+        dismiss();
+    }
+
+    public BottomMenu bindDismissWithLifecycleOwner(LifecycleOwner owner){
+        super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }
 }

@@ -1155,4 +1155,19 @@ public abstract class BaseDialog implements LifecycleOwner {
         }
         return false;
     }
+
+    public abstract void callDialogDismiss();
+
+    protected void bindDismissWithLifecycleOwnerPrivate(LifecycleOwner owner) {
+        if (owner == null) return;
+        owner.getLifecycle().addObserver(new LifecycleEventObserver() {
+            @Override
+            public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
+                if (event == Lifecycle.Event.ON_STOP || event == Lifecycle.Event.ON_DESTROY) {
+                    callDialogDismiss();
+                    source.getLifecycle().removeObserver(this);
+                }
+            }
+        });
+    }
 }

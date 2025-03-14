@@ -23,7 +23,9 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -1425,13 +1427,23 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         return this;
     }
 
-    public BottomDialog cleanAction(int actionId){
+    public BottomDialog cleanAction(int actionId) {
         dialogActionRunnableMap.remove(actionId);
         return this;
     }
 
-    public BottomDialog cleanAllAction(){
+    public BottomDialog cleanAllAction() {
         dialogActionRunnableMap.clear();
+        return this;
+    }
+
+    // for BaseDialog use
+    public void callDialogDismiss() {
+        dismiss();
+    }
+
+    public BottomDialog bindDismissWithLifecycleOwner(LifecycleOwner owner) {
+        super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }
 }
