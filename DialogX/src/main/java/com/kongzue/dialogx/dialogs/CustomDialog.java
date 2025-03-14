@@ -157,7 +157,7 @@ public class CustomDialog extends BaseDialog {
     }
 
     private ViewTreeObserver viewTreeObserver;
-    private ViewTreeObserver.OnDrawListener baseViewDrawListener;
+    private ViewTreeObserver.OnPreDrawListener baseViewDrawListener;
 
     public class DialogImpl implements DialogConvertViewInterface {
 
@@ -311,9 +311,9 @@ public class CustomDialog extends BaseDialog {
                     };
 
                     viewTreeObserver = boxCustom.getViewTreeObserver();
-                    viewTreeObserver.addOnDrawListener(baseViewDrawListener = new ViewTreeObserver.OnDrawListener() {
+                    viewTreeObserver.addOnPreDrawListener(baseViewDrawListener = new ViewTreeObserver.OnPreDrawListener() {
                         @Override
-                        public void onDraw() {
+                        public boolean onPreDraw() {
                             int[] baseViewLocCache = new int[2];
                             if (baseView() != null) {
                                 baseView().getLocationInWindow(baseViewLocCache);
@@ -331,6 +331,7 @@ public class CustomDialog extends BaseDialog {
                                 viewTreeObserver = null;
                                 baseViewDrawListener = null;
                             }
+                            return true;
                         }
                     });
                     initSetCustomViewLayoutListener = true;
@@ -570,12 +571,12 @@ public class CustomDialog extends BaseDialog {
         }
     }
 
-    private void removeDrawListener(ViewTreeObserver viewTreeObserver, ViewTreeObserver.OnDrawListener listener) {
+    private void removeDrawListener(ViewTreeObserver viewTreeObserver, ViewTreeObserver.OnPreDrawListener listener) {
         if (viewTreeObserver == null || listener == null || !viewTreeObserver.isAlive()) {
             return;
         }
         try {
-            viewTreeObserver.removeOnDrawListener(listener);
+            viewTreeObserver.removeOnPreDrawListener(listener);
         } catch (Exception e) {
         }
     }
