@@ -42,8 +42,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -86,6 +84,7 @@ import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
+import com.kongzue.dialogx.interfaces.PopMoveDisplacementInterceptor;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -474,9 +473,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        BottomDialog dialog = null;
-        dialog.callDialogDismiss();
-        
         btnFullScreenDialogFragment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1261,10 +1257,81 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        PopTip.maxShowCount = 4;        //限制最大可显示数量
+
+        DialogX.globalStyle = new MaterialStyle() {
+            @Override
+            public PopTipSettings popTipSettings() {
+                return new PopTipSettings() {
+                    @Override
+                    public int layout(boolean light) {
+                        return R.layout.layout_dialogx_poptip_snackbar;
+                    }
+
+                    @Override
+                    public ALIGN align() {
+                        return ALIGN.BOTTOM;
+                    }
+
+                    @Override
+                    public int enterAnimResId(boolean light) {
+                        return com.kongzue.dialogx.R.anim.anim_dialogx_default_enter;
+                    }
+
+                    @Override
+                    public int exitAnimResId(boolean light) {
+                        return com.kongzue.dialogx.R.anim.anim_dialogx_default_exit;
+                    }
+                };
+            }
+        };
+
+        //重置位移动画位置
+        PopTip.moveUpDisplacementInterceptor = new PopMoveDisplacementInterceptor<PopTip>() {
+            @Override
+            public float resetAnimY(int index, PopTip dialog, float fromY, float toY, int dialogHeight, int allTipSize, boolean moveBack) {
+                if (moveBack) {
+                    return fromY - dialogHeight * 0.5f + 0.15f * (allTipSize - index - 1) * dialogHeight;
+                }else{
+                    return fromY + dialogHeight * 0.5f - 0.15f * (allTipSize - index - 1) * dialogHeight;
+                }
+            }
+
+            float zoomRatio = 0.03f;
+
+            @Override
+            public boolean animUpdater(int index, PopTip dialog, View dialogBody, float fromY, float toY, float progress, ValueAnimator animation, int allTipSize, boolean moveBack) {
+                if (moveBack){
+                    float originalScale = 1f - zoomRatio * (allTipSize - index - 1);
+                    float targetScale = originalScale * (1f - zoomRatio * progress);
+                    if (targetScale>1)targetScale=1;
+                    dialogBody.setScaleX(targetScale);
+                    dialogBody.setScaleY(targetScale);
+                    dialogBody.setAlpha(targetScale);
+                }else{
+                    float originalScale = 1f - zoomRatio * (allTipSize - index - 1);
+                    float currentScale = originalScale * (1f - zoomRatio * 1);
+                    float targetScale = currentScale + (originalScale - currentScale) * progress;
+
+                    if (index==0){
+                        log("originalScale=" + originalScale + " ("+index + "/" + allTipSize + ")"  + " targetScale="+targetScale + " progress="+progress);
+                    }
+
+                    if (targetScale > 1) targetScale = 1;
+                    dialogBody.setScaleX(targetScale);
+                    dialogBody.setScaleY(targetScale);
+                    dialogBody.setAlpha(targetScale);
+                }
+                return false;
+            }
+        };
+
         btnPoptip.setOnClickListener(new View.OnClickListener() {
+            int index;
             @Override
             public void onClick(View v) {
-                PopTip.show("这是一个提示");
+                index++;
+                PopTip.show("任务 " + index + " 已完成处理","撤销").setEnterAnimDuration(500).iconSuccess().noAutoDismiss();
             }
         });
 
