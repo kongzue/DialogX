@@ -37,6 +37,7 @@ import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
 import com.kongzue.dialogx.interfaces.SELECT_MODE;
 import com.kongzue.dialogx.util.BottomMenuArrayAdapter;
+import com.kongzue.dialogx.util.ItemDivider;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogListView;
 
@@ -62,6 +63,7 @@ public class BottomMenu extends BottomDialog {
     protected boolean showSelectedBackgroundTips = false;
     protected MenuItemLayoutRefreshCallback<BottomMenu> menuMenuItemLayoutRefreshCallback;
     protected Map<Integer, Boolean> menuUsability = new HashMap<Integer, Boolean>();
+    protected ItemDivider itemDivider;
 
     protected OnMenuItemClickListener<BottomMenu> onMenuItemClickListener;
 
@@ -672,6 +674,11 @@ public class BottomMenu extends BottomDialog {
                 });
             }
 
+        }
+
+        if (itemDivider != null) {
+            listView.setDivider(itemDivider.createDividerDrawable(getOwnActivity(), isLightTheme()));
+            listView.setDividerHeight(itemDivider.getWidth());
         }
         super.refreshUI();
     }

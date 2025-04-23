@@ -1287,7 +1287,7 @@ public class MainActivity extends BaseActivity {
         };
 
         //重置位移动画位置
-        PopTip.moveUpDisplacementInterceptor = new PopMoveDisplacementInterceptor<PopTip>() {
+        PopTip.moveDisplacementInterceptor = new PopMoveDisplacementInterceptor<PopTip>() {
             @Override
             public float resetAnimY(int index, PopTip dialog, float fromY, float toY, int dialogHeight, int allTipSize, boolean moveBack) {
                 if (moveBack) {
@@ -1464,7 +1464,7 @@ public class MainActivity extends BaseActivity {
                 }).setScrollableWhenContentLargeThanVisibleRange(false).show();
             }
         });
-
+        PopNotification.maxShowCount=3;
         btnPopnotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

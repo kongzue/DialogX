@@ -68,7 +68,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
     public static int overrideEnterAnimRes = 0;
     public static int overrideExitAnimRes = 0;
     public static int maxShowCount = Integer.MAX_VALUE;
-    public static PopMoveDisplacementInterceptor<PopTip> moveUpDisplacementInterceptor;
+    public static PopMoveDisplacementInterceptor<PopTip> moveDisplacementInterceptor;
 
     protected OnBindView<PopTip> onBindView;
     protected DialogLifecycleCallback<PopTip> dialogLifecycleCallback;
@@ -885,8 +885,8 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                             moveAimTop = bodyView.getY() - bodyView.getHeight() * 1.3f;
                             break;
                     }
-                    if (moveUpDisplacementInterceptor != null) {
-                        moveAimTop = moveUpDisplacementInterceptor.resetAnimY(popTipList == null ? 0 : popTipList.indexOf(me), me, bodyView.getY(), moveAimTop, (int) (bodyView.getHeight() / bodyView.getScaleY()), popTipList == null ? 1 : popTipList.size(), true);
+                    if (moveDisplacementInterceptor != null) {
+                        moveAimTop = moveDisplacementInterceptor.resetAnimY(popTipList == null ? 0 : popTipList.indexOf(me), me, bodyView.getY(), moveAimTop, (int) (bodyView.getHeight() / bodyView.getScaleY()), popTipList == null ? 1 : popTipList.size(), true);
                     }
                     if (bodyView.getTag() instanceof ValueAnimator) {
                         ((ValueAnimator) bodyView.getTag()).end();
@@ -906,7 +906,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                             View bodyView = getDialogImpl().boxBody;
                             float value = (Float) animation.getAnimatedValue();
                             float totalDistance = toY - fromY;
-                            if (moveUpDisplacementInterceptor != null && moveUpDisplacementInterceptor.animUpdater(popTipList == null ? 0 : popTipList.indexOf(me), me, bodyView, fromY, toY, Math.max(0f, Math.min(1f, (totalDistance == 0f ? 1f : (value - fromY) / totalDistance))), animation, popTipList == null ? 1 : countDisplayPopTipsNum(), true)) {
+                            if (moveDisplacementInterceptor != null && moveDisplacementInterceptor.animUpdater(popTipList == null ? 0 : popTipList.indexOf(me), me, bodyView, fromY, toY, Math.max(0f, Math.min(1f, (totalDistance == 0f ? 1f : (value - fromY) / totalDistance))), animation, popTipList == null ? 1 : countDisplayPopTipsNum(), true)) {
                                 return;
                             }
                             if (bodyView != null && bodyView.isAttachedToWindow()) {
@@ -949,8 +949,8 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                             moveAimTop = bodyView.getY() + bodyView.getHeight() * 1.3f;
                             break;
                     }
-                    if (moveUpDisplacementInterceptor != null) {
-                        moveAimTop = moveUpDisplacementInterceptor.resetAnimY(popTipList == null ? 0 : popTipList.indexOf(me), me, bodyView.getY(), moveAimTop, (int) (bodyView.getHeight() / bodyView.getScaleY()), popTipList == null ? 1 : popTipList.size(), false);
+                    if (moveDisplacementInterceptor != null) {
+                        moveAimTop = moveDisplacementInterceptor.resetAnimY(popTipList == null ? 0 : popTipList.indexOf(me), me, bodyView.getY(), moveAimTop, (int) (bodyView.getHeight() / bodyView.getScaleY()), popTipList == null ? 1 : popTipList.size(), false);
                     }
                     if (bodyView.getTag() instanceof ValueAnimator) {
                         ((ValueAnimator) bodyView.getTag()).end();
@@ -970,7 +970,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                             View bodyView = getDialogImpl().boxBody;
                             float value = (Float) animation.getAnimatedValue();
                             float totalDistance = toY - fromY;
-                            if (moveUpDisplacementInterceptor != null && moveUpDisplacementInterceptor.animUpdater(popTipList == null ? 0 : popTipList.indexOf(me), me, bodyView, fromY, toY, Math.max(0f, Math.min(1f, (totalDistance == 0f ? 1f : (value - fromY) / totalDistance))), animation, popTipList == null ? 1 : countDisplayPopTipsNum(), false)) {
+                            if (moveDisplacementInterceptor != null && moveDisplacementInterceptor.animUpdater(popTipList == null ? 0 : popTipList.indexOf(me), me, bodyView, fromY, toY, Math.max(0f, Math.min(1f, (totalDistance == 0f ? 1f : (value - fromY) / totalDistance))), animation, popTipList == null ? 1 : countDisplayPopTipsNum(), false)) {
                                 return;
                             }
                             if (bodyView != null && bodyView.isAttachedToWindow()) {
@@ -978,7 +978,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                             }
                         }
                     });
-                    valueAnimator.setDuration(enterAnimDuration == -1 ? 300 : enterAnimDuration).setInterpolator(new DecelerateInterpolator(2f));
+                    valueAnimator.setDuration(exitAnimDuration == -1 ? 300 : exitAnimDuration).setInterpolator(new AccelerateInterpolator(2f));
                     valueAnimator.start();
                 }
             });

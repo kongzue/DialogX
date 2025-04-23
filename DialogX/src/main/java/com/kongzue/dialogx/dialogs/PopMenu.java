@@ -43,6 +43,7 @@ import com.kongzue.dialogx.interfaces.OnBindView;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.util.DialogXViewLoc;
+import com.kongzue.dialogx.util.ItemDivider;
 import com.kongzue.dialogx.util.PopMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout;
@@ -91,6 +92,7 @@ public class PopMenu extends BaseDialog {
     protected MenuItemLayoutRefreshCallback<PopMenu> menuMenuItemLayoutRefreshCallback;
     protected int pressedIndex = -1;
     protected Map<Integer, Boolean> menuUsability = new HashMap<Integer, Boolean>();
+    protected ItemDivider itemDivider;
 
     protected int alignGravity = -1;                                        // 指定菜单相对 baseView 的位置
 
@@ -671,6 +673,11 @@ public class PopMenu extends BaseDialog {
                         ((BlurViewType) blurView).setOverlayColor(backgroundColor);
                     }
                 }
+            }
+
+            if (itemDivider != null) {
+                listMenu.setDivider(itemDivider.createDividerDrawable(getOwnActivity(), isLightTheme()));
+                listMenu.setDividerHeight(itemDivider.getWidth());
             }
 
             onDialogRefreshUI();
@@ -1536,23 +1543,32 @@ public class PopMenu extends BaseDialog {
         return this;
     }
 
-    public PopMenu cleanAction(int actionId){
+    public PopMenu cleanAction(int actionId) {
         dialogActionRunnableMap.remove(actionId);
         return this;
     }
 
-    public PopMenu cleanAllAction(){
+    public PopMenu cleanAllAction() {
         dialogActionRunnableMap.clear();
         return this;
     }
 
     // for BaseDialog use
-    public void callDialogDismiss(){
+    public void callDialogDismiss() {
         dismiss();
     }
 
-    public PopMenu bindDismissWithLifecycleOwner(LifecycleOwner owner){
+    public PopMenu bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
+        return this;
+    }
+
+    public ItemDivider getItemDivider() {
+        return itemDivider;
+    }
+
+    public PopMenu setItemDivider(ItemDivider itemDivider) {
+        this.itemDivider = itemDivider;
         return this;
     }
 }

@@ -37,6 +37,7 @@ import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
 import com.kongzue.dialogx.interfaces.SELECT_MODE;
 import com.kongzue.dialogx.util.BottomMenuArrayAdapter;
+import com.kongzue.dialogx.util.ItemDivider;
 import com.kongzue.dialogx.util.MessageMenuArrayAdapter;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogListView;
@@ -58,6 +59,7 @@ public class MessageMenu extends MessageDialog {
     protected boolean showSelectedBackgroundTips = false;
     protected MenuItemLayoutRefreshCallback<MessageMenu> menuMenuItemLayoutRefreshCallback;
     protected Map<Integer, Boolean> menuUsability = new HashMap<Integer, Boolean>();
+    protected ItemDivider itemDivider;
 
     protected OnMenuItemClickListener<MessageMenu> onMenuItemClickListener;
 
@@ -664,6 +666,11 @@ public class MessageMenu extends MessageDialog {
                 });
             }
 
+        }
+
+        if (itemDivider != null && listView != null) {
+            listView.setDivider(itemDivider.createDividerDrawable(getOwnActivity(), isLightTheme()));
+            listView.setDividerHeight(itemDivider.getWidth());
         }
         super.refreshUI();
     }
@@ -1562,24 +1569,32 @@ public class MessageMenu extends MessageDialog {
         return this;
     }
 
-    public MessageMenu cleanAction(int actionId){
+    public MessageMenu cleanAction(int actionId) {
         dialogActionRunnableMap.remove(actionId);
         return this;
     }
 
-    public MessageMenu cleanAllAction(){
+    public MessageMenu cleanAllAction() {
         dialogActionRunnableMap.clear();
         return this;
     }
 
     // for BaseDialog use
-    public void callDialogDismiss(){
+    public void callDialogDismiss() {
         dismiss();
     }
 
-    public MessageMenu bindDismissWithLifecycleOwner(LifecycleOwner owner){
+    public MessageMenu bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }
 
+    public ItemDivider getItemDivider() {
+        return itemDivider;
+    }
+
+    public MessageMenu setItemDivider(ItemDivider itemDivider) {
+        this.itemDivider = itemDivider;
+        return this;
+    }
 }
