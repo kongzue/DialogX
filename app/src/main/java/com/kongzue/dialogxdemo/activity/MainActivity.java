@@ -1257,81 +1257,13 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        PopTip.maxShowCount = 4;        //限制最大可显示数量
-
-        DialogX.globalStyle = new MaterialStyle() {
-            @Override
-            public PopTipSettings popTipSettings() {
-                return new PopTipSettings() {
-                    @Override
-                    public int layout(boolean light) {
-                        return R.layout.layout_dialogx_poptip_snackbar;
-                    }
-
-                    @Override
-                    public ALIGN align() {
-                        return ALIGN.BOTTOM;
-                    }
-
-                    @Override
-                    public int enterAnimResId(boolean light) {
-                        return com.kongzue.dialogx.R.anim.anim_dialogx_default_enter;
-                    }
-
-                    @Override
-                    public int exitAnimResId(boolean light) {
-                        return com.kongzue.dialogx.R.anim.anim_dialogx_default_exit;
-                    }
-                };
-            }
-        };
-
-        //重置位移动画位置
-        PopTip.moveDisplacementInterceptor = new PopMoveDisplacementInterceptor<PopTip>() {
-            @Override
-            public float resetAnimY(int index, PopTip dialog, float fromY, float toY, int dialogHeight, int allTipSize, boolean moveBack) {
-                if (moveBack) {
-                    return fromY - dialogHeight * 0.5f + 0.15f * (allTipSize - index - 1) * dialogHeight;
-                }else{
-                    return fromY + dialogHeight * 0.5f - 0.15f * (allTipSize - index - 1) * dialogHeight;
-                }
-            }
-
-            float zoomRatio = 0.03f;
-
-            @Override
-            public boolean animUpdater(int index, PopTip dialog, View dialogBody, float fromY, float toY, float progress, ValueAnimator animation, int allTipSize, boolean moveBack) {
-                if (moveBack){
-                    float originalScale = 1f - zoomRatio * (allTipSize - index - 1);
-                    float targetScale = originalScale * (1f - zoomRatio * progress);
-                    if (targetScale>1)targetScale=1;
-                    dialogBody.setScaleX(targetScale);
-                    dialogBody.setScaleY(targetScale);
-                    dialogBody.setAlpha(targetScale);
-                }else{
-                    float originalScale = 1f - zoomRatio * (allTipSize - index - 1);
-                    float currentScale = originalScale * (1f - zoomRatio * 1);
-                    float targetScale = currentScale + (originalScale - currentScale) * progress;
-
-                    if (index==0){
-                        log("originalScale=" + originalScale + " ("+index + "/" + allTipSize + ")"  + " targetScale="+targetScale + " progress="+progress);
-                    }
-
-                    if (targetScale > 1) targetScale = 1;
-                    dialogBody.setScaleX(targetScale);
-                    dialogBody.setScaleY(targetScale);
-                    dialogBody.setAlpha(targetScale);
-                }
-                return false;
-            }
-        };
-
         btnPoptip.setOnClickListener(new View.OnClickListener() {
             int index;
+
             @Override
             public void onClick(View v) {
                 index++;
-                PopTip.show("任务 " + index + " 已完成处理","撤销").setEnterAnimDuration(500).iconSuccess().noAutoDismiss();
+                PopTip.show("任务 " + index + " 已完成处理", "撤销").setEnterAnimDuration(500).iconSuccess().noAutoDismiss();
             }
         });
 
@@ -1464,7 +1396,7 @@ public class MainActivity extends BaseActivity {
                 }).setScrollableWhenContentLargeThanVisibleRange(false).show();
             }
         });
-        PopNotification.maxShowCount=3;
+
         btnPopnotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1490,7 +1422,7 @@ public class MainActivity extends BaseActivity {
                         toast("点击回复按钮");
                         return false;
                     }
-                }).showLong();
+                }).noAutoDismiss();
             }
         });
 
