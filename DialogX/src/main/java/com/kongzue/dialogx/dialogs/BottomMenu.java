@@ -1596,4 +1596,10 @@ public class BottomMenu extends BottomDialog {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }
+
+    public BottomMenu setItemDivider(ItemDivider itemDivider) {
+        this.itemDivider = itemDivider;
+        refreshUI();
+        return this;
+    }
 }

@@ -10,7 +10,10 @@ public class ItemDivider {
     private int left;       //左边距（dp）
     private int right;      //右边距（dp）
     private int width = 1;  //分割线宽度（px）
-    private int[] color = {0xFFF3F4F6, 0xFF3A3A3A};     //颜色
+    private int[] color = {0xFFDFE1E5, 0xFF3A3A3A};     //颜色
+
+    public ItemDivider() {
+    }
 
     public ItemDivider(int left, int right, int width) {
         this.left = left;
@@ -55,6 +58,11 @@ public class ItemDivider {
         } else {
             this.color[1] = color;
         }
+        return this;
+    }
+
+    public ItemDivider setColor(int color) {
+        this.color = new int[]{color, color};
         return this;
     }
 

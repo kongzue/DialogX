@@ -1595,6 +1595,7 @@ public class MessageMenu extends MessageDialog {
 
     public MessageMenu setItemDivider(ItemDivider itemDivider) {
         this.itemDivider = itemDivider;
+        refreshUI();
         return this;
     }
 }

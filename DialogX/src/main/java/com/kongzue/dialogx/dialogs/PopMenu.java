@@ -1569,6 +1569,7 @@ public class PopMenu extends BaseDialog {
 
     public PopMenu setItemDivider(ItemDivider itemDivider) {
         this.itemDivider = itemDivider;
+        refreshUI();
         return this;
     }
 }

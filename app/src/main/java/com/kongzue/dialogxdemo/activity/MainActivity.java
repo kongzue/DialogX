@@ -89,6 +89,7 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
 import com.kongzue.dialogx.style.MaterialStyle;
+import com.kongzue.dialogx.util.ItemDivider;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogxdemo.BuildConfig;
 import com.kongzue.dialogxdemo.R;
@@ -469,7 +470,7 @@ public class MainActivity extends BaseActivity {
                         btnSelectMenu.setText(text);
                         return false;
                     }
-                });
+                }).setItemDivider(new ItemDivider(15,15,1));
             }
         });
 
