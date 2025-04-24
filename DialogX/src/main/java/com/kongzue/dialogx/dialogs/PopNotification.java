@@ -409,7 +409,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
     public PopNotification show(Activity activity) {
         super.beforeShow();
-        if (getDialogView() != null) {
+        if (getDialogView() == null) {
             if (DialogX.onlyOnePopNotification) {
                 PopNotification oldInstance = null;
                 if (popNotificationList != null && !popNotificationList.isEmpty()) {

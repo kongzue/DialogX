@@ -375,7 +375,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
     public PopTip show(Activity activity) {
         super.beforeShow();
-        if (getDialogView() != null) {
+        if (getDialogView() == null) {
             if (DialogX.onlyOnePopTip) {
                 PopTip oldInstance = null;
                 if (popTipList != null && !popTipList.isEmpty()) {

@@ -1264,7 +1264,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 index++;
-                PopTip.show("任务 " + index + " 已完成处理", "撤销").setEnterAnimDuration(500).iconSuccess().noAutoDismiss();
+                PopTip.show("任务 " + index + " 已完成处理", "撤销").setEnterAnimDuration(500).iconSuccess();
             }
         });
 
@@ -1423,7 +1423,7 @@ public class MainActivity extends BaseActivity {
                         toast("点击回复按钮");
                         return false;
                     }
-                }).noAutoDismiss();
+                });
             }
         });
 
