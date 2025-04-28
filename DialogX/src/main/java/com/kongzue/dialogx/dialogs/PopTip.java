@@ -842,7 +842,9 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             return;
         }
         preRecycle = true;
-        getDialogView().setVisibility(View.GONE);
+        if (getDialogView() != null) {
+            getDialogView().setVisibility(View.GONE);
+        }
         CopyOnWriteArrayList<PopTip> copyPopTipList = new CopyOnWriteArrayList<>(popTipList);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             copyPopTipList.removeIf(Objects::isNull);

@@ -359,8 +359,8 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                 if (popNotificationList != null && !popNotificationList.isEmpty()) {
                     popNotificationList.get(popNotificationList.size() - 1).dismiss();
                 }
-            }else{
-                if (popNotificationList!=null) {
+            } else {
+                if (popNotificationList != null) {
                     CopyOnWriteArrayList<PopNotification> popNotificationCopyOnWriteArrayList = new CopyOnWriteArrayList<>(popNotificationList);
                     for (int i = 0; i < popNotificationCopyOnWriteArrayList.size(); i++) {
                         PopNotification popInstance = popNotificationCopyOnWriteArrayList.get(i);
@@ -671,7 +671,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             boxBody.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (dismissAnimFlag){
+                    if (dismissAnimFlag) {
                         log("skip click @ A");
                         return;
                     }
@@ -689,7 +689,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             txtDialogxButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (dismissAnimFlag){
+                    if (dismissAnimFlag) {
                         return;
                     }
                     haptic(v);
@@ -863,7 +863,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
 
         @Override
         public void doDismiss(final View v) {
-            if (PopNotification.this.preDismiss(PopNotification.this)){
+            if (PopNotification.this.preDismiss(PopNotification.this)) {
                 return;
             }
             if (v != null) v.setEnabled(false);
@@ -985,11 +985,13 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             return;
         }
         preRecycle = true;
-        getDialogView().setVisibility(View.GONE);
+        if (getDialogView() != null) {
+            getDialogView().setVisibility(View.GONE);
+        }
         CopyOnWriteArrayList<PopNotification> copyPopNotificationList = new CopyOnWriteArrayList<>(popNotificationList);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             copyPopNotificationList.removeIf(Objects::isNull);
-        }else{
+        } else {
             Iterator<PopNotification> iterator = copyPopNotificationList.iterator();
             while (iterator.hasNext()) {
                 if (iterator.next() == null) {
@@ -1680,7 +1682,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         return this;
     }
 
-    public PopNotification appendMessage(CharSequence message){
+    public PopNotification appendMessage(CharSequence message) {
         this.message = TextUtils.concat(this.message, message);
         refreshUI();
         return this;
@@ -1692,7 +1694,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getDialogView().setTranslationZ(orderIndex);
             } else {
-                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex("+orderIndex+") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
+                error("DialogX: " + dialogKey() + " 执行 .setThisOrderIndex(" + orderIndex + ") 失败：系统不支持此方法，SDK-API 版本必须大于 21（LOLLIPOP）");
             }
         }
         return this;
@@ -1708,22 +1710,22 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
         return this;
     }
 
-    public PopNotification cleanAction(int actionId){
+    public PopNotification cleanAction(int actionId) {
         dialogActionRunnableMap.remove(actionId);
         return this;
     }
 
-    public PopNotification cleanAllAction(){
+    public PopNotification cleanAllAction() {
         dialogActionRunnableMap.clear();
         return this;
     }
 
     // for BaseDialog use
-    public void callDialogDismiss(){
+    public void callDialogDismiss() {
         dismiss();
     }
 
-    public PopNotification bindDismissWithLifecycleOwner(LifecycleOwner owner){
+    public PopNotification bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }
