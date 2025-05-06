@@ -258,6 +258,12 @@ public class CustomDialog extends BaseDialog {
             if (boxRoot == null || getOwnActivity() == null) {
                 return;
             }
+
+            boxCustom.setMaxWidth(getMaxWidth());
+            boxCustom.setMaxHeight(getMaxHeight());
+            boxCustom.setMinimumWidth(getMinWidth());
+            boxCustom.setMinimumHeight(getMinHeight());
+
             boxRoot.setAutoUnsafePlacePadding(isEnableImmersiveMode());
             boxRoot.setRootPadding(screenPaddings[0], screenPaddings[1], screenPaddings[2], screenPaddings[3]);
             if (baseView() != null) {
@@ -1191,6 +1197,30 @@ public class CustomDialog extends BaseDialog {
 
     public CustomDialog bindDismissWithLifecycleOwner(LifecycleOwner owner){
         super.bindDismissWithLifecycleOwnerPrivate(owner);
+        return this;
+    }
+
+    public CustomDialog setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        refreshUI();
+        return this;
+    }
+
+    public CustomDialog setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
+        refreshUI();
+        return this;
+    }
+
+    public CustomDialog setMinHeight(int minHeight) {
+        this.minHeight = minHeight;
+        refreshUI();
+        return this;
+    }
+
+    public CustomDialog setMinWidth(int minWidth) {
+        this.minWidth = minWidth;
+        refreshUI();
         return this;
     }
 }
