@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 35
 
     defaultConfig {
         applicationId "com.kongzue.dialogxdemo"
         minSdkVersion 19
-        targetSdkVersion 31
+        targetSdkVersion 35
         versionCode BUILD_VERSION_INT as int
         versionName BUILD_VERSION
 
@@ -20,6 +20,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.kongzue.dialogxdemo'
 }
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])

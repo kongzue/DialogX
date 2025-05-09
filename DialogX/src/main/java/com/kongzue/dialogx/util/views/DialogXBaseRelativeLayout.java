@@ -1,5 +1,6 @@
 package com.kongzue.dialogx.util.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -16,9 +17,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 
+import androidx.activity.ComponentActivity;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Px;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -72,6 +77,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
     }
 
     private boolean isInited = false;
+    private OnBackPressedCallback backPressedCallback;
 
     private void init(AttributeSet attrs) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -161,6 +167,21 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
                     return 0;
                 }
             });
+
+            backPressedCallback = new OnBackPressedCallback(false) {
+                @Override
+                public void handleOnBackPressed() {
+                    log( "#DialogXBaseRelativeLayout >>> handleOnBackPressed (committed)");
+                    if (onBackPressedListener != null && !parentDialog.get().isHide()) {
+                        onBackPressedListener.onBackPressed();
+                    }
+                }
+
+                @Override
+                public void handleOnBackCancelled() {
+                    log( "#DialogXBaseRelativeLayout >>> handleOnBackCancelled");
+                }
+            };
         }
     }
 
@@ -215,7 +236,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        log("#dispatchKeyEvent: KeyCode=" + event.getKeyCode());
+        log("#DialogXBaseRelativeLayout >>> dispatchKeyEvent: KeyCode=" + event.getKeyCode());
         if (isAttachedToWindow() && event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_BACK && interceptBack) {
             if (onBackPressedListener != null && !parentDialog.get().isHide()) {
                 return onBackPressedListener.onBackPressed();
@@ -264,6 +285,24 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
             if (focusable) {
                 requestFocus();
             }
+            registerOnBackListener(true);
+        }
+    }
+
+    private void registerOnBackListener(boolean enable) {
+        if (enable){
+            if (getContext() instanceof ComponentActivity) {
+                ((ComponentActivity) getContext()).getOnBackPressedDispatcher().addCallback((LifecycleOwner) getContext(), backPressedCallback);
+                log("#DialogXBaseRelativeLayout >>> registerOnBackListener: BackPressedCallback added to dispatcher.");
+            } else if (getContext() instanceof AppCompatActivity && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                // 对于非 ComponentActivity 但 API 33+ 的情况
+                // 但最好让你的 Activity 继承自 ComponentActivity 或 FragmentActivity
+                ((AppCompatActivity) getContext()).getOnBackPressedDispatcher().addCallback(backPressedCallback);
+                log( "#DialogXBaseRelativeLayout >>> registerOnBackListener: BackPressedCallback added to dispatcher (API 33+).");
+            }
+        }else{
+            backPressedCallback.setEnabled(false);
+            backPressedCallback.remove();
         }
     }
 
