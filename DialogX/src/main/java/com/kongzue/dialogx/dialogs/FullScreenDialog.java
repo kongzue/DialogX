@@ -237,10 +237,10 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             fullScreenDialogTouchEventInterceptor = new FullScreenDialogTouchEventInterceptor(me, dialogImpl);
             boxRoot.setBkgAlpha(0f);
 
-            bkg.setY(boxRoot.getHeight());
             boxRoot.post(new Runnable() {
                 @Override
                 public void run() {
+                    bkg.setY(boxRoot.getHeight());
                     getDialogXAnimImpl().doShowAnim(me, bkg);
                     setLifecycleState(Lifecycle.State.RESUMED);
                 }
@@ -250,7 +250,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                 public void onChange(Rect unsafeRect) {
                     mUnsafeRect.set(unsafeRect);
                     makeEnterY();
-                    if (!enterAnimRunning) {
+                    if (!enterAnimRunning && getEnterY() != 0) {
                         bkg.setY(getEnterY());
                     }
                 }
@@ -294,7 +294,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                                 bkgEnterAimY = newBkgEnterAimY;
                                 //需要重新定义终点
                                 doShowAnimRepeat((int) oldVal, (int) newBkgEnterAimY, true);
-                            } else if (bkg.getY() != newBkgEnterAimY) {
+                            } else if (bkg.getY() != newBkgEnterAimY && newBkgEnterAimY != 0) {
                                 bkg.setY(newBkgEnterAimY);
                             }
                         }
@@ -1002,22 +1002,22 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         return this;
     }
 
-    public FullScreenDialog cleanAction(int actionId){
+    public FullScreenDialog cleanAction(int actionId) {
         dialogActionRunnableMap.remove(actionId);
         return this;
     }
 
-    public FullScreenDialog cleanAllAction(){
+    public FullScreenDialog cleanAllAction() {
         dialogActionRunnableMap.clear();
         return this;
     }
 
     // for BaseDialog use
-    public void callDialogDismiss(){
+    public void callDialogDismiss() {
         dismiss();
     }
 
-    public FullScreenDialog bindDismissWithLifecycleOwner(LifecycleOwner owner){
+    public FullScreenDialog bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }
