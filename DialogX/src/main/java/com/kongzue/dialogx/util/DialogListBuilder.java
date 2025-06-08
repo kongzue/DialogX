@@ -69,6 +69,8 @@ public class DialogListBuilder {
     }
 
     public void clear() {
-        dialogs.clear();
+        if (dialogs != null) {
+            dialogs.clear();
+        }
     }
 }

@@ -34,4 +34,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4+'
     compileOnly files('libs\\androidx-rs.jar')
     api files('libs\\DialogXInterface.jar')
+    testImplementation 'junit:junit:4.13.2'
 }
