@@ -753,6 +753,21 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
+    public BottomMenu setMenus(int... menuListResId) {
+        this.menuList = Arrays.asList(getTextArray(menuListResId));
+        this.menuListAdapter = null;
+        preRefreshUI();
+        return this;
+    }
+
+    private String[] getTextArray(int[] menuListResId) {
+        String[] result = new String[menuListResId == null ? 0 : menuListResId.length];
+        for (int i = 0; i < (menuListResId == null ? 0 : menuListResId.length); i++) {
+            result[i] = getString(menuListResId[i]);
+        }
+        return result;
+    }
+
     public OnIconChangeCallBack<BottomMenu> getOnIconChangeCallBack() {
         return onIconChangeCallBack;
     }
@@ -1577,22 +1592,22 @@ public class BottomMenu extends BottomDialog {
         return this;
     }
 
-    public BottomMenu cleanAction(int actionId){
+    public BottomMenu cleanAction(int actionId) {
         dialogActionRunnableMap.remove(actionId);
         return this;
     }
 
-    public BottomMenu cleanAllAction(){
+    public BottomMenu cleanAllAction() {
         dialogActionRunnableMap.clear();
         return this;
     }
 
     // for BaseDialog use
-    protected void callDialogDismissPrivate(){
+    protected void callDialogDismissPrivate() {
         dismiss();
     }
 
-    public BottomMenu bindDismissWithLifecycleOwner(LifecycleOwner owner){
+    public BottomMenu bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }

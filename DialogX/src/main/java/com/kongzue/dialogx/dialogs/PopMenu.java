@@ -1060,6 +1060,21 @@ public class PopMenu extends BaseDialog {
         return this;
     }
 
+    public PopMenu setMenus(int... menuListResId) {
+        this.menuList = Arrays.asList(getTextArray(menuListResId));
+        this.menuListAdapter = null;
+        refreshUI();
+        return this;
+    }
+
+    private String[] getTextArray(int[] menuListResId) {
+        String[] result = new String[menuListResId == null ? 0 : menuListResId.length];
+        for (int i = 0; i < (menuListResId == null ? 0 : menuListResId.length); i++) {
+            result[i] = getString(menuListResId[i]);
+        }
+        return result;
+    }
+
     public void refreshUI() {
         if (getDialogImpl() == null) {
             return;

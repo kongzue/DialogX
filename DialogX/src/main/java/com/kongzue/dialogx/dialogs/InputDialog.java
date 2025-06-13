@@ -59,12 +59,24 @@ public class InputDialog extends MessageDialog {
         this.message = message;
         this.okText = okText;
     }
+
+    public InputDialog(CharSequence title, CharSequence message) {
+        cancelable = DialogX.cancelable;
+        this.title = title;
+        this.message = message;
+    }
     
     public InputDialog(int titleResId, int messageResId, int okTextResId) {
         cancelable = DialogX.cancelable;
         this.title = getString(titleResId);
         this.message = getString(messageResId);
         this.okText = getString(okTextResId);
+    }
+
+    public InputDialog(int titleResId, int messageResId) {
+        cancelable = DialogX.cancelable;
+        this.title = getString(titleResId);
+        this.message = getString(messageResId);
     }
     
     public static InputDialog show(CharSequence title, CharSequence message, CharSequence okText) {

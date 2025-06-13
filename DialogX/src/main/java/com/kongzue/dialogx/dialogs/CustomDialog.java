@@ -65,9 +65,9 @@ public class CustomDialog extends BaseDialog {
     protected DialogXAnimInterface<CustomDialog> dialogXAnimImpl;
 
     protected WeakReference<View> baseViewWeakReference;
-    protected int alignViewGravity = -1;                                    //指定菜单相对 baseView 的位置
-    protected int width = -1;                                               //指定菜单宽度
-    protected int height = -1;                                              //指定菜单高度
+    protected int alignViewGravity = -1;                                    //指定对话框相对 baseView 的位置
+    protected int width = -1;                                               //指定对话框宽度
+    protected int height = -1;                                              //指定对话框高度
     protected int[] baseViewLoc;
     protected int[] marginRelativeBaseView = new int[4];
 
