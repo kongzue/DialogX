@@ -12,6 +12,7 @@
         android:layout_weight="1"
         android:gravity="left|center_vertical"
         android:maxLines="1"
+        android:layout_marginRight="10dp"
         android:text=""
         android:textColor="@color/white"
         android:textSize="16dp" />
@@ -20,7 +21,6 @@
         android:id="@+id/img_dialogx_menu_icon"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginLeft="8dp"
         android:padding="7dp" />
 
 </LinearLayout>

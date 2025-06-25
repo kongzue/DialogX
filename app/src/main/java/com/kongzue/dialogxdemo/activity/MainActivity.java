@@ -452,16 +452,16 @@ public class MainActivity extends BaseActivity {
                         .disableMenu("编辑", "删除")
                         .setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_edit, R.mipmap.img_dialogx_demo_delete, R.mipmap.img_dialogx_demo_share)
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
-                    @Override
-                    public boolean onClick(PopMenu dialog, CharSequence text, int index) {
-                        if (index == 0) {
-                            dialog.enableAllMenu();
-                            dialog.setMenuList(new String[]{"产品A", "产品B", "产品C"});
-                            return true;
-                        }
-                        return false;
-                    }
-                });
+                            @Override
+                            public boolean onClick(PopMenu dialog, CharSequence text, int index) {
+                                if (index == 0) {
+                                    dialog.enableAllMenu();
+                                    dialog.setMenuList(new String[]{"产品A", "产品B", "产品C"});
+                                    return true;
+                                }
+                                return false;
+                            }
+                        });
             }
         });
 
@@ -469,13 +469,15 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onClick(View view) {
-                PopMenu.show(view, new String[]{"选项1", "选项2", "选项3"}).setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
-                    @Override
-                    public boolean onClick(PopMenu dialog, CharSequence text, int index) {
-                        btnSelectMenu.setText(text);
-                        return false;
-                    }
-                }).setItemDivider(new ItemDivider(15,15,1));
+                PopMenu.show(view, new String[]{"选项1", "选项2", "选项3"})
+                        .setMenuTextInfo(new TextInfo().setGravity(Gravity.CENTER))
+                        .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
+                            @Override
+                            public boolean onClick(PopMenu dialog, CharSequence text, int index) {
+                                btnSelectMenu.setText(text);
+                                return false;
+                            }
+                        }).setItemDivider(new ItemDivider(15, 15, 1));
             }
         });
 
