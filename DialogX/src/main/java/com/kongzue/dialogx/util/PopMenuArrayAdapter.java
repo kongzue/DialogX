@@ -117,12 +117,12 @@ public class PopMenuArrayAdapter extends BaseAdapter {
             }
         }
         
+        int textColor = popMenu.isLightTheme() ? R.color.black90 : R.color.white90;
+        viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
+
         if (popMenu.getMenuTextInfo() != null) {
             useTextInfo(viewHolder.txtDialogxMenuText, popMenu.getMenuTextInfo());
         }
-        
-        int textColor = popMenu.isLightTheme() ? R.color.black90 : R.color.white90;
-        viewHolder.txtDialogxMenuText.setTextColor(context.getResources().getColor(textColor));
         
         if (popMenu.getOnIconChangeCallBack() != null) {
             if (popMenu.getOnIconChangeCallBack() instanceof MenuIconAdapter) {

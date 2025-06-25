@@ -1555,6 +1555,11 @@ public class PopMenu extends BaseDialog {
         return this;
     }
 
+    public PopMenu enableAllMenu() {
+        menuUsability.clear();
+        return this;
+    }
+
     public PopMenu disableMenu(int... menuIndex) {
         for (int i : menuIndex) {
             menuUsability.put(i, false);
@@ -1582,6 +1587,17 @@ public class PopMenu extends BaseDialog {
             }
         } else {
             error("DialogX: " + dialogKey() + " .disableMenu(" + menuText + ")执行失败，请先初始化菜单项 menuList");
+        }
+        return this;
+    }
+
+    public PopMenu disableAllMenu() {
+        if (menuList != null && !menuList.isEmpty()) {
+            for (int i = 0; i < menuList.size(); i++) {
+                menuUsability.put(i, false);
+            }
+        } else {
+            error("DialogX: " + dialogKey() + " .disableAllMenu()执行失败，请先初始化菜单项 menuList");
         }
         return this;
     }

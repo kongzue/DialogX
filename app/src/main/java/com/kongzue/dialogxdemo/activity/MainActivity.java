@@ -78,6 +78,7 @@ import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnBindingView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
@@ -447,10 +448,14 @@ public class MainActivity extends BaseActivity {
         btnContextMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopMenu.show("添加", "编辑", "删除", "分享").disableMenu("编辑", "删除").setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_edit, R.mipmap.img_dialogx_demo_delete, R.mipmap.img_dialogx_demo_share).setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
+                PopMenu.show("添加", "编辑", "删除", "分享")
+                        .disableMenu("编辑", "删除")
+                        .setIconResIds(R.mipmap.img_dialogx_demo_add, R.mipmap.img_dialogx_demo_edit, R.mipmap.img_dialogx_demo_delete, R.mipmap.img_dialogx_demo_share)
+                        .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                     @Override
                     public boolean onClick(PopMenu dialog, CharSequence text, int index) {
                         if (index == 0) {
+                            dialog.enableAllMenu();
                             dialog.setMenuList(new String[]{"产品A", "产品B", "产品C"});
                             return true;
                         }
