@@ -394,7 +394,7 @@ public class CustomDialog extends BaseDialog {
                         case LEFT:
                         case LEFT_CENTER:
                             rlp.removeRule(RelativeLayout.CENTER_IN_PARENT);
-                            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                            rlp.addRule(RelativeLayout.ALIGN_LEFT);
                             rlp.addRule(RelativeLayout.CENTER_VERTICAL);
                             break;
                         case RIGHT:
