@@ -488,7 +488,7 @@ public class MessageMenu extends MessageDialog {
 
     @Override
     protected void onDialogShow() {
-        if (getDialogImpl() != null) {
+        if (getDialogImpl() != null && getDialogImpl().boxList != null) {
             getDialogImpl().boxList.setVisibility(View.VISIBLE);
 
             if (!isAllowInterceptTouch()) {
