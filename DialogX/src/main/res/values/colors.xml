@@ -39,4 +39,9 @@
     <color name="dialogxWaitBkgDark">#232323</color>
 
     <color name="dialogxPopButtonBlueDark">#86B3D6</color>
+
+    <!-- color -->
+    <color name="color_picker_seekbar_background">#EBF1FD</color>
+    <color name="color_picker_title_color">#666666</color>
+    <color name="seekbar_progress">#4980F7</color>
 </resources>

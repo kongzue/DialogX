@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- color -->
+    <string name="color_hue">色相</string>
+    <string name="color_saturation">饱和度</string>
+    <string name="color_lightness">亮度</string>
+    <string name="color_alpha">不透明度</string>
+    <string name="color_display">#%1$s</string>
+</resources>

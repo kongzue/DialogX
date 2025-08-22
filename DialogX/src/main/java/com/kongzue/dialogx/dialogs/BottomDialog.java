@@ -23,12 +23,12 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
+import com.kongzue.dialogx.color.ColorPickerView;
 import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.BaseOnDialogClickCallback;
 import com.kongzue.dialogx.interfaces.BlurViewType;
@@ -355,6 +355,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         public TextView btnSelectOther;
         public TextView btnSelectPositive;
 
+        public ColorPickerView colorPickerView;
+
         private List<View> blurViews;
 
         public DialogImpl(View convertView) {
@@ -386,6 +388,8 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             btnSelectPositive = convertView.findViewById(R.id.btn_selectPositive);
             splitSelectPositive = convertView.findViewWithTag("imgPositiveButtonSplit");
             splitSelectOther = convertView.findViewWithTag("imgOtherButtonSplit");
+
+            colorPickerView = convertView.findViewById(R.id.color_picker);
 
             blurViews = findAllBlurView(convertView);
 
@@ -629,9 +633,9 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
             if (boxButton != null) {
                 boxButton.setVisibility((btnSelectNegative != null && btnSelectNegative.getVisibility() == View.VISIBLE) ||
-                        (btnSelectOther != null && btnSelectOther.getVisibility() == View.VISIBLE) ||
-                        (btnSelectPositive != null && btnSelectPositive.getVisibility() == View.VISIBLE) ?
-                        View.VISIBLE : View.GONE);
+                    (btnSelectOther != null && btnSelectOther.getVisibility() == View.VISIBLE) ||
+                    (btnSelectPositive != null && btnSelectPositive.getVisibility() == View.VISIBLE) ?
+                    View.VISIBLE : View.GONE);
             }
             if (titleIcon != null) {
                 int size = (int) txtDialogTitle.getTextSize();

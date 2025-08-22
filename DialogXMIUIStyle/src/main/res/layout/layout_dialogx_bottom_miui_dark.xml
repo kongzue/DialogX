@@ -75,6 +75,16 @@
                                 android:textColor="@color/dialogxMIUITextDark"
                                 android:textSize="16dp" />
 
+                            <com.kongzue.dialogx.color.ColorPickerView
+                                android:id="@+id/color_picker"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="26dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="26dp"
+                                android:paddingBottom="10dp"
+                                android:visibility="gone" />
+
                             <RelativeLayout
                                 android:id="@+id/box_custom"
                                 android:layout_width="match_parent"

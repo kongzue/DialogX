@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.kongzue.dialogx.util.views.DialogXBaseRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/box_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -82,6 +81,16 @@
                                 android:text="This is content text."
                                 android:textColor="@color/black70"
                                 android:textSize="16dp" />
+
+                            <com.kongzue.dialogx.color.ColorPickerView
+                                android:id="@+id/color_picker"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="20dp"
+                                android:paddingBottom="10dp"
+                                android:visibility="gone" />
 
                             <RelativeLayout
                                 android:id="@+id/box_custom"

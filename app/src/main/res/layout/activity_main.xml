@@ -652,6 +652,21 @@
                     app:cornerRadius="99dp" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_color_picker_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="10dp"
+                    android:text="颜色选择框"
+                    android:textColor="@color/white"
+                    android:textSize="13dp"
+                    android:textStyle="bold"
+                    app:cornerRadius="99dp" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_bottom_menu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

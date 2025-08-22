@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- color -->
+    <color name="color_picker_seekbar_background">#29354D</color>
+    <color name="color_picker_title_color">#929292</color>
+    <color name="seekbar_progress">#4078EF</color>
+</resources>

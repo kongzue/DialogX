@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/ColorPickerTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color_hue" />
+
+    <com.kongzue.dialogx.color.ColorPickerHue
+        android:id="@+id/color_hue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/color_picker_margin_top"
+        android:layout_marginBottom="@dimen/color_picker_margin_bottom" />
+
+    <TextView
+        style="@style/ColorPickerTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color_saturation" />
+
+    <com.kongzue.dialogx.color.ColorPickerSaturation
+        android:id="@+id/color_saturation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/color_picker_margin_top"
+        android:layout_marginBottom="@dimen/color_picker_margin_bottom" />
+
+    <TextView
+        style="@style/ColorPickerTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color_lightness" />
+
+    <com.kongzue.dialogx.color.ColorPickerLightness
+        android:id="@+id/color_lightness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/color_picker_margin_top"
+        android:layout_marginBottom="@dimen/color_picker_margin_bottom" />
+
+    <TextView
+        style="@style/ColorPickerTitleStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/color_alpha" />
+
+    <com.kongzue.dialogx.color.ColorPickerAlpha
+        android:id="@+id/color_alpha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/color_picker_margin_top"
+        android:layout_marginBottom="@dimen/color_picker_margin_bottom" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/color_picker_expand_margin"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/color_view"
+            android:layout_width="@dimen/color_picker_view_width"
+            android:layout_height="@dimen/color_picker_view_height"
+            android:layout_weight="0" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.8888" />
+
+        <EditText
+            android:id="@+id/color_edit"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/color_picker_edit_height"
+            android:layout_weight="1" />
+    </LinearLayout>
+</merge>

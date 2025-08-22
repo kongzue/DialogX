@@ -34,4 +34,12 @@
         <item name="android:taskToBackEnterAnimation">@null</item>
         <item name="android:taskToBackExitAnimation">@null</item>
     </style>
+
+    <style name="ColorPickerTitleStyle">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:scrollbars">none</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/color_picker_title</item>
+        <item name="android:textColor">@color/color_picker_title_color</item>
+    </style>
 </resources>

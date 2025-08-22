@@ -14,15 +14,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.kongzue.dialogx.kongzuetheme'
 }
+
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+    archiveClassifier.set("sources")
+    // classifier = 'sources'
 }
 
 artifacts {
     archives sourcesJar
 }
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(path: ':DialogX')

@@ -20,6 +20,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.kongzue.dialogxdemo'
 }
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])

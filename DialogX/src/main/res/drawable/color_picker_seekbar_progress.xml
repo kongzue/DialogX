@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@android:id/background"
+        android:gravity="center|fill_horizontal">
+        <shape>
+            <corners android:radius="@dimen/color_picker_seekbar_radius" />
+            <solid android:color="@color/color_picker_seekbar_background" />
+            <size android:height="@dimen/color_picker_seekbar_height" />
+        </shape>
+    </item>
+
+    <item
+        android:id="@android:id/progress"
+        android:gravity="center|fill_horizontal">
+        <clip>
+            <shape>
+                <corners android:radius="@dimen/color_picker_seekbar_radius" />
+                <solid android:color="@color/seekbar_progress" />
+                <size android:height="@dimen/color_picker_seekbar_height" />
+            </shape>
+        </clip>
+    </item>
+</layer-list>

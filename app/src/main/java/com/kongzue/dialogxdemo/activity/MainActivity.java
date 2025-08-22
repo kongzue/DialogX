@@ -58,6 +58,7 @@ import com.kongzue.baseframework.util.JumpParameter;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.BottomDialog;
 import com.kongzue.dialogx.dialogs.BottomMenu;
+import com.kongzue.dialogx.dialogs.ColorPickerDialog;
 import com.kongzue.dialogx.dialogs.CustomDialog;
 import com.kongzue.dialogx.dialogs.FullScreenDialog;
 import com.kongzue.dialogx.dialogs.GuideDialog;
@@ -78,14 +79,12 @@ import com.kongzue.dialogx.interfaces.MenuItemTextInfoInterceptor;
 import com.kongzue.dialogx.interfaces.OnBackPressedListener;
 import com.kongzue.dialogx.interfaces.OnBackgroundMaskClickListener;
 import com.kongzue.dialogx.interfaces.OnBindView;
-import com.kongzue.dialogx.interfaces.OnBindingView;
 import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnIconChangeCallBack;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuItemSelectListener;
-import com.kongzue.dialogx.interfaces.PopMoveDisplacementInterceptor;
 import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.style.KongzueStyle;
 import com.kongzue.dialogx.style.MIUIStyle;
@@ -148,6 +147,7 @@ public class MainActivity extends BaseActivity {
     private MaterialButton btnPopnotificationBigMessage;
     private MaterialButton btnPopnotificationOverlay;
     private MaterialButton btnBottomDialog;
+    private MaterialButton btnColorPickerDialog;
     private MaterialButton btnBottomMenu;
     private MaterialButton btnBottomReply;
     private MaterialButton btnBottomSelectMenu;
@@ -212,6 +212,7 @@ public class MainActivity extends BaseActivity {
         btnPopnotificationBigMessage = findViewById(R.id.btn_popnotification_bigMessage);
         btnPopnotificationOverlay = findViewById(R.id.btn_popnotification_overlay);
         btnBottomDialog = findViewById(R.id.btn_bottom_dialog);
+        btnColorPickerDialog = findViewById(R.id.btn_color_picker_dialog);
         btnBottomMenu = findViewById(R.id.btn_bottom_menu);
         btnBottomReply = findViewById(R.id.btn_bottom_reply);
         btnBottomSelectMenu = findViewById(R.id.btn_bottom_select_menu);
@@ -745,6 +746,29 @@ public class MainActivity extends BaseActivity {
                         });
                     }
                 }).setDialogLifecycleCallback(new BottomDialogSlideEventLifecycleCallback<BottomDialog>() {
+                    @Override
+                    public boolean onSlideClose(BottomDialog dialog) {
+                        log("#onSlideClose");
+                        return super.onSlideClose(dialog);
+                    }
+
+                    @Override
+                    public boolean onSlideTouchEvent(BottomDialog dialog, View v, MotionEvent event) {
+                        log("#onSlideTouchEvent: action=" + event.getAction() + " y=" + event.getY());
+                        return super.onSlideTouchEvent(dialog, v, event);
+                    }
+                }).show();
+            }
+        });
+
+        btnColorPickerDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String s = rdoMaterial.isChecked() ? "你可以向下滑动来关闭这个对话框" : "你可以点击空白区域或返回键来关闭这个对话框";
+                new ColorPickerDialog("标题", "这里是对话框内容。\n" + s)
+                    .setValue(Color.parseColor("#099CFC"))
+                    .setHapticFeedbackEnabled(true)
+                    .setDialogLifecycleCallback(new BottomDialogSlideEventLifecycleCallback<BottomDialog>() {
                     @Override
                     public boolean onSlideClose(BottomDialog dialog) {
                         log("#onSlideClose");

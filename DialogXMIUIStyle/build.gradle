@@ -14,10 +14,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    namespace 'com.kongzue.dialogx.miuistyle'
 }
+
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+    archiveClassifier.set("sources")
+    // classifier = 'sources'
 }
 
 artifacts {
