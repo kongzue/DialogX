@@ -121,7 +121,7 @@ public class ProgressView extends View implements ProgressViewInterface {
                 rotateAnimator.addUpdateListener(new DialogXValueAnimator.ValueUpdateListener() {
                     @Override
                     public void onValueUpdate(float animatedValue) {
-                        if (!isAttachedToWindow()){
+                        if (!isAttachedToWindow()) {
                             return;
                         }
                         currentRotateDegrees = animatedValue;
@@ -352,6 +352,7 @@ public class ProgressView extends View implements ProgressViewInterface {
     private Interpolator interpolator;
 
     public void success() {
+        if (status == STATUS_SUCCESS) return;
         if (status == STATUS_PROGRESSING) {
             progress(1f);
             waitArticulationAnimationRunnable = new Runnable() {
@@ -366,6 +367,7 @@ public class ProgressView extends View implements ProgressViewInterface {
     }
 
     public void warning() {
+        if (status == STATUS_WARNING) return;
         if (status == STATUS_PROGRESSING) {
             progress(1f);
             waitArticulationAnimationRunnable = new Runnable() {
@@ -380,6 +382,7 @@ public class ProgressView extends View implements ProgressViewInterface {
     }
 
     public void error() {
+        if (status == STATUS_ERROR) return;
         if (status == STATUS_PROGRESSING) {
             progress(1f);
             waitArticulationAnimationRunnable = new Runnable() {
@@ -455,6 +458,7 @@ public class ProgressView extends View implements ProgressViewInterface {
     }
 
     public void loading() {
+        if (status == STATUS_LOADING) return;
         noShowLoading = false;
         successStep = 0;
         line1X = 0;
