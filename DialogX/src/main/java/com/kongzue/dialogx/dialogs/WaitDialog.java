@@ -373,7 +373,7 @@ public class WaitDialog extends BaseDialog {
         private int layoutResId;
 
         public DialogImpl(int layoutResId) {
-            this.layoutResId = layoutResId;
+            this.layoutResId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutResId;
         }
 
         public void lazyCreate() {
@@ -1342,6 +1342,17 @@ public class WaitDialog extends BaseDialog {
 
     public WaitDialog bindDismissWithLifecycleOwner(LifecycleOwner owner){
         super.bindDismissWithLifecycleOwnerPrivate(owner);
+        return this;
+    }
+
+    public WaitDialog setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public WaitDialog setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
         return this;
     }
 }

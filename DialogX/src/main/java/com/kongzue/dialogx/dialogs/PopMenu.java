@@ -255,6 +255,7 @@ public class PopMenu extends BaseDialog {
                     layoutId = getStyle().popMenuSettings().layout(isLightTheme());
                 }
             }
+            layoutId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutId;
 
             View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
@@ -311,6 +312,7 @@ public class PopMenu extends BaseDialog {
                     layoutId = getStyle().popMenuSettings().layout(isLightTheme());
                 }
             }
+            layoutId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutId;
 
             View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
@@ -384,14 +386,10 @@ public class PopMenu extends BaseDialog {
                 calY = (Math.max(0, baseViewTop + baseView().getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
             }
             if (isAlignGravity(Gravity.CENTER_HORIZONTAL)) {
-                calX = (Math.max(0, baseViewLeft + (
-                        getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0
-                )));
+                calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
             }
             if (isAlignGravity(Gravity.CENTER)) {
-                calX = (Math.max(0, baseViewLeft + (
-                        getWidth() > 0 ? (baseView().getMeasuredWidth() / 2 - getWidth() / 2) : 0
-                )));
+                calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? (baseView().getMeasuredWidth() / 2 - getWidth() / 2) : 0)));
                 calY = (Math.max(0, baseViewTop + baseView().getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
             }
             if (overlayBaseView) {
@@ -399,9 +397,7 @@ public class PopMenu extends BaseDialog {
                 if (isAlignGravity(Gravity.TOP)) {
                     calY = (baseViewTop + baseView().getMeasuredHeight() - boxBody.getHeight());
                     if (calX == 0) {
-                        calX = (Math.max(0, baseViewLeft + (
-                                getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0
-                        )));
+                        calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
                     }
                 }
                 if (isAlignGravity(Gravity.LEFT)) {
@@ -419,18 +415,14 @@ public class PopMenu extends BaseDialog {
                 if (isAlignGravity(Gravity.BOTTOM)) {
                     calY = baseViewTop;
                     if (calX == 0) {
-                        calX = (Math.max(0, baseViewLeft + (
-                                getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0
-                        )));
+                        calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
                     }
                 }
             } else {
                 if (isAlignGravity(Gravity.TOP)) {
                     calY = (Math.max(0, baseViewTop - boxBody.getHeight()));
                     if (calX == 0) {
-                        calX = (Math.max(0, baseViewLeft + (
-                                getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0
-                        )));
+                        calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
                     }
                 }
                 if (isAlignGravity(Gravity.LEFT)) {
@@ -448,9 +440,7 @@ public class PopMenu extends BaseDialog {
                 if (isAlignGravity(Gravity.BOTTOM)) {
                     calY = (Math.max(0, baseViewTop + baseView().getHeight()));
                     if (calX == 0) {
-                        calX = (Math.max(0, baseViewLeft + (
-                                getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0
-                        )));
+                        calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
                     }
                 }
             }
@@ -902,10 +892,7 @@ public class PopMenu extends BaseDialog {
                         exitAnim.setDuration(exitAnimDuration);
                         boxBody.startAnimation(exitAnim);
 
-                        boxRoot.animate()
-                                .alpha(0f)
-                                .setInterpolator(new AccelerateInterpolator())
-                                .setDuration(exitAnimDuration);
+                        boxRoot.animate().alpha(0f).setInterpolator(new AccelerateInterpolator()).setDuration(exitAnimDuration);
 
                         ValueAnimator bkgAlpha = ValueAnimator.ofFloat(1, 0f);
                         bkgAlpha.setDuration(exitAnimDuration);
@@ -1658,6 +1645,17 @@ public class PopMenu extends BaseDialog {
     public PopMenu setItemDivider(ItemDivider itemDivider) {
         this.itemDivider = itemDivider;
         refreshUI();
+        return this;
+    }
+
+    public PopMenu setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public PopMenu setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
         return this;
     }
 }

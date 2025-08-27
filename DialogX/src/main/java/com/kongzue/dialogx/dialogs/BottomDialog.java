@@ -300,6 +300,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (style.overrideBottomDialogRes() != null) {
                 layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
             }
+            layoutId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutId;
 
             View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
@@ -318,6 +319,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
             if (style.overrideBottomDialogRes() != null) {
                 layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
             }
+            layoutId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutId;
 
             View dialogView = createView(layoutId);
             dialogImpl = new DialogImpl(dialogView);
@@ -1237,6 +1239,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
         if (style.overrideBottomDialogRes() != null) {
             layoutId = style.overrideBottomDialogRes().overrideDialogLayout(isLightTheme());
         }
+        layoutId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutId;
 
         enterAnimDuration = 0;
         View dialogView = createView(layoutId);
@@ -1524,6 +1527,17 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
 
     public BottomDialog bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
+        return this;
+    }
+
+    public BottomDialog setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public BottomDialog setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
         return this;
     }
 }

@@ -849,4 +849,15 @@ public class GuideDialog extends CustomDialog {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }
+
+    public GuideDialog setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public GuideDialog setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
+        return this;
+    }
 }

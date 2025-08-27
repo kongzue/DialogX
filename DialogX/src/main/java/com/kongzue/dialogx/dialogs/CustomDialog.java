@@ -134,7 +134,7 @@ public class CustomDialog extends BaseDialog {
         }
         super.beforeShow();
         if (getDialogView() == null) {
-            View dialogView = createView(R.layout.layout_dialogx_custom);
+            View dialogView = createView(getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : R.layout.layout_dialogx_custom);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
             show(dialogView);
@@ -147,7 +147,7 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog show(Activity activity) {
         super.beforeShow();
         if (getDialogView() == null) {
-            View dialogView = createView(R.layout.layout_dialogx_custom);
+            View dialogView = createView(getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : R.layout.layout_dialogx_custom);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
             show(activity, dialogView);
@@ -856,7 +856,7 @@ public class CustomDialog extends BaseDialog {
         }
 
         enterAnimDuration = 0;
-        View dialogView = createView(R.layout.layout_dialogx_custom);
+        View dialogView = createView(getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : R.layout.layout_dialogx_custom);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
@@ -1221,6 +1221,17 @@ public class CustomDialog extends BaseDialog {
     public CustomDialog setMinWidth(int minWidth) {
         this.minWidth = minWidth;
         refreshUI();
+        return this;
+    }
+
+    public CustomDialog setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public CustomDialog setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
         return this;
     }
 }

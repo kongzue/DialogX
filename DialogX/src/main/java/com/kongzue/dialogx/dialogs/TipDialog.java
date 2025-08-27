@@ -310,4 +310,15 @@ public class TipDialog extends WaitDialog {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
         return this;
     }
+
+    public TipDialog setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public TipDialog setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
+        return this;
+    }
 }

@@ -363,6 +363,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                         overrideExitDuration
                 ) : exitAnimDuration;
             }
+            layoutResId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutResId;
             View dialogView = createView(layoutResId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
@@ -432,6 +433,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                         overrideExitDuration
                 ) : exitAnimDuration;
             }
+            layoutResId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutResId;
             View dialogView = createView(layoutResId);
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
@@ -1285,6 +1287,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
             ) : exitAnimDuration;
         }
         enterAnimDuration = 0;
+        layoutResId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : layoutResId;
         View dialogView = createView(layoutResId);
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
@@ -1561,6 +1564,17 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
 
     public PopTip bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
+        return this;
+    }
+
+    public PopTip setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public PopTip setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
         return this;
     }
 }

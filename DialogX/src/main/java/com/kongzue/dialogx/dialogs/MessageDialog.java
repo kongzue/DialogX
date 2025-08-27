@@ -50,7 +50,6 @@ import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
 import com.kongzue.dialogx.interfaces.OnMenuButtonClickListener;
 import com.kongzue.dialogx.interfaces.ScrollController;
-import com.kongzue.dialogx.style.MaterialStyle;
 import com.kongzue.dialogx.util.InputInfo;
 import com.kongzue.dialogx.util.TextInfo;
 import com.kongzue.dialogx.util.views.DialogScrollView;
@@ -246,7 +245,7 @@ public class MessageDialog extends BaseDialog {
         }
         super.beforeShow();
         if (getDialogView() == null) {
-            int layoutId = style.layout(isLightTheme());
+            int layoutId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : style.layout(isLightTheme());
             layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
             View dialogView = createView(layoutId);
@@ -262,7 +261,7 @@ public class MessageDialog extends BaseDialog {
     public void show(Activity activity) {
         super.beforeShow();
         if (getDialogView() == null) {
-            int layoutId = style.layout(isLightTheme());
+            int layoutId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : style.layout(isLightTheme());
             layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
             View dialogView = createView(layoutId);
@@ -1336,7 +1335,7 @@ public class MessageDialog extends BaseDialog {
         if (getDialogImpl().boxList != null) {
             getDialogImpl().boxList.removeAllViews();
         }
-        int layoutId = style.layout(isLightTheme());
+        int layoutId = getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) :  style.layout(isLightTheme());
         layoutId = layoutId == 0 ? (isLightTheme() ? R.layout.layout_dialogx_material : R.layout.layout_dialogx_material_dark) : layoutId;
 
         enterAnimDuration = 0;
@@ -1590,23 +1589,34 @@ public class MessageDialog extends BaseDialog {
         return this;
     }
 
-    public MessageDialog cleanAction(int actionId){
+    public MessageDialog cleanAction(int actionId) {
         dialogActionRunnableMap.remove(actionId);
         return this;
     }
 
-    public MessageDialog cleanAllAction(){
+    public MessageDialog cleanAllAction() {
         dialogActionRunnableMap.clear();
         return this;
     }
 
     // for BaseDialog use
-    public void callDialogDismiss(){
+    public void callDialogDismiss() {
         dismiss();
     }
 
-    public MessageDialog bindDismissWithLifecycleOwner(LifecycleOwner owner){
+    public MessageDialog bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
+        return this;
+    }
+
+    public MessageDialog setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public MessageDialog setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
         return this;
     }
 }

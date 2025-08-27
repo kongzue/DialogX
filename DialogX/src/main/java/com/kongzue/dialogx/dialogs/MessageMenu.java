@@ -1598,4 +1598,15 @@ public class MessageMenu extends MessageDialog {
         refreshUI();
         return this;
     }
+
+    public MessageMenu setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public MessageMenu setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
+        return this;
+    }
 }

@@ -111,7 +111,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
         }
         super.beforeShow();
         if (getDialogView() == null) {
-            View dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+            View dialogView = createView(getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : (isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark));
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
             show(dialogView);
@@ -124,7 +124,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
     public void show(Activity activity) {
         super.beforeShow();
         if (getDialogView() == null) {
-            View dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+            View dialogView = createView(getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : (isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark));
             dialogImpl = new DialogImpl(dialogView);
             if (dialogView != null) dialogView.setTag(me);
             show(activity, dialogView);
@@ -713,7 +713,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
             getDialogImpl().boxCustom.removeAllViews();
         }
         enterAnimDuration = 0;
-        View dialogView = createView(isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark);
+        View dialogView = createView(getCustomDialogLayoutResId(isLightTheme()) != 0 ? getCustomDialogLayoutResId(isLightTheme()) : (isLightTheme() ? R.layout.layout_dialogx_fullscreen : R.layout.layout_dialogx_fullscreen_dark));
         dialogImpl = new DialogImpl(dialogView);
         if (dialogView != null) dialogView.setTag(me);
         show(dialogView);
@@ -1019,6 +1019,17 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
 
     public FullScreenDialog bindDismissWithLifecycleOwner(LifecycleOwner owner) {
         super.bindDismissWithLifecycleOwnerPrivate(owner);
+        return this;
+    }
+
+    public FullScreenDialog setCustomDialogLayoutResId(int customDialogLayoutId) {
+        this.customDialogLayoutResId[0] = customDialogLayoutId;
+        this.customDialogLayoutResId[1] = customDialogLayoutId;
+        return this;
+    }
+
+    public FullScreenDialog setCustomDialogLayoutResId(int customDialogLayoutId, boolean isLightTheme) {
+        this.customDialogLayoutResId[isLightTheme ? 0 : 1] = customDialogLayoutId;
         return this;
     }
 }
