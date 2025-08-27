@@ -1164,7 +1164,7 @@ public abstract class BaseDialog implements LifecycleOwner {
         owner.getLifecycle().addObserver(new LifecycleEventObserver() {
             @Override
             public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
-                if (event == Lifecycle.Event.ON_STOP || event == Lifecycle.Event.ON_DESTROY) {
+                if (event == Lifecycle.Event.ON_DESTROY) {
                     callDialogDismiss();
                     source.getLifecycle().removeObserver(this);
                 }
