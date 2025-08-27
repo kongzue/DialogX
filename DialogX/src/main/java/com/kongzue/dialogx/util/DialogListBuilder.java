@@ -1,5 +1,7 @@
 package com.kongzue.dialogx.util;
 
+import android.util.Log;
+
 import com.kongzue.dialogx.interfaces.BaseDialog;
 
 import java.util.ArrayList;
@@ -50,9 +52,7 @@ public class DialogListBuilder {
         if (dialogs == null || dialogs.isEmpty()) {
             return;
         }
-        while (!dialogs.isEmpty() && dialogs.get(0) == null) {
-            dialogs.remove(0);
-        }
+        dialogs.remove(0);
         if (!dialogs.isEmpty() && dialogs.get(0) != null) {
             dialogs.get(0).show();
         }
