@@ -421,7 +421,7 @@ public class MessageDialog extends BaseDialog {
                     setLifecycleState(Lifecycle.State.DESTROYED);
                     dialogLifecycleCallback = null;
 
-                    System.gc();
+                    BaseDialog.gc();
                 }
             });
 

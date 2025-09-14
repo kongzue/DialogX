@@ -463,7 +463,7 @@ public class BottomDialog extends BaseDialog implements DialogXBaseBottomDialog 
                     dialogImpl = null;
                     bottomDialogTouchEventInterceptor = null;
                     dialogLifecycleCallback = null;
-                    System.gc();
+                    BaseDialog.gc();
                 }
             });
 

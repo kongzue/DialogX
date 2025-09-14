@@ -214,7 +214,7 @@ public class FullScreenDialog extends BaseDialog implements DialogXBaseBottomDia
                     fullScreenDialogTouchEventInterceptor = null;
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
-                    System.gc();
+                    BaseDialog.gc();
                 }
             });
 

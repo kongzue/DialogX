@@ -509,7 +509,13 @@ public abstract class BaseDialog implements LifecycleOwner {
             activityWeakReference.clear();
         }
         activityWeakReference = null;
-        System.gc();
+        BaseDialog.gc();
+    }
+
+    public static void gc() {
+        if (DialogX.autoGC){
+            System.gc();
+        }
     }
 
     protected abstract void shutdown();

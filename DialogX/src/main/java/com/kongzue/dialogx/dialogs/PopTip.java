@@ -570,7 +570,7 @@ public class PopTip extends BaseDialog implements NoTouchInterface {
                     PopTip.this.onDismiss(me);
                     setLifecycleState(Lifecycle.State.DESTROYED);
                     dialogImpl = null;
-                    System.gc();
+                    BaseDialog.gc();
                 }
             });
 

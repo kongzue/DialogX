@@ -214,4 +214,7 @@ public class DialogX {
 
     // 警告提示框默认文本
     public static CharSequence defaultTipDialogWarningText;
+
+    // 销毁对话框时自动回收内存
+    public static boolean autoGC;
 }

@@ -213,7 +213,7 @@ public class CustomDialog extends BaseDialog {
                     setLifecycleState(Lifecycle.State.DESTROYED);
                     dialogImpl = null;
                     dialogLifecycleCallback = null;
-                    System.gc();
+                    BaseDialog.gc();
                 }
             });
 

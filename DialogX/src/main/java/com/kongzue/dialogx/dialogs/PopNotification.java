@@ -593,7 +593,7 @@ public class PopNotification extends BaseDialog implements NoTouchInterface {
                     PopNotification.this.onDismiss(me);
                     setLifecycleState(Lifecycle.State.DESTROYED);
                     dialogImpl = null;
-                    System.gc();
+                    BaseDialog.gc();
                 }
             });
 

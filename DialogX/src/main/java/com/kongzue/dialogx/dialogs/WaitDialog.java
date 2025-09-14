@@ -806,7 +806,7 @@ public class WaitDialog extends BaseDialog {
         dialogView = null;
         dialogLifecycleCallback = null;
         if (ownActivity != null) ownActivity.clear();
-        System.gc();
+        BaseDialog.gc();
     }
 
     private void setDialogImpl(DialogImpl d) {

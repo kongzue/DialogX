@@ -547,7 +547,7 @@ public class PopMenu extends BaseDialog {
                     dialogImpl = null;
                     baseView(null);
                     dialogLifecycleCallback = null;
-                    System.gc();
+                    BaseDialog.gc();
                 }
             });
 
