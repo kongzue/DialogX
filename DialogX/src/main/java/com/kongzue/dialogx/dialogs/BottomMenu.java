@@ -1121,12 +1121,14 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setOkButton(CharSequence okText, OnMenuButtonClickListener<BottomMenu> okButtonClickListener) {
         this.okText = okText;
         this.okButtonClickListener = okButtonClickListener;
+        preRefreshUI();
         return this;
     }
 
     public BottomMenu setOkButton(int okTextResId, OnMenuButtonClickListener<BottomMenu> okButtonClickListener) {
         this.okText = getString(okTextResId);
         this.okButtonClickListener = okButtonClickListener;
+        preRefreshUI();
         return this;
     }
 
@@ -1151,6 +1153,7 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setOkButton(CharSequence okText, OnDialogButtonClickListener<BottomDialog> okButtonClickListener) {
         this.okText = okText;
         this.okButtonClickListener = okButtonClickListener;
+        preRefreshUI();
         return this;
     }
 
@@ -1161,6 +1164,7 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setOkButton(int okTextResId, OnDialogButtonClickListener<BottomDialog> okButtonClickListener) {
         this.okText = getString(okTextResId);
         this.okButtonClickListener = okButtonClickListener;
+        preRefreshUI();
         return this;
     }
 
@@ -1188,12 +1192,14 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setOtherButton(CharSequence otherText, OnMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
         this.otherText = otherText;
         this.otherButtonClickListener = otherButtonClickListener;
+        preRefreshUI();
         return this;
     }
 
     public BottomMenu setOtherButton(int otherTextResId, OnMenuButtonClickListener<BottomMenu> otherButtonClickListener) {
         this.otherText = getString(otherTextResId);
         this.otherButtonClickListener = otherButtonClickListener;
+        preRefreshUI();
         return this;
     }
 
@@ -1213,6 +1219,7 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setOtherButton(CharSequence otherText, OnDialogButtonClickListener<BottomDialog> otherButtonClickListener) {
         this.otherText = otherText;
         this.otherButtonClickListener = otherButtonClickListener;
+        preRefreshUI();
         return this;
     }
 
@@ -1223,6 +1230,7 @@ public class BottomMenu extends BottomDialog {
     public BottomMenu setOtherButton(int otherTextResId, OnDialogButtonClickListener<BottomDialog> otherButtonClickListener) {
         this.otherText = getString(otherTextResId);
         this.otherButtonClickListener = otherButtonClickListener;
+        preRefreshUI();
         return this;
     }
 
