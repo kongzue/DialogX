@@ -118,6 +118,7 @@
                 </com.kongzue.dialogx.util.views.MaxRelativeLayout>
 
                 <com.kongzue.dialogx.style.views.BlurLinearLayout
+                    android:id="@+id/box_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
