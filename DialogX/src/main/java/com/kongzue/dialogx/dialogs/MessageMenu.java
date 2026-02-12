@@ -486,6 +486,15 @@ public class MessageMenu extends MessageDialog {
     private int[] resultArray;
     private CharSequence[] selectTextArray;
 
+    private void syncMultiSelectResult() {
+        resultArray = new int[selectionItems.size()];
+        selectTextArray = new CharSequence[selectionItems.size()];
+        for (int i = 0; i < selectionItems.size(); i++) {
+            resultArray[i] = selectionItems.get(i);
+            selectTextArray[i] = menuList.get(resultArray[i]);
+        }
+    }
+
     @Override
     protected void onDialogShow() {
         if (getDialogImpl() != null && getDialogImpl().boxList != null) {
@@ -580,12 +589,7 @@ public class MessageMenu extends MessageDialog {
                                             selectionItems.add(position);
                                         }
                                         menuListAdapter.notifyDataSetInvalidated();
-                                        resultArray = new int[selectionItems.size()];
-                                        selectTextArray = new CharSequence[selectionItems.size()];
-                                        for (int i = 0; i < selectionItems.size(); i++) {
-                                            resultArray[i] = selectionItems.get(i);
-                                            selectTextArray[i] = menuList.get(resultArray[i]);
-                                        }
+                                        syncMultiSelectResult();
                                         onMenuItemSelectListener.onMultiItemSelect(me, selectTextArray, resultArray);
                                     }
                                 } else {
@@ -600,12 +604,7 @@ public class MessageMenu extends MessageDialog {
                                             selectionItems.add(position);
                                         }
                                         menuListAdapter.notifyDataSetInvalidated();
-                                        resultArray = new int[selectionItems.size()];
-                                        selectTextArray = new CharSequence[selectionItems.size()];
-                                        for (int i = 0; i < selectionItems.size(); i++) {
-                                            resultArray[i] = selectionItems.get(i);
-                                            selectTextArray[i] = menuList.get(resultArray[i]);
-                                        }
+                                        syncMultiSelectResult();
                                     }
                                 }
                                 break;
@@ -1373,11 +1372,13 @@ public class MessageMenu extends MessageDialog {
 
     // 返回多选时，选择的菜单索引集合
     public int[] getSelectionIndexArray() {
+        syncMultiSelectResult();
         return resultArray;
     }
 
     // 返回多选时，选择的菜单文本集合
     public CharSequence[] getSelectTextArray() {
+        syncMultiSelectResult();
         return selectTextArray;
     }
 
