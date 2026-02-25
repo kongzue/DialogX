@@ -60,8 +60,11 @@ public class DialogFragmentImpl extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (activityWeakReference == null) return;
-        final Activity activity = activityWeakReference.get();
+      
+        final Activity activity = activityWeakReference != null ? activityWeakReference.get() : null;
+        if(activity == null){
+          return;
+        }
 
         if (getDialog() == null) return;
         Window dialogWindow = getDialog().getWindow();
