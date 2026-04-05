@@ -27,7 +27,7 @@ jobs:
       - name: Build release AARs
         run: |
           ./gradlew \
-            DialogXInterface:assembleRelease \
+            DialogXInterface:jar \
             DialogXMIUIStyle:assembleRelease \
             DialogXKongzueStyle:assembleRelease \
             DialogXIOSStyle:assembleRelease \
@@ -37,7 +37,11 @@ jobs:
       - name: Collect release AARs
         run: |
           mkdir -p build/release-artifacts
-          for module in DialogXInterface DialogXMIUIStyle DialogXKongzueStyle DialogXIOSStyle DialogX DialogXMaterialYou; do
+          jar=$(find "DialogXInterface/build/libs" -name "*.jar" 2>/dev/null | head -1)
+          if [ -n "$jar" ]; then
+            cp "$jar" "build/release-artifacts/DialogXInterface.jar"
+          fi
+          for module in DialogXMIUIStyle DialogXKongzueStyle DialogXIOSStyle DialogX DialogXMaterialYou; do
             aar=$(find "${module}/build/outputs/aar" -name "*-release.aar" 2>/dev/null | head -1)
             if [ -n "$aar" ]; then
               cp "$aar" "build/release-artifacts/${module}-release.aar"
