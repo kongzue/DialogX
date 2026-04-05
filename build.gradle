@@ -31,3 +31,28 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+subprojects {
+    plugins.withId('com.android.library') {
+        afterEvaluate {
+            tasks.register('exportReleaseJar') {
+                dependsOn('assembleRelease')
+                doLast {
+                    def aarDir = new File("${project.buildDir}/outputs/aar")
+                    if (!aarDir.exists()) return
+                    def aarFile = aarDir.listFiles()?.find { it.name.endsWith('-release.aar') }
+                    if (aarFile) {
+                        def outDir = new File("${rootProject.buildDir}/release-artifacts")
+                        outDir.mkdirs()
+                        project.copy {
+                            from zipTree(aarFile)
+                            include 'classes.jar'
+                            rename 'classes.jar', "${project.name}-release.jar"
+                            into outDir
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
