@@ -24,15 +24,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build release AARs and export JARs
+      - name: Build release AARs
         run: |
           ./gradlew \
-            DialogXInterface:exportReleaseJar \
-            DialogXMIUIStyle:exportReleaseJar \
-            DialogXKongzueStyle:exportReleaseJar \
-            DialogXIOSStyle:exportReleaseJar \
-            DialogX:exportReleaseJar \
-            DialogXMaterialYou:exportReleaseJar
+            DialogXInterface:assembleRelease \
+            DialogXMIUIStyle:assembleRelease \
+            DialogXKongzueStyle:assembleRelease \
+            DialogXIOSStyle:assembleRelease \
+            DialogX:assembleRelease \
+            DialogXMaterialYou:assembleRelease
 
       - name: Collect release AARs
         run: |
