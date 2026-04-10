@@ -487,6 +487,11 @@ public class MessageMenu extends MessageDialog {
     private CharSequence[] selectTextArray;
 
     private void syncMultiSelectResult() {
+        if (selectionItems == null) {
+            resultArray = null;
+            selectTextArray = null;
+            return;
+        }
         resultArray = new int[selectionItems.size()];
         selectTextArray = new CharSequence[selectionItems.size()];
         for (int i = 0; i < selectionItems.size(); i++) {
