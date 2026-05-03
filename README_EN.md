@@ -140,7 +140,6 @@ Latest version:
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()      //增加 mavenCentral 仓库
     }
 }
@@ -174,7 +173,6 @@ implementation "com.kongzue.dialogx:DialogX:${dialogx_version}"
 allprojects {
     repositories {
         google()
-        jcenter()
         maven { url 'https://jitpack.io' }      //add jitPack Maven
     }
 }

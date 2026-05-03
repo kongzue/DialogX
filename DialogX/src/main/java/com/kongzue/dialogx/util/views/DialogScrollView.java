@@ -1,10 +1,14 @@
 package com.kongzue.dialogx.util.views;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
+
+import androidx.annotation.RequiresApi;
+
 import com.kongzue.dialogx.interfaces.ScrollController;
 
 /**
@@ -28,6 +32,7 @@ public class DialogScrollView extends ScrollView implements ScrollController {
         super(context, attrs, defStyleAttr);
     }
     
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public DialogScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
