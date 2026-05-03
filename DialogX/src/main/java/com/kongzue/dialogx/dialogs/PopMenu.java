@@ -80,6 +80,7 @@ public class PopMenu extends BaseDialog {
     protected boolean autoTintIconInLightOrDarkMode = true;
     protected DialogImpl dialogImpl;
     protected WeakReference<View> baseViewWeakReference;
+    protected int[] marginRelativeBaseView = new int[4];
     protected boolean overlayBaseView = true;                               // 允许菜单覆盖在 baseView 上
     protected OnMenuItemClickListener<PopMenu> onMenuItemClickListener;
     protected OnIconChangeCallBack<PopMenu> onIconChangeCallBack;           // 设置图标
@@ -395,50 +396,50 @@ public class PopMenu extends BaseDialog {
             if (overlayBaseView) {
                 // 菜单覆盖在 baseView 上时
                 if (isAlignGravity(Gravity.TOP)) {
-                    calY = (baseViewTop + baseView().getMeasuredHeight() - boxBody.getHeight());
+                    calY = (baseViewTop + baseView().getMeasuredHeight() - boxBody.getHeight() - marginRelativeBaseView[3]);
                     if (calX == 0) {
                         calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
                     }
                 }
                 if (isAlignGravity(Gravity.LEFT)) {
-                    calX = Math.max(0, (baseViewLeft + baseView().getMeasuredWidth() - boxBody.getWidth()));
+                    calX = Math.max(0, (baseViewLeft + baseView().getMeasuredWidth() - boxBody.getWidth() - marginRelativeBaseView[2]));
                     if (calY == 0) {
                         calY = (Math.max(0, baseViewTop + baseView().getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
                     }
                 }
                 if (isAlignGravity(Gravity.RIGHT)) {
-                    calX = baseViewLeft;
+                    calX = baseViewLeft + marginRelativeBaseView[0];
                     if (calY == 0) {
                         calY = (Math.max(0, baseViewTop + baseView().getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
                     }
                 }
                 if (isAlignGravity(Gravity.BOTTOM)) {
-                    calY = baseViewTop;
+                    calY = baseViewTop + marginRelativeBaseView[1];
                     if (calX == 0) {
                         calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
                     }
                 }
             } else {
                 if (isAlignGravity(Gravity.TOP)) {
-                    calY = (Math.max(0, baseViewTop - boxBody.getHeight()));
+                    calY = (Math.max(0, baseViewTop - boxBody.getHeight() - marginRelativeBaseView[3]));
                     if (calX == 0) {
                         calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
                     }
                 }
                 if (isAlignGravity(Gravity.LEFT)) {
-                    calX = Math.max(0, (baseViewLeft - boxBody.getWidth()));
+                    calX = Math.max(0, (baseViewLeft - boxBody.getWidth() - marginRelativeBaseView[2]));
                     if (calY == 0) {
                         calY = (Math.max(0, baseViewTop + baseView().getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
                     }
                 }
                 if (isAlignGravity(Gravity.RIGHT)) {
-                    calX = (Math.max(0, baseViewLeft + baseView().getWidth()));
+                    calX = (Math.max(0, baseViewLeft + baseView().getWidth() + marginRelativeBaseView[0]));
                     if (calY == 0) {
                         calY = (Math.max(0, baseViewTop + baseView().getMeasuredHeight() / 2 - boxBody.getHeight() / 2));
                     }
                 }
                 if (isAlignGravity(Gravity.BOTTOM)) {
-                    calY = (Math.max(0, baseViewTop + baseView().getHeight()));
+                    calY = (Math.max(0, baseViewTop + baseView().getHeight() + marginRelativeBaseView[1]));
                     if (calX == 0) {
                         calX = (Math.max(0, baseViewLeft + (getWidth() > 0 ? baseView().getMeasuredWidth() / 2 - getWidth() / 2 : 0)));
                     }
@@ -461,8 +462,8 @@ public class PopMenu extends BaseDialog {
             result.setX(calX).setY(calY);
         } else {
             int mHeight = PopMenu.this.height == -1 ? baseView().getHeight() : PopMenu.this.height;
-            int left = (int) baseViewLoc.getX();
-            int top = (int) (baseViewLoc.getY() + (overlayBaseView ? 0 : mHeight) + selectItemYDeviation);
+            int left = (int) baseViewLoc.getX() + marginRelativeBaseView[0] - marginRelativeBaseView[2];
+            int top = (int) (baseViewLoc.getY() + (overlayBaseView ? 0 : mHeight) + selectItemYDeviation + marginRelativeBaseView[1] - marginRelativeBaseView[3]);
 
             if (!offScreen) {
                 if (left < 0) {
@@ -805,7 +806,7 @@ public class PopMenu extends BaseDialog {
                             }
 
                             refreshMenuLoc();
-                            selectItemYDeviation = (int) (getMenuLoc().getY() - baseViewLoc.getY());
+                            final float targetYDeviation = getMenuLoc().getY() - baseViewLoc.getY();
 
                             // 展开动画
                             ValueAnimator enterAnim = ValueAnimator.ofFloat(0f, 1f);
@@ -826,7 +827,7 @@ public class PopMenu extends BaseDialog {
                                         boxBody.setY(boxRoot.getSafeHeight() - aimHeight);
                                     }
                                     float calX = loc.getX() != -1 ? loc.getX() : baseViewLoc.getX();
-                                    float calY = baseViewLoc.getY() + selectItemYDeviation * animatedValue;
+                                    float calY = baseViewLoc.getY() + targetYDeviation * animatedValue;
 
                                     if (!offScreen) {
                                         if (calX < 0) {
@@ -1205,6 +1206,71 @@ public class PopMenu extends BaseDialog {
         this.alignGravity = alignGravity;
         refreshMenuLoc();
         return this;
+    }
+
+    public PopMenu setAlignGravity(int alignGravity, int marginLeft, int marginTop,
+                                   int marginRight, int marginBottom) {
+        this.alignGravity = alignGravity;
+        this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
+        refreshMenuLoc();
+        return this;
+    }
+
+    public int[] getBaseViewMargin() {
+        return marginRelativeBaseView;
+    }
+
+    public PopMenu setBaseViewMargin(int[] marginRelativeBaseView) {
+        this.marginRelativeBaseView = marginRelativeBaseView;
+        refreshMenuLoc();
+        return this;
+    }
+
+    public PopMenu setBaseViewMargin(int marginLeft, int marginTop,
+                                     int marginRight, int marginBottom) {
+        this.marginRelativeBaseView = new int[]{marginLeft, marginTop, marginRight, marginBottom};
+        refreshMenuLoc();
+        return this;
+    }
+
+    public PopMenu setBaseViewMarginLeft(int marginLeft) {
+        this.marginRelativeBaseView[0] = marginLeft;
+        refreshMenuLoc();
+        return this;
+    }
+
+    public PopMenu setBaseViewMarginTop(int marginTop) {
+        this.marginRelativeBaseView[1] = marginTop;
+        refreshMenuLoc();
+        return this;
+    }
+
+    public PopMenu setBaseViewMarginRight(int marginRight) {
+        this.marginRelativeBaseView[2] = marginRight;
+        refreshMenuLoc();
+        return this;
+    }
+
+    public PopMenu setBaseViewMarginBottom(int marginBottom) {
+        this.marginRelativeBaseView[3] = marginBottom;
+        refreshMenuLoc();
+        return this;
+    }
+
+    public int getBaseViewMarginLeft() {
+        return this.marginRelativeBaseView[0];
+    }
+
+    public int getBaseViewMarginTop() {
+        return this.marginRelativeBaseView[1];
+    }
+
+    public int getBaseViewMarginRight() {
+        return this.marginRelativeBaseView[2];
+    }
+
+    public int getBaseViewMarginBottom() {
+        return this.marginRelativeBaseView[3];
     }
 
     public PopMenu setDialogImplMode(DialogX.IMPL_MODE dialogImplMode) {
