@@ -473,6 +473,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 PopMenu.show(view, new String[]{"选项1", "选项2", "选项3"})
+                        .setBaseViewMargin(0, 0, 0, 0)
                         .setMenuTextInfo(new TextInfo().setGravity(Gravity.CENTER))
                         .setOnMenuItemClickListener(new OnMenuItemClickListener<PopMenu>() {
                             @Override
