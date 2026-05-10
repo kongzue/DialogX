@@ -22,7 +22,6 @@ import androidx.activity.ViewTreeOnBackPressedDispatcherOwner;
 import androidx.annotation.Px;
 import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.LifecycleOwner;
 
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.R;
@@ -278,7 +277,7 @@ public class DialogXBaseRelativeLayout extends RelativeLayout {
         if (bind) {
             OnBackPressedDispatcherOwner owner = ViewTreeOnBackPressedDispatcherOwner.get(this);
             if (owner == null) return;
-            owner.getOnBackPressedDispatcher().addCallback((LifecycleOwner) getContext(),
+            owner.getOnBackPressedDispatcher().addCallback(owner,
                     onBackPressedCallback= new OnBackPressedCallback(true) {
                         @Override
                         public void handleOnBackPressed() {
