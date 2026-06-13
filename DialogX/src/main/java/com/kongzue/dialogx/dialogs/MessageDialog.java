@@ -302,6 +302,16 @@ public class MessageDialog extends BaseDialog {
         public TextView btnSelectNegative;
         public TextView btnSelectPositive;
 
+        private boolean shouldShowInputView() {
+            return me instanceof InputDialog;
+        }
+
+        private void hideInputKeyboardAndClearFocus() {
+            if (txtInput == null) return;
+            imeShow(txtInput, false);
+            txtInput.clearFocus();
+        }
+
         public DialogImpl(View convertView) {
             if (convertView == null) return;
             setDialogView(convertView);
@@ -390,11 +400,11 @@ public class MessageDialog extends BaseDialog {
                         });
                     }
 
-                    if (autoShowInputKeyboard) {
+                    if (shouldShowInputView() && autoShowInputKeyboard) {
                         txtInput.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (txtInput == null) return;
+                                if (txtInput == null || !shouldShowInputView()) return;
                                 txtInput.requestFocus();
                                 txtInput.setFocusableInTouchMode(true);
                                 imeShow(txtInput, true);
@@ -404,7 +414,7 @@ public class MessageDialog extends BaseDialog {
                                 }
                             }
                         }, 300);
-                    } else {
+                    } else if (shouldShowInputView()) {
                         if (inputInfo != null && inputInfo.isSelectAllText()) {
                             txtInput.clearFocus();
                             txtInput.requestFocus();
@@ -608,13 +618,14 @@ public class MessageDialog extends BaseDialog {
             bkg.setMinimumHeight(getMinHeight());
 
             View inputBoxView = boxRoot.findViewWithTag("dialogx_editbox");
-            if (me instanceof InputDialog) {
+            if (shouldShowInputView()) {
                 if (inputBoxView != null) {
                     inputBoxView.setVisibility(View.VISIBLE);
                 }
                 txtInput.setVisibility(View.VISIBLE);
                 boxRoot.bindFocusView(txtInput);
             } else {
+                hideInputKeyboardAndClearFocus();
                 if (inputBoxView != null) {
                     inputBoxView.setVisibility(View.GONE);
                 }
