@@ -28,6 +28,7 @@ import com.kongzue.dialogx.interfaces.BaseDialog;
 import com.kongzue.dialogx.interfaces.NoTouchInterface;
 
 import java.lang.ref.WeakReference;
+import java.util.HashSet;
 
 /**
  * @author: Kongzue
@@ -57,6 +58,11 @@ public class DialogFragmentImpl extends DialogFragment {
 
     WeakReference<Activity> activityWeakReference = null;
 
+    // Tracks the dialog root views on the current touch-forwarding chain.
+    // When two or more dialogs are alive, each one forwards touches to the others;
+    // without this guard a touch landing on an empty area ping-pongs A→B→A… until StackOverflowError.
+    static final ThreadLocal<HashSet<View>> FORWARDING_CHAIN = new ThreadLocal<>();
+
     @Override
     public void onStart() {
         super.onStart();
@@ -81,19 +87,35 @@ public class DialogFragmentImpl extends DialogFragment {
         dialogView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                for (BaseDialog dialog : BaseDialog.getRunningDialogList()) {
-                    if (dialog.getOwnActivity() == activity && dialog != baseDialog && dialog.getDialogImplMode() == baseDialog.getDialogImplMode()) {
-                        if (!(dialog instanceof NoTouchInterface) && dialog.getDialogView() != null) {
-                            Log.e(">>>", "onTouch: dialog=" + dialog + "  baseDialog="+baseDialog );
-                            dialog.getDialogView().dispatchTouchEvent(event);
-                            return true;
+                HashSet<View> chain = FORWARDING_CHAIN.get();
+                if (chain == null) {
+                    chain = new HashSet<>();
+                    FORWARDING_CHAIN.set(chain);
+                }
+                if (chain.contains(v)) {
+                    // 该弹窗已在转发链上：再次到达即为回环，放弃转发，交回普通触摸处理
+                    return false;
+                }
+                chain.add(v);
+                try {
+                    for (BaseDialog dialog : BaseDialog.getRunningDialogList()) {
+                        if (dialog.getOwnActivity() == activity && dialog != baseDialog && dialog.getDialogImplMode() == baseDialog.getDialogImplMode()) {
+                            if (!(dialog instanceof NoTouchInterface) && dialog.getDialogView() != null) {
+                                dialog.getDialogView().dispatchTouchEvent(event);
+                                return true;
+                            }
                         }
                     }
-                }
-                if (baseDialog instanceof NoTouchInterface) {
-                    return activity.dispatchTouchEvent(event);
-                } else {
-                    return false;
+                    if (baseDialog instanceof NoTouchInterface) {
+                        return activity.dispatchTouchEvent(event);
+                    } else {
+                        return false;
+                    }
+                } finally {
+                    chain.remove(v);
+                    if (chain.isEmpty()) {
+                        FORWARDING_CHAIN.remove();
+                    }
                 }
             }
         });
