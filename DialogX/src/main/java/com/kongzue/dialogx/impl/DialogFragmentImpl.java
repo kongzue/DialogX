@@ -157,6 +157,28 @@ public class DialogFragmentImpl extends DialogFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        if (dialogView != null) {
+            dialogView.setOnTouchListener(null);
+            if (dialogView.getParent() instanceof ViewGroup) {
+                ((ViewGroup) dialogView.getParent()).removeView(dialogView);
+            }
+        }
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        dialogView = null;
+        baseDialog = null;
+        if (activityWeakReference != null) {
+            activityWeakReference.clear();
+            activityWeakReference = null;
+        }
+    }
+
+    @Override
     public void dismiss() {
         dismissAllowingStateLoss();
     }
